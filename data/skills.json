@@ -1,0 +1,38 @@
+{
+  "기초검법": {
+    "name": "기초검법",
+    "type": "공격무공",
+    "category": "검법",
+    "grade": "기본",
+    "base_multiplier": 1.0,
+    "secret_technique": {
+      "name": null,
+      "unlock_grade": "상승",
+      "unlock_mastery": 70
+    }
+  },
+  "매화검법": {
+    "name": "매화검법",
+    "type": "공격무공",
+    "category": "검법",
+    "grade": "명품",
+    "base_multiplier": 1.2,
+    "secret_technique": {
+      "name": "매화난무",
+      "unlock_grade": "상승",
+      "unlock_mastery": 70
+    }
+  },
+  "천뢰검법": {
+    "name": "천뢰검법",
+    "type": "공격무공",
+    "category": "검법",
+    "grade": "상승",
+    "base_multiplier": 1.5,
+    "secret_technique": {
+      "name": "천뢰일섬",
+      "unlock_grade": "상승",
+      "unlock_mastery": 70
+    }
+  }
+}

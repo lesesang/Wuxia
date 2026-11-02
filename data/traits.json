@@ -1,0 +1,49 @@
+{
+  "강건한_육체": {
+    "name": "강건한 육체",
+    "desc": "시작 외공이 크게 늘어난다.",
+    "rarity": "일반",
+    "cost": 3,
+    "effects": [
+      {"type": "start_stat", "stat": "external", "amount": 10}
+    ]
+  },
+  "선천진기": {
+    "name": "선천진기",
+    "desc": "시작 내공이 크게 늘어난다.",
+    "rarity": "일반",
+    "cost": 3,
+    "effects": [
+      {"type": "start_stat", "stat": "internal", "amount": 10}
+    ]
+  },
+  "무골": {
+    "name": "무골",
+    "desc": "외공 성장이 10% 증가한다 (소수점 올림).",
+    "rarity": "일반",
+    "cost": 5,
+    "effects": [
+      {"type": "growth_rate", "stat": "external", "percent": 10}
+    ]
+  },
+  "기재": {
+    "name": "기재",
+    "desc": "무리 성장이 10% 증가한다 (소수점 올림).",
+    "rarity": "일반",
+    "cost": 5,
+    "effects": [
+      {"type": "growth_rate", "stat": "martial", "percent": 10}
+    ]
+  },
+  "전투광": {
+    "name": "전투광",
+    "desc": "전투가 시작되면 외공이 전투 중에만 5 오른다 (99 한계 초과 가능). 전투가 끝나면 체력과 내공을 각각 25% 즉시 회복한다.",
+    "rarity": "희귀",
+    "cost": 8,
+    "effects": [
+      {"type": "battle_buff", "trigger": "on_battle_start", "stat": "external", "amount": 5, "temporary": true},
+      {"type": "battle_buff", "trigger": "on_battle_end", "stat": "hp", "percent": 25},
+      {"type": "battle_buff", "trigger": "on_battle_end", "stat": "qi", "percent": 25}
+    ]
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "산적": {
+    "name": "산적",
+    "tier": "일반",
+    "realm": "일류",
+    "hp": 60,
+    "attack": 8,
+    "exp_reward": 1,
+    "skills": [],
+    "silver": [
+      8,
+      15
+    ]
+  },
+  "절정고수": {
+    "name": "절정의 떠돌이 고수",
+    "tier": "난적",
+    "realm": "절정",
+    "hp": 150,
+    "attack": 18,
+    "exp_reward": 2,
+    "skills": [
+      "기초검법"
+    ],
+    "silver": [
+      20,
+      35
+    ]
+  },
+  "화경마인": {
+    "name": "화경의 마인",
+    "tier": "강적",
+    "realm": "화경",
+    "hp": 400,
+    "attack": 40,
+    "exp_reward": 3,
+    "skills": [
+      "매화검법"
+    ],
+    "silver": [
+      40,
+      70
+    ]
+  },
+  "천마": {
+    "name": "천마",
+    "tier": "보스",
+    "realm": "현경",
+    "hp": 1000,
+    "attack": 70,
+    "exp_reward": 5,
+    "skills": [
+      "매화검법"
+    ],
+    "silver": [
+      0,
+      0
+    ]
+  }
+}
