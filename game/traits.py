@@ -10,10 +10,12 @@
     3. battle_buff  — 전투 중/후 발동하는 특수 효과
         trigger:
             on_battle_start — 전투 시작 시 (예: 외공 +5, 99 한계 무시하고 임시 적용)
-            on_battle_end   — 전투 종료 시 (예: 체력/내공 25% 즉시 회복)
+            on_battle_end   — 전투 종료 시 (예: 체력/기력 25% 즉시 회복)
+    4. start_silver / market_discount / silver_rate / crit / turn_regen / start_skill
+       — 은자, 시장, 치명타, 턴 회복, 시작 무공에 대한 보정
 
 특성은 카르마(영구 재화)로 해금하며, 해금된 특성은 게임 시작 시 장착할 수 있다.
-초기 장착 슬롯은 1개 (계획서 §25 — 후반 2~3슬롯으로 확장 예정, 아직 미구현).
+장착 슬롯은 1개로 시작해 누적 카르마에 따라 최대 3개까지 늘어난다.
 """
 
 import json
@@ -29,6 +31,47 @@ def _load_trait_db():
 
 
 TRAIT_DB = _load_trait_db()
+
+
+# (누적 카르마, 슬롯 수)
+SLOT_THRESHOLDS = [(0, 1), (20, 2), (50, 3)]
+
+
+def trait_slots(total_karma):
+    """누적 카르마로 열린 특성 슬롯 수."""
+    slots = 1
+    for threshold, count in SLOT_THRESHOLDS:
+        if total_karma >= threshold:
+            slots = count
+    return slots
+
+
+def next_slot_threshold(total_karma):
+    """다음 슬롯이 열리는 누적 카르마. 모두 열렸으면 None."""
+    for threshold, _ in SLOT_THRESHOLDS:
+        if total_karma < threshold:
+            return threshold
+    return None
+
+
+def _effects_of_type(trait_keys, effect_type):
+    for key in trait_keys:
+        trait = TRAIT_DB.get(key)
+        if not trait:
+            continue
+        for effect in trait["effects"]:
+            if effect["type"] == effect_type:
+                yield effect
+
+
+def sum_effect(trait_keys, effect_type, field):
+    """특정 종류 효과의 수치 합계."""
+    return sum(e.get(field, 0) for e in _effects_of_type(trait_keys, effect_type))
+
+
+def start_skills(trait_keys):
+    """특성으로 얻는 시작 무공 키 목록."""
+    return [e["skill"] for e in _effects_of_type(trait_keys, "start_skill")]
 
 
 def get_trait(key):

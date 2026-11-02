@@ -10,20 +10,27 @@ REALM_REQUIREMENTS = {
     "현경":  {"avg": 80, "min_stat": 75, "battles": 18},
 }
 
+# 경지별 전투 보너스 (주는 피해 증가율, 받는 피해 감소율은 그 절반)
+REALM_COMBAT_BONUS = {"일류": 0, "절정": 0.06, "초절정": 0.14, "화경": 0.24, "현경": 0.36, "생사경": 0.5}
+
 # 생사경 조건 — 일반 돌파와 별개. 최종전 클리어 시점에만 판정 (계획서 §10)
 SAENGSA_REQUIREMENTS = {
     "min_stat": 95,   # 모든 능력치 95 이상
     "battles": 25,
-    "hp_ratio": 0.8,  # 체력 80% 이상 (예: 최종전 종료 시점 기준, 추후 전투 시스템과 연결)
-    "qi_ratio": 0.8,  # 내공 80% 이상
+    "hp_ratio": 0.5,  # 최종전 종료 시점 체력 50% 이상
+    "qi_ratio": 0.3,  # 최종전 종료 시점 기력 30% 이상
 }
 
 # 기본 엔딩(정상 클리어) 충족 조건 — 최종전(천마) 클리어 후 판정 (계획서 §28, 임시 수치)
 GOOD_ENDING_REQUIREMENTS = {
     "min_realm": "화경",   # 최종 경지가 화경 이상이어야 함
-    "hp_ratio": 0.3,        # 체력 30% 이상 남아있어야 함
-    "qi_ratio": 0.3,        # 내공 30% 이상 남아있어야 함
+    "hp_ratio": 0.15,       # 최종전 종료 시점 체력 15% 이상
+    "qi_ratio": 0.0,        # 기력은 비기로 다 써도 괜찮다
 }
+
+
+def realm_bonus(realm):
+    return REALM_COMBAT_BONUS.get(realm, 0)
 
 
 def _stats(player):
@@ -97,8 +104,8 @@ def check_saengsa(player):
     stats = _stats(player)
     min_stat = min(stats)
 
-    max_hp = 100 + player.external * 5
-    max_qi = 100 + player.internal * 5
+    max_hp = player.max_hp()
+    max_qi = player.max_qi()
 
     return (
         min_stat >= req["min_stat"] and
@@ -114,8 +121,8 @@ def check_good_ending(player):
     조건 충족 시 True, 아니면 배드 엔딩.
     """
     req = GOOD_ENDING_REQUIREMENTS
-    max_hp = 100 + player.external * 5
-    max_qi = 100 + player.internal * 5
+    max_hp = player.max_hp()
+    max_qi = player.max_qi()
 
     realm_ok = REALM_ORDER.index(player.realm) >= REALM_ORDER.index(req["min_realm"])
     hp_ok = player.hp >= max_hp * req["hp_ratio"]

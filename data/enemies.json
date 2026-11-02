@@ -3,58 +3,494 @@
     "name": "산적",
     "tier": "일반",
     "realm": "일류",
-    "hp": 60,
-    "attack": 8,
+    "hp": 70,
+    "attack": 10,
     "exp_reward": 1,
-    "skills": [],
     "silver": [
       8,
       15
+    ],
+    "chapters": [
+      1
+    ],
+    "weight": 5,
+    "desc": "고갯길에 숨어 행인을 터는 무리. 무공이라 부르기도 민망하다."
+  },
+  "낭인": {
+    "name": "떠돌이 낭인",
+    "tier": "일반",
+    "realm": "일류",
+    "hp": 100,
+    "attack": 13,
+    "exp_reward": 1,
+    "silver": [
+      10,
+      18
+    ],
+    "chapters": [
+      1,
+      2
+    ],
+    "weight": 4,
+    "desc": "돈이면 무엇이든 베는 칼잡이.",
+    "specials": [
+      {
+        "name": "발도",
+        "every": 3,
+        "mult": 1.6
+      }
+    ]
+  },
+  "늑대무리": {
+    "name": "굶주린 늑대 무리",
+    "tier": "일반",
+    "realm": "일류",
+    "hp": 80,
+    "attack": 11,
+    "exp_reward": 1,
+    "silver": [
+      0,
+      4
+    ],
+    "chapters": [
+      1
+    ],
+    "weight": 3,
+    "evasion": 0.08,
+    "desc": "겨울을 넘기지 못한 짐승들. 은자는 없지만 싸움은 된다."
+  },
+  "흑풍채두목": {
+    "name": "흑풍채 두목",
+    "tier": "난적",
+    "realm": "일류",
+    "hp": 230,
+    "attack": 18,
+    "exp_reward": 2,
+    "silver": [
+      30,
+      50
+    ],
+    "chapters": [
+      1,
+      2
+    ],
+    "weight": 2,
+    "desc": "산채 하나를 거느린 도적 두목. 도끼질 한 번이 무겁다.",
+    "specials": [
+      {
+        "name": "태산압정",
+        "every": 3,
+        "mult": 1.8
+      }
+    ]
+  },
+  "녹림호걸": {
+    "name": "녹림 호걸",
+    "tier": "일반",
+    "realm": "절정",
+    "hp": 240,
+    "attack": 25,
+    "exp_reward": 1,
+    "silver": [
+      18,
+      30
+    ],
+    "chapters": [
+      2,
+      3
+    ],
+    "weight": 5,
+    "desc": "제 나름의 의리를 말하는 녹림의 무인."
+  },
+  "사파자객": {
+    "name": "사파 자객",
+    "tier": "일반",
+    "realm": "절정",
+    "hp": 200,
+    "attack": 32,
+    "exp_reward": 1,
+    "silver": [
+      22,
+      34
+    ],
+    "chapters": [
+      2,
+      3
+    ],
+    "weight": 4,
+    "evasion": 0.12,
+    "desc": "그림자를 타고 오는 자객. 쉽게 맞아 주지 않는다.",
+    "specials": [
+      {
+        "name": "암습",
+        "every": 3,
+        "mult": 1.5,
+        "poison": {
+          "damage": 8,
+          "rounds": 3
+        }
+      }
     ]
   },
   "절정고수": {
     "name": "절정의 떠돌이 고수",
     "tier": "난적",
     "realm": "절정",
-    "hp": 150,
-    "attack": 18,
+    "hp": 430,
+    "attack": 34,
     "exp_reward": 2,
-    "skills": [
-      "기초검법"
-    ],
     "silver": [
-      20,
-      35
+      40,
+      65
+    ],
+    "chapters": [
+      2,
+      3
+    ],
+    "weight": 3,
+    "armor": 3,
+    "desc": "이름을 팔러 다니는 고수. 실력만은 진짜다.",
+    "specials": [
+      {
+        "name": "회선검",
+        "every": 3,
+        "mult": 1.8
+      }
+    ],
+    "drop": {
+      "skill": "육합권",
+      "chance": 0.15
+    }
+  },
+  "혈교수련자": {
+    "name": "혈교 수련자",
+    "tier": "일반",
+    "realm": "초절정",
+    "hp": 510,
+    "attack": 46,
+    "exp_reward": 1,
+    "silver": [
+      28,
+      42
+    ],
+    "chapters": [
+      3,
+      4
+    ],
+    "weight": 5,
+    "desc": "피로 기를 닦는 광신도.",
+    "specials": [
+      {
+        "name": "혈기폭주",
+        "every": 4,
+        "mult": 1.7,
+        "heal_pct": 8
+      }
+    ]
+  },
+  "독문고수": {
+    "name": "독문의 고수",
+    "tier": "난적",
+    "realm": "초절정",
+    "hp": 640,
+    "attack": 41,
+    "exp_reward": 2,
+    "silver": [
+      50,
+      80
+    ],
+    "chapters": [
+      3,
+      4
+    ],
+    "weight": 4,
+    "desc": "손끝 하나에도 독이 묻어 있다.",
+    "specials": [
+      {
+        "name": "칠보독연",
+        "every": 2,
+        "mult": 1.1,
+        "poison": {
+          "damage": 18,
+          "rounds": 3
+        }
+      }
+    ],
+    "drop": {
+      "skill": "독룡장",
+      "chance": 0.1
+    }
+  },
+  "철혈대원": {
+    "name": "철혈대 대원",
+    "tier": "난적",
+    "realm": "초절정",
+    "hp": 790,
+    "attack": 51,
+    "exp_reward": 2,
+    "silver": [
+      55,
+      80
+    ],
+    "chapters": [
+      3,
+      4
+    ],
+    "weight": 3,
+    "armor": 9,
+    "desc": "온몸에 철갑을 두른 정예병. 가벼운 공격은 통하지 않는다.",
+    "specials": [
+      {
+        "name": "철혈돌격",
+        "every": 3,
+        "mult": 1.7
+      }
     ]
   },
   "화경마인": {
     "name": "화경의 마인",
     "tier": "강적",
     "realm": "화경",
-    "hp": 400,
-    "attack": 40,
+    "hp": 1290,
+    "attack": 70,
     "exp_reward": 3,
-    "skills": [
-      "매화검법"
+    "silver": [
+      90,
+      130
     ],
+    "chapters": [
+      3,
+      4,
+      5
+    ],
+    "weight": 2,
+    "armor": 7,
+    "desc": "마공에 삼켜진 고수. 눈빛에 이미 사람의 것이 없다.",
+    "specials": [
+      {
+        "name": "마기폭풍",
+        "every": 3,
+        "mult": 2.0,
+        "qi_drain": 15
+      }
+    ],
+    "drop": {
+      "skill": "매화검법",
+      "chance": 0.1
+    }
+  },
+  "마교장로": {
+    "name": "마교 장로",
+    "tier": "난적",
+    "realm": "화경",
+    "hp": 1190,
+    "attack": 72,
+    "exp_reward": 2,
+    "silver": [
+      70,
+      100
+    ],
+    "chapters": [
+      4,
+      5
+    ],
+    "weight": 5,
+    "armor": 7,
+    "desc": "천마의 복귀를 맹신하는 늙은 마두.",
+    "specials": [
+      {
+        "name": "흡성대법",
+        "every": 3,
+        "mult": 1.3,
+        "qi_drain": 20,
+        "heal_pct": 8
+      }
+    ]
+  },
+  "혈마대귀": {
+    "name": "혈마대의 귀졸",
+    "tier": "일반",
+    "realm": "화경",
+    "hp": 950,
+    "attack": 78,
+    "exp_reward": 1,
     "silver": [
       40,
-      70
+      60
+    ],
+    "chapters": [
+      4,
+      5
+    ],
+    "weight": 5,
+    "desc": "죽음을 두려워하지 않도록 길러진 자들.",
+    "specials": [
+      {
+        "name": "동귀어진",
+        "every": 4,
+        "mult": 2.2
+      }
+    ]
+  },
+  "십이마장": {
+    "name": "십이마장",
+    "tier": "강적",
+    "realm": "현경",
+    "hp": 2030,
+    "attack": 91,
+    "exp_reward": 3,
+    "silver": [
+      130,
+      180
+    ],
+    "chapters": [
+      4,
+      5
+    ],
+    "weight": 3,
+    "armor": 15,
+    "evasion": 0.05,
+    "desc": "천마의 열두 손발. 한 명 한 명이 한 문파를 지울 수 있다.",
+    "specials": [
+      {
+        "name": "마장붕천",
+        "every": 3,
+        "mult": 2.0
+      }
+    ],
+    "phases": [
+      {
+        "hp_pct": 40,
+        "attack_mult": 1.25,
+        "text": "마장이 제 심맥을 끊어 마지막 기세를 끌어올린다!"
+      }
+    ]
+  },
+  "단목휘": {
+    "name": "단목휘",
+    "tier": "난적",
+    "realm": "절정",
+    "hp": 360,
+    "attack": 26,
+    "exp_reward": 2,
+    "silver": [
+      0,
+      0
+    ],
+    "chapters": [],
+    "weight": 0,
+    "evasion": 0.08,
+    "desc": "나와 같은 해에 강호로 나선 검객. 언제나 한 걸음 앞에서 웃는다.",
+    "specials": [
+      {
+        "name": "유성검",
+        "every": 3,
+        "mult": 1.7
+      }
+    ]
+  },
+  "혈마잔영": {
+    "name": "혈마의 잔영",
+    "tier": "강적",
+    "realm": "화경",
+    "hp": 920,
+    "attack": 53,
+    "exp_reward": 3,
+    "silver": [
+      60,
+      90
+    ],
+    "chapters": [],
+    "weight": 0,
+    "desc": "유적에 남은 옛 혈마의 의지. 죽은 자의 칼이 산 자보다 무겁다.",
+    "specials": [
+      {
+        "name": "혈해만리",
+        "every": 3,
+        "mult": 2.0,
+        "qi_drain": 10
+      }
+    ]
+  },
+  "무명노인": {
+    "name": "무명노인",
+    "tier": "강적",
+    "realm": "현경",
+    "hp": 900,
+    "attack": 43,
+    "exp_reward": 3,
+    "silver": [
+      0,
+      0
+    ],
+    "chapters": [],
+    "weight": 0,
+    "evasion": 0.15,
+    "desc": "제자를 시험하러 나온 노인. 죽일 생각은 없어 보인다."
+  },
+  "무림맹추격대": {
+    "name": "무림맹 추격대",
+    "tier": "난적",
+    "realm": "초절정",
+    "hp": 650,
+    "attack": 43,
+    "exp_reward": 2,
+    "silver": [
+      40,
+      60
+    ],
+    "chapters": [],
+    "weight": 0,
+    "armor": 5,
+    "desc": "마도에 물든 자를 쫓는 정도의 칼.",
+    "specials": [
+      {
+        "name": "합격진",
+        "every": 3,
+        "mult": 1.8
+      }
     ]
   },
   "천마": {
     "name": "천마",
     "tier": "보스",
     "realm": "현경",
-    "hp": 1000,
-    "attack": 70,
+    "hp": 5200,
+    "attack": 92,
     "exp_reward": 5,
-    "skills": [
-      "매화검법"
-    ],
     "silver": [
       0,
       0
+    ],
+    "chapters": [],
+    "weight": 0,
+    "armor": 22,
+    "desc": "마교의 지존. 백 년 전 무림을 피로 물들였다는 그 이름.",
+    "specials": [
+      {
+        "name": "천마군림",
+        "every": 3,
+        "mult": 2.1
+      },
+      {
+        "name": "흡성마공",
+        "every": 5,
+        "mult": 1.2,
+        "qi_drain": 25,
+        "heal_pct": 4
+      }
+    ],
+    "phases": [
+      {
+        "hp_pct": 60,
+        "attack_mult": 1.2,
+        "text": "천마가 처음으로 양손을 든다. \"제법이구나.\""
+      },
+      {
+        "hp_pct": 25,
+        "attack_mult": 1.45,
+        "text": "천마의 머리칼이 희게 타오른다. 하늘의 색이 바뀌었다!"
+      }
     ]
   }
 }

@@ -1,0 +1,163 @@
+{
+  "주막싸움": {"chapters": [1, 2], "title": "주막의 시비", "text": "주막에서 건달들이 늙은 주인을 둘러쌌다. 주인이 나를 힐끗 본다.",
+    "choices": [
+      {"label": "나서서 말린다", "outcomes": [{"weight": 3, "text": "건달들은 칼자루를 보더니 슬금슬금 물러났다. 주인이 술값을 받지 않았다.", "effects": {"alignment": {"정도": 1}, "silver": 8, "stats": {"mind": 1}}}, {"weight": 2, "text": "말이 통하지 않았다. 칼이 먼저 나왔다.", "effects": {"alignment": {"정도": 1}, "battle": "산적"}}]},
+      {"label": "건달 편에 서서 몫을 챙긴다", "outcomes": [{"text": "돈궤는 금방 비었다. 주인의 눈을 보지 않았다.", "effects": {"alignment": {"사도": 2}, "silver": 25}}]},
+      {"label": "못 본 척 술만 마신다", "outcomes": [{"text": "오늘의 술은 유난히 썼다.", "effects": {"qi_pct": 15}}]}
+    ]},
+  "길잃은상단": {"chapters": [1, 2], "title": "길 잃은 상단", "text": "상단 하나가 고갯길에서 수레 축이 부러져 오도 가도 못한다. 행수가 은자를 내밀며 호위를 청한다.",
+    "choices": [
+      {"label": "호위를 맡는다", "outcomes": [{"weight": 2, "text": "별일 없이 도착했다. 약속한 은자에 웃돈까지 받았다.", "effects": {"silver": 35, "stats": {"external": 1}}}, {"weight": 1, "text": "산적이 기다리고 있었다. 약속은 약속이다.", "effects": {"silver": 25, "battle": "흑풍채두목"}}]},
+      {"label": "짐을 빼앗는다", "outcomes": [{"text": "행수가 울며 빌었다. 짐은 생각보다 값나갔다.", "effects": {"alignment": {"사도": 1, "마도": 1}, "silver": 50}}]}
+    ]},
+  "폐사찰": {"chapters": [1, 2, 3], "title": "폐사찰의 노승", "text": "무너진 절에 노승 하나가 앉아 있다. 그는 눈도 뜨지 않고 말한다. \"앉으시게. 급할 것 없네.\"",
+    "choices": [
+      {"label": "곁에 앉아 함께 좌선한다", "outcomes": [{"text": "해가 진 줄도 몰랐다. 일어나니 노승은 없었고 마음은 물처럼 잠잠했다.", "effects": {"stats": {"mind": 3}, "qi_pct": 30}}]},
+      {"label": "무공을 가르쳐 달라 청한다", "requires": {"stat_min": {"mind": 35}}, "outcomes": [{"text": "노승이 땅에 손가락으로 몇 줄 그었다. 근골을 바꾸는 구결이었다.", "effects": {"skill": "역근공", "alignment": {"정도": 1}}}]},
+      {"label": "불상의 금박을 긁어 간다", "outcomes": [{"text": "금박은 은자 몇 냥이 되었다. 등 뒤에서 낮은 웃음소리가 들린 것 같았다.", "effects": {"alignment": {"사도": 1}, "silver": 18, "stats": {"mind": -1}}}]}
+    ]},
+  "독사의계곡": {"chapters": [1, 2], "title": "독사의 계곡", "text": "약초꾼이 뱀에 물려 쓰러져 있다. 그의 망태기에는 귀한 약초가 가득하다.",
+    "choices": [
+      {"label": "독을 빨아내고 치료한다", "outcomes": [{"text": "약초꾼이 살아났다. 답례로 금창약을 내밀었다.", "effects": {"alignment": {"정도": 1}, "hp_pct": -5, "item": "금창약"}}]},
+      {"label": "망태기만 챙겨 떠난다", "outcomes": [{"text": "약초를 달여 먹으니 내공이 도는 것이 느껴졌다.", "effects": {"alignment": {"마도": 1}, "stats": {"internal": 3}}}]}
+    ]},
+  "비무대회": {"chapters": [1, 2, 3], "title": "저잣거리 비무", "text": "저잣거리에 비무대가 섰다. 우승 상금이 제법 두둑하다. 얼굴이 알려질 기회이기도 하다.",
+    "choices": [
+      {"label": "정정당당히 참가한다", "outcomes": [{"text": "결승의 상대가 칼을 뽑았다.", "effects": {"battle": "낭인", "silver": 25, "stats": {"martial": 1}}}]},
+      {"label": "판돈을 걸고 지켜본다", "outcomes": [{"weight": 1, "text": "눈이 정확했다. 판돈이 세 배가 되었다.", "effects": {"silver": 45, "stats": {"martial": 1}}}, {"weight": 1, "text": "믿었던 자가 첫판에 나가떨어졌다. 다음엔 자기 칼에 걸어야겠다.", "effects": {"silver": -10}}]},
+      {"label": "다른 사람의 초식을 눈여겨본다", "outcomes": [{"text": "좋은 눈요기였다. 땅에 그어 보며 곱씹었다.", "effects": {"stats": {"martial": 2}}}]}
+    ]},
+  "떠돌이약장수": {"chapters": [1, 2, 3], "title": "수상한 약장수", "text": "\"만병통치! 무공 증진! 한 알에 은자 스무 냥!\" 약장수가 까만 환약을 흔든다.",
+    "choices": [
+      {"label": "한 알 사 먹는다", "requires": {"min_silver": 20}, "outcomes": [{"weight": 2, "text": "진짜였다. 단전이 따뜻해졌다.", "effects": {"silver": -20, "stats": {"internal": 3}}}, {"weight": 1, "text": "밀가루에 숯가루였다. 사흘을 앓았다.", "effects": {"silver": -20, "hp_pct": -15}}]},
+      {"label": "약장수를 추궁한다", "outcomes": [{"text": "약장수가 질겁하고 달아나며 약 몇 알을 떨어뜨렸다.", "effects": {"item": "회기단"}}]}
+    ]},
+  "쫓기는소녀": {"chapters": [1, 2, 3], "title": "쫓기는 소녀", "text": "등에 칼을 멘 사내들이 소녀를 쫓는다. 소녀가 달려와 내 뒤에 숨는다. 사내들의 옷에는 사도련의 문양이 있다.",
+    "choices": [
+      {"label": "소녀를 감싼다", "outcomes": [{"text": "사내들이 칼을 뽑았다.", "effects": {"alignment": {"정도": 2}, "battle": "사파자객"}}]},
+      {"label": "소녀를 넘기고 사례를 받는다", "outcomes": [{"text": "사내가 은자를 던져 주었다. 소녀는 더 울지 않았다.", "effects": {"alignment": {"사도": 2}, "silver": 40, "stats": {"mind": -1}}}]}
+    ]},
+  "달밤의수련": {"chapters": [1, 2, 3, 4, 5], "title": "달밤", "text": "달이 유난히 밝은 밤이다. 잠이 오지 않아 검을 들고 나섰다.",
+    "choices": [
+      {"label": "초식을 처음부터 다시 밟는다", "outcomes": [{"text": "기초가 달라지니 모든 것이 달라졌다.", "effects": {"mastery": 12, "stats": {"martial": 1}}}]},
+      {"label": "달빛 아래 호흡을 고른다", "outcomes": [{"text": "숨 한 번에 달이 들어왔다 나갔다.", "effects": {"qi_pct": 40, "stats": {"internal": 1}}}]},
+      {"label": "그냥 달을 본다", "outcomes": [{"text": "강호에 나온 뒤 처음으로 고향 생각이 났다.", "effects": {"hp_pct": 25, "stats": {"mind": 2}}}]}
+    ]},
+
+  "단목휘_첫만남": {"chapters": [1, 2], "title": "웃는 검객", "text": "돌다리 위에서 젊은 검객이 길을 막고 웃는다. \"단목휘라 하오. 같은 해에 강호에 나왔다지? 한 수 겨룹시다. 다리 값 대신.\"",
+    "choices": [
+      {"label": "검을 뽑는다", "outcomes": [{"text": "그의 검은 웃는 얼굴처럼 가벼웠고, 빨랐다.", "effects": {"flags": ["단목휘_만남"], "battle": "단목휘"}}]},
+      {"label": "웃어넘기고 술을 권한다", "outcomes": [{"text": "\"재미없는 사람이군. 아니, 재미있는 사람인가?\" 그는 술을 받아 마시고 떠났다.", "effects": {"flags": ["단목휘_만남", "단목휘_친분"], "stats": {"mind": 1}}}]}
+    ]},
+  "단목휘_재회": {"chapters": [2, 3], "requires": {"flag": "단목휘_만남"}, "title": "다시 만난 다리", "text": "객잔 2층에서 단목휘가 손을 흔든다. 전보다 눈빛이 깊어졌다. \"소문 들었소. 그런데 천마 이야기, 진짜인 것 같소. 내가 본 것을 들어 보겠소?\"",
+    "choices": [
+      {"label": "그의 이야기를 듣고 함께 조사한다", "outcomes": [{"text": "마을 셋이 비어 있었다. 그와 등을 맞대고 몇 번의 고비를 넘겼다.", "effects": {"flags": ["단목휘_친분"], "stats": {"martial": 2, "external": 1}}}]},
+      {"label": "그의 정보를 사도련에 판다", "outcomes": [{"text": "값은 좋았다. 다음 날 그는 객잔에서 사라졌다.", "effects": {"alignment": {"사도": 2}, "silver": 70, "flags": ["단목휘_배신"]}}]},
+      {"label": "남의 일이다", "outcomes": [{"text": "\"그렇군.\" 그는 여전히 웃었지만, 술은 혼자 마셨다.", "effects": {"stats": {"mind": 1}}}]}
+    ]},
+  "단목휘_위기": {"chapters": [3, 4, 5], "requires": {"flag": "단목휘_친분"}, "title": "포위된 검객", "text": "골짜기에서 익숙한 검기가 흩어진다. 단목휘가 피투성이가 되어 마인들에게 둘러싸였다. 그가 나를 보고 또 웃는다. \"하필 이럴 때 오시오?\"",
+    "choices": [
+      {"label": "뛰어들어 함께 싸운다", "outcomes": [{"text": "그는 내 등 뒤에서 숨을 몰아쉬며 말했다. \"빚졌소. 천마봉에 갈 때 부르시오.\"", "effects": {"alignment": {"정도": 1}, "flags": ["단목휘_동맹"], "battle": "화경마인"}}]},
+      {"label": "약을 던져 주고 길을 뚫어 준다", "requires": {"min_silver": 30}, "outcomes": [{"text": "그는 살았다. 은자값은 나중에 받기로 했다.", "effects": {"silver": -30, "flags": ["단목휘_동맹"], "hp_pct": -10}}]},
+      {"label": "돌아선다", "outcomes": [{"text": "등 뒤에서 검기가 하나 꺼졌다. 다리 위의 웃음이 오래 귀에 남았다.", "effects": {"alignment": {"마도": 2}, "flags": ["단목휘_죽음"], "stats": {"mind": -3}}}]}
+    ]},
+
+  "무명노인_첫시험": {"chapters": [2, 3], "title": "장작 패는 노인", "text": "산중의 노인이 장작을 패고 있다. 도끼질 한 번마다 공기가 갈라진다. \"거기 젊은이, 장작이나 좀 패 보게. 석 달만.\"",
+    "choices": [
+      {"label": "말없이 도끼를 든다", "outcomes": [{"text": "석 달 치의 장작을 사흘에 팼다. 노인이 처음으로 고개를 끄덕였다.", "effects": {"flags": ["노인_제자"], "stats": {"external": 3, "mind": 2}}}]},
+      {"label": "그럴 시간이 없다", "outcomes": [{"text": "\"그렇겠지.\" 노인은 돌아보지 않았다.", "effects": {"qi_pct": 10}}]}
+    ]},
+  "무명노인_심법": {"chapters": [3, 4], "requires": {"flag": "노인_제자"}, "title": "비어 있는 방", "text": "노인의 초막에는 아무것도 없다. \"가진 것을 내려놓아 보게. 무엇이든.\" 노인이 손을 내민다.",
+    "choices": [
+      {"label": "지닌 은자를 전부 내려놓는다", "outcomes": [{"text": "노인은 은자를 거들떠보지도 않고 구결 한 줄을 읊었다. 태허심법이었다.", "effects": {"set_silver": 0, "skill": "태허심법", "flags": ["노인_심법"]}}]},
+      {"label": "지금은 내려놓을 수 없다", "outcomes": [{"text": "노인은 웃기만 했다.", "effects": {"stats": {"mind": 1}}}]}
+    ]},
+  "무명노인_검결": {"chapters": [4, 5], "requires": {"flag": "노인_심법"}, "title": "마지막 수업", "text": "노인이 마침내 나뭇가지를 들었다. \"내 평생이 여기 있네. 받아 갈 수 있으면 받아 가게.\"",
+    "choices": [
+      {"label": "온 힘을 다해 달려든다", "outcomes": [{"text": "나뭇가지 하나를 넘지 못했지만, 그 궤적이 눈에 박혔다.", "effects": {"skill": "태허검결", "flags": ["노인_검결"], "battle": "무명노인"}}]}
+    ]},
+
+  "혈마유적_입구": {"chapters": [2, 3], "title": "붉은 동굴", "text": "비가 그치지 않던 날, 비를 피해 들어간 동굴의 벽이 온통 붉다. 안쪽에서 누군가 내 이름을 부른다. 분명 처음 온 곳인데.",
+    "choices": [
+      {"label": "더 들어간다", "outcomes": [{"text": "제단 위 낡은 도 한 자루. 칼자루를 쥐자 혈영도법의 초식이 머릿속으로 쏟아졌다.", "effects": {"alignment": {"마도": 3}, "skill": "혈영도법", "flags": ["혈마유적"], "hp_pct": -20}}]},
+      {"label": "동굴 입구를 무너뜨린다", "outcomes": [{"text": "돌무더기 너머에서 무언가 길게 탄식했다.", "effects": {"alignment": {"정도": 2}, "stats": {"mind": 2}}}]}
+    ]},
+  "혈마유적_심처": {"chapters": [3, 4], "requires": {"flag": "혈마유적"}, "title": "혈마의 심처", "text": "도가 나를 다시 그 동굴로 끌고 왔다. 가장 깊은 곳에 옛 혈마의 그림자가 앉아 있다. \"먹어라. 아니면 먹혀라.\"",
+    "choices": [
+      {"label": "그림자를 벤다", "outcomes": [{"text": "칼이 칼을 알아보았다.", "effects": {"alignment": {"마도": 2}, "skill": "혈마심공", "battle": "혈마잔영"}}]},
+      {"label": "도를 제단에 돌려놓는다", "outcomes": [{"text": "손에서 도를 떼는 데 사흘이 걸렸다. 하지만 떼어 냈다.", "effects": {"alignment": {"정도": 3, "마도": -2}, "stats": {"mind": 5}}}]}
+    ]},
+
+  "암시장초대": {"chapters": [2, 3, 4], "requires": {"any_flag": ["사도련", "하오문연줄"]}, "title": "암시장의 초대", "text": "낯선 아이가 쪽지를 건넨다. '달 없는 밤, 옛 나루터. 사도련 물건 있음.' 나루터에는 등불 하나 없이 거래가 오간다.",
+    "choices": [
+      {"label": "독룡장 비급을 산다", "requires": {"min_silver": 150}, "outcomes": [{"text": "독 냄새 나는 책을 품에 넣었다.", "effects": {"alignment": {"사도": 1}, "silver": -150, "skill": "독룡장"}}]},
+      {"label": "장물을 받아 되판다", "outcomes": [{"weight": 3, "text": "손도 안 대고 코를 풀었다.", "effects": {"alignment": {"사도": 1}, "silver": 90}}, {"weight": 1, "text": "함정이었다. 무림맹 추격대가 나루터를 덮쳤다.", "effects": {"alignment": {"사도": 1}, "battle": "무림맹추격대"}}]},
+      {"label": "소식만 듣고 돌아간다", "outcomes": [{"text": "돈보다 값진 이야기를 몇 개 들었다.", "effects": {"stats": {"mind": 2}}}]}
+    ]},
+  "맹의임무": {"chapters": [2, 3, 4], "requires": {"flag": "무림맹"}, "title": "무림맹의 부탁", "text": "무림맹 전서구가 날아왔다. 이웃 고을을 약탈하는 자들을 처리해 달라는 전갈이다. 이번 일을 해내면 항마장을 전수하겠다고 한다.",
+    "choices": [
+      {"label": "임무를 수행한다", "outcomes": [{"text": "맹의 장로가 직접 손을 잡아 항마장의 요결을 일러 주었다.", "effects": {"alignment": {"정도": 2}, "skill": "항마장", "battle": "철혈대원"}}]},
+      {"label": "지금은 바쁘다고 답한다", "outcomes": [{"text": "전서구를 날려 보냈다.", "effects": {"qi_pct": 15}}]}
+    ]},
+  "붉은여인": {"chapters": [2, 3, 4], "requires": {"flag": "마교접촉"}, "title": "붉은 옷의 여인", "text": "붉은 옷의 여인이 또 찾아왔다. \"본교에 오시지요. 교주께서 그대를 궁금해하십니다.\" 그녀의 손에 붉은 단약이 놓여 있다.",
+    "choices": [
+      {"label": "단약을 삼킨다", "outcomes": [{"text": "온몸의 피가 거꾸로 돌았다가 제자리를 찾았다. 전보다 강하다. 전보다 무언가 적다.", "effects": {"alignment": {"마도": 2}, "stats": {"external": 3, "internal": 3, "mind": -3}}}]},
+      {"label": "단약을 받아 팔아 버린다", "outcomes": [{"text": "그녀가 소리 없이 웃었다. 그 정도는 예상했다는 듯이.", "effects": {"alignment": {"사도": 1}, "silver": 80}}]},
+      {"label": "다시는 찾아오지 말라고 한다", "outcomes": [{"text": "\"그럴 수 있을까요?\" 그녀가 사라진 자리에 재가 남았다.", "effects": {"alignment": {"정도": 2}, "stats": {"mind": 1}}}]}
+    ]},
+
+  "전장의유품": {"chapters": [3, 4, 5], "title": "전장의 유품", "text": "지난 격전지. 시신들 사이로 부러진 명검과 전낭이 보인다. 까마귀들이 내 쪽을 본다.",
+    "choices": [
+      {"label": "시신을 수습해 묻어 준다", "outcomes": [{"text": "하루가 꼬박 걸렸다. 마지막 무덤을 덮자 바람이 잦아들었다.", "effects": {"alignment": {"정도": 2}, "stats": {"mind": 2}}}]},
+      {"label": "쓸 만한 것을 챙긴다", "outcomes": [{"text": "죽은 자들에게 쓸모없는 것들이다. 그렇게 말해 두자.", "effects": {"alignment": {"사도": 1}, "silver": 80}}]},
+      {"label": "시신에 남은 마기를 흡수한다", "outcomes": [{"text": "까마귀들이 날아올랐다. 내게서 달아나는 것이었다.", "effects": {"alignment": {"마도": 2}, "stats": {"internal": 4}, "hp_pct": 15}}]}
+    ]},
+  "난민행렬": {"chapters": [3, 4], "title": "끝없는 행렬", "text": "전란을 피한 사람들이 끝없이 걷는다. 한 아이가 내 옷자락을 붙들고 먹을 것을 조른다.",
+    "choices": [
+      {"label": "지닌 은자를 나눠 준다", "requires": {"min_silver": 50}, "outcomes": [{"text": "아이가 처음으로 웃었다. 그것으로 충분했다.", "effects": {"alignment": {"정도": 3}, "silver": -50, "stats": {"mind": 3}}}]},
+      {"label": "길을 안내해 준다", "outcomes": [{"text": "사흘 길을 함께 걸었다. 몸은 지쳤지만 마음은 무겁지 않았다.", "effects": {"alignment": {"정도": 1}, "hp_pct": -10, "stats": {"mind": 1}}}]},
+      {"label": "그들의 소식을 사도련에 판다", "outcomes": [{"text": "값을 받았다. 이런 정보는 늘 값이 나간다.", "effects": {"alignment": {"사도": 2}, "silver": 60}}]}
+    ]},
+  "독문의거래": {"chapters": [3, 4], "title": "독문의 제안", "text": "독문의 노파가 바구니를 내민다. \"면역을 길러 주지. 독을 조금씩 먹는 거야. 죽지만 않으면 강해지거든.\"",
+    "choices": [
+      {"label": "독을 받아 삼킨다", "outcomes": [{"weight": 3, "text": "밤새 토하고 나니 몸이 가볍다.", "effects": {"hp_pct": -20, "stats": {"external": 3, "internal": 2}}}, {"weight": 1, "text": "독이 내장을 긁었다. 그래도 죽지는 않았다.", "effects": {"hp_pct": -40, "stats": {"external": 1}}}]},
+      {"label": "노파를 내쫓는다", "outcomes": [{"text": "노파가 깔깔 웃으며 금창약 한 병을 남기고 갔다.", "effects": {"item": "금창약"}}]}
+    ]},
+  "강호의소문": {"chapters": [3, 4, 5], "title": "객잔의 소문", "text": "객잔이 시끄럽다. 누가 누구를 베었고, 어느 문파가 사라졌다는 이야기들. 이제 그 이야기 속에 내 별호도 섞여 있다.",
+    "choices": [
+      {"label": "조용히 귀를 기울인다", "outcomes": [{"text": "쓸모 있는 이야기를 몇 개 건졌다.", "effects": {"stats": {"mind": 1, "martial": 1}, "silver": 15}}]},
+      {"label": "내 이름을 팔아 외상을 한다", "outcomes": [{"text": "주인이 벌벌 떨며 고기와 술을 내왔다.", "effects": {"alignment": {"사도": 1}, "hp_pct": 30, "qi_pct": 30}}]}
+    ]},
+  "폭포수련": {"chapters": [2, 3, 4], "title": "천 길 폭포", "text": "천 길 폭포 아래 평평한 바위가 있다. 많은 고수가 저기서 깨달음을 얻었다고 한다. 저기서 죽은 이는 더 많다.",
+    "choices": [
+      {"label": "바위에 올라 물줄기를 받는다", "requires": {"stat_min": {"external": 40}}, "outcomes": [{"text": "물줄기가 산처럼 내리눌렀다. 버티고 나니 몸의 쓸모없는 힘이 씻겨 나갔다.", "effects": {"stats": {"external": 4, "mind": 2}, "hp_pct": -25}}]},
+      {"label": "물줄기를 베어 본다", "outcomes": [{"text": "베이지 않았다. 몇백 번째에서 잠시 틈이 보였다.", "effects": {"mastery": 18, "qi_pct": -20}}]},
+      {"label": "멀리서 바라만 본다", "outcomes": [{"text": "물소리에 마음이 씻겼다.", "effects": {"qi_pct": 25}}]}
+    ]},
+  "비급경매": {"chapters": [3, 4], "title": "은밀한 경매", "text": "고급 기루 지하에서 경매가 열렸다. 오늘의 물건은 '유운신법' 비급. 사람들의 눈빛이 번들거린다.",
+    "choices": [
+      {"label": "은자 200냥을 부른다", "requires": {"min_silver": 200}, "outcomes": [{"text": "낙찰. 비급은 진짜였다.", "effects": {"silver": -200, "skill": "유운신법"}}]},
+      {"label": "낙찰자를 뒤따라간다", "outcomes": [{"text": "골목에서 그를 기다렸다. 그도 나를 기다리고 있었다.", "effects": {"alignment": {"사도": 2}, "skill": "유운신법", "battle": "사파자객"}}]},
+      {"label": "구경만 한다", "outcomes": [{"text": "돈이 무서운 줄 모르는 사람이 이렇게 많다.", "effects": {"stats": {"mind": 1}}}]}
+    ]},
+  "옛사부의편지": {"chapters": [4, 5], "title": "사부의 편지", "text": "낯선 전령이 편지를 전한다. 떠나온 날 이후 처음이다. '소식은 듣는다. 네가 무엇이 되었든, 밥은 먹고 다녀라.' 글씨가 많이 흔들린다.",
+    "choices": [
+      {"label": "답장을 쓴다", "outcomes": [{"text": "몇 번을 고쳐 쓰다 결국 '잘 지냅니다' 한 줄을 보냈다.", "effects": {"stats": {"mind": 4}, "hp_pct": 20}}]},
+      {"label": "태워 버린다", "outcomes": [{"text": "재가 다 흩어질 때까지 움직이지 않았다.", "effects": {"alignment": {"마도": 1}, "stats": {"external": 2, "martial": 2}}}]}
+    ]},
+  "마지막밤의술": {"chapters": [5], "title": "결전 전의 술", "text": "결전이 가까워진 어느 밤, 이름 모를 무인들이 모닥불에 둘러앉아 술을 돌린다. \"같이 드시오. 다음 해엔 없을지도 모르는 얼굴들이니.\"",
+    "choices": [
+      {"label": "함께 마신다", "outcomes": [{"text": "이름도 묻지 않았다. 그래도 오래 기억날 것 같은 밤이었다.", "effects": {"hp_pct": 40, "qi_pct": 40, "stats": {"mind": 2}}}]},
+      {"label": "홀로 검을 닦는다", "outcomes": [{"text": "칼날에 비친 얼굴이 낯설었다.", "effects": {"mastery": 20}}]}
+    ]},
+  "마두의토벌": {"chapters": [4, 5], "title": "현상금", "text": "객잔 벽보에 십이마장 중 한 명의 현상금이 붙었다. 어젯밤 이 근처에서 봤다는 소문이 돈다.",
+    "choices": [
+      {"label": "찾아 나선다", "outcomes": [{"text": "소문은 사실이었다.", "effects": {"battle": "십이마장", "alignment": {"정도": 1}, "silver": 120}}]},
+      {"label": "다음에 하자", "outcomes": [{"text": "아직은 때가 아니다. 칼을 조금 더 갈았다.", "effects": {"mastery": 8}}]}
+    ]},
+  "떠도는영약": {"chapters": [2, 3, 4, 5], "title": "산삼 지키는 노루", "text": "길을 잃고 들어간 깊은 골짜기, 하얀 노루 한 마리가 붉은 열매가 맺힌 풀 앞에 서서 움직이지 않는다.",
+    "choices": [
+      {"label": "노루를 쫓고 영약을 캔다", "outcomes": [{"text": "오래 묵은 산삼이었다. 혀끝부터 뜨거워졌다.", "effects": {"alignment": {"마도": 1}, "stats": {"internal": 5}}}]},
+      {"label": "절을 하고 돌아선다", "outcomes": [{"text": "노루가 천천히 고개를 숙였다. 그날 밤 꿈에서 초식 하나를 보았다.", "effects": {"alignment": {"정도": 1}, "stats": {"martial": 3, "mind": 2}}}]}
+    ]}
+}

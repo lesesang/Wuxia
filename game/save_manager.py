@@ -1,13 +1,11 @@
 """
-턴 체크포인트 저장 시스템 (계획서 §4)
+턴 체크포인트 저장 시스템
 
 "턴이 시작되는 시점"의 상태를 saves/save.json에 저장한다.
-브라우저 세션이 완전히 사라져도(앱을 껐다 켜도) 이 파일을 읽어서
-가장 최근 턴 시작 지점부터 다시 진행할 수 있게 한다.
+앱을 껐다 켜면 이 파일을 읽어서 가장 최근 턴 시작 지점부터 다시 진행한다.
 
-저장 시점: 한 턴의 모든 처리(전투 포함)가 완전히 끝나서
-           다음 턴이 시작되려는 순간 (engine._finish_turn() 직후).
-전투 중간 상태는 이 파일에 저장하지 않는다 — 전투는 세션에서만 임시로 다룬다.
+전투, 이벤트, 시장 중간 상태는 저장하지 않는다.
+다시 불러오면 그 턴의 처음으로 돌아간다.
 """
 
 import json
@@ -21,19 +19,27 @@ def _ensure_save_dir():
 
 
 def save_checkpoint(player_dict, log):
-    """턴 시작 지점 스냅샷을 디스크에 저장."""
+    """턴 시작 지점 스냅샷을 디스크에 저장. 중간에 꺼져도 깨지지 않도록 임시 파일을 거친다."""
     _ensure_save_dir()
     data = {"player": player_dict, "log": log}
-    with open(_SAVE_PATH, "w", encoding="utf-8") as f:
+    temp_path = _SAVE_PATH + ".tmp"
+    with open(temp_path, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
+    os.replace(temp_path, _SAVE_PATH)
 
 
 def load_checkpoint():
-    """저장된 체크포인트를 불러온다. 없으면 None."""
+    """저장된 체크포인트를 불러온다. 없거나 손상됐으면 None."""
     if not os.path.exists(_SAVE_PATH):
         return None
-    with open(_SAVE_PATH, "r", encoding="utf-8") as f:
-        return json.load(f)
+    try:
+        with open(_SAVE_PATH, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except (json.JSONDecodeError, OSError):
+        return None
+    if not isinstance(data, dict) or "player" not in data:
+        return None
+    return data
 
 
 def clear_checkpoint():
@@ -43,4 +49,4 @@ def clear_checkpoint():
 
 
 def has_checkpoint():
-    return os.path.exists(_SAVE_PATH)
+    return load_checkpoint() is not None

@@ -5,7 +5,11 @@
     "rarity": "일반",
     "cost": 3,
     "effects": [
-      {"type": "start_stat", "stat": "external", "amount": 10}
+      {
+        "type": "start_stat",
+        "stat": "external",
+        "amount": 10
+      }
     ]
   },
   "선천진기": {
@@ -14,7 +18,11 @@
     "rarity": "일반",
     "cost": 3,
     "effects": [
-      {"type": "start_stat", "stat": "internal", "amount": 10}
+      {
+        "type": "start_stat",
+        "stat": "internal",
+        "amount": 10
+      }
     ]
   },
   "무골": {
@@ -23,7 +31,11 @@
     "rarity": "일반",
     "cost": 5,
     "effects": [
-      {"type": "growth_rate", "stat": "external", "percent": 10}
+      {
+        "type": "growth_rate",
+        "stat": "external",
+        "percent": 10
+      }
     ]
   },
   "기재": {
@@ -32,18 +44,167 @@
     "rarity": "일반",
     "cost": 5,
     "effects": [
-      {"type": "growth_rate", "stat": "martial", "percent": 10}
+      {
+        "type": "growth_rate",
+        "stat": "martial",
+        "percent": 10
+      }
     ]
   },
   "전투광": {
     "name": "전투광",
-    "desc": "전투가 시작되면 외공이 전투 중에만 5 오른다 (99 한계 초과 가능). 전투가 끝나면 체력과 내공을 각각 25% 즉시 회복한다.",
+    "desc": "전투가 시작되면 외공이 전투 중에만 5 오른다 (99 한계 초과 가능). 전투가 끝나면 체력과 기력을 각각 25% 즉시 회복한다.",
     "rarity": "희귀",
     "cost": 8,
     "effects": [
-      {"type": "battle_buff", "trigger": "on_battle_start", "stat": "external", "amount": 5, "temporary": true},
-      {"type": "battle_buff", "trigger": "on_battle_end", "stat": "hp", "percent": 25},
-      {"type": "battle_buff", "trigger": "on_battle_end", "stat": "qi", "percent": 25}
+      {
+        "type": "battle_buff",
+        "trigger": "on_battle_start",
+        "stat": "external",
+        "amount": 5,
+        "temporary": true
+      },
+      {
+        "type": "battle_buff",
+        "trigger": "on_battle_end",
+        "stat": "hp",
+        "percent": 25
+      },
+      {
+        "type": "battle_buff",
+        "trigger": "on_battle_end",
+        "stat": "qi",
+        "percent": 25
+      }
+    ]
+  },
+  "천생근골": {
+    "name": "천생근골",
+    "desc": "외공과 무리 성장이 각각 10% 증가한다 (소수점 올림).",
+    "rarity": "희귀",
+    "cost": 8,
+    "effects": [
+      {
+        "type": "growth_rate",
+        "stat": "external",
+        "percent": 10
+      },
+      {
+        "type": "growth_rate",
+        "stat": "martial",
+        "percent": 10
+      }
+    ]
+  },
+  "오성": {
+    "name": "오성",
+    "desc": "내공과 심경 성장이 각각 10% 증가한다 (소수점 올림).",
+    "rarity": "희귀",
+    "cost": 8,
+    "effects": [
+      {
+        "type": "growth_rate",
+        "stat": "internal",
+        "percent": 10
+      },
+      {
+        "type": "growth_rate",
+        "stat": "mind",
+        "percent": 10
+      }
+    ]
+  },
+  "장사꾼기질": {
+    "name": "장사꾼 기질",
+    "desc": "은자 60을 들고 시작하며, 시장 가격이 10% 싸다.",
+    "rarity": "일반",
+    "cost": 4,
+    "effects": [
+      {
+        "type": "start_silver",
+        "amount": 60
+      },
+      {
+        "type": "market_discount",
+        "percent": 10
+      }
+    ]
+  },
+  "금전운": {
+    "name": "금전운",
+    "desc": "얻는 은자가 30% 늘어난다.",
+    "rarity": "일반",
+    "cost": 5,
+    "effects": [
+      {
+        "type": "silver_rate",
+        "percent": 30
+      }
+    ]
+  },
+  "철옹성": {
+    "name": "철옹성",
+    "desc": "매 턴 시작 시 체력을 추가로 5% 회복한다.",
+    "rarity": "일반",
+    "cost": 5,
+    "effects": [
+      {
+        "type": "turn_regen",
+        "hp_pct": 5,
+        "qi_pct": 0
+      }
+    ]
+  },
+  "심유일점": {
+    "name": "심유일점",
+    "desc": "치명타 확률이 10% 오른다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "crit",
+        "percent": 10
+      }
+    ]
+  },
+  "경공의재능": {
+    "name": "경공의 재능",
+    "desc": "경공 「초상비」를 익힌 채로 시작한다.",
+    "rarity": "일반",
+    "cost": 4,
+    "effects": [
+      {
+        "type": "start_skill",
+        "skill": "초상비"
+      }
+    ]
+  },
+  "천하제일기재": {
+    "name": "천하제일기재",
+    "desc": "모든 능력치가 6 높은 채로 시작한다.",
+    "rarity": "전설",
+    "cost": 15,
+    "effects": [
+      {
+        "type": "start_stat",
+        "stat": "external",
+        "amount": 6
+      },
+      {
+        "type": "start_stat",
+        "stat": "internal",
+        "amount": 6
+      },
+      {
+        "type": "start_stat",
+        "stat": "martial",
+        "amount": 6
+      },
+      {
+        "type": "start_stat",
+        "stat": "mind",
+        "amount": 6
+      }
     ]
   }
 }
