@@ -8,12 +8,13 @@ data/events_random.json : 탐색 중 일어나는 사건. 회차당 한 번씩�
 
 requires (이벤트와 선택지 공통, 모두 선택 사항):
     origin, flag, not_flag, any_flag, min_silver, realm_min, skill, no_skill,
-    stat_min {"mind": 40}, alignment_min {"정도": 5}
+    stat_min {"mind": 40}, alignment_min {"정도": 5},
+    sect (문파 키), no_sect (true), min_fame, max_alignment {"마도": 5}
 
 effects (결과):
     stats {"external": 2}, hp_pct, qi_pct, silver, set_silver, alignment {"정도": 1},
-    flags ["이름"], skill, mastery, item, boss_weaken,
-    battle (적 키), final_battle (true), ending (엔딩 키)
+    flags ["이름"], skill, mastery, item, equip, boss_weaken, fame, injury, join_sect,
+    battle (적 키), gauntlet {"enemies": [...], "reward": {효과}}, final_battle (true), ending (엔딩 키)
 """
 
 import json
@@ -22,10 +23,16 @@ import random
 
 from game.alignment import ALIGNMENTS
 from game.chapter import get_chapter
-from game.market import ITEM_DB
+from game.flavor import fame_rank_changed
+from game.karma import update_known
+from game.market import ITEM_DB, equipment_bonus
 from game.player import STAT_NAMES
 from game.realm import REALM_ORDER
+from game.sect import SECT_DB
 from game.skill import SKILL_DB, Skill
+from game.traits import apply_growth
+
+EVENT_STAT_SCALE = 0.6  # 사건·기연의 능력치 상승 배율 (밸런스 조정용)
 
 _DIR = os.path.join(os.path.dirname(__file__), "..", "data")
 
@@ -37,7 +44,11 @@ def _load(name):
 
 STORY_EVENTS = _load("events_story.json")
 RANDOM_EVENTS = _load("events_random.json")
+SECT_EVENTS = _load("events_sect.json")
+RANDOM_EVENTS.update(SECT_EVENTS)
+RANDOM_EVENTS.update(_load("events_jianghu.json"))
 EVENT_DB = {**STORY_EVENTS, **RANDOM_EVENTS}
+FORTUNES = _load("fortunes.json")
 
 
 def check_requires(player, requires):
@@ -66,6 +77,15 @@ def unmet_reason(player, requires):
         return "필요한 무공이 없다"
     if "no_skill" in requires and player.has_skill(requires["no_skill"]):
         return "이미 익혔다"
+    if "sect" in requires and player.sect != requires["sect"]:
+        return "다른 문파의 일이다"
+    if requires.get("no_sect") and player.sect:
+        return "이미 사문이 있다"
+    if "min_fame" in requires and player.fame < requires["min_fame"]:
+        return f"명성 {requires['min_fame']} 필요"
+    for name, value in requires.get("max_alignment", {}).items():
+        if player.alignment.get(name, 0) > value:
+            return f"{name}의 기운이 너무 짙다"
     for stat, value in requires.get("stat_min", {}).items():
         if getattr(player, stat) < value:
             return f"{STAT_NAMES[stat]} {value} 필요"
@@ -98,6 +118,14 @@ def pick_random_event(player):
     # 인연이 이어지는 이벤트를 먼저 만날 가능성을 높인다
     weights = [3 if RANDOM_EVENTS[k].get("requires") else 1 for k in options]
     return random.choices(options, weights=weights)[0]
+
+
+def pick_fortune(player):
+    """지금 챕터에 맞는 기연 하나."""
+    chapter = get_chapter(player.turn)
+    options = [f for f in FORTUNES
+               if chapter in f.get("chapters", [1, 2, 3, 4, 5]) and check_requires(player, f.get("requires"))]
+    return random.choice(options)
 
 
 def event_view(player, key):
@@ -140,7 +168,8 @@ def apply_effects(player, effects):
 
     for stat, amount in effects.get("stats", {}).items():
         if amount >= 0:
-            gained = player.gain_stat(stat, amount)
+            scaled = max(1, round(amount * EVENT_STAT_SCALE))
+            gained = player.gain_stat(stat, apply_growth(scaled, player.traits, stat))
             summary.append(f"{STAT_NAMES[stat]}+{gained}")
         else:
             setattr(player, stat, max(1, getattr(player, stat) + amount))
@@ -177,6 +206,22 @@ def apply_effects(player, effects):
     if "boss_weaken" in effects:
         player.boss_weaken += effects["boss_weaken"]
 
+    if "fame" in effects:
+        before = player.fame
+        player.fame = max(0, player.fame + effects["fame"])
+        summary.append(f"명성{effects['fame']:+d}")
+        new_rank = fame_rank_changed(before, player.fame)
+        if new_rank:
+            summary.append(f"강호에서 「{new_rank}」로 불리기 시작했다")
+
+    if "injury" in effects:
+        player.add_injury(effects["injury"])
+        summary.append(f"내상{effects['injury']:+d}")
+
+    if "join_sect" in effects:
+        player.sect = effects["join_sect"]
+        summary.append(f"「{SECT_DB[player.sect]['name']}」 입문")
+
     if "mastery" in effects:
         skill = player.best_skill()
         if skill is not None:
@@ -192,11 +237,24 @@ def apply_effects(player, effects):
             summary.append(f"📕 새 무공 「{skill.name}」")
         summary.extend(messages)
 
+    if "equip" in effects:
+        summary.extend(_equip_reward(player, effects["equip"]))
+
     if "item" in effects:
         player.add_item(effects["item"])
         summary.append(f"「{ITEM_DB[effects['item']]['name']}」 획득")
 
     return summary
+
+
+def _equip_reward(player, key):
+    """보상 장비: 지금 것보다 좋을 때만 바꿔 든다."""
+    effect = next(e for e in ITEM_DB[key]["effects"] if e["type"] == "equip")
+    update_known(item_keys=[key])
+    if effect["bonus"] > equipment_bonus(player, effect["slot"]):
+        setattr(player, effect["slot"], key)
+        return [f"「{ITEM_DB[key]['name']}」 장착"]
+    return [f"「{ITEM_DB[key]['name']}」을(를) 받았지만 지금 장비가 더 좋다"]
 
 
 def validate_events():
@@ -209,6 +267,14 @@ def validate_events():
                 effects = outcome.get("effects", {})
                 if "battle" in effects and effects["battle"] not in ENEMY_DB:
                     errors.append(f"{key}: 없는 적 {effects['battle']}")
+                for enemy in effects.get("gauntlet", {}).get("enemies", []):
+                    if enemy not in ENEMY_DB:
+                        errors.append(f"{key}: 없는 적 {enemy}")
+                reward = effects.get("gauntlet", {}).get("reward", {})
+                if "skill" in reward and reward["skill"] not in SKILL_DB:
+                    errors.append(f"{key}: 없는 무공 {reward['skill']}")
+                if "join_sect" in effects and effects["join_sect"] not in SECT_DB:
+                    errors.append(f"{key}: 없는 문파 {effects['join_sect']}")
                 if "skill" in effects and effects["skill"] not in SKILL_DB:
                     errors.append(f"{key}: 없는 무공 {effects['skill']}")
                 if "item" in effects and effects["item"] not in ITEM_DB:
@@ -219,4 +285,11 @@ def validate_events():
                 for name in effects.get("alignment", {}):
                     if name not in ALIGNMENTS:
                         errors.append(f"{key}: 없는 성향 {name}")
+    for fortune in FORTUNES:
+        effects = fortune["effects"]
+        if "item" in effects and effects["item"] not in ITEM_DB:
+            errors.append(f"기연: 없는 품목 {effects['item']}")
+    for chapter in range(1, 6):
+        if not any(chapter in f.get("chapters", [1, 2, 3, 4, 5]) for f in FORTUNES):
+            errors.append(f"{chapter}장 기연 없음")
     return errors

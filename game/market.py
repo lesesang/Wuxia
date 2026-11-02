@@ -17,6 +17,7 @@
         equip       {"slot": "weapon"|"armor", "bonus": N}
         skill       {"skill": 무공 키}
         boss_weaken {"percent": N}                     (천마 시작 체력 감소)
+        cure        {"what": "poison"|"injury", "amount": N}  (해독, 내상 치료)
 
 시장은 해당 턴의 행동을 마치고 "다음"을 눌렀을 때 열리며 턴을 소모하지 않는다.
 은자는 회차마다 새로 시작한다.
@@ -31,7 +32,7 @@ from game.chapter import MARKET_TURNS
 from game.skill import Skill
 from game.traits import sum_effect
 
-STOCK_SIZE = 7
+STOCK_SIZE = 8
 STAT_CAP = 99
 
 _DATA_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "market.json")
@@ -61,6 +62,7 @@ def open_market(turn, player):
         e["type"] == "skill" and player.has_skill(e["skill"]) for e in ITEM_DB[k]["effects"])]
 
     stock = [k for k in pool if ITEM_DB[k].get("always")]
+    stock += _gear_for_sale(pool, player)
     others = [k for k in pool if k not in stock]
     random.shuffle(others)
     stock += others[:max(0, STOCK_SIZE - len(stock))]
@@ -70,6 +72,17 @@ def open_market(turn, player):
         "stock": [{"key": k, "left": ITEM_DB[k].get("stock_qty", 1)} for k in stock],
         "message": None,
     }
+
+
+def _gear_for_sale(pool, player):
+    """무기와 방어구는 지금 것보다 나은 물건을 하나씩 꼭 진열한다."""
+    picks = []
+    for slot in ("weapon", "armor"):
+        better = [k for k in pool for e in ITEM_DB[k]["effects"]
+                  if e["type"] == "equip" and e["slot"] == slot and e["bonus"] > equipment_bonus(player, slot)]
+        if better:
+            picks.append(random.choice(better))
+    return picks
 
 
 def equipment_bonus(player, slot):
@@ -93,8 +106,8 @@ def price_of(player, key):
 
 def _effect_is_useful(player, effect):
     kind = effect["type"]
-    if kind == "heal":
-        return effect["percent"] > 0
+    if kind in ("heal", "cure"):
+        return effect.get("percent", 1) > 0
     if kind == "stat":
         return getattr(player, effect["stat"]) < STAT_CAP
     if kind == "equip":

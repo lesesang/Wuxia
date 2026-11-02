@@ -1,0 +1,12 @@
+{
+  "소림": {"name": "소림사", "alignment": "정도", "desc": "천하 무공의 뿌리라 불리는 숭산의 고찰.", "bonus_text": "받는 피해 6% 감소", "bonus": {"damage_reduce": 6}},
+  "무당": {"name": "무당파", "alignment": "정도", "desc": "유로써 강을 제압하는 도가의 명문.", "bonus_text": "심법 회복량 30% 증가", "bonus": {"heal_bonus": 30}},
+  "화산": {"name": "화산파", "alignment": "정도", "desc": "매화가 지는 화산 절벽의 검문.", "bonus_text": "치명타 확률 8% 증가", "bonus": {"crit": 8}},
+  "아미": {"name": "아미파", "alignment": "정도", "desc": "구름 위 금정에 자리한 불문의 무가.", "bonus_text": "경공 회피 10% 증가", "bonus": {"evade": 10}},
+  "개방": {"name": "개방", "alignment": "정도", "desc": "천하의 거지가 모여 만든, 소문이 가장 빠른 방파.", "bonus_text": "얻는 은자 20% 증가", "bonus": {"silver": 20}},
+  "당가": {"name": "사천당가", "alignment": "사도", "desc": "독과 암기로 사천을 지키는 가문.", "bonus_text": "공격이 적을 중독시킨다", "bonus": {"poison": 6}},
+  "마교": {"name": "천마신교", "alignment": "마도", "desc": "천마를 하늘로 섬기는 자들.", "bonus_text": "주는 피해 8% 증가", "bonus": {"damage": 8}},
+  "곤륜": {"name": "곤륜파", "alignment": "정도", "desc": "만년설 위의 정통 도문.", "bonus_text": "심법 회복량 20% 증가", "bonus": {"heal_bonus": 20}},
+  "남궁": {"name": "남궁세가", "alignment": "정도", "desc": "창궁의 깃발 아래 모였던, 이제는 잿더미인 검가.", "bonus_text": "주는 피해 5% 증가", "bonus": {"damage": 5}},
+  "하오문": {"name": "하오문", "alignment": "사도", "desc": "강호의 눈과 귀라 불리는 뒷골목의 문파.", "bonus_text": "얻는 은자 20% 증가", "bonus": {"silver": 20}}
+}

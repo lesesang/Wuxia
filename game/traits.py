@@ -69,6 +69,10 @@ def sum_effect(trait_keys, effect_type, field):
     return sum(e.get(field, 0) for e in _effects_of_type(trait_keys, effect_type))
 
 
+def has_effect(trait_keys, effect_type):
+    return any(True for _ in _effects_of_type(trait_keys, effect_type))
+
+
 def start_skills(trait_keys):
     """특성으로 얻는 시작 무공 키 목록."""
     return [e["skill"] for e in _effects_of_type(trait_keys, "start_skill")]

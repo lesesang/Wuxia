@@ -22,7 +22,11 @@ python app.py
 
 | 파일 | 내용 |
 |---|---|
-| `data/events_random.json` | 탐색 중 일어나는 사건과 선택지 |
+| `data/events_random.json`, `data/events_jianghu.json` | 탐색 중 일어나는 사건과 선택지 |
+| `data/events_sect.json` | 문파와 출신별 이야기 |
+| `data/sects.json` | 문파 |
+| `data/fortunes.json` | 기연 |
+| `data/flavor.json` | 달마다 바뀌는 문장, 수련 문장, 명성 등급, 별호 |
 | `data/events_story.json` | 정해진 턴의 줄거리 |
 | `data/enemies.json` | 적 |
 | `data/skills.json` | 무공, 심공, 경공 |

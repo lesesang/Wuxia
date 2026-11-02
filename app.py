@@ -1,10 +1,12 @@
 from flask import Flask, redirect, render_template, request, session, url_for
 
-from game.alignment import ALIGNMENTS, benefit_text, title
+from game.alignment import ALIGNMENTS, benefit_text
 from game.battle import Battle, use_consumable
 from game.chapter import MARKET_TURNS, get_chapter_info, get_month_in_year, get_year, is_market_turn
 from game.ending import ENDING_SEALS, ENDING_TITLES, KARMA_REWARD, build_epilogue, run_summary
 from game.enemy import ENEMY_DB
+from game.events import apply_effects
+from game.flavor import byname, fame_rank
 from game.engine import GameEngine
 from game.events import EVENT_DB, event_view, resolve_choice
 from game.karma import load_karma, record_run, unlock_origin, unlock_trait, update_known
@@ -13,6 +15,7 @@ from game.origin import ORIGIN_ORDER, ORIGINS
 from game.player import Player
 from game.realm import get_progress
 from game.save_manager import clear_checkpoint, load_checkpoint, save_checkpoint
+from game.sect import SECT_DB
 from game.server_session import MemorySessionInterface
 from game.skill import SKILL_DB
 from game.traits import TRAIT_DB, get_trait_keys, next_slot_threshold, trait_slots
@@ -24,7 +27,8 @@ app.session_interface = MemorySessionInterface()
 LOG_LIMIT = 40
 VALID_ACTIONS = {"수련", "명상", "탐색", "휴식"}
 VALID_BATTLE_ACTIONS = {"기본공격", "비기", "심법", "경공", "소비품", "도주"}
-TURN_STATES = ("battle", "ending", "pending_next", "market", "event")
+TURN_STATES = ("battle", "ending", "pending_next", "market", "event", "gauntlet")
+GAUNTLET_REST = 20  # 연전 사이에 회복하는 체력·기력 비율(%)
 
 
 # ---------- 공통 도우미 ----------
@@ -218,6 +222,9 @@ def game():
             "poison": battle.poison,
             "atk_buff": battle.atk_buff,
             "counter_pct": battle.counter_pct,
+            "sealed": battle.sealed,
+            "enemy_poison": battle.enemy_poison,
+            "gauntlet": session.get("gauntlet"),
         }
 
     market_view = None
@@ -242,7 +249,7 @@ def game():
                  for k, n in player.inventory.items() if k in ITEM_DB]
     alignment_view = {
         "values": [(name, player.alignment.get(name, 0)) for name in ALIGNMENTS],
-        "title": title(player.alignment),
+        "title": byname(player),
         "benefit": benefit_text(player.alignment),
     }
     next_market = next((t for t in sorted(MARKET_TURNS) if t >= player.turn), None)
@@ -254,6 +261,7 @@ def game():
         pending_next=session.get("pending_next", False), codex=_codex_data(karma_data),
         market=market_view, event=event, gear=gear, inventory=inventory,
         alignment=alignment_view, traits=[TRAIT_DB[k] for k in player.traits if k in TRAIT_DB],
+        fame=fame_rank(player.fame), sect=SECT_DB.get(player.sect),
         next_market=next_market,
     )
 
@@ -322,6 +330,12 @@ def event_choose():
         engine.start_final_battle()
     elif "battle" in effects:
         engine.start_battle_with(effects["battle"])
+    elif "gauntlet" in effects:
+        gauntlet = effects["gauntlet"]
+        session["gauntlet"] = {"name": gauntlet["name"], "enemies": gauntlet["enemies"][1:],
+                               "reward": gauntlet["reward"], "round": 1,
+                               "total": len(gauntlet["enemies"])}
+        engine.start_battle_with(gauntlet["enemies"][0])
 
     if engine.battle_started:
         session["battle"] = engine.battle_started.to_dict()
@@ -361,6 +375,12 @@ def battle_action():
 
     session.pop("battle", None)
 
+    if result.victory and session.get("gauntlet") and not battle.is_final:
+        if _continue_gauntlet(player, log):
+            return redirect(url_for("game"))
+    elif session.get("gauntlet"):
+        session.pop("gauntlet", None)
+
     if result.victory:
         log.append(f"승리! (전투 경험 +{result.exp_gained})")
     elif result.fled:
@@ -375,6 +395,28 @@ def battle_action():
         session["pending_next"] = True
         _store(player, log)
     return redirect(url_for("game"))
+
+
+def _continue_gauntlet(player, log):
+    """연전의 다음 상대를 부른다. 다음 전투가 시작되면 True, 다 이겼으면 보상 후 False."""
+    gauntlet = session["gauntlet"]
+    if gauntlet["enemies"]:
+        next_enemy = gauntlet["enemies"].pop(0)
+        gauntlet["round"] += 1
+        session["gauntlet"] = gauntlet
+        player.heal_percent(GAUNTLET_REST, GAUNTLET_REST)
+        engine = GameEngine(player)
+        engine.start_battle_with(next_enemy)
+        session["battle"] = engine.battle_started.to_dict()
+        log.append(f"잠시 숨을 고른다. ({gauntlet['name']} {gauntlet['round']}/{gauntlet['total']}전)")
+        _store(player, log + engine.log)
+        return True
+
+    summary = apply_effects(player, gauntlet["reward"])
+    log.append(f"🏆 {gauntlet['name']}을(를) 제패했다! 강호가 그 이름을 외친다.")
+    log.append(", ".join(summary))
+    session.pop("gauntlet", None)
+    return False
 
 
 @app.route("/use_item", methods=["POST"])

@@ -2,10 +2,12 @@ import random
 
 from game.alignment import MA_HEAL_PENALTY, SA_SILVER_BONUS, dominant, new_alignment
 from game.origin import ORIGINS
+from game.sect import ORIGIN_SECTS, sect_bonus
 from game.skill import Skill
-from game.traits import apply_start_stats, start_skills, sum_effect
+from game.traits import apply_start_stats, has_effect, start_skills, sum_effect
 
 START_SILVER = 30
+MAX_INJURY = 3
 STAT_CAP = 99
 STAT_NAMES = {"external": "외공", "internal": "내공", "martial": "무리", "mind": "심경"}
 
@@ -63,6 +65,11 @@ class Player:
         self.seen_events = []
         self.kills = 0
 
+        # 명성, 문파, 내상
+        self.fame = sum_effect(self.traits, "start_fame", "amount")
+        self.sect = ORIGIN_SECTS.get(origin_key)
+        self.injury = 0
+
         # 진행 (1턴 = 1개월, 60턴 = 5년 / 5챕터 x 12턴)
         self.turn     = 1
         self.max_turn = 60
@@ -105,12 +112,18 @@ class Player:
 
     def gain_silver(self, amount):
         """은자를 얻는다. 성향과 특성 보정을 적용하고 실제 획득량을 돌려준다."""
-        percent = sum_effect(self.traits, "silver_rate", "percent")
+        percent = sum_effect(self.traits, "silver_rate", "percent") + sect_bonus(self, "silver")
         if self.dominant_alignment() == "사도":
             percent += SA_SILVER_BONUS
         gained = int(amount * (1 + percent / 100))
         self.silver += gained
         return gained
+
+    def add_injury(self, amount=1):
+        """내상. 3단계까지 쌓이고 단계마다 주는 피해가 7% 준다. 회복이나 약으로 낫는다."""
+        if amount > 0 and has_effect(self.traits, "no_injury"):
+            return
+        self.injury = max(0, min(MAX_INJURY, self.injury + amount))
 
     def adjust_alignment(self, name, amount):
         self.alignment[name] = max(0, self.alignment.get(name, 0) + amount)
@@ -140,8 +153,14 @@ class Player:
             return [f"이미 아는 무공이다. {owned.name}의 이해가 깊어졌다."] + owned.gain_mastery(25)
         self.skills.append(skill)
         current = self.get_skill(self.main_skill) if self.main_skill else None
-        if skill.type == "공격무공" and (
-                current is None or skill.get_effective_multiplier() > current.get_effective_multiplier()):
+        if skill.type != "공격무공":
+            return []
+        if current is None:
+            self.main_skill = skill.key
+        elif skill.get_effective_multiplier() > current.get_effective_multiplier():
+            # 비기까지 해방한 무공은 함부로 바꾸지 않고 플레이어에게 맡긴다
+            if current.secret_unlocked:
+                return [f"상태 창에서 「{skill.name}」을(를) 주무공으로 바꿀 수 있다."]
             self.main_skill = skill.key
         return []
 
@@ -206,6 +225,7 @@ class Player:
             "weapon": self.weapon, "armor": self.armor, "inventory": self.inventory,
             "boss_weaken": self.boss_weaken, "alignment": self.alignment,
             "flags": self.flags, "seen_events": self.seen_events, "kills": self.kills,
+            "fame": self.fame, "sect": self.sect, "injury": self.injury,
             "turn": self.turn, "max_turn": self.max_turn, "alive": self.alive,
         }
 
@@ -233,6 +253,9 @@ class Player:
         p.flags = list(d.get("flags", []))
         p.seen_events = list(d.get("seen_events", []))
         p.kills = d.get("kills", 0)
+        p.fame = d.get("fame", 0)
+        p.sect = d.get("sect", ORIGIN_SECTS.get(p.origin_key))
+        p.injury = d.get("injury", 0)
         p.turn, p.max_turn = d["turn"], d["max_turn"]
         p.alive = d["alive"]
         return p

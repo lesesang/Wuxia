@@ -206,5 +206,55 @@
         "amount": 6
       }
     ]
+  },
+  "불굴": {
+    "name": "불굴",
+    "desc": "전투마다 한 번, 치명상을 입어도 체력 1로 버틴다.",
+    "rarity": "희귀",
+    "cost": 9,
+    "effects": [
+      {
+        "type": "last_stand"
+      }
+    ]
+  },
+  "복성": {
+    "name": "복성",
+    "desc": "탐색에서 기연을 만날 확률이 크게 오른다.",
+    "rarity": "일반",
+    "cost": 5,
+    "effects": [
+      {
+        "type": "fortune_rate",
+        "percent": 15
+      }
+    ]
+  },
+  "명문의자제": {
+    "name": "명문의 자제",
+    "desc": "은자 150을 들고 시작하고 명성도 조금 알려져 있다.",
+    "rarity": "일반",
+    "cost": 4,
+    "effects": [
+      {
+        "type": "start_silver",
+        "amount": 150
+      },
+      {
+        "type": "start_fame",
+        "amount": 6
+      }
+    ]
+  },
+  "금강불괴": {
+    "name": "금강불괴",
+    "desc": "내상을 입지 않는다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "no_injury"
+      }
+    ]
   }
 }

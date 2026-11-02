@@ -4,14 +4,15 @@ from game.battle import Battle
 from game.chapter import get_chapter, get_chapter_info, get_month_in_year, get_year
 from game.ending import judge_ending
 from game.enemy import ENEMY_DB, Enemy, get_enemy_pool
-from game.events import pick_random_event, story_event_for_turn
+from game.events import apply_effects, pick_fortune, pick_random_event, story_event_for_turn
+from game.flavor import action_line, month_line
 from game.karma import add_karma, update_global_codex, update_known
-from game.player import STAT_NAMES
-from game.realm import REALM_ORDER, check_breakthrough
+from game.realm import REALM_ORDER, breakthrough_block, check_breakthrough
 from game.traits import apply_growth, sum_effect
 
 NATURAL_REGEN = 5     # 턴이 지나면 저절로 회복되는 체력·기력 비율(%)
 EXPLORE_BATTLE = 0.45
+SPARRING_CHANCE = 0.3  # 수련 중 대련으로 실전 경험을 얻을 확률
 EXPLORE_EVENT = 0.40  # 나머지 0.15는 기연
 
 
@@ -45,18 +46,23 @@ class GameEngine:
         p = self.player
 
         if action == "수련":
-            ext = self._grow("external", random.randint(1, 2))
-            mar = self._grow("martial", random.randint(1, 2))
-            self.log.append(f"수련: 외공+{ext}, 무리+{mar}")
+            ext = self._grow("external", random.randint(1, 3))
+            mar = self._grow("martial", random.randint(1, 3))
+            self.log.append(action_line("수련"))
+            self.log.append(f"외공+{ext}, 무리+{mar}")
+            if random.random() < SPARRING_CHANCE:
+                p.battles += 1
+                self.log.append("지나던 무인과 대련을 나누었다. (전투 경험 +1)")
             skill = p.best_skill()
             if skill is not None:
                 self.log.extend(skill.gain_mastery(p.mastery_gain_amount()))
 
         elif action == "명상":
-            int_gain = self._grow("internal", random.randint(1, 2))
-            mind = self._grow("mind", random.randint(1, 2))
+            int_gain = self._grow("internal", random.randint(1, 3))
+            mind = self._grow("mind", random.randint(1, 3))
             _, qi = p.heal_percent(qi_pct=15)
-            self.log.append(f"명상: 내공+{int_gain}, 심경+{mind}, 기력+{qi}")
+            self.log.append(action_line("명상"))
+            self.log.append(f"내공+{int_gain}, 심경+{mind}, 기력+{qi}")
             skill = p.best_of_type("심공")
             if skill is not None:
                 self.log.extend(skill.gain_mastery(p.mastery_gain_amount()))
@@ -66,7 +72,12 @@ class GameEngine:
 
         elif action == "휴식":
             hp, qi = p.heal_percent(hp_pct=35, qi_pct=45)
-            self.log.append(f"휴식: 체력+{hp}, 기력+{qi}")
+            self.log.append(action_line("휴식"))
+            result = f"체력+{hp}, 기력+{qi}"
+            if p.injury:
+                p.add_injury(-1)
+                result += f", 내상 {'완치' if not p.injury else f'{p.injury}단계로 호전'}"
+            self.log.append(result)
 
     def _grow(self, stat, amount):
         """수련·명상 성장. 심경이 높으면 가끔 1 더 오른다."""
@@ -87,11 +98,19 @@ class GameEngine:
         self._check_chapter_transition(p)
         self._apply_turn_regen(p)
         self._normalize(p)
+        self._add_turn_notes(p)
 
-        if not self.log:
-            self.log.append(f"{get_year(p.turn)}년차 {get_month_in_year(p.turn)}월. 무엇을 할까?")
+        self.log.append(month_line(get_month_in_year(p.turn)))
 
         self.begin_turn()
+
+    def _add_turn_notes(self, p):
+        """돌파가 막힌 이유처럼 플레이어가 알아야 할 것을 알려 준다."""
+        hint = breakthrough_block(p)
+        if hint:
+            self.log.append(hint)
+        if p.injury:
+            self.log.append(f"가슴 안쪽이 욱신거린다. (내상 {p.injury}단계, 회복으로 낫는다)")
 
     def _commit_codex(self):
         """직전 턴의 조우와 습득을 영구 도감에 반영한다."""
@@ -121,7 +140,11 @@ class GameEngine:
     def _explore(self):
         """탐색 시 전투, 이벤트, 기연 중 하나가 발생한다."""
         roll = random.random()
-        if roll < EXPLORE_BATTLE:
+        fortune_bonus = sum_effect(self.player.traits, "fortune_rate", "percent") / 100
+        if roll < fortune_bonus:
+            self._fortune()
+            return
+        if roll < EXPLORE_BATTLE + fortune_bonus:
             self._start_battle()
             return
         if roll < EXPLORE_BATTLE + EXPLORE_EVENT:
@@ -132,18 +155,13 @@ class GameEngine:
         self._fortune()
 
     def _fortune(self):
-        """기연: 능력치 하나와 은자를 얻는다."""
+        """기연: data/fortunes.json 에서 지금 챕터에 맞는 것을 하나 고른다."""
         p = self.player
-        stat = random.choice(list(STAT_NAMES))
-        gain = p.gain_stat(stat, apply_growth(random.randint(2, 4), p.traits, stat))
-        silver = p.gain_silver(random.randint(8, 16) * get_chapter(p.turn))
-        self.log.append(random.choice([
-            "기연! 절벽 틈에서 이름 모를 고수의 수련 흔적을 찾았다.",
-            "기연! 산중에서 오래 묵은 영초를 발견했다.",
-            "기연! 지나가던 노인이 무심코 던진 한마디가 벼락처럼 박혔다.",
-            "기연! 무너진 사당 아래에서 옛 무인의 유품을 찾았다.",
-        ]))
-        self.log.append(f"{STAT_NAMES[stat]}+{gain}, 은자+{silver}")
+        fortune = pick_fortune(p)
+        self.log.append(f"기연! {fortune['text']}")
+        summary = apply_effects(p, fortune["effects"])
+        silver = p.gain_silver(random.randint(6, 12) * get_chapter(p.turn))
+        self.log.append(", ".join(summary + [f"은자+{silver}"]))
 
     def _start_battle(self):
         """현재 챕터와 경지에 맞는 적을 골라 전투를 시작한다."""
@@ -154,6 +172,8 @@ class GameEngine:
         self.player.record_enemy_encounter(enemy_key)
         battle = Battle(self.player, enemy)
         self.log.append(f"⚔️ {enemy.name}과(와) 마주쳤다!")
+        if enemy.intro:
+            self.log.append(enemy.intro)
         self.log.extend(battle.log)
         battle.log = []
         self.battle_started = battle

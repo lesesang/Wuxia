@@ -7,7 +7,7 @@
 각 엔딩은 카르마 보상을 가지며, 성향과 이야기 선택에 따라 맺음말이 달라진다.
 """
 
-from game.alignment import title
+from game.flavor import byname, fame_rank
 from game.realm import check_good_ending, check_saengsa
 
 # 엔딩별 카르마 보상 (임시 수치)
@@ -46,6 +46,19 @@ EPILOGUE = {
     None:   "그는 어느 깃발도 들지 않은 채 강호를 떠났다. 다리 위에서 그를 봤다는 사람만 드물게 있었다.",
 }
 
+SECT_EPILOGUE = {
+    "소림": "숭산의 물지게는 지금도 같은 자리에 있고, 사미승들은 그 이름을 수군거리며 물을 진다.",
+    "무당": "무당산 빗자루질하던 도사가 그 소식을 듣고 비질을 한 번 멈췄다가 다시 쓸었다.",
+    "화산": "그해 화산의 매화는 유난히 늦게 졌다.",
+    "아미": "금정의 구름 위로 발자국 없는 걸음이 한 번 더 지나갔다.",
+    "개방": "다리 밑 거지들은 그 이야기를 하며 쉰밥을 나눠 먹었고, 허리의 매듭 하나가 늘었다.",
+    "당가": "사천의 찻집에서는 그 이름을 입에 올릴 때 찻잔을 먼저 내려놓는다.",
+    "마교": "교단의 장로들은 새 하늘을 어떻게 불러야 할지 아직 정하지 못했다.",
+    "곤륜": "곤륜의 장문인은 만년설 위에 아무 말 없이 차 한 잔을 더 놓았다.",
+    "남궁": "창궁의 깃발이 다시 올랐다.",
+    "하오문": "하오문의 장부에 그의 빚은 끝내 '탕감'이라 적혔다. 이자만 빼고.",
+}
+
 FLAG_EPILOGUE = [
     ("찬탈", "「내가 다음 천마다.」 그 말은 끝내 사실이 되었다."),
     ("단목휘_동맹", "천마봉을 내려오는 길, 단목휘가 말했다. \"다리 값은 이걸로 퉁칩시다.\" 그는 여전히 웃고 있었다."),
@@ -55,6 +68,12 @@ FLAG_EPILOGUE = [
     ("가문재건", "다시 세운 사당에 창궁의 깃발이 올랐다."),
     ("가문복수", "붉은 표식의 주인들은 하나씩 사라졌다. 사당은 끝내 다시 세워지지 않았다."),
     ("권마의유언", "동굴의 백골 앞에 천마의 부러진 검이 놓였다. 값은 치러졌다."),
+    ("대회우승", "태산의 비석에 새겨진 이름은 해마다 찾아오는 젊은 무인들의 칼끝으로 닳아 갔다."),
+    ("형제구출", "도원의 복사꽃 아래, 해마다 술잔 셋이 놓였다."),
+    ("소년과약속", "십 년 뒤, 약속대로 소년이 찾아왔다. 이번에는 칼 대신 제자의 예를 올렸다."),
+    ("낙양수호", "낙양 성문 앞에 작은 비석이 섰다. 이름 대신 별호가 적혔다."),
+    ("남궁_원수", "붉은 표식은 강호에서 사라졌고, 창궁의 사당에 향이 끊이지 않았다."),
+    ("비무초친", "해마다 어느 장원에서 도전장이 날아왔다. '다음엔 진심으로 오세요.'"),
 ]
 
 
@@ -83,6 +102,8 @@ def build_epilogue(player, ending):
     if ending not in ("기본", "생사경", "배드"):
         return []
     lines = [EPILOGUE[player.dominant_alignment()]]
+    if player.sect in SECT_EPILOGUE:
+        lines.append(SECT_EPILOGUE[player.sect])
     lines += [text for flag, text in FLAG_EPILOGUE if player.has_flag(flag)]
     return lines
 
@@ -95,5 +116,6 @@ def run_summary(player, ending):
         "realm": player.realm,
         "turn": min(player.turn, player.max_turn),
         "kills": player.kills,
-        "title": title(player.alignment),
+        "title": byname(player),
+        "fame": fame_rank(player.fame),
     }

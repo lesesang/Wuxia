@@ -41,10 +41,13 @@
 
     <p class="battle-state">
         제 {{ battle.round_num + 1 }} 라운드
-        {% if battle.poison %}, 중독 {{ battle.poison.rounds }}라운드{% endif %}
-        {% if battle.atk_buff %}, 공격력 +{{ battle.atk_buff.percent }}%{% endif %}
-        {% if battle.counter_pct %}, 다음 공격 +{{ battle.counter_pct }}%{% endif %}
-    </p>
+        {%- if battle.poison %}, 중독 {{ battle.poison.rounds }}라운드{% endif %}
+        {%- if battle.atk_buff %}, 공격력 +{{ battle.atk_buff.percent }}%{% endif %}
+        {%- if battle.counter_pct %}, 다음 공격 +{{ battle.counter_pct }}%{% endif %}
+        {%- if battle.sealed %}, 혈도 봉쇄{% endif %}
+        {%- if player.injury %}, 내상 {{ player.injury }}단계{% endif %}
+        {%- if battle.enemy_poison %}, 적 중독{% endif %}
+        {%- if battle.gauntlet %}, {{ battle.gauntlet.name }} {{ battle.gauntlet.round }}/{{ battle.gauntlet.total }}전{% endif %}</p>
     {% if battle.warning %}<p class="battle-warning">⚠️ 다음은 「{{ battle.warning }}」! 경공으로 흘려낼 수 있다.</p>{% endif %}
 
     <div class="battle-log">
@@ -103,6 +106,7 @@
         <span>외공 <b>{{ player.external }}</b></span><span>내공 <b>{{ player.internal }}</b></span>
         <span>무리 <b>{{ player.martial }}</b></span><span>심경 <b>{{ player.mind }}</b></span>
         <span class="silver">은자 <b>{{ player.silver }}</b></span>
+        {% if player.injury %}<span class="injury">내상 <b>{{ player.injury }}</b></span>{% endif %}
     </div>
 </div></div>
 
@@ -123,6 +127,7 @@
         <div><b>{{ alignment.title }}</b>별호</div>
         <div><b>{{ [player.turn, player.max_turn]|min }}턴</b>진행</div>
         <div><b>{{ player.kills }}명</b>처치</div>
+        <div><b>{{ fame }}</b>명성</div>
     </div>
 </div></div>
 <div class="action-area"><div class="action-inner">
@@ -208,7 +213,11 @@
 
         <div class="modal-section">
             <div class="stat-row"><span>출신</span><span>{{ player.origin }}</span></div>
+            <div class="stat-row"><span>사문</span><span>{% if sect %}{{ sect.name }}{% else %}없음{% endif %}</span></div>
+            {% if sect %}<div class="stat-row"><span>사문의 은혜</span><span>{{ sect.bonus_text }}</span></div>{% endif %}
             <div class="stat-row"><span>경지</span><span>{{ player.realm }}</span></div>
+            <div class="stat-row"><span>명성</span><span>{{ player.fame }} ({{ fame }})</span></div>
+            {% if player.injury %}<div class="stat-row"><span>내상</span><span>{{ player.injury }}단계 (주는 피해 -{{ player.injury * 7 }}%, 회복으로 치료)</span></div>{% endif %}
             <div class="stat-row"><span>전투 경험</span><span>{{ player.battles }} ({{ player.kills }}명 처치)</span></div>
             <div class="stat-row"><span>은자</span><span>{{ player.silver }}</span></div>
             <div class="stat-row"><span>무기</span><span>{% if gear.weapon %}{{ gear.weapon }} (공격력 +{{ gear.weapon_bonus }}){% else %}없음{% endif %}</span></div>
@@ -224,7 +233,7 @@
         </div>
 
         <div class="modal-section">
-            <h4>성향: {{ alignment.title }}</h4>
+            <h4>별호: {{ alignment.title }}</h4>
             {% for name, value in alignment["values"] %}
             <div class="align-row">
                 <span>{{ name }}</span>

@@ -17,7 +17,7 @@ REALM_COMBAT_BONUS = {"일류": 0, "절정": 0.06, "초절정": 0.14, "화경": 
 SAENGSA_REQUIREMENTS = {
     "min_stat": 95,   # 모든 능력치 95 이상
     "battles": 25,
-    "hp_ratio": 0.5,  # 최종전 종료 시점 체력 50% 이상
+    "hp_ratio": 0.6,  # 최종전 종료 시점 체력 60% 이상
     "qi_ratio": 0.3,  # 최종전 종료 시점 기력 30% 이상
 }
 
@@ -64,6 +64,19 @@ def check_breakthrough(player):
         player.battles >= req["battles"]):
         return next_realm
 
+    return None
+
+
+def breakthrough_block(player):
+    """능력치는 다음 경지에 닿았는데 실전 경험이 모자라면 안내 문구를 돌려준다."""
+    next_realm = get_next_realm(player.realm)
+    if next_realm is None:
+        return None
+    req = REALM_REQUIREMENTS[next_realm]
+    stats = _stats(player)
+    if sum(stats) / len(stats) >= req["avg"] and min(stats) >= req["min_stat"] and player.battles < req["battles"]:
+        return (f"{next_realm}의 문턱이 보이지만 실전이 모자라다. "
+                f"(전투 경험 {player.battles}/{req['battles']}, 탐색에서 싸워야 는다)")
     return None
 
 

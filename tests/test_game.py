@@ -22,6 +22,18 @@ def test_event_data_is_valid():
     assert validate_events() == []
 
 
+def test_event_keys_do_not_collide_between_files():
+    import json
+    import os
+    from game import events
+    seen = set()
+    for name in ("events_story.json", "events_random.json", "events_sect.json", "events_jianghu.json"):
+        with open(os.path.join(events._DIR, name), encoding="utf-8") as f:
+            keys = set(json.load(f))
+        assert not keys & seen, keys & seen
+        seen |= keys
+
+
 def test_every_market_item_and_trait_points_to_real_data():
     for item in ITEM_DB.values():
         for effect in item["effects"]:
@@ -487,3 +499,182 @@ def test_full_run_never_errors(origin):
     for _ in range(3):
         ending = play_one(app, origin)
         assert ending in ("사망", "배드", "기본", "생사경", "귀순")
+
+
+# ---------- 문파 / 무협 요소 ----------
+
+def test_sect_data_and_origin_sects():
+    from game.sect import SECT_DB, sect_bonus
+    assert Player("곤륜파").sect == "곤륜" and Player("무림초출").sect is None
+    player = Player()
+    player.sect = "소림"
+    assert sect_bonus(player, "damage_reduce") == 6
+    for key in SECT_DB:
+        joins = [e for e in EVENT_DB.values() for c in e["choices"] for o in c["outcomes"]
+                 if o.get("effects", {}).get("join_sect") == key]
+        assert joins or key in ("곤륜", "남궁", "하오문")
+
+
+def test_join_event_requires_no_sect(client):
+    from game.events import check_requires
+    player = Player()
+    assert check_requires(player, RANDOM_EVENTS["소림_입문"]["requires"])
+    apply_effects(player, {"join_sect": "소림", "skill": "나한권"})
+    assert player.sect == "소림" and player.has_skill("나한권")
+    assert not check_requires(player, RANDOM_EVENTS["무당_입문"]["requires"])
+    assert check_requires(player, RANDOM_EVENTS["소림_동인진"]["requires"])
+    assert not check_requires(player, RANDOM_EVENTS["소림_비전"]["requires"])
+
+
+def test_tournament_runs_three_fights_then_rewards(client):
+    set_player(client, turn=29, external=90, martial=90, internal=90, mind=90, hp=550, qi=550)
+    with client.session_transaction() as s:
+        s["pending_next"] = True
+    client.post("/advance_turn")
+    current = state(client)
+    assert current["event"]["key"] == "천하제일비무"
+    client.post("/event/choose", data={"choice": 0})
+    seen = []
+    for _ in range(100):
+        current = state(client)
+        if not current.get("battle"):
+            break
+        key = current["battle"]["enemy"]["key"]
+        if key not in seen:
+            seen.append(key)
+        set_player(client, hp=550)
+        client.post("/battle_action", data={"battle_action": "기본공격"})
+    current = state(client)
+    assert seen == ["비무청성", "비무철권", "비무결승"]
+    assert current["pending_next"] and not current.get("gauntlet")
+    assert "대회우승" in current["player"]["flags"] and current["player"]["fame"] >= 14
+    assert current["player"]["weapon"] == "태산신검"
+
+
+def test_fleeing_tournament_ends_it(client):
+    set_player(client, turn=30)
+    with client.session_transaction() as s:
+        s["gauntlet"] = {"name": "대회", "enemies": ["비무철권"], "reward": {"fame": 9}, "round": 1, "total": 2}
+        s["battle"] = Battle(Player.from_dict(s["player"]), Enemy("산적")).to_dict()
+    random.seed(0)
+    for _ in range(40):
+        if not state(client).get("battle"):
+            break
+        client.post("/battle_action", data={"battle_action": "도주"})
+    current = state(client)
+    assert not current.get("gauntlet") and current["player"]["fame"] < 9
+
+
+def test_injury_lowers_damage_and_rest_heals_it():
+    player = Player()
+    battle = Battle(player, Enemy("천마"))
+    plain = battle._attack_scale()
+    player.add_injury(2)
+    assert battle._attack_scale() < plain
+    from game.engine import GameEngine
+    GameEngine(player).process_action("휴식")
+    assert player.injury == 1
+
+
+def test_seal_blocks_skills_and_mindset_clears_it():
+    player = Player()
+    skill = player.best_skill()
+    battle = Battle(player, Enemy("천마"))
+    battle.sealed = 2
+    qi = player.qi
+    battle.player_use_skill(skill)
+    assert player.qi == qi and any("혈도" in l for l in battle.log)
+    battle.player_use_mindset()
+    assert battle.sealed == 0
+
+
+def test_poison_on_enemy_ticks_and_can_kill():
+    player = Player()
+    player.sect = "당가"
+    enemy = Enemy("산적")
+    battle = Battle(player, enemy)
+    battle._hits = lambda: True
+    battle.player_use_skill(player.best_skill())
+    assert battle.enemy_poison
+    enemy.hp = 1
+    battle._tick_effects()
+    assert not enemy.is_alive()
+
+
+def test_qi_deviation_on_risky_secret():
+    random.seed(1)
+    player = Player()
+    player.mind = 1
+    player.learn_skill(Skill("천마파천공"))
+    skill = player.get_skill("천마파천공")
+    skill.secret_unlocked = True
+    player.main_skill = skill.key
+    battle = Battle(player, Enemy("천마"))
+    for _ in range(10):
+        player.qi = player.max_qi()
+        battle.player_use_secret(skill)
+    assert player.injury > 0
+
+
+def test_last_stand_trait_once_per_battle():
+    player = Player(trait_keys=["불굴"])
+    enemy = Enemy("천마")
+    battle = Battle(player, enemy)
+    battle.round_num = 1
+    player.hp = 1
+    battle.enemy_attack()
+    assert player.hp == 1 and battle.stand_used
+    battle.enemy_attack()
+    assert player.hp == 0
+
+
+def test_no_injury_trait():
+    player = Player(trait_keys=["금강불괴"])
+    player.add_injury(2)
+    assert player.injury == 0
+
+
+def test_market_always_offers_better_gear():
+    player = Player()
+    for _ in range(30):
+        keys = [s["key"] for s in open_market(12, player)["stock"]]
+        assert any(k in keys for k in ("철검", "강철검")) and any(k in keys for k in ("가죽호구", "철사갑의"))
+
+
+def test_new_skill_does_not_replace_main_with_secret():
+    player = Player()
+    current = player.best_skill()
+    current.secret_unlocked = True
+    messages = player.learn_skill(Skill("태허검결"))
+    assert player.main_skill == current.key and any("주무공" in m for m in messages)
+
+
+def test_byname_and_fame():
+    from game.flavor import byname, fame_rank
+    player = Player()
+    assert byname(player) == "이름 없는 무인" and fame_rank(0) == "무명소졸"
+    player.fame = 40
+    player.alignment["정도"] = 5
+    assert byname(player).endswith("검협") and fame_rank(40) == "일방의 고수"
+
+
+def test_battle_log_shows_form_names():
+    player = Player()
+    battle = Battle(player, Enemy("천마"))
+    battle._hits = lambda: True
+    battle.player_use_skill(player.best_skill())
+    assert any("제" in l and "초" in l and "「" in l for l in battle.log)
+
+
+def test_every_month_has_flavor_text():
+    from game.flavor import FLAVOR
+    assert set(FLAVOR["months"]) == {str(i) for i in range(1, 13)}
+
+
+def test_breakthrough_hint_when_only_experience_is_missing():
+    from game.realm import breakthrough_block
+    player = Player()
+    player.external = player.internal = player.martial = player.mind = 40
+    assert "실전" in breakthrough_block(player)
+    player.battles = 5
+    assert breakthrough_block(player) is None

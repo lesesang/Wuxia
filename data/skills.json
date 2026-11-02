@@ -1,325 +1,788 @@
 {
- "기초검법": {
-  "name": "기초검법",
-  "type": "공격무공",
-  "category": "검법",
-  "grade": "기본",
-  "base_multiplier": 1.0,
-  "qi_cost": 4,
-  "desc": "강호 어디서나 배울 수 있는 검법. 익힐수록 정직하게 강해진다.",
-  "secret_technique": {
-   "name": "일섬",
-   "unlock_grade": "명품",
-   "unlock_mastery": 50,
-   "multiplier": 1.8,
-   "qi_cost": 30
+  "기초검법": {
+    "name": "기초검법",
+    "type": "공격무공",
+    "category": "검법",
+    "grade": "기본",
+    "base_multiplier": 1.1,
+    "qi_cost": 4,
+    "desc": "강호 어디서나 배울 수 있는 검법. 익힐수록 정직하게 강해진다.",
+    "secret_technique": {
+      "name": "일섬",
+      "unlock_grade": "명품",
+      "unlock_mastery": 50,
+      "multiplier": 1.8,
+      "qi_cost": 30
+    },
+    "forms": [
+      "직자",
+      "횡소천군",
+      "낙엽귀근"
+    ]
+  },
+  "육합권": {
+    "name": "육합권",
+    "type": "공격무공",
+    "category": "권법",
+    "grade": "기본",
+    "base_multiplier": 1.05,
+    "qi_cost": 3,
+    "desc": "저잣거리의 무사들이 즐겨 익히는 권법.",
+    "secret_technique": {
+      "name": "육합귀일",
+      "unlock_grade": "명품",
+      "unlock_mastery": 60,
+      "multiplier": 1.8,
+      "qi_cost": 28
+    },
+    "forms": [
+      "흑호투심",
+      "금계독립",
+      "육합귀원"
+    ]
+  },
+  "운룡검법": {
+    "name": "운룡검법",
+    "type": "공격무공",
+    "category": "검법",
+    "grade": "기본",
+    "base_multiplier": 1.2,
+    "qi_cost": 4,
+    "desc": "곤륜의 기초 검법. 구름 위를 노니는 용처럼 끊김이 없다.",
+    "secret_technique": {
+      "name": "운룡승천",
+      "unlock_grade": "명품",
+      "unlock_mastery": 50,
+      "multiplier": 2.0,
+      "qi_cost": 32
+    },
+    "forms": [
+      "운무요산",
+      "비룡재천",
+      "신룡파미"
+    ]
+  },
+  "창궁검법": {
+    "name": "창궁검법",
+    "type": "공격무공",
+    "category": "검법",
+    "grade": "명품",
+    "base_multiplier": 1.08,
+    "qi_cost": 6,
+    "desc": "남궁세가의 가전 검법. 하늘을 뒤덮듯 넓게 펼쳐진다.",
+    "secret_technique": {
+      "name": "창궁무애",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 40
+    },
+    "forms": [
+      "창궁일색",
+      "백운출수",
+      "유성추월",
+      "무애검"
+    ]
+  },
+  "암향비도": {
+    "name": "암향비도",
+    "type": "공격무공",
+    "category": "암기",
+    "grade": "기본",
+    "base_multiplier": 1.2,
+    "qi_cost": 3,
+    "desc": "하오문이 뒷골목에서 갈고닦은 비도술. 향기처럼 소리가 없다.",
+    "secret_technique": {
+      "name": "만화비영",
+      "unlock_grade": "명품",
+      "unlock_mastery": 60,
+      "multiplier": 1.9,
+      "qi_cost": 30
+    },
+    "forms": [
+      "암향부동",
+      "월하무흔",
+      "일비충천"
+    ]
+  },
+  "파천권": {
+    "name": "파천권",
+    "type": "공격무공",
+    "category": "권법",
+    "grade": "명품",
+    "base_multiplier": 1.1,
+    "qi_cost": 7,
+    "desc": "권마가 남긴 권법. 강하지만 기력을 거칠게 태운다.",
+    "secret_technique": {
+      "name": "권마강림",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.5,
+      "qi_cost": 55
+    },
+    "forms": [
+      "붕산",
+      "열지",
+      "파천"
+    ],
+    "risky": true
+  },
+  "매화검법": {
+    "name": "매화검법",
+    "type": "공격무공",
+    "category": "검법",
+    "grade": "명품",
+    "base_multiplier": 1.2,
+    "qi_cost": 6,
+    "desc": "꽃잎이 흩날리듯 변화무쌍한 정종 검법.",
+    "secret_technique": {
+      "name": "매화난무",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 40
+    },
+    "forms": [
+      "매화점점",
+      "이십사향",
+      "낙화무정"
+    ]
+  },
+  "천뢰검법": {
+    "name": "천뢰검법",
+    "type": "공격무공",
+    "category": "검법",
+    "grade": "상승",
+    "base_multiplier": 1.5,
+    "qi_cost": 9,
+    "desc": "벼락의 기세를 본뜬 쾌검. 일격에 승부를 건다.",
+    "secret_technique": {
+      "name": "천뢰일섬",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.3,
+      "qi_cost": 50
+    },
+    "forms": [
+      "뇌동",
+      "섬광",
+      "벽력"
+    ]
+  },
+  "항마장": {
+    "name": "항마장",
+    "type": "공격무공",
+    "category": "장법",
+    "grade": "명품",
+    "base_multiplier": 1.3,
+    "qi_cost": 7,
+    "desc": "마를 굴복시키는 정도의 장법. 협객에게만 전해진다.",
+    "secret_technique": {
+      "name": "금강항마",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.3,
+      "qi_cost": 42
+    },
+    "forms": [
+      "금강역사",
+      "복호",
+      "항마인"
+    ]
+  },
+  "독룡장": {
+    "name": "독룡장",
+    "type": "공격무공",
+    "category": "장법",
+    "grade": "명품",
+    "base_multiplier": 1.3,
+    "qi_cost": 6,
+    "desc": "손바닥에 독기를 실어 내지르는 사파의 장법.",
+    "secret_technique": {
+      "name": "독룡출해",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.3,
+      "qi_cost": 40
+    },
+    "forms": [
+      "독수",
+      "맹룡과강",
+      "해저침독"
+    ],
+    "inflict": {
+      "poison": 8
+    }
+  },
+  "혈영도법": {
+    "name": "혈영도법",
+    "type": "공격무공",
+    "category": "도법",
+    "grade": "상승",
+    "base_multiplier": 1.55,
+    "qi_cost": 10,
+    "desc": "피 그림자를 끌고 다니는 마도의 도법. 쓸수록 손이 떨린다.",
+    "secret_technique": {
+      "name": "혈해만리",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.6,
+      "qi_cost": 60
+    },
+    "forms": [
+      "혈우",
+      "귀곡",
+      "혈영무종"
+    ],
+    "risky": true
+  },
+  "태허검결": {
+    "name": "태허검결",
+    "type": "공격무공",
+    "category": "검법",
+    "grade": "신공",
+    "base_multiplier": 1.9,
+    "qi_cost": 12,
+    "desc": "이름 없는 노인이 평생을 바쳐 다듬은 검결. 비어 있기에 모든 것을 벤다.",
+    "secret_technique": {
+      "name": "태허무극",
+      "unlock_grade": "신공",
+      "unlock_mastery": 40,
+      "multiplier": 2.8,
+      "qi_cost": 70
+    },
+    "forms": [
+      "허",
+      "공",
+      "무"
+    ]
+  },
+  "토납법": {
+    "name": "토납법",
+    "type": "심공",
+    "category": "심공",
+    "grade": "기본",
+    "base_multiplier": 1.0,
+    "qi_cost": 0,
+    "desc": "숨을 고르는 가장 기초적인 심공. 싸움 중에도 기력을 되찾는다.",
+    "effect": {
+      "heal_hp_pct": 5,
+      "heal_qi_pct": 15,
+      "atk_buff_pct": 0,
+      "buff_rounds": 0
+    }
+  },
+  "곤륜현기공": {
+    "name": "곤륜현기공",
+    "type": "심공",
+    "category": "심공",
+    "grade": "명품",
+    "base_multiplier": 1.0,
+    "qi_cost": 0,
+    "desc": "곤륜의 정통 심법. 호흡 한 번에 몸과 마음을 함께 다스린다.",
+    "effect": {
+      "heal_hp_pct": 12,
+      "heal_qi_pct": 22,
+      "atk_buff_pct": 10,
+      "buff_rounds": 2
+    }
+  },
+  "역근공": {
+    "name": "역근공",
+    "type": "심공",
+    "category": "심공",
+    "grade": "상승",
+    "base_multiplier": 1.0,
+    "qi_cost": 0,
+    "desc": "근골을 바꾸는 심공. 상처가 빠르게 아문다.",
+    "effect": {
+      "heal_hp_pct": 20,
+      "heal_qi_pct": 20,
+      "atk_buff_pct": 15,
+      "buff_rounds": 2
+    }
+  },
+  "혈마심공": {
+    "name": "혈마심공",
+    "type": "심공",
+    "category": "심공",
+    "grade": "상승",
+    "base_multiplier": 1.0,
+    "qi_cost": 0,
+    "desc": "제 피를 태워 힘으로 바꾸는 마공. 몸은 축나지만 기세가 무섭게 오른다.",
+    "effect": {
+      "heal_hp_pct": -8,
+      "heal_qi_pct": 30,
+      "atk_buff_pct": 40,
+      "buff_rounds": 3
+    }
+  },
+  "태허심법": {
+    "name": "태허심법",
+    "type": "심공",
+    "category": "심공",
+    "grade": "신공",
+    "base_multiplier": 1.0,
+    "qi_cost": 0,
+    "desc": "태허검결과 짝을 이루는 심법. 마음이 비면 기가 스스로 찬다.",
+    "effect": {
+      "heal_hp_pct": 25,
+      "heal_qi_pct": 35,
+      "atk_buff_pct": 25,
+      "buff_rounds": 3
+    }
+  },
+  "초상비": {
+    "name": "초상비",
+    "type": "경공",
+    "category": "경공",
+    "grade": "기본",
+    "base_multiplier": 1.0,
+    "qi_cost": 5,
+    "desc": "풀잎 위를 달리는 경공. 기초적이지만 쓸모 있다.",
+    "effect": {
+      "evade": 60,
+      "counter_pct": 60,
+      "flee_bonus": 15
+    }
+  },
+  "부운보": {
+    "name": "부운보",
+    "type": "경공",
+    "category": "경공",
+    "grade": "명품",
+    "base_multiplier": 1.0,
+    "qi_cost": 6,
+    "desc": "뜬구름처럼 종잡을 수 없는 보법. 하오문의 생존 기술이다.",
+    "effect": {
+      "evade": 70,
+      "counter_pct": 80,
+      "flee_bonus": 25
+    }
+  },
+  "유운신법": {
+    "name": "유운신법",
+    "type": "경공",
+    "category": "경공",
+    "grade": "상승",
+    "base_multiplier": 1.0,
+    "qi_cost": 8,
+    "desc": "흐르는 구름처럼 공격을 흘려보낸 뒤 그 틈을 찌른다.",
+    "effect": {
+      "evade": 80,
+      "counter_pct": 100,
+      "flee_bonus": 30
+    }
+  },
+  "능공허도": {
+    "name": "능공허도",
+    "type": "경공",
+    "category": "경공",
+    "grade": "신공",
+    "base_multiplier": 1.0,
+    "qi_cost": 10,
+    "desc": "허공을 밟는다는 전설의 경공.",
+    "effect": {
+      "evade": 90,
+      "counter_pct": 150,
+      "flee_bonus": 45
+    }
+  },
+  "나한권": {
+    "name": "나한권",
+    "category": "권법",
+    "type": "공격무공",
+    "grade": "기본",
+    "base_multiplier": 1.15,
+    "qi_cost": 4,
+    "desc": "소림 무승이 처음 배우는 권법. 천하 권법의 뿌리다.",
+    "forms": [
+      "나한출동",
+      "호심권",
+      "금강권"
+    ],
+    "secret_technique": {
+      "name": "나한복호",
+      "unlock_grade": "명품",
+      "unlock_mastery": 50,
+      "multiplier": 2.0,
+      "qi_cost": 32
+    }
+  },
+  "백보신권": {
+    "name": "백보신권",
+    "category": "권법",
+    "type": "공격무공",
+    "grade": "상승",
+    "base_multiplier": 1.55,
+    "qi_cost": 10,
+    "desc": "소림 칠십이절예. 백 보 밖에서도 권력이 닿는다.",
+    "forms": [
+      "격산타우",
+      "공권",
+      "일권백보"
+    ],
+    "secret_technique": {
+      "name": "백보무형",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    }
+  },
+  "태극검": {
+    "name": "태극검",
+    "category": "검법",
+    "type": "공격무공",
+    "grade": "명품",
+    "base_multiplier": 1.25,
+    "qi_cost": 5,
+    "desc": "칼을 쓰지 않는 듯 쓰는 무당의 검. 기력을 적게 먹는다.",
+    "forms": [
+      "기수식",
+      "운수",
+      "태극원전"
+    ],
+    "secret_technique": {
+      "name": "양의검화",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 36
+    }
+  },
+  "이십사수매화검법": {
+    "name": "이십사수매화검법",
+    "category": "검법",
+    "type": "공격무공",
+    "grade": "신공",
+    "base_multiplier": 1.85,
+    "qi_cost": 12,
+    "desc": "화산의 정수. 스물네 번 꽃이 지면 상대가 없다.",
+    "forms": [
+      "매화삼롱",
+      "암향소영",
+      "암향부동",
+      "낙화유수"
+    ],
+    "secret_technique": {
+      "name": "만개매화",
+      "unlock_grade": "신공",
+      "unlock_mastery": 40,
+      "multiplier": 2.7,
+      "qi_cost": 65
+    }
+  },
+  "금정면장": {
+    "name": "금정면장",
+    "category": "장법",
+    "type": "공격무공",
+    "grade": "명품",
+    "base_multiplier": 1.25,
+    "qi_cost": 5,
+    "desc": "솜처럼 부드럽게 파고드는 아미의 장법.",
+    "forms": [
+      "금정불광",
+      "면리장침",
+      "자항보도"
+    ],
+    "secret_technique": {
+      "name": "불광보조",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 38
+    }
+  },
+  "타구봉법": {
+    "name": "타구봉법",
+    "category": "봉법",
+    "type": "공격무공",
+    "grade": "명품",
+    "base_multiplier": 1.3,
+    "qi_cost": 5,
+    "desc": "개방 방주의 봉법. 개를 때리듯 고수를 때린다.",
+    "forms": [
+      "봉타쌍견",
+      "악구탈식",
+      "천하무구"
+    ],
+    "secret_technique": {
+      "name": "천하무구",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.3,
+      "qi_cost": 40
+    }
+  },
+  "항룡장": {
+    "name": "항룡장",
+    "category": "장법",
+    "type": "공격무공",
+    "grade": "신공",
+    "base_multiplier": 1.9,
+    "qi_cost": 12,
+    "desc": "개방 비전의 장법. 강맹하기가 용과 같다.",
+    "forms": [
+      "견룡재전",
+      "비룡재천",
+      "항룡유회"
+    ],
+    "secret_technique": {
+      "name": "항룡유회",
+      "unlock_grade": "신공",
+      "unlock_mastery": 40,
+      "multiplier": 2.7,
+      "qi_cost": 65
+    }
+  },
+  "당가비도": {
+    "name": "당가비도",
+    "category": "암기",
+    "type": "공격무공",
+    "grade": "기본",
+    "base_multiplier": 1.1,
+    "qi_cost": 3,
+    "desc": "독을 바른 비도. 맞으면 천천히 죽는다.",
+    "forms": [
+      "일점홍",
+      "연환비도",
+      "회선도"
+    ],
+    "inflict": {
+      "poison": 4
+    },
+    "secret_technique": {
+      "name": "칠보단혼",
+      "unlock_grade": "명품",
+      "unlock_mastery": 50,
+      "multiplier": 1.9,
+      "qi_cost": 28
+    }
+  },
+  "만천화우": {
+    "name": "만천화우",
+    "category": "암기",
+    "type": "공격무공",
+    "grade": "상승",
+    "base_multiplier": 1.5,
+    "qi_cost": 9,
+    "desc": "손끝에서 꽃비가 쏟아진다. 사천당가 궁극의 암기술.",
+    "forms": [
+      "화우",
+      "만천",
+      "독화"
+    ],
+    "inflict": {
+      "poison": 14
+    },
+    "secret_technique": {
+      "name": "만천화우",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.5,
+      "qi_cost": 55
+    }
+  },
+  "천마파천공": {
+    "name": "천마파천공",
+    "category": "장법",
+    "type": "공격무공",
+    "grade": "신공",
+    "base_multiplier": 2.0,
+    "qi_cost": 14,
+    "desc": "천마의 잔편. 위력은 무섭지만 쓰는 자를 먼저 태운다.",
+    "forms": [
+      "천마낙일",
+      "마기충천",
+      "파천"
+    ],
+    "risky": true,
+    "secret_technique": {
+      "name": "천마강림",
+      "unlock_grade": "신공",
+      "unlock_mastery": 30,
+      "multiplier": 2.9,
+      "qi_cost": 75
+    }
+  },
+  "대라검법": {
+    "name": "대라검법",
+    "category": "검법",
+    "type": "공격무공",
+    "grade": "신공",
+    "base_multiplier": 1.95,
+    "qi_cost": 11,
+    "desc": "곤륜 만년설에 전해지는 비전 검법.",
+    "forms": [
+      "대라천개",
+      "설봉",
+      "곤륜일점"
+    ],
+    "secret_technique": {
+      "name": "대라귀진",
+      "unlock_grade": "신공",
+      "unlock_mastery": 40,
+      "multiplier": 2.7,
+      "qi_cost": 62
+    }
+  },
+  "제왕검형": {
+    "name": "제왕검형",
+    "category": "검법",
+    "type": "공격무공",
+    "grade": "신공",
+    "base_multiplier": 1.85,
+    "qi_cost": 13,
+    "desc": "남궁의 마지막 비전. 검이 움직이면 천지가 고개를 숙인다.",
+    "forms": [
+      "왕림",
+      "군림천하",
+      "제왕일검"
+    ],
+    "secret_technique": {
+      "name": "창천무극",
+      "unlock_grade": "신공",
+      "unlock_mastery": 40,
+      "multiplier": 2.8,
+      "qi_cost": 70
+    }
+  },
+  "천수나찰": {
+    "name": "천수나찰",
+    "category": "암기",
+    "type": "공격무공",
+    "grade": "상승",
+    "base_multiplier": 1.6,
+    "qi_cost": 8,
+    "desc": "천 개의 손으로 던지는 듯한 하오문의 비전.",
+    "forms": [
+      "나찰소",
+      "천수",
+      "귀영"
+    ],
+    "secret_technique": {
+      "name": "천수귀영",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.4,
+      "qi_cost": 48
+    }
+  },
+  "권왕패천": {
+    "name": "권왕패천",
+    "category": "권법",
+    "type": "공격무공",
+    "grade": "신공",
+    "base_multiplier": 1.95,
+    "qi_cost": 14,
+    "desc": "권마 비록의 마지막 장. 주먹으로 하늘을 친다.",
+    "forms": [
+      "패권",
+      "파천",
+      "개벽"
+    ],
+    "risky": true,
+    "secret_technique": {
+      "name": "권왕개벽",
+      "unlock_grade": "신공",
+      "unlock_mastery": 30,
+      "multiplier": 2.9,
+      "qi_cost": 75
+    }
+  },
+  "오호단문도": {
+    "name": "오호단문도",
+    "category": "도법",
+    "type": "공격무공",
+    "grade": "명품",
+    "base_multiplier": 1.25,
+    "qi_cost": 5,
+    "desc": "다섯 호랑이처럼 사납게 몰아치는 도법.",
+    "forms": [
+      "호포",
+      "맹호출림",
+      "단문"
+    ],
+    "secret_technique": {
+      "name": "오호단문",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 40
+    }
+  },
+  "달마심공": {
+    "name": "달마심공",
+    "type": "심공",
+    "category": "심공",
+    "grade": "상승",
+    "base_multiplier": 1.0,
+    "qi_cost": 0,
+    "desc": "면벽의 심공. 몸이 금강처럼 굳고 마음은 잠잠하다.",
+    "effect": {
+      "heal_hp_pct": 22,
+      "heal_qi_pct": 22,
+      "atk_buff_pct": 15,
+      "buff_rounds": 2
+    }
+  },
+  "태극심공": {
+    "name": "태극심공",
+    "type": "심공",
+    "category": "심공",
+    "grade": "신공",
+    "base_multiplier": 1.0,
+    "qi_cost": 0,
+    "desc": "음과 양이 돌면 기력이 끝나지 않는다.",
+    "effect": {
+      "heal_hp_pct": 18,
+      "heal_qi_pct": 45,
+      "atk_buff_pct": 25,
+      "buff_rounds": 3
+    }
+  },
+  "청음심공": {
+    "name": "청음심공",
+    "type": "심공",
+    "category": "심공",
+    "grade": "상승",
+    "base_multiplier": 1.0,
+    "qi_cost": 0,
+    "desc": "맑은 소리처럼 몸속을 씻어 내는 아미의 심공.",
+    "effect": {
+      "heal_hp_pct": 25,
+      "heal_qi_pct": 25,
+      "atk_buff_pct": 10,
+      "buff_rounds": 2
+    }
+  },
+  "제운종": {
+    "name": "제운종",
+    "type": "경공",
+    "category": "경공",
+    "grade": "상승",
+    "base_multiplier": 1.0,
+    "qi_cost": 7,
+    "desc": "구름을 사다리 삼아 오른다는 무당의 신법.",
+    "effect": {
+      "evade": 82,
+      "counter_pct": 100,
+      "flee_bonus": 30
+    }
+  },
+  "표운보": {
+    "name": "표운보",
+    "type": "경공",
+    "category": "경공",
+    "grade": "명품",
+    "base_multiplier": 1.0,
+    "qi_cost": 6,
+    "desc": "구름 위를 스치듯 걷는 아미의 보법.",
+    "effect": {
+      "evade": 72,
+      "counter_pct": 80,
+      "flee_bonus": 25
+    }
   }
- },
- "육합권": {
-  "name": "육합권",
-  "type": "공격무공",
-  "category": "권법",
-  "grade": "기본",
-  "base_multiplier": 1.05,
-  "qi_cost": 3,
-  "desc": "저잣거리의 무사들이 즐겨 익히는 권법.",
-  "secret_technique": {
-   "name": "육합귀일",
-   "unlock_grade": "명품",
-   "unlock_mastery": 60,
-   "multiplier": 1.8,
-   "qi_cost": 28
-  }
- },
- "운룡검법": {
-  "name": "운룡검법",
-  "type": "공격무공",
-  "category": "검법",
-  "grade": "기본",
-  "base_multiplier": 1.15,
-  "qi_cost": 4,
-  "desc": "곤륜의 기초 검법. 구름 위를 노니는 용처럼 끊김이 없다.",
-  "secret_technique": {
-   "name": "운룡승천",
-   "unlock_grade": "명품",
-   "unlock_mastery": 50,
-   "multiplier": 2.0,
-   "qi_cost": 32
-  }
- },
- "창궁검법": {
-  "name": "창궁검법",
-  "type": "공격무공",
-  "category": "검법",
-  "grade": "명품",
-  "base_multiplier": 1.2,
-  "qi_cost": 6,
-  "desc": "남궁세가의 가전 검법. 하늘을 뒤덮듯 넓게 펼쳐진다.",
-  "secret_technique": {
-   "name": "창궁무애",
-   "unlock_grade": "상승",
-   "unlock_mastery": 50,
-   "multiplier": 2.2,
-   "qi_cost": 40
-  }
- },
- "암향비도": {
-  "name": "암향비도",
-  "type": "공격무공",
-  "category": "암기",
-  "grade": "기본",
-  "base_multiplier": 1.15,
-  "qi_cost": 3,
-  "desc": "하오문이 뒷골목에서 갈고닦은 비도술. 향기처럼 소리가 없다.",
-  "secret_technique": {
-   "name": "만화비영",
-   "unlock_grade": "명품",
-   "unlock_mastery": 60,
-   "multiplier": 1.9,
-   "qi_cost": 30
-  }
- },
- "파천권": {
-  "name": "파천권",
-  "type": "공격무공",
-  "category": "권법",
-  "grade": "명품",
-  "base_multiplier": 1.25,
-  "qi_cost": 8,
-  "desc": "권마가 남긴 권법. 강하지만 기력을 거칠게 태운다.",
-  "secret_technique": {
-   "name": "권마강림",
-   "unlock_grade": "상승",
-   "unlock_mastery": 50,
-   "multiplier": 2.5,
-   "qi_cost": 55
-  }
- },
- "매화검법": {
-  "name": "매화검법",
-  "type": "공격무공",
-  "category": "검법",
-  "grade": "명품",
-  "base_multiplier": 1.2,
-  "qi_cost": 6,
-  "desc": "꽃잎이 흩날리듯 변화무쌍한 정종 검법.",
-  "secret_technique": {
-   "name": "매화난무",
-   "unlock_grade": "상승",
-   "unlock_mastery": 50,
-   "multiplier": 2.2,
-   "qi_cost": 40
-  }
- },
- "천뢰검법": {
-  "name": "천뢰검법",
-  "type": "공격무공",
-  "category": "검법",
-  "grade": "상승",
-  "base_multiplier": 1.5,
-  "qi_cost": 9,
-  "desc": "벼락의 기세를 본뜬 쾌검. 일격에 승부를 건다.",
-  "secret_technique": {
-   "name": "천뢰일섬",
-   "unlock_grade": "상승",
-   "unlock_mastery": 60,
-   "multiplier": 2.3,
-   "qi_cost": 50
-  }
- },
- "항마장": {
-  "name": "항마장",
-  "type": "공격무공",
-  "category": "장법",
-  "grade": "명품",
-  "base_multiplier": 1.3,
-  "qi_cost": 7,
-  "desc": "마를 굴복시키는 정도의 장법. 협객에게만 전해진다.",
-  "secret_technique": {
-   "name": "금강항마",
-   "unlock_grade": "상승",
-   "unlock_mastery": 50,
-   "multiplier": 2.3,
-   "qi_cost": 42
-  }
- },
- "독룡장": {
-  "name": "독룡장",
-  "type": "공격무공",
-  "category": "장법",
-  "grade": "명품",
-  "base_multiplier": 1.3,
-  "qi_cost": 6,
-  "desc": "손바닥에 독기를 실어 내지르는 사파의 장법.",
-  "secret_technique": {
-   "name": "독룡출해",
-   "unlock_grade": "상승",
-   "unlock_mastery": 50,
-   "multiplier": 2.3,
-   "qi_cost": 40
-  }
- },
- "혈영도법": {
-  "name": "혈영도법",
-  "type": "공격무공",
-  "category": "도법",
-  "grade": "상승",
-  "base_multiplier": 1.55,
-  "qi_cost": 10,
-  "desc": "피 그림자를 끌고 다니는 마도의 도법. 쓸수록 손이 떨린다.",
-  "secret_technique": {
-   "name": "혈해만리",
-   "unlock_grade": "상승",
-   "unlock_mastery": 60,
-   "multiplier": 2.6,
-   "qi_cost": 60
-  }
- },
- "태허검결": {
-  "name": "태허검결",
-  "type": "공격무공",
-  "category": "검법",
-  "grade": "신공",
-  "base_multiplier": 1.9,
-  "qi_cost": 12,
-  "desc": "이름 없는 노인이 평생을 바쳐 다듬은 검결. 비어 있기에 모든 것을 벤다.",
-  "secret_technique": {
-   "name": "태허무극",
-   "unlock_grade": "신공",
-   "unlock_mastery": 40,
-   "multiplier": 2.8,
-   "qi_cost": 70
-  }
- },
- "토납법": {
-  "name": "토납법",
-  "type": "심공",
-  "category": "심공",
-  "grade": "기본",
-  "base_multiplier": 1.0,
-  "qi_cost": 0,
-  "desc": "숨을 고르는 가장 기초적인 심공. 싸움 중에도 기력을 되찾는다.",
-  "effect": {
-   "heal_hp_pct": 5,
-   "heal_qi_pct": 15,
-   "atk_buff_pct": 0,
-   "buff_rounds": 0
-  }
- },
- "곤륜현기공": {
-  "name": "곤륜현기공",
-  "type": "심공",
-  "category": "심공",
-  "grade": "명품",
-  "base_multiplier": 1.0,
-  "qi_cost": 0,
-  "desc": "곤륜의 정통 심법. 호흡 한 번에 몸과 마음을 함께 다스린다.",
-  "effect": {
-   "heal_hp_pct": 12,
-   "heal_qi_pct": 22,
-   "atk_buff_pct": 10,
-   "buff_rounds": 2
-  }
- },
- "역근공": {
-  "name": "역근공",
-  "type": "심공",
-  "category": "심공",
-  "grade": "상승",
-  "base_multiplier": 1.0,
-  "qi_cost": 0,
-  "desc": "근골을 바꾸는 심공. 상처가 빠르게 아문다.",
-  "effect": {
-   "heal_hp_pct": 20,
-   "heal_qi_pct": 20,
-   "atk_buff_pct": 15,
-   "buff_rounds": 2
-  }
- },
- "혈마심공": {
-  "name": "혈마심공",
-  "type": "심공",
-  "category": "심공",
-  "grade": "상승",
-  "base_multiplier": 1.0,
-  "qi_cost": 0,
-  "desc": "제 피를 태워 힘으로 바꾸는 마공. 몸은 축나지만 기세가 무섭게 오른다.",
-  "effect": {
-   "heal_hp_pct": -8,
-   "heal_qi_pct": 30,
-   "atk_buff_pct": 40,
-   "buff_rounds": 3
-  }
- },
- "태허심법": {
-  "name": "태허심법",
-  "type": "심공",
-  "category": "심공",
-  "grade": "신공",
-  "base_multiplier": 1.0,
-  "qi_cost": 0,
-  "desc": "태허검결과 짝을 이루는 심법. 마음이 비면 기가 스스로 찬다.",
-  "effect": {
-   "heal_hp_pct": 25,
-   "heal_qi_pct": 35,
-   "atk_buff_pct": 25,
-   "buff_rounds": 3
-  }
- },
- "초상비": {
-  "name": "초상비",
-  "type": "경공",
-  "category": "경공",
-  "grade": "기본",
-  "base_multiplier": 1.0,
-  "qi_cost": 5,
-  "desc": "풀잎 위를 달리는 경공. 기초적이지만 쓸모 있다.",
-  "effect": {
-   "evade": 45,
-   "counter_pct": 20,
-   "flee_bonus": 15
-  }
- },
- "부운보": {
-  "name": "부운보",
-  "type": "경공",
-  "category": "경공",
-  "grade": "명품",
-  "base_multiplier": 1.0,
-  "qi_cost": 6,
-  "desc": "뜬구름처럼 종잡을 수 없는 보법. 하오문의 생존 기술이다.",
-  "effect": {
-   "evade": 60,
-   "counter_pct": 30,
-   "flee_bonus": 25
-  }
- },
- "유운신법": {
-  "name": "유운신법",
-  "type": "경공",
-  "category": "경공",
-  "grade": "상승",
-  "base_multiplier": 1.0,
-  "qi_cost": 8,
-  "desc": "흐르는 구름처럼 공격을 흘려보낸 뒤 그 틈을 찌른다.",
-  "effect": {
-   "evade": 72,
-   "counter_pct": 50,
-   "flee_bonus": 30
-  }
- },
- "능공허도": {
-  "name": "능공허도",
-  "type": "경공",
-  "category": "경공",
-  "grade": "신공",
-  "base_multiplier": 1.0,
-  "qi_cost": 10,
-  "desc": "허공을 밟는다는 전설의 경공.",
-  "effect": {
-   "evade": 85,
-   "counter_pct": 80,
-   "flee_bonus": 45
-  }
- }
 }

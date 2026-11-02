@@ -10,8 +10,10 @@
     evasion           : 회피 확률(0~1)
     silver            : 처치 시 은자 범위
     drop              : {"skill": 무공 키, "chance": 확률}
+    intro / outro     : 싸움 전후의 한마디
     specials          : 주기적인 필살기. every 라운드마다 발동하고 직전 라운드에 예고된다.
-                        mult(위력 배율), poison, qi_drain(%), heal_pct(%)
+                        mult(위력 배율), poison, qi_drain(%), heal_pct(%),
+                        seal(점혈: 그 라운드 수만큼 무공 봉쇄), injury(내상 +1)
     phases            : 체력 비율 이하가 되면 공격력이 오르는 단계
 """
 
@@ -59,6 +61,8 @@ class Enemy:
         self.specials = data.get("specials", [])
         self.phases = data.get("phases", [])
         self.drop = data.get("drop")
+        self.intro = data.get("intro")
+        self.outro = data.get("outro")
         self.growth_range = STAT_GROWTH_RANGE.get(self.tier, (1, 3))
         self.silver_range = tuple(data.get("silver", (0, 0)))
         self.phase = 0  # 지금까지 넘어간 단계 수

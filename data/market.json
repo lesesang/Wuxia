@@ -175,12 +175,12 @@
       1,
       2
     ],
-    "desc": "대장간에서 흔히 파는 검. 공격력 +8",
+    "desc": "대장간에서 흔히 파는 검. 공격력 +10",
     "effects": [
       {
         "type": "equip",
         "slot": "weapon",
-        "bonus": 8
+        "bonus": 10
       }
     ]
   },
@@ -192,12 +192,12 @@
       2,
       3
     ],
-    "desc": "잘 벼린 강철검. 공격력 +20",
+    "desc": "잘 벼린 강철검. 공격력 +26",
     "effects": [
       {
         "type": "equip",
         "slot": "weapon",
-        "bonus": 20
+        "bonus": 26
       }
     ]
   },
@@ -209,12 +209,12 @@
       3,
       4
     ],
-    "desc": "현철을 섞어 만든 명검. 공격력 +40",
+    "desc": "현철을 섞어 만든 명검. 공격력 +50",
     "effects": [
       {
         "type": "equip",
         "slot": "weapon",
-        "bonus": 40
+        "bonus": 50
       }
     ]
   },
@@ -226,12 +226,12 @@
       4,
       5
     ],
-    "desc": "하늘에서 떨어진 쇠로 벼린 보검. 공격력 +65",
+    "desc": "하늘에서 떨어진 쇠로 벼린 보검. 공격력 +80",
     "effects": [
       {
         "type": "equip",
         "slot": "weapon",
-        "bonus": 65
+        "bonus": 80
       }
     ]
   },
@@ -243,12 +243,12 @@
       1,
       2
     ],
-    "desc": "질긴 소가죽 호구. 받는 피해 -3",
+    "desc": "질긴 소가죽 호구. 받는 피해 -4",
     "effects": [
       {
         "type": "equip",
         "slot": "armor",
-        "bonus": 3
+        "bonus": 4
       }
     ]
   },
@@ -260,12 +260,12 @@
       2,
       3
     ],
-    "desc": "철사를 엮어 넣은 옷. 받는 피해 -8",
+    "desc": "철사를 엮어 넣은 옷. 받는 피해 -10",
     "effects": [
       {
         "type": "equip",
         "slot": "armor",
-        "bonus": 8
+        "bonus": 10
       }
     ]
   },
@@ -277,12 +277,12 @@
       3,
       4
     ],
-    "desc": "금실로 짠 보의. 받는 피해 -15",
+    "desc": "금실로 짠 보의. 받는 피해 -20",
     "effects": [
       {
         "type": "equip",
         "slot": "armor",
-        "bonus": 15
+        "bonus": 20
       }
     ]
   },
@@ -294,12 +294,12 @@
       4,
       5
     ],
-    "desc": "천잠사로 지은 전설의 옷. 받는 피해 -25",
+    "desc": "천잠사로 지은 전설의 옷. 받는 피해 -32",
     "effects": [
       {
         "type": "equip",
         "slot": "armor",
-        "bonus": 25
+        "bonus": 32
       }
     ]
   },
@@ -543,6 +543,170 @@
         "type": "heal",
         "stat": "qi",
         "percent": 40
+      }
+    ]
+  },
+  "오호단문도보": {
+    "name": "오호단문도 비급",
+    "category": "무공서",
+    "price": 180,
+    "markets": [
+      2,
+      3
+    ],
+    "desc": "도법 「오호단문도」를 익힌다. (위력 계수 1.25)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "오호단문도"
+      }
+    ]
+  },
+  "해독단": {
+    "name": "해독단",
+    "category": "소비품",
+    "price": 18,
+    "markets": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "consumable": true,
+    "stock_qty": 2,
+    "desc": "전투에서 쓰면 중독이 풀리고 체력을 조금 회복한다.",
+    "effects": [
+      {
+        "type": "cure",
+        "what": "poison"
+      },
+      {
+        "type": "heal",
+        "stat": "hp",
+        "percent": 10
+      }
+    ]
+  },
+  "활혈단": {
+    "name": "활혈단",
+    "category": "소비품",
+    "price": 45,
+    "markets": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "consumable": true,
+    "stock_qty": 2,
+    "desc": "내상을 2단계 치료한다.",
+    "effects": [
+      {
+        "type": "cure",
+        "what": "injury",
+        "amount": 2
+      }
+    ]
+  },
+  "천년하수오": {
+    "name": "천년 하수오",
+    "category": "영약",
+    "price": 180,
+    "markets": [
+      2,
+      3,
+      4
+    ],
+    "desc": "사람 모양으로 자란 영초. 네 능력치가 모두 3 오른다.",
+    "effects": [
+      {
+        "type": "stat",
+        "stat": "external",
+        "amount": 3
+      },
+      {
+        "type": "stat",
+        "stat": "internal",
+        "amount": 3
+      },
+      {
+        "type": "stat",
+        "stat": "martial",
+        "amount": 3
+      },
+      {
+        "type": "stat",
+        "stat": "mind",
+        "amount": 3
+      }
+    ]
+  },
+  "설산영지": {
+    "name": "설산 영지",
+    "category": "영약",
+    "price": 150,
+    "markets": [
+      2,
+      3,
+      4
+    ],
+    "desc": "만년설에서 자란 영지. 심경이 8 오른다.",
+    "effects": [
+      {
+        "type": "stat",
+        "stat": "mind",
+        "amount": 8
+      }
+    ]
+  },
+  "호왕골": {
+    "name": "호왕의 뼈",
+    "category": "영약",
+    "price": 160,
+    "markets": [
+      2,
+      3,
+      4
+    ],
+    "desc": "산군의 뼈를 달인 것. 외공이 8 오른다.",
+    "effects": [
+      {
+        "type": "stat",
+        "stat": "external",
+        "amount": 8
+      }
+    ]
+  },
+  "심득잡기": {
+    "name": "고수의 심득",
+    "category": "영약",
+    "price": 160,
+    "markets": [
+      2,
+      3,
+      4
+    ],
+    "desc": "어느 고수의 평생 메모. 무리가 8 오른다.",
+    "effects": [
+      {
+        "type": "stat",
+        "stat": "martial",
+        "amount": 8
+      }
+    ]
+  },
+  "태산신검": {
+    "name": "태산신검",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "비무대회 우승자에게 주어지는 신병이기. 공격력 +60",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 60
       }
     ]
   }

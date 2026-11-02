@@ -46,6 +46,9 @@ class Skill:
         self.qi_cost = data.get("qi_cost", 0)
         self.desc = data.get("desc", "")
         self.effect = data.get("effect", {})
+        self.forms = data.get("forms", [])    # 초식 이름 (전투 문장에 쓰인다)
+        self.risky = data.get("risky", False)  # 마공: 비기를 쓰면 주화입마 위험
+        self.inflict = data.get("inflict")     # {"poison": N} 맞으면 적이 중독된다
 
         self.mastery = 0
 

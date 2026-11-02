@@ -17,13 +17,6 @@ SA_SILVER_BONUS = 25
 MA_DAMAGE_BONUS = 10
 MA_HEAL_PENALTY = 20
 
-TITLES = {
-    "정도": [(3, "협객"), (8, "대협"), (14, "무림의 기둥")],
-    "사도": [(3, "뒷골목의 이름"), (8, "사도의 거물"), (14, "녹림의 그림자")],
-    "마도": [(3, "마에 물든 자"), (8, "마도의 칼"), (14, "천마의 후계")],
-}
-
-
 def new_alignment():
     return {name: 0 for name in ALIGNMENTS}
 
@@ -37,18 +30,6 @@ def dominant(alignment):
     if sum(1 for a in ALIGNMENTS if alignment.get(a, 0) == value) > 1:
         return None
     return top
-
-
-def title(alignment):
-    """강호에서 불리는 별호."""
-    top = dominant(alignment)
-    if top is None:
-        return "이름 없는 무인"
-    name = TITLES[top][0][1]
-    for threshold, candidate in TITLES[top]:
-        if alignment[top] >= threshold:
-            name = candidate
-    return name
 
 
 def benefit_text(alignment):
