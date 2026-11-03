@@ -1141,5 +1141,26 @@
       "multiplier": 2.4,
       "qi_cost": 48
     }
+  },
+  "백호도법": {
+    "name": "백호도법",
+    "type": "공격무공",
+    "category": "도법",
+    "grade": "기본",
+    "base_multiplier": 1.14,
+    "qi_cost": 4,
+    "desc": "오랑캐 고수를 상대하려고 변방 군문에서 다듬은 도법. 꾸밈없이 목숨을 노린다.",
+    "forms": [
+      "맹호출림",
+      "호미횡소",
+      "백호도강"
+    ],
+    "secret_technique": {
+      "name": "백호참",
+      "unlock_grade": "명품",
+      "unlock_mastery": 50,
+      "multiplier": 2.0,
+      "qi_cost": 32
+    }
   }
 }

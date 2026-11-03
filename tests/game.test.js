@@ -997,7 +997,7 @@ test("이벤트에서 만들어 쓰는 인연 표시는 어딘가에서 얻을 �
 });
 
 test("새 출신은 서장과 첫 무기 문장을 갖는다", () => {
-  for (const origin of ["탈영병", "낙방서생"]) {
+  for (const origin of ["탈영병"]) {
     const p = new Player(origin);
     assert.notEqual(eventView(p, "시작_병기고").text, DB.events.시작_병기고.text);
     assert.ok(Object.values(DB.storyEvents).some((e) => e.requires?.origin === origin && e.turn === 1));
@@ -1035,6 +1035,41 @@ test("맷집은 받는 피해를 줄인다", () => {
 test("특성에 따라 사건 선택지가 늘어난다", () => {
   const plain = eventView(new Player(), "밀주꾼").choices.length;
   assert.equal(eventView(new Player("무림초출", ["주당"]), "밀주꾼").choices.length, plain + 1);
+});
+
+test("없어진 출신은 공덕을 돌려주고 저장도 이어 갈 수 있다", () => {
+  const meta = loadMeta();
+  meta.unlocked_origins = ["무림초출", "낙방서생"];
+  meta.current_karma = 2;
+  saveMeta(meta);
+  const after = loadMeta();
+  assert.ok(!after.unlocked_origins.includes("낙방서생"));
+  assert.equal(after.current_karma, 7);
+  const dict = new Player().toDict();
+  dict.origin_key = "낙방서생";
+  dict.origin = "낙방한 서생";
+  assert.equal(Player.fromDict(dict).originKey, "무림초출");
+  assert.ok(!DB.origins.origins.낙방서생);
+});
+
+test("모든 출신은 시작 경지가 일류인 까닭을 설명하고 맺음말이 있다", () => {
+  for (const [key, origin] of Object.entries(DB.origins.origins)) {
+    assert.ok(DB.endings.origin_epilogue[key], key);
+    assert.ok(new Player(key).realm === "일류", key);
+    if (!["남궁세가", "곤륜파", "하오문", "권마계승"].includes(key)) assert.ok(origin.desc.includes("일류"), key);
+  }
+  assert.ok(new Player("탈영병").hasSkill("백호도법"));
+});
+
+test("강호행의 굵직한 일이 기록으로 남고 저장된다", () => {
+  const game = newGame();
+  game.chooseEvent(0);
+  assert.ok(game.player.chronicle.some((c) => c.text.startsWith("첫 무기")));
+  game.player.note("시험");
+  assert.equal(Player.fromDict(game.player.toDict()).chronicle.at(-1).text, "시험");
+  const old = game.player.toDict();
+  delete old.chronicle;
+  assert.deepEqual(Player.fromDict(old).chronicle, []);
 });
 
 // ---------- 전체 플레이 ----------

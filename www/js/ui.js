@@ -18,7 +18,7 @@ import { storage } from "./storage.js";
 const game = new Game();
 const ui = {
   screen: "title", setupTab: "origin", origin: "무림초출", traits: new Set(),
-  modal: null, tab: "enemies", statusTab: "stats", notice: null, lastTyped: "", bars: null,
+  traitFilter: "전체", modal: null, tab: "enemies", statusTab: "stats", notice: null, lastTyped: "", bars: null,
 };
 let installPrompt = null;
 const app = () => document.getElementById("app");
@@ -175,8 +175,12 @@ function renderSetup() {
       <span class="pick-main"><span class="pick-name">${esc(o.name)}</span>${detail}</span></label></div>`;
   }).join("");
 
+  const rarities = ["전체", "일반", "희귀", "전설"];
+  const filterRow = `<div class="filter-row">${rarities.map((r) => `<button class="filter-btn${ui.traitFilter === r ? " on" : ""}" data-act="trait-filter" data-key="${r}">${r}</button>`).join("")}</div>`;
   const traits = Object.keys(DB.traits)
-    .sort((a, b) => Number(meta.unlocked_traits.includes(b)) - Number(meta.unlocked_traits.includes(a)))
+    .filter((key) => ui.traitFilter === "전체" || DB.traits[key].rarity === ui.traitFilter)
+    .sort((a, b) => Number(ui.traits.has(b)) - Number(ui.traits.has(a))
+      || Number(meta.unlocked_traits.includes(b)) - Number(meta.unlocked_traits.includes(a)))
     .map((key) => {
       const t = DB.traits[key];
       const name = `${esc(t.name)}<span class="rarity rarity-${esc(t.rarity)}">${esc(t.rarity)}</span>`;
@@ -200,7 +204,7 @@ function renderSetup() {
       <button class="tab-btn${ui.setupTab === "trait" ? " active" : ""}" data-act="setup-tab" data-tab="trait">특성 ${ui.traits.size}/${slots}</button>
     </div>
     <div class="home-wrap">
-      ${ui.setupTab === "origin" ? origins : `<p class="section-note">${next ? `특성을 ${slots}개 장착할 수 있습니다. 누적 공덕 ${next}이 되면 하나 더 열립니다.` : "특성 칸가 모두 열렸습니다."}</p>${traits}`}
+      ${ui.setupTab === "origin" ? origins : `<p class="section-note">${next ? `특성을 ${slots}개 장착할 수 있습니다. 누적 공덕 ${next}이 되면 하나 더 열립니다.` : "특성 칸이 모두 열렸습니다."}</p>${filterRow}${traits}`}
     </div>
     <div class="setup-bar"><div class="setup-summary">${esc(originName)}${ui.traits.size ? `, 특성 ${ui.traits.size}개` : ""}</div>
       <button class="start-btn" data-act="${hasSave ? "confirm-start" : "start"}">강호로 나선다</button></div>
@@ -220,6 +224,10 @@ function sidebar() {
     <button data-act="open" data-modal="codex-modal">📖<span class="sb-label">도감</span></button>
     <button data-act="open" data-modal="settings-modal">⚙️<span class="sb-label">설정</span></button>
   </div>`;
+}
+
+function chronicleList(p) {
+  return p.chronicle.map((c) => `<div class="chronicle-row"><span class="chronicle-date">${getYear(c.turn)}년차 ${getMonth(c.turn)}월</span><span>${esc(c.text)}</span></div>`).join("");
 }
 
 function statusModal() {
@@ -272,13 +280,14 @@ function statusModal() {
       </div>
       ${traits.length ? `<div class="modal-section"><h4>특성</h4>${traits.map((t) => `<div class="skill-row">${esc(t.name)}<div class="skill-meta">${esc(t.desc)}</div></div>`).join("")}</div>` : ""}`,
     skills: skills,
+    history: chronicleList(p) || `<p class="codex-empty">아직 남길 만한 일이 없습니다.</p>`,
     bag: `<div class="modal-section">
         ${row("은자", p.silver)}
         ${row("무기", weapon ? `${weapon} (공격력 +${equipmentBonus(p, "weapon")})` : "없음")}
         ${row("방어구", armor ? `${armor} (받는 피해 -${equipmentBonus(p, "armor")})` : "없음")}
       </div><div class="modal-section"><h4>소비품</h4>${bag}</div>`,
   };
-  const tabs = [["stats", "능력치"], ["skills", "무공"], ["bag", "가방"]];
+  const tabs = [["stats", "능력치"], ["skills", "무공"], ["bag", "가방"], ["history", "기록"]];
   return modalShell("status-modal", "내 상태", `
     <div class="tabs">${tabs.map(([key, label]) => `<button class="tab-btn${ui.statusTab === key ? " active" : ""}" data-act="status-tab" data-tab="${key}">${label}</button>`).join("")}</div>
     <div class="tab-panel active">${panels[ui.statusTab]}</div>`);
@@ -416,6 +425,7 @@ function renderEnding() {
       <h2 class="ending-title">${esc(ending.title)}</h2>
       <p class="ending-text">${esc(ending.text)}</p>
       ${ending.epilogue.map((l) => `<p class="epilogue">${esc(l)}</p>`).join("")}
+      ${p.chronicle.length ? `<details class="chronicle"><summary>이번 강호행 돌아보기</summary>${chronicleList(p)}</details>` : ""}
       <p class="karma-gain">💠 공덕 +${ending.karma} (보유 ${meta.current_karma}, 누적 ${meta.total_karma})</p>
       <p class="ending-hint">공덕으로 새 출신과 특성을 해금해 다시 도전할 수 있습니다.</p>
       <div class="run-facts">
@@ -623,6 +633,7 @@ const actions = {
     openModal("status-modal");
   },
   "status-tab": (el) => { ui.statusTab = el.dataset.tab; render(); },
+  "trait-filter": (el) => { ui.traitFilter = el.dataset.key; render(); },
   "setup-tab": (el) => { ui.setupTab = el.dataset.tab; render(); window.scrollTo(0, 0); },
   setup: () => { ui.screen = "setup"; render(); window.scrollTo(0, 0); },
   title: () => { ui.screen = "title"; render(); },

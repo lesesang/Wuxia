@@ -12,6 +12,7 @@ const MASTERY_BONUS = 0.003;    // 숙련도 1당 위력 계수 증가
 const EFFECT_GRADE_BONUS = 0.2; // 심공·경공 승급 1단계당 효과 증가율
 
 export const START_SILVER = 30;
+const CHRONICLE_LIMIT = 40;
 export const STAT_CAP = 99;
 export const MAX_INJURY = 3;
 export const MAX_TURN = 120;
@@ -143,6 +144,7 @@ export class Player {
       }
     }
     this.bossWeaken = 0;
+    this.chronicle = [];
     this.alignment = newAlignment();
     this.flags = [];
     this.seenEvents = [];
@@ -252,6 +254,11 @@ export class Player {
     return added;
   }
 
+  /** 이번 강호행의 굵직한 일을 적어 둔다. 판이 끝나면 돌아볼 수 있다. */
+  note(text) {
+    this.chronicle = [...this.chronicle, { turn: this.turn, text }].slice(-CHRONICLE_LIMIT);
+  }
+
   toDict() {
     return {
       origin: this.origin, origin_key: this.originKey, realm: this.realm,
@@ -263,15 +270,17 @@ export class Player {
       inventory: this.inventory, boss_weaken: this.bossWeaken, alignment: this.alignment,
       flags: this.flags, seen_events: this.seenEvents, kills: this.kills,
       fame: this.fame, sect: this.sect, injury: this.injury,
-      turn: this.turn, max_turn: this.maxTurn, alive: this.alive,
+      turn: this.turn, max_turn: this.maxTurn, alive: this.alive, chronicle: this.chronicle,
     };
   }
 
   /** 없는 값은 기본값으로 채워 이전 저장도 읽는다. */
   static fromDict(d) {
     const p = Object.create(Player.prototype);
-    p.origin = d.origin;
-    p.originKey = d.origin_key ?? "무림초출";
+    p.origin = DB.origins.origins[d.origin_key] ? d.origin : DB.origins.origins.무림초출.name;
+    // 없어진 출신으로 저장된 판은 무림초출로 이어 간다
+    p.originKey = DB.origins.origins[d.origin_key] ? d.origin_key : "무림초출";
+    p.chronicle = d.chronicle ?? [];
     p.realm = d.realm;
     p.external = d.external;
     p.internal = d.internal;

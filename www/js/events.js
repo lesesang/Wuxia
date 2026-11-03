@@ -121,7 +121,7 @@ export function resolveChoice(player, key, index) {
   const effects = outcome.effects || {};
   const summary = applyEffects(player, effects);
   if (!player.seenEvents.includes(key)) player.seenEvents.push(key);
-  return { text: outcome.text, summary, effects };
+  return { text: outcome.text, label: choice.label, summary, effects };
 }
 
 /** 비급으로 파는 공격무공 중 하나를 고른다. 익힌 계열이 나올 가능성이 높다. */
@@ -236,7 +236,10 @@ export function applyEffects(player, effects) {
     player.fame = Math.max(0, player.fame + effects.fame);
     summary.push(`명성${signed(effects.fame)}`);
     const rank = fameRankChanged(before, player.fame);
-    if (rank) summary.push(`강호에서 「${rank}」로 불리기 시작했다`);
+    if (rank) {
+      summary.push(`강호에서 「${rank}」로 불리기 시작했다`);
+      player.note(`강호에서 「${rank}」로 불리기 시작했다.`);
+    }
   }
 
   if ("injury" in effects) {
@@ -247,10 +250,12 @@ export function applyEffects(player, effects) {
   if (effects.join_sect && !player.sect) {
     player.sect = effects.join_sect;
     summary.push(`「${DB.sects[player.sect].name}」 입문`);
+    player.note(`${DB.sects[player.sect].name}에 들어갔다.`);
   }
 
   if (effects.leave_sect && player.sect) {
     summary.push(`「${DB.sects[player.sect].name}」을(를) 떠남`);
+    player.note(`${DB.sects[player.sect].name}을(를) 떠났다.`);
     player.sect = null;
   }
 

@@ -348,3 +348,11 @@ body { word-break: keep-all; overflow-wrap: anywhere; }
 
 .toggle { width: 22px; height: 22px; accent-color: var(--celadon); flex-shrink: 0; }
 .guide-off { display: flex; align-items: center; gap: .5rem; font-size: .88rem; padding: .6rem 0 .2rem; border-top: 1px solid var(--line); cursor: pointer; }
+
+.filter-row { display: flex; gap: .4rem; flex-wrap: wrap; margin: 0 0 .7rem; }
+.filter-btn { min-height: 34px; padding: 0 .8rem; background: none; border: 1px solid var(--line); color: var(--paper-dim); font: inherit; font-size: .85rem; cursor: pointer; }
+.filter-btn.on { color: var(--gold); border-color: var(--gold); }
+.chronicle { text-align: left; margin: .8rem 0; font-size: .88rem; }
+.chronicle summary { cursor: pointer; color: var(--gold); min-height: 36px; }
+.chronicle-row { display: flex; gap: .7rem; padding: .35rem 0; border-bottom: 1px solid var(--line); font-size: .88rem; }
+.chronicle-date { flex: 0 0 4.6rem; color: var(--paper-dim); font-size: .8rem; }

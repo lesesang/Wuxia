@@ -4,6 +4,8 @@ import { storage } from "./storage.js";
 const LEGEND_KEY = "wuxia-legend";
 const SAVE_KEY = "wuxia-save";
 const RUN_HISTORY_LIMIT = 10;
+// 게임에서 빠진 출신을 해금했던 기록은 지우고 공덕을 돌려준다
+const REMOVED_ORIGINS = { 낙방서생: 5 };
 
 const defaults = () => ({
   current_karma: 0, total_karma: 0,
@@ -17,13 +19,24 @@ export function loadMeta() {
   if (raw) {
     try {
       const data = JSON.parse(raw);
-      if (data && typeof data === "object") return { ...defaults(), ...data };
+      if (data && typeof data === "object") return refundRemoved({ ...defaults(), ...data });
     } catch {
       // 손상된 기록은 지우지 않고 옆에 남겨 둔다
       storage.set(`${LEGEND_KEY}-broken`, raw);
     }
   }
   return defaults();
+}
+
+function refundRemoved(data) {
+  for (const [key, cost] of Object.entries(REMOVED_ORIGINS)) {
+    if (data.unlocked_origins.includes(key)) {
+      data.unlocked_origins = data.unlocked_origins.filter((k) => k !== key);
+      data.current_karma += cost;
+      storage.set(LEGEND_KEY, JSON.stringify(data));
+    }
+  }
+  return data;
 }
 
 export const saveMeta = (data) => storage.set(LEGEND_KEY, JSON.stringify(data));
