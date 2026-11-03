@@ -8,7 +8,7 @@ import {
 
 export const GRADE_ORDER = ["기본", "명품", "상승", "신공", "천상"];
 const GRADE_BONUS = 0.25;       // 승급 1단계당 위력 계수 증가
-const MASTERY_BONUS = 0.003;    // 성취 1당 위력 계수 증가
+const MASTERY_BONUS = 0.003;    // 숙련도 1당 위력 계수 증가
 const EFFECT_GRADE_BONUS = 0.2; // 심공·경공 승급 1단계당 효과 증가율
 
 export const START_SILVER = 30;
@@ -45,13 +45,13 @@ export class Skill {
     this.secretUnlocked = false;
   }
 
-  /** 성취를 올리고, 승급·비기 터득이 일어나면 안내 문구 목록을 돌려준다. */
+  /** 숙련도를 올리고, 승급·비기 터득이 일어나면 안내 문구 목록을 돌려준다. */
   gainMastery(amount) {
     const messages = [];
     this.mastery = Math.min(100, this.mastery + amount);
     if (this.canEvolve()) {
       this.evolve();
-      messages.push(`🌟 ${this.name}이(가) ${this.grade} 품계로 승급했다!`);
+      messages.push(`🌟 ${this.name}이(가) ${this.grade} 등급으로 승급했다!`);
     }
     if (this.checkSecretUnlock()) messages.push(`✨ 비기 「${this.secretName}」이(가) 터득되었다!`);
     return messages;
@@ -114,7 +114,7 @@ export class Player {
     this.mind = data.mind;
     this.traits = traitKeys;
 
-    // 천품의 시작 기량 보정은 기혈·내력 계산 전에 적용한다
+    // 특성의 시작 능력치 보정은 체력·기력 계산 전에 적용한다
     for (const key of traitKeys) {
       for (const effect of DB.traits[key]?.effects || []) {
         if (effect.type === "start_stat") this[effect.stat] += effect.amount;
@@ -153,7 +153,7 @@ export class Player {
   maxQi() { return 100 + this.internal * 5; }
   dominantAlignment() { return dominant(this.alignment); }
 
-  /** 기량을 올리고 상한 99를 적용한다. 실제로 오른 양을 돌려준다. */
+  /** 능력치를 올리고 상한 99를 적용한다. 실제로 오른 양을 돌려준다. */
   gainStat(stat, amount) {
     const before = this[stat];
     const after = Math.max(before, Math.min(STAT_CAP, before + amount));
@@ -161,7 +161,7 @@ export class Player {
     return after - before;
   }
 
-  /** 기혈·내력을 최대치 비율로 바꾼다. 기혈은 1 아래로 내려가지 않는다. [기혈 변화, 내력 변화] */
+  /** 체력·기력을 최대치 비율로 바꾼다. 체력은 1 아래로 내려가지 않는다. [체력 변화, 기력 변화] */
   healPercent(hpPct = 0, qiPct = 0) {
     const penalty = this.dominantAlignment() === "마도" ? 1 - MA_HEAL_PENALTY / 100 : 1;
     const hpChange = Math.trunc(this.maxHp() * hpPct / 100 * (hpPct > 0 ? penalty : 1));
@@ -194,7 +194,7 @@ export class Player {
   getSkill(key) { return this.skills.find((s) => s.key === key) || null; }
   skillsOfType(type) { return this.skills.filter((s) => s.type === type); }
 
-  /** 무공 습득. 이미 익혔으면 성취를 올린다. 안내 문구 목록을 돌려준다. */
+  /** 무공 습득. 이미 익혔으면 숙련도를 올린다. 안내 문구 목록을 돌려준다. */
   learnSkill(skill) {
     const owned = this.getSkill(skill.key);
     if (owned) return [`이미 아는 무공이다. ${owned.name}의 이해가 깊어졌다.`, ...owned.gainMastery(25)];

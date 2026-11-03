@@ -1,4 +1,4 @@
-// 성향, 챕터, 경지, 천품, 문파, 명성처럼 상태를 갖지 않는 규칙들
+// 성향, 챕터, 경지, 특성, 문파, 명성처럼 상태를 갖지 않는 규칙들
 import { DB } from "./data.js";
 import { pick, rng } from "./rng.js";
 
@@ -22,13 +22,13 @@ export function dominant(alignment) {
 
 export function benefitText(alignment) {
   const top = dominant(alignment);
-  if (top === "정도") return `장터 가격 ${JUNG_DISCOUNT}% 할인`;
+  if (top === "정도") return `시장 가격 ${JUNG_DISCOUNT}% 할인`;
   if (top === "사도") return `얻는 은자 ${SA_SILVER_BONUS}% 증가`;
   if (top === "마도") return `주는 피해 ${MA_DAMAGE_BONUS}% 증가, 회복 효율 ${MA_HEAL_PENALTY}% 감소`;
   return "아직 어느 길에도 서지 않았다";
 }
 
-// ---------- 챕터와 장터 ----------
+// ---------- 챕터와 시장 ----------
 export const CHAPTER_LENGTH = 24;
 export const CHAPTER_STARTS = [25, 49, 73, 97];
 export const getChapter = (turn) => Math.min(5, Math.floor((turn - 1) / CHAPTER_LENGTH) + 1);
@@ -39,7 +39,7 @@ export const marketTurns = () => Object.keys(DB.chapters.market_turns).map(Numbe
 export const isMarketTurn = (turn) => String(turn) in DB.chapters.market_turns;
 export const marketName = (turn) => DB.chapters.market_turns[String(turn)];
 
-// ---------- 천품 ----------
+// ---------- 특성 ----------
 const SLOT_THRESHOLDS = [[0, 1], [20, 2], [50, 3]];
 
 export function traitSlots(totalKarma) {
@@ -64,7 +64,7 @@ export const startSkills = (traits) => effectsOfType(traits, "start_skill").map(
 export const battleBuffs = (traits, trigger) =>
   effectsOfType(traits, "battle_buff").filter((e) => e.trigger === trigger);
 
-/** 천품의 성장률 보정. 소수점 아래는 그 확률로 1이 더 오른다. */
+/** 특성의 성장률 보정. 소수점 아래는 그 확률로 1이 더 오른다. */
 export function applyGrowth(amount, traits, stat) {
   const percent = effectsOfType(traits, "growth_rate")
     .filter((e) => e.stat === stat).reduce((total, e) => total + e.percent, 0);
@@ -99,14 +99,14 @@ export function checkBreakthrough(player) {
   return ok ? next : null;
 }
 
-/** 기량은 찼는데 실전 경험만 모자라면 안내 문구 */
+/** 능력치는 찼는데 전투 경험만 모자라면 안내 문구 */
 export function breakthroughBlock(player) {
   const next = nextRealm(player.realm);
   if (!next) return null;
   const req = DB.realms.requirements[next];
   const stats = statsOf(player);
   if (average(stats) >= req.avg && Math.min(...stats) >= req.min_stat && player.battles < req.battles) {
-    return `${next}의 문턱이 보이지만 실전이 모자라다. (실전 경험 ${player.battles}/${req.battles}, 행각에서 싸워야 는다)`;
+    return `${next}의 문턱이 보이지만 실전이 모자라다. (전투 경험 ${player.battles}/${req.battles}, 탐색에서 싸워야 는다)`;
   }
   return null;
 }

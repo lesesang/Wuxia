@@ -1,4 +1,4 @@
-// 생을 넘어 남는 기록(공덕, 개방, 강호록)과 달 체크포인트
+// 생을 넘어 남는 기록(공덕, 개방, 도감)과 달 체크포인트
 import { storage } from "./storage.js";
 
 const LEGEND_KEY = "wuxia-legend";

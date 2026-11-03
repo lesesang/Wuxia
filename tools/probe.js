@@ -27,9 +27,9 @@ function battleChoice(game) {
   const { player, battle } = game;
   const skill = player.bestSkill();
   const hpRatio = player.hp / player.maxHp();
-  if (battle.poison && player.inventory.해독단) return ["상비약", "해독단"];
+  if (battle.poison && player.inventory.해독단) return ["소비품", "해독단"];
   if (battle.sealed && player.bestOfType("심공")) return ["심법"];
-  if (hpRatio < 0.35) for (const k of ["구명단", "금창약"]) if (player.inventory[k]) return ["상비약", k];
+  if (hpRatio < 0.35) for (const k of ["구명단", "금창약"]) if (player.inventory[k]) return ["소비품", k];
   const movement = player.bestOfType("경공");
   if (battle.enemy.specialForRound(battle.roundNum + 1) && movement && player.qi >= movement.qiCost) return ["경공"];
   if (skill?.secretUnlocked && player.qi >= skill.secretQiCost) return ["비기"];
@@ -90,14 +90,14 @@ for (let run = 0; run < count; run++) {
 }
 
 console.log(`${origin} ${count}판: 격파 ${Math.round(wins * 100 / count)}%, 120달 도달 ${Math.round(reach * 100 / count)}%`, JSON.stringify(endings));
-console.log("년차  위력  기혈  방어  평균능력  은자  전투경험  경지");
+console.log("년차  위력  체력  방어  평균능력  은자  전투경험  경지");
 for (let y = 1; y <= 10; y++) {
   const s = years[y];
   if (!s.n) continue;
   const top = Object.entries(s.realm).sort((a, b) => b[1] - a[1])[0][0];
   console.log(`${String(y).padStart(3)} ${(s.atk / s.n).toFixed(0).padStart(7)} ${(s.hp / s.n).toFixed(0).padStart(5)} ${(s.armor / s.n).toFixed(0).padStart(5)} ${(s.avg / s.n).toFixed(0).padStart(7)} ${(s.silver / s.n).toFixed(0).padStart(6)} ${(s.battles / s.n).toFixed(0).padStart(7)}   ${top} (${s.n})`);
 }
-console.log("장   전투수/판  합  전투당기혈소모  사망");
+console.log("장   전투수/판  합  전투당체력소모  사망");
 for (let c = 1; c <= 5; c++) {
   const s = chapters[c];
   console.log(`${c}장 ${(s.fights / count).toFixed(1).padStart(8)} ${(s.rounds / (s.fights || 1)).toFixed(1).padStart(7)} ${(s.lost * 100 / (s.fights || 1)).toFixed(0).padStart(9)}% ${String(s.deaths).padStart(8)}  ${JSON.stringify(s.tier)}`);

@@ -63,7 +63,11 @@
         },
         "text": "\"하오문 사람인가. 그쪽 문주에게 받을 돈이 있는데, 네 목으로 받아도 되겠지.\""
       }
-    ]
+    ],
+    "drop": {
+      "skill": "기초도법",
+      "chance": 0.15
+    }
   },
   "늑대무리": {
     "name": "굶주린 늑대 무리",
@@ -113,7 +117,11 @@
     "intro": "\"흑풍채의 도끼 맛을 보여 주마!\"",
     "level": 1,
     "hp_style": 1.07,
-    "attack_style": 1.03
+    "attack_style": 1.03,
+    "drop": {
+      "skill": "광풍도법",
+      "chance": 0.1
+    }
   },
   "녹림호걸": {
     "name": "녹림 호걸",
@@ -134,7 +142,11 @@
     "desc": "제 나름의 의리를 말하는 녹림의 무인.",
     "level": 25,
     "hp_style": 1.06,
-    "attack_style": 0.88
+    "attack_style": 0.88,
+    "drop": {
+      "skill": "양가창법",
+      "chance": 0.08
+    }
   },
   "사파자객": {
     "name": "사파 자객",
@@ -232,7 +244,11 @@
     "intro": "\"피! 피를 바쳐라!\"",
     "level": 49,
     "hp_style": 1.09,
-    "attack_style": 1.09
+    "attack_style": 1.09,
+    "drop": {
+      "skill": "열화장",
+      "chance": 0.06
+    }
   },
   "독문고수": {
     "name": "독문의 고수",
@@ -299,7 +315,11 @@
     "intro": "철갑이 일제히 한 걸음 앞으로 나왔다.",
     "level": 49,
     "hp_style": 1.25,
-    "attack_style": 1.2
+    "attack_style": 1.2,
+    "drop": {
+      "skill": "벽력곤법",
+      "chance": 0.06
+    }
   },
   "화경마인": {
     "name": "화경의 마인",
@@ -384,7 +404,11 @@
         },
         "text": "\"같은 교도라 해서 칼이 무뎌지지는 않는다. 약하면 먹힌다, 그것이 본교다.\""
       }
-    ]
+    ],
+    "drop": {
+      "skill": "현빙장",
+      "chance": 0.08
+    }
   },
   "혈마대귀": {
     "name": "혈마대의 귀졸",
@@ -681,7 +705,11 @@
     ],
     "level": 1,
     "hp_style": 1.06,
-    "attack_style": 0.98
+    "attack_style": 0.98,
+    "drop": {
+      "skill": "기초봉법",
+      "chance": 0.12
+    }
   },
   "배신표사": {
     "name": "배신한 표사",
@@ -739,7 +767,11 @@
     ],
     "level": 25,
     "hp_style": 1.06,
-    "attack_style": 1.07
+    "attack_style": 1.07,
+    "drop": {
+      "skill": "귀면도법",
+      "chance": 0.05
+    }
   },
   "금의위밀정": {
     "name": "금의위 밀정",
@@ -831,7 +863,11 @@
     ],
     "level": 49,
     "hp_style": 0.91,
-    "attack_style": 0.91
+    "attack_style": 0.91,
+    "drop": {
+      "skill": "낙성비도",
+      "chance": 0.08
+    }
   },
   "장강수적": {
     "name": "장강수로채 정예",
@@ -1022,7 +1058,11 @@
     ],
     "level": 97,
     "hp_style": 1.0,
-    "attack_style": 1.0
+    "attack_style": 1.0,
+    "drop": {
+      "skill": "패왕창법",
+      "chance": 0.06
+    }
   },
   "혈수인": {
     "name": "혈수인",

@@ -14,8 +14,8 @@ import {
 } from "./rules.js";
 
 const NATURAL_REGEN = 5;
-const EXPLORE_BATTLE = 0.45;
-const EXPLORE_EVENT = 0.40;
+const EXPLORE_BATTLE = 0.35; // 나머지는 사건과 기연
+const EXPLORE_EVENT = 0.45;
 const SPARRING_CHANCE = 0.65;
 const TRAIN_BONUS_BASE = 0.05;
 const TRAIN_MASTERY_RATE = 3;
@@ -23,7 +23,7 @@ const INSIGHT_CHANCE = 0.3;
 const GAUNTLET_REST = 20;
 const LOG_LIMIT = 40;
 const VALID_ACTIONS = ["수련", "명상", "탐색", "휴식"];
-const VALID_BATTLE_ACTIONS = ["기본공격", "비기", "심법", "경공", "상비약", "도주"];
+const VALID_BATTLE_ACTIONS = ["기본공격", "비기", "심법", "경공", "소비품", "도주"];
 
 export class Game {
   constructor() { this.reset(); }
@@ -106,7 +106,7 @@ export class Game {
       if (rng.random() < SPARRING_CHANCE) {
         const silver = p.gainSilver(randInt(6, 10) * getChapter(p.turn));
         p.battles += 1;
-        this.addLog([`지나던 무인과 대련을 나누고 사례를 받았다. (실전 경험 +1, 은자 +${silver})`]);
+        this.addLog([`지나던 무인과 대련을 나누고 사례를 받았다. (전투 경험 +1, 은자 +${silver})`]);
       }
       const skill = p.bestSkill();
       if (skill) this.addLog(skill.gainMastery(p.masteryGainAmount() * TRAIN_MASTERY_RATE));
@@ -114,7 +114,7 @@ export class Game {
       const internal = this.grow("internal");
       const mind = this.grow("mind");
       const [, qi] = p.healPercent(0, 15);
-      this.addLog([actionLine("명상"), `내공+${internal}, 심경+${mind}, 내력+${qi}`]);
+      this.addLog([actionLine("명상"), `내공+${internal}, 심경+${mind}, 기력+${qi}`]);
       const skill = p.bestOfType("심공");
       if (skill) this.addLog(skill.gainMastery(p.masteryGainAmount()));
       // 고요한 중에 깨달음이 오면 주무공도 함께 깊어진다
@@ -123,7 +123,7 @@ export class Game {
       }
     } else if (name === "휴식") {
       const [hp, qi] = p.healPercent(35, 45);
-      let result = `기혈+${hp}, 내력+${qi}`;
+      let result = `체력+${hp}, 기력+${qi}`;
       if (p.injury) {
         p.addInjury(-1);
         result += `, 내상 ${p.injury ? `${p.injury}단계로 호전` : "완치"}`;
@@ -195,7 +195,7 @@ export class Game {
       const percent = Math.min(weaken, 60);
       enemy.maxHp = Math.trunc(enemy.maxHp * (100 - percent) / 100);
       enemy.hp = enemy.maxHp;
-      this.addLog([`천마의 기세가 꺾인 채 싸움이 시작된다. (기혈 ${percent}% 감소)`]);
+      this.addLog([`천마의 기세가 꺾인 채 싸움이 시작된다. (체력 ${percent}% 감소)`]);
     }
     p.recordEnemyEncounter("천마");
     this.battle = new Battle(p, enemy, true);
@@ -253,7 +253,7 @@ export class Game {
       this.gauntlet = null;
     }
 
-    if (result.victory) this.addLog([`승리! (실전 경험 +${result.exp})`]);
+    if (result.victory) this.addLog([`승리! (전투 경험 +${result.exp})`]);
     else if (result.fled) this.addLog(["가까스로 전장을 벗어났다."]);
     else this.addLog(["패배..."]);
 
@@ -288,7 +288,7 @@ export class Game {
     if (skill?.type === "공격무공") this.player.mainSkill = key;
   }
 
-  // ---------- 달 넘김과 장터 ----------
+  // ---------- 달 넘김과 시장 ----------
 
   advanceTurn() {
     if (!this.active || !this.pendingNext || this.market) return;
@@ -312,18 +312,18 @@ export class Game {
     p.healPercent(hp, qi);
     const hint = breakthroughBlock(p);
     if (hint) lines.push(hint);
-    if (p.injury) lines.push(`가슴 안쪽이 욱신거린다. (내상 ${p.injury}단계, 요양으로 낫는다)`);
+    if (p.injury) lines.push(`가슴 안쪽이 욱신거린다. (내상 ${p.injury}단계, 회복으로 낫는다)`);
     lines.push(monthLine(getMonth(p.turn)));
     this.pendingNext = false;
     this.enterTurn(lines);
   }
 
-  /** 직전 달의 조우와 습득을 영구 강호록에 반영한다. */
+  /** 직전 달의 조우와 습득을 영구 도감에 반영한다. */
   commitCodex() {
     const added = this.player.commitPendingEncounters();
     updateGlobalCodex(added);
     updateKnown(this.player.skills.map((s) => s.key));
-    return added.map((key) => `📖 강호 강호록에 「${DB.enemies[key]?.name ?? key}」이(가) 기록되었다.`);
+    return added.map((key) => `📖 강호 도감에 「${DB.enemies[key]?.name ?? key}」이(가) 기록되었다.`);
   }
 
   checkRealm() {
@@ -335,10 +335,10 @@ export class Game {
     // 심경이 충분히 높지 않으면 돌파가 거칠어 내상을 입는다
     if (rng.random() < Math.max(0, 60 - p.mind) * 0.01) {
       p.healPercent(-25, -25);
-      lines.push("심경이 흔들려 기가 역류했다. 간신히 돌파했지만 내상을 입었다. (기혈·내력 -25%)");
+      lines.push("심경이 흔들려 기가 역류했다. 간신히 돌파했지만 내상을 입었다. (체력·기력 -25%)");
     } else {
       p.healPercent(50, 50);
-      lines.push("막혀 있던 혈맥이 뚫리며 온몸에 기운이 찬다. (기혈·내력 회복)");
+      lines.push("막혀 있던 혈맥이 뚫리며 온몸에 기운이 찬다. (체력·기력 회복)");
     }
     return lines;
   }
