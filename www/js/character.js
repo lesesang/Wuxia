@@ -146,6 +146,7 @@ export class Player {
     this.bossWeaken = 0;
     this.chronicle = [];
     this.content = [];
+    this.chains = [];
     this.alignment = newAlignment();
     this.flags = [];
     this.seenEvents = [];
@@ -271,7 +272,7 @@ export class Player {
       inventory: this.inventory, boss_weaken: this.bossWeaken, alignment: this.alignment,
       flags: this.flags, seen_events: this.seenEvents, kills: this.kills,
       fame: this.fame, sect: this.sect, injury: this.injury,
-      turn: this.turn, max_turn: this.maxTurn, alive: this.alive, chronicle: this.chronicle, content: this.content,
+      turn: this.turn, max_turn: this.maxTurn, alive: this.alive, chronicle: this.chronicle, content: this.content, chains: this.chains,
     };
   }
 
@@ -283,6 +284,7 @@ export class Player {
     p.originKey = DB.origins.origins[d.origin_key] ? d.origin_key : "무림초출";
     p.chronicle = d.chronicle ?? [];
     p.content = d.content ?? [];
+    p.chains = d.chains ?? [];
     p.realm = d.realm;
     p.external = d.external;
     p.internal = d.internal;

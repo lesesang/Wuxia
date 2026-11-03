@@ -3,7 +3,7 @@ import { GRADE_ORDER, Skill, STAT_NAMES } from "./character.js";
 import { DB } from "./data.js";
 import { bonusFor, equipmentBonus, styleWeight } from "./market.js";
 import { updateKnown } from "./meta.js";
-import { pick, pickWeighted } from "./rng.js";
+import { pick, pickWeighted, rng } from "./rng.js";
 import { ALIGNMENTS, applyGrowth, fameRankChanged, getChapter, realmIndex, sumEffect } from "./rules.js";
 
 export const EVENT_STAT_SCALE = 0.3; // 사건·기연의 능력치 상승 배율 (밸런스 조정용)
@@ -58,16 +58,83 @@ export function storyEventForTurn(player) {
   return null;
 }
 
+// ---------- 연계 인카운터 ----------
+
+export const LAST_CHAIN_TURN = 119; // 천마봉(120달) 전에 모든 연계가 끝나야 한다
+const CHAIN_SLACK = 2;              // 줄거리 전투로 달이 밀려도 끝낼 수 있게 남겨 두는 달
+const MAX_ACTIVE_CHAINS = 2;
+
+/** 지금 시작해도 남은 달 안에 끝까지 갈 수 있는 연계인가 */
+export function canStartChain(player, id) {
+  if (player.chains.length >= MAX_ACTIVE_CHAINS) return false;
+  const occupied = player.chains.reduce((sum, c) => sum + DB.chains[c.id].keys.length - c.next, 0);
+  return player.turn + DB.chains[id].span + occupied + CHAIN_SLACK <= LAST_CHAIN_TURN;
+}
+
+/** 다음 편의 달. 남은 편수만큼 달을 남기도록 당겨 잡는다. */
+function nextDue(player, id, next) {
+  const left = DB.chains[id].keys.length - next;
+  return Math.min(player.turn + DB.chains[id].gaps[next], LAST_CHAIN_TURN - left + 1);
+}
+
+export function startChain(player, id) {
+  player.chains.push({ id, next: 1, due: nextDue(player, id, 1) });
+  player.note(`「${DB.chains[id].title}」 일에 발을 들였다.`);
+}
+
+/** 고른 결과에 따라 연계를 다음 편으로 넘기거나 끝낸다. */
+export function advanceChain(player, id, abandoned = false) {
+  const chain = player.chains.find((c) => c.id === id);
+  if (!chain) return;
+  const finished = chain.next >= DB.chains[id].keys.length;
+  if (abandoned || finished) {
+    player.chains = player.chains.filter((c) => c.id !== id);
+    player.note(abandoned ? `「${DB.chains[id].title}」 일에서 손을 뗐다.` : `「${DB.chains[id].title}」 일을 끝맺었다.`);
+    return;
+  }
+  chain.due = nextDue(player, id, chain.next);
+}
+
+/** 이번 달에 찾아와야 할 연계 편. 천마봉이 코앞이면 남은 것을 모두 불러낸다. */
+export function dueChainEvent(player) {
+  const urgent = player.turn >= LAST_CHAIN_TURN;
+  const due = player.chains.filter((c) => urgent || c.due <= player.turn).sort((a, b) => a.due - b.due)[0];
+  if (!due) return null;
+  const key = DB.chains[due.id].keys[due.next];
+  due.next += 1;
+  return key;
+}
+
+/** 연계 데이터가 규칙을 지키는지 검사한다. */
+export function validateChains() {
+  const errors = [];
+  for (const [id, chain] of Object.entries(DB.chains)) {
+    chain.keys.forEach((key, i) => {
+      const { choices } = DB.events[key];
+      if (!choices.some((c) => !c.requires)) errors.push(`${key}: 조건 없는 선택지가 없다`);
+      const last = i === chain.keys.length - 1;
+      const has = (name) => choices.some((c) => c.outcomes.some((o) => o.effects?.[name]));
+      if (i === 0 && !has("chain_start")) errors.push(`${key}: 시작 선택지가 없다`);
+      if (i > 0 && !last && !has("chain_abandon")) errors.push(`${key}: 포기 선택지가 없다`);
+      if (i > 0 && chain.gaps[i] < 1) errors.push(`${key}: 간격은 1달 이상`);
+    });
+    const latest = Math.max(...DB.events[chain.keys[0]].chapters) * 24;
+    if (latest > 120) errors.push(`${id}: 장 범위 오류`);
+  }
+  return errors;
+}
+
 export function pickRandomEvent(player) {
   const chapter = getChapter(player.turn);
   const options = Object.keys(DB.randomEvents).filter((key) => {
     const event = DB.randomEvents[key];
+    if (event.chain && !canStartChain(player, event.chain.id)) return false;
     return (event.chapters || []).includes(chapter) && !player.seenEvents.includes(key)
       && checkRequires(player, event.requires);
   });
   if (!options.length) return null;
   // 인연이 이어지는 이벤트를 먼저 만날 가능성을 높인다
-  return pickWeighted(options, options.map((k) => (DB.randomEvents[k].requires ? 3 : 1)));
+  return pickWeighted(options, options.map((k) => (DB.randomEvents[k].requires || DB.randomEvents[k].chain ? 3 : 1)));
 }
 
 export function pickFortune(player) {
@@ -104,7 +171,8 @@ export function eventView(player, key) {
     if (locked && choice.hidden) return;
     choices.push({ index, label: choice.label, locked, tag: choice.tag || null });
   });
-  return { key, title: event.title, text: eventText(player, key), choices };
+  const title = event.chain ? `${event.title} (${event.chain.index + 1}/${event.chain.total})` : event.title;
+  return { key, title, text: eventText(player, key), choices, chain: event.chain ? DB.chains[event.chain.id].title : null };
 }
 
 /** 적이 플레이어를 보고 하는 말. 상황에 맞는 대사가 있으면 그것을 쓴다. */
@@ -290,6 +358,18 @@ export function applyEffects(player, effects) {
       summary.push(`📕 새 무공 「${skill.name}」`, ...player.learnSkill(skill));
     } else {
       summary.push(`무리+${player.gainStat("martial", 2)}`);
+    }
+  }
+
+  if (effects.style_skill) {
+    const main = player.bestSkill()?.category;
+    const list = Object.keys(DB.skills).filter((k) => DB.skills[k].legend && DB.skills[k].category === main && !player.hasSkill(k));
+    if (list.length) {
+      const skill = new Skill(list[Math.floor(rng.random() * list.length)]);
+      summary.push(`📕 새 무공 「${skill.name}」`, ...player.learnSkill(skill));
+      player.note(`전설의 무공 「${skill.name}」을(를) 얻었다.`);
+    } else {
+      summary.push(`무리+${player.gainStat("martial", 4)}`);
     }
   }
 

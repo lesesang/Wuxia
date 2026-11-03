@@ -6,7 +6,7 @@ import { listAssets } from "../tools/build_asset_list.js";
 import { Battle, Enemy, useConsumable } from "../www/js/battle.js";
 import { Player, Skill } from "../www/js/character.js";
 import { DB } from "../www/js/data.js";
-import { applyEffects, checkRequires, enemyIntro, eventView, pickRandomEvent, resolveChoice, validateEvents } from "../www/js/events.js";
+import { applyEffects, canStartChain, checkRequires, enemyIntro, eventView, LAST_CHAIN_TURN, pickRandomEvent, resolveChoice, validateChains, validateEvents } from "../www/js/events.js";
 import { Game } from "../www/js/game.js";
 import { blockReason, buy, equipmentBonus, openMarket, priceOf } from "../www/js/market.js";
 import {
@@ -1180,6 +1180,152 @@ test("수상한 누군가에게 카르마로 거래한다", () => {
   assert.equal(game.player.external, before + 3);
   assert.equal(loadMeta().current_karma, 1);
   withKarma(0);
+});
+
+// ---------- 연계 인카운터 ----------
+
+/** 전투를 바로 끝내며 끝까지 굴린다. 첫 편은 강제로 시작해 볼 수 있다. */
+function runToEnd(game, { accept = true, giveUp = false, onEvent = () => {} } = {}) {
+  for (let i = 0; i < 6000 && game.player.alive; i++) {
+    const p = game.player;
+    p.hp = p.maxHp();
+    if (game.battle) { game.battle.enemy.hp = 1; game.battleAction("기본공격"); continue; }
+    if (game.event) {
+      onEvent(game);
+      const view = eventView(p, game.event.key);
+      const open = view.choices.filter((c) => !c.locked);
+      const event = DB.events[game.event.key];
+      const list = event.choices;
+      const pickBy = (name) => open.find((c) => {
+        const raw = view.choices.find((x) => x.index === c.index);
+        return raw && (list.find((x) => x.label === c.label) || {}).outcomes?.some((o) => o.effects?.[name]);
+      });
+      const chosen = (event.chain && event.chain.index === 0 && accept && pickBy("chain_start"))
+        || (event.chain && giveUp && pickBy("chain_abandon"))
+        || open.find((c) => { const x = list.find((y) => y.label === c.label); return !x?.outcomes.some((o) => o.effects?.chain_abandon || o.effects?.ending); })
+        || open[0];
+      game.chooseEvent(chosen.index);
+      continue;
+    }
+    if (game.market) { game.marketLeave(); continue; }
+    if (game.pendingNext) { game.advanceTurn(); continue; }
+    if (game.ending) break;
+    game.action("탐색");
+  }
+}
+
+test("연계 데이터가 규칙을 지킨다", () => {
+  assert.deepEqual(validateChains(), []);
+  assert.ok(Object.keys(DB.chains).length >= 8);
+});
+
+test("남은 달이 모자라면 연계가 시작되지 않는다", () => {
+  const p = new Player();
+  const id = "제자를키우다";
+  p.turn = LAST_CHAIN_TURN - DB.chains[id].span - 2;
+  assert.ok(canStartChain(p, id));
+  p.turn += 1;
+  assert.ok(!canStartChain(p, id));
+  p.turn = 1;
+  p.chains = [{ id: "역병의고을", next: 1, due: 5 }, { id: "장강수로", next: 1, due: 5 }];
+  assert.ok(!canStartChain(p, id), "동시에 둘까지만");
+});
+
+test("시작한 연계는 포기하지 않으면 천마봉 전에 끝까지 나온다", () => {
+  for (let run = 0; run < 150; run++) {
+    const game = new Game();
+    game.start("무림초출");
+    const started = new Set();
+    const seen = {};
+    let finalWithChains = 0;
+    runToEnd(game, {
+      onEvent: (g) => {
+        const { chain } = DB.events[g.event.key];
+        if (chain) {
+          (seen[chain.id] ||= new Set()).add(chain.index);
+          if (chain.index === 0) started.add(chain.id);
+        }
+        if (DB.events[g.event.key].kind === "final" && g.player.chains.length) finalWithChains++;
+      },
+    });
+    assert.equal(finalWithChains, 0, "천마봉에 남은 연계가 있다");
+    for (const id of started) {
+      if (!game.player.chronicle.some((c) => c.text.includes(DB.chains[id].title))) continue;
+      assert.equal(seen[id].size, DB.chains[id].keys.length, `${id}가 끝까지 나오지 않았다`);
+    }
+  }
+});
+
+test("어느 달에 강제로 시작해도 천마봉 전에 끝난다", () => {
+  for (const id of Object.keys(DB.chains)) {
+    const span = DB.chains[id].span;
+    for (const turn of [LAST_CHAIN_TURN - span - 2, 60, 96]) {
+      if (turn < 1) continue;
+      const game = new Game();
+      game.start("무림초출");
+      game.player.turn = turn;
+      game.event = null;
+      if (!canStartChain(game.player, id)) continue;
+      game.event = { key: DB.chains[id].keys[0], forced: false };
+      const start = DB.events[DB.chains[id].keys[0]].choices.findIndex((c) => c.outcomes.some((o) => o.effects?.chain_start));
+      const extra = eventView(game.player, game.event.key).choices.findIndex((c) => c.index === start);
+      game.chooseEvent(extra < 0 ? start : start);
+      assert.equal(game.player.chains.length, 1);
+      let finalLeft = -1;
+      runToEnd(game, { onEvent: (g) => { if (DB.events[g.event.key].kind === "final") finalLeft = g.player.chains.length; } });
+      assert.equal(finalLeft, 0, `${id} ${turn}달 시작`);
+    }
+  }
+});
+
+test("중간에 손을 떼면 다음 편이 나오지 않는다", () => {
+  const game = new Game();
+  game.start("무림초출");
+  game.event = { key: DB.chains.과부의복수.keys[0], forced: false };
+  game.chooseEvent(0);
+  assert.equal(game.player.chains.length, 1);
+  game.player.turn = game.player.chains[0].due;
+  game.pendingNext = false;
+  game.openStoryEvent();
+  game.event = { key: DB.chains.과부의복수.keys[1], forced: false };
+  const index = eventView(game.player, game.event.key).choices.find((c) => c.label === "여기서 손을 뗀다").index;
+  game.chooseEvent(index);
+  assert.equal(game.player.chains.length, 0);
+});
+
+test("저장했다 이어 해도 연계가 유지된다", () => {
+  const p = new Player();
+  p.chains = [{ id: "역병의고을", next: 1, due: 9 }];
+  assert.deepEqual(Player.fromDict(p.toDict()).chains, p.chains);
+});
+
+// ---------- 무공과 출신의 고른 분포 ----------
+
+test("무기 계열마다 무공 수가 같고 등급이 고르다", () => {
+  const styles = ["검법", "도법", "창법", "봉법", "권법", "장법", "암기"];
+  const attacks = Object.values(DB.skills).filter((s) => s.type === "공격무공");
+  for (const style of styles) {
+    const list = attacks.filter((s) => s.category === style);
+    assert.equal(list.length, 12, style);
+    for (const [grade, min] of [["기본", 2], ["명품", 3], ["상승", 3], ["신공", 2]]) {
+      assert.ok(list.filter((s) => s.grade === grade).length >= min, `${style} ${grade}`);
+    }
+    const sold = list.filter((s) => Object.values(DB.market).some((i) => i.effects.some((e) => e.skill === s.key || e.skill === s.name)));
+    assert.ok(sold.length >= 3, `${style} 파는 비급`);
+  }
+  for (const style of ["도법", "창법", "봉법", "권법", "장법", "암기"]) {
+    assert.ok(attacks.some((s) => s.category === style && s.legend), `${style} 전설`);
+  }
+});
+
+test("새 출신은 저마다 서장과 무기 문장, 이야기가 있다", () => {
+  for (const origin of ["세외도객", "양가서자", "육선문포두", "소림속가", "마교탈주", "살문탈주"]) {
+    assert.ok(DB.origins.origins[origin].desc.includes("일류"));
+    assert.ok(Object.values(DB.storyEvents).some((e) => e.requires?.origin === origin && e.turn === 1));
+    assert.notEqual(eventView(new Player(origin), "시작_병기고").text, DB.events.시작_병기고.text);
+    assert.ok(Object.values(DB.randomEvents).filter((e) => e.requires?.origin === origin).length >= 2);
+    assert.ok(DB.enemies.천마.intros.some((i) => i.requires.origin === origin));
+  }
 });
 
 // ---------- 전체 플레이 ----------
