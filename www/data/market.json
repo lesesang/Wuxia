@@ -2624,5 +2624,110 @@
         "style": "암기"
       }
     ]
+  },
+  "창궁고검": {
+    "name": "창궁고검",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "남궁 가주가 대대로 차던 옛 검. 검법에 맞음, 위력 +45",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 45,
+        "style": "검법"
+      }
+    ]
+  },
+  "오호맹도": {
+    "name": "오호맹도",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "넷째 형의 칼을 다시 벼린 칼. 다섯 호랑이가 새겨져 있다. 도법에 맞음, 위력 +45",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 45,
+        "style": "도법"
+      }
+    ]
+  },
+  "철마장창": {
+    "name": "철마장창",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "철마표국 총표두의 창. 창대에 표기를 묶던 자리가 있다. 창법에 맞음, 위력 +45",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 45,
+        "style": "창법"
+      }
+    ]
+  },
+  "녹죽봉": {
+    "name": "녹죽봉",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "역대 방주가 전해 온 푸른 대나무 봉. 쇠보다 질기다. 봉법에 맞음, 위력 +45",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 45,
+        "style": "봉법"
+      }
+    ]
+  },
+  "혈권갑": {
+    "name": "혈권갑",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "권마가 묻어 둔 권갑. 안쪽에 오래된 피가 배어 있다. 권법에 맞음, 위력 +45",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 45,
+        "style": "권법"
+      }
+    ]
+  },
+  "적련수갑": {
+    "name": "적련수갑",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "연못의 쇠붙이로 벼린 장갑. 뜨거움을 받아 낸다. 장법에 맞음, 위력 +45",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 45,
+        "style": "장법"
+      }
+    ]
+  },
+  "무흔비도": {
+    "name": "무흔비도",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "전대 문주의 비도. 던진 흔적이 남지 않는다. 암기에 맞음, 위력 +45",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 45,
+        "style": "암기"
+      }
+    ]
   }
 }

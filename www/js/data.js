@@ -30,11 +30,14 @@ export async function loadData(read) {
       DB.events[keys[i]] = entry;
     });
   }
-  // 환생 강화는 숨은 특성으로 등록해 특성과 같은 방식으로 적용한다
+  // 기틀과 누적 보상은 숨은 특성으로 등록해 특성과 같은 방식으로 적용한다
   for (const [key, upgrade] of Object.entries(DB.karma.upgrades)) {
     upgrade.costs.forEach((_, i) => {
       DB.traits[`환생_${key}_${i + 1}`] = { name: upgrade.name, desc: upgrade.desc, hidden: true, effects: upgrade.effects };
     });
+  }
+  for (const reward of DB.karma.rewards) {
+    DB.traits[`누적_${reward.at}`] = { name: reward.name, desc: reward.desc, hidden: true, effects: reward.effects };
   }
 }
 

@@ -6,7 +6,7 @@ import { eventView } from "./events.js";
 import { Game } from "./game.js";
 import { bonusFor, equipmentBonus, itemName, stockView } from "./market.js";
 import {
-  buyContent, buyUpgrade, exportRecords, extraSlots, importRecords, legacyAvailable, loadCheckpoint, loadMeta, openLegacy,
+  buyContent, buyUpgrade, exportRecords, extraSlots, importRecords, legacyAvailable, loadCheckpoint, loadEventLog, loadMeta, nextReward, openLegacy,
   toggleContent, unlockOrigin, unlockTrait, upgradeLevel,
 } from "./meta.js";
 import {
@@ -19,7 +19,7 @@ import { storage } from "./storage.js";
 const game = new Game();
 const ui = {
   screen: "title", setupTab: "origin", origin: "무림초출", traits: new Set(),
-  traitFilter: "전체", legacy: null, shopTab: "origin", shopFrom: "title", modal: null, tab: "enemies", statusTab: "stats", notice: null, lastTyped: "", bars: null,
+  traitFilter: "전체", codexQuery: "", codexFilter: "전체", codexRead: null, legacy: null, shopTab: "origin", shopFrom: "title", modal: null, tab: "enemies", statusTab: "stats", notice: null, lastTyped: "", bars: null,
 };
 let installPrompt = null;
 const app = () => document.getElementById("app");
@@ -39,60 +39,186 @@ function modalShell(id, title, body) {
     </div></div>`;
 }
 
-function codexModal() {
-  const meta = loadMeta();
-  const list = (items, empty, row) => (items.length ? items.map(row).join("") : `<p class="codex-empty">${empty}</p>`);
-  const entry = (name, meta2, desc) => `<div class="codex-item"><div class="codex-name">${esc(name)}</div>
-    <div class="codex-meta">${esc(meta2)}</div>${desc ? `<div>${esc(desc)}</div>` : ""}</div>`;
-  const enemies = meta.global_codex.filter((k) => DB.enemies[k]);
-  const skills = meta.known_skills.filter((k) => DB.skills[k]);
-  const items = meta.known_items.filter((k) => DB.market[k]);
-  const events = meta.known_events.filter((k) => DB.events[k]);
-  const tabs = [
-    ["enemies", `인물 ${enemies.length}/${Object.keys(DB.enemies).length}`],
-    ["skills", `무공 ${skills.length}/${Object.keys(DB.skills).length}`],
-    ["items", `보물 ${items.length}/${Object.keys(DB.market).length}`],
-    ["events", `인연 ${events.length}/${Object.keys(DB.events).length}`],
-    ["achievements", `공적 ${meta.achievements.length}`],
-    ["endings", "결말"],
-    ["runs", "강호행 기록"],
-  ];
-  const panels = {
-    enemies: list(enemies, "탐색에서 적을 만나면 다음 달에 이곳에 기록됩니다.", (k) => {
-      const e = DB.enemies[k];
-      return entry(e.name, `${TIER_NAMES[e.tier] || e.tier}, ${e.realm} 경지`, e.desc);
-    }),
-    skills: list(skills, "무공을 익히면 이곳에 기록됩니다.", (k) => {
-      const s = DB.skills[k];
-      return entry(s.name, `${s.type}, ${s.grade} 품계`, s.desc);
-    }),
-    items: list(items, "장터에서 물건을 사면 이곳에 기록됩니다.", (k) => {
-      const i = DB.market[k];
-      return entry(i.name, categoryName(i.category), i.desc);
-    }),
-    events: list(events, "강호에서 겪은 사건이 이곳에 기록됩니다.", (k) => {
-      const e = DB.events[k];
-      const label = e.chain ? `연계 「${DB.chains[e.chain.id].title}」 ${e.chain.index + 1}/${e.chain.total}편` : e.kind === "story" ? "줄거리" : e.requires?.sect ? "사문" : e.requires?.origin ? "출신 이야기" : "강호 사건";
-      return entry(e.title, label, e.text.split(/(?<=[.?!"])\s/)[0]);
-    }),
-    achievements: DB.karma.achievements.filter((a) => !a.hidden || meta.achievements.includes(a.key)).map((a) => {
-      const done = meta.achievements.includes(a.key);
-      return entry(`${done ? "✓ " : ""}${a.name}`, a.karma ? `카르마 +${a.karma}` : "", a.desc);
-    }).join(""),
-    endings: Object.keys(DB.endings.titles).filter((k) => k !== "생사경" || meta.endings_seen.includes(k)).map((k) => entry(
-      meta.endings_seen.includes(k) ? DB.endings.titles[k] : "아직 보지 못한 결말", `카르마 +${DB.endings.karma[k]}`)).join(""),
-    runs: `<p class="codex-meta">끝낸 강호행 ${meta.total_runs}회, 천마 격파 ${meta.total_wins || 0}회, 가장 오래 간 달 ${meta.best_turn || 0}달</p>${list(meta.runs, "강호행을 끝내면 이곳에 기록됩니다.", (r) => entry(
-      DB.endings.titles[r.ending] || r.ending, `${r.origin}, ${r.realm}, ${r.title}`, `${r.turn}달까지 진행, ${r.kills}명 처치`))}`,
+// ---------- 강호록 ----------
+
+const GRADE_LIST = ["기본", "명품", "상승", "일절", "신공"];
+
+/** 사건의 갈래 이름. 분류와 표시에 함께 쓴다. */
+function eventKind(e) {
+  if (e.chain) return "이어지는 인연";
+  if (e.kind === "story" || e.kind === "final") return "줄거리";
+  if (e.requires?.unlocked) return "카르마 인연";
+  if (e.requires?.origin) return "출신 이야기";
+  if (e.requires?.sect || e.requires?.no_sect) return "사문";
+  return "강호 사건";
+}
+
+function skillDetail(s) {
+  const lines = [];
+  if (s.type === "공격무공") {
+    lines.push(`위력 ${s.base_multiplier}배, 내력 ${s.qi_cost}`);
+    if (s.forms?.length) lines.push(`초식: ${s.forms.join(", ")}`);
+    if (s.secret_technique) lines.push(`비기 「${s.secret_technique.name}」: ${s.secret_technique.unlock_grade} 품계, 성취 ${s.secret_technique.unlock_mastery}, 위력 ${s.secret_technique.multiplier}배, 내력 ${s.secret_technique.qi_cost}`);
+  } else if (s.type === "심공") {
+    const e = s.effect;
+    lines.push(`체력 ${e.heal_hp_pct}%, 내력 ${e.heal_qi_pct}% 회복${e.atk_buff_pct ? `, ${e.buff_rounds}합 동안 위력 +${e.atk_buff_pct}%` : ""}`);
+  } else {
+    const e = s.effect;
+    lines.push(`회피 ${e.evade}%, 다음 공격 +${e.counter_pct}%, 도주 +${e.flee_bonus}%, 내력 ${s.qi_cost}`);
+  }
+  if (s.origin) lines.push(`${DB.origins.origins[s.origin].name} 전용`);
+  return lines;
+}
+
+function enemyDetail(e) {
+  const lines = [`체력 ${e.hp}, 공격 ${e.attack}${e.armor ? `, 방어 ${e.armor}` : ""}`];
+  if (e.specials?.length) lines.push(`필살기: ${e.specials.map((x) => x.name).join(", ")}`);
+  if (e.chapters?.length) lines.push(`나오는 곳: ${e.chapters.join(", ")}장`);
+  return lines;
+}
+
+/** 탭마다 줄 목록과 분류 이름을 만든다. */
+function codexRows(tab, meta) {
+  if (tab === "enemies") {
+    return {
+      total: Object.keys(DB.enemies).length, filterLabel: "등급", filters: ["일반", "난적", "강적", "마두"], empty: "적을 만나면 다음 달에 이곳에 기록됩니다.",
+      rows: meta.global_codex.filter((k) => DB.enemies[k]).map((k) => {
+        const e = DB.enemies[k];
+        const tier = TIER_NAMES[e.tier] || e.tier;
+        return { key: k, name: e.name, meta: `${tier}, ${e.realm} 경지`, desc: e.desc, more: enemyDetail(e), cats: [tier] };
+      }),
+    };
+  }
+  if (tab === "skills") {
+    const cats = [...new Set(Object.values(DB.skills).map((s) => s.category))];
+    return {
+      total: Object.keys(DB.skills).length, filterLabel: "갈래", filters: [...cats, ...GRADE_LIST], empty: "무공을 익히면 이곳에 기록됩니다.",
+      rows: meta.known_skills.filter((k) => DB.skills[k]).map((k) => {
+        const s = DB.skills[k];
+        return { key: k, name: s.name, meta: `${s.category}, ${s.grade} 품계`, desc: s.desc, more: skillDetail(s), cats: [s.category, s.grade] };
+      }),
+    };
+  }
+  if (tab === "items") {
+    const cats = [...new Set(Object.values(DB.market).map((i) => categoryName(i.category)))];
+    return {
+      total: Object.keys(DB.market).length, filterLabel: "종류", filters: cats, empty: "장터에서 물건을 사면 이곳에 기록됩니다.",
+      rows: meta.known_items.filter((k) => DB.market[k]).map((k) => {
+        const i = DB.market[k];
+        return { key: k, name: i.name, meta: categoryName(i.category), desc: i.desc, cats: [categoryName(i.category)] };
+      }),
+    };
+  }
+  if (tab === "events") {
+    const kinds = ["줄거리", "강호 사건", "출신 이야기", "사문", "이어지는 인연", "카르마 인연"];
+    return {
+      total: Object.keys(DB.events).length, filterLabel: "갈래", filters: kinds, empty: "강호에서 겪은 사건이 이곳에 기록됩니다.",
+      rows: meta.known_events.filter((k) => DB.events[k]).map((k) => {
+        const e = DB.events[k];
+        const kind = eventKind(e);
+        const log = loadEventLog()[k];
+        const picks = log ? Object.keys(log.picks).length : 0;
+        const label = e.chain ? `${kind}, 「${DB.chains[e.chain.id].title}」 ${e.chain.index + 1}/${e.chain.total}편` : kind;
+        return { key: k, name: e.title, meta: `${label}${picks ? `, 고른 선택 ${picks}가지` : ""}`, desc: e.text.split(/(?<=[.?!"])\s/)[0], read: true, cats: [kind], search: `${e.text} ${log ? JSON.stringify(log) : ""}` };
+      }),
+    };
+  }
+  if (tab === "achievements") {
+    return {
+      total: DB.karma.achievements.filter((a) => !a.hidden).length, filterLabel: "상태", filters: ["이룸", "아직"], empty: "",
+      rows: DB.karma.achievements.filter((a) => !a.hidden || meta.achievements.includes(a.key)).map((a) => {
+        const done = meta.achievements.includes(a.key);
+        return { key: a.key, name: `${done ? "✓ " : ""}${a.name}`, meta: a.karma ? `카르마 +${a.karma}` : "", desc: a.desc, cats: [done ? "이룸" : "아직"] };
+      }),
+    };
+  }
+  if (tab === "endings") {
+    return {
+      total: Object.keys(DB.endings.titles).length - 1, filterLabel: "", filters: [], empty: "",
+      rows: Object.keys(DB.endings.titles).filter((k) => k !== "생사경" || meta.endings_seen.includes(k)).map((k) => {
+        const seen = meta.endings_seen.includes(k);
+        return { key: k, name: seen ? DB.endings.titles[k] : "아직 보지 못한 결말", meta: `카르마 +${DB.endings.karma[k]}`, desc: seen ? DB.endings.text[k] : "", cats: [] };
+      }),
+    };
+  }
+  return {
+    total: meta.total_runs, filterLabel: "", filters: [], empty: "강호행을 끝내면 이곳에 기록됩니다.",
+    note: `끝낸 강호행 ${meta.total_runs}회, 천마 격파 ${meta.total_wins || 0}회, 가장 오래 간 달 ${meta.best_turn || 0}달`,
+    rows: meta.runs.map((r, i) => ({ key: i, name: DB.endings.titles[r.ending] || r.ending, meta: `${r.origin}, ${r.realm}, ${r.title}`, desc: `${r.turn}달까지 진행, ${r.kills}명 처치`, cats: [] })),
   };
-  return modalShell("codex-modal", "강호록", `
-    <div class="tabs">${tabs.map(([key, label]) => `<button class="tab-btn${ui.tab === key ? " active" : ""}" data-act="tab" data-tab="${key}">${esc(label)}</button>`).join("")}</div>
-    <div class="tab-panel active">${panels[ui.tab]}</div>`);
+}
+
+function codexRowHtml(row) {
+  const more = row.more ? `<details class="codex-more"><summary>자세히</summary>${row.more.map((l) => `<p>${esc(l)}</p>`).join("")}</details>` : "";
+  const read = row.read ? `<button class="mini-btn codex-read" data-act="codex-read" data-key="${esc(row.key)}">다시 읽기</button>` : "";
+  return `<div class="codex-item"><div class="codex-name">${esc(row.name)}</div><div class="codex-meta">${esc(row.meta)}</div>${row.desc ? `<div>${esc(row.desc)}</div>` : ""}${more}${read}</div>`;
+}
+
+function codexListHtml(data) {
+  const query = ui.codexQuery.trim().toLowerCase();
+  const rows = data.rows.filter((r) => (ui.codexFilter === "전체" || r.cats.includes(ui.codexFilter))
+    && (!query || `${r.name} ${r.meta} ${r.desc || ""} ${r.search || ""} ${(r.more || []).join(" ")}`.toLowerCase().includes(query)));
+  if (!data.rows.length) return `<p class="codex-empty">${data.empty}</p>`;
+  if (!rows.length) return `<p class="codex-empty">찾는 기록이 없습니다.</p>`;
+  return `<p class="codex-count">${rows.length}개</p>${rows.map(codexRowHtml).join("")}`;
+}
+
+/** 한 사건에서 본 모든 문장과 고른 선택의 결과를 다시 읽는다. */
+function codexReader(key) {
+  const e = DB.events[key];
+  const log = loadEventLog()[key];
+  const texts = log?.texts?.length ? log.texts : [e.text];
+  const picks = log ? Object.entries(log.picks) : [];
+  const allChoices = new Set([...e.choices, ...(e.variants || []).flatMap((v) => v.choices || [])].map((c) => c.label));
+  const left = [...allChoices].filter((l) => !log?.picks[l]).length;
+  return `<button class="mini-btn" data-act="codex-back">← 목록으로</button>
+    <h4 class="codex-title">${esc(e.title)}</h4>
+    <p class="codex-meta">${esc(eventKind(e))}${e.chain ? `, 「${esc(DB.chains[e.chain.id].title)}」 ${e.chain.index + 1}/${e.chain.total}편` : ""}</p>
+    ${texts.map((t) => `<p class="codex-body-text">${esc(t)}</p>`).join("")}
+    ${picks.length ? picks.map(([label, results]) => `<div class="codex-pick"><div class="codex-pick-label">▸ ${esc(label)}</div>${results.map((r) => `<p>${esc(r)}</p>`).join("")}</div>`).join("") : `<p class="codex-empty">이 사건의 선택은 아직 기록되지 않았습니다. 다시 겪으면 이곳에 남습니다.</p>`}
+    ${left ? `<p class="codex-meta">아직 고르지 않은 선택 ${left}가지가 더 있습니다.</p>` : `<p class="codex-meta">이 사건의 선택을 모두 보았습니다.</p>`}`;
+}
+
+function codexBody() {
+  if (ui.codexRead && DB.events[ui.codexRead]) return codexReader(ui.codexRead);
+  const meta = loadMeta();
+  const titles = { enemies: "인물", skills: "무공", items: "물건", events: "사건", achievements: "공적", endings: "결말", runs: "강호행" };
+  const data = codexRows(ui.tab, meta);
+  const tabCount = (key) => {
+    if (key === "enemies") return `${meta.global_codex.filter((k) => DB.enemies[k]).length}/${Object.keys(DB.enemies).length}`;
+    if (key === "skills") return `${meta.known_skills.filter((k) => DB.skills[k]).length}/${Object.keys(DB.skills).length}`;
+    if (key === "items") return `${meta.known_items.filter((k) => DB.market[k]).length}/${Object.keys(DB.market).length}`;
+    if (key === "events") return `${meta.known_events.filter((k) => DB.events[k]).length}/${Object.keys(DB.events).length}`;
+    if (key === "achievements") return `${meta.achievements.length}`;
+    return "";
+  };
+  const searchable = !["endings", "runs"].includes(ui.tab);
+  return `<div class="tabs codex-tabs">${Object.entries(titles).map(([key, label]) => `<button class="tab-btn${ui.tab === key ? " active" : ""}" data-act="tab" data-tab="${key}">${esc(label)} ${tabCount(key)}</button>`).join("")}</div>
+    ${data.note ? `<p class="codex-meta">${esc(data.note)}</p>` : ""}
+    ${searchable ? `<div class="codex-tools"><input type="search" id="codex-search" class="codex-search" placeholder="이름이나 문장으로 찾기" value="${esc(ui.codexQuery)}" aria-label="강호록 찾기">
+      ${data.filters.length ? `<select id="codex-filter" class="codex-select" aria-label="${esc(data.filterLabel)}"><option value="전체">${esc(data.filterLabel)} 전체</option>${data.filters.map((f) => `<option value="${esc(f)}" ${ui.codexFilter === f ? "selected" : ""}>${esc(f)}</option>`).join("")}</select>` : ""}</div>` : ""}
+    <div class="codex-list tab-panel active">${codexListHtml(data)}</div>`;
+}
+
+/** 강호록은 열 때만 그린다. 창이 닫혀 있으면 내용을 만들지 않는다. */
+function codexModal() {
+  return modalShell("codex-modal", "강호록", `<div class="codex-body">${ui.modal === "codex-modal" ? codexBody() : ""}</div>`);
+}
+
+function refreshCodex() {
+  const body = document.querySelector("#codex-modal .codex-body");
+  if (body) body.innerHTML = codexBody();
+}
+
+function refreshCodexList() {
+  const list = document.querySelector("#codex-modal .codex-list");
+  if (list) list.innerHTML = codexListHtml(codexRows(ui.tab, loadMeta()));
 }
 
 function helpModal() {
   const section = (title, lines) => `<div class="modal-section"><h4>${title}</h4>${lines.map((l) => `<p class="help-line">${l}</p>`).join("")}</div>`;
   return modalShell("help-modal", "강호 입문서", `
-    ${section("목표", ["10년(120달) 뒤 겨울, 천마봉에서 천마를 쓰러뜨립니다.", "처음에는 어렵습니다. 죽어도 카르마가 남고, 멀리 갈수록 많이 받습니다.", "카르마로 출신과 자질, 항상 적용되는 환생 강화, 새 인연을 얻을 수 있습니다. 천마를 한 번 쓰러뜨리면 전설의 유산도 열 수 있습니다."])}
+    ${section("목표", ["10년(120달) 뒤 겨울, 천마봉에서 천마를 쓰러뜨립니다.", "처음에는 어렵습니다. 죽어도 카르마가 남고, 멀리 갈수록 많이 받습니다.", "카르마로 출신과 자질, 항상 적용되는 기틀, 새 인연을 얻을 수 있습니다. 쌓인 카르마가 늘면 누적 보상도 저절로 받습니다. 천마를 한 번 쓰러뜨리면 전설의 유산도 열 수 있습니다."])}
     ${section("매달 하는 일", [
     "<b>탐색</b>: 강호를 떠돌며 전투, 사건, 기연 중 하나를 만납니다. 가장 크게 성장하지만 위험합니다.",
     "<b>수련</b>: 외공과 무리, 주무공 성취가 오릅니다. 대련으로 실전 경험을 얻기도 합니다.",
@@ -176,11 +302,26 @@ function originDetail(key) {
 const traitName = (t) => `${esc(t.name)}<span class="rarity rarity-${esc(t.rarity)}">${esc(t.rarity)}</span>`;
 
 function filterRow() {
-  return `<div class="filter-row">${["전체", "일반", "희귀", "전설"].map((r) => `<button class="filter-btn${ui.traitFilter === r ? " on" : ""}" data-act="trait-filter" data-key="${r}">${r}</button>`).join("")}</div>`;
+  return `<div class="filter-row">${["전체", "능력", "물건과 무공", "사건 반응", "출신 전용"].map((r) => `<button class="filter-btn${ui.traitFilter === r ? " on" : ""}" data-act="trait-filter" data-key="${r}">${r}</button>`).join("")}</div>`;
 }
 
-const visibleTraits = () => Object.keys(DB.traits).filter((key) => !DB.traits[key].hidden
-  && (ui.traitFilter === "전체" || DB.traits[key].rarity === ui.traitFilter));
+const GIFT_EFFECTS = ["start_item", "start_equip", "start_skill", "start_style_weapon", "start_style_tool", "start_battle_tool", "start_style_skill"];
+
+/** 자질의 갈래. 고르는 화면과 상점의 분류에 쓴다. */
+function traitKind(t) {
+  if (t.origin) return "출신 전용";
+  if (t.reacts) return "사건 반응";
+  if (t.effects.some((e) => GIFT_EFFECTS.includes(e.type))) return "물건과 무공";
+  return "능력";
+}
+
+const visibleTraits = (origin = null) => Object.keys(DB.traits).filter((key) => {
+  const t = DB.traits[key];
+  if (t.hidden || (origin && t.origin && t.origin !== origin)) return false;
+  return ui.traitFilter === "전체" || traitKind(t) === ui.traitFilter;
+});
+
+const originOnly = (key) => (key ? `<span class="pick-stats block">${esc(DB.origins.origins[key].name)} 전용</span>` : "");
 
 function shopRow(name, desc, act, key, cost, meta, label = "해금") {
   return `<div class="pick-row locked"><div class="pick-main"><div class="pick-name">${name}</div>${desc}</div>
@@ -193,28 +334,54 @@ function shopPanels(meta) {
   const origins = DB.origins.order.filter((k) => !meta.unlocked_origins.includes(k))
     .map((k) => shopRow(esc(DB.origins.origins[k].name), originDetail(k), "unlock-origin", k, DB.origins.origins[k].cost, meta)).join("");
   const traits = visibleTraits().filter((k) => !meta.unlocked_traits.includes(k))
-    .map((k) => shopRow(traitName(DB.traits[k]), `<p class="pick-desc">${esc(DB.traits[k].desc)}</p>`, "unlock-trait", k, DB.traits[k].cost, meta)).join("");
-  const upgrades = Object.entries(DB.karma.upgrades).map(([key, u]) => {
+    .map((k) => shopRow(traitName(DB.traits[k]), `<p class="pick-desc">${esc(DB.traits[k].desc)}</p>${originOnly(DB.traits[k].origin)}`, "unlock-trait", k, DB.traits[k].cost, meta)).join("");
+  const groups = [...new Set(Object.values(DB.karma.upgrades).map((u) => u.group))];
+  const upgradeRow = ([key, u]) => {
     const level = upgradeLevel(key, meta);
     const cost = u.costs[level];
     const name = `${esc(u.name)} <span class="rarity">${level}/${u.costs.length}단계</span>`;
     const desc = `<p class="pick-desc">${esc(u.desc)}</p>`;
     if (cost === undefined) return `<div class="pick-row"><div class="pick-main"><div class="pick-name">${name}</div>${desc}</div><span class="pick-stats">다 올림</span></div>`;
     return shopRow(name, desc, "buy-upgrade", key, cost, meta, "올리기");
-  }).join("");
+  };
+  const upgrades = groups.map((g) => `<h4 class="shop-group">${esc(g)}</h4>${Object.entries(DB.karma.upgrades).filter(([, u]) => u.group === g).map(upgradeRow).join("")}`).join("");
   const content = Object.entries(DB.karma.content).filter(([k]) => !meta.content.includes(k))
-    .map(([k, c]) => shopRow(esc(c.name), `<p class="pick-desc">${esc(c.desc)}</p>`, "buy-content", k, c.cost, meta)).join("");
+    .map(([k, c]) => shopRow(esc(c.name), `<p class="pick-desc">${esc(c.desc)}</p>${originOnly(c.origin)}`, "buy-content", k, c.cost, meta)).join("");
   const { cost } = DB.karma.legacy;
   const legacy = meta.legacy_open ? emptyNote("이미 열었습니다. 강호행을 시작할 때 유산을 고를 수 있습니다.")
     : !legacyAvailable(meta) ? emptyNote("천마를 한 번 쓰러뜨리면 살 수 있습니다.")
       : shopRow("전설의 유산", `<p class="pick-desc">강호행이 끝날 때 무공이나 병장기 하나를 남기고, 다음 강호행에서 이어받습니다.</p>`, "open-legacy", "", cost, meta);
   return {
     origin: origins || emptyNote("모든 출신을 해금했습니다."),
-    trait: filterRow() + (traits || emptyNote("이 품계의 자질을 모두 해금했습니다.")),
-    upgrade: `<p class="section-note">환생 강화는 장착하지 않아도 모든 강호행에 적용됩니다.</p>${upgrades}`,
+    trait: filterRow() + (traits || emptyNote("이 갈래의 자질을 모두 해금했습니다.")),
+    upgrade: `<p class="section-note">기틀은 장착하지 않아도 모든 강호행에 적용됩니다.</p>${upgrades}`,
     content: `<p class="section-note">해금한 인연은 강호에서 만날 수 있습니다.</p>${content || emptyNote("모든 인연을 해금했습니다.")}`,
     legacy,
+    reward: rewardPanel(meta),
   };
+}
+
+/** 누적 카르마 보상과 카르마를 얻는 길을 한눈에 보여 준다. */
+function rewardPanel(meta) {
+  const next = nextReward(meta);
+  const last = DB.karma.rewards[DB.karma.rewards.length - 1].at;
+  const rows = DB.karma.rewards.map((r) => {
+    const done = meta.total_karma >= r.at;
+    return `<div class="reward-row${done ? " done" : ""}"><span class="reward-at">${r.at}</span><span class="reward-main"><b>${done ? "✓ " : ""}${esc(r.name)}</b><span class="pick-desc block">${esc(r.desc)}</span></span></div>`;
+  }).join("");
+  const { milestones, achievements } = DB.karma;
+  const realm = Object.entries(milestones.realm).map(([k, v]) => `${k} +${v}`).join(", ");
+  const endings = Object.entries(DB.endings.karma).filter(([k]) => k !== "생사경").map(([k, v]) => `${DB.endings.titles[k]} +${v}`).join(", ");
+  const left = achievements.filter((a) => !a.hidden && !meta.achievements.includes(a.key));
+  const total = left.reduce((sum, a) => sum + a.karma, 0);
+  return `<p class="section-note">카르마를 써도 줄지 않는 누적 카르마가 쌓이면 저절로 받습니다. 사거나 장착할 필요가 없습니다.</p>
+    <div class="reward-progress"><div class="reward-track"><span style="width:${percent(Math.min(meta.total_karma, last), last)}%"></span></div>
+      <p>누적 카르마 <b>${meta.total_karma}</b>${next ? `, 다음 「${esc(next.name)}」까지 ${next.at - meta.total_karma}` : ", 모두 받았습니다"}</p></div>
+    ${rows}
+    <h4 class="shop-group">카르마를 얻는 길</h4>
+    <p class="help-line"><b>결말</b>: ${esc(endings)}</p>
+    <p class="help-line"><b>처음 이른 경지</b>: ${esc(realm)}, 첫 천마 격파 +${milestones.격파}</p>
+    <p class="help-line"><b>공적</b>: 아직 이루지 못한 공적 ${left.length}개, 합쳐서 +${total}. 강호록의 공적 칸에서 볼 수 있습니다.</p>`;
 }
 
 function affordableCount(meta) {
@@ -230,7 +397,7 @@ function renderShop() {
   document.body.className = "home setup-screen";
   setMood("calm");
   const meta = loadMeta();
-  const tabs = [["origin", "출신"], ["trait", "자질"], ["upgrade", "강화"], ["content", "인연"], ["legacy", "유산"]];
+  const tabs = [["origin", "출신"], ["trait", "자질"], ["upgrade", "기틀"], ["content", "인연"], ["legacy", "유산"], ["reward", "누적"]];
   app().innerHTML = `<div class="setup-head">
       <button class="back-btn" data-act="shop-back" aria-label="뒤로">←</button>
       <h2>카르마 상점</h2>
@@ -243,7 +410,7 @@ function renderShop() {
 function chosenLegacy(meta) { return ui.legacy === null ? null : meta.legacies[ui.legacy] || null; }
 
 function contentSetup(meta) {
-  const rows = meta.content.map((key) => `<div class="pick-row"><div class="pick-main"><div class="pick-name">${esc(DB.karma.content[key].name)}</div><p class="pick-desc">${esc(DB.karma.content[key].desc)}</p></div>
+  const rows = meta.content.filter((key) => !DB.karma.content[key].origin || DB.karma.content[key].origin === ui.origin).map((key) => `<div class="pick-row"><div class="pick-main"><div class="pick-name">${esc(DB.karma.content[key].name)}</div><p class="pick-desc">${esc(DB.karma.content[key].desc)}</p></div>
     <label class="content-toggle"><input type="checkbox" class="toggle" data-content="${esc(key)}" ${meta.content_off.includes(key) ? "" : "checked"}> 등장</label></div>`).join("");
   return rows ? `<p class="section-note">이번에 만나고 싶지 않은 인연은 꺼 둘 수 있습니다.</p>${rows}` : emptyNote("아직 해금한 인연이 없습니다. 카르마 상점에서 살 수 있습니다.");
 }
@@ -264,17 +431,17 @@ function renderSetup() {
   const slots = traitSlots(meta.total_karma) + extraSlots(meta);
   const next = nextSlotThreshold(meta.total_karma);
   const hasSave = loadCheckpoint() !== null;
-  ui.traits = new Set([...ui.traits].filter((t) => meta.unlocked_traits.includes(t)));
+  ui.traits = new Set([...ui.traits].filter((t) => meta.unlocked_traits.includes(t) && (!DB.traits[t].origin || DB.traits[t].origin === ui.origin)));
   if (!meta.unlocked_origins.includes(ui.origin)) ui.origin = "무림초출";
 
   const origins = DB.origins.order.filter((key) => meta.unlocked_origins.includes(key)).map((key) => `<div class="pick-row"><label class="pick-label"><input type="radio" name="origin" value="${esc(key)}" ${ui.origin === key ? "checked" : ""}>
       <span class="pick-main"><span class="pick-name">${esc(DB.origins.origins[key].name)}${meta.origin_wins.includes(key) ? ` <span class="rarity">천마 격파</span>` : ""}</span>${originDetail(key)}</span></label></div>`).join("");
 
-  const ownedTraits = visibleTraits().filter((key) => meta.unlocked_traits.includes(key))
+  const ownedTraits = visibleTraits(ui.origin).filter((key) => meta.unlocked_traits.includes(key))
     .sort((a, b) => Number(ui.traits.has(b)) - Number(ui.traits.has(a)))
     .map((key) => `<div class="pick-row"><label class="pick-label"><input type="checkbox" name="trait" value="${esc(key)}" ${ui.traits.has(key) ? "checked" : ""} ${!ui.traits.has(key) && ui.traits.size >= slots ? "disabled" : ""}>
         <span class="pick-main"><span class="pick-name">${traitName(DB.traits[key])}</span><span class="pick-desc block">${esc(DB.traits[key].desc)}</span></span></label></div>`).join("");
-  const traits = ownedTraits || emptyNote("이 품계에 해금한 자질이 없습니다. 카르마 상점에서 살 수 있습니다.");
+  const traits = ownedTraits || emptyNote("이 갈래에 해금한 자질이 없습니다. 카르마 상점에서 살 수 있습니다.");
 
   const originName = DB.origins.origins[ui.origin].name;
   app().innerHTML = `<div class="setup-head">
@@ -289,7 +456,7 @@ function renderSetup() {
       <button class="tab-btn${ui.setupTab === "legacy" ? " active" : ""}" data-act="setup-tab" data-tab="legacy">유산</button>
     </div>
     <div class="home-wrap">
-      ${ui.setupTab === "content" ? contentSetup(meta) : ui.setupTab === "legacy" ? legacySetup(meta) : ui.setupTab === "origin" ? origins : `<p class="section-note">${next ? `자질을 ${slots}개 장착할 수 있습니다. 누적 카르마 ${next}이 되면 하나 더 열립니다.` : "자질 칸이 모두 열렸습니다."}</p>${filterRow()}${traits}`}
+      ${ui.setupTab === "content" ? contentSetup(meta) : ui.setupTab === "legacy" ? legacySetup(meta) : ui.setupTab === "origin" ? origins : `<p class="section-note">${next ? `자질을 ${slots}개 장착할 수 있습니다. 누적 카르마 ${next}이 되면 하나 더 열립니다. 누적 보상은 상점에서 볼 수 있습니다.` : "자질 칸이 모두 열렸습니다."}</p>${filterRow()}${traits}`}
     </div>
     <div class="setup-bar"><div class="setup-summary">${esc(originName)}${ui.traits.size ? `, 자질 ${ui.traits.size}개` : ""}${chosenLegacy(meta) ? `, 유산 「${esc(chosenLegacy(meta).label)}」` : ""}</div>
       <button class="start-btn" data-act="${hasSave ? "confirm-start" : "start"}">강호로 나선다</button></div>
@@ -383,7 +550,7 @@ function statusModal() {
 function gameModals() {
   return `${statusModal()}${codexModal()}${settingsModal()}${helpModal()}
   ${modalShell("reset-modal", "이번 강호행을 포기할까요?", `
-    <p class="modal-text">이번 회차의 진행이 사라지고 첫 화면으로 돌아갑니다. 카르마와 강호록은 남습니다.</p>
+    <p class="modal-text">이번 강호행의 진행이 사라지고 첫 화면으로 돌아갑니다. 카르마와 강호록은 남습니다.</p>
     <button class="danger-btn" data-act="restart">포기하고 첫 화면으로</button>`)}`;
 }
 
@@ -540,7 +707,7 @@ function renderEnding() {
       ${legacyPanel()}
       <p class="karma-gain">💠 카르마 +${ending.karma} (보유 ${meta.current_karma}, 누적 ${meta.total_karma})</p>
       <p class="karma-lines">${(ending.karmaLines || []).map(esc).join(", ")}</p>
-      <p class="ending-hint">카르마로 출신과 자질, 환생 강화, 인연, 유산을 얻어 다시 도전할 수 있습니다. 첫 화면의 상점에서 살 수 있습니다.</p>
+      <p class="ending-hint">카르마로 출신과 자질, 기틀, 인연, 유산을 얻어 다시 도전할 수 있습니다. 첫 화면의 상점에서 살 수 있습니다.</p>
       <div class="run-facts">
         <div><b>${esc(p.realm)}</b>경지</div><div><b>${esc(byname(p))}</b>별호</div>
         <div><b>${Math.min(p.turn, p.maxTurn)}달</b>진행</div><div><b>${p.kills}명</b>처치</div>
@@ -726,6 +893,7 @@ export function render() {
 
 function openModal(id) {
   ui.modal = id;
+  if (id === "codex-modal") refreshCodex();
   // 안드로이드 뒤로 가기로 창을 닫을 수 있게 기록을 하나 남긴다
   history.pushState({ modal: id }, "");
   document.getElementById(id)?.classList.add("open");
@@ -753,7 +921,21 @@ function downloadRecords() {
 const actions = {
   open: (el) => { openModal(el.dataset.modal); },
   "close-modal": closeModal,
-  tab: (el) => { ui.tab = el.dataset.tab; render(); },
+  tab: (el) => {
+    ui.tab = el.dataset.tab;
+    ui.codexFilter = "전체";
+    ui.codexQuery = "";
+    refreshCodex();
+  },
+  "codex-read": (el) => {
+    ui.codexRead = el.dataset.key;
+    refreshCodex();
+    document.querySelector("#codex-modal .modal-box").scrollTop = 0;
+  },
+  "codex-back": () => {
+    ui.codexRead = null;
+    refreshCodex();
+  },
   "open-status": (el) => {
     ui.statusTab = el.dataset.tab;
     render();
@@ -826,8 +1008,20 @@ export function installInput() {
     actions[el.dataset.act]?.(el);
   });
 
+  document.addEventListener("input", (event) => {
+    if (event.target.id === "codex-search") {
+      ui.codexQuery = event.target.value;
+      refreshCodexList();
+    }
+  });
+
   document.addEventListener("change", async (event) => {
     const { target } = event;
+    if (target.id === "codex-filter") {
+      ui.codexFilter = target.value;
+      refreshCodexList();
+      return;
+    }
     if (target.name === "origin") {
       ui.origin = target.value;
     } else if (target.name === "trait") {

@@ -1,7 +1,7 @@
 {
   "강건한_육체": {
     "name": "강건한 육체",
-    "desc": "시작 외공이 크게 늘어난다.",
+    "desc": "시작 외공이 10 높다.",
     "rarity": "일반",
     "cost": 3,
     "effects": [
@@ -14,7 +14,7 @@
   },
   "선천진기": {
     "name": "선천진기",
-    "desc": "시작 내공이 크게 늘어난다.",
+    "desc": "시작 내공이 10 높다.",
     "rarity": "일반",
     "cost": 3,
     "effects": [
@@ -209,7 +209,7 @@
   },
   "불굴": {
     "name": "불굴",
-    "desc": "전투마다 한 번, 치운기를 입어도 체력 1로 버틴다.",
+    "desc": "전투마다 한 번, 치명상을 입어도 체력 1로 버틴다.",
     "rarity": "희귀",
     "cost": 9,
     "effects": [
@@ -220,7 +220,7 @@
   },
   "복성": {
     "name": "복성",
-    "desc": "탐색에서 기연을 만날 확률이 크게 오른다.",
+    "desc": "탐색에서 기연을 만날 확률이 15% 오른다.",
     "rarity": "일반",
     "cost": 5,
     "effects": [
@@ -347,7 +347,7 @@
   },
   "눈썰미": {
     "name": "눈썰미",
-    "desc": "장터에 물건이 2개 더 진열된다.",
+    "desc": "장터에 물건이 2개 더 진열된다. 사건에서 남이 못 보는 것을 본다.",
     "rarity": "일반",
     "cost": 4,
     "effects": [
@@ -355,7 +355,8 @@
         "type": "extra_stock",
         "amount": 2
       }
-    ]
+    ],
+    "reacts": true
   },
   "전장의아이": {
     "name": "전장의 아이",
@@ -511,7 +512,7 @@
   },
   "승부사": {
     "name": "승부사",
-    "desc": "회심의 일격의 피해가 크게 늘어난다.",
+    "desc": "회심의 일격의 피해가 40% 늘어난다.",
     "rarity": "일반",
     "cost": 5,
     "effects": [
@@ -547,7 +548,7 @@
   },
   "매의눈": {
     "name": "매의 눈",
-    "desc": "공격이 빗나갈 일이 크게 줄어든다.",
+    "desc": "공격이 빗나갈 확률이 10% 줄어든다.",
     "rarity": "일반",
     "cost": 3,
     "effects": [
@@ -568,7 +569,8 @@
         "hp_pct": 3,
         "qi_pct": 3
       }
-    ]
+    ],
+    "reacts": true
   },
   "입담꾼": {
     "name": "입담꾼",
@@ -585,7 +587,8 @@
         "stat": "mind",
         "amount": 3
       }
-    ]
+    ],
+    "reacts": true
   },
   "저잣거리아이": {
     "name": "저잣거리 아이",
@@ -607,7 +610,8 @@
         "stat": "martial",
         "amount": 3
       }
-    ]
+    ],
+    "reacts": true
   },
   "천둥벌거숭이": {
     "name": "천둥벌거숭이",
@@ -626,5 +630,346 @@
         "amount": -6
       }
     ]
+  },
+  "타고난안목": {
+    "name": "타고난 안목",
+    "desc": "시작 무리가 10 높다.",
+    "rarity": "일반",
+    "cost": 3,
+    "effects": [
+      {
+        "type": "start_stat",
+        "stat": "martial",
+        "amount": 10
+      }
+    ]
+  },
+  "총명": {
+    "name": "총명",
+    "desc": "시작 심경이 10 높다.",
+    "rarity": "일반",
+    "cost": 3,
+    "effects": [
+      {
+        "type": "start_stat",
+        "stat": "mind",
+        "amount": 10
+      }
+    ]
+  },
+  "넓은단전": {
+    "name": "넓은 단전",
+    "desc": "내공 성장이 10% 증가한다.",
+    "rarity": "일반",
+    "cost": 5,
+    "effects": [
+      {
+        "type": "growth_rate",
+        "stat": "internal",
+        "percent": 10
+      }
+    ]
+  },
+  "맑은마음": {
+    "name": "맑은 마음",
+    "desc": "심경 성장이 10% 증가한다.",
+    "rarity": "일반",
+    "cost": 5,
+    "effects": [
+      {
+        "type": "growth_rate",
+        "stat": "mind",
+        "percent": 10
+      }
+    ]
+  },
+  "손에익은병기": {
+    "name": "손에 익은 병기",
+    "desc": "주무공 계열의 좋은 병기를 들고 시작한다.",
+    "rarity": "일반",
+    "cost": 6,
+    "effects": [
+      {
+        "type": "start_style_weapon",
+        "tier": 1
+      }
+    ]
+  },
+  "수련도구": {
+    "name": "수련 꾸러미",
+    "desc": "주무공 계열 수련 도구 2개를 들고 시작한다.",
+    "rarity": "일반",
+    "cost": 3,
+    "effects": [
+      {
+        "type": "start_style_tool",
+        "amount": 2
+      }
+    ]
+  },
+  "비장의도구": {
+    "name": "비장의 도구",
+    "desc": "주무공 계열 전투 도구 2개를 들고 시작한다.",
+    "rarity": "일반",
+    "cost": 3,
+    "effects": [
+      {
+        "type": "start_battle_tool",
+        "amount": 2
+      }
+    ]
+  },
+  "가전비급": {
+    "name": "가전 비급",
+    "desc": "주무공 계열의 명품 공격무공 하나를 더 익히고 시작한다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "start_style_skill",
+        "grade": "명품"
+      }
+    ]
+  },
+  "구름걸음": {
+    "name": "구름 걸음",
+    "desc": "경공 「유운신법」을 익힌 채로 시작한다.",
+    "rarity": "희귀",
+    "cost": 8,
+    "effects": [
+      {
+        "type": "start_skill",
+        "skill": "유운신법"
+      }
+    ]
+  },
+  "현기의호흡": {
+    "name": "현기의 호흡",
+    "desc": "심법 「곤륜현기공」을 익힌 채로 시작한다.",
+    "rarity": "일반",
+    "cost": 6,
+    "effects": [
+      {
+        "type": "start_skill",
+        "skill": "곤륜현기공"
+      }
+    ]
+  },
+  "구명의은혜": {
+    "name": "구명의 은혜",
+    "desc": "구명단 1개와 해독단 1개를 들고 시작한다.",
+    "rarity": "일반",
+    "cost": 4,
+    "effects": [
+      {
+        "type": "start_item",
+        "item": "구명단",
+        "amount": 1
+      },
+      {
+        "type": "start_item",
+        "item": "해독단",
+        "amount": 1
+      }
+    ]
+  },
+  "의협심": {
+    "name": "의협심",
+    "desc": "명성이 3 높게 시작한다. 약한 사람이 얽힌 사건에서 다른 길이 열린다.",
+    "rarity": "일반",
+    "cost": 3,
+    "effects": [
+      {
+        "type": "start_fame",
+        "amount": 3
+      }
+    ],
+    "reacts": true
+  },
+  "소식통": {
+    "name": "소식통",
+    "desc": "은자 20을 더 들고 시작한다. 객잔과 소문이 얽힌 사건에서 먼저 안다.",
+    "rarity": "일반",
+    "cost": 3,
+    "effects": [
+      {
+        "type": "start_silver",
+        "amount": 20
+      }
+    ],
+    "reacts": true
+  },
+  "글읽는무인": {
+    "name": "글 읽는 무인",
+    "desc": "시작 심경이 3 높다. 글과 진법, 설법이 얽힌 사건에서 알아듣는다.",
+    "rarity": "일반",
+    "cost": 3,
+    "effects": [
+      {
+        "type": "start_stat",
+        "stat": "mind",
+        "amount": 3
+      }
+    ],
+    "reacts": true
+  },
+  "대식가": {
+    "name": "대식가",
+    "desc": "매달 체력을 2% 더 회복한다. 먹을 것이 얽힌 사건에서 남다른 일이 생긴다.",
+    "rarity": "일반",
+    "cost": 3,
+    "effects": [
+      {
+        "type": "turn_regen",
+        "hp_pct": 2,
+        "qi_pct": 0
+      }
+    ],
+    "reacts": true
+  },
+  "산사람": {
+    "name": "산사람",
+    "desc": "기연을 만날 확률이 5% 오른다. 산과 짐승, 약초가 얽힌 사건에서 길을 안다.",
+    "rarity": "일반",
+    "cost": 4,
+    "effects": [
+      {
+        "type": "fortune_rate",
+        "percent": 5
+      }
+    ],
+    "reacts": true
+  },
+  "창궁의혈통": {
+    "name": "창궁의 혈통",
+    "desc": "주무공 성취 30과 명성 3으로 시작한다. 오대세가와 맹의 일에 남궁의 이름이 통한다.",
+    "rarity": "희귀",
+    "cost": 6,
+    "effects": [
+      {
+        "type": "start_mastery",
+        "amount": 30
+      },
+      {
+        "type": "start_fame",
+        "amount": 3
+      }
+    ],
+    "origin": "남궁세가",
+    "reacts": true
+  },
+  "네형의칼": {
+    "name": "네 형의 칼",
+    "desc": "체력이 40% 이하일 때 주는 피해가 35% 늘어난다. 형제와 불이 얽힌 사건에서 물러서지 않는다.",
+    "rarity": "희귀",
+    "cost": 6,
+    "effects": [
+      {
+        "type": "low_hp_power",
+        "below": 40,
+        "percent": 35
+      }
+    ],
+    "origin": "하북팽가",
+    "reacts": true
+  },
+  "표로의다리": {
+    "name": "표로의 다리",
+    "desc": "은자 60을 더 들고 시작하고 달아날 확률이 20% 오른다. 길과 표물이 얽힌 사건에서 앞장선다.",
+    "rarity": "희귀",
+    "cost": 6,
+    "effects": [
+      {
+        "type": "start_silver",
+        "amount": 60
+      },
+      {
+        "type": "flee_rate",
+        "percent": 20
+      }
+    ],
+    "origin": "표국표사",
+    "reacts": true
+  },
+  "거지의귀": {
+    "name": "거지의 귀",
+    "desc": "기연을 만날 확률이 10% 오른다. 소문과 끼니가 얽힌 사건에서 먼저 듣는다.",
+    "rarity": "희귀",
+    "cost": 6,
+    "effects": [
+      {
+        "type": "fortune_rate",
+        "percent": 10
+      }
+    ],
+    "origin": "개방제자",
+    "reacts": true
+  },
+  "권마의혈맥": {
+    "name": "권마의 혈맥",
+    "desc": "비기의 피해가 30% 늘어난다. 권사와 원한이 얽힌 사건에서 권마의 이름이 먼저 간다.",
+    "rarity": "희귀",
+    "cost": 6,
+    "effects": [
+      {
+        "type": "secret_power",
+        "percent": 30
+      }
+    ],
+    "origin": "권마계승",
+    "reacts": true
+  },
+  "식은연못": {
+    "name": "식은 연못",
+    "desc": "독에 당하지 않고 회복이 20% 늘어난다. 마교와 혈교가 얽힌 사건에서 연못의 기억이 깨어난다.",
+    "rarity": "희귀",
+    "cost": 6,
+    "effects": [
+      {
+        "type": "poison_immune"
+      },
+      {
+        "type": "heal_rate",
+        "percent": 20
+      }
+    ],
+    "origin": "혈지생환",
+    "reacts": true
+  },
+  "외상장부": {
+    "name": "외상 장부",
+    "desc": "장터 가격이 15% 싸고 얻는 은자가 15% 늘어난다. 거래와 비밀이 얽힌 사건에서 값을 먼저 안다.",
+    "rarity": "희귀",
+    "cost": 6,
+    "effects": [
+      {
+        "type": "market_discount",
+        "percent": 15
+      },
+      {
+        "type": "silver_rate",
+        "percent": 15
+      }
+    ],
+    "origin": "하오문",
+    "reacts": true
+  },
+  "사부의보따리": {
+    "name": "사부의 보따리",
+    "desc": "수련 도구 2개와 주무공 계열 명품 무공 하나를 들고 시작한다. 고수와 노인이 얽힌 사건에서 사부의 이름이 나온다.",
+    "rarity": "희귀",
+    "cost": 6,
+    "effects": [
+      {
+        "type": "start_style_tool",
+        "amount": 2
+      },
+      {
+        "type": "start_style_skill",
+        "grade": "명품"
+      }
+    ],
+    "origin": "무림초출",
+    "reacts": true
   }
 }

@@ -4,11 +4,14 @@ import { storage } from "./storage.js";
 
 const LEGEND_KEY = "wuxia-legend";
 const SAVE_KEY = "wuxia-save";
+const EVENT_LOG_KEY = "wuxia-event-log";
 const RUN_HISTORY_LIMIT = 10;
 // 게임에서 빠진 출신을 해금했던 기록은 지우고 카르마를 돌려준다
 // 이름이 바뀐 출신은 해금을 그대로 옮겨 준다
 export const RENAMED_ORIGINS = { 마교탈주: "혈지생환", 소교주: "혈지생환", 신교사자: "혈지생환", 개방후개: "개방제자" };
 const REMOVED_ORIGINS = { 곤륜파: 5, 금군교두: 5, 낙방서생: 5, 녹림소채주: 5, 녹림채주: 5, 녹림후계: 5, 당가무사: 5, 당가방계: 5, 당가소주: 5, 대장간자식: 5, 백호대장: 5, 백호무관: 5, 살막살수: 5, 살막탈주: 5, 살문탈주: 5, 세외도객: 5, 소림속가: 5, 소림수제자: 5, 소막주: 5, 악가서자: 5, 악가소장주: 5, 악가전인: 5, 양가서자: 5, 육선문포두: 5, 의원제자: 5, 점소이: 5, 탈영병: 5, 황보막내: 5, 회귀자: 5 };
+
+const SPLIT_UPGRADES = { 근골: ["강골", "혜안"], 심지: ["원기", "명경"] };
 
 const defaults = () => ({
   current_karma: 0, total_karma: 0,
@@ -34,6 +37,17 @@ export function loadMeta() {
 }
 
 function refundRemoved(data) {
+  // 둘씩 묶여 있던 시작 능력치 강화는 같은 단계의 낱개 강화로 옮긴다
+  let moved = false;
+  for (const [oldKey, parts] of Object.entries(SPLIT_UPGRADES)) {
+    const level = data.upgrades[oldKey];
+    if (level) {
+      for (const part of parts) data.upgrades[part] = Math.max(data.upgrades[part] || 0, level);
+      moved = true;
+    }
+    if (oldKey in data.upgrades) delete data.upgrades[oldKey];
+  }
+  if (moved) storage.set(LEGEND_KEY, JSON.stringify(data));
   // 없어진 강화(윤회의 고리)에 쓴 카르마를 돌려준다
   if (data.upgrades.윤회) {
     data.current_karma += [5, 10, 18].slice(0, data.upgrades.윤회).reduce((a, b) => a + b, 0);
@@ -82,7 +96,7 @@ export function spendKarma(cost) {
 
 export function upgradeLevel(key, data = loadMeta()) { return data.upgrades[key] || 0; }
 
-/** 환생 강화를 한 단계 올린다. */
+/** 기틀을 한 단계 올린다. */
 export function buyUpgrade(key) {
   const data = loadMeta();
   const level = data.upgrades[key] || 0;
@@ -101,6 +115,12 @@ export function upgradeTraits(data = loadMeta()) {
 }
 
 export const extraSlots = (data = loadMeta()) => data.upgrades.그릇 || 0;
+
+/** 누적 카르마로 받은 보상의 숨은 특성 목록 */
+export const rewardTraits = (data = loadMeta()) => DB.karma.rewards
+  .filter((r) => data.total_karma >= r.at && r.effects.length).map((r) => `누적_${r.at}`);
+
+export const nextReward = (data = loadMeta()) => DB.karma.rewards.find((r) => data.total_karma < r.at) || null;
 
 export function buyContent(key) {
   const data = loadMeta();
@@ -180,6 +200,32 @@ export function updateKnown(skillKeys = [], itemKeys = [], eventKeys = []) {
   addToList("known_events", eventKeys);
 }
 
+// 사건 기록은 커질 수 있어 따로 저장한다. 매번 읽고 쓰지 않도록 메모리에 들고 있는다.
+let eventLogCache = null;
+
+export function loadEventLog() {
+  if (eventLogCache) return eventLogCache;
+  try {
+    eventLogCache = JSON.parse(storage.get(EVENT_LOG_KEY) || "{}") || {};
+  } catch {
+    eventLogCache = {};
+  }
+  return eventLogCache;
+}
+
+/** 사건에서 본 본문과 고른 선택, 그 결과를 강호록에 남긴다. 새로운 것이 있을 때만 쓴다. */
+export function recordEventPick(key, text, label, outcome) {
+  const log = loadEventLog();
+  const entry = log[key] || { texts: [], picks: {} };
+  const results = entry.picks[label] || [];
+  if (entry.texts.includes(text) && results.includes(outcome)) return;
+  if (!entry.texts.includes(text)) entry.texts.push(text);
+  if (!results.includes(outcome)) results.push(outcome);
+  entry.picks[label] = results;
+  log[key] = entry;
+  storage.set(EVENT_LOG_KEY, JSON.stringify(log));
+}
+
 /** 강호행 끝에 새로 이룬 업적을 기록하고 돌려준다. */
 export function claimAchievements(player, ending, victory) {
   const data = loadMeta();
@@ -242,7 +288,7 @@ export const clearCheckpoint = () => storage.remove(SAVE_KEY);
 // ---------- 기록 내보내기와 가져오기 ----------
 
 export function exportRecords() {
-  return JSON.stringify({ format: "wuxia-records", version: 1, legend: loadMeta(), save: loadCheckpoint() }, null, 2);
+  return JSON.stringify({ format: "wuxia-records", version: 1, legend: loadMeta(), save: loadCheckpoint(), event_log: loadEventLog() }, null, 2);
 }
 
 /** 내보낸 파일과 예전 PC 버전의 legend_data.json을 모두 받는다. 성공하면 true */
@@ -256,6 +302,9 @@ export function importRecords(text) {
     if (!Array.isArray(merged[key])) merged[key] = defaults()[key];
   }
   saveMeta(merged);
+  const log = data?.event_log;
+  eventLogCache = log && typeof log === "object" && !Array.isArray(log) ? log : {};
+  storage.set(EVENT_LOG_KEY, JSON.stringify(eventLogCache));
   if (data?.format === "wuxia-records" && data.save?.player) storage.set(SAVE_KEY, JSON.stringify(data.save));
   return true;
 }

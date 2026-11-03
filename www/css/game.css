@@ -374,3 +374,29 @@ body { word-break: keep-all; overflow-wrap: anywhere; }
 .battle-panel.interlude { border: 1px solid var(--gold); padding: .7rem; background: rgba(0,0,0,.35); max-height: 52vh; overflow-y: auto; }
 .interlude-title { margin: 0 0 .3rem; font-size: 1.05rem; color: var(--gold); }
 .interlude-text { margin: 0 0 .6rem; font-size: .9rem; line-height: 1.6; }
+/* 강호록 */
+.codex-tabs { flex-wrap: wrap; }
+.codex-tools { display: flex; gap: .4rem; margin: .5rem 0; }
+.codex-search { flex: 1; min-width: 0; min-height: 40px; padding: 0 .6rem; background: var(--ink-2); border: 1px solid var(--line); color: var(--paper); font: inherit; font-size: 16px; }
+.codex-select { max-width: 40%; min-height: 40px; background: var(--ink-2); border: 1px solid var(--line); color: var(--paper); font: inherit; font-size: .85rem; }
+.codex-count { color: var(--paper-faint); font-size: .75rem; margin: 0 0 .2rem; text-align: right; }
+.codex-more summary { color: var(--paper-dim); font-size: .78rem; cursor: pointer; padding: .2rem 0; }
+.codex-more p { margin: .1rem 0; font-size: .8rem; color: var(--paper-dim); }
+.codex-read { display: inline-block; margin-top: .3rem; }
+.codex-title { color: var(--gold); margin: .6rem 0 .1rem; font-size: 1.05rem; }
+.codex-body-text { line-height: 1.7; margin: .6rem 0; font-size: .92rem; }
+.codex-pick { border-left: 2px solid var(--gold); padding: .2rem 0 .2rem .6rem; margin: .6rem 0; }
+.codex-pick-label { color: var(--gold); font-weight: 700; font-size: .88rem; }
+.codex-pick p { margin: .2rem 0; font-size: .88rem; line-height: 1.6; }
+/* 카르마 상점 */
+.shop-group { color: var(--gold); font-size: .95rem; margin: 1rem 0 .1rem; }
+.reward-progress { margin: .4rem 0 .8rem; font-size: .88rem; }
+.reward-progress p { margin: .3rem 0 0; }
+.reward-track { height: 8px; background: var(--ink-3); }
+.reward-track span { display: block; height: 100%; background: var(--gold); }
+.reward-row { display: flex; gap: .7rem; padding: .55rem .2rem; border-top: 1px solid var(--ink-3); opacity: .72; }
+.reward-row.done { opacity: 1; }
+.reward-at { flex: 0 0 2.6rem; text-align: right; color: var(--gold); font-weight: 700; }
+.reward-main { flex: 1; font-size: .9rem; }
+.reward-row.done b { color: var(--gold); }
+

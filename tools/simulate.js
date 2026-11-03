@@ -52,17 +52,18 @@ function battleChoice(game) {
   return ["기본공격"];
 }
 
-function setUpgrades(upgrades = {}) {
+function setUpgrades(upgrades = {}, total = 0) {
   const data = loadMeta();
   data.upgrades = upgrades;
-  data.total_karma = 200;
+  data.total_karma = total;
   saveMeta(data);
 }
 
-const ALL_UPGRADES = { 근골: 3, 심지: 3, 감각: 3, 재물: 3, 약상자: 3, 기연: 3, 깨달음: 3, 인맥: 3 };
+const ALL_UPGRADES = { 강골: 3, 혜안: 3, 원기: 3, 명경: 3, 감각: 3, 재물: 3, 약상자: 3, 기연: 3, 깨달음: 3, 인맥: 3 };
 
-function play({ style = "섞어서", useMarket = true, origin = "무림초출", traits = [], upgrades = {} }) {
-  setUpgrades(upgrades);
+function play({ style = "섞어서", useMarket = true, origin = "무림초출", traits = [], upgrades = {}, total = null }) {
+  // 누적 보상이 끼어들므로 그 단계의 누적 카르마에 맞춘다. 정하지 않으면 자질 칸에 필요한 만큼만
+  setUpgrades(upgrades, total ?? [0, 0, 30, 90][traits.length]);
   const game = new Game();
   game.start(origin, traits);
   for (let i = 0; i < 3000 && game.player.alive; i++) {
@@ -100,9 +101,9 @@ function play({ style = "섞어서", useMarket = true, origin = "무림초출", 
 
 const ROWS = [
   ["첫 판(아무것도 없음)", {}],
-  ["초반(특성 1, 강화 조금)", { traits: ["천생근골"], upgrades: { 근골: 1, 심지: 1, 감각: 1, 약상자: 1 } }],
-  ["중반(특성 2, 강화 절반)", { traits: ["천생근골", "오성"], upgrades: { 근골: 2, 심지: 2, 감각: 2, 재물: 1, 약상자: 2, 기연: 1, 깨달음: 1 } }],
-  ["완성(특성 3, 강화 전부)", { traits: ["천하제일기재", "천생근골", "오성"], upgrades: ALL_UPGRADES }],
+  ["초반(특성 1, 강화 조금)", { total: 40, traits: ["천생근골"], upgrades: { 강골: 1, 혜안: 1, 원기: 1, 명경: 1, 감각: 1, 약상자: 1 } }],
+  ["중반(특성 2, 강화 절반)", { total: 120, traits: ["천생근골", "오성"], upgrades: { 강골: 2, 혜안: 2, 원기: 2, 명경: 2, 감각: 2, 재물: 1, 약상자: 2, 기연: 1, 깨달음: 1 } }],
+  ["완성(특성 3, 강화 전부)", { total: 400, traits: ["천하제일기재", "천생근골", "오성"], upgrades: ALL_UPGRADES }],
   ["탐색 위주 / 시장 이용", { style: "탐색 위주" }],
   ["수련 위주 / 시장 이용", { style: "수련 위주" }],
   ["섞어서 / 시장 안 씀", { useMarket: false }],
