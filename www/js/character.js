@@ -10,6 +10,7 @@ import {
 export const GRADE_ORDER = ["기본", "명품", "상승", "신공", "천상"];
 const SAME_GRADE_TRANSFER = 0.5;  // 같은 품계 무공의 성취를 옮기는 비율
 const LOWER_GRADE_TRANSFER = 0.3; // 낮은 품계 무공의 성취를 옮기는 비율
+const MAX_MASTERY = 100;
 const GRADE_BONUS = 0.25;       // 승급 1단계당 위력 계수 증가
 const MASTERY_BONUS = 0.003;    // 성취 1당 위력 계수 증가
 const EFFECT_GRADE_BONUS = 0.2; // 심공·경공 승급 1단계당 효과 증가율
@@ -52,16 +53,19 @@ export class Skill {
   /** 숙련도를 올리고, 승급·비기 터득이 일어나면 안내 문구 목록을 돌려준다. */
   gainMastery(amount) {
     const messages = [];
-    this.mastery = Math.min(100, this.mastery + amount);
-    if (this.canEvolve()) {
+    // 성취가 100에 이른 뒤 더 쌓이면 승급한다. 정확히 100이면 다음 성취를 기다린다.
+    if (this.mastery + amount > MAX_MASTERY && this.canEvolve()) {
       this.evolve();
       messages.push(`🌟 ${this.name}이(가) ${this.grade} 품계로 승급했다!`);
+    } else {
+      this.mastery = Math.min(MAX_MASTERY, this.mastery + amount);
     }
     if (this.checkSecretUnlock()) messages.push(`✨ 비기 「${this.secretName}」이(가) 터득되었다!`);
     return messages;
   }
 
-  canEvolve() { return this.grade !== "천상" && this.mastery >= 100; }
+  /** 승급으로는 최고 품계(천상)에 오르지 못한다. 신공이 승급의 끝이다. */
+  canEvolve() { return GRADE_ORDER.indexOf(this.grade) < GRADE_ORDER.length - 2; }
 
   /** 품계가 같거나 낮은 같은 계열 무공에서 주무공으로 옮길 수 있는 성취. 없으면 0 */
   masteryFor(main) {
