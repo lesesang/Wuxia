@@ -143,6 +143,7 @@ export class Battle {
   attackScale() {
     const p = this.player;
     let scale = 1 + realmBonus(p.realm);
+    scale *= 1 + sumEffect(p.traits, "damage_bonus", "percent") / 100;
     scale *= 1 + sectBonus(p, "damage") / 100;
     scale *= 1 - p.injury * INJURY_PENALTY / 100;
     if (p.dominantAlignment() === "마도") scale *= 1 + MA_DAMAGE_BONUS / 100;

@@ -40,7 +40,7 @@ export const isMarketTurn = (turn) => String(turn) in DB.chapters.market_turns;
 export const marketName = (turn) => DB.chapters.market_turns[String(turn)];
 
 // ---------- 특성 ----------
-const SLOT_THRESHOLDS = [[0, 1], [20, 2], [50, 3]];
+const SLOT_THRESHOLDS = [[0, 1], [30, 2], [90, 3]];
 
 export function traitSlots(totalKarma) {
   let slots = 1;
@@ -123,9 +123,12 @@ export function realmProgress(player) {
   };
 }
 
+const SAENGSA_GATE_BONUS = 10; // 생사의 문을 지나면 생사경의 능력치 조건이 낮아진다
+
 export function checkSaengsa(player) {
   const req = DB.realms.saengsa;
-  return Math.min(...statsOf(player)) >= req.min_stat && player.battles >= req.battles
+  const minStat = req.min_stat - (player.hasFlag("생사의문") ? SAENGSA_GATE_BONUS : 0);
+  return Math.min(...statsOf(player)) >= minStat && player.battles >= req.battles
     && player.hp >= player.maxHp() * req.hp_ratio && player.qi >= player.maxQi() * req.qi_ratio;
 }
 

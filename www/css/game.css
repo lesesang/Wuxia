@@ -356,3 +356,10 @@ body { word-break: keep-all; overflow-wrap: anywhere; }
 .chronicle summary { cursor: pointer; color: var(--gold); min-height: 36px; }
 .chronicle-row { display: flex; gap: .7rem; padding: .35rem 0; border-bottom: 1px solid var(--line); font-size: .88rem; }
 .chronicle-date { flex: 0 0 4.6rem; color: var(--paper-dim); font-size: .8rem; }
+
+.setup-tabs .tab-btn { font-size: .88rem; padding: 0 .1rem; }
+.content-toggle { display: flex; align-items: center; gap: .3rem; font-size: .82rem; white-space: nowrap; cursor: pointer; }
+.legacy-panel { text-align: left; margin: 1rem 0; padding-top: .7rem; border-top: 1px solid var(--line); }
+.legacy-panel h4 { color: var(--gold); margin: 0 0 .5rem; font-weight: 400; }
+.legacy-note { color: var(--gold); font-size: .92rem; }
+.karma-lines { color: var(--paper-dim); font-size: .82rem; margin: 0 0 .5rem; }

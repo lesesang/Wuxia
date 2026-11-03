@@ -10,7 +10,7 @@ import { applyEffects, checkRequires, enemyIntro, eventView, pickRandomEvent, re
 import { Game } from "../www/js/game.js";
 import { blockReason, buy, equipmentBonus, openMarket, priceOf } from "../www/js/market.js";
 import {
-  exportRecords, importRecords, loadCheckpoint, loadMeta, saveMeta, unlockOrigin,
+  activeContent, buyContent, buyUpgrade, exportRecords, importRecords, loadCheckpoint, loadMeta, openLegacy, saveMeta, takeLegacy, toggleContent, unlockOrigin,
 } from "../www/js/meta.js";
 import { applyGrowth, breakthroughBlock, byname, fameRank, getChapter, getYear, marketTurns, traitSlots } from "../www/js/rules.js";
 import { storage } from "../www/js/storage.js";
@@ -219,7 +219,7 @@ test("전투 임시 버프는 끝나면 되돌린다", () => {
   assert.equal(p.external, base);
 });
 
-test("일반 전투 사망은 곧바로 엔딩과 공덕", () => {
+test("일반 전투 사망은 곧바로 엔딩과 카르마", () => {
   const game = newGame();
   game.player.hp = 1;
   game.startBattle("천마");
@@ -607,8 +607,8 @@ test("엉뚱한 파일은 거절한다", () => {
 
 // ---------- 메타 ----------
 
-test("특성 칸는 누적 공덕으로 늘어난다", () => {
-  assert.deepEqual([0, 19, 20, 49, 50].map(traitSlots), [1, 1, 2, 2, 3]);
+test("특성 칸는 누적 카르마로 늘어난다", () => {
+  assert.deepEqual([0, 29, 30, 89, 90].map(traitSlots), [1, 1, 2, 2, 3]);
 });
 
 test("잠긴 출신과 자리를 넘는 특성은 막힌다", () => {
@@ -622,7 +622,7 @@ test("잠긴 출신과 자리를 넘는 특성은 막힌다", () => {
   assert.deepEqual(game.player.traits, ["금전운"]);
 });
 
-test("공덕으로 개방하면 차감된다", () => {
+test("카르마로 개방하면 차감된다", () => {
   const data = loadMeta();
   data.current_karma = 5;
   saveMeta(data);
@@ -1037,7 +1037,7 @@ test("특성에 따라 사건 선택지가 늘어난다", () => {
   assert.equal(eventView(new Player("무림초출", ["주당"]), "밀주꾼").choices.length, plain + 1);
 });
 
-test("없어진 출신은 공덕을 돌려주고 저장도 이어 갈 수 있다", () => {
+test("없어진 출신은 카르마를 돌려주고 저장도 이어 갈 수 있다", () => {
   const meta = loadMeta();
   meta.unlocked_origins = ["무림초출", "낙방서생"];
   meta.current_karma = 2;
@@ -1070,6 +1070,116 @@ test("강호행의 굵직한 일이 기록으로 남고 저장된다", () => {
   const old = game.player.toDict();
   delete old.chronicle;
   assert.deepEqual(Player.fromDict(old).chronicle, []);
+});
+
+// ---------- 카르마, 강화, 인연, 유산 ----------
+
+function withKarma(amount, extra = {}) {
+  const data = loadMeta();
+  Object.assign(data, { current_karma: amount, total_karma: amount, upgrades: {}, content: [], content_off: [], legacy_open: false, legacies: [], endings_seen: [], milestones: [] }, extra);
+  saveMeta(data);
+}
+
+test("환생 강화는 장착 없이 적용되고 단계마다 비용이 오른다", () => {
+  withKarma(30);
+  assert.ok(buyUpgrade("근골"));
+  assert.ok(buyUpgrade("근골"));
+  assert.equal(loadMeta().current_karma, 18);
+  const game = new Game();
+  game.start("무림초출");
+  assert.equal(game.player.external, 32);
+  assert.ok(buyUpgrade("근골"));
+  assert.ok(!buyUpgrade("근골"), "최고 단계를 넘을 수 없다");
+  withKarma(0);
+});
+
+test("강화는 상태 창과 고르는 화면에 특성으로 보이지 않는다", () => {
+  assert.ok(DB.traits.환생_근골_1.hidden);
+  assert.ok(Object.values(DB.traits).filter((t) => !t.hidden).every((t) => t.rarity));
+});
+
+test("인연은 사야 나오고 꺼 두면 나오지 않는다", () => {
+  withKarma(8);
+  const plain = new Game();
+  plain.start("무림초출");
+  assert.ok(!checkRequires(plain.player, DB.events.유적_석문.requires));
+  assert.ok(buyContent("숨겨진유적"));
+  const game = new Game();
+  game.start("무림초출");
+  assert.ok(checkRequires(game.player, DB.events.유적_석문.requires));
+  toggleContent("숨겨진유적");
+  assert.deepEqual(activeContent(), []);
+  const off = new Game();
+  off.start("무림초출");
+  assert.ok(!checkRequires(off.player, DB.events.유적_석문.requires));
+  withKarma(0);
+});
+
+test("모든 인연에 사건이나 기연이 있다", () => {
+  const text = JSON.stringify([DB.events, DB.fortunes]);
+  for (const key of Object.keys(DB.karma.content)) assert.ok(text.includes(`"unlocked":"${key}"`), key);
+});
+
+test("유산은 천마를 쓰러뜨린 뒤 열리고, 남기고, 이어받으면 사라진다", () => {
+  withKarma(30);
+  assert.ok(!openLegacy(), "아직 천마를 쓰러뜨리지 못했다");
+  withKarma(30, { endings_seen: ["기본"] });
+  assert.ok(openLegacy());
+  const first = new Game();
+  first.start("무림초출");
+  first.player.learnSkill(Skill.fromDict({ key: "양가창법", grade: "신공", mastery: 80 }));
+  first.player.weapon = "운철보검";
+  first.finishGame(false);
+  const options = first.legacyOptions();
+  const index = options.findIndex((o) => o.key === "양가창법");
+  first.leaveLegacy(index);
+  first.leaveLegacy(index);
+  assert.equal(loadMeta().legacies.length, 1, "한 판에 하나만 남긴다");
+
+  const next = new Game();
+  next.start("무림초출", [], 0);
+  const skill = next.player.skills.find((s) => s.key === "양가창법");
+  assert.equal(skill.grade, "상승", "한 등급 낮아지고 상승을 넘지 않는다");
+  assert.equal(next.player.mainSkill, "양가창법");
+  assert.equal(loadMeta().legacies.length, 0);
+
+  first.ending.legacyLeft = null;
+  first.leaveLegacy(options.findIndex((o) => o.key === "운철보검"));
+  const third = new Game();
+  third.start("무림초출", [], 0);
+  assert.equal(third.player.weapon, "강철검", "장비는 낮은 단계로 돌아온다");
+  withKarma(0);
+});
+
+test("카르마는 도달한 장과 경지, 처음 이룬 일만큼 늘어난다", () => {
+  withKarma(0);
+  const game = new Game();
+  game.start("무림초출");
+  game.player.turn = 80;
+  game.player.realm = "화경";
+  game.finishGame(false);
+  assert.equal(game.ending.karma, 1 + 3 + 3 + 1 + 2 + 3);
+  const again = new Game();
+  again.start("무림초출");
+  again.player.turn = 80;
+  again.player.realm = "화경";
+  again.finishGame(false);
+  assert.equal(again.ending.karma, 1 + 3 + 3, "처음 보상은 한 번뿐이다");
+  withKarma(0);
+});
+
+test("수상한 누군가에게 카르마로 거래한다", () => {
+  withKarma(4);
+  const game = new Game();
+  game.start("무림초출");
+  const market = openMarket(119, game.player);
+  assert.ok(market.stock.some((s) => s.key === "생사단"));
+  assert.equal(blockReason(game.player, "운명의패"), "카르마 부족");
+  const before = game.player.external;
+  assert.ok(buy(game.player, market, "생사단")[0]);
+  assert.equal(game.player.external, before + 3);
+  assert.equal(loadMeta().current_karma, 1);
+  withKarma(0);
 });
 
 // ---------- 전체 플레이 ----------

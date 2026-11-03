@@ -1,6 +1,7 @@
 // 은자와 시장. 품목은 data/market.json 에 있으며 항목 추가만으로 늘어난다.
 import { Skill, STAT_CAP } from "./character.js";
 import { DB } from "./data.js";
+import { loadMeta, spendKarma } from "./meta.js";
 import { pickWeighted } from "./rng.js";
 import { getChapter, hasEffect, JUNG_DISCOUNT, marketName, sumEffect } from "./rules.js";
 
@@ -126,6 +127,7 @@ function effectIsUseful(player, effect, key) {
 
 export function blockReason(player, key) {
   if (!DB.market[key].effects.some((e) => effectIsUseful(player, e, key))) return "효과 없음";
+  if (DB.market[key].karma_price) return loadMeta().current_karma < DB.market[key].karma_price ? "카르마 부족" : null;
   if (player.silver < priceOf(player, key)) return "은자 부족";
   return null;
 }
@@ -152,6 +154,12 @@ export function buy(player, market, key) {
   if (reason) return [false, `살 수 없다. (${reason})`];
 
   const item = DB.market[key];
+  if (item.karma_price) {
+    spendKarma(item.karma_price);
+    entry.left -= 1;
+    for (const effect of item.effects) applyEffect(player, key, effect);
+    return [true, `「${item.name}」을(를) 거래했다. (카르마 -${item.karma_price})`];
+  }
   const price = priceOf(player, key);
   player.silver -= price;
   entry.left -= 1;
@@ -169,7 +177,7 @@ export function stockView(player, market) {
     const sold = entry.left <= 0;
     return {
       key: entry.key, name: item.name, category: item.category, desc: item.desc,
-      price: priceOf(player, entry.key), left: entry.left,
+      price: priceOf(player, entry.key), karma: item.karma_price || 0, left: entry.left,
       stackable: (item.stock_qty || 1) > 1, sold,
       blocked: sold ? null : blockReason(player, entry.key),
     };

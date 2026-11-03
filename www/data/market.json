@@ -1528,5 +1528,65 @@
         "style": "암기"
       }
     ]
+  },
+  "생사단": {
+    "name": "생사단",
+    "category": "금단",
+    "price": 0,
+    "karma_price": 3,
+    "always": true,
+    "markets": [
+      5
+    ],
+    "desc": "죽은 자의 몫을 당겨 쓰는 단약. 체력과 기력이 가득 차고 모든 능력치가 3 오른다. 카르마로 거래한다.",
+    "effects": [
+      {
+        "type": "heal",
+        "stat": "hp",
+        "percent": 100
+      },
+      {
+        "type": "heal",
+        "stat": "qi",
+        "percent": 100
+      },
+      {
+        "type": "stat",
+        "stat": "external",
+        "amount": 3
+      },
+      {
+        "type": "stat",
+        "stat": "internal",
+        "amount": 3
+      },
+      {
+        "type": "stat",
+        "stat": "martial",
+        "amount": 3
+      },
+      {
+        "type": "stat",
+        "stat": "mind",
+        "amount": 3
+      }
+    ]
+  },
+  "운명의패": {
+    "name": "운명의 패",
+    "category": "밀서",
+    "price": 0,
+    "karma_price": 5,
+    "always": true,
+    "markets": [
+      5
+    ],
+    "desc": "수상한 누군가가 내미는 패 한 장. 천마의 체력이 10% 줄어든 채 싸움이 시작된다. 카르마로 거래한다.",
+    "effects": [
+      {
+        "type": "boss_weaken",
+        "percent": 10
+      }
+    ]
   }
 }

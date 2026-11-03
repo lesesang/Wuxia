@@ -1,11 +1,12 @@
 // 한 생의 진행을 맡는 상태 기계. 화면(ui.js)은 이 객체의 상태를 그리고 메서드를 부른다.
 import { Battle, enemyPool, Enemy, useConsumable } from "./battle.js";
-import { Player, Skill, STAT_NAMES } from "./character.js";
+import { GRADE_ORDER, Player, Skill, STAT_NAMES } from "./character.js";
 import { DB } from "./data.js";
 import { applyEffects, enemyIntro, pickFortune, pickRandomEvent, resolveChoice, storyEventForTurn } from "./events.js";
 import { buy, openMarket } from "./market.js";
 import {
-  addKarma, clearCheckpoint, loadCheckpoint, loadMeta, recordRun, saveCheckpoint, updateGlobalCodex, updateKnown,
+  activeContent, addKarma, claimMilestones, clearCheckpoint, extraSlots, loadCheckpoint, loadMeta, recordRun, saveCheckpoint,
+  storeLegacy, takeLegacy, updateGlobalCodex, updateKnown, upgradeLevel, upgradeTraits,
 } from "./meta.js";
 import { pickWeighted, randInt, rng } from "./rng.js";
 import {
@@ -51,18 +52,59 @@ export class Game {
   // ---------- 시작과 복구 ----------
 
   /** 새 생 시작. 잠긴 출신이면 false */
-  start(originKey = "무림초출", selectedTraits = []) {
+  start(originKey = "무림초출", selectedTraits = [], legacyIndex = null) {
     const meta = loadMeta();
     if (!meta.unlocked_origins.includes(originKey) || !DB.origins.origins[originKey]) return false;
     const traits = [...new Set(selectedTraits)].filter((t) => meta.unlocked_traits.includes(t))
-      .slice(0, traitSlots(meta.total_karma));
+      .slice(0, traitSlots(meta.total_karma) + extraSlots(meta));
 
     this.reset();
-    this.player = new Player(originKey, traits);
+    this.player = new Player(originKey, [...traits, ...upgradeTraits(meta)]);
+    this.player.content = activeContent(meta);
+    const legacyLines = legacyIndex !== null && meta.legacy_open ? this.inheritLegacy(legacyIndex) : [];
     updateKnown(this.player.skills.map((s) => s.key));
     const intro = getChapterInfo(1);
-    this.enterTurn([`📖 ${intro.title} (1년차) — ${intro.desc}`]);
+    this.enterTurn([`📖 ${intro.title} (1년차) — ${intro.desc}`, ...legacyLines]);
     return true;
+  }
+
+  /** 보관한 유산을 이어받는다. 한 번 쓰면 사라지고 전성기만은 못하다. */
+  inheritLegacy(index) {
+    const entry = takeLegacy(index);
+    if (!entry) return [];
+    const p = this.player;
+    let name;
+    if (entry.kind === "skill") {
+      const skill = Skill.fromDict({ key: entry.key, grade: inheritedGrade(entry.grade), mastery: 0 });
+      name = skill.name;
+      if (!p.hasSkill(skill.key)) p.learnSkill(skill);
+      if (skill.type === "공격무공") p.mainSkill = skill.key;
+    } else {
+      const key = inheritedGear(entry.key);
+      name = DB.market[key].name;
+      p[DB.market[key].effects.find((e) => e.type === "equip").slot] = key;
+    }
+    p.note(`전대 「${entry.from}」의 유산 「${name}」을(를) 이어받았다.`);
+    return [`🏺 전대 「${entry.from}」이(가) 남긴 「${name}」을(를) 이어받았다. 세월에 조금 무뎌졌지만 아직 쓸 만하다.`];
+  }
+
+  /** 이번 강호행에서 유산으로 남길 수 있는 것들 */
+  legacyOptions() {
+    const p = this.player;
+    const skills = p.skills.filter((s) => GRADE_ORDER.indexOf(s.grade) >= 1)
+      .sort((a, b) => GRADE_ORDER.indexOf(b.grade) - GRADE_ORDER.indexOf(a.grade)).slice(0, 4)
+      .map((s) => ({ kind: "skill", key: s.key, grade: s.grade, label: `${s.name} (${s.grade} 등급)` }));
+    const gear = [p.weapon, p.armor].filter((k) => DB.market[k]?.markets.length)
+      .map((k) => ({ kind: "gear", key: k, label: DB.market[k].name }));
+    return [...skills, ...gear];
+  }
+
+  leaveLegacy(index) {
+    if (!this.ending || this.ending.legacyLeft || !loadMeta().legacy_open) return;
+    const option = this.legacyOptions()[index];
+    if (!option) return;
+    storeLegacy({ kind: option.kind, key: option.key, grade: option.grade, label: option.label, from: byname(this.player), origin: this.player.origin });
+    this.ending.legacyLeft = option.label;
   }
 
   /** 새 달 공통 처리: 체크포인트를 저장하고 줄거리 이벤트를 연다. */
@@ -391,10 +433,11 @@ export class Game {
         : checkSaengsa(p) ? "생사경"
           : checkGoodEnding(p) ? "기본" : "배드");
     const { endings } = DB;
-    addKarma(endings.karma[key]);
+    const gain = karmaGain(p, key, victory);
+    addKarma(gain.total);
     p.alive = false;
     this.ending = {
-      key, title: endings.titles[key], seal: endings.seals[key], karma: endings.karma[key],
+      key, title: endings.titles[key], seal: endings.seals[key], karma: gain.total, karmaLines: gain.lines,
       text: endings.text[key], epilogue: buildEpilogue(p, key),
     };
     recordRun({
@@ -407,6 +450,45 @@ export class Game {
     this.market = null;
     clearCheckpoint();
   }
+}
+
+/** 엔딩 값에 도달한 장과 경지, 처음 이룬 일을 더한다. */
+function karmaGain(player, key, victory) {
+  const lines = [`${DB.endings.titles[key]} +${DB.endings.karma[key]}`];
+  let total = DB.endings.karma[key];
+  const add = (label, amount) => {
+    if (amount > 0) {
+      total += amount;
+      lines.push(`${label} +${amount}`);
+    }
+  };
+  add("도달한 장", getChapter(Math.min(player.turn, player.maxTurn)) - 1);
+  add("경지", realmIndex(player.realm));
+  add("윤회의 고리", upgradeLevel("윤회"));
+  const { realm, 생사경: saengsa, 격파: win } = DB.karma.milestones;
+  const reached = Object.keys(realm).filter((k) => realmIndex(player.realm) >= realmIndex(k));
+  const wants = [...reached, ...(victory ? ["격파"] : []), ...(key === "생사경" ? ["생사경"] : [])];
+  for (const k of claimMilestones(wants)) {
+    add(k === "격파" ? "첫 천마 격파" : `처음 오른 ${k}`, k === "격파" ? win : k === "생사경" ? saengsa : realm[k]);
+  }
+  return { total, lines };
+}
+
+/** 유산 무공은 한 등급 낮아지고 상승을 넘지 않는다. */
+function inheritedGrade(grade) {
+  const index = Math.max(0, GRADE_ORDER.indexOf(grade) - 1);
+  return GRADE_ORDER[Math.min(index, GRADE_ORDER.indexOf("상승"))];
+}
+
+/** 유산 장비는 같은 종류의 낮은 단계로 돌아온다. */
+function inheritedGear(key) {
+  const effect = DB.market[key].effects.find((e) => e.type === "equip");
+  const same = Object.keys(DB.market).filter((k) => {
+    const e = DB.market[k].effects.find((x) => x.type === "equip");
+    return e && DB.market[k].markets.length && e.slot === effect.slot && e.style === effect.style;
+  }).sort((a, b) => DB.market[a].price - DB.market[b].price);
+  const position = Math.min(same.indexOf(key), DB.karma.legacy.gear_tier - 1);
+  return same[Math.max(0, position)];
 }
 
 export function buildEpilogue(player, ending) {
