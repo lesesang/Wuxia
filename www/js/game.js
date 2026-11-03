@@ -122,7 +122,8 @@ export class Game {
         this.addLog(["문득 초식의 군더더기가 보였다.", ...p.bestSkill().gainMastery(p.masteryGainAmount() * TRAIN_MASTERY_RATE)]);
       }
     } else if (name === "휴식") {
-      const [hp, qi] = p.healPercent(35, 45);
+      const rate = 1 + sumEffect(p.traits, "heal_rate", "percent") / 100;
+      const [hp, qi] = p.healPercent(35 * rate, 45 * rate);
       let result = `체력+${hp}, 기력+${qi}`;
       if (p.injury) {
         p.addInjury(-1);
