@@ -1,0 +1,87 @@
+<!-- 도감 창 -->
+<div class="modal-overlay" id="codex-modal">
+    <div class="modal-box">
+        <div class="modal-head"><h3>강호 도감</h3><button class="modal-close" aria-label="닫기">✕</button></div>
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="enemies">인물 {{ codex.enemies|length }}/{{ codex.enemy_total }}</button>
+            <button class="tab-btn" data-tab="skills">무공 {{ codex.skills|length }}/{{ codex.skill_total }}</button>
+            <button class="tab-btn" data-tab="items">보물 {{ codex.goods|length }}/{{ codex.item_total }}</button>
+            <button class="tab-btn" data-tab="endings">결말</button>
+            <button class="tab-btn" data-tab="runs">회차 기록</button>
+        </div>
+        <div class="tab-panel active" data-panel="enemies">
+            {% for e in codex.enemies %}
+            <div class="codex-item">
+                <div class="codex-name">{{ e.name }}</div>
+                <div class="codex-meta">{{ e.tier }}, {{ e.realm }} 경지, 체력 {{ e.hp }}, 공격력 {{ e.attack }}</div>
+                <div>{{ e.desc }}</div>
+            </div>
+            {% else %}<p class="codex-empty">탐색에서 적을 만나면 다음 턴에 이곳에 기록됩니다.</p>{% endfor %}
+        </div>
+        <div class="tab-panel" data-panel="skills">
+            {% for s in codex.skills %}
+            <div class="codex-item">
+                <div class="codex-name">{{ s.name }}</div>
+                <div class="codex-meta">{{ s.type }}, {{ s.grade }} 등급</div>
+                <div>{{ s.desc }}</div>
+            </div>
+            {% else %}<p class="codex-empty">무공을 익히면 이곳에 기록됩니다.</p>{% endfor %}
+        </div>
+        <div class="tab-panel" data-panel="items">
+            {% for i in codex.goods %}
+            <div class="codex-item">
+                <div class="codex-name">{{ i.name }}</div>
+                <div class="codex-meta">{{ i.category }}</div>
+                <div>{{ i.desc }}</div>
+            </div>
+            {% else %}<p class="codex-empty">시장에서 물건을 사면 이곳에 기록됩니다.</p>{% endfor %}
+        </div>
+        <div class="tab-panel" data-panel="endings">
+            {% for e in codex.endings %}
+            <div class="codex-item">
+                <div class="codex-name">{% if e.seen %}{{ e.title }}{% else %}아직 보지 못한 결말{% endif %}</div>
+                <div class="codex-meta">카르마 +{{ e.karma }}</div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="tab-panel" data-panel="runs">
+            <p class="codex-meta">끝낸 강호행 {{ codex.total_runs }}회</p>
+            {% for r in codex.runs %}
+            <div class="codex-item">
+                <div class="codex-name">{{ r.ending_title }}</div>
+                <div class="codex-meta">{{ r.origin }}, {{ r.realm }}, {{ r.title }}</div>
+                <div class="codex-meta">{{ r.turn }}턴까지 진행, {{ r.kills }}명 처치</div>
+            </div>
+            {% else %}<p class="codex-empty">강호행을 끝내면 이곳에 기록됩니다.</p>{% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- 설정 창 -->
+<div class="modal-overlay" id="settings-modal">
+    <div class="modal-box">
+        <div class="modal-head"><h3>게임 설정</h3><button class="modal-close" aria-label="닫기">✕</button></div>
+        <div class="setting-row">
+            <label for="set-volume">BGM 볼륨</label>
+            <input type="range" id="set-volume" min="0" max="100" step="5">
+        </div>
+        <div class="setting-row">
+            <label for="set-speed">텍스트 속도</label>
+            <select id="set-speed">
+                <option value="0">바로 표시</option>
+                <option value="35">느리게</option>
+                <option value="18">보통</option>
+                <option value="7">빠르게</option>
+            </select>
+        </div>
+        <div class="setting-row">
+            <label for="set-font">글자 크기</label>
+            <select id="set-font">
+                <option value="small">작게</option>
+                <option value="normal">보통</option>
+                <option value="large">크게</option>
+            </select>
+        </div>
+        <div class="setting-row"><span>언어</span><span class="muted">한국어</span></div>
+    </div>
+</div>

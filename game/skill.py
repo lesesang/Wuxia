@@ -1,18 +1,21 @@
 """
-무공 시스템 (계획서 §12~16)
+무공 시스템
 
 - 무공 데이터는 data/skills.json 에서 로드한다.
   새 무공을 추가하려면 코드를 건드릴 필요 없이 JSON에 항목만 추가하면 된다.
-- 등급(grade) 진화: 기본 → 명품 → 상승 → 신공 → 천상
-  (천상 제외 전부 진화 가능. §13)
-- 숙련도(mastery): 0~100. 100 도달 시 진화 가능, 진화 후 30으로 초기화. (§14)
-- 비기(secret_technique): 상승 등급 + 숙련도 70 이상에서 해방. (§15)
+- 종류: 공격무공 / 심공(전투의 '심법' 행동) / 경공(전투의 '경공' 행동)
+- 등급 진화: 기본 → 명품 → 상승 → 신공 → 천상. 등급이 오를 때마다 위력이 오른다.
+- 숙련도: 0~100. 100에 도달하면 자동으로 진화하고 숙련도는 30이 된다.
+- 비기: 무공별 조건(등급 + 숙련도)을 채우면 해방된다.
 """
 
 import json
 import os
 
 GRADE_ORDER = ["기본", "명품", "상승", "신공", "천상"]
+GRADE_BONUS = 0.25       # 진화 1단계당 위력 계수 증가
+MASTERY_BONUS = 0.003    # 숙련도 1당 위력 계수 증가
+EFFECT_GRADE_BONUS = 0.2 # 심공·경공 진화 1단계당 효과 증가율
 
 _DATA_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "skills.json")
 
@@ -35,58 +38,80 @@ class Skill:
         data = SKILL_DB[key]
         self.key = key
         self.name = data["name"]
-        self.type = data["type"]            # 공격무공 / 심공 / 경공 / 비기 (현재는 공격무공 위주 뼈대)
-        self.category = data["category"]    # 검법 / 도법 / 장법 ...
-        self.grade = data["grade"]           # 시작 등급 (보통 "기본")
+        self.type = data["type"]
+        self.category = data["category"]
+        self.grade = data["grade"]
+        self.start_grade = data["grade"]
         self.base_multiplier = data["base_multiplier"]
+        self.qi_cost = data.get("qi_cost", 0)
+        self.desc = data.get("desc", "")
+        self.effect = data.get("effect", {})
+        self.forms = data.get("forms", [])    # 초식 이름 (전투 문장에 쓰인다)
+        self.risky = data.get("risky", False)  # 마공: 비기를 쓰면 주화입마 위험
+        self.inflict = data.get("inflict")     # {"poison": N} 맞으면 적이 중독된다
 
-        self.mastery = 0  # 0~100
+        self.mastery = 0
 
         secret = data.get("secret_technique", {})
         self.secret_name = secret.get("name")
         self.secret_unlock_grade = secret.get("unlock_grade", "상승")
         self.secret_unlock_mastery = secret.get("unlock_mastery", 70)
+        self.secret_multiplier = secret.get("multiplier", 2.0)
+        self.secret_qi_cost = secret.get("qi_cost", 30)
         self.secret_unlocked = False
 
     # ---------- 숙련도 / 진화 ----------
 
     def gain_mastery(self, amount):
-        """숙련도 획득. 100 도달 시 진화 가능 여부를 반환."""
+        """숙련도를 올리고, 진화·비기 해방이 일어나면 안내 문구 목록을 돌려준다."""
+        messages = []
         self.mastery = min(100, self.mastery + amount)
-        self._check_secret_unlock()
-        return self.can_evolve()
+        if self.can_evolve():
+            self.evolve()
+            messages.append(f"🌟 {self.name}이(가) {self.grade} 등급으로 진화했다!")
+        if self._check_secret_unlock():
+            messages.append(f"✨ 비기 「{self.secret_name}」이(가) 해방되었다!")
+        return messages
 
     def can_evolve(self):
-        if self.grade == "천상":
-            return False
-        return self.mastery >= 100
+        return self.grade != "천상" and self.mastery >= 100
 
     def evolve(self):
-        """등급을 한 단계 올리고 숙련도를 30으로 초기화. (§14)"""
+        """등급을 한 단계 올리고 숙련도를 30으로 초기화한다."""
         if not self.can_evolve():
             return False
-
-        idx = GRADE_ORDER.index(self.grade)
-        self.grade = GRADE_ORDER[idx + 1]
+        self.grade = GRADE_ORDER[GRADE_ORDER.index(self.grade) + 1]
         self.mastery = 30
-        self._check_secret_unlock()
         return True
+
+    def grades_gained(self):
+        return GRADE_ORDER.index(self.grade) - GRADE_ORDER.index(self.start_grade)
 
     # ---------- 비기 ----------
 
     def _check_secret_unlock(self):
+        """이번 호출로 새로 해방되었으면 True."""
         if self.secret_unlocked or self.secret_name is None:
-            return
+            return False
         grade_ok = GRADE_ORDER.index(self.grade) >= GRADE_ORDER.index(self.secret_unlock_grade)
-        mastery_ok = self.mastery >= self.secret_unlock_mastery
-        if grade_ok and mastery_ok:
+        if grade_ok and self.mastery >= self.secret_unlock_mastery:
             self.secret_unlocked = True
+            return True
+        return False
 
     # ---------- 전투 계산용 ----------
 
     def get_effective_multiplier(self):
-        """숙련도를 반영한 실제 위력 계수. (예: 기본계수 + 숙련도*0.005)"""
-        return self.base_multiplier + (self.mastery * 0.005)
+        """등급과 숙련도를 반영한 실제 위력 계수."""
+        return self.base_multiplier + self.grades_gained() * GRADE_BONUS + self.mastery * MASTERY_BONUS
+
+    def effect_value(self, name):
+        """심공·경공 효과 수치. 진화할수록 강해지며, 양수만 증가한다."""
+        value = self.effect.get(name, 0)
+        if value <= 0:
+            return value
+        scale = 1 + self.grades_gained() * EFFECT_GRADE_BONUS + self.mastery * 0.002
+        return int(value * scale)
 
     def to_dict(self):
         return {
@@ -99,9 +124,9 @@ class Skill:
     @classmethod
     def from_dict(cls, d):
         skill = cls(d["key"])
-        skill.grade = d["grade"]
-        skill.mastery = d["mastery"]
-        skill.secret_unlocked = d["secret_unlocked"]
+        skill.grade = d.get("grade", skill.grade)
+        skill.mastery = d.get("mastery", 0)
+        skill.secret_unlocked = d.get("secret_unlocked", False)
         return skill
 
 

@@ -1,242 +1,86 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <title>무협 로그라이크</title>
-    <style>
-        body { font-family: serif; max-width: 720px; margin: 50px auto; padding: 0 20px; background: #fdf6e3; color: #333; }
-        h1 { color: #8b0000; text-align: center; font-size: 2rem; margin-bottom: 6px; }
-        .subtitle { text-align: center; color: #888; margin-bottom: 10px; }
-        .karma-display { text-align: center; font-size: 1rem; color: #6a4fb3; font-weight: bold; margin-bottom: 28px; }
-
-        h2.section-title { color: #8b0000; font-size: 1.1rem; border-bottom: 2px solid #e0c97f; padding-bottom: 6px; margin: 32px 0 14px; }
-
-        /* 출신 카드 */
-        .origins { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 10px; }
-        .origin-card {
-            border: 1px solid #d4b896; border-radius: 8px; padding: 14px;
-            background: #fffbf2; position: relative;
-        }
-        .origin-card.locked { background: #f0ece3; opacity: 0.8; }
-        .origin-card.main   { grid-column: 1 / -1; }
-        .origin-card h3 { margin: 0 0 6px; color: #8b0000; font-size: 1rem; }
-        .origin-card p  { margin: 0 0 10px; font-size: 0.82rem; color: #666; line-height: 1.5; }
-        .stats-mini { font-size: 0.8rem; color: #888; margin-bottom: 8px; }
-        .stats-mini span { margin-right: 8px; }
-        .origin-card label { display: flex; align-items: center; gap: 6px; cursor: pointer; }
-        .origin-card input[type="radio"] { cursor: pointer; }
-        .lock-badge { position: absolute; top: 10px; right: 12px; font-size: 0.72rem; color: #999; }
-
-        .buy-btn {
-            margin-top: 6px; width: 100%; padding: 6px; font-size: 0.82rem;
-            background: #6a4fb3; color: white; border: none; border-radius: 4px; cursor: pointer;
-        }
-        .buy-btn:hover:not(:disabled) { background: #5a3f9a; }
-        .buy-btn:disabled { background: #bbb; cursor: not-allowed; }
-
-        /* 특성 카드 */
-        .traits { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-        .trait-card {
-            border: 1px solid #d4b896; border-radius: 8px; padding: 12px;
-            background: #fffbf2; font-size: 0.85rem; position: relative;
-        }
-        .trait-card.locked { background: #f0ece3; opacity: 0.8; }
-        .trait-card h4 { margin: 0 0 4px; color: #8b0000; font-size: 0.92rem; }
-        .trait-card p { margin: 0 0 8px; color: #666; font-size: 0.78rem; line-height: 1.5; }
-        .trait-card label { display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 0.82rem; }
-        .rarity { font-size: 0.7rem; padding: 2px 6px; border-radius: 3px; margin-left: 6px; }
-        .rarity-일반 { background: #e8e0cc; color: #777; }
-        .rarity-희귀 { background: #d9e6f5; color: #2a5a99; }
-
-        .start-section { text-align: center; margin-top: 28px; }
-        .start-btn {
-            padding: 12px 36px; font-size: 1.05rem; background: #8b0000; color: white;
-            border: none; cursor: pointer; border-radius: 4px;
-        }
-        .start-btn:hover { background: #a00000; }
-
-        hr { border: none; border-top: 1px solid #e0d5b8; margin: 28px 0; }
-
-        /* 메인 사이드바 */
-        .main-sidebar {
-            position: fixed; bottom: 0; left: 0; right: 0;
-            background: #2a1f14; border-top: 1px solid #5a4a30;
-            display: flex; justify-content: center; gap: 32px; padding: 8px 0;
-            z-index: 10;
-        }
-        .main-sidebar button {
-            background: none; border: none; color: #998; font-size: 1.3rem;
-            cursor: pointer; padding: 4px 8px; text-align: center;
-        }
-        .main-sidebar button:hover { color: #ffd27a; }
-        .main-sidebar .sb-label { display: block; font-size: 0.6rem; color: #776; margin-top: 2px; }
-
-        body { padding-bottom: 56px; }
-
-        /* 모달 */
-        .modal-overlay {
-            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.65);
-            z-index: 100; align-items: center; justify-content: center;
-        }
-        .modal-overlay.open { display: flex; }
-        .modal-box {
-            background: #221d16; border: 1px solid #5a4a30; border-radius: 10px;
-            max-width: 480px; width: 90%; max-height: 80vh; overflow-y: auto;
-            padding: 20px; color: #e8ddc8; font-family: serif;
-        }
-        .modal-box h3 { margin: 0 0 14px; color: #ffd27a; font-size: 1.1rem; border-bottom: 1px solid #5a4a30; padding-bottom: 8px; }
-        .modal-close { float: right; background: none; border: none; color: #998; font-size: 1.1rem; cursor: pointer; }
-        .codex-item { border-bottom: 1px solid #3a3025; padding: 8px 0; font-size: 0.85rem; }
-        .codex-item .codex-name { color: #ffd27a; font-weight: bold; }
-        .codex-item .codex-meta { color: #998; font-size: 0.78rem; margin-top: 2px; }
-        .codex-empty { color: #776; font-size: 0.85rem; text-align: center; padding: 16px 0; }
-        .setting-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #3a3025; font-size: 0.88rem; color: #ccc1a8; }
-        .setting-row .setting-note { font-size: 0.75rem; color: #776; }
-    </style>
-</head>
-<body>
-    <h1>무협 로그라이크 RPG</h1>
-    <p class="subtitle">강호에 첫 발을 내딛는 무인의 이야기</p>
-    <p class="karma-display">💠 보유 카르마: {{ karma.current_karma }} (누적: {{ karma.total_karma }})</p>
-
-    {% if has_save %}
-    <div style="text-align:center; margin-bottom: 24px;">
-        <form action="/continue" method="post">
-            <button type="submit" class="start-btn" style="background:#6a4fb3;">📜 이어하기 (진행 중인 강호행이 있습니다)</button>
-        </form>
-    </div>
-    {% endif %}
+<head>{% include "_head.html" %}</head>
+<body class="home">
+<div class="home-wrap">
+    <header class="hero">
+        <h1>무협<br>로그라이크</h1>
+        <div class="hero-side">
+            <p class="hero-line">다섯 해 뒤 겨울, 천마봉에서 누군가 기다린다.<br>그때까지 어떤 무인이 될지는 당신이 정한다.</p>
+            <p class="karma-display">💠 카르마 {{ karma.current_karma }} (누적 {{ karma.total_karma }})</p>
+            {% if has_save %}
+            <form action="/continue" method="post"><button type="submit" class="continue-btn">📜 저장된 턴부터 이어하기</button></form>
+            {% endif %}
+        </div>
+    </header>
 
     <form action="/start" method="post" id="start-form">
-
-    <h2 class="section-title">출신 선택</h2>
-    <div class="origins">
+        <h2 class="section-title">출신</h2>
         {% for o in origins %}
-        <div class="origin-card {% if o.locked %}locked{% endif %} {% if not o.locked %}main{% endif %}">
-
+        <div class="pick-row {% if o.locked %}locked{% endif %}">
             {% if o.locked %}
-            <span class="lock-badge">🔒 카르마 {{ o.cost }} 필요</span>
-            {% endif %}
-
-            <h3>{{ o.name }}</h3>
-            <p>{{ o.desc }}</p>
-            <div class="stats-mini">
-                <span>⚔️ 외공 {{ o.external }}</span>
-                <span>🌀 내공 {{ o.internal }}</span>
-                <span>🥋 무리 {{ o.martial }}</span>
-                <span>🧘 심경 {{ o.mind }}</span>
+            <div class="pick-main">
+                <div class="pick-name">🔒 {{ o.name }}</div>
+                <p class="pick-desc">{{ o.desc }}</p>
+                <div class="pick-stats">외공 {{ o.external }}, 내공 {{ o.internal }}, 무리 {{ o.martial }}, 심경 {{ o.mind }}</div>
+                <div class="pick-stats">시작 무공: {{ o.skill_names|join(', ') }}</div>
             </div>
-
-            {% if o.locked %}
-                <button type="submit" form="buy-origin-{{ o.key }}" class="buy-btn" {% if karma.current_karma < o.cost %}disabled{% endif %}>
-                    💠 카르마 {{ o.cost }}로 해금
-                </button>
+            <button type="submit" form="buy-origin-{{ o.key }}" class="unlock-btn" {% if karma.current_karma < o.cost %}disabled{% endif %}>카르마 {{ o.cost }}로 해금</button>
             {% else %}
-                <label>
-                    <input type="radio" name="origin" value="{{ o.key }}" {% if o.key == '무림초출' %}checked{% endif %}>
-                    이 출신으로 시작
-                </label>
+            <label class="pick-label">
+                <input type="radio" name="origin" value="{{ o.key }}" {% if o.key == '무림초출' %}checked{% endif %}>
+                <span class="pick-main">
+                    <span class="pick-name">{{ o.name }}</span>
+                    <span class="pick-desc" style="display:block">{{ o.desc }}</span>
+                    <span class="pick-stats" style="display:block">외공 {{ o.external }}, 내공 {{ o.internal }}, 무리 {{ o.martial }}, 심경 {{ o.mind }}</span>
+                    <span class="pick-stats" style="display:block">시작 무공: {{ o.skill_names|join(', ') }}</span>
+                </span>
+            </label>
             {% endif %}
         </div>
         {% endfor %}
-    </div>
 
-    <h2 class="section-title">특성 선택 (1개 장착 가능)</h2>
-    <div class="traits">
+        <h2 class="section-title">특성 <span id="slot-count" data-limit="{{ slots }}" style="font-size:.9rem">0 / {{ slots }}</span></h2>
+        <p class="section-note">
+            {% if next_slot %}누적 카르마 {{ next_slot }}이 되면 특성을 하나 더 장착할 수 있습니다.{% else %}특성 슬롯이 모두 열렸습니다.{% endif %}
+        </p>
         {% for t in traits %}
-        <div class="trait-card {% if not t.unlocked %}locked{% endif %}">
-            <h4>{{ t.name }} <span class="rarity rarity-{{ t.rarity }}">{{ t.rarity }}</span></h4>
-            <p>{{ t.desc }}</p>
+        <div class="pick-row {% if not t.unlocked %}locked{% endif %}">
             {% if t.unlocked %}
-                <label>
-                    <input type="radio" name="trait" value="{{ t.key }}">
-                    장착하기
-                </label>
+            <label class="pick-label">
+                <input type="checkbox" name="trait" value="{{ t.key }}">
+                <span class="pick-main">
+                    <span class="pick-name">{{ t.name }}<span class="rarity rarity-{{ t.rarity }}">{{ t.rarity }}</span></span>
+                    <span class="pick-desc" style="display:block">{{ t.desc }}</span>
+                </span>
+            </label>
             {% else %}
-                <button type="submit" form="buy-trait-{{ t.key }}" class="buy-btn" {% if karma.current_karma < t.cost %}disabled{% endif %}>
-                    💠 카르마 {{ t.cost }}로 해금
-                </button>
+            <div class="pick-main">
+                <div class="pick-name">🔒 {{ t.name }}<span class="rarity rarity-{{ t.rarity }}">{{ t.rarity }}</span></div>
+                <p class="pick-desc">{{ t.desc }}</p>
+            </div>
+            <button type="submit" form="buy-trait-{{ t.key }}" class="unlock-btn" {% if karma.current_karma < t.cost %}disabled{% endif %}>카르마 {{ t.cost }}로 해금</button>
             {% endif %}
         </div>
         {% endfor %}
-    </div>
-    <label style="font-size:0.8rem; color:#888; display:block; margin-top:6px;">
-        <input type="radio" name="trait" value="" checked> 특성 없이 시작
-    </label>
 
-    <div class="start-section">
-        <button type="submit" class="start-btn">⚔️ 강호에 첫 발을 내딛는다</button>
-    </div>
+        <button type="submit" class="start-btn">강호로 나선다</button>
     </form>
 
-    <!-- 출신 해금 구매용 개별 폼 (히든) -->
-    {% for o in origins %}
-    {% if o.locked %}
-    <form id="buy-origin-{{ o.key }}" action="/shop/buy_origin" method="post">
-        <input type="hidden" name="origin" value="{{ o.key }}">
-    </form>
-    {% endif %}
-    {% endfor %}
+    {% for o in origins %}{% if o.locked %}
+    <form id="buy-origin-{{ o.key }}" action="/shop/buy_origin" method="post"><input type="hidden" name="origin" value="{{ o.key }}"></form>
+    {% endif %}{% endfor %}
+    {% for t in traits %}{% if not t.unlocked %}
+    <form id="buy-trait-{{ t.key }}" action="/shop/buy_trait" method="post"><input type="hidden" name="trait" value="{{ t.key }}"></form>
+    {% endif %}{% endfor %}
+</div>
 
-    <!-- 특성 해금 구매용 개별 폼 (히든) -->
-    {% for t in traits %}
-    {% if not t.unlocked %}
-    <form id="buy-trait-{{ t.key }}" action="/shop/buy_trait" method="post">
-        <input type="hidden" name="trait" value="{{ t.key }}">
-    </form>
-    {% endif %}
-    {% endfor %}
-    <!-- 최하단 사이드바 -->
-    <div class="main-sidebar">
-        <button onclick="document.getElementById('main-codex-modal').classList.add('open')">
-            📖<span class="sb-label">도감</span>
-        </button>
-        <button onclick="document.getElementById('main-settings-modal').classList.add('open')">
-            ⚙️<span class="sb-label">설정</span>
-        </button>
-    </div>
+<div class="main-sidebar">
+    <button data-open="codex-modal">📖<span class="sb-label">도감</span></button>
+    <button data-open="settings-modal">⚙️<span class="sb-label">설정</span></button>
+</div>
 
-    <!-- 도감 모달 -->
-    <div class="modal-overlay" id="main-codex-modal">
-        <div class="modal-box">
-            <button class="modal-close" onclick="document.getElementById('main-codex-modal').classList.remove('open')">✕</button>
-            <h3>강호 도감 — 만난 자들</h3>
-            {% if codex_enemies %}
-                {% for e in codex_enemies %}
-                <div class="codex-item">
-                    <div class="codex-name">{{ e.name }}</div>
-                    <div class="codex-meta">{{ e.tier }} · {{ e.realm }} 경지 · 체력 {{ e.hp }} · 공격력 {{ e.attack }}</div>
-                </div>
-                {% endfor %}
-            {% else %}
-                <p class="codex-empty">아직 강호에서 마주친 자가 없습니다.</p>
-            {% endif %}
-        </div>
-    </div>
-
-    <!-- 설정 모달 -->
-    <div class="modal-overlay" id="main-settings-modal">
-        <div class="modal-box">
-            <button class="modal-close" onclick="document.getElementById('main-settings-modal').classList.remove('open')">✕</button>
-            <h3>게임 설정</h3>
-            <div class="setting-row">
-                <span>BGM 볼륨</span>
-                <span class="setting-note">추후 추가 예정</span>
-            </div>
-            <div class="setting-row">
-                <span>텍스트 속도</span>
-                <span class="setting-note">추후 추가 예정</span>
-            </div>
-            <div class="setting-row">
-                <span>글자 크기</span>
-                <span class="setting-note">추후 추가 예정</span>
-            </div>
-            <div class="setting-row">
-                <span>언어</span>
-                <span class="setting-note">추후 추가 예정</span>
-            </div>
-        </div>
-    </div>
-
+{% include "_modals_shared.html" %}
+<script src="{{ url_for('static', filename='game.js') }}"></script>
 </body>
 </html>

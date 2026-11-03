@@ -1,211 +1,32 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <title>무협 로그라이크</title>
-    <style>
-        * { box-sizing: border-box; }
-        body {
-            font-family: 'Noto Serif KR', serif; margin: 0; padding: 0;
-            background: #1c1814; color: #e8ddc8;
-            height: 100vh; display: flex; flex-direction: column; overflow: hidden;
-        }
+<head>{% include "_head.html" %}</head>
 
-        /* ===================== 상단 상태바 ===================== */
-        .topbar {
-            background: #2a231b; border-bottom: 2px solid #5a4a30;
-            padding: 10px 16px; flex-shrink: 0;
-        }
-        .topbar-row1 { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
-        .turn-info { font-size: 0.85rem; color: #c9a050; letter-spacing: 1px; }
-        .realm-info { font-size: 0.95rem; color: #e8ddc8; font-weight: bold; }
-        .topbar-row2 { display: flex; gap: 14px; flex-wrap: wrap; }
-        .resource { display: flex; align-items: center; gap: 5px; font-size: 0.78rem; }
-        .resource .label { color: #998; width: 28px; }
-        .resource .bar-track { width: 60px; height: 6px; background: #3a3025; border-radius: 3px; overflow: hidden; }
-        .resource .bar-fill { height: 100%; }
-        .bar-hp { background: #c0392b; }
-        .bar-qi { background: #2980b9; }
-        .resource .num { color: #bba; min-width: 50px; }
+{% macro sidebar() %}
+<div class="sidebar">
+    <button data-open="status-modal">🧍<span class="sb-label">상태</span></button>
+    <button data-open="codex-modal">📖<span class="sb-label">도감</span></button>
+    <button data-open="settings-modal">⚙️<span class="sb-label">설정</span></button>
+    <button data-open="reset-modal">🔄<span class="sb-label">초기화</span></button>
+</div>
+{% endmacro %}
 
-        /* ===================== 중앙: 이벤트 영역 ===================== */
-        .event-area {
-            flex: 1; overflow-y: auto; padding: 24px 20px;
-            display: flex; flex-direction: column; justify-content: center;
-            background: radial-gradient(ellipse at top, #241f17 0%, #181410 100%);
-        }
-        .event-text { max-width: 560px; margin: 0 auto; width: 100%; }
-        .event-text p {
-            font-size: 1.05rem; line-height: 2; color: #e8ddc8;
-            margin: 0 0 10px; text-align: center;
-        }
-        .event-text p.major { color: #ffd27a; font-weight: bold; font-size: 1.1rem; }
-        .event-text p.sub { color: #998; font-size: 0.85rem; }
-
-        /* ===================== 하단: 행동 버튼 슬롯 ===================== */
-        .action-area {
-            flex-shrink: 0; background: #221d16; border-top: 2px solid #5a4a30;
-            padding: 14px 16px;
-        }
-        .actions { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; max-width: 560px; margin: 0 auto; }
-        .actions form { display: block; }
-        .actions button {
-            width: 100%; padding: 12px 6px; font-size: 0.92rem;
-            background: linear-gradient(180deg, #5a3a1a, #3a2510); color: #e8ddc8;
-            border: 1px solid #7a5a30; border-radius: 6px; cursor: pointer;
-        }
-        .actions button:hover:not(:disabled) { background: linear-gradient(180deg, #6a4a2a, #4a3520); }
-
-        .next-turn-area { text-align: center; max-width: 560px; margin: 0 auto; }
-        .next-btn {
-            width: 100%; padding: 13px !important; font-size: 1rem !important;
-            color: #e8ddc8; border: 1px solid; border-radius: 6px; cursor: pointer;
-            background: linear-gradient(180deg, #2a7a3a, #1a5a28) !important; border-color: #3a9a4a !important;
-        }
-        .next-btn:hover { background: linear-gradient(180deg, #339245, #2a7a38) !important; }
-
-        .restart-area { text-align: center; max-width: 560px; margin: 0 auto; }
-        .restart-area button {
-            width: 100%; padding: 13px; background: linear-gradient(180deg, #555, #333);
-            color: #e8ddc8; border: 1px solid #777; border-radius: 6px; cursor: pointer; font-size: 1rem;
-        }
-
-        /* ===================== 시장 화면 ===================== */
-        .market-area {
-            flex: 1; overflow-y: auto; padding: 18px 16px;
-            background: radial-gradient(ellipse at top, #33261a 0%, #181410 100%);
-        }
-        .market-inner { max-width: 560px; margin: 0 auto; }
-        .market-title { text-align: center; font-size: 1.25rem; color: #ffd27a; letter-spacing: 3px; margin: 0 0 4px; }
-        .market-sub { text-align: center; font-size: 0.82rem; color: #a89878; margin: 0 0 12px; }
-        .market-message { text-align: center; font-size: 0.85rem; color: #9fd8a0; margin: 0 0 12px; }
-        .market-item {
-            display: flex; justify-content: space-between; align-items: center; gap: 12px;
-            background: rgba(0,0,0,0.25); border: 1px solid #4a3c28; border-radius: 8px;
-            padding: 10px 12px; margin-bottom: 8px;
-        }
-        .market-item.sold { opacity: 0.45; }
-        .item-info { min-width: 0; }
-        .item-name { font-size: 0.95rem; color: #e8ddc8; font-weight: bold; }
-        .item-category { font-size: 0.7rem; color: #c9a050; margin-left: 6px; font-weight: normal; }
-        .item-desc { font-size: 0.78rem; color: #a89878; margin-top: 3px; line-height: 1.5; }
-        .market-item button {
-            flex-shrink: 0; width: 84px; padding: 9px 4px; font-size: 0.82rem;
-            background: linear-gradient(180deg, #5a3a1a, #3a2510); color: #e8ddc8;
-            border: 1px solid #7a5a30; border-radius: 6px; cursor: pointer;
-        }
-        .market-item button:hover:not(:disabled) { background: linear-gradient(180deg, #6a4a2a, #4a3520); }
-        .market-item button:disabled { background: #2c2720; color: #776; border-color: #3a3025; cursor: not-allowed; }
-        .market-area.special { background: radial-gradient(ellipse at top, #2a1a33 0%, #120d16 100%); }
-        .market-area.special .market-title { color: #c9a8e8; }
-        .market-area.special .market-item { border-color: #4a3560; }
-        .market-area.special .item-category { color: #b39ddb; }
-        .resource .silver { color: #ffd27a; }
-
-        /* ===================== 최하단 사이드바 ===================== */
-        .sidebar {
-            flex-shrink: 0; background: #16130f; border-top: 1px solid #3a3025;
-            display: flex; justify-content: center; gap: 28px; padding: 8px 0;
-        }
-        .sidebar button {
-            background: none; border: none; color: #998; font-size: 1.3rem;
-            cursor: pointer; padding: 4px 8px; line-height: 1;
-        }
-        .sidebar button:hover { color: #ffd27a; }
-        .sidebar .sb-label { display: block; font-size: 0.6rem; color: #776; margin-top: 2px; }
-
-        /* ===================== 모달 공통 ===================== */
-        .modal-overlay {
-            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.65);
-            z-index: 100; align-items: center; justify-content: center;
-        }
-        .modal-overlay.open { display: flex; }
-        .modal-box {
-            background: #221d16; border: 1px solid #5a4a30; border-radius: 10px;
-            max-width: 480px; width: 90%; max-height: 80vh; overflow-y: auto;
-            padding: 20px; color: #e8ddc8;
-        }
-        .modal-box h3 { margin: 0 0 14px; color: #ffd27a; font-size: 1.1rem; border-bottom: 1px solid #5a4a30; padding-bottom: 8px; }
-        .modal-close { float: right; background: none; border: none; color: #998; font-size: 1.1rem; cursor: pointer; }
-        .modal-stat-row { display: flex; justify-content: space-between; font-size: 0.88rem; margin: 5px 0; color: #ccc1a8; }
-        .modal-section { margin-bottom: 16px; }
-        .codex-item { border-bottom: 1px solid #3a3025; padding: 8px 0; font-size: 0.85rem; }
-        .codex-item .codex-name { color: #ffd27a; font-weight: bold; }
-        .codex-item .codex-meta { color: #998; font-size: 0.78rem; margin-top: 2px; }
-        .codex-empty { color: #776; font-size: 0.85rem; text-align: center; padding: 16px 0; }
-
-        /* ===================== 전투 전용 화면 (그대로 유지) ===================== */
-        body.in-battle {
-            background: radial-gradient(ellipse at top, #3a1414 0%, #160808 70%);
-            color: #f0e6d8; display: block; overflow: auto; height: auto;
-        }
-        .battle-screen { max-width: 600px; margin: 30px auto; padding: 0 16px; }
-        .battle-title {
-            text-align: center; font-size: 1.6rem; color: #ff6b6b; letter-spacing: 4px;
-            margin: 10px 0 24px; text-shadow: 0 0 12px rgba(255,80,80,0.5);
-        }
-        .battle-final-tag {
-            display: block; text-align: center; font-size: 0.85rem; color: #ffd27a;
-            letter-spacing: 2px; margin-top: 4px; text-shadow: none;
-        }
-        .vs-row { display: flex; justify-content: space-between; align-items: center; margin: 0 0 28px; }
-        .combatant { width: 46%; text-align: center; }
-        .combatant .name { font-size: 1.05rem; color: #f0e6d8; margin-bottom: 8px; }
-        .combatant .hpnum { font-size: 0.8rem; color: #c9b8a8; margin-top: 4px; }
-        .hpbar-outer { background: #2a1c1c; border: 1px solid #5a3a3a; border-radius: 6px; height: 16px; overflow: hidden; }
-        .hpbar-inner { height: 100%; transition: width 0.3s ease; }
-        .hpbar-inner.mine  { background: linear-gradient(90deg, #4a9a4a, #6fc26f); }
-        .hpbar-inner.enemy { background: linear-gradient(90deg, #a02020, #d04040); }
-        .vs-mark { font-size: 1.3rem; color: #888; font-style: italic; }
-        .round-tag { text-align: center; font-size: 0.8rem; color: #998; margin-bottom: 18px; letter-spacing: 1px; }
-        .battle-log {
-            background: rgba(0,0,0,0.25); border: 1px solid #4a3535; border-radius: 8px;
-            padding: 12px 14px; margin-bottom: 20px; max-height: 220px; overflow-y: auto;
-        }
-        .battle-log p { margin: 4px 0; font-size: 0.85rem; color: #ddd0c0; }
-        .battle-log p:first-child { color: #ffd27a; font-weight: bold; }
-        .battle-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .battle-actions form { display: block; }
-        .battle-actions button {
-            width: 100%; padding: 12px; font-size: 0.95rem;
-            background: linear-gradient(180deg, #b03030, #8a2020); color: #fff0e8;
-            border: 1px solid #d04040; border-radius: 6px; cursor: pointer;
-        }
-        .battle-actions button:hover:not(:disabled) { background: linear-gradient(180deg, #d04040, #a02828); }
-        .battle-actions button:disabled { background: #3a3030; color: #777; border-color: #4a3a3a; cursor: not-allowed; }
-        .battle-actions .flee-btn { grid-column: 1 / -1; }
-        .battle-actions .flee-btn button { background: linear-gradient(180deg, #555, #333); border-color: #666; }
-        .battle-actions .flee-btn button:hover { background: linear-gradient(180deg, #666, #444); }
-        .battle-note { font-size: 0.72rem; color: #a8897a; text-align: center; margin: 10px 0 0; }
-
-        /* ===================== 엔딩 화면 ===================== */
-        .ending-wrap { flex: 1; display: flex; align-items: center; justify-content: center; padding: 20px; }
-        .ending-box { border-radius: 8px; padding: 24px; text-align: center; max-width: 480px; }
-        .ending-title { font-size: 1.4rem; font-weight: bold; margin: 0 0 10px; }
-        .ending-text { font-size: 0.95rem; margin: 0 0 14px; line-height: 1.7; color: #ccc1a8; }
-        .karma-gain { font-size: 0.9rem; color: #b39ddb; font-weight: bold; }
-        .ending-사망   .ending-title { color: #998; }
-        .ending-배드   .ending-title { color: #d9a050; }
-        .ending-기본   .ending-title { color: #ffd27a; }
-        .ending-생사경 .ending-title { color: #b39ddb; }
-    </style>
-</head>
+{% set hp_pct = [(player.hp / player.max_hp() * 100)|int, 100]|min %}
+{% set qi_pct = [(player.qi / player.max_qi() * 100)|int, 100]|min %}
 
 {% if battle %}
-<body class="in-battle">
+<body class="in-battle" data-mood="battle">
 <div class="battle-screen">
-
-    <h1 class="battle-title">
-        ⚔ 전 투 ⚔
-        {% if battle.is_final %}<span class="battle-final-tag">최종전 — 천마와의 결전</span>{% endif %}
+    <h1 class="battle-title">전 투
+        {% if battle.is_final %}<span class="battle-final-tag">천마와의 결전</span>{% endif %}
     </h1>
 
     <div class="vs-row">
         <div class="combatant">
             <div class="name">{{ player.origin }}</div>
-            {% set php_pct = [(player.hp / player.max_hp() * 100)|int, 100]|min %}
-            <div class="hpbar-outer"><div class="hpbar-inner mine" style="width:{{ php_pct }}%"></div></div>
-            <div class="hpnum">{{ player.hp }} / {{ player.max_hp() }}</div>
+            <div class="hpbar-outer"><div class="hpbar-inner mine" style="width:{{ hp_pct }}%"></div></div>
+            <div class="qibar"><div style="width:{{ qi_pct }}%"></div></div>
+            <div class="hpnum">체력 {{ player.hp }}/{{ player.max_hp() }}, 기력 {{ player.qi }}/{{ player.max_qi() }}</div>
         </div>
         <div class="vs-mark">VS</div>
         <div class="combatant">
@@ -216,247 +37,273 @@
         </div>
     </div>
 
-    <p class="round-tag">제 {{ battle.round_num + 1 }} 라운드</p>
+    {% if battle.round_num == 0 %}<p class="enemy-desc">{{ battle.enemy_desc }}</p>{% endif %}
+
+    <p class="battle-state">
+        제 {{ battle.round_num + 1 }} 라운드
+        {%- if battle.poison %}, 중독 {{ battle.poison.rounds }}라운드{% endif %}
+        {%- if battle.atk_buff %}, 공격력 +{{ battle.atk_buff.percent }}%{% endif %}
+        {%- if battle.counter_pct %}, 다음 공격 +{{ battle.counter_pct }}%{% endif %}
+        {%- if battle.sealed %}, 혈도 봉쇄{% endif %}
+        {%- if player.injury %}, 내상 {{ player.injury }}단계{% endif %}
+        {%- if battle.enemy_poison %}, 적 중독{% endif %}
+        {%- if battle.gauntlet %}, {{ battle.gauntlet.name }} {{ battle.gauntlet.round }}/{{ battle.gauntlet.total }}전{% endif %}</p>
+    {% if battle.warning %}<p class="battle-warning">⚠️ 다음은 「{{ battle.warning }}」! 경공으로 흘려낼 수 있다.</p>{% endif %}
 
     <div class="battle-log">
-        {% for l in log[:8] %}
-        <p>{{ l }}</p>
-        {% endfor %}
+        {% for l in log[-10:] %}<p>{{ l }}</p>{% endfor %}
     </div>
 
     <div class="battle-actions">
-        <form action="/battle_action" method="post"><button name="battle_action" value="기본공격">⚔️ 기본공격</button></form>
-        <form action="/battle_action" method="post">
-            <button name="battle_action" value="비기" {% if not battle.secret_ready %}disabled{% endif %}>✨ 비기</button>
-        </form>
-        <form action="/battle_action" method="post">
-            <button name="battle_action" value="심법" {% if not battle.has_skill %}disabled{% endif %}>🧘 심법</button>
-        </form>
-        <form action="/battle_action" method="post">
-            <button name="battle_action" value="경공" {% if not battle.has_skill %}disabled{% endif %}>💨 경공</button>
-        </form>
-        <div class="flee-btn">
-            <form action="/battle_action" method="post"><button name="battle_action" value="도주">🏃 도주</button></form>
-        </div>
-    </div>
-
-    {% if not battle.has_skill %}<p class="battle-note">심법·경공은 아직 익히지 않았다.</p>{% endif %}
-    {% if not battle.secret_ready %}<p class="battle-note">비기는 아직 해방되지 않았다.</p>{% endif %}
-
-</div>
-</body>
-
-{% else %}
-<body>
-
-<!-- ===================== 상단 상태바 ===================== -->
-<div class="topbar">
-    <div class="topbar-row1">
-        <span class="turn-info">{{ chapter.title }} · {{ year }}년차 {{ month }}월 (턴 {{ player.turn }}/{{ player.max_turn }})</span>
-        <span class="realm-info">{{ player.origin }} · {{ player.realm }}</span>
-    </div>
-    <div class="topbar-row2">
-        <div class="resource">
-            <span class="label">체력</span>
-            {% set hp_pct = [(player.hp / player.max_hp() * 100)|int, 100]|min %}
-            <div class="bar-track"><div class="bar-fill bar-hp" style="width:{{ hp_pct }}%"></div></div>
-            <span class="num">{{ player.hp }}/{{ player.max_hp() }}</span>
-        </div>
-        <div class="resource">
-            <span class="label">내공</span>
-            {% set qi_pct = [(player.qi / player.max_qi() * 100)|int, 100]|min %}
-            <div class="bar-track"><div class="bar-fill bar-qi" style="width:{{ qi_pct }}%"></div></div>
-            <span class="num">{{ player.qi }}/{{ player.max_qi() }}</span>
-        </div>
-        <div class="resource"><span class="label">외공</span><span class="num">{{ player.external }}</span></div>
-        <div class="resource"><span class="label">무리</span><span class="num">{{ player.martial }}</span></div>
-        <div class="resource"><span class="label">은자</span><span class="num silver">{{ player.silver }}</span></div>
-    </div>
-</div>
-
-{% if not player.alive %}
-<!-- ===================== 엔딩 화면 ===================== -->
-<div class="ending-wrap">
-    {% if ending %}
-    <div class="ending-box ending-{{ ending.key }}">
-        <p class="ending-title">
-            {% if ending.key == '사망' %}⚰️ 사망
-            {% elif ending.key == '배드' %}🌧️ 배드 엔딩
-            {% elif ending.key == '기본' %}🏆 강호의 전설
-            {% elif ending.key == '생사경' %}✨ 생사경 — 완전한 엔딩
-            {% endif %}
-        </p>
-        <p class="ending-text">{{ ending.text }}</p>
-        <p class="karma-gain">💠 카르마 +{{ ending.karma }} 획득 (현재 보유: {{ karma.current_karma }} / 누적: {{ karma.total_karma }})</p>
-    </div>
-    {% else %}
-    <div class="ending-box ending-사망">
-        <p class="ending-title">⚰️ 사망</p>
-        <p class="ending-text">무림의 길이 여기서 끊겼습니다.</p>
-    </div>
-    {% endif %}
-</div>
-<div class="action-area">
-    <div class="restart-area">
-        <form action="/restart" method="post"><button type="submit">🔄 다시 시작</button></form>
-    </div>
-</div>
-
-{% elif market %}
-<!-- ===================== 시장 ===================== -->
-<div class="market-area{% if market.special %} special{% endif %}">
-    <div class="market-inner">
-        <h2 class="market-title">{% if market.special %}🌑{% else %}🏪{% endif %} {{ market.name }}</h2>
-        <p class="market-sub">
-            {% if market.special %}결전을 앞둔 밤, 누군가 말없이 보따리를 풀어 놓는다.
-            {% else %}강호의 물건이 모였다. 턴을 쓰지 않고 둘러볼 수 있다.{% endif %}
-        </p>
-        {% if market.message %}<p class="market-message">{{ market.message }}</p>{% endif %}
-        {% for item in market.stock %}
-        <div class="market-item{% if item.sold %} sold{% endif %}">
-            <div class="item-info">
-                <div class="item-name">{{ item.name }}<span class="item-category">{{ item.category }}</span></div>
-                <div class="item-desc">{{ item.desc }}</div>
-            </div>
-            <form action="/market/buy" method="post">
-                <input type="hidden" name="item" value="{{ item.key }}">
-                <button type="submit" {% if item.sold or item.blocked %}disabled{% endif %}>
-                    {% if item.sold %}판매 완료{% elif item.blocked == '효과 없음' %}효과 없음{% else %}은자 {{ item.price }}{% endif %}
-                </button>
-            </form>
-        </div>
-        {% endfor %}
-    </div>
-</div>
-<div class="action-area">
-    <div class="next-turn-area">
-        <form action="/market/leave" method="post"><button class="next-btn" type="submit">{% if market.special %}⚔️ 떠나서 결전으로{% else %}▶️ 시장을 떠난다{% endif %}</button></form>
-    </div>
-</div>
-
-{% else %}
-<!-- ===================== 중앙: 이번 턴 이벤트 텍스트 ===================== -->
-<div class="event-area">
-    <div class="event-text">
-        {% for l in log[:8] %}
-        <p class="{% if loop.first %}major{% endif %}">{{ l }}</p>
-        {% endfor %}
-        {% if not log %}
-        <p class="sub">강호의 첫걸음을 내딛으려 한다...</p>
+        <form action="/battle_action" method="post"><button class="bt-btn" name="battle_action" value="기본공격">
+            ⚔️ {% if battle.skill %}{{ battle.skill.name }}{% else %}맨손 공격{% endif %}
+            <small>{% if battle.skill %}기력 {{ battle.skill.qi_cost }}{% if player.qi < battle.skill.qi_cost %}, 부족해서 맨손 공격{% endif %}{% else %}기력 소모 없음{% endif %}</small>
+        </button></form>
+        <form action="/battle_action" method="post"><button class="bt-btn" name="battle_action" value="비기" {% if not battle.secret_ready %}disabled{% endif %}>
+            ✨ {% if battle.skill and battle.skill.secret_unlocked %}{{ battle.skill.secret_name }}{% else %}비기{% endif %}
+            <small>{% if battle.skill and battle.skill.secret_unlocked %}기력 {{ battle.skill.secret_qi_cost }}{% elif battle.skill %}{{ battle.skill.secret_unlock_grade }} 등급, 숙련도 {{ battle.skill.secret_unlock_mastery }}에 해방{% else %}무공 없음{% endif %}</small>
+        </button></form>
+        <form action="/battle_action" method="post"><button class="bt-btn" name="battle_action" value="심법" {% if not battle.mindset %}disabled{% endif %}>
+            🧘 {% if battle.mindset %}{{ battle.mindset.name }}{% else %}심법{% endif %}
+            <small>{% if battle.mindset %}숨을 고르며 회복{% else %}익힌 심공 없음{% endif %}</small>
+        </button></form>
+        <form action="/battle_action" method="post"><button class="bt-btn" name="battle_action" value="경공" {% if not battle.movement or player.qi < battle.movement.qi_cost %}disabled{% endif %}>
+            💨 {% if battle.movement %}{{ battle.movement.name }}{% else %}경공{% endif %}
+            <small>{% if battle.movement %}기력 {{ battle.movement.qi_cost }}, 회피 {{ battle.movement.effect_value('evade') }}%{% else %}익힌 경공 없음{% endif %}</small>
+        </button></form>
+        {% if not battle.is_final %}
+        <form action="/battle_action" method="post" style="grid-column:1/-1"><button class="bt-btn flee" name="battle_action" value="도주">🏃 도주</button></form>
         {% endif %}
     </div>
-</div>
 
-<!-- ===================== 하단: 행동 버튼 슬롯 ===================== -->
-<div class="action-area">
-    {% if pending_next %}
-    <div class="next-turn-area">
-        <form action="/advance_turn" method="post"><button class="next-btn" type="submit">▶️ 다음</button></form>
-    </div>
-    {% else %}
-    <div class="actions">
-        <form action="/action" method="post"><button name="action" value="탐색">🗺️ 탐색</button></form>
-        <form action="/action" method="post"><button name="action" value="수련">⚔️ 수련</button></form>
-        <form action="/action" method="post"><button name="action" value="명상">🧘 명상</button></form>
-        <form action="/action" method="post"><button name="action" value="휴식">💤 회복</button></form>
+    {% if inventory %}
+    <div class="battle-items">
+        {% for i in inventory %}
+        <form action="/battle_action" method="post">
+            <input type="hidden" name="item" value="{{ i.key }}">
+            <button class="item-btn" name="battle_action" value="소비품">{{ i.name }} ×{{ i.count }}</button>
+        </form>
+        {% endfor %}
     </div>
     {% endif %}
+
+    {{ sidebar() }}
 </div>
+
+{% else %}
+<body class="play" data-mood="{% if market %}market{% else %}calm{% endif %}">
+
+<div class="topbar"><div class="topbar-inner">
+    <div class="topbar-row1">
+        <span class="turn-info">{{ chapter.title }}, {{ year }}년차 {{ month }}월 (턴 {{ player.turn }}/{{ player.max_turn }})</span>
+        <span class="realm-info">{{ alignment.title }}, {{ player.realm }}</span>
+    </div>
+    <div class="topbar-row2">
+        <div class="resource"><span class="label">체력</span><div class="bar-track"><div class="bar-fill bar-hp" style="width:{{ hp_pct }}%"></div></div><span class="num">{{ player.hp }}/{{ player.max_hp() }}</span></div>
+        <div class="resource"><span class="label">기력</span><div class="bar-track"><div class="bar-fill bar-qi" style="width:{{ qi_pct }}%"></div></div><span class="num">{{ player.qi }}/{{ player.max_qi() }}</span></div>
+    </div>
+    <div class="topbar-stats">
+        <span>외공 <b>{{ player.external }}</b></span><span>내공 <b>{{ player.internal }}</b></span>
+        <span>무리 <b>{{ player.martial }}</b></span><span>심경 <b>{{ player.mind }}</b></span>
+        <span class="silver">은자 <b>{{ player.silver }}</b></span>
+        {% if player.injury %}<span class="injury">내상 <b>{{ player.injury }}</b></span>{% endif %}
+    </div>
+</div></div>
+
+{% if not player.alive %}
+<div class="stage"><div class="stage-inner ending-sheet">
+    {% if ending %}
+    <div class="seal seal-{{ ending.key }}">{{ ending.seal }}</div>
+    <h2 class="ending-title">{{ ending.title }}</h2>
+    <p class="ending-text">{{ ending.text }}</p>
+    {% for line in ending.epilogue %}<p class="epilogue">{{ line }}</p>{% endfor %}
+    <p class="karma-gain">💠 카르마 +{{ ending.karma }} (보유 {{ karma.current_karma }}, 누적 {{ karma.total_karma }})</p>
+    {% else %}
+    <div class="seal seal-사망">사망</div>
+    <p class="ending-text">무림의 길이 여기서 끊겼습니다.</p>
+    {% endif %}
+    <div class="run-facts">
+        <div><b>{{ player.realm }}</b>경지</div>
+        <div><b>{{ alignment.title }}</b>별호</div>
+        <div><b>{{ [player.turn, player.max_turn]|min }}턴</b>진행</div>
+        <div><b>{{ player.kills }}명</b>처치</div>
+        <div><b>{{ fame }}</b>명성</div>
+    </div>
+</div></div>
+<div class="action-area"><div class="action-inner">
+    <form action="/restart" method="post"><button class="next-btn" type="submit">메인 화면으로</button></form>
+</div></div>
+
+{% elif market %}
+<div class="stage {% if market.special %}market-special{% endif %}"><div class="market-inner">
+    <h2 class="market-title">{% if market.special %}🌑{% else %}🏪{% endif %} {{ market.name }}</h2>
+    <p class="market-sub">{% if market.special %}결전을 앞둔 밤, 누군가 말없이 보따리를 풀어 놓는다.{% else %}턴을 쓰지 않고 둘러볼 수 있다.{% endif %}</p>
+    {% if market.message %}<p class="market-message">{{ market.message }}</p>{% endif %}
+    {% for item in market.stock %}
+    <div class="market-item{% if item.sold %} sold{% endif %}">
+        <div class="item-info">
+            <div class="item-name">{{ item.name }}<span class="item-category">{{ item.category }}{% if item.stackable and not item.sold %}, {{ item.left }}개 남음{% endif %}</span></div>
+            <div class="item-desc">{{ item.desc }}</div>
+        </div>
+        <form action="/market/buy" method="post">
+            <input type="hidden" name="item" value="{{ item.key }}">
+            <button class="buy-btn" type="submit" {% if item.sold or item.blocked %}disabled{% endif %}>
+                {% if item.sold %}판매 완료{% elif item.blocked == '효과 없음' %}효과 없음{% else %}은자 {{ item.price }}{% endif %}
+            </button>
+        </form>
+    </div>
+    {% endfor %}
+</div></div>
+<div class="action-area"><div class="action-inner">
+    <form action="/market/leave" method="post"><button class="next-btn" type="submit">{% if market.special %}⚔️ 떠나서 결전으로{% else %}▶️ 시장을 떠난다{% endif %}</button></form>
+</div></div>
+
+{% elif event %}
+<div class="stage"><div class="stage-inner">
+    <div class="event-sheet">
+        <h2 class="event-title">{{ event.title }}</h2>
+        <div class="event-body">
+            <p class="event-text" data-type>{{ event.text }}</p>
+            {% for c in event.choices %}
+            <form action="/event/choose" method="post">
+                <input type="hidden" name="choice" value="{{ c.index }}">
+                <button class="choice-btn" type="submit" {% if c.locked %}disabled{% endif %}>
+                    {{ c.label }}{% if c.locked %}<small>{{ c.locked }}</small>{% endif %}
+                </button>
+            </form>
+            {% endfor %}
+        </div>
+    </div>
+</div></div>
+<div class="action-area"><div class="action-inner">
+    <p class="hint" style="margin:0">{% if player.turn >= player.max_turn %}이 선택 뒤에는 돌아갈 수 없다.{% else %}선택지의 결과는 고르기 전까지 알 수 없다.{% endif %}</p>
+</div></div>
+
+{% else %}
+<div class="stage"><div class="stage-inner">
+    {% for l in log[-8:] %}
+    <p class="log-line {% if loop.last %}latest{% endif %}" data-type>{{ l }}</p>
+    {% else %}
+    <p class="log-line muted">강호의 첫걸음을 내딛으려 한다...</p>
+    {% endfor %}
+</div></div>
+
+<div class="action-area"><div class="action-inner">
+    {% if pending_next %}
+    <form action="/advance_turn" method="post"><button class="next-btn" type="submit">▶️ 다음</button></form>
+    {% else %}
+    <div class="actions">
+        <form action="/action" method="post"><button class="act-btn" name="action" value="탐색">🗺️ 탐색<small>전투, 사건, 기연</small></button></form>
+        <form action="/action" method="post"><button class="act-btn" name="action" value="수련">⚔️ 수련<small>외공, 무리, 숙련도</small></button></form>
+        <form action="/action" method="post"><button class="act-btn" name="action" value="명상">🧘 명상<small>내공, 심경, 기력</small></button></form>
+        <form action="/action" method="post"><button class="act-btn" name="action" value="휴식">💤 회복<small>체력, 기력</small></button></form>
+    </div>
+    {% if next_market %}<p class="hint">{% if next_market == player.turn %}이번 달 말에 시장이 열린다.{% else %}다음 시장까지 {{ next_market - player.turn }}개월{% endif %}</p>{% endif %}
+    {% endif %}
+</div></div>
 {% endif %}
 
-<!-- ===================== 최하단 사이드바 ===================== -->
-<div class="sidebar">
-    <button onclick="document.getElementById('status-modal').classList.add('open')">
-        ⚙️<span class="sb-label">상태</span>
-    </button>
-    <button onclick="document.getElementById('codex-modal').classList.add('open')">
-        📖<span class="sb-label">도감</span>
-    </button>
-    <button onclick="document.getElementById('reset-modal').classList.add('open')">
-        🔄<span class="sb-label">초기화</span>
-    </button>
-</div>
+{{ sidebar() }}
+{% endif %}
 
-<!-- ===================== 상태 모달 ===================== -->
+<!-- 상태 창 -->
 <div class="modal-overlay" id="status-modal">
     <div class="modal-box">
-        <button class="modal-close" onclick="document.getElementById('status-modal').classList.remove('open')">✕</button>
-        <h3>캐릭터 상태</h3>
+        <div class="modal-head"><h3>캐릭터 상태</h3><button class="modal-close" aria-label="닫기">✕</button></div>
 
         <div class="modal-section">
-            <div class="modal-stat-row"><span>출신</span><span>{{ player.origin }}</span></div>
-            <div class="modal-stat-row"><span>경지</span><span>{{ player.realm }}</span></div>
-            <div class="modal-stat-row"><span>턴</span><span>{{ player.turn }} / {{ player.max_turn }}</span></div>
-            <div class="modal-stat-row"><span>전투 경험</span><span>{{ player.battles }}</span></div>
-            <div class="modal-stat-row"><span>은자</span><span>{{ player.silver }}</span></div>
-            <div class="modal-stat-row"><span>무기</span><span>{% if gear.weapon %}{{ gear.weapon }} (공격력 +{{ gear.weapon_bonus }}){% else %}없음{% endif %}</span></div>
-            <div class="modal-stat-row"><span>방어구</span><span>{% if gear.armor %}{{ gear.armor }} (받는 피해 -{{ gear.armor_bonus }}){% else %}없음{% endif %}</span></div>
-            {% if player.traits %}
-            <div class="modal-stat-row"><span>장착 특성</span><span>{% for tk in player.traits %}{{ tk }}{% if not loop.last %}, {% endif %}{% endfor %}</span></div>
-            {% endif %}
+            <div class="stat-row"><span>출신</span><span>{{ player.origin }}</span></div>
+            <div class="stat-row"><span>사문</span><span>{% if sect %}{{ sect.name }}{% else %}없음{% endif %}</span></div>
+            {% if sect %}<div class="stat-row"><span>사문의 은혜</span><span>{{ sect.bonus_text }}</span></div>{% endif %}
+            <div class="stat-row"><span>경지</span><span>{{ player.realm }}</span></div>
+            <div class="stat-row"><span>명성</span><span>{{ player.fame }} ({{ fame }})</span></div>
+            {% if player.injury %}<div class="stat-row"><span>내상</span><span>{{ player.injury }}단계 (주는 피해 -{{ player.injury * 7 }}%, 회복으로 치료)</span></div>{% endif %}
+            <div class="stat-row"><span>전투 경험</span><span>{{ player.battles }} ({{ player.kills }}명 처치)</span></div>
+            <div class="stat-row"><span>은자</span><span>{{ player.silver }}</span></div>
+            <div class="stat-row"><span>무기</span><span>{% if gear.weapon %}{{ gear.weapon }} (공격력 +{{ gear.weapon_bonus }}){% else %}없음{% endif %}</span></div>
+            <div class="stat-row"><span>방어구</span><span>{% if gear.armor %}{{ gear.armor }} (받는 피해 -{{ gear.armor_bonus }}){% else %}없음{% endif %}</span></div>
         </div>
 
         <div class="modal-section">
-            <div class="modal-stat-row"><span>외공</span><span>{{ player.external }}</span></div>
-            <div class="modal-stat-row"><span>내공</span><span>{{ player.internal }}</span></div>
-            <div class="modal-stat-row"><span>무리</span><span>{{ player.martial }}</span></div>
-            <div class="modal-stat-row"><span>심경</span><span>{{ player.mind }}</span></div>
-            <div class="modal-stat-row"><span>체력</span><span>{{ player.hp }} / {{ player.max_hp() }}</span></div>
-            <div class="modal-stat-row"><span>내공(기력)</span><span>{{ player.qi }} / {{ player.max_qi() }}</span></div>
+            <h4>능력치</h4>
+            <div class="stat-row"><span>외공 (체력, 공격력)</span><span>{{ player.external }}</span></div>
+            <div class="stat-row"><span>내공 (기력, 비기 위력)</span><span>{{ player.internal }}</span></div>
+            <div class="stat-row"><span>무리 (공격력, 명중, 숙련도)</span><span>{{ player.martial }}</span></div>
+            <div class="stat-row"><span>심경 (치명타, 수련 효율, 돌파)</span><span>{{ player.mind }}</span></div>
+        </div>
+
+        <div class="modal-section">
+            <h4>별호: {{ alignment.title }}</h4>
+            {% for name, value in alignment["values"] %}
+            <div class="align-row">
+                <span>{{ name }}</span>
+                <div class="align-track"><div class="a-{{ name }}" style="width:{{ [value * 5, 100]|min }}%"></div></div>
+                <span>{{ value }}</span>
+            </div>
+            {% endfor %}
+            <p class="skill-meta" style="margin:.3rem 0 0">{{ alignment.benefit }}</p>
         </div>
 
         {% if progress %}
         <div class="modal-section">
-            <p style="color:#ffd27a; font-size:0.85rem; margin-bottom:6px;">다음 경지: {{ progress.next_realm }}</p>
-            <div class="modal-stat-row"><span>평균 능력치</span><span>{{ progress.avg_current }} / {{ progress.avg_required }}</span></div>
-            <div class="modal-stat-row"><span>최저 능력치</span><span>{{ progress.min_current }} / {{ progress.min_required }}</span></div>
-            <div class="modal-stat-row"><span>전투 경험</span><span>{{ progress.battles_current }} / {{ progress.battles_required }}</span></div>
+            <h4>다음 경지: {{ progress.next_realm }}</h4>
+            <div class="stat-row"><span>평균 능력치</span><span>{{ progress.avg_current }} / {{ progress.avg_required }}</span></div>
+            <div class="stat-row"><span>최저 능력치</span><span>{{ progress.min_current }} / {{ progress.min_required }}</span></div>
+            <div class="stat-row"><span>전투 경험</span><span>{{ progress.battles_current }} / {{ progress.battles_required }}</span></div>
         </div>
         {% endif %}
 
         <div class="modal-section">
-            <p style="color:#ffd27a; font-size:0.85rem; margin-bottom:6px;">보유 무공</p>
-            {% if player.skills %}
-                {% for s in player.skills %}
-                <div class="modal-stat-row"><span>{{ s.key }} ({{ s.grade }})</span><span>숙련도 {{ s.mastery }}{% if s.secret_unlocked %} · 비기✨{% endif %}</span></div>
-                {% endfor %}
-            {% else %}
-                <p class="codex-empty">아직 익힌 무공이 없습니다.</p>
-            {% endif %}
-        </div>
-    </div>
-</div>
-
-<!-- ===================== 도감 모달 ===================== -->
-<div class="modal-overlay" id="codex-modal">
-    <div class="modal-box">
-        <button class="modal-close" onclick="document.getElementById('codex-modal').classList.remove('open')">✕</button>
-        <h3>강호 도감 — 만난 자들</h3>
-        {% if codex_enemies %}
-            {% for e in codex_enemies %}
-            <div class="codex-item">
-                <div class="codex-name">{{ e.name }}</div>
-                <div class="codex-meta">{{ e.tier }} · {{ e.realm }} 경지 · 체력 {{ e.hp }} · 공격력 {{ e.attack }}</div>
+            <h4>무공</h4>
+            {% for s in player.skills %}
+            <div class="skill-row">
+                <div class="skill-head">
+                    <span>{{ s.name }} <span class="skill-meta">{{ s.type }}, {{ s.grade }}</span></span>
+                    {% if s.type == '공격무공' and not battle %}
+                    <form action="/set_main_skill" method="post">
+                        <input type="hidden" name="skill" value="{{ s.key }}">
+                        <button class="mini-btn {% if player.best_skill().key == s.key %}on{% endif %}" {% if player.best_skill().key == s.key %}disabled{% endif %}>{% if player.best_skill().key == s.key %}주무공{% else %}주무공으로{% endif %}</button>
+                    </form>
+                    {% endif %}
+                </div>
+                <div class="skill-meta">숙련도 {{ s.mastery }}/100{% if s.secret_name %}, 비기 「{{ s.secret_name }}」 {% if s.secret_unlocked %}해방{% else %}{{ s.secret_unlock_grade }} 등급 숙련도 {{ s.secret_unlock_mastery }}에 해방{% endif %}{% endif %}</div>
+                <div class="skill-meta">{{ s.desc }}</div>
             </div>
-            {% endfor %}
-        {% else %}
-            <p class="codex-empty">아직 강호에서 마주친 자가 없습니다.</p>
+            {% else %}<p class="codex-empty">아직 익힌 무공이 없습니다.</p>{% endfor %}
+        </div>
+
+        <div class="modal-section">
+            <h4>가방</h4>
+            {% for i in inventory %}
+            <div class="skill-row"><div class="skill-head">
+                <span>{{ i.name }} ×{{ i.count }}<br><span class="skill-meta">{{ i.desc }}</span></span>
+                {% if not battle and player.alive %}
+                <form action="/use_item" method="post"><input type="hidden" name="item" value="{{ i.key }}"><button class="mini-btn">사용</button></form>
+                {% endif %}
+            </div></div>
+            {% else %}<p class="codex-empty">시장에서 산 소비품이 이곳에 들어옵니다.</p>{% endfor %}
+        </div>
+
+        {% if traits %}
+        <div class="modal-section">
+            <h4>특성</h4>
+            {% for t in traits %}<div class="skill-row">{{ t.name }}<div class="skill-meta">{{ t.desc }}</div></div>{% endfor %}
+        </div>
         {% endif %}
     </div>
 </div>
 
-<!-- ===================== 초기화 확인 모달 ===================== -->
+{% include "_modals_shared.html" %}
+
+<!-- 초기화 창 -->
 <div class="modal-overlay" id="reset-modal">
     <div class="modal-box">
-        <button class="modal-close" onclick="document.getElementById('reset-modal').classList.remove('open')">✕</button>
-        <h3>강호행을 초기화하시겠습니까?</h3>
-        <p style="font-size:0.88rem; color:#ccc1a8; margin-bottom:16px;">현재 진행 상황이 모두 사라지고 메인 화면으로 돌아갑니다. 이 행동은 되돌릴 수 없습니다.</p>
-        <form action="/restart" method="post">
-            <button type="submit" style="width:100%; padding:12px; background:#8b0000; color:white; border:none; border-radius:6px; cursor:pointer;">초기화하고 메인으로</button>
-        </form>
+        <div class="modal-head"><h3>강호행을 초기화할까요?</h3><button class="modal-close" aria-label="닫기">✕</button></div>
+        <p style="font-size:.9rem">이번 회차의 진행이 사라지고 메인 화면으로 돌아갑니다. 카르마와 도감은 남습니다.</p>
+        <form action="/restart" method="post"><button class="danger-btn" type="submit">초기화하고 메인으로</button></form>
     </div>
 </div>
 
+<script src="{{ url_for('static', filename='game.js') }}"></script>
 </body>
-{% endif %}
 </html>
