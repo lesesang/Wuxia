@@ -3,7 +3,7 @@ import { readdirSync, readFileSync } from "node:fs";
 import { test } from "node:test";
 import { seed } from "./helpers.js";
 import { listAssets } from "../tools/build_asset_list.js";
-import { Battle, Enemy } from "../www/js/battle.js";
+import { Battle, Enemy, useConsumable } from "../www/js/battle.js";
 import { Player, Skill } from "../www/js/character.js";
 import { DB } from "../www/js/data.js";
 import { applyEffects, checkRequires, enemyIntro, eventView, pickRandomEvent, resolveChoice, validateEvents } from "../www/js/events.js";
@@ -964,6 +964,77 @@ test("기연의 비급은 익힌 계열이 더 자주 나온다", () => {
     if (learned.category === "도법") saber++;
   }
   assert.ok(saber > 300 / 7);
+});
+
+// ---------- 새 특성과 출신 ----------
+
+test("적 대사와 사건 반응의 조건이 실제 데이터를 가리킨다", () => {
+  const check = (r, where) => {
+    if (!r) return;
+    if (r.origin) assert.ok(DB.origins.origins[r.origin], where);
+    if (r.trait) assert.ok(DB.traits[r.trait], `${where} ${r.trait}`);
+    if (r.sect) assert.ok(DB.sects[r.sect], where);
+    if (r.item) assert.ok(DB.market[r.item], where);
+    for (const k of r.any_skill || []) assert.ok(DB.skills[k], `${where} ${k}`);
+  };
+  for (const [key, enemy] of Object.entries(DB.enemies)) for (const i of enemy.intros || []) check(i.requires, key);
+  for (const [key, event] of Object.entries(DB.events)) for (const v of event.variants || []) check(v.requires, key);
+});
+
+test("이벤트에서 만들어 쓰는 인연 표시는 어딘가에서 얻을 수 있다", () => {
+  const given = new Set();
+  const used = new Set();
+  const walk = (node) => {
+    if (Array.isArray(node)) return node.forEach(walk);
+    if (!node || typeof node !== "object") return undefined;
+    for (const f of node.flags || []) given.add(f);
+    for (const name of ["flag", "not_flag"]) if (node[name]) used.add(node[name]);
+    for (const f of node.any_flag || []) used.add(f);
+    return Object.values(node).forEach(walk);
+  };
+  walk(DB.events);
+  for (const flag of used) assert.ok(given.has(flag), flag);
+});
+
+test("새 출신은 서장과 첫 무기 문장을 갖는다", () => {
+  for (const origin of ["탈영병", "낙방서생"]) {
+    const p = new Player(origin);
+    assert.notEqual(eventView(p, "시작_병기고").text, DB.events.시작_병기고.text);
+    assert.ok(Object.values(DB.storyEvents).some((e) => e.requires?.origin === origin && e.turn === 1));
+  }
+});
+
+test("잠이 보약과 약손은 회복량을 늘린다", () => {
+  const heal = (traits, act) => {
+    const p = new Player("무림초출", traits);
+    p.hp = 1;
+    act(p);
+    return p.hp;
+  };
+  const rest = (p) => {
+    const game = new Game();
+    game.player = p;
+    game.action("휴식");
+  };
+  assert.ok(heal(["잠이보약"], rest) > heal([], rest));
+  const potion = (p) => { p.inventory.금창약 = 1; useConsumable(p, "금창약"); };
+  assert.ok(heal(["약손"], potion) > heal([], potion));
+});
+
+test("맷집은 받는 피해를 줄인다", () => {
+  const taken = (traits) => {
+    const p = new Player("무림초출", traits);
+    const b = new Battle(p, new Enemy("낭인", 1));
+    let sum = 0;
+    for (let i = 0; i < 300; i++) sum += b.incoming();
+    return sum;
+  };
+  assert.ok(taken(["맷집"]) < taken([]));
+});
+
+test("특성에 따라 사건 선택지가 늘어난다", () => {
+  const plain = eventView(new Player(), "밀주꾼").choices.length;
+  assert.equal(eventView(new Player("무림초출", ["주당"]), "밀주꾼").choices.length, plain + 1);
 });
 
 // ---------- 전체 플레이 ----------

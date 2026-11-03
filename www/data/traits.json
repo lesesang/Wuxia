@@ -484,5 +484,147 @@
         "qi_pct": 5
       }
     ]
+  },
+  "잠이보약": {
+    "name": "잠이 보약",
+    "desc": "회복으로 되찾는 체력과 기력이 50% 늘어난다.",
+    "rarity": "일반",
+    "cost": 3,
+    "effects": [
+      {
+        "type": "heal_rate",
+        "percent": 50
+      }
+    ]
+  },
+  "일격필살": {
+    "name": "일격필살",
+    "desc": "비기의 피해가 30% 늘어난다.",
+    "rarity": "희귀",
+    "cost": 6,
+    "effects": [
+      {
+        "type": "secret_power",
+        "percent": 30
+      }
+    ]
+  },
+  "승부사": {
+    "name": "승부사",
+    "desc": "치명타의 피해가 크게 늘어난다.",
+    "rarity": "일반",
+    "cost": 5,
+    "effects": [
+      {
+        "type": "crit_power",
+        "percent": 40
+      }
+    ]
+  },
+  "맷집": {
+    "name": "맷집",
+    "desc": "받는 피해가 8% 줄어든다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "damage_reduce",
+        "percent": 8
+      }
+    ]
+  },
+  "약손": {
+    "name": "약손",
+    "desc": "소비품의 회복량이 50% 늘어난다.",
+    "rarity": "일반",
+    "cost": 3,
+    "effects": [
+      {
+        "type": "consumable_rate",
+        "percent": 50
+      }
+    ]
+  },
+  "매의눈": {
+    "name": "매의 눈",
+    "desc": "공격이 빗나갈 일이 크게 줄어든다.",
+    "rarity": "일반",
+    "cost": 3,
+    "effects": [
+      {
+        "type": "hit_bonus",
+        "percent": 10
+      }
+    ]
+  },
+  "주당": {
+    "name": "주당",
+    "desc": "매달 체력과 기력을 3%씩 더 회복한다. 술자리에서 남다른 일이 생긴다.",
+    "rarity": "일반",
+    "cost": 3,
+    "effects": [
+      {
+        "type": "turn_regen",
+        "hp_pct": 3,
+        "qi_pct": 3
+      }
+    ]
+  },
+  "입담꾼": {
+    "name": "입담꾼",
+    "desc": "명성이 조금 알려진 채 시작하고 심경이 3 높다. 말로 풀리는 일이 많다.",
+    "rarity": "일반",
+    "cost": 3,
+    "effects": [
+      {
+        "type": "start_fame",
+        "amount": 5
+      },
+      {
+        "type": "start_stat",
+        "stat": "mind",
+        "amount": 3
+      }
+    ]
+  },
+  "저잣거리아이": {
+    "name": "저잣거리 아이",
+    "desc": "은자 없이 시작하지만 심경이 5, 무리가 3 높다. 밑바닥 사람들과 말이 통한다.",
+    "rarity": "일반",
+    "cost": 2,
+    "effects": [
+      {
+        "type": "start_silver",
+        "amount": -30
+      },
+      {
+        "type": "start_stat",
+        "stat": "mind",
+        "amount": 5
+      },
+      {
+        "type": "start_stat",
+        "stat": "martial",
+        "amount": 3
+      }
+    ]
+  },
+  "천둥벌거숭이": {
+    "name": "천둥벌거숭이",
+    "desc": "외공이 8 높지만 심경이 6 낮게 시작한다.",
+    "rarity": "일반",
+    "cost": 2,
+    "effects": [
+      {
+        "type": "start_stat",
+        "stat": "external",
+        "amount": 8
+      },
+      {
+        "type": "start_stat",
+        "stat": "mind",
+        "amount": -6
+      }
+    ]
   }
 }

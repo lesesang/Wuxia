@@ -86,10 +86,11 @@ export const enemyPool = (chapter) =>
   Object.keys(DB.enemies).filter((k) => (DB.enemies[k].chapters || []).includes(chapter));
 
 export function useConsumable(player, key) {
+  const rate = 1 + sumEffect(player.traits, "consumable_rate", "percent") / 100;
   for (const effect of DB.market[key].effects) {
     if (effect.type === "heal") {
-      if (effect.stat === "hp") player.healPercent(effect.percent, 0);
-      else player.healPercent(0, effect.percent);
+      if (effect.stat === "hp") player.healPercent(effect.percent * rate, 0);
+      else player.healPercent(0, effect.percent * rate);
     } else if (effect.type === "cure" && effect.what === "injury") {
       player.addInjury(-(effect.amount ?? 1));
     }
@@ -159,10 +160,14 @@ export class Battle {
   secretPower(skill) {
     const p = this.player;
     const base = p.external + p.martial + equipmentBonus(p, "weapon") + p.internal * SECRET_INTERNAL_RATE;
-    return Math.max(1, Math.trunc(base * skill.effectiveMultiplier() * skill.secretMultiplier * this.attackScale()));
+    return Math.max(1, Math.trunc(base * skill.effectiveMultiplier() * skill.secretMultiplier * this.attackScale()
+      * (1 + sumEffect(p.traits, "secret_power", "percent") / 100)));
   }
 
-  hits() { return rng.random() < BASE_HIT + this.player.martial * 0.001 - this.enemy.evasion; }
+  hits() {
+    const bonus = sumEffect(this.player.traits, "hit_bonus", "percent") / 100;
+    return rng.random() < BASE_HIT + bonus + this.player.martial * 0.001 - this.enemy.evasion;
+  }
 
   critChance() {
     const p = this.player;
@@ -190,7 +195,7 @@ export class Battle {
       this.counterPct = 0;
     }
     if (rng.random() < this.critChance()) {
-      damage *= 1.5;
+      damage *= 1.5 + sumEffect(p.traits, "crit_power", "percent") / 100;
       notes.push("치명타!");
     }
     damage = Math.max(1, Math.trunc(damage) - this.enemy.armor);
@@ -333,6 +338,7 @@ export class Battle {
     let base = this.enemy.attack * this.enemy.attackMultiplier() * multiplier;
     base *= 1 - realmBonus(this.player.realm) / 2;
     base *= 1 - sectBonus(this.player, "damage_reduce") / 100;
+    base *= 1 - sumEffect(this.player.traits, "damage_reduce", "percent") / 100;
     return Math.max(1, Math.trunc(base * uniform(0.9, 1.1)) - equipmentBonus(this.player, "armor"));
   }
 
