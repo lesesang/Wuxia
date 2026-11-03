@@ -68,10 +68,8 @@ function play({ style = "섞어서", useMarket = true, origin = "무림초출", 
   for (let i = 0; i < 3000 && game.player.alive; i++) {
     const p = game.player;
     if (game.event && DB.events[game.event.key].prelude) {
-      // 사람은 대개 지금 무공에 맞는 무기를 고른다
       const list = eventView(p, game.event.key).choices;
-      const own = list.find((c) => DB.events[game.event.key].choices[c.index]?.outcomes[0].effects.start_weapon === p.bestSkill().category);
-      game.chooseEvent((own || choice(list)).index);
+      game.chooseEvent(choice(list).index);
     } else if (game.event) {
       const view = eventView(p, game.event.key);
       const open = view.choices.filter((c) => !c.locked);
@@ -109,7 +107,10 @@ const ROWS = [
   ["수련 위주 / 시장 이용", { style: "수련 위주" }],
   ["섞어서 / 시장 안 씀", { useMarket: false }],
   ["섞어서 / 남궁세가", { origin: "남궁세가" }],
-  ["섞어서 / 곤륜파", { origin: "곤륜파" }],
+  ["섞어서 / 하북팽가", { origin: "하북팽가" }],
+  ["섞어서 / 표두", { origin: "표국표사" }],
+  ["섞어서 / 개방", { origin: "개방제자" }],
+  ["섞어서 / 신교 사자", { origin: "신교사자" }],
   ["섞어서 / 하오문", { origin: "하오문" }],
   ["섞어서 / 권마계승", { origin: "권마계승" }],
   ["탐색 위주 / 특성 1개", { style: "탐색 위주", traits: ["천생근골"] }],

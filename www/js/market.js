@@ -12,8 +12,8 @@ const LAST_MARKET_TURN = 119;
 /** 시장 등급 1~4는 챕터를 따르고, 5는 마지막의 수상한 누군가 */
 const marketNumber = (turn) => (turn === LAST_MARKET_TURN ? 5 : Math.min(4, getChapter(turn)));
 
-const MISMATCH_RATE = 0.75; // 주무공과 맞지 않는 무기는 공격력이 이만큼만 나온다
-const MAIN_STYLE_WEIGHT = 3; // 주무공 계열 품목이 시장에 나올 비중
+const MISMATCH_RATE = 0.75; // 주무공과 맞지 않는 병기는 위력이 이만큼만 나온다
+const MAIN_STYLE_WEIGHT = 3; // 주무공 계열 품목이 장터에 나올 비중
 const KNOWN_STYLE_WEIGHT = 1.5; // 익힌 다른 무공 계열 품목의 비중
 
 /** 이 플레이어가 그 장비에서 실제로 얻는 수치 */
@@ -166,7 +166,7 @@ export function buy(player, market, key) {
   entry.left -= 1;
   if (item.consumable) {
     player.addItem(key);
-    return [true, `「${item.name}」을(를) 샀다. (은자 -${price}) 가방에 넣었다.`];
+    return [true, `「${item.name}」을(를) 샀다. (은자 -${price}) 행낭에 넣었다.`];
   }
   for (const effect of item.effects) applyEffect(player, key, effect);
   return [true, `「${item.name}」을(를) 샀다. (은자 -${price})`];
