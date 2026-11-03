@@ -4,11 +4,11 @@ import { GRADE_ORDER, Player, Skill, STAT_NAMES } from "./character.js";
 import { DB } from "./data.js";
 import { grantStartGifts,
   advanceChain, applyEffects, checkRequires, dueChainEvent, enemyIntro, LAST_CHAIN_TURN, pickFortune, pickRandomEvent, resolveChoice,
-  startChain, storyEventForTurn,
+  reactiveLine, startChain, storyEventForTurn,
 } from "./events.js";
 import { buy, openMarket } from "./market.js";
 import {
-  activeContent, addKarma, claimAchievements, claimMilestones, clearCheckpoint, extraSlots, rewardTraits, loadCheckpoint, loadMeta, recordRun, saveCheckpoint,
+  activeContent, addKarma, claimAchievements, clearCheckpoint, extraSlots, rewardTraits, loadCheckpoint, loadMeta, recordRun, saveCheckpoint,
   storeLegacy, takeLegacy, updateGlobalCodex, updateKnown, upgradeTraits,
 } from "./meta.js";
 import { pickWeighted, randInt, rng } from "./rng.js";
@@ -522,7 +522,7 @@ export class Game {
   }
 }
 
-/** 판이 끝나면 경지에 따라 받는다. 천마를 넘었으면 결말 값을, 아니면 도달한 장을 더한다. */
+/** 판이 끝나면 도달한 장과 경지, 결말의 값을 따로 받는다. */
 function karmaGain(player, key, victory) {
   const lines = [];
   let total = 0;
@@ -532,10 +532,9 @@ function karmaGain(player, key, victory) {
       lines.push(`${label} +${amount}`);
     }
   };
-  if (key === "사망") add("도달한 장", getChapter(Math.min(player.turn, player.maxTurn)));
-  else add(DB.endings.titles[key], DB.endings.karma[key]);
+  add("도달한 장", getChapter(Math.min(player.turn, player.maxTurn)));
+  add(DB.endings.titles[key], DB.endings.karma[key]);
   add("경지", realmIndex(player.realm));
-  if (victory) for (const k of claimMilestones(["격파"])) add("첫 천마 격파", DB.karma.milestones[k]);
   return { total, lines };
 }
 
@@ -557,13 +556,16 @@ function inheritedGear(key) {
 }
 
 export function buildEpilogue(player, ending) {
-  if (!["기본", "생사경", "배드"].includes(ending)) return [];
   const { endings } = DB;
-  const lines = [endings.epilogue[player.dominantAlignment() || "중립"]];
+  const framed = (endings.frames[ending] || []).map((group) => reactiveLine(player, group)).filter(Boolean);
+  if (!["기본", "생사경", "배드"].includes(ending)) return framed;
+  const lines = [];
+  // 상처뿐인 승리는 성향과 출신의 맺음말을 제 문장으로 쓴다
+  if (ending !== "배드") lines.push(endings.epilogue[player.dominantAlignment() || "중립"]);
   if (endings.sect_epilogue[player.sect]) lines.push(endings.sect_epilogue[player.sect]);
-  if (endings.origin_epilogue[player.originKey]) lines.push(endings.origin_epilogue[player.originKey]);
+  if (ending !== "배드" && endings.origin_epilogue[player.originKey]) lines.push(endings.origin_epilogue[player.originKey]);
   for (const [flag, text] of endings.flag_epilogue) if (player.hasFlag(flag)) lines.push(text);
-  return lines;
+  return [...framed, ...lines];
 }
 
 export { Skill, STAT_NAMES };
