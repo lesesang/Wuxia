@@ -1,4 +1,4 @@
-// 은자와 시장. 품목은 data/market.json 에 있으며 항목 추가만으로 늘어난다.
+// 은자와 장터. 품목은 data/market.json 에 있으며 항목 추가만으로 늘어난다.
 import { Skill, STAT_CAP } from "./character.js";
 import { DB } from "./data.js";
 import { pick, shuffled } from "./rng.js";
@@ -8,7 +8,7 @@ const STOCK_SIZE = 8;
 
 const LAST_MARKET_TURN = 119;
 
-/** 시장 등급 1~4는 챕터를 따르고, 5는 마지막의 수상한 누군가 */
+/** 장터 품계 1~4는 챕터를 따르고, 5는 마지막의 수상한 누군가 */
 const marketNumber = (turn) => (turn === LAST_MARKET_TURN ? 5 : Math.min(4, getChapter(turn)));
 
 export function equipmentBonus(player, slot) {
@@ -16,7 +16,7 @@ export function equipmentBonus(player, slot) {
   return item?.effects.find((e) => e.type === "equip")?.bonus || 0;
 }
 
-/** 무기와 방어구는 지금 것보다 나은 물건을 하나씩 꼭 진열한다. */
+/** 병기와 호신구는 지금 것보다 나은 물건을 하나씩 꼭 진열한다. */
 function gearForSale(pool, player) {
   const picks = [];
   for (const slot of ["weapon", "armor"]) {
@@ -99,7 +99,7 @@ export function buy(player, market, key) {
   entry.left -= 1;
   if (item.consumable) {
     player.addItem(key);
-    return [true, `「${item.name}」을(를) 샀다. (은자 -${price}) 가방에 넣었다.`];
+    return [true, `「${item.name}」을(를) 샀다. (은자 -${price}) 행낭에 넣었다.`];
   }
   for (const effect of item.effects) applyEffect(player, key, effect);
   return [true, `「${item.name}」을(를) 샀다. (은자 -${price})`];

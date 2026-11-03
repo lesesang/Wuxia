@@ -1,4 +1,4 @@
-// 턴제 전투. 적의 필살기는 직전 라운드에 예고되고, 경공으로 흘려낼 수 있다.
+// 달제 전투. 적의 필살기는 직전 합에 예고되고, 경공으로 흘려낼 수 있다.
 import { MAX_INJURY, Skill, STAT_NAMES } from "./character.js";
 import { DB } from "./data.js";
 import { equipmentBonus } from "./market.js";
@@ -13,7 +13,7 @@ export const INJURY_PENALTY = 7;
 const FAME_BY_TIER = { 일반: 1, 난적: 2, 강적: 4, 보스: 10 };
 const STAT_GROWTH_RANGE = { 일반: [1, 2], 난적: [1, 3], 강적: [2, 4], 보스: [5, 10] };
 
-/** 표(12턴 간격)에서 해당 턴의 값을 읽는다. */
+/** 표(12달 간격)에서 해당 달의 값을 읽는다. */
 function curveAt(curve, turn) {
   const position = Math.max(0, Math.min(curve.length - 1, turn / 12));
   const low = Math.floor(position);
@@ -22,7 +22,7 @@ function curveAt(curve, turn) {
 }
 
 export class Enemy {
-  /** turn을 주면 그 시기에 맞게 강해진다. 데이터의 hp와 attack은 level 턴 기준 값이다. */
+  /** turn을 주면 그 시기에 맞게 강해진다. 데이터의 hp와 attack은 level 달 기준 값이다. */
   constructor(key, turn = null) {
     const data = DB.enemies[key];
     if (!data) throw new Error(`알 수 없는 적: ${key}`);
@@ -60,7 +60,7 @@ export class Enemy {
   takeDamage(amount) { this.hp = Math.max(0, this.hp - amount); }
   attackMultiplier() { return this.phase === 0 ? 1 : this.phases[this.phase - 1].attack_mult; }
 
-  /** 체력이 다음 단계 기준 아래로 내려가면 단계를 올리고 그 문구를 돌려준다. */
+  /** 기혈이 다음 단계 기준 아래로 내려가면 단계를 올리고 그 문구를 돌려준다. */
   advancePhase() {
     if (this.phase < this.phases.length) {
       const next = this.phases[this.phase];
@@ -72,7 +72,7 @@ export class Enemy {
     return null;
   }
 
-  /** 이 라운드의 필살기. 주기가 긴 것을 우선한다. */
+  /** 이 합의 필살기. 주기가 긴 것을 우선한다. */
   specialForRound(round) {
     let chosen = null;
     for (const special of this.specials) {
@@ -112,11 +112,11 @@ export class Battle {
     this.sealed = 0;
     this.enemyPoison = null;
     this.standUsed = false;
-    // 전투 시작 시 발동하는 특성 효과 (99 한계 무시, 전투가 끝나면 되돌림)
+    // 전투 시작 시 발동하는 천품 효과 (99 한계 무시, 전투가 끝나면 되돌림)
     for (const buff of battleBuffs(player.traits, "on_battle_start")) {
       player[buff.stat] += buff.amount;
       this.tempBuffs.push([buff.stat, buff.amount]);
-      this.log.push(`(특성 효과: ${STAT_NAMES[buff.stat]} 임시 +${buff.amount})`);
+      this.log.push(`(천품 효과: ${STAT_NAMES[buff.stat]} 임시 +${buff.amount})`);
     }
   }
 
@@ -129,10 +129,10 @@ export class Battle {
     for (const buff of battleBuffs(this.player.traits, "on_battle_end")) {
       if (buff.stat === "hp") {
         const [healed] = this.player.healPercent(buff.percent, 0);
-        this.log.push(`(특성 효과: 체력 +${healed})`);
+        this.log.push(`(천품 효과: 기혈 +${healed})`);
       } else if (buff.stat === "qi") {
         const [, healed] = this.player.healPercent(0, buff.percent);
-        this.log.push(`(특성 효과: 기력 +${healed})`);
+        this.log.push(`(천품 효과: 내력 +${healed})`);
       }
     }
   }
@@ -184,7 +184,7 @@ export class Battle {
     }
     if (rng.random() < this.critChance()) {
       damage *= 1.5;
-      notes.push("치명타!");
+      notes.push("급소 타격!");
     }
     damage = Math.max(1, Math.trunc(damage) - this.enemy.armor);
     this.enemy.takeDamage(damage);
@@ -216,7 +216,7 @@ export class Battle {
       return this.basicAttack();
     }
     if (this.player.qi < skill.qiCost) {
-      this.log.push(`기력이 모자라 ${skill.name}을(를) 펼치지 못했다.`);
+      this.log.push(`내력이 모자라 ${skill.name}을(를) 펼치지 못했다.`);
       return this.basicAttack();
     }
     this.player.qi -= skill.qiCost;
@@ -227,11 +227,11 @@ export class Battle {
 
   useSecret(skill) {
     if (!skill.secretUnlocked) {
-      this.log.push(`${skill.name}의 비기는 아직 해방되지 않았다.`);
+      this.log.push(`${skill.name}의 비기는 아직 터득되지 않았다.`);
       return 0;
     }
     if (this.player.qi < skill.secretQiCost) {
-      this.log.push(`기력이 모자라 비기를 펼치지 못했다. (기력 ${skill.secretQiCost} 필요)`);
+      this.log.push(`내력이 모자라 비기를 펼치지 못했다. (내력 ${skill.secretQiCost} 필요)`);
       return 0;
     }
     if (this.sealed) {
@@ -266,7 +266,7 @@ export class Battle {
     const qiValue = skill.effectValue("heal_qi_pct");
     const [hpChange, qiChange] = p.healPercent(hpValue > 0 ? hpValue * boost : hpValue, qiValue * boost);
     const signed = (n) => (n >= 0 ? `+${n}` : `${n}`);
-    this.log.push(`${skill.name}을(를) 운기했다. (체력 ${signed(hpChange)}, 기력 ${signed(qiChange)})`);
+    this.log.push(`${skill.name}을(를) 운기했다. (기혈 ${signed(hpChange)}, 내력 ${signed(qiChange)})`);
     if (this.sealed) {
       this.sealed = 0;
       this.log.push("막혔던 혈도가 풀렸다.");
@@ -275,7 +275,7 @@ export class Battle {
     const rounds = skill.effect.buff_rounds || 0;
     if (percent > 0 && rounds > 0) {
       this.atkBuff = { percent, rounds: rounds + 1 };
-      this.log.push(`기세가 오른다. (${rounds}라운드 동안 공격력 +${percent}%)`);
+      this.log.push(`기세가 오른다. (${rounds}합 동안 위력 +${percent}%)`);
     }
     this.log.push(...skill.gainMastery(p.masteryGainAmount()));
   }
@@ -287,7 +287,7 @@ export class Battle {
       return null;
     }
     if (this.player.qi < skill.qiCost) {
-      this.log.push("기력이 모자라 경공을 펼치지 못했다.");
+      this.log.push("내력이 모자라 경공을 펼치지 못했다.");
       return null;
     }
     this.player.qi -= skill.qiCost;
@@ -298,7 +298,7 @@ export class Battle {
 
   useItem(key) {
     if (!(this.player.inventory[key] > 0) || !DB.market[key]) {
-      this.log.push("가방에 없는 물건이다.");
+      this.log.push("행낭에 없는 물건이다.");
       return;
     }
     const item = DB.market[key];
@@ -359,7 +359,7 @@ export class Battle {
     const p = this.player;
     if (special.seal) {
       this.sealed = special.seal + 1;
-      this.log.push(`혈도를 짚였다! (${special.seal}라운드 동안 무공 봉쇄, 심법으로 풀 수 있다)`);
+      this.log.push(`혈도를 짚였다! (${special.seal}합 동안 무공 봉쇄, 심법으로 풀 수 있다)`);
     }
     if (special.injury && p.injury < MAX_INJURY) {
       p.addInjury(1);
@@ -367,17 +367,17 @@ export class Battle {
     }
     if (special.poison) {
       this.poison = { ...special.poison };
-      this.log.push(`독이 퍼진다. (${this.poison.rounds}라운드 동안 매 라운드 ${this.poison.damage} 피해)`);
+      this.log.push(`독이 퍼진다. (${this.poison.rounds}합 동안 매 합 ${this.poison.damage} 피해)`);
     }
     if (special.qi_drain) {
       const drained = Math.trunc(p.maxQi() * special.qi_drain / 100);
       p.qi = Math.max(0, p.qi - drained);
-      this.log.push(`기력을 빼앗겼다! (기력 -${drained})`);
+      this.log.push(`내력을 빼앗겼다! (내력 -${drained})`);
     }
     if (special.heal_pct) {
       const healed = Math.trunc(this.enemy.maxHp * special.heal_pct / 100);
       this.enemy.hp = Math.min(this.enemy.maxHp, this.enemy.hp + healed);
-      this.log.push(`${this.enemy.name}의 상처가 아문다. (체력 +${healed})`);
+      this.log.push(`${this.enemy.name}의 상처가 아문다. (기혈 +${healed})`);
     }
   }
 
@@ -414,7 +414,7 @@ export class Battle {
 
   // ---------- 진행 ----------
 
-  /** 한 라운드 진행. 전투가 끝나면 결과를, 계속되면 null을 돌려준다. */
+  /** 한 합 진행. 전투가 끝나면 결과를, 계속되면 null을 돌려준다. */
   runRound(action = "기본공격", skill = null, itemKey = null) {
     this.roundNum += 1;
     let evadeSkill = null;
@@ -427,7 +427,7 @@ export class Battle {
       this.useMindset();
     } else if (action === "경공") {
       evadeSkill = this.useMovement();
-    } else if (action === "소비품") {
+    } else if (action === "상비약") {
       this.useItem(itemKey);
     } else if (skill) {
       this.useSkill(skill);
@@ -459,7 +459,7 @@ export class Battle {
       this.player.battles += exp;
       this.player.kills += 1;
       if (this.enemy.outro) this.log.push(this.enemy.outro);
-      this.log.push(`${this.enemy.name}을(를) 쓰러뜨렸다! 전투 경험 +${exp}`);
+      this.log.push(`${this.enemy.name}을(를) 쓰러뜨렸다! 실전 경험 +${exp}`);
       this.player.fame += FAME_BY_TIER[this.enemy.tier] || 0;
       this.applyStatGrowth();
       this.gainSilver();
@@ -486,7 +486,7 @@ export class Battle {
     }
   }
 
-  /** 승리 시 4개 능력치 중 랜덤 2개가 적 등급 범위만큼 오른다. */
+  /** 승리 시 4개 기량 중 랜덤 2개가 적 품계 범위만큼 오른다. */
   applyStatGrowth() {
     const stats = ["external", "internal", "martial", "mind"];
     const first = pick(stats);

@@ -342,3 +342,6 @@ body.in-battle #app { height: 100%; display: flex; flex-direction: column; max-w
 
 body { word-break: keep-all; overflow-wrap: anywhere; }
 .float { top: 1.5rem; }
+
+.choice-btn.special { border-color: var(--gold); }
+.choice-tag { display: inline-block; font-size: .72rem; color: var(--ink); background: var(--gold); padding: 0 .4rem; margin-right: .4rem; vertical-align: 1px; }
