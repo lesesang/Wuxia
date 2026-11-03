@@ -522,17 +522,18 @@ export class Game {
   }
 }
 
-/** 엔딩 값에 도달한 장과 경지, 처음 이룬 일을 더한다. */
+/** 판이 끝나면 경지에 따라 받는다. 천마를 넘었으면 결말 값을, 아니면 도달한 장을 더한다. */
 function karmaGain(player, key, victory) {
-  const lines = [`${DB.endings.titles[key]} +${DB.endings.karma[key]}`];
-  let total = DB.endings.karma[key];
+  const lines = [];
+  let total = 0;
   const add = (label, amount) => {
     if (amount > 0) {
       total += amount;
       lines.push(`${label} +${amount}`);
     }
   };
-  add("도달한 장", getChapter(Math.min(player.turn, player.maxTurn)) - 1);
+  if (key === "사망") add("도달한 장", getChapter(Math.min(player.turn, player.maxTurn)));
+  else add(DB.endings.titles[key], DB.endings.karma[key]);
   add("경지", realmIndex(player.realm));
   if (victory) for (const k of claimMilestones(["격파"])) add("첫 천마 격파", DB.karma.milestones[k]);
   return { total, lines };

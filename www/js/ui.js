@@ -137,7 +137,7 @@ function codexRows(tab, meta) {
       total: Object.keys(DB.endings.titles).length - 1, filterLabel: "", filters: [], empty: "",
       rows: Object.keys(DB.endings.titles).filter((k) => k !== "생사경" || meta.endings_seen.includes(k)).map((k) => {
         const seen = meta.endings_seen.includes(k);
-        return { key: k, name: seen ? DB.endings.titles[k] : "아직 보지 못한 결말", meta: `카르마 +${DB.endings.karma[k]}`, desc: seen ? DB.endings.text[k] : "", cats: [] };
+        return { key: k, name: seen ? DB.endings.titles[k] : "아직 보지 못한 결말", meta: k === "사망" ? "도달한 장만큼 카르마" : `카르마 +${DB.endings.karma[k]}`, desc: seen ? DB.endings.text[k] : "", cats: [] };
       }),
     };
   }
@@ -370,7 +370,7 @@ function rewardPanel(meta) {
     return `<div class="reward-row${done ? " done" : ""}"><span class="reward-at">${r.at}</span><span class="reward-main"><b>${done ? "✓ " : ""}${esc(r.name)}</b><span class="pick-desc block">${esc(r.desc)}</span></span></div>`;
   }).join("");
   const { milestones, achievements } = DB.karma;
-  const endings = Object.entries(DB.endings.karma).filter(([k]) => k !== "생사경").map(([k, v]) => `${DB.endings.titles[k]} +${v}`).join(", ");
+  const endings = Object.entries(DB.endings.karma).filter(([k]) => !["생사경", "사망"].includes(k)).map(([k, v]) => `${DB.endings.titles[k]} +${v}`).join(", ");
   const left = achievements.filter((a) => !a.hidden && !meta.achievements.includes(a.key));
   const total = left.reduce((sum, a) => sum + a.karma, 0);
   return `<p class="section-note">카르마를 써도 줄지 않는 누적 카르마가 쌓이면 저절로 받습니다. 사거나 장착할 필요가 없습니다.</p>
@@ -378,8 +378,10 @@ function rewardPanel(meta) {
       <p>누적 카르마 <b>${meta.total_karma}</b>${next ? `, 다음 「${esc(next.name)}」까지 ${next.at - meta.total_karma}` : ", 모두 받았습니다"}</p></div>
     ${rows}
     <h4 class="shop-group">카르마를 얻는 길</h4>
-    <p class="help-line"><b>결말</b>: ${esc(endings)}</p>
-    <p class="help-line"><b>강호행마다</b>: 도달한 장과 오른 경지에 따라 더 받습니다. 첫 천마 격파 +${milestones.격파}</p>
+    <p class="help-line"><b>경지</b>: 판이 끝날 때 오른 경지에 따라 절정 +1, 초절정 +2, 화경 +3, 현경 +4</p>
+    <p class="help-line"><b>도달한 장</b>: 천마를 넘지 못하고 끝나면 1장 +1부터 5장 +5까지</p>
+    <p class="help-line"><b>결말</b>: 결말을 보면 도달한 장 대신 받습니다. ${esc(endings)}</p>
+    <p class="help-line"><b>첫 천마 격파</b>: +${milestones.격파}</p>
     <p class="help-line"><b>공적</b>: 아직 이루지 못한 공적 ${left.length}개, 합쳐서 +${total}. 강호록의 공적 칸에서 볼 수 있습니다.</p>`;
 }
 
