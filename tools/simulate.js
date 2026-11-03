@@ -74,7 +74,7 @@ function play({ style = "섞어서", useMarket = true, origin = "무림초출", 
       game.advanceTurn();
     } else {
       let hurt = p.hp < p.maxHp() * 0.55 || p.injury >= 2;
-      if (p.turn >= 58 && (p.hp < p.maxHp() * 0.9 || p.qi < p.maxQi() * 0.7)) hurt = true;
+      if (p.turn >= 118 && (p.hp < p.maxHp() * 0.9 || p.qi < p.maxQi() * 0.7)) hurt = true;
       if (hurt && p.inventory.활혈단 && p.injury >= 2) {
         game.useItem("활혈단");
         continue;
@@ -107,7 +107,7 @@ for (const [name, options] of ROWS) {
   const tally = {};
   for (const r of results) tally[r.ending] = (tally[r.ending] || 0) + 1;
   const wins = results.filter((r) => ["배드", "기본", "생사경"].includes(r.ending)).length;
-  const reached = results.filter((r) => r.player.turn >= 60).length;
+  const reached = results.filter((r) => r.player.turn >= 120).length;
   const avg = results.reduce((t, r) => t + (r.player.external + r.player.internal + r.player.martial + r.player.mind) / 4, 0) / count;
-  console.log(`${name}: 격파 ${Math.round(wins * 100 / count)}%, 60턴 도달 ${Math.round(reached * 100 / count)}%, 평균 능력치 ${avg.toFixed(0)}`, JSON.stringify(tally));
+  console.log(`${name}: 격파 ${Math.round(wins * 100 / count)}%, 120턴 도달 ${Math.round(reached * 100 / count)}%, 평균 능력치 ${avg.toFixed(0)}`, JSON.stringify(tally));
 }

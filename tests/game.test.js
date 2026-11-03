@@ -12,7 +12,7 @@ import { blockReason, buy, openMarket, priceOf } from "../www/js/market.js";
 import {
   exportRecords, importRecords, loadCheckpoint, loadMeta, saveMeta, unlockOrigin,
 } from "../www/js/meta.js";
-import { breakthroughBlock, byname, fameRank, traitSlots } from "../www/js/rules.js";
+import { applyGrowth, breakthroughBlock, byname, fameRank, getChapter, getYear, marketTurns, traitSlots } from "../www/js/rules.js";
 import { storage } from "../www/js/storage.js";
 
 function newGame(origin = "무림초출") {
@@ -59,7 +59,7 @@ test("출신별 서장과 챕터 줄거리가 있다", () => {
   const prologues = new Set(stories.filter((e) => e.turn === 1).map((e) => e.requires.origin));
   assert.deepEqual([...prologues].sort(), Object.keys(DB.origins.origins).sort());
   const turns = stories.map((e) => e.turn);
-  for (const t of [13, 25, 30, 37, 49, 55, 60]) assert.ok(turns.includes(t));
+  for (const t of [25, 49, 60, 73, 97, 115, 120]) assert.ok(turns.includes(t));
 });
 
 test("챕터마다 사건, 적이 충분하다", () => {
@@ -115,7 +115,7 @@ test("처치 보상은 능력치 2종, 등급 범위 안", () => {
   assert.ok(battle.runRound("기본공격").victory);
   const gains = [p.external, p.internal, p.martial, p.mind].map((v, i) => v - before[i]);
   assert.equal(gains.filter((g) => g > 0).length, 2);
-  assert.ok(gains.every((g) => g >= 0 && g <= 3));
+  assert.ok(gains.every((g) => g >= 0 && g <= 2));
 });
 
 // ---------- 전투 ----------
@@ -230,7 +230,7 @@ test("일반 전투 사망은 곧바로 엔딩과 카르마", () => {
 test("천마는 엔딩 때 도감에 기록된다", () => {
   const game = newGame();
   game.player.hp = 1;
-  toTurnEnd(game, 60);
+  toTurnEnd(game, 120);
   game.pendingNext = false;
   game.startFinalBattle();
   for (let i = 0; i < 5 && game.battle; i++) game.battleAction("심법");
@@ -239,7 +239,7 @@ test("천마는 엔딩 때 도감에 기록된다", () => {
 
 test("최종전에서는 도망칠 수 없다", () => {
   const game = newGame();
-  toTurnEnd(game, 59);
+  toTurnEnd(game, 119);
   game.advanceTurn();
   game.marketLeave();
   game.chooseEvent(0);
@@ -314,12 +314,12 @@ test("초식 이름이 전투 문장에 나온다", () => {
 
 // ---------- 이벤트와 성향 ----------
 
-test("13턴 줄거리는 행동을 쓰지 않고 고를 때까지 막는다", () => {
+test("25턴 줄거리는 행동을 쓰지 않고 고를 때까지 막는다", () => {
   const game = newGame();
-  toTurnEnd(game, 12);
+  toTurnEnd(game, 24);
   game.advanceTurn();
   game.marketLeave();
-  assert.equal(game.player.turn, 13);
+  assert.equal(game.player.turn, 25);
   assert.equal(game.event.key, "2장_세력");
   game.action("수련");
   assert.ok(game.event);
@@ -347,7 +347,7 @@ test("무작위 사건은 회차당 한 번", () => {
 test("성향 혜택", () => {
   let p = new Player();
   p.alignment.정도 = 5;
-  assert.equal(priceOf(p, "호골주"), 54);
+  assert.equal(priceOf(p, "호골주"), Math.trunc(DB.market.호골주.price * 0.9));
   p = new Player();
   p.alignment.사도 = 5;
   assert.equal(p.gainSilver(100), 125);
@@ -367,7 +367,7 @@ test("능력치는 1 아래로 내려가지 않고 효과 요약이 나온다", 
 
 test("마도 10이면 천마봉에서 귀순할 수 있다", () => {
   const game = newGame();
-  toTurnEnd(game, 59);
+  toTurnEnd(game, 119);
   game.player.alignment = { 정도: 0, 사도: 0, 마도: 12 };
   game.advanceTurn();
   game.marketLeave();
@@ -381,7 +381,7 @@ test("마도 10이면 천마봉에서 귀순할 수 있다", () => {
 
 test("단목휘와 동맹이면 천마 체력이 줄어든다", () => {
   const game = newGame();
-  toTurnEnd(game, 59);
+  toTurnEnd(game, 119);
   game.player.addFlag("단목휘_동맹");
   game.advanceTurn();
   game.marketLeave();
@@ -406,7 +406,7 @@ test("비무대회는 세 번 싸우고 보상을 준다", () => {
   const game = newGame();
   const p = game.player;
   Object.assign(p, { external: 95, martial: 95, internal: 95, mind: 95, hp: 575, qi: 575 });
-  toTurnEnd(game, 29);
+  toTurnEnd(game, 59);
   game.advanceTurn();
   assert.equal(game.event.key, "천하제일비무");
   game.chooseEvent(0);
@@ -439,14 +439,14 @@ test("별호와 명성", () => {
   p.fame = 40;
   p.alignment.정도 = 5;
   assert.ok(byname(p).endsWith("검협"));
-  assert.equal(fameRank(40), "일방의 고수");
+  assert.equal(fameRank(60), "일방의 고수");
 });
 
 test("실전 경험만 모자라면 알려 준다", () => {
   const p = new Player();
   p.external = p.internal = p.martial = p.mind = 40;
   assert.ok(breakthroughBlock(p).includes("실전"));
-  p.battles = 5;
+  p.battles = 8;
   assert.equal(breakthroughBlock(p), null);
 });
 
@@ -476,7 +476,7 @@ test("시장은 턴을 쓰지 않고 소비품은 가방에 들어간다", () =>
 test("진열은 겹치지 않고 아는 비급은 빠지며 더 좋은 장비가 있다", () => {
   const p = new Player();
   p.learnSkill(new Skill("초상비"));
-  for (const turn of [12, 24, 36, 48, 59]) {
+  for (const turn of [12, 24, 36, 48, 60, 72, 84, 96, 108, 119]) {
     for (let i = 0; i < 30; i++) {
       const keys = openMarket(turn, p).stock.map((s) => s.key);
       assert.equal(new Set(keys).size, keys.length);
@@ -485,16 +485,15 @@ test("진열은 겹치지 않고 아는 비급은 빠지며 더 좋은 장비가
   }
   for (let i = 0; i < 30; i++) {
     const keys = openMarket(12, new Player()).stock.map((s) => s.key);
-    assert.ok(keys.some((k) => ["철검", "강철검"].includes(k)) || keys.includes("철검"));
-    assert.ok(keys.includes("가죽호구"));
+    assert.ok(keys.includes("철검") && keys.includes("가죽호구"));
   }
 });
 
 test("성향 전용 물건은 그 길을 걷는 사람에게만", () => {
   const p = new Player();
-  for (let i = 0; i < 30; i++) assert.ok(!openMarket(24, p).stock.some((s) => s.key === "혈영도법비급"));
+  for (let i = 0; i < 30; i++) assert.ok(!openMarket(36, p).stock.some((s) => s.key === "혈영도법비급"));
   p.alignment.마도 = 5;
-  assert.ok(openMarket(24, p).stock.some((s) => s.key === "혈영도법비급"));
+  assert.ok(openMarket(36, p).stock.some((s) => s.key === "혈영도법비급"));
 });
 
 test("은자가 없거나 진열에 없으면 살 수 없다", () => {
@@ -540,9 +539,9 @@ test("저장은 턴 시작 지점으로 복구된다", () => {
   assert.equal(fresh.pendingNext, false);
 });
 
-test("60턴에서 복구하면 천마봉 선택부터", () => {
+test("120턴에서 복구하면 천마봉 선택부터", () => {
   const game = newGame();
-  toTurnEnd(game, 59);
+  toTurnEnd(game, 119);
   game.advanceTurn();
   game.marketLeave();
   game.chooseEvent(0);
@@ -624,6 +623,57 @@ test("카르마로 해금하면 차감된다", () => {
   assert.ok(!unlockOrigin("하오문", 5));
 });
 
+// ---------- 시간과 난이도 ----------
+
+test("게임은 120턴, 10년이다", () => {
+  const p = new Player();
+  assert.equal(p.maxTurn, 120);
+  assert.equal(getYear(120), 10);
+  assert.equal(getChapter(24), 1);
+  assert.equal(getChapter(25), 2);
+  assert.equal(getChapter(120), 5);
+  assert.equal(marketTurns().length, 10);
+  assert.equal(marketTurns().at(-1), 119);
+});
+
+test("적은 시기가 지나면 강해지고 천마는 그대로다", () => {
+  const early = new Enemy("낭인", DB.enemies.낭인.level);
+  const late = new Enemy("낭인", 48);
+  assert.equal(early.maxHp, DB.enemies.낭인.hp);
+  assert.ok(late.maxHp > early.maxHp && late.attack > early.attack);
+  assert.equal(new Enemy("천마", 120).maxHp, DB.enemies.천마.hp);
+});
+
+test("초반 적도 한 방에 쓰러지지 않는다", () => {
+  const p = new Player();
+  const power = new Battle(p, new Enemy("천마")).attackPower(p.bestSkill());
+  for (const key of ["산적", "낭인", "늑대무리", "사이비도사"]) {
+    assert.ok(new Enemy(key, 1).maxHp > power * 1.5, key);
+  }
+});
+
+test("모든 적이 기준 시기를 가진다", () => {
+  for (const [key, enemy] of Object.entries(DB.enemies)) {
+    if (enemy.tier !== "보스") assert.ok(enemy.level >= 1 && enemy.level <= 120, key);
+  }
+});
+
+test("60턴 시절의 저장은 시간표를 늘려 이어 간다", () => {
+  const p = new Player();
+  const old = { ...p.toDict(), turn: 30, max_turn: 60, battles: 10 };
+  const moved = Player.fromDict(old);
+  assert.equal(moved.maxTurn, 120);
+  assert.equal(moved.turn, 59);
+  assert.equal(moved.battles, 20);
+});
+
+test("성장 특성은 작은 수에서 두 배가 되지 않는다", () => {
+  seed(5);
+  let total = 0;
+  for (let i = 0; i < 1000; i++) total += applyGrowth(1, ["무골"], "external");
+  assert.ok(total > 1050 && total < 1150, String(total));
+});
+
 // ---------- 전체 플레이 ----------
 
 for (const origin of ["무림초출", "남궁세가", "곤륜파", "하오문", "권마계승"]) {
@@ -637,7 +687,7 @@ for (const origin of ["무림초출", "남궁세가", "곤륜파", "하오문", 
       game.start(origin);
       let steps = 0;
       while (game.player.alive) {
-        assert.ok(steps++ < 4000, "게임이 끝나지 않는다");
+        assert.ok(steps++ < 8000, "게임이 끝나지 않는다");
         const p = game.player;
         if (game.event) {
           game.chooseEvent(pick(eventView(p, game.event.key).choices.filter((c) => !c.locked)).index);
@@ -653,6 +703,7 @@ for (const origin of ["무림초출", "남궁세가", "곤륜파", "하오문", 
           game.action(p.hp < p.maxHp() / 2 ? "휴식" : pick(["탐색", "수련", "명상"]));
         }
         assert.ok(p.hp >= 0 && p.qi >= 0 && p.silver >= 0 && Number.isInteger(p.hp));
+        assert.ok(p.turn <= 120);
         for (const stat of ["external", "internal", "martial", "mind"]) {
           assert.ok(p[stat] >= 1 && p[stat] <= 110, `${stat} ${p[stat]}`);
         }

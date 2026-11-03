@@ -9,14 +9,15 @@ import {
 } from "./meta.js";
 import { pickWeighted, randInt, rng } from "./rng.js";
 import {
-  actionLine, applyGrowth, breakthroughBlock, byname, checkBreakthrough, checkGoodEnding, checkSaengsa, fameRank,
-  getChapter, getChapterInfo, getMonth, isMarketTurn, monthLine, realmIndex, sumEffect, traitSlots,
+  actionLine, applyGrowth, breakthroughBlock, byname, CHAPTER_STARTS, checkBreakthrough, checkGoodEnding, checkSaengsa,
+  fameRank, getChapter, getChapterInfo, getMonth, getYear, isMarketTurn, monthLine, realmIndex, sumEffect, traitSlots,
 } from "./rules.js";
 
 const NATURAL_REGEN = 5;
 const EXPLORE_BATTLE = 0.45;
 const EXPLORE_EVENT = 0.40;
-const SPARRING_CHANCE = 0.3;
+const SPARRING_CHANCE = 0.5;
+const TRAIN_BONUS_BASE = 0.12;
 const GAUNTLET_REST = 20;
 const LOG_LIMIT = 40;
 const VALID_ACTIONS = ["수련", "명상", "탐색", "휴식"];
@@ -58,7 +59,7 @@ export class Game {
     this.player = new Player(originKey, traits);
     updateKnown(this.player.skills.map((s) => s.key));
     const intro = getChapterInfo(1);
-    this.enterTurn([`📖 ${intro.title} (${intro.year}년차) — ${intro.desc}`]);
+    this.enterTurn([`📖 ${intro.title} (1년차) — ${intro.desc}`]);
     return true;
   }
 
@@ -129,8 +130,8 @@ export class Game {
 
   grow(stat) {
     const p = this.player;
-    let amount = randInt(1, 3);
-    if (rng.random() < p.mind / 300) amount += 1; // 심경이 높으면 가끔 1 더 오른다
+    let amount = 1;
+    if (rng.random() < TRAIN_BONUS_BASE + p.mind / 500) amount += 1; // 심경이 높으면 2 오를 때가 많아진다
     return p.gainStat(stat, applyGrowth(amount, p.traits, stat));
   }
 
@@ -167,7 +168,7 @@ export class Game {
   }
 
   startBattle(key) {
-    const enemy = new Enemy(key);
+    const enemy = new Enemy(key, this.player.turn);
     this.player.recordEnemyEncounter(key);
     this.battle = new Battle(this.player, enemy);
     this.addLog([`⚔️ ${enemy.name}과(와) 마주쳤다!`, ...(enemy.intro ? [enemy.intro] : []), ...this.battle.log]);
@@ -293,9 +294,9 @@ export class Game {
     const p = this.player;
     const lines = [...this.commitCodex(), ...this.checkRealm()];
     p.turn += 1;
-    if ([13, 25, 37, 49].includes(p.turn)) {
+    if (CHAPTER_STARTS.includes(p.turn)) {
       const info = getChapterInfo(p.turn);
-      lines.push(`📖 ${info.title} (${info.year}년차) — ${info.desc}`);
+      lines.push(`📖 ${info.title} (${getYear(p.turn)}년차) — ${info.desc}`);
     }
     const hp = NATURAL_REGEN + sumEffect(p.traits, "turn_regen", "hp_pct");
     const qi = NATURAL_REGEN + sumEffect(p.traits, "turn_regen", "qi_pct");

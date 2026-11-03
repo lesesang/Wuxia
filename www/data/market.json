@@ -48,7 +48,7 @@
   "호골주": {
     "name": "호골주",
     "category": "영약",
-    "price": 60,
+    "price": 80,
     "markets": [
       1,
       2,
@@ -66,7 +66,7 @@
   "소환단": {
     "name": "소환단",
     "category": "영약",
-    "price": 60,
+    "price": 80,
     "markets": [
       1,
       2,
@@ -84,7 +84,7 @@
   "무학잡록": {
     "name": "무학잡록",
     "category": "영약",
-    "price": 60,
+    "price": 80,
     "markets": [
       1,
       2,
@@ -102,7 +102,7 @@
   "청심환": {
     "name": "청심환",
     "category": "영약",
-    "price": 60,
+    "price": 80,
     "markets": [
       1,
       2,
@@ -120,7 +120,7 @@
   "공청석유": {
     "name": "공청석유",
     "category": "영약",
-    "price": 240,
+    "price": 340,
     "markets": [
       3,
       4,
@@ -138,7 +138,7 @@
   "대환단": {
     "name": "대환단",
     "category": "영약",
-    "price": 320,
+    "price": 450,
     "markets": [
       4,
       5
@@ -612,7 +612,7 @@
   "천년하수오": {
     "name": "천년 하수오",
     "category": "영약",
-    "price": 180,
+    "price": 250,
     "markets": [
       2,
       3,
@@ -645,7 +645,7 @@
   "설산영지": {
     "name": "설산 영지",
     "category": "영약",
-    "price": 150,
+    "price": 210,
     "markets": [
       2,
       3,
@@ -663,7 +663,7 @@
   "호왕골": {
     "name": "호왕의 뼈",
     "category": "영약",
-    "price": 160,
+    "price": 220,
     "markets": [
       2,
       3,
@@ -681,7 +681,7 @@
   "심득잡기": {
     "name": "고수의 심득",
     "category": "영약",
-    "price": 160,
+    "price": 220,
     "markets": [
       2,
       3,

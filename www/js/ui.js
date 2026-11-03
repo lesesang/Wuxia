@@ -10,12 +10,16 @@ import {
 } from "./meta.js";
 import {
   ALIGNMENTS, benefitText, byname, fameRank, getChapterInfo, getMonth, getYear, marketTurns, nextSlotThreshold,
-  realmProgress, traitSlots,
+  ORIGIN_SECTS, realmProgress, traitSlots,
 } from "./rules.js";
+import { MAX_TURN } from "./character.js";
 import { storage } from "./storage.js";
 
 const game = new Game();
-const ui = { origin: "무림초출", traits: new Set(), modal: null, tab: "enemies", notice: null, lastTyped: "" };
+const ui = {
+  screen: "title", setupTab: "origin", origin: "무림초출", traits: new Set(),
+  modal: null, tab: "enemies", statusTab: "stats", notice: null, lastTyped: "", bars: null,
+};
 let installPrompt = null;
 const app = () => document.getElementById("app");
 
@@ -71,6 +75,25 @@ function codexModal() {
     <div class="tab-panel active">${panels[ui.tab]}</div>`);
 }
 
+function helpModal() {
+  const section = (title, lines) => `<div class="modal-section"><h4>${title}</h4>${lines.map((l) => `<p class="help-line">${l}</p>`).join("")}</div>`;
+  return modalShell("help-modal", "강호 입문서", `
+    ${section("목표", ["10년(120턴) 뒤 겨울, 천마봉에서 천마를 쓰러뜨립니다.", "죽어도 카르마가 남아 다음 강호행에서 출신과 특성을 해금할 수 있습니다."])}
+    ${section("매달 하는 일", [
+    "<b>탐색</b>: 전투, 사건, 기연 중 하나가 일어납니다. 가장 크게 성장하지만 위험합니다.",
+    "<b>수련</b>: 외공과 무리, 주무공 숙련도가 오릅니다. 대련으로 실전 경험을 얻기도 합니다.",
+    "<b>명상</b>: 내공과 심경이 오르고 기력을 되찾습니다.",
+    "<b>회복</b>: 체력과 기력을 채우고 내상을 치료합니다. 싸우기 전에 몸을 챙기세요."])}
+    ${section("경지", ["능력치와 <b>실전 경험</b>이 함께 차야 돌파합니다. 위쪽 띠에서 남은 조건을 볼 수 있습니다.", "경지가 오르면 주는 피해가 크게 늘고 받는 피해가 줄어듭니다."])}
+    ${section("전투", [
+    "무공은 기력을 씁니다. 기력이 없으면 맨손으로 싸웁니다.",
+    "적의 필살기는 한 라운드 전에 ⚠️로 예고됩니다. <b>경공</b>으로 흘려내면 다음 공격이 강해집니다.",
+    "<b>심법</b>은 숨을 고르며 회복하고 점혈을 풉니다. 위험하면 <b>도주</b>도 방법입니다.",
+    "내상은 전투가 끝나도 남고 주는 피해를 줄입니다."])}
+    ${section("시장과 성장", ["매년 말 시장이 열리고 턴을 쓰지 않습니다. 더 나은 무기와 방어구가 항상 진열됩니다.", "사건의 선택으로 정도, 사도, 마도 성향이 쌓이고 혜택과 파는 물건이 달라집니다."])}
+    ${section("저장", ["매달 초 자동으로 저장됩니다. 도중에 끄면 그달의 처음부터 이어 합니다."])}`);
+}
+
 function settingsModal() {
   const speed = storage.get("wuxia-speed") ?? "18";
   const font = storage.get("wuxia-font") ?? "normal";
@@ -87,13 +110,44 @@ function settingsModal() {
     <div class="setting-row"><span>기록 옮기기<br><small class="muted">카르마, 도감, 진행 중인 턴</small></span>
       <span class="setting-buttons"><button class="mini-btn" data-act="export">내보내기</button>
       <label class="mini-btn file-btn">가져오기<input type="file" id="import-file" accept=".json,application/json"></label></span></div>
-    ${ui.notice ? `<p class="market-message">${esc(ui.notice)}</p>` : ""}`);
+    <div class="setting-row"><span>도움말</span><button class="mini-btn" data-act="open" data-modal="help-modal">강호 입문서</button></div>
+    ${ui.notice ? `<p class="market-message">${esc(ui.notice)}</p>` : ""}
+    ${game.active && game.player.alive ? `<div class="setting-row danger-row"><span>이번 강호행 포기<br><small class="muted">카르마와 도감은 남습니다</small></span>
+      <button class="mini-btn danger-mini" data-act="open" data-modal="reset-modal">포기하기</button></div>` : ""}`);
 }
 
 // ---------- 메인 화면 ----------
 
-function renderHome() {
-  document.body.className = "home";
+function renderTitle() {
+  document.body.className = "home title-screen";
+  setMood("calm");
+  const meta = loadMeta();
+  const hasSave = loadCheckpoint() !== null;
+  const save = hasSave ? loadCheckpoint().player : null;
+  app().innerHTML = `<div class="title-wrap">
+    <h1 class="title-name">무협<br>로그라이크</h1>
+    <p class="hero-line">십 년 뒤 겨울, 천마봉에서 누군가 기다린다.<br>그때까지 어떤 무인이 될지는 당신이 정한다.</p>
+    <div class="title-actions">
+      ${hasSave ? `<button class="start-btn" data-act="continue">이어하기<small>${esc(save.origin)}, ${esc(save.realm)}, ${Math.min(save.turn, MAX_TURN)}턴째</small></button>` : ""}
+      <button class="${hasSave ? "continue-btn" : "start-btn"}" data-act="setup">새 강호행</button>
+    </div>
+    <p class="karma-display">💠 카르마 ${meta.current_karma} (누적 ${meta.total_karma})${meta.total_runs ? `, 끝낸 강호행 ${meta.total_runs}회` : ""}</p>
+    <div class="title-links">
+      <button class="link-btn" data-act="open" data-modal="help-modal">❓ 입문서</button>
+      <button class="link-btn" data-act="open" data-modal="codex-modal">📖 도감</button>
+      <button class="link-btn" data-act="open" data-modal="settings-modal">⚙️ 설정</button>
+    </div>
+  </div>
+  ${helpModal()}${codexModal()}${settingsModal()}`;
+}
+
+function statBars(o) {
+  const bar = (label, value) => `<span class="mini-stat"><span>${label}</span><span class="mini-track"><span style="width:${value * 2}%"></span></span><span>${value}</span></span>`;
+  return `<span class="mini-stats">${bar("외공", o.external)}${bar("내공", o.internal)}${bar("무리", o.martial)}${bar("심경", o.mind)}</span>`;
+}
+
+function renderSetup() {
+  document.body.className = "home setup-screen";
   setMood("calm");
   const meta = loadMeta();
   const slots = traitSlots(meta.total_karma);
@@ -102,74 +156,73 @@ function renderHome() {
   ui.traits = new Set([...ui.traits].filter((t) => meta.unlocked_traits.includes(t)));
   if (!meta.unlocked_origins.includes(ui.origin)) ui.origin = "무림초출";
 
-  const statLine = (o) => `외공 ${o.external}, 내공 ${o.internal}, 무리 ${o.martial}, 심경 ${o.mind}`;
   const origins = DB.origins.order.map((key) => {
     const o = DB.origins.origins[key];
-    const skillNames = o.skills.map((s) => DB.skills[s].name).join(", ");
+    const skillNames = o.skills.map((k) => DB.skills[k].name).join(", ");
+    const sect = ORIGIN_SECTS[key] ? DB.sects[ORIGIN_SECTS[key]] : null;
+    const detail = `<span class="pick-desc block">${esc(o.desc)}</span>${statBars(o)}
+      <span class="pick-stats block">시작 무공: ${esc(skillNames)}</span>
+      ${sect ? `<span class="pick-stats block">사문: ${esc(sect.name)} (${esc(sect.bonus_text)})</span>` : ""}`;
     if (!meta.unlocked_origins.includes(key)) {
-      return `<div class="pick-row locked"><div class="pick-main">
-        <div class="pick-name">🔒 ${esc(o.name)}</div><p class="pick-desc">${esc(o.desc)}</p>
-        <div class="pick-stats">${statLine(o)}</div><div class="pick-stats">시작 무공: ${esc(skillNames)}</div></div>
-        <button class="unlock-btn" data-act="unlock-origin" data-key="${esc(key)}" ${meta.current_karma < o.cost ? "disabled" : ""}>카르마 ${o.cost}로 해금</button></div>`;
+      return `<div class="pick-row locked"><div class="pick-main"><div class="pick-name">🔒 ${esc(o.name)}</div>${detail}</div>
+        <button class="unlock-btn" data-act="unlock-origin" data-key="${esc(key)}" ${meta.current_karma < o.cost ? "disabled" : ""}>💠 ${o.cost}<br>해금</button></div>`;
     }
-    return `<div class="pick-row"><label class="pick-label">
-      <input type="radio" name="origin" value="${esc(key)}" ${ui.origin === key ? "checked" : ""}>
-      <span class="pick-main"><span class="pick-name">${esc(o.name)}</span>
-      <span class="pick-desc block">${esc(o.desc)}</span>
-      <span class="pick-stats block">${statLine(o)}</span>
-      <span class="pick-stats block">시작 무공: ${esc(skillNames)}</span></span></label></div>`;
+    return `<div class="pick-row"><label class="pick-label"><input type="radio" name="origin" value="${esc(key)}" ${ui.origin === key ? "checked" : ""}>
+      <span class="pick-main"><span class="pick-name">${esc(o.name)}</span>${detail}</span></label></div>`;
   }).join("");
 
-  const traits = Object.keys(DB.traits).map((key) => {
-    const t = DB.traits[key];
-    const title = `${esc(t.name)}<span class="rarity rarity-${esc(t.rarity)}">${esc(t.rarity)}</span>`;
-    if (!meta.unlocked_traits.includes(key)) {
-      return `<div class="pick-row locked"><div class="pick-main"><div class="pick-name">🔒 ${title}</div><p class="pick-desc">${esc(t.desc)}</p></div>
-        <button class="unlock-btn" data-act="unlock-trait" data-key="${esc(key)}" ${meta.current_karma < t.cost ? "disabled" : ""}>카르마 ${t.cost}로 해금</button></div>`;
-    }
-    const checked = ui.traits.has(key);
-    return `<div class="pick-row"><label class="pick-label">
-      <input type="checkbox" name="trait" value="${esc(key)}" ${checked ? "checked" : ""} ${!checked && ui.traits.size >= slots ? "disabled" : ""}>
-      <span class="pick-main"><span class="pick-name">${title}</span><span class="pick-desc block">${esc(t.desc)}</span></span></label></div>`;
-  }).join("");
+  const traits = Object.keys(DB.traits)
+    .sort((a, b) => Number(meta.unlocked_traits.includes(b)) - Number(meta.unlocked_traits.includes(a)))
+    .map((key) => {
+      const t = DB.traits[key];
+      const name = `${esc(t.name)}<span class="rarity rarity-${esc(t.rarity)}">${esc(t.rarity)}</span>`;
+      if (!meta.unlocked_traits.includes(key)) {
+        return `<div class="pick-row locked"><div class="pick-main"><div class="pick-name">🔒 ${name}</div><p class="pick-desc">${esc(t.desc)}</p></div>
+          <button class="unlock-btn" data-act="unlock-trait" data-key="${esc(key)}" ${meta.current_karma < t.cost ? "disabled" : ""}>💠 ${t.cost}<br>해금</button></div>`;
+      }
+      const checked = ui.traits.has(key);
+      return `<div class="pick-row"><label class="pick-label"><input type="checkbox" name="trait" value="${esc(key)}" ${checked ? "checked" : ""} ${!checked && ui.traits.size >= slots ? "disabled" : ""}>
+        <span class="pick-main"><span class="pick-name">${name}</span><span class="pick-desc block">${esc(t.desc)}</span></span></label></div>`;
+    }).join("");
 
-  app().innerHTML = `<div class="home-wrap">
-    <header class="hero"><h1>무협<br>로그라이크</h1>
-      <div class="hero-side">
-        <p class="hero-line">다섯 해 뒤 겨울, 천마봉에서 누군가 기다린다.<br>그때까지 어떤 무인이 될지는 당신이 정한다.</p>
-        <p class="karma-display">💠 카르마 ${meta.current_karma} (누적 ${meta.total_karma})</p>
-        ${hasSave ? `<button class="continue-btn" data-act="continue">📜 저장된 턴부터 이어하기</button>` : ""}
-      </div></header>
-    <h2 class="section-title">출신</h2>${origins}
-    <h2 class="section-title">특성 <span class="slot-count">${ui.traits.size} / ${slots}</span></h2>
-    <p class="section-note">${next ? `누적 카르마 ${next}이 되면 특성을 하나 더 장착할 수 있습니다.` : "특성 슬롯이 모두 열렸습니다."}</p>
-    ${traits}
-    <button class="start-btn" data-act="${hasSave ? "confirm-start" : "start"}">강호로 나선다</button>
-  </div>
-  <div class="main-sidebar">
-    <button data-act="open" data-modal="codex-modal">📖<span class="sb-label">도감</span></button>
-    <button data-act="open" data-modal="settings-modal">⚙️<span class="sb-label">설정</span></button>
-  </div>
-  ${codexModal()}${settingsModal()}
-  ${modalShell("confirm-start-modal", "새 강호행을 시작할까요?", `
-    <p class="modal-text">저장된 진행이 사라집니다. 카르마와 도감은 남습니다.</p>
-    <button class="danger-btn" data-act="start">새로 시작</button>`)}`;
+  const originName = DB.origins.origins[ui.origin].name;
+  app().innerHTML = `<div class="setup-head">
+      <button class="back-btn" data-act="title" aria-label="뒤로">←</button>
+      <h2>어떤 무인으로 시작할까</h2>
+      <span class="setup-karma">💠 ${meta.current_karma}</span>
+    </div>
+    <div class="setup-tabs">
+      <button class="tab-btn${ui.setupTab === "origin" ? " active" : ""}" data-act="setup-tab" data-tab="origin">출신</button>
+      <button class="tab-btn${ui.setupTab === "trait" ? " active" : ""}" data-act="setup-tab" data-tab="trait">특성 ${ui.traits.size}/${slots}</button>
+    </div>
+    <div class="home-wrap">
+      ${ui.setupTab === "origin" ? origins : `<p class="section-note">${next ? `특성을 ${slots}개 장착할 수 있습니다. 누적 카르마 ${next}이 되면 하나 더 열립니다.` : "특성 슬롯이 모두 열렸습니다."}</p>${traits}`}
+    </div>
+    <div class="setup-bar"><div class="setup-summary">${esc(originName)}${ui.traits.size ? `, 특성 ${ui.traits.size}개` : ""}</div>
+      <button class="start-btn" data-act="${hasSave ? "confirm-start" : "start"}">강호로 나선다</button></div>
+    ${modalShell("confirm-start-modal", "새 강호행을 시작할까요?", `
+      <p class="modal-text">저장된 진행이 사라집니다. 카르마와 도감은 남습니다.</p>
+      <button class="danger-btn" data-act="start">새로 시작</button>`)}`;
 }
 
 // ---------- 게임 화면 ----------
 
 function sidebar() {
+  const bag = Object.values(game.player.inventory).reduce((a, b) => a + b, 0);
   return `<div class="sidebar">
-    <button data-act="open" data-modal="status-modal">🧍<span class="sb-label">상태</span></button>
+    <button data-act="open-status" data-tab="stats">🧍<span class="sb-label">상태</span></button>
+    <button data-act="open-status" data-tab="skills">🥋<span class="sb-label">무공</span></button>
+    <button data-act="open-status" data-tab="bag">🎒<span class="sb-label">가방${bag ? ` ${bag}` : ""}</span></button>
     <button data-act="open" data-modal="codex-modal">📖<span class="sb-label">도감</span></button>
     <button data-act="open" data-modal="settings-modal">⚙️<span class="sb-label">설정</span></button>
-    <button data-act="open" data-modal="reset-modal">🔄<span class="sb-label">초기화</span></button>
   </div>`;
 }
 
 function statusModal() {
   const p = game.player;
   const row = (label, value) => `<div class="stat-row"><span>${esc(label)}</span><span>${esc(value)}</span></div>`;
+  const statRow = (name, value, note) => `<div class="stat-line"><span class="stat-name">${name}<small>${note}</small></span>
+    <span class="stat-track"><span style="width:${Math.min(value, 99)}%"></span></span><span class="stat-value">${value}</span></div>`;
   const sect = DB.sects[p.sect];
   const progress = realmProgress(p);
   const weapon = itemName(p.weapon);
@@ -183,9 +236,10 @@ function statusModal() {
     const button = s.type === "공격무공" && !game.battle
       ? `<button class="mini-btn${isMain ? " on" : ""}" data-act="main-skill" data-key="${esc(s.key)}" ${isMain ? "disabled" : ""}>${isMain ? "주무공" : "주무공으로"}</button>` : "";
     const secret = s.secretName
-      ? `, 비기 「${esc(s.secretName)}」 ${s.secretUnlocked ? "해방" : `${esc(s.secretUnlockGrade)} 등급 숙련도 ${s.secretUnlockMastery}에 해방`}` : "";
+      ? `<div class="skill-meta">비기 「${esc(s.secretName)}」: ${s.secretUnlocked ? "해방됨" : `${esc(s.secretUnlockGrade)} 등급, 숙련도 ${s.secretUnlockMastery}에 해방`}</div>` : "";
     return `<div class="skill-row"><div class="skill-head"><span>${esc(s.name)} <span class="skill-meta">${esc(s.type)}, ${esc(s.grade)}</span></span>${button}</div>
-      <div class="skill-meta">숙련도 ${s.mastery}/100${secret}</div><div class="skill-meta">${esc(s.desc)}</div></div>`;
+      <div class="mastery"><span class="stat-track"><span style="width:${s.mastery}%"></span></span><span class="skill-meta">숙련도 ${s.mastery}</span></div>
+      ${secret}<div class="skill-meta">${esc(s.desc)}</div></div>`;
   }).join("") || `<p class="codex-empty">아직 익힌 무공이 없습니다.</p>`;
 
   const bag = inventory.map(([key, count]) => `<div class="skill-row"><div class="skill-head">
@@ -193,38 +247,44 @@ function statusModal() {
     ${!game.battle && p.alive ? `<button class="mini-btn" data-act="use-item" data-key="${esc(key)}">사용</button>` : ""}</div></div>`).join("")
     || `<p class="codex-empty">시장에서 산 소비품이 이곳에 들어옵니다.</p>`;
 
-  return modalShell("status-modal", "캐릭터 상태", `
-    <div class="modal-section">
-      ${row("출신", p.origin)}${row("사문", sect ? sect.name : "없음")}
-      ${sect ? row("사문의 은혜", sect.bonus_text) : ""}
-      ${row("경지", p.realm)}${row("명성", `${p.fame} (${fameRank(p.fame)})`)}
-      ${p.injury ? row("내상", `${p.injury}단계 (주는 피해 -${p.injury * INJURY_PENALTY}%, 회복으로 치료)`) : ""}
-      ${row("전투 경험", `${p.battles} (${p.kills}명 처치)`)}${row("은자", p.silver)}
-      ${row("무기", weapon ? `${weapon} (공격력 +${equipmentBonus(p, "weapon")})` : "없음")}
-      ${row("방어구", armor ? `${armor} (받는 피해 -${equipmentBonus(p, "armor")})` : "없음")}
-    </div>
-    <div class="modal-section"><h4>능력치</h4>
-      ${row("외공 (체력, 공격력)", p.external)}${row("내공 (기력, 비기 위력)", p.internal)}
-      ${row("무리 (공격력, 명중, 숙련도)", p.martial)}${row("심경 (치명타, 수련 효율, 돌파)", p.mind)}
-    </div>
-    <div class="modal-section"><h4>별호: ${esc(byname(p))}</h4>
-      ${ALIGNMENTS.map((name) => `<div class="align-row"><span>${name}</span><div class="align-track"><div class="a-${name}" style="width:${Math.min(p.alignment[name] * 5, 100)}%"></div></div><span>${p.alignment[name]}</span></div>`).join("")}
-      <p class="skill-meta">${esc(benefitText(p.alignment))}</p>
-    </div>
-    ${progress ? `<div class="modal-section"><h4>다음 경지: ${esc(progress.next)}</h4>
-      ${row("평균 능력치", `${progress.avg} / ${progress.avgRequired}`)}
-      ${row("최저 능력치", `${progress.min} / ${progress.minRequired}`)}
-      ${row("전투 경험", `${progress.battles} / ${progress.battlesRequired}`)}</div>` : ""}
-    <div class="modal-section"><h4>무공</h4>${skills}</div>
-    <div class="modal-section"><h4>가방</h4>${bag}</div>
-    ${traits.length ? `<div class="modal-section"><h4>특성</h4>${traits.map((t) => `<div class="skill-row">${esc(t.name)}<div class="skill-meta">${esc(t.desc)}</div></div>`).join("")}</div>` : ""}`);
+  const panels = {
+    stats: `<div class="modal-section">
+        ${statRow("외공", p.external, "체력, 공격력")}${statRow("내공", p.internal, "기력, 비기 위력")}
+        ${statRow("무리", p.martial, "공격력, 명중, 숙련도")}${statRow("심경", p.mind, "치명타, 수련, 돌파")}
+      </div>
+      <div class="modal-section">
+        ${row("출신", p.origin)}${row("사문", sect ? `${sect.name} (${sect.bonus_text})` : "없음")}
+        ${row("명성", `${p.fame} (${fameRank(p.fame)})`)}
+        ${p.injury ? row("내상", `${p.injury}단계, 주는 피해 -${p.injury * INJURY_PENALTY}%, 회복으로 치료`) : ""}
+        ${row("전투 경험", `${p.battles} (${p.kills}명 처치)`)}
+      </div>
+      ${progress ? `<div class="modal-section"><h4>다음 경지: ${esc(progress.next)}</h4>
+        ${row("평균 능력치", `${progress.avg} / ${progress.avgRequired}`)}
+        ${row("최저 능력치", `${progress.min} / ${progress.minRequired}`)}
+        ${row("전투 경험", `${progress.battles} / ${progress.battlesRequired}`)}</div>` : ""}
+      <div class="modal-section"><h4>성향과 별호: ${esc(byname(p))}</h4>
+        ${ALIGNMENTS.map((name) => `<div class="align-row"><span>${name}</span><div class="align-track"><div class="a-${name}" style="width:${Math.min(p.alignment[name] * 5, 100)}%"></div></div><span>${p.alignment[name]}</span></div>`).join("")}
+        <p class="skill-meta">${esc(benefitText(p.alignment))}</p>
+      </div>
+      ${traits.length ? `<div class="modal-section"><h4>특성</h4>${traits.map((t) => `<div class="skill-row">${esc(t.name)}<div class="skill-meta">${esc(t.desc)}</div></div>`).join("")}</div>` : ""}`,
+    skills: skills,
+    bag: `<div class="modal-section">
+        ${row("은자", p.silver)}
+        ${row("무기", weapon ? `${weapon} (공격력 +${equipmentBonus(p, "weapon")})` : "없음")}
+        ${row("방어구", armor ? `${armor} (받는 피해 -${equipmentBonus(p, "armor")})` : "없음")}
+      </div><div class="modal-section"><h4>소비품</h4>${bag}</div>`,
+  };
+  const tabs = [["stats", "능력치"], ["skills", "무공"], ["bag", "가방"]];
+  return modalShell("status-modal", "내 무인", `
+    <div class="tabs">${tabs.map(([key, label]) => `<button class="tab-btn${ui.statusTab === key ? " active" : ""}" data-act="status-tab" data-tab="${key}">${label}</button>`).join("")}</div>
+    <div class="tab-panel active">${panels[ui.statusTab]}</div>`);
 }
 
 function gameModals() {
-  return `${statusModal()}${codexModal()}${settingsModal()}
-  ${modalShell("reset-modal", "강호행을 초기화할까요?", `
+  return `${statusModal()}${codexModal()}${settingsModal()}${helpModal()}
+  ${modalShell("reset-modal", "이번 강호행을 포기할까요?", `
     <p class="modal-text">이번 회차의 진행이 사라지고 메인 화면으로 돌아갑니다. 카르마와 도감은 남습니다.</p>
-    <button class="danger-btn" data-act="restart">초기화하고 메인으로</button>`)}`;
+    <button class="danger-btn" data-act="restart">포기하고 메인으로</button>`)}`;
 }
 
 function renderBattle() {
@@ -235,53 +295,90 @@ function renderBattle() {
   const mindset = p.bestOfType("심공");
   const movement = p.bestOfType("경공");
   const warning = b.nextSpecialWarning();
-  const secretReady = skill?.secretUnlocked && p.qi >= skill.secretQiCost;
+  const secretReady = skill?.secretUnlocked && p.qi >= skill.secretQiCost && !b.sealed;
   const state = [`제 ${b.roundNum + 1} 라운드`];
-  if (b.poison) state.push(`중독 ${b.poison.rounds}라운드`);
-  if (b.atkBuff) state.push(`공격력 +${b.atkBuff.percent}%`);
-  if (b.counterPct) state.push(`다음 공격 +${b.counterPct}%`);
-  if (b.sealed) state.push("혈도 봉쇄");
-  if (p.injury) state.push(`내상 ${p.injury}단계`);
-  if (b.enemyPoison) state.push("적 중독");
   if (gauntlet) state.push(`${gauntlet.name} ${gauntlet.round}/${gauntlet.total}전`);
+  const tags = [];
+  if (b.poison) tags.push(["bad", `중독 ${b.poison.rounds}`]);
+  if (b.sealed) tags.push(["bad", "혈도 봉쇄"]);
+  if (p.injury) tags.push(["bad", `내상 ${p.injury}`]);
+  if (b.atkBuff) tags.push(["good", `공격 +${b.atkBuff.percent}%`]);
+  if (b.counterPct) tags.push(["good", `반격 +${b.counterPct}%`]);
+  if (b.enemyPoison) tags.push(["good", "적 중독"]);
+  const lowHp = p.hp < p.maxHp() * 0.3;
 
   const secretNote = !skill ? "무공 없음"
     : skill.secretUnlocked ? `기력 ${skill.secretQiCost}`
-      : `${skill.secretUnlockGrade} 등급, 숙련도 ${skill.secretUnlockMastery}에 해방`;
+      : `${skill.secretUnlockGrade}, 숙련 ${skill.secretUnlockMastery} 해방`;
   const items = Object.entries(p.inventory).filter(([k]) => DB.market[k]);
+  const attackNote = !skill ? "기력 소모 없음"
+    : b.sealed ? "혈도가 막혀 맨손 공격"
+      : p.qi < skill.qiCost ? "기력이 모자라 맨손 공격" : `기력 ${skill.qiCost}`;
 
-  app().innerHTML = `<div class="battle-screen">
-    <h1 class="battle-title">전 투${b.isFinal ? `<span class="battle-final-tag">천마와의 결전</span>` : ""}</h1>
+  app().innerHTML = `<div class="battle-top">
+      <h1 class="battle-title">${b.isFinal ? "천마와의 결전" : "전투"}<small>${esc(state.join(", "))}</small></h1>
+      <button class="round-menu" data-act="open-status" data-tab="stats" aria-label="내 무인 보기">🧍</button>
+    </div>
     <div class="vs-row">
-      <div class="combatant"><div class="name">${esc(p.origin)}</div>
-        <div class="hpbar-outer"><div class="hpbar-inner mine" style="width:${percent(p.hp, p.maxHp())}%"></div></div>
+      <div class="combatant" data-side="player"><div class="name">${esc(p.origin)}</div>
+        <div class="hpbar-outer${lowHp ? " danger" : ""}"><div class="hpbar-inner mine" data-bar="player" style="width:${percent(p.hp, p.maxHp())}%"></div></div>
+        <div class="hpnum">체력 <b>${p.hp}</b>/${p.maxHp()}</div>
         <div class="qibar"><div style="width:${percent(p.qi, p.maxQi())}%"></div></div>
-        <div class="hpnum">체력 ${p.hp}/${p.maxHp()}, 기력 ${p.qi}/${p.maxQi()}</div></div>
+        <div class="hpnum">기력 ${p.qi}/${p.maxQi()}</div></div>
       <div class="vs-mark">VS</div>
-      <div class="combatant"><div class="name">${esc(b.enemy.name)}</div>
-        <div class="hpbar-outer"><div class="hpbar-inner enemy" style="width:${percent(b.enemy.hp, b.enemy.maxHp)}%"></div></div>
-        <div class="hpnum">${b.enemy.hp} / ${b.enemy.maxHp}</div></div>
+      <div class="combatant" data-side="enemy"><div class="name">${esc(b.enemy.name)}</div>
+        <div class="hpbar-outer"><div class="hpbar-inner enemy" data-bar="enemy" style="width:${percent(b.enemy.hp, b.enemy.maxHp)}%"></div></div>
+        <div class="hpnum">체력 <b>${b.enemy.hp}</b>/${b.enemy.maxHp}</div>
+        <div class="enemy-tier">${esc(b.enemy.tier)}${b.enemy.armor ? `, 방어 ${b.enemy.armor}` : ""}</div></div>
     </div>
-    ${b.roundNum === 0 ? `<p class="enemy-desc">${esc(b.enemy.desc)}</p>` : ""}
-    <p class="battle-state">${esc(state.join(", "))}</p>
-    ${warning ? `<p class="battle-warning">⚠️ 다음은 「${esc(warning)}」! 경공으로 흘려낼 수 있다.</p>` : ""}
-    <div class="battle-log">${game.log.slice(-10).map((l) => `<p>${esc(l)}</p>`).join("")}</div>
-    <div class="battle-actions">
-      <button class="bt-btn" data-act="battle" data-action="기본공격">⚔️ ${skill ? esc(skill.name) : "맨손 공격"}
-        <small>${skill ? `기력 ${skill.qiCost}${p.qi < skill.qiCost ? ", 부족해서 맨손 공격" : ""}` : "기력 소모 없음"}</small></button>
-      <button class="bt-btn" data-act="battle" data-action="비기" ${secretReady ? "" : "disabled"}>✨ ${skill?.secretUnlocked ? esc(skill.secretName) : "비기"}
-        <small>${esc(secretNote)}</small></button>
-      <button class="bt-btn" data-act="battle" data-action="심법" ${mindset ? "" : "disabled"}>🧘 ${mindset ? esc(mindset.name) : "심법"}
-        <small>${mindset ? "숨을 고르며 회복" : "익힌 심공 없음"}</small></button>
-      <button class="bt-btn" data-act="battle" data-action="경공" ${movement && p.qi >= movement.qiCost ? "" : "disabled"}>💨 ${movement ? esc(movement.name) : "경공"}
-        <small>${movement ? `기력 ${movement.qiCost}, 회피 ${movement.effectValue("evade")}%` : "익힌 경공 없음"}</small></button>
-      ${b.isFinal ? "" : `<button class="bt-btn flee" data-act="battle" data-action="도주">🏃 도주</button>`}
-    </div>
-    ${items.length ? `<div class="battle-items">${items.map(([key, count]) => `<button class="item-btn" data-act="battle" data-action="소비품" data-key="${esc(key)}">${esc(DB.market[key].name)} ×${count}</button>`).join("")}</div>` : ""}
-    ${sidebar()}
-  </div>${gameModals()}`;
+    ${tags.length ? `<div class="battle-tags">${tags.map(([kind, label]) => `<span class="tag ${kind}">${esc(label)}</span>`).join("")}</div>` : ""}
+    ${warning ? `<p class="battle-warning">⚠️ 다음은 「${esc(warning)}」${movement ? " — 경공으로 흘려낼 수 있다" : ""}</p>` : ""}
+    <div class="battle-log" aria-live="polite">${b.roundNum === 0 ? `<p class="enemy-desc">${esc(b.enemy.desc)}</p>` : ""}${game.log.slice(-12).map((l) => `<p>${esc(l)}</p>`).join("")}</div>
+    <div class="battle-panel">
+      <button class="bt-btn main" data-act="battle" data-action="기본공격">⚔️ ${skill ? esc(skill.name) : "맨손 공격"}<small>${esc(attackNote)}</small></button>
+      <div class="battle-actions">
+        <button class="bt-btn" data-act="battle" data-action="비기" ${secretReady ? "" : "disabled"}>✨ ${skill?.secretUnlocked ? esc(skill.secretName) : "비기"}<small>${esc(secretNote)}</small></button>
+        <button class="bt-btn${b.sealed ? " suggest" : ""}" data-act="battle" data-action="심법" ${mindset ? "" : "disabled"}>🧘 ${mindset ? esc(mindset.name) : "심법"}<small>${mindset ? "회복, 점혈 해제" : "익힌 심공 없음"}</small></button>
+        <button class="bt-btn${warning && movement ? " suggest" : ""}" data-act="battle" data-action="경공" ${movement && p.qi >= movement.qiCost ? "" : "disabled"}>💨 ${movement ? esc(movement.name) : "경공"}<small>${movement ? `기력 ${movement.qiCost}, 회피 ${movement.effectValue("evade")}%` : "익힌 경공 없음"}</small></button>
+        ${b.isFinal ? "" : `<button class="bt-btn flee" data-act="battle" data-action="도주">🏃 도주<small>실패하면 공격받음</small></button>`}
+      </div>
+      ${items.length ? `<div class="battle-items">${items.map(([key, count]) => `<button class="item-btn${lowHp && DB.market[key].effects.some((e) => e.type === "heal") ? " suggest" : ""}" data-act="battle" data-action="소비품" data-key="${esc(key)}">${esc(DB.market[key].name)} ×${count}</button>`).join("")}</div>` : ""}
+    </div>${gameModals()}`;
   const log = document.querySelector(".battle-log");
   if (log) log.scrollTop = log.scrollHeight;
+  animateBars(p.hp, p.maxHp(), b.enemy.hp, b.enemy.maxHp, b);
+}
+
+/** 체력 막대가 깎이는 모습과 피해 숫자를 보여 준다. */
+function animateBars(playerHp, playerMax, enemyHp, enemyMax, battle) {
+  const previous = ui.bars?.battle === battle ? ui.bars : null;
+  ui.bars = { battle, playerHp, enemyHp };
+  if (!previous || window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
+  const apply = (side, before, after, max) => {
+    const bar = document.querySelector(`[data-bar="${side}"]`);
+    if (!bar || before === after) return;
+    const target = bar.style.width;
+    bar.style.transition = "none";
+    bar.style.width = `${percent(Math.max(before, 0), max)}%`;
+    void bar.offsetWidth;
+    bar.style.transition = "";
+    bar.style.width = target;
+    const float = document.createElement("span");
+    float.className = `float ${after < before ? "down" : "up"}`;
+    float.textContent = after < before ? `-${before - after}` : `+${after - before}`;
+    document.querySelector(`[data-side="${side}"]`)?.appendChild(float);
+  };
+  apply("player", previous.playerHp, playerHp, playerMax);
+  apply("enemy", previous.enemyHp, enemyHp, enemyMax);
+}
+
+function goalStrip() {
+  const p = game.player;
+  const progress = realmProgress(p);
+  if (!progress) return `<div class="goal">천마봉까지 ${Math.max(0, p.maxTurn - p.turn)}개월</div>`;
+  const part = (label, now, need) => `<span class="${now >= need ? "done" : ""}">${label} ${now}/${need}</span>`;
+  return `<div class="goal"><b>${esc(progress.next)}까지</b>
+    ${part("평균", progress.avg, progress.avgRequired)}${part("최저", progress.min, progress.minRequired)}${part("실전", progress.battles, progress.battlesRequired)}</div>`;
 }
 
 function topbar() {
@@ -289,11 +386,12 @@ function topbar() {
   const turn = Math.min(p.turn, p.maxTurn);
   return `<div class="topbar"><div class="topbar-inner">
     <div class="topbar-row1">
-      <span class="turn-info">${esc(getChapterInfo(turn).title)}, ${getYear(turn)}년차 ${getMonth(turn)}월 (턴 ${p.turn}/${p.maxTurn})</span>
-      <span class="realm-info">${esc(byname(p))}, ${esc(p.realm)}</span>
+      <span class="turn-info">${getYear(turn)}년차 ${getMonth(turn)}월<small>${esc(getChapterInfo(turn).title)}, ${p.turn}/${p.maxTurn}턴</small></span>
+      <span class="realm-info">${esc(p.realm)}<small>${esc(byname(p))}</small></span>
     </div>
+    <div class="turn-track"><span style="width:${percent(turn, p.maxTurn)}%"></span></div>
     <div class="topbar-row2">
-      <div class="resource"><span class="label">체력</span><div class="bar-track"><div class="bar-fill bar-hp" style="width:${percent(p.hp, p.maxHp())}%"></div></div><span class="num">${p.hp}/${p.maxHp()}</span></div>
+      <div class="resource${p.hp < p.maxHp() * 0.35 ? " danger" : ""}"><span class="label">체력</span><div class="bar-track"><div class="bar-fill bar-hp" style="width:${percent(p.hp, p.maxHp())}%"></div></div><span class="num">${p.hp}/${p.maxHp()}</span></div>
       <div class="resource"><span class="label">기력</span><div class="bar-track"><div class="bar-fill bar-qi" style="width:${percent(p.qi, p.maxQi())}%"></div></div><span class="num">${p.qi}/${p.maxQi()}</span></div>
     </div>
     <div class="topbar-stats">
@@ -301,7 +399,8 @@ function topbar() {
       <span>무리 <b>${p.martial}</b></span><span>심경 <b>${p.mind}</b></span>
       <span class="silver">은자 <b>${p.silver}</b></span>
       ${p.injury ? `<span class="injury">내상 <b>${p.injury}</b></span>` : ""}
-    </div></div></div>`;
+    </div>
+    ${p.alive ? goalStrip() : ""}</div></div>`;
 }
 
 function renderEnding() {
@@ -314,29 +413,38 @@ function renderEnding() {
       <p class="ending-text">${esc(ending.text)}</p>
       ${ending.epilogue.map((l) => `<p class="epilogue">${esc(l)}</p>`).join("")}
       <p class="karma-gain">💠 카르마 +${ending.karma} (보유 ${meta.current_karma}, 누적 ${meta.total_karma})</p>
+      <p class="ending-hint">카르마로 새 출신과 특성을 해금해 다시 도전할 수 있습니다.</p>
       <div class="run-facts">
         <div><b>${esc(p.realm)}</b>경지</div><div><b>${esc(byname(p))}</b>별호</div>
         <div><b>${Math.min(p.turn, p.maxTurn)}턴</b>진행</div><div><b>${p.kills}명</b>처치</div>
         <div><b>${esc(fameRank(p.fame))}</b>명성</div>
       </div></div></div>
-    <div class="action-area"><div class="action-inner"><button class="next-btn" data-act="restart">메인 화면으로</button></div></div>`;
+    <div class="action-area"><div class="action-inner"><button class="next-btn" data-act="restart">다시 강호로</button></div></div>`;
+}
+
+function compareNote(player, key) {
+  const effect = DB.market[key].effects.find((e) => e.type === "equip");
+  if (!effect) return player.inventory[key] ? `가방에 ${player.inventory[key]}개` : "";
+  const label = effect.slot === "weapon" ? "공격력" : "받는 피해 감소";
+  return `지금 ${label} +${equipmentBonus(player, effect.slot)} → +${effect.bonus}`;
 }
 
 function renderMarket() {
-  const { market } = game;
-  const stock = stockView(game.player, market).map((item) => {
-    const label = item.sold ? "판매 완료" : item.blocked === "효과 없음" ? "효과 없음" : `은자 ${item.price}`;
+  const { market, player } = game;
+  const stock = stockView(player, market).map((item) => {
+    const label = item.sold ? "판매 완료" : item.blocked === "효과 없음" ? "필요 없음" : `은자 ${item.price}`;
+    const note = item.sold ? "" : compareNote(player, item.key);
     return `<div class="market-item${item.sold ? " sold" : ""}"><div class="item-info">
       <div class="item-name">${esc(item.name)}<span class="item-category">${esc(item.category)}${item.stackable && !item.sold ? `, ${item.left}개 남음` : ""}</span></div>
-      <div class="item-desc">${esc(item.desc)}</div></div>
-      <button class="buy-btn" data-act="buy" data-key="${esc(item.key)}" ${item.sold || item.blocked ? "disabled" : ""}>${label}</button></div>`;
+      <div class="item-desc">${esc(item.desc)}</div>${note ? `<div class="item-note">${esc(note)}</div>` : ""}</div>
+      <button class="buy-btn${item.blocked === "은자 부족" ? " poor" : ""}" data-act="buy" data-key="${esc(item.key)}" ${item.sold || item.blocked ? "disabled" : ""}>${label}</button></div>`;
   }).join("");
   return `<div class="stage market-stage${market.special ? " market-special" : ""}"><div class="market-inner">
       <h2 class="market-title">${market.special ? "🌑" : "🏪"} ${esc(market.name)}</h2>
-      <p class="market-sub">${market.special ? "결전을 앞둔 밤, 누군가 말없이 보따리를 풀어 놓는다." : "턴을 쓰지 않고 둘러볼 수 있다."}</p>
+      <p class="market-sub">${market.special ? "결전을 앞둔 밤, 누군가 말없이 보따리를 풀어 놓는다." : "턴을 쓰지 않습니다. 다음 시장은 일 년 뒤입니다."}</p>
       ${market.message ? `<p class="market-message">${esc(market.message)}</p>` : ""}
       ${stock}</div></div>
-    <div class="action-area"><div class="action-inner"><button class="next-btn" data-act="leave-market">${market.special ? "⚔️ 떠나서 결전으로" : "▶️ 시장을 떠난다"}</button></div></div>`;
+    <div class="action-area"><div class="action-inner"><button class="next-btn" data-act="leave-market">${market.special ? "⚔️ 떠나서 결전으로" : `▶️ 시장을 떠난다 (은자 ${player.silver})`}</button></div></div>`;
 }
 
 function renderEvent() {
@@ -350,22 +458,48 @@ function renderEvent() {
     <div class="action-area"><div class="action-inner"><p class="hint flush">${p.turn >= p.maxTurn ? "이 선택 뒤에는 돌아갈 수 없다." : "선택지의 결과는 고르기 전까지 알 수 없다."}</p></div></div>`;
 }
 
+const MAJOR_LINE = /^(🌟|✨|🏆|📕|📖|⚠️|🩸|⚔️|⚡|🗡️)/;
+const RESULT_PART = /[+-]\d|단계|완치|입문|획득|장착|새 무공|받았지만|불리기/;
+
+/** "외공+2, 은자+10" 같은 결과 줄은 표로, 나머지는 문장으로 보여 준다. */
+function logLine(line, isLast) {
+  const text = line.replace(/^성장: /, "");
+  const parts = text.split(", ");
+  if (parts.length && parts.every((p) => RESULT_PART.test(p) && p.length < 34)) {
+    const chips = parts.map((part) => {
+      const kind = /-\d/.test(part) ? "down" : /\+\d|입문|획득|장착|새 무공|완치|호전/.test(part) ? "up" : "";
+      return `<span class="chip ${kind}">${esc(part)}</span>`;
+    }).join("");
+    return `<p class="chips">${chips}</p>`;
+  }
+  const major = MAJOR_LINE.test(line);
+  const title = /^「.*」$/.test(line);
+  return `<p class="log-line${major ? " major" : ""}${title ? " log-title" : ""}${isLast && !major ? " latest" : ""}" data-type>${esc(line)}</p>`;
+}
+
 function renderTurn() {
   const p = game.player;
-  const lines = game.log.slice(-8);
+  const lines = game.log.slice(-9);
   const nextMarket = marketTurns().find((t) => t >= p.turn);
   const body = lines.length
-    ? lines.map((l, i) => `<p class="log-line${i === lines.length - 1 ? " latest" : ""}" data-type>${esc(l)}</p>`).join("")
+    ? lines.map((l, i) => logLine(l, i === lines.length - 1)).join("")
     : `<p class="log-line muted">강호의 첫걸음을 내딛으려 한다...</p>`;
-  const action = (value, label, note) => `<button class="act-btn" data-act="action" data-action="${value}">${label}<small>${note}</small></button>`;
+  const lowHp = p.hp < p.maxHp() * 0.45;
+  const lowQi = p.qi < p.maxQi() * 0.25;
+  const needRest = lowHp || lowQi || p.injury >= 2;
+  const advice = lowHp ? "체력이 낮습니다. 탐색 전에 회복하는 것이 안전합니다."
+    : p.injury >= 2 ? "내상이 깊습니다. 회복하면 나아집니다."
+      : lowQi ? "기력이 부족합니다. 회복이나 명상으로 채우세요." : null;
+  const action = (value, label, note, extra = "") => `<button class="act-btn${extra}" data-act="action" data-action="${value}">${label}<small>${note}</small></button>`;
+  const market = nextMarket ? (nextMarket === p.turn ? "이번 달 말에 시장이 열립니다." : `다음 시장까지 ${nextMarket - p.turn}개월`) : "";
   const controls = game.pendingNext
-    ? `<button class="next-btn" data-act="next">▶️ 다음</button>`
-    : `<div class="actions">
+    ? `<button class="next-btn" data-act="next">${nextMarket === p.turn ? "🏪 시장으로" : "▶️ 다음 달로"}</button>`
+    : `${advice ? `<p class="advice">${advice}</p>` : ""}<div class="actions">
         ${action("탐색", "🗺️ 탐색", "전투, 사건, 기연")}${action("수련", "⚔️ 수련", "외공, 무리, 숙련도")}
-        ${action("명상", "🧘 명상", "내공, 심경, 기력")}${action("휴식", "💤 회복", "체력, 기력, 내상")}
+        ${action("명상", "🧘 명상", "내공, 심경, 기력")}${action("휴식", "💤 회복", "체력, 기력, 내상", needRest ? " suggest" : "")}
       </div>
-      ${nextMarket ? `<p class="hint">${nextMarket === p.turn ? "이번 달 말에 시장이 열린다." : `다음 시장까지 ${nextMarket - p.turn}개월`}</p>` : ""}`;
-  return `<div class="stage"><div class="stage-inner">${body}</div></div>
+      ${market ? `<p class="hint">${market}</p>` : ""}`;
+  return `<div class="stage" aria-live="polite"><div class="stage-inner">${body}</div></div>
     <div class="action-area"><div class="action-inner">${controls}</div></div>`;
 }
 
@@ -394,10 +528,12 @@ function typeText() {
   if (!delay || reduced) return;
 
   nodes.forEach((n) => { n.textContent = ""; });
+  document.body.classList.add("typing");
   let index = 0;
   let count = 0;
   const finish = () => {
     clearInterval(timer);
+    document.body.classList.remove("typing");
     nodes.forEach((n, k) => { n.textContent = full[k]; });
     document.removeEventListener("pointerdown", finish, true);
     document.removeEventListener("keydown", finish, true);
@@ -426,7 +562,7 @@ export function render() {
   const box = document.querySelector(".modal-overlay.open .modal-box");
   const boxScroll = box ? box.scrollTop : 0;
   const homeScroll = document.body.classList.contains("home") ? window.scrollY : 0;
-  if (!game.active) renderHome();
+  if (!game.active) (ui.screen === "setup" ? renderSetup : renderTitle)();
   else if (game.battle) renderBattle();
   else renderPlay();
   const nextStage = document.querySelector(".market-stage");
@@ -470,10 +606,25 @@ const actions = {
   open: (el) => { openModal(el.dataset.modal); },
   "close-modal": closeModal,
   tab: (el) => { ui.tab = el.dataset.tab; render(); },
+  "open-status": (el) => {
+    ui.statusTab = el.dataset.tab;
+    render();
+    openModal("status-modal");
+  },
+  "status-tab": (el) => { ui.statusTab = el.dataset.tab; render(); },
+  "setup-tab": (el) => { ui.setupTab = el.dataset.tab; render(); window.scrollTo(0, 0); },
+  setup: () => { ui.screen = "setup"; render(); window.scrollTo(0, 0); },
+  title: () => { ui.screen = "title"; render(); },
   start: () => {
     closeModalQuietly();
     game.start(ui.origin, [...ui.traits]);
+    ui.screen = "title";
     render();
+    // 처음 하는 사람에게는 입문서를 먼저 보여 준다
+    if (!storage.get("wuxia-guided")) {
+      storage.set("wuxia-guided", "1");
+      openModal("help-modal");
+    }
   },
   "confirm-start": () => { openModal("confirm-start-modal"); },
   continue: () => { game.continueFromSave(); render(); },

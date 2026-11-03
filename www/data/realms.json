@@ -11,22 +11,22 @@
     "절정": {
       "avg": 35,
       "min_stat": 30,
-      "battles": 5
+      "battles": 8
     },
     "초절정": {
       "avg": 50,
       "min_stat": 45,
-      "battles": 7
+      "battles": 16
     },
     "화경": {
       "avg": 65,
       "min_stat": 60,
-      "battles": 12
+      "battles": 28
     },
     "현경": {
       "avg": 80,
       "min_stat": 75,
-      "battles": 18
+      "battles": 42
     }
   },
   "combat_bonus": {
@@ -39,8 +39,8 @@
   },
   "saengsa": {
     "min_stat": 95,
-    "battles": 25,
-    "hp_ratio": 0.6,
+    "battles": 50,
+    "hp_ratio": 0.7,
     "qi_ratio": 0.3
   },
   "good_ending": {

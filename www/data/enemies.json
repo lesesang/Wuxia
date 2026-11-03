@@ -3,30 +3,33 @@
     "name": "산적",
     "tier": "일반",
     "realm": "일류",
-    "hp": 70,
-    "attack": 10,
+    "hp": 140,
+    "attack": 15,
     "exp_reward": 1,
     "silver": [
-      8,
-      15
+      6,
+      10
     ],
     "chapters": [
       1
     ],
     "weight": 5,
     "desc": "고갯길에 숨어 행인을 터는 무리. 무공이라 부르기도 민망하다.",
-    "intro": "\"이 길은 내가 닦았다! 통행세를 내라!\""
+    "intro": "\"이 길은 내가 닦았다! 통행세를 내라!\"",
+    "level": 1,
+    "hp_style": 0.82,
+    "attack_style": 0.89
   },
   "낭인": {
     "name": "떠돌이 낭인",
     "tier": "일반",
     "realm": "일류",
-    "hp": 100,
-    "attack": 13,
+    "hp": 200,
+    "attack": 19,
     "exp_reward": 1,
     "silver": [
-      10,
-      18
+      7,
+      13
     ],
     "chapters": [
       1,
@@ -41,36 +44,42 @@
         "mult": 1.6
       }
     ],
-    "intro": "\"칼값은 이미 받았소. 원망은 마시오.\""
+    "intro": "\"칼값은 이미 받았소. 원망은 마시오.\"",
+    "level": 1,
+    "hp_style": 1.18,
+    "attack_style": 1.16
   },
   "늑대무리": {
     "name": "굶주린 늑대 무리",
     "tier": "일반",
     "realm": "일류",
-    "hp": 80,
-    "attack": 11,
+    "hp": 160,
+    "attack": 16,
     "exp_reward": 1,
     "silver": [
       0,
-      4
+      3
     ],
     "chapters": [
       1
     ],
     "weight": 3,
     "evasion": 0.08,
-    "desc": "겨울을 넘기지 못한 짐승들. 은자는 없지만 싸움은 된다."
+    "desc": "겨울을 넘기지 못한 짐승들. 은자는 없지만 싸움은 된다.",
+    "level": 1,
+    "hp_style": 0.94,
+    "attack_style": 0.98
   },
   "흑풍채두목": {
     "name": "흑풍채 두목",
     "tier": "난적",
     "realm": "일류",
-    "hp": 230,
-    "attack": 18,
+    "hp": 275,
+    "attack": 20,
     "exp_reward": 2,
     "silver": [
-      30,
-      50
+      21,
+      35
     ],
     "chapters": [
       1,
@@ -85,36 +94,42 @@
         "mult": 1.8
       }
     ],
-    "intro": "\"흑풍채의 도끼 맛을 보여 주마!\""
+    "intro": "\"흑풍채의 도끼 맛을 보여 주마!\"",
+    "level": 1,
+    "hp_style": 1.07,
+    "attack_style": 1.03
   },
   "녹림호걸": {
     "name": "녹림 호걸",
     "tier": "일반",
     "realm": "절정",
-    "hp": 270,
-    "attack": 28,
+    "hp": 360,
+    "attack": 21,
     "exp_reward": 1,
     "silver": [
-      18,
-      30
+      13,
+      21
     ],
     "chapters": [
       2,
       3
     ],
     "weight": 5,
-    "desc": "제 나름의 의리를 말하는 녹림의 무인."
+    "desc": "제 나름의 의리를 말하는 녹림의 무인.",
+    "level": 25,
+    "hp_style": 1.06,
+    "attack_style": 0.88
   },
   "사파자객": {
     "name": "사파 자객",
     "tier": "일반",
     "realm": "절정",
-    "hp": 220,
-    "attack": 36,
+    "hp": 290,
+    "attack": 27,
     "exp_reward": 1,
     "silver": [
-      22,
-      34
+      15,
+      24
     ],
     "chapters": [
       2,
@@ -134,18 +149,21 @@
         }
       }
     ],
-    "intro": "어둠 속에서 칼날만 먼저 번뜩였다."
+    "intro": "어둠 속에서 칼날만 먼저 번뜩였다.",
+    "level": 25,
+    "hp_style": 0.86,
+    "attack_style": 1.13
   },
   "절정고수": {
     "name": "절정의 떠돌이 고수",
     "tier": "난적",
     "realm": "절정",
-    "hp": 480,
-    "attack": 38,
+    "hp": 560,
+    "attack": 33,
     "exp_reward": 2,
     "silver": [
-      40,
-      65
+      28,
+      46
     ],
     "chapters": [
       2,
@@ -165,18 +183,21 @@
       "skill": "육합권",
       "chance": 0.15
     },
-    "intro": "\"이름 석 자 값을 하는지 보자.\""
+    "intro": "\"이름 석 자 값을 하는지 보자.\"",
+    "level": 25,
+    "hp_style": 1.1,
+    "attack_style": 1.12
   },
   "혈교수련자": {
     "name": "혈교 수련자",
     "tier": "일반",
     "realm": "초절정",
-    "hp": 570,
-    "attack": 52,
+    "hp": 720,
+    "attack": 39,
     "exp_reward": 1,
     "silver": [
-      28,
-      42
+      20,
+      29
     ],
     "chapters": [
       3,
@@ -192,18 +213,21 @@
         "heal_pct": 8
       }
     ],
-    "intro": "\"피! 피를 바쳐라!\""
+    "intro": "\"피! 피를 바쳐라!\"",
+    "level": 49,
+    "hp_style": 1.09,
+    "attack_style": 1.09
   },
   "독문고수": {
     "name": "독문의 고수",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 720,
-    "attack": 46,
+    "hp": 1090,
+    "attack": 45,
     "exp_reward": 2,
     "silver": [
-      50,
-      80
+      35,
+      56
     ],
     "chapters": [
       3,
@@ -226,18 +250,21 @@
       "skill": "독룡장",
       "chance": 0.1
     },
-    "intro": "\"숨을 조금만 얕게 쉬시오. 그래야 좀 더 살 테니.\""
+    "intro": "\"숨을 조금만 얕게 쉬시오. 그래야 좀 더 살 테니.\"",
+    "level": 49,
+    "hp_style": 1.1,
+    "attack_style": 1.04
   },
   "철혈대원": {
     "name": "철혈대 대원",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 880,
-    "attack": 57,
+    "hp": 1235,
+    "attack": 52,
     "exp_reward": 2,
     "silver": [
-      55,
-      80
+      38,
+      56
     ],
     "chapters": [
       3,
@@ -253,18 +280,21 @@
         "mult": 1.7
       }
     ],
-    "intro": "철갑이 일제히 한 걸음 앞으로 나왔다."
+    "intro": "철갑이 일제히 한 걸음 앞으로 나왔다.",
+    "level": 49,
+    "hp_style": 1.25,
+    "attack_style": 1.2
   },
   "화경마인": {
     "name": "화경의 마인",
     "tier": "강적",
     "realm": "화경",
-    "hp": 1440,
-    "attack": 78,
+    "hp": 1475,
+    "attack": 49,
     "exp_reward": 3,
     "silver": [
-      90,
-      130
+      63,
+      91
     ],
     "chapters": [
       3,
@@ -286,18 +316,21 @@
       "skill": "매화검법",
       "chance": 0.1
     },
-    "intro": "웃음소리에 사람의 것이 남아 있지 않았다."
+    "intro": "웃음소리에 사람의 것이 남아 있지 않았다.",
+    "level": 49,
+    "hp_style": 1.22,
+    "attack_style": 1.19
   },
   "마교장로": {
     "name": "마교 장로",
     "tier": "난적",
     "realm": "화경",
-    "hp": 1330,
-    "attack": 81,
+    "hp": 2195,
+    "attack": 73,
     "exp_reward": 2,
     "silver": [
-      70,
-      100
+      49,
+      70
     ],
     "chapters": [
       4,
@@ -316,18 +349,21 @@
         "injury": true
       }
     ],
-    "intro": "\"본좌를 보았으니 눈은 놓고 가거라.\""
+    "intro": "\"본좌를 보았으니 눈은 놓고 가거라.\"",
+    "level": 73,
+    "hp_style": 1.0,
+    "attack_style": 1.0
   },
   "혈마대귀": {
     "name": "혈마대의 귀졸",
     "tier": "일반",
     "realm": "화경",
-    "hp": 1060,
-    "attack": 87,
+    "hp": 1465,
+    "attack": 61,
     "exp_reward": 1,
     "silver": [
-      40,
-      60
+      28,
+      42
     ],
     "chapters": [
       4,
@@ -342,18 +378,21 @@
         "mult": 2.2
       }
     ],
-    "intro": "그들은 비명도, 기합도 지르지 않았다."
+    "intro": "그들은 비명도, 기합도 지르지 않았다.",
+    "level": 73,
+    "hp_style": 1.0,
+    "attack_style": 1.0
   },
   "십이마장": {
     "name": "십이마장",
     "tier": "강적",
     "realm": "현경",
-    "hp": 2270,
-    "attack": 102,
+    "hp": 3355,
+    "attack": 84,
     "exp_reward": 3,
     "silver": [
-      130,
-      180
+      91,
+      126
     ],
     "chapters": [
       4,
@@ -377,14 +416,17 @@
         "text": "마장이 제 심맥을 끊어 마지막 기세를 끌어올린다!"
       }
     ],
-    "intro": "\"천마봉으로 가는 길은 열두 개의 무덤을 지나야 한다.\""
+    "intro": "\"천마봉으로 가는 길은 열두 개의 무덤을 지나야 한다.\"",
+    "level": 73,
+    "hp_style": 1.25,
+    "attack_style": 1.2
   },
   "단목휘": {
     "name": "단목휘",
     "tier": "난적",
     "realm": "절정",
-    "hp": 360,
-    "attack": 26,
+    "hp": 370,
+    "attack": 24,
     "exp_reward": 2,
     "silver": [
       0,
@@ -401,18 +443,21 @@
         "mult": 1.7
       }
     ],
-    "intro": "\"다리 값이오. 웃으며 받아 주시오.\""
+    "intro": "\"다리 값이오. 웃으며 받아 주시오.\"",
+    "level": 13,
+    "hp_style": 1.0,
+    "attack_style": 1.0
   },
   "혈마잔영": {
     "name": "혈마의 잔영",
     "tier": "강적",
     "realm": "화경",
-    "hp": 920,
-    "attack": 53,
+    "hp": 970,
+    "attack": 35,
     "exp_reward": 3,
     "silver": [
-      60,
-      90
+      42,
+      63
     ],
     "chapters": [],
     "weight": 0,
@@ -425,14 +470,17 @@
         "qi_drain": 10
       }
     ],
-    "intro": "\"먹어라. 아니면 먹혀라.\""
+    "intro": "\"먹어라. 아니면 먹혀라.\"",
+    "level": 49,
+    "hp_style": 0.8,
+    "attack_style": 0.85
   },
   "무명노인": {
     "name": "무명노인",
     "tier": "강적",
     "realm": "현경",
-    "hp": 900,
-    "attack": 43,
+    "hp": 2145,
+    "attack": 59,
     "exp_reward": 3,
     "silver": [
       0,
@@ -442,18 +490,21 @@
     "weight": 0,
     "evasion": 0.15,
     "desc": "제자를 시험하러 나온 노인. 죽일 생각은 없어 보인다.",
-    "intro": "\"장작 패던 대로만 해 보게.\""
+    "intro": "\"장작 패던 대로만 해 보게.\"",
+    "level": 73,
+    "hp_style": 0.8,
+    "attack_style": 0.85
   },
   "무림맹추격대": {
     "name": "무림맹 추격대",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 650,
-    "attack": 43,
+    "hp": 980,
+    "attack": 42,
     "exp_reward": 2,
     "silver": [
-      40,
-      60
+      28,
+      42
     ],
     "chapters": [],
     "weight": 0,
@@ -466,14 +517,17 @@
         "mult": 1.8
       }
     ],
-    "intro": "\"마도에 물든 자여, 칼을 버려라!\""
+    "intro": "\"마도에 물든 자여, 칼을 버려라!\"",
+    "level": 49,
+    "hp_style": 0.99,
+    "attack_style": 0.97
   },
   "천마": {
     "name": "천마",
     "tier": "보스",
     "realm": "현경",
-    "hp": 7800,
-    "attack": 112,
+    "hp": 12000,
+    "attack": 118,
     "exp_reward": 5,
     "silver": [
       0,
@@ -522,12 +576,12 @@
     "name": "사이비 도사",
     "tier": "일반",
     "realm": "일류",
-    "hp": 90,
-    "attack": 11,
+    "hp": 180,
+    "attack": 16,
     "exp_reward": 1,
     "silver": [
-      12,
-      20
+      8,
+      14
     ],
     "chapters": [
       1
@@ -542,18 +596,21 @@
         "mult": 1.3,
         "qi_drain": 10
       }
-    ]
+    ],
+    "level": 1,
+    "hp_style": 1.06,
+    "attack_style": 0.98
   },
   "배신표사": {
     "name": "배신한 표사",
     "tier": "난적",
     "realm": "일류",
-    "hp": 200,
-    "attack": 17,
+    "hp": 240,
+    "attack": 19,
     "exp_reward": 2,
     "silver": [
-      35,
-      50
+      24,
+      35
     ],
     "chapters": [
       1
@@ -567,18 +624,21 @@
         "every": 3,
         "mult": 1.7
       }
-    ]
+    ],
+    "level": 1,
+    "hp_style": 0.93,
+    "attack_style": 0.97
   },
   "귀도객": {
     "name": "귀도객",
     "tier": "일반",
     "realm": "절정",
-    "hp": 270,
-    "attack": 34,
+    "hp": 360,
+    "attack": 26,
     "exp_reward": 1,
     "silver": [
-      22,
-      36
+      15,
+      25
     ],
     "chapters": [
       2,
@@ -594,18 +654,21 @@
         "every": 3,
         "mult": 1.9
       }
-    ]
+    ],
+    "level": 25,
+    "hp_style": 1.06,
+    "attack_style": 1.07
   },
   "금의위밀정": {
     "name": "금의위 밀정",
     "tier": "일반",
     "realm": "절정",
-    "hp": 260,
-    "attack": 29,
+    "hp": 345,
+    "attack": 22,
     "exp_reward": 1,
     "silver": [
-      30,
-      44
+      21,
+      31
     ],
     "chapters": [
       2,
@@ -622,18 +685,21 @@
         "mult": 1.2,
         "seal": 1
       }
-    ]
+    ],
+    "level": 25,
+    "hp_style": 1.02,
+    "attack_style": 0.91
   },
   "수적두목": {
     "name": "장강 수적 두목",
     "tier": "난적",
     "realm": "절정",
-    "hp": 390,
-    "attack": 30,
+    "hp": 460,
+    "attack": 26,
     "exp_reward": 2,
     "silver": [
-      50,
-      70
+      35,
+      49
     ],
     "chapters": [
       2
@@ -647,18 +713,21 @@
         "every": 3,
         "mult": 1.8
       }
-    ]
+    ],
+    "level": 25,
+    "hp_style": 0.9,
+    "attack_style": 0.88
   },
   "독고객": {
     "name": "독고객",
     "tier": "일반",
     "realm": "초절정",
-    "hp": 480,
-    "attack": 43,
+    "hp": 600,
+    "attack": 33,
     "exp_reward": 1,
     "silver": [
-      30,
-      44
+      21,
+      31
     ],
     "chapters": [
       3,
@@ -677,18 +746,21 @@
           "rounds": 3
         }
       }
-    ]
+    ],
+    "level": 49,
+    "hp_style": 0.91,
+    "attack_style": 0.91
   },
   "장강수적": {
     "name": "장강수로채 정예",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 630,
-    "attack": 45,
+    "hp": 950,
+    "attack": 44,
     "exp_reward": 2,
     "silver": [
-      50,
-      70
+      35,
+      49
     ],
     "chapters": [
       3
@@ -703,18 +775,21 @@
         "every": 3,
         "mult": 1.7
       }
-    ]
+    ],
+    "level": 49,
+    "hp_style": 0.96,
+    "attack_style": 1.02
   },
   "십이마장귀곡": {
     "name": "제칠마장 귀곡자",
     "tier": "강적",
     "realm": "화경",
-    "hp": 1660,
-    "attack": 85,
+    "hp": 2900,
+    "attack": 80,
     "exp_reward": 3,
     "silver": [
-      120,
-      160
+      84,
+      112
     ],
     "chapters": [
       4,
@@ -735,14 +810,17 @@
     "drop": {
       "skill": "오호단문도",
       "chance": 0.2
-    }
+    },
+    "level": 73,
+    "hp_style": 1.08,
+    "attack_style": 1.15
   },
   "천년혈망": {
     "name": "천년 혈망",
     "tier": "강적",
     "realm": "화경",
-    "hp": 1300,
-    "attack": 66,
+    "hp": 2280,
+    "attack": 62,
     "exp_reward": 3,
     "silver": [
       0,
@@ -763,18 +841,21 @@
           "rounds": 3
         }
       }
-    ]
+    ],
+    "level": 73,
+    "hp_style": 0.85,
+    "attack_style": 0.89
   },
   "혈수라": {
     "name": "제삼마장 혈수라",
     "tier": "강적",
     "realm": "현경",
-    "hp": 2350,
-    "attack": 101,
+    "hp": 4815,
+    "attack": 86,
     "exp_reward": 3,
     "silver": [
-      150,
-      200
+      105,
+      140
     ],
     "chapters": [
       5
@@ -797,18 +878,21 @@
         "attack_mult": 1.3,
         "text": "혈수라가 제 상처를 핥으며 웃는다!"
       }
-    ]
+    ],
+    "level": 97,
+    "hp_style": 1.09,
+    "attack_style": 0.97
   },
   "무영": {
     "name": "제일마장 무영",
     "tier": "강적",
     "realm": "현경",
-    "hp": 1960,
-    "attack": 108,
+    "hp": 4020,
+    "attack": 91,
     "exp_reward": 3,
     "silver": [
-      160,
-      210
+      112,
+      147
     ],
     "chapters": [
       5
@@ -824,18 +908,21 @@
         "every": 3,
         "mult": 2.2
       }
-    ]
+    ],
+    "level": 97,
+    "hp_style": 0.91,
+    "attack_style": 1.03
   },
   "천마친위대": {
     "name": "천마 친위대",
     "tier": "난적",
     "realm": "화경",
-    "hp": 1400,
-    "attack": 90,
+    "hp": 3615,
+    "attack": 92,
     "exp_reward": 2,
     "silver": [
-      80,
-      110
+      56,
+      77
     ],
     "chapters": [
       5
@@ -850,18 +937,21 @@
         "every": 3,
         "mult": 1.7
       }
-    ]
+    ],
+    "level": 97,
+    "hp_style": 1.0,
+    "attack_style": 1.0
   },
   "혈수인": {
     "name": "혈수인",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 640,
-    "attack": 44,
+    "hp": 970,
+    "attack": 43,
     "exp_reward": 2,
     "silver": [
-      60,
-      90
+      42,
+      63
     ],
     "chapters": [],
     "weight": 0,
@@ -874,14 +964,17 @@
         "mult": 1.8,
         "injury": true
       }
-    ]
+    ],
+    "level": 49,
+    "hp_style": 0.98,
+    "attack_style": 1.0
   },
   "십팔동인": {
     "name": "십팔동인",
     "tier": "난적",
     "realm": "절정",
-    "hp": 520,
-    "attack": 30,
+    "hp": 730,
+    "attack": 31,
     "exp_reward": 2,
     "silver": [
       0,
@@ -898,14 +991,17 @@
         "every": 3,
         "mult": 1.6
       }
-    ]
+    ],
+    "level": 37,
+    "hp_style": 1.05,
+    "attack_style": 0.9
   },
   "무당진인": {
     "name": "무당 진인",
     "tier": "난적",
     "realm": "절정",
-    "hp": 460,
-    "attack": 26,
+    "hp": 650,
+    "attack": 29,
     "exp_reward": 2,
     "silver": [
       0,
@@ -923,14 +1019,17 @@
         "mult": 1.5,
         "seal": 1
       }
-    ]
+    ],
+    "level": 37,
+    "hp_style": 0.93,
+    "attack_style": 0.85
   },
   "화산장로": {
     "name": "화산 장로",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 520,
-    "attack": 36,
+    "hp": 790,
+    "attack": 37,
     "exp_reward": 2,
     "silver": [
       0,
@@ -947,14 +1046,17 @@
         "every": 3,
         "mult": 1.9
       }
-    ]
+    ],
+    "level": 49,
+    "hp_style": 0.8,
+    "attack_style": 0.85
   },
   "아미사태": {
     "name": "멸절 사태",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 540,
-    "attack": 38,
+    "hp": 820,
+    "attack": 37,
     "exp_reward": 2,
     "silver": [
       0,
@@ -970,14 +1072,17 @@
         "every": 3,
         "mult": 1.8
       }
-    ]
+    ],
+    "level": 49,
+    "hp_style": 0.83,
+    "attack_style": 0.86
   },
   "개방십걸": {
     "name": "개방 십걸",
     "tier": "난적",
     "realm": "절정",
-    "hp": 420,
-    "attack": 30,
+    "hp": 595,
+    "attack": 31,
     "exp_reward": 2,
     "silver": [
       0,
@@ -993,18 +1098,21 @@
         "every": 3,
         "mult": 1.7
       }
-    ]
+    ],
+    "level": 37,
+    "hp_style": 0.85,
+    "attack_style": 0.9
   },
   "당가배신자": {
     "name": "당가의 배신자",
     "tier": "난적",
     "realm": "절정",
-    "hp": 430,
-    "attack": 33,
+    "hp": 605,
+    "attack": 34,
     "exp_reward": 2,
     "silver": [
-      40,
-      60
+      28,
+      42
     ],
     "chapters": [],
     "weight": 0,
@@ -1021,18 +1129,21 @@
           "rounds": 2
         }
       }
-    ]
+    ],
+    "level": 37,
+    "hp_style": 0.87,
+    "attack_style": 0.99
   },
   "마교심판자": {
     "name": "혈지의 심판자",
     "tier": "강적",
     "realm": "화경",
-    "hp": 950,
-    "attack": 56,
+    "hp": 1825,
+    "attack": 55,
     "exp_reward": 3,
     "silver": [
-      50,
-      70
+      35,
+      49
     ],
     "chapters": [],
     "weight": 0,
@@ -1046,18 +1157,21 @@
         "mult": 1.9,
         "injury": true
       }
-    ]
+    ],
+    "level": 61,
+    "hp_style": 0.97,
+    "attack_style": 0.98
   },
   "곤륜역도": {
     "name": "곤륜의 사숙",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 540,
-    "attack": 38,
+    "hp": 760,
+    "attack": 39,
     "exp_reward": 2,
     "silver": [
-      20,
-      40
+      14,
+      28
     ],
     "chapters": [],
     "weight": 0,
@@ -1069,18 +1183,21 @@
         "every": 3,
         "mult": 1.8
       }
-    ]
+    ],
+    "level": 37,
+    "hp_style": 1.09,
+    "attack_style": 1.15
   },
   "하오문주": {
     "name": "하오문주",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 600,
-    "attack": 42,
+    "hp": 845,
+    "attack": 41,
     "exp_reward": 2,
     "silver": [
-      60,
-      80
+      42,
+      56
     ],
     "chapters": [],
     "weight": 0,
@@ -1094,14 +1211,17 @@
         "mult": 1.7,
         "qi_drain": 12
       }
-    ]
+    ],
+    "level": 37,
+    "hp_style": 1.21,
+    "attack_style": 1.2
   },
   "권마의그림자": {
     "name": "권마의 그림자",
     "tier": "강적",
     "realm": "화경",
-    "hp": 1000,
-    "attack": 58,
+    "hp": 1940,
+    "attack": 57,
     "exp_reward": 3,
     "silver": [
       0,
@@ -1118,14 +1238,17 @@
         "mult": 2.1,
         "injury": true
       }
-    ]
+    ],
+    "level": 61,
+    "hp_style": 1.03,
+    "attack_style": 1.02
   },
   "비무청성": {
     "name": "청성파 후기지수",
     "tier": "일반",
     "realm": "절정",
-    "hp": 340,
-    "attack": 30,
+    "hp": 990,
+    "attack": 48,
     "exp_reward": 2,
     "silver": [
       0,
@@ -1142,14 +1265,17 @@
         "every": 3,
         "mult": 1.6
       }
-    ]
+    ],
+    "level": 60,
+    "hp_style": 1.0,
+    "attack_style": 1.0
   },
   "비무철권": {
     "name": "철권왕 호연패",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 500,
-    "attack": 36,
+    "hp": 1485,
+    "attack": 58,
     "exp_reward": 2,
     "silver": [
       0,
@@ -1166,14 +1292,17 @@
         "every": 3,
         "mult": 1.8
       }
-    ]
+    ],
+    "level": 60,
+    "hp_style": 1.0,
+    "attack_style": 1.0
   },
   "비무결승": {
     "name": "혈의공자",
     "tier": "강적",
     "realm": "화경",
-    "hp": 720,
-    "attack": 44,
+    "hp": 1815,
+    "attack": 55,
     "exp_reward": 3,
     "silver": [
       0,
@@ -1194,6 +1323,9 @@
           "rounds": 2
         }
       }
-    ]
+    ],
+    "level": 60,
+    "hp_style": 1.0,
+    "attack_style": 1.0
   }
 }

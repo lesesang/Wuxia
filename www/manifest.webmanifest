@@ -1,7 +1,7 @@
 {
   "name": "무협 로그라이크",
   "short_name": "무협",
-  "description": "다섯 해 동안 무공을 닦아 천마봉에 오르는 한국어 텍스트 로그라이크",
+  "description": "십 년 동안 무공을 닦아 천마봉에 오르는 한국어 텍스트 로그라이크",
   "lang": "ko",
   "start_url": "./index.html",
   "scope": "./",

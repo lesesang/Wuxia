@@ -11,10 +11,19 @@ const INTERNAL_ATTACK_RATE = 0.3;
 const FLEE_BASE = 0.5;
 export const INJURY_PENALTY = 7;
 const FAME_BY_TIER = { 일반: 1, 난적: 2, 강적: 4, 보스: 10 };
-const STAT_GROWTH_RANGE = { 일반: [1, 3], 난적: [2, 5], 강적: [3, 7], 보스: [5, 10] };
+const STAT_GROWTH_RANGE = { 일반: [1, 2], 난적: [1, 3], 강적: [2, 4], 보스: [5, 10] };
+
+/** 표(12턴 간격)에서 해당 턴의 값을 읽는다. */
+function curveAt(curve, turn) {
+  const position = Math.max(0, Math.min(curve.length - 1, turn / 12));
+  const low = Math.floor(position);
+  const high = Math.min(curve.length - 1, low + 1);
+  return curve[low] + (curve[high] - curve[low]) * (position - low);
+}
 
 export class Enemy {
-  constructor(key) {
+  /** turn을 주면 그 시기에 맞게 강해진다. 데이터의 hp와 attack은 level 턴 기준 값이다. */
+  constructor(key, turn = null) {
     const data = DB.enemies[key];
     if (!data) throw new Error(`알 수 없는 적: ${key}`);
     this.key = key;
@@ -36,6 +45,15 @@ export class Enemy {
     this.growthRange = STAT_GROWTH_RANGE[this.tier] || [1, 3];
     this.silverRange = data.silver || [0, 0];
     this.phase = 0;
+    if (turn !== null && data.tier !== "보스" && data.level) {
+      const { hp_curve: hpCurve, attack_curve: attackCurve } = DB.balance;
+      const hpScale = curveAt(hpCurve, turn) / curveAt(hpCurve, data.level);
+      const attackScale = curveAt(attackCurve, turn) / curveAt(attackCurve, data.level);
+      this.maxHp = Math.max(1, Math.round(this.maxHp * hpScale / 5) * 5);
+      this.hp = this.maxHp;
+      this.attack = Math.max(1, Math.round(this.attack * attackScale));
+      this.armor = Math.round(this.armor * attackScale);
+    }
   }
 
   isAlive() { return this.hp > 0; }

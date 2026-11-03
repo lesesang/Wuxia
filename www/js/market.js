@@ -2,11 +2,14 @@
 import { Skill, STAT_CAP } from "./character.js";
 import { DB } from "./data.js";
 import { pick, shuffled } from "./rng.js";
-import { JUNG_DISCOUNT, marketName, marketTurns, sumEffect } from "./rules.js";
+import { getChapter, JUNG_DISCOUNT, marketName, sumEffect } from "./rules.js";
 
 const STOCK_SIZE = 8;
 
-const marketNumber = (turn) => marketTurns().indexOf(turn) + 1;
+const LAST_MARKET_TURN = 119;
+
+/** 시장 등급 1~4는 챕터를 따르고, 5는 마지막의 수상한 누군가 */
+const marketNumber = (turn) => (turn === LAST_MARKET_TURN ? 5 : Math.min(4, getChapter(turn)));
 
 export function equipmentBonus(player, slot) {
   const item = DB.market[player[slot]];
