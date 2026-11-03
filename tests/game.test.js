@@ -997,7 +997,7 @@ test("이벤트에서 만들어 쓰는 인연 표시는 어딘가에서 얻을 �
 });
 
 test("새 출신은 서장과 첫 무기 문장을 갖는다", () => {
-  for (const origin of ["백호대장"]) {
+  for (const origin of ["백호무관"]) {
     const p = new Player(origin);
     assert.notEqual(eventView(p, "시작_병기고").text, DB.events.시작_병기고.text);
     assert.ok(Object.values(DB.storyEvents).some((e) => e.requires?.origin === origin && e.turn === 1));
@@ -1058,7 +1058,7 @@ test("모든 출신은 시작 경지가 일류인 까닭을 설명하고 맺음�
     assert.ok(new Player(key).realm === "일류", key);
     if (!["남궁세가", "곤륜파", "하오문", "권마계승"].includes(key)) assert.ok(origin.desc.includes("일류"), key);
   }
-  assert.ok(new Player("백호대장").hasSkill("백호도법"));
+  assert.ok(new Player("백호무관").hasSkill("백호도법"));
 });
 
 test("강호행의 굵직한 일이 기록으로 남고 저장된다", () => {
@@ -1319,7 +1319,7 @@ test("무기 계열마다 무공 수가 같고 등급이 고르다", () => {
 });
 
 test("새 출신은 저마다 서장과 무기 문장, 이야기가 있다", () => {
-  for (const origin of ["하북팽가", "악가소장주", "개방후개", "소림수제자", "소교주", "소막주", "당가소주", "황보막내", "녹림후계", "금군교두", "회귀자"]) {
+  for (const origin of ["하북팽가", "악가전인", "개방제자", "소림속가", "신교사자", "살막살수", "당가무사", "황보막내", "녹림채주", "금군교두", "회귀자"]) {
     assert.ok(DB.origins.origins[origin].desc.includes("일류"));
     assert.ok(Object.values(DB.storyEvents).some((e) => e.requires?.origin === origin && e.turn === 1));
     assert.notEqual(eventView(new Player(origin), "시작_병기고").text, DB.events.시작_병기고.text);
@@ -1401,8 +1401,8 @@ test("없어진 출신을 샀던 기록은 카르마로 돌려준다", () => {
 });
 
 test("개방과 당가 출신은 사문을 지니고 시작한다", () => {
-  assert.equal(new Player("개방후개").sect, "개방");
-  assert.equal(new Player("당가소주").sect, "당가");
+  assert.equal(new Player("개방제자").sect, "개방");
+  assert.equal(new Player("당가무사").sect, "당가");
 });
 
 // ---------- 생사경과 출신의 위치 ----------
@@ -1443,26 +1443,51 @@ test("어떤 사건이나 인연도 생사경 조건을 건드리지 않는다",
   assert.ok(!JSON.stringify(shown).includes("생사경"), "히든 엔딩을 미리 알리지 않는다");
 });
 
-test("출신은 낮은 처지가 아니라 세계관에서 좋은 위치의 인물이다", () => {
+test("출신은 너무 낮지도 높지도 않은 어엿한 위치의 인물이다", () => {
   const text = JSON.stringify(Object.values(DB.origins.origins).map((o) => [o.name, o.desc]));
-  for (const word of ["방계", "서자", "탈주", "도망자", "탈영", "점소이", "파문"]) assert.ok(!text.includes(word), word);
+  for (const word of ["방계", "서자", "탈주", "도망자", "탈영", "점소이", "파문", "소가주", "소장주", "소막주", "소교주", "소표두", "수제자", "후개", "후계"]) assert.ok(!text.includes(word), word);
 });
 
 test("이름이 바뀐 출신은 해금과 저장을 잃지 않는다", () => {
   const data = loadMeta();
   data.unlocked_origins = ["무림초출", "탈영병", "점소이"];
   saveMeta(data);
-  assert.deepEqual(loadMeta().unlocked_origins, ["무림초출", "백호대장", "금군교두"]);
-  const dict = new Player("백호대장").toDict();
+  assert.deepEqual(loadMeta().unlocked_origins, ["무림초출", "백호무관", "금군교두"]);
+  const dict = new Player("백호무관").toDict();
   dict.origin_key = "탈영병";
   const p = Player.fromDict(dict);
-  assert.equal(p.originKey, "백호대장");
-  assert.equal(p.origin, "백호대의 대장");
+  assert.equal(p.originKey, "백호무관");
+  assert.equal(p.origin, "변방 백호대의 무관");
+});
+
+test("카르마를 늘리는 강화는 없고, 샀던 것은 돌려준다", () => {
+  assert.ok(!DB.karma.upgrades.윤회);
+  const data = loadMeta();
+  data.upgrades = { 윤회: 2, 근골: 1 };
+  data.current_karma = 1;
+  saveMeta(data);
+  const after = loadMeta();
+  assert.equal(after.current_karma, 16);
+  assert.deepEqual(after.upgrades, { 근골: 1 });
+  data.upgrades = {};
+  saveMeta(after);
+});
+
+test("격파 기록과 가장 오래 간 달이 남는다", () => {
+  const data = loadMeta();
+  data.total_wins = 0;
+  data.best_turn = 0;
+  saveMeta(data);
+  const game = newGame();
+  game.player.turn = 50;
+  game.finishGame(true);
+  assert.equal(loadMeta().total_wins, 1);
+  assert.equal(loadMeta().best_turn, 50);
 });
 
 // ---------- 전체 플레이 ----------
 
-for (const origin of ["무림초출", "남궁세가", "곤륜파", "하오문", "권마계승"]) {
+for (const origin of DB.origins.order) {
   test(`${origin}: 무작위로 끝까지 플레이해도 오류가 없다`, () => {
     const data = loadMeta();
     data.unlocked_origins = Object.keys(DB.origins.origins);

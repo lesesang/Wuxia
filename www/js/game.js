@@ -9,7 +9,7 @@ import {
 import { buy, openMarket } from "./market.js";
 import {
   activeContent, addKarma, claimAchievements, claimMilestones, clearCheckpoint, extraSlots, loadCheckpoint, loadMeta, recordRun, saveCheckpoint,
-  storeLegacy, takeLegacy, updateGlobalCodex, updateKnown, upgradeLevel, upgradeTraits,
+  storeLegacy, takeLegacy, updateGlobalCodex, updateKnown, upgradeTraits,
 } from "./meta.js";
 import { pickWeighted, randInt, rng } from "./rng.js";
 import {
@@ -497,7 +497,6 @@ function karmaGain(player, key, victory) {
   };
   add("도달한 장", getChapter(Math.min(player.turn, player.maxTurn)) - 1);
   add("경지", realmIndex(player.realm));
-  add("윤회의 고리", upgradeLevel("윤회"));
   const { realm, 생사경: saengsa, 격파: win } = DB.karma.milestones;
   const reached = Object.keys(realm).filter((k) => realmIndex(player.realm) >= realmIndex(k));
   const wants = [...reached, ...(victory ? ["격파"] : []), ...(key === "생사경" ? ["생사경"] : [])];

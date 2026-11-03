@@ -81,7 +81,7 @@ function codexModal() {
     }).join(""),
     endings: Object.keys(DB.endings.titles).filter((k) => k !== "생사경" || meta.endings_seen.includes(k)).map((k) => entry(
       meta.endings_seen.includes(k) ? DB.endings.titles[k] : "아직 보지 못한 결말", `카르마 +${DB.endings.karma[k]}`)).join(""),
-    runs: `<p class="codex-meta">끝낸 강호행 ${meta.total_runs}회</p>${list(meta.runs, "강호행을 끝내면 이곳에 기록됩니다.", (r) => entry(
+    runs: `<p class="codex-meta">끝낸 강호행 ${meta.total_runs}회, 천마 격파 ${meta.total_wins || 0}회, 가장 오래 간 달 ${meta.best_turn || 0}달</p>${list(meta.runs, "강호행을 끝내면 이곳에 기록됩니다.", (r) => entry(
       DB.endings.titles[r.ending] || r.ending, `${r.origin}, ${r.realm}, ${r.title}`, `${r.turn}달까지 진행, ${r.kills}명 처치`))}`,
   };
   return modalShell("codex-modal", "강호 도감", `
@@ -150,7 +150,7 @@ function renderTitle() {
     </div>
     <p class="karma-display">💠 카르마 ${meta.current_karma} (누적 ${meta.total_karma})${meta.total_runs ? `, 끝낸 강호행 ${meta.total_runs}회` : ""}</p>
     <div class="title-links">
-      <button class="link-btn" data-act="shop">💠 카르마 상점</button>
+      <button class="link-btn" data-act="shop">💠 카르마 상점${affordableCount(meta) ? ` (살 수 있는 것 ${affordableCount(meta)})` : ""}</button>
       <button class="link-btn" data-act="open" data-modal="help-modal">❓ 입문서</button>
       <button class="link-btn" data-act="open" data-modal="codex-modal">📖 도감</button>
       <button class="link-btn" data-act="open" data-modal="settings-modal">⚙️ 설정</button>
@@ -217,6 +217,15 @@ function shopPanels(meta) {
   };
 }
 
+function affordableCount(meta) {
+  const k = meta.current_karma;
+  const origins = DB.origins.order.filter((o) => !meta.unlocked_origins.includes(o) && DB.origins.origins[o].cost <= k).length;
+  const traits = Object.keys(DB.traits).filter((t) => !DB.traits[t].hidden && !meta.unlocked_traits.includes(t) && DB.traits[t].cost <= k).length;
+  const ups = Object.entries(DB.karma.upgrades).filter(([key, u]) => u.costs[upgradeLevel(key, meta)] <= k).length;
+  const content = Object.entries(DB.karma.content).filter(([key, c]) => !meta.content.includes(key) && c.cost <= k).length;
+  return origins + traits + ups + content;
+}
+
 function renderShop() {
   document.body.className = "home setup-screen";
   setMood("calm");
@@ -259,7 +268,7 @@ function renderSetup() {
   if (!meta.unlocked_origins.includes(ui.origin)) ui.origin = "무림초출";
 
   const origins = DB.origins.order.filter((key) => meta.unlocked_origins.includes(key)).map((key) => `<div class="pick-row"><label class="pick-label"><input type="radio" name="origin" value="${esc(key)}" ${ui.origin === key ? "checked" : ""}>
-      <span class="pick-main"><span class="pick-name">${esc(DB.origins.origins[key].name)}</span>${originDetail(key)}</span></label></div>`).join("");
+      <span class="pick-main"><span class="pick-name">${esc(DB.origins.origins[key].name)}${meta.origin_wins.includes(key) ? ` <span class="rarity">천마 격파</span>` : ""}</span>${originDetail(key)}</span></label></div>`).join("");
 
   const ownedTraits = visibleTraits().filter((key) => meta.unlocked_traits.includes(key))
     .sort((a, b) => Number(ui.traits.has(b)) - Number(ui.traits.has(a)))
@@ -523,7 +532,7 @@ function renderEnding() {
       ${legacyPanel()}
       <p class="karma-gain">💠 카르마 +${ending.karma} (보유 ${meta.current_karma}, 누적 ${meta.total_karma})</p>
       <p class="karma-lines">${(ending.karmaLines || []).map(esc).join(", ")}</p>
-      <p class="ending-hint">카르마로 출신과 특성, 환생 강화, 인연, 유산을 얻어 다시 도전할 수 있습니다.</p>
+      <p class="ending-hint">카르마로 출신과 특성, 환생 강화, 인연, 유산을 얻어 다시 도전할 수 있습니다. 첫 화면의 상점에서 살 수 있습니다.</p>
       <div class="run-facts">
         <div><b>${esc(p.realm)}</b>경지</div><div><b>${esc(byname(p))}</b>별호</div>
         <div><b>${Math.min(p.turn, p.maxTurn)}달</b>진행</div><div><b>${p.kills}명</b>처치</div>
@@ -548,14 +557,25 @@ function compareNote(player, key) {
 
 function renderMarket() {
   const { market, player } = game;
-  const stock = stockView(player, market).map((item) => {
+  const GROUPS = [["장비", ["무기", "방어구"]], ["비급", ["비급"]], ["약", ["소비품", "영약"]], ["도구", ["도구"]]];
+  const main = player.bestSkill()?.category;
+  const views = stockView(player, market);
+  const fits = (item) => (compareNote(player, item.key).includes("맞음") || compareNote(player, item.key).includes("같은 계열") || (DB.market[item.key].effects[0]?.style === main) ? 0 : 1);
+  const row = (item) => {
     const label = item.sold ? "품절" : item.blocked === "효과 없음" ? "필요 없음" : item.karma ? `💠 ${item.karma}` : `은자 ${item.price}`;
     const note = item.sold ? "" : compareNote(player, item.key);
     return `<div class="market-item${item.sold ? " sold" : ""}"><div class="item-info">
       <div class="item-name">${esc(item.name)}<span class="item-category">${esc(item.category)}${item.stackable && !item.sold ? `, ${item.left}개 남음` : ""}</span></div>
       <div class="item-desc">${esc(item.desc)}</div>${note ? `<div class="item-note">${esc(note)}</div>` : ""}</div>
       <button class="buy-btn${item.blocked === "은자 부족" ? " poor" : ""}" data-act="buy" data-key="${esc(item.key)}" ${item.sold || item.blocked ? "disabled" : ""}>${label}</button></div>`;
-  }).join("");
+  };
+  const known = GROUPS.flatMap(([, cats]) => cats);
+  const sections = GROUPS.map(([title, cats]) => {
+    const list = views.filter((v) => cats.includes(v.category)).sort((a, b) => fits(a) - fits(b));
+    return list.length ? `<h4 class="market-group">${title}</h4>${list.map(row).join("")}` : "";
+  });
+  const rest = views.filter((v) => !known.includes(v.category));
+  const stock = sections.join("") + (rest.length ? `<h4 class="market-group">특별한 물건</h4>${rest.map(row).join("")}` : "");
   return `<div class="stage market-stage${market.special ? " market-special" : ""}"><div class="market-inner">
       <h2 class="market-title">${market.special ? "🌑" : "🏪"} ${esc(market.name)}</h2>
       <p class="market-sub">${market.special ? "결전을 앞둔 밤, 누군가 말없이 보따리를 풀어 놓는다." : "달을 쓰지 않습니다. 다음 시장은 일 년 뒤입니다."}</p>

@@ -7,7 +7,7 @@ const SAVE_KEY = "wuxia-save";
 const RUN_HISTORY_LIMIT = 10;
 // 게임에서 빠진 출신을 해금했던 기록은 지우고 카르마를 돌려준다
 // 이름이 바뀐 출신은 해금을 그대로 옮겨 준다
-export const RENAMED_ORIGINS = { 탈영병: "백호대장", 악가서자: "악가소장주", 당가방계: "당가소주", 마교탈주: "소교주", 살막탈주: "소막주", 점소이: "금군교두", 개방제자: "개방후개", 소림속가: "소림수제자", 녹림소채주: "녹림후계" };
+export const RENAMED_ORIGINS = { 탈영병: "백호무관", 백호대장: "백호무관", 악가서자: "악가전인", 악가소장주: "악가전인", 당가방계: "당가무사", 당가소주: "당가무사", 마교탈주: "신교사자", 소교주: "신교사자", 살막탈주: "살막살수", 소막주: "살막살수", 점소이: "금군교두", 개방후개: "개방제자", 소림수제자: "소림속가", 녹림소채주: "녹림채주", 녹림후계: "녹림채주" };
 const REMOVED_ORIGINS = { 낙방서생: 5, 세외도객: 5, 양가서자: 5, 육선문포두: 5, 살문탈주: 5 };
 
 const defaults = () => ({
@@ -16,7 +16,7 @@ const defaults = () => ({
   global_codex: [], known_skills: [], known_items: [],
   endings_seen: [], runs: [], total_runs: 0,
   upgrades: {}, content: [], content_off: [], legacy_open: false, legacies: [], milestones: [],
-  known_events: [], achievements: [], origin_wins: [],
+  known_events: [], achievements: [], origin_wins: [], total_wins: 0, best_turn: 0,
 });
 
 export function loadMeta() {
@@ -34,8 +34,14 @@ export function loadMeta() {
 }
 
 function refundRemoved(data) {
+  // 없어진 강화(윤회의 고리)에 쓴 카르마를 돌려준다
+  if (data.upgrades.윤회) {
+    data.current_karma += [5, 10, 18].slice(0, data.upgrades.윤회).reduce((a, b) => a + b, 0);
+    delete data.upgrades.윤회;
+    storage.set(LEGEND_KEY, JSON.stringify(data));
+  }
   if (data.unlocked_origins.some((k) => RENAMED_ORIGINS[k])) {
-    data.unlocked_origins = data.unlocked_origins.map((k) => RENAMED_ORIGINS[k] || k);
+    data.unlocked_origins = [...new Set(data.unlocked_origins.map((k) => RENAMED_ORIGINS[k] || k))];
     storage.set(LEGEND_KEY, JSON.stringify(data));
   }
   for (const [key, cost] of Object.entries(REMOVED_ORIGINS)) {
@@ -208,6 +214,8 @@ function achievementMet(a, p, ending, victory, data) {
 export function recordRun(summary) {
   const data = loadMeta();
   data.total_runs += 1;
+  if (["기본", "배드", "생사경", "귀순"].includes(summary.ending)) data.total_wins = (data.total_wins || 0) + 1;
+  data.best_turn = Math.max(data.best_turn || 0, summary.turn || 0);
   data.runs = [summary, ...data.runs].slice(0, RUN_HISTORY_LIMIT);
   if (!data.endings_seen.includes(summary.ending)) data.endings_seen.push(summary.ending);
   saveMeta(data);
