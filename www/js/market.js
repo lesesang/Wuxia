@@ -1,28 +1,78 @@
-// 은자와 장터. 품목은 data/market.json 에 있으며 항목 추가만으로 늘어난다.
+// 은자와 시장. 품목은 data/market.json 에 있으며 항목 추가만으로 늘어난다.
 import { Skill, STAT_CAP } from "./character.js";
 import { DB } from "./data.js";
-import { pick, shuffled } from "./rng.js";
+import { pickWeighted } from "./rng.js";
 import { getChapter, JUNG_DISCOUNT, marketName, sumEffect } from "./rules.js";
 
-const STOCK_SIZE = 8;
+const STOCK_SIZE = 10;
 
 const LAST_MARKET_TURN = 119;
 
-/** 장터 품계 1~4는 챕터를 따르고, 5는 마지막의 수상한 누군가 */
+/** 시장 등급 1~4는 챕터를 따르고, 5는 마지막의 수상한 누군가 */
 const marketNumber = (turn) => (turn === LAST_MARKET_TURN ? 5 : Math.min(4, getChapter(turn)));
 
-export function equipmentBonus(player, slot) {
-  const item = DB.market[player[slot]];
-  return item?.effects.find((e) => e.type === "equip")?.bonus || 0;
+const MISMATCH_RATE = 0.75; // 주무공과 맞지 않는 무기는 공격력이 이만큼만 나온다
+const MAIN_STYLE_WEIGHT = 3; // 주무공 계열 품목이 시장에 나올 비중
+const KNOWN_STYLE_WEIGHT = 1.5; // 익힌 다른 무공 계열 품목의 비중
+
+/** 이 플레이어가 그 장비에서 실제로 얻는 수치 */
+export function bonusFor(player, key) {
+  const effect = DB.market[key]?.effects.find((e) => e.type === "equip");
+  if (!effect) return 0;
+  if (effect.slot !== "weapon" || !effect.style) return effect.bonus;
+  const main = player.bestSkill();
+  return !main || main.category === effect.style ? effect.bonus : Math.floor(effect.bonus * MISMATCH_RATE);
 }
 
-/** 병기와 호신구는 지금 것보다 나은 물건을 하나씩 꼭 진열한다. */
+export function equipmentBonus(player, slot) {
+  return bonusFor(player, player[slot]);
+}
+
+/** 무기와 비급이 어느 무공 계열의 것인지. 계열이 없으면 null */
+function itemStyle(key) {
+  for (const effect of DB.market[key].effects) {
+    if (effect.type === "equip" && effect.style) return effect.style;
+    if (effect.type === "skill" && DB.skills[effect.skill]?.type === "공격무공") return DB.skills[effect.skill].category;
+  }
+  return null;
+}
+
+/** 익힌 무공과 맞는 품목일수록 진열될 가능성이 높다. */
+export function styleWeight(player, key) {
+  const style = itemStyle(key);
+  if (!style) return 1;
+  if (player.bestSkill()?.category === style) return MAIN_STYLE_WEIGHT;
+  return player.skillsOfType("공격무공").some((s) => s.category === style) ? KNOWN_STYLE_WEIGHT : 1;
+}
+
+const SHELVES = [["약", 3], ["내공과 경공", 1], ["공격 비급", 2]];
+
+function shelfOf(key) {
+  const item = DB.market[key];
+  if (item.category === "영약" || item.category === "소비품") return "약";
+  const effect = item.effects.find((e) => e.type === "skill");
+  if (!effect) return "기타";
+  return DB.skills[effect.skill]?.type === "공격무공" ? "공격 비급" : "내공과 경공";
+}
+
+function weightedSample(list, weightOf, count) {
+  const pool = [...list];
+  const picked = [];
+  while (pool.length && picked.length < count) {
+    const key = pickWeighted(pool, pool.map(weightOf));
+    picked.push(key);
+    pool.splice(pool.indexOf(key), 1);
+  }
+  return picked;
+}
+
+/** 무기와 방어구는 지금 것보다 나은 물건을 하나씩 꼭 진열한다. */
 function gearForSale(pool, player) {
   const picks = [];
   for (const slot of ["weapon", "armor"]) {
     const better = pool.filter((k) => DB.market[k].effects.some(
-      (e) => e.type === "equip" && e.slot === slot && e.bonus > equipmentBonus(player, slot)));
-    if (better.length) picks.push(pick(better));
+      (e) => e.type === "equip" && e.slot === slot && bonusFor(player, k) > equipmentBonus(player, slot)));
+    if (better.length) picks.push(...weightedSample(better, (k) => styleWeight(player, k), slot === "weapon" ? 2 : 1));
   }
   return picks;
 }
@@ -39,8 +89,13 @@ export function openMarket(turn, player) {
   });
   const stock = pool.filter((k) => DB.market[k].always);
   for (const key of gearForSale(pool, player)) if (!stock.includes(key)) stock.push(key);
-  const others = shuffled(pool.filter((k) => !stock.includes(k)));
-  stock.push(...others.slice(0, Math.max(0, STOCK_SIZE - stock.length)));
+  // 무기와 비급이 많아도 약과 심법, 경공이 밀려나지 않도록 칸을 나눠 고른다
+  for (const [shelf, size] of SHELVES) {
+    const items = pool.filter((k) => !stock.includes(k) && shelfOf(k) === shelf);
+    stock.push(...weightedSample(items, (k) => styleWeight(player, k), size));
+  }
+  const others = pool.filter((k) => !stock.includes(k));
+  stock.push(...weightedSample(others, (k) => styleWeight(player, k), Math.max(0, STOCK_SIZE - stock.length)));
   return {
     name: marketName(turn),
     special: number === 5,
@@ -55,11 +110,11 @@ export function priceOf(player, key) {
   return Math.max(1, Math.trunc(DB.market[key].price * (100 - percent) / 100));
 }
 
-function effectIsUseful(player, effect) {
+function effectIsUseful(player, effect, key) {
+  if (effect.type === "equip") return bonusFor(player, key) > equipmentBonus(player, effect.slot);
   switch (effect.type) {
     case "heal": case "cure": return (effect.percent ?? 1) > 0;
     case "stat": return player[effect.stat] < STAT_CAP;
-    case "equip": return effect.bonus > equipmentBonus(player, effect.slot);
     case "skill": return !player.hasSkill(effect.skill);
     case "boss_weaken": return player.bossWeaken === 0;
     default: return false;
@@ -67,7 +122,7 @@ function effectIsUseful(player, effect) {
 }
 
 export function blockReason(player, key) {
-  if (!DB.market[key].effects.some((e) => effectIsUseful(player, e))) return "효과 없음";
+  if (!DB.market[key].effects.some((e) => effectIsUseful(player, e, key))) return "효과 없음";
   if (player.silver < priceOf(player, key)) return "은자 부족";
   return null;
 }
@@ -99,7 +154,7 @@ export function buy(player, market, key) {
   entry.left -= 1;
   if (item.consumable) {
     player.addItem(key);
-    return [true, `「${item.name}」을(를) 샀다. (은자 -${price}) 행낭에 넣었다.`];
+    return [true, `「${item.name}」을(를) 샀다. (은자 -${price}) 가방에 넣었다.`];
   }
   for (const effect of item.effects) applyEffect(player, key, effect);
   return [true, `「${item.name}」을(를) 샀다. (은자 -${price})`];

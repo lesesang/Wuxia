@@ -1,6 +1,6 @@
 // 밸런스 확인 도구: 규칙대로 움직이는 봇이 게임을 여러 번 끝까지 플레이한다.
 //   node tools/simulate.js 300            (조건마다 300판)
-//   node tools/simulate.js 300 장터       (이름에 "장터"이 들어간 조건만)
+//   node tools/simulate.js 300 시장       (이름에 "시장"이 들어간 조건만)
 import { readFile } from "node:fs/promises";
 import { loadData } from "../www/js/data.js";
 import { eventView } from "../www/js/events.js";
@@ -39,10 +39,10 @@ function battleChoice(game) {
   const { player, battle } = game;
   const skill = player.bestSkill();
   const hpRatio = player.hp / player.maxHp();
-  if (battle.poison && player.inventory.해독단) return ["상비약", "해독단"];
+  if (battle.poison && player.inventory.해독단) return ["소비품", "해독단"];
   if (battle.sealed && player.bestOfType("심공")) return ["심법"];
   if (hpRatio < 0.35) {
-    for (const key of ["구명단", "금창약"]) if (player.inventory[key]) return ["상비약", key];
+    for (const key of ["구명단", "금창약"]) if (player.inventory[key]) return ["소비품", key];
   }
   const movement = player.bestOfType("경공");
   if (battle.enemy.specialForRound(battle.roundNum + 1) && movement && player.qi >= movement.qiCost) return ["경공"];
@@ -86,16 +86,16 @@ function play({ style = "섞어서", useMarket = true, origin = "무림초출", 
 }
 
 const ROWS = [
-  ["섞어서 / 장터 이용", {}],
-  ["탐색 위주 / 장터 이용", { style: "탐색 위주" }],
-  ["수련 위주 / 장터 이용", { style: "수련 위주" }],
-  ["섞어서 / 장터 안 씀", { useMarket: false }],
+  ["섞어서 / 시장 이용", {}],
+  ["탐색 위주 / 시장 이용", { style: "탐색 위주" }],
+  ["수련 위주 / 시장 이용", { style: "수련 위주" }],
+  ["섞어서 / 시장 안 씀", { useMarket: false }],
   ["섞어서 / 남궁세가", { origin: "남궁세가" }],
   ["섞어서 / 곤륜파", { origin: "곤륜파" }],
   ["섞어서 / 하오문", { origin: "하오문" }],
   ["섞어서 / 권마계승", { origin: "권마계승" }],
-  ["탐색 위주 / 천품 1개", { style: "탐색 위주", traits: ["천생근골"] }],
-  ["탐색 위주 / 천품 3개", { style: "탐색 위주", traits: ["천하제일기재", "천생근골", "오성"] }],
+  ["탐색 위주 / 특성 1개", { style: "탐색 위주", traits: ["천생근골"] }],
+  ["탐색 위주 / 특성 3개", { style: "탐색 위주", traits: ["천하제일기재", "천생근골", "오성"] }],
 ];
 
 const count = Number(process.argv[2] || 100);
@@ -109,5 +109,5 @@ for (const [name, options] of ROWS) {
   const wins = results.filter((r) => ["배드", "기본", "생사경"].includes(r.ending)).length;
   const reached = results.filter((r) => r.player.turn >= 120).length;
   const avg = results.reduce((t, r) => t + (r.player.external + r.player.internal + r.player.martial + r.player.mind) / 4, 0) / count;
-  console.log(`${name}: 격파 ${Math.round(wins * 100 / count)}%, 120달 도달 ${Math.round(reached * 100 / count)}%, 평균 기량 ${avg.toFixed(0)}`, JSON.stringify(tally));
+  console.log(`${name}: 격파 ${Math.round(wins * 100 / count)}%, 120달 도달 ${Math.round(reached * 100 / count)}%, 평균 능력치 ${avg.toFixed(0)}`, JSON.stringify(tally));
 }

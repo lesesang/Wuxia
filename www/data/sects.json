@@ -21,7 +21,7 @@
     "name": "화산파",
     "alignment": "정도",
     "desc": "매화가 지는 화산 절벽의 검문.",
-    "bonus_text": "급소 타격 확률 8% 증가",
+    "bonus_text": "치명타 확률 8% 증가",
     "bonus": {
       "crit": 8
     }

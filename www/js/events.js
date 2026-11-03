@@ -1,12 +1,12 @@
 // 이벤트. 정해진 달의 줄거리와 탐색 중 사건을 JSON으로 관리한다. 형식은 docs/콘텐츠-가이드.md 참고.
-import { Skill, STAT_NAMES } from "./character.js";
+import { GRADE_ORDER, Skill, STAT_NAMES } from "./character.js";
 import { DB } from "./data.js";
-import { equipmentBonus } from "./market.js";
+import { bonusFor, equipmentBonus, styleWeight } from "./market.js";
 import { updateKnown } from "./meta.js";
 import { pick, pickWeighted } from "./rng.js";
 import { ALIGNMENTS, applyGrowth, fameRankChanged, getChapter, realmIndex } from "./rules.js";
 
-export const EVENT_STAT_SCALE = 0.3; // 사건·기연의 기량 상승 배율 (밸런스 조정용)
+export const EVENT_STAT_SCALE = 0.3; // 사건·기연의 능력치 상승 배율 (밸런스 조정용)
 
 /** 만족하지 못한 첫 조건의 설명. 모두 만족하면 null */
 export function unmetReason(player, requires) {
@@ -29,6 +29,7 @@ export function unmetReason(player, requires) {
   if (r.equip && player.weapon !== r.equip && player.armor !== r.equip) return `${DB.market[r.equip].name} 필요`;
   if (r.any_skill && !r.any_skill.some((k) => player.hasSkill(k))) return "필요한 무공이 없다";
   if (r.injured && !player.injury) return "내상이 없다";
+  if (r.main_category && player.bestSkill()?.category !== r.main_category) return `${r.main_category}을 쓰는 무인이 아니다`;
   if (r.dominant && player.dominantAlignment() !== r.dominant) return `${r.dominant}의 길이 아니다`;
   if (r.min_fame && player.fame < r.min_fame) return `명성 ${r.min_fame} 필요`;
   for (const [name, value] of Object.entries(r.max_alignment || {})) {
@@ -122,15 +123,29 @@ export function resolveChoice(player, key, index) {
   return { text: outcome.text, summary, effects };
 }
 
+/** 비급으로 파는 공격무공 중 하나를 고른다. 익힌 계열이 나올 가능성이 높다. */
+function randomBookSkill(player, maxGrade) {
+  const limit = GRADE_ORDER.indexOf(maxGrade);
+  const keys = Object.keys(DB.market).filter((k) => {
+    const effect = DB.market[k].effects.find((e) => e.type === "skill");
+    const skill = effect && DB.skills[effect.skill];
+    return skill && skill.type === "공격무공" && !DB.market[k].dominant
+      && GRADE_ORDER.indexOf(skill.grade) <= limit && !player.hasSkill(effect.skill);
+  });
+  if (!keys.length) return null;
+  const key = pickWeighted(keys, keys.map((k) => styleWeight(player, k)));
+  return new Skill(DB.market[key].effects.find((e) => e.type === "skill").skill);
+}
+
 function equipReward(player, key) {
   const effect = DB.market[key].effects.find((e) => e.type === "equip");
   const name = DB.market[key].name;
   updateKnown([], [key]);
-  if (effect.bonus > equipmentBonus(player, effect.slot)) {
+  if (bonusFor(player, key) > equipmentBonus(player, effect.slot)) {
     player[effect.slot] = key;
     return [`「${name}」 장착`];
   }
-  return [`「${name}」을(를) 받았지만 지금 병장기가 더 좋다`];
+  return [`「${name}」을(를) 받았지만 지금 장비가 더 좋다`];
 }
 
 const signed = (n) => (n >= 0 ? `+${n}` : `${n}`);
@@ -151,8 +166,8 @@ export function applyEffects(player, effects) {
 
   if ("hp_pct" in effects || "qi_pct" in effects) {
     const [hp, qi] = player.healPercent(effects.hp_pct || 0, effects.qi_pct || 0);
-    if (hp) summary.push(`기혈${signed(hp)}`);
-    if (qi) summary.push(`내력${signed(qi)}`);
+    if (hp) summary.push(`체력${signed(hp)}`);
+    if (qi) summary.push(`기력${signed(qi)}`);
   }
 
   if ("set_silver" in effects) {
@@ -212,7 +227,7 @@ export function applyEffects(player, effects) {
     const skill = player.bestSkill();
     if (skill) {
       const messages = skill.gainMastery(effects.mastery);
-      summary.push(`${skill.name} 성취+${effects.mastery}`, ...messages);
+      summary.push(`${skill.name} 숙련도+${effects.mastery}`, ...messages);
     }
   }
 
@@ -222,6 +237,17 @@ export function applyEffects(player, effects) {
     const messages = player.learnSkill(skill);
     if (!known) summary.push(`📕 새 무공 「${skill.name}」`);
     summary.push(...messages);
+  }
+
+  if (effects.main_skill && player.hasSkill(effects.main_skill)) player.mainSkill = effects.main_skill;
+
+  if (effects.random_skill) {
+    const skill = randomBookSkill(player, effects.random_skill.max_grade);
+    if (skill) {
+      summary.push(`📕 새 무공 「${skill.name}」`, ...player.learnSkill(skill));
+    } else {
+      summary.push(`무리+${player.gainStat("martial", 2)}`);
+    }
   }
 
   if (effects.equip) summary.push(...equipReward(player, effects.equip));
@@ -248,7 +274,7 @@ export function validateEvents() {
     if (effects.equip && !DB.market[effects.equip]) errors.push(`${where}: 없는 품목 ${effects.equip}`);
     if (effects.join_sect && !DB.sects[effects.join_sect]) errors.push(`${where}: 없는 문파 ${effects.join_sect}`);
     for (const stat of Object.keys(effects.stats || {})) {
-      if (!STAT_NAMES[stat]) errors.push(`${where}: 없는 기량 ${stat}`);
+      if (!STAT_NAMES[stat]) errors.push(`${where}: 없는 능력치 ${stat}`);
     }
     for (const name of Object.keys(effects.alignment || {})) {
       if (!ALIGNMENTS.includes(name)) errors.push(`${where}: 없는 성향 ${name}`);
