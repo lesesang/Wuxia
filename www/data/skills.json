@@ -240,13 +240,13 @@
     "name": "태허검결",
     "type": "공격무공",
     "category": "검법",
-    "grade": "신공",
+    "grade": "일절",
     "base_multiplier": 1.9,
     "qi_cost": 12,
     "desc": "이름 없는 노인이 평생을 바쳐 다듬은 검결. 비어 있기에 모든 것을 벤다.",
     "secret_technique": {
       "name": "태허무극",
-      "unlock_grade": "신공",
+      "unlock_grade": "일절",
       "unlock_mastery": 40,
       "multiplier": 2.8,
       "qi_cost": 70
@@ -255,7 +255,8 @@
       "허",
       "공",
       "무"
-    ]
+    ],
+    "legend": true
   },
   "토납법": {
     "name": "토납법",
@@ -321,7 +322,7 @@
     "name": "태허심법",
     "type": "심공",
     "category": "심공",
-    "grade": "신공",
+    "grade": "일절",
     "base_multiplier": 1.0,
     "qi_cost": 0,
     "desc": "태허검결과 짝을 이루는 심법. 마음이 비면 기가 스스로 찬다.",
@@ -378,7 +379,7 @@
     "name": "능공허도",
     "type": "경공",
     "category": "경공",
-    "grade": "신공",
+    "grade": "일절",
     "base_multiplier": 1.0,
     "qi_cost": 10,
     "desc": "허공을 밟는다는 전설의 경공.",
@@ -455,7 +456,7 @@
     "name": "이십사수매화검법",
     "category": "검법",
     "type": "공격무공",
-    "grade": "신공",
+    "grade": "일절",
     "base_multiplier": 1.85,
     "qi_cost": 12,
     "desc": "화산의 정수. 스물네 번 꽃이 지면 상대가 없다.",
@@ -467,7 +468,7 @@
     ],
     "secret_technique": {
       "name": "만개매화",
-      "unlock_grade": "신공",
+      "unlock_grade": "일절",
       "unlock_mastery": 40,
       "multiplier": 2.7,
       "qi_cost": 65
@@ -519,7 +520,7 @@
     "name": "항룡장",
     "category": "장법",
     "type": "공격무공",
-    "grade": "신공",
+    "grade": "일절",
     "base_multiplier": 1.9,
     "qi_cost": 12,
     "desc": "개방 비전의 장법. 강맹하기가 용과 같다.",
@@ -530,11 +531,12 @@
     ],
     "secret_technique": {
       "name": "항룡유회",
-      "unlock_grade": "신공",
+      "unlock_grade": "일절",
       "unlock_mastery": 40,
       "multiplier": 2.7,
       "qi_cost": 65
-    }
+    },
+    "legend": true
   },
   "당가비도": {
     "name": "당가비도",
@@ -588,7 +590,7 @@
     "name": "천마파천공",
     "category": "장법",
     "type": "공격무공",
-    "grade": "신공",
+    "grade": "일절",
     "base_multiplier": 2.0,
     "qi_cost": 14,
     "desc": "천마의 잔편. 위력은 무섭지만 쓰는 자를 먼저 태운다.",
@@ -600,7 +602,7 @@
     "risky": true,
     "secret_technique": {
       "name": "천마강림",
-      "unlock_grade": "신공",
+      "unlock_grade": "일절",
       "unlock_mastery": 30,
       "multiplier": 2.9,
       "qi_cost": 75
@@ -610,7 +612,7 @@
     "name": "대라검법",
     "category": "검법",
     "type": "공격무공",
-    "grade": "신공",
+    "grade": "일절",
     "base_multiplier": 1.95,
     "qi_cost": 11,
     "desc": "곤륜 만년설에 전해지는 비전 검법.",
@@ -621,7 +623,7 @@
     ],
     "secret_technique": {
       "name": "대라귀진",
-      "unlock_grade": "신공",
+      "unlock_grade": "일절",
       "unlock_mastery": 40,
       "multiplier": 2.7,
       "qi_cost": 62
@@ -632,8 +634,8 @@
     "category": "검법",
     "type": "공격무공",
     "grade": "신공",
-    "base_multiplier": 1.85,
-    "qi_cost": 13,
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
     "desc": "남궁의 마지막 비전. 검이 움직이면 천지가 고개를 숙인다.",
     "forms": [
       "왕림",
@@ -644,8 +646,8 @@
       "name": "창천무극",
       "unlock_grade": "신공",
       "unlock_mastery": 40,
-      "multiplier": 2.8,
-      "qi_cost": 70
+      "multiplier": 3.0,
+      "qi_cost": 80
     }
   },
   "천수나찰": {
@@ -674,8 +676,8 @@
     "category": "권법",
     "type": "공격무공",
     "grade": "신공",
-    "base_multiplier": 1.95,
-    "qi_cost": 14,
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
     "desc": "권마 비록의 마지막 장. 주먹으로 하늘을 친다.",
     "forms": [
       "패권",
@@ -687,8 +689,8 @@
       "name": "권왕개벽",
       "unlock_grade": "신공",
       "unlock_mastery": 30,
-      "multiplier": 2.9,
-      "qi_cost": 75
+      "multiplier": 3.0,
+      "qi_cost": 80
     }
   },
   "오호단문도": {
@@ -731,7 +733,7 @@
     "name": "태극심공",
     "type": "심공",
     "category": "심공",
-    "grade": "신공",
+    "grade": "일절",
     "base_multiplier": 1.0,
     "qi_cost": 0,
     "desc": "음과 양이 돌면 내력이 끝나지 않는다.",
@@ -1294,8 +1296,8 @@
     "type": "공격무공",
     "category": "도법",
     "grade": "신공",
-    "base_multiplier": 1.9,
-    "qi_cost": 14,
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
     "desc": "하늘을 베겠다던 광인이 남긴 도결.",
     "forms": [
       "패도",
@@ -1306,16 +1308,15 @@
       "name": "패천일도",
       "unlock_grade": "신공",
       "unlock_mastery": 50,
-      "multiplier": 2.8,
-      "qi_cost": 70
-    },
-    "legend": true
+      "multiplier": 3.0,
+      "qi_cost": 80
+    }
   },
   "무상도결": {
     "name": "무상도결",
     "type": "공격무공",
     "category": "도법",
-    "grade": "신공",
+    "grade": "일절",
     "base_multiplier": 1.9,
     "qi_cost": 14,
     "desc": "형을 버린 끝에 남은 단 하나의 칼.",
@@ -1326,7 +1327,7 @@
     ],
     "secret_technique": {
       "name": "무상참",
-      "unlock_grade": "신공",
+      "unlock_grade": "일절",
       "unlock_mastery": 50,
       "multiplier": 2.8,
       "qi_cost": 70
@@ -1485,8 +1486,8 @@
     "type": "공격무공",
     "category": "창법",
     "grade": "신공",
-    "base_multiplier": 1.9,
-    "qi_cost": 14,
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
     "desc": "한 자루 창으로 만군 사이를 일곱 번 드나들었다는 전설의 창법.",
     "forms": [
       "칠진칠출",
@@ -1497,16 +1498,15 @@
       "name": "용담무쌍",
       "unlock_grade": "신공",
       "unlock_mastery": 50,
-      "multiplier": 2.8,
-      "qi_cost": 70
-    },
-    "legend": true
+      "multiplier": 3.0,
+      "qi_cost": 80
+    }
   },
   "무상창결": {
     "name": "무상창결",
     "type": "공격무공",
     "category": "창법",
-    "grade": "신공",
+    "grade": "일절",
     "base_multiplier": 1.9,
     "qi_cost": 14,
     "desc": "창이 곧 몸이요 몸이 곧 창이라는 경지.",
@@ -1517,7 +1517,7 @@
     ],
     "secret_technique": {
       "name": "무상일창",
-      "unlock_grade": "신공",
+      "unlock_grade": "일절",
       "unlock_mastery": 50,
       "multiplier": 2.8,
       "qi_cost": 70
@@ -1655,8 +1655,8 @@
     "type": "공격무공",
     "category": "봉법",
     "grade": "신공",
-    "base_multiplier": 1.9,
-    "qi_cost": 14,
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
     "desc": "하늘과 겨루겠다는 뜻을 담은 곤법의 끝.",
     "forms": [
       "제천",
@@ -1667,16 +1667,15 @@
       "name": "제천일곤",
       "unlock_grade": "신공",
       "unlock_mastery": 50,
-      "multiplier": 2.8,
-      "qi_cost": 70
-    },
-    "legend": true
+      "multiplier": 3.0,
+      "qi_cost": 80
+    }
   },
   "무상곤결": {
     "name": "무상곤결",
     "type": "공격무공",
     "category": "봉법",
-    "grade": "신공",
+    "grade": "일절",
     "base_multiplier": 1.9,
     "qi_cost": 14,
     "desc": "막대 하나로 천하를 쓸어 낸 노인의 곤결.",
@@ -1687,7 +1686,7 @@
     ],
     "secret_technique": {
       "name": "일곤소천",
-      "unlock_grade": "신공",
+      "unlock_grade": "일절",
       "unlock_mastery": 50,
       "multiplier": 2.8,
       "qi_cost": 70
@@ -1761,7 +1760,7 @@
     "name": "천강권경",
     "type": "공격무공",
     "category": "권법",
-    "grade": "신공",
+    "grade": "일절",
     "base_multiplier": 1.9,
     "qi_cost": 14,
     "desc": "하늘의 강기를 주먹에 싣는다는 권경.",
@@ -1772,7 +1771,7 @@
     ],
     "secret_technique": {
       "name": "천강일권",
-      "unlock_grade": "신공",
+      "unlock_grade": "일절",
       "unlock_mastery": 50,
       "multiplier": 2.8,
       "qi_cost": 70
@@ -1783,7 +1782,7 @@
     "name": "무상권결",
     "type": "공격무공",
     "category": "권법",
-    "grade": "신공",
+    "grade": "일절",
     "base_multiplier": 1.9,
     "qi_cost": 14,
     "desc": "형을 다 잊은 뒤 남는 한 주먹.",
@@ -1794,7 +1793,7 @@
     ],
     "secret_technique": {
       "name": "무상일권",
-      "unlock_grade": "신공",
+      "unlock_grade": "일절",
       "unlock_mastery": 50,
       "multiplier": 2.8,
       "qi_cost": 70
@@ -1869,8 +1868,8 @@
     "type": "공격무공",
     "category": "장법",
     "grade": "신공",
-    "base_multiplier": 1.9,
-    "qi_cost": 14,
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
     "desc": "부처의 손바닥이라 불리는 전설의 장법.",
     "forms": [
       "여래",
@@ -1881,10 +1880,9 @@
       "name": "만불조종",
       "unlock_grade": "신공",
       "unlock_mastery": 50,
-      "multiplier": 2.8,
-      "qi_cost": 70
-    },
-    "legend": true
+      "multiplier": 3.0,
+      "qi_cost": 80
+    }
   },
   "매화침법": {
     "name": "매화침법",
@@ -1954,8 +1952,8 @@
     "type": "공격무공",
     "category": "암기",
     "grade": "신공",
-    "base_multiplier": 1.9,
-    "qi_cost": 14,
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
     "desc": "보이지 않는다는 침. 맞은 사람도 모른다.",
     "forms": [
       "무영",
@@ -1966,16 +1964,15 @@
       "name": "무영일침",
       "unlock_grade": "신공",
       "unlock_mastery": 50,
-      "multiplier": 2.8,
-      "qi_cost": 70
-    },
-    "legend": true
+      "multiplier": 3.0,
+      "qi_cost": 80
+    }
   },
   "만리추혼": {
     "name": "만리추혼",
     "type": "공격무공",
     "category": "암기",
-    "grade": "신공",
+    "grade": "일절",
     "base_multiplier": 1.9,
     "qi_cost": 14,
     "desc": "던진 뒤에도 쫓아간다는 전설의 비도술.",
@@ -1986,7 +1983,7 @@
     ],
     "secret_technique": {
       "name": "만리일비",
-      "unlock_grade": "신공",
+      "unlock_grade": "일절",
       "unlock_mastery": 50,
       "multiplier": 2.8,
       "qi_cost": 70

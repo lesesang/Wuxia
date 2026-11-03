@@ -202,7 +202,7 @@ function achievementMet(a, p, ending, victory, data) {
     case "sect": return !!p.sect;
     case "chains": return p.chainsDone >= a.value;
     case "attacks": return attacks >= a.value;
-    case "legend": return p.skills.some((s) => DB.skills[s.key].legend);
+    case "legend": return p.skills.some((s) => DB.skills[s.key].legend || s.grade === "신공");
     case "origins": return data.origin_wins.length >= a.value;
     case "runs": return data.total_runs + 1 >= a.value;
     case "silver": return p.silver >= a.value;

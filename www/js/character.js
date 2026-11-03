@@ -7,7 +7,7 @@ import {
   startSkills, sumEffect,
 } from "./rules.js";
 
-export const GRADE_ORDER = ["기본", "명품", "상승", "신공", "천상"];
+export const GRADE_ORDER = ["기본", "명품", "상승", "일절", "신공"];
 const SAME_GRADE_TRANSFER = 0.5;  // 같은 품계 무공의 성취를 옮기는 비율
 const LOWER_GRADE_TRANSFER = 0.3; // 낮은 품계 무공의 성취를 옮기는 비율
 const MAX_MASTERY = 100;
@@ -64,7 +64,7 @@ export class Skill {
     return messages;
   }
 
-  /** 승급으로는 최고 품계(천상)에 오르지 못한다. 신공이 승급의 끝이다. */
+  /** 승급으로는 최고 품계(신공)에 오르지 못한다. 일절이 승급의 끝이다. */
   canEvolve() { return GRADE_ORDER.indexOf(this.grade) < GRADE_ORDER.length - 2; }
 
   /** 품계가 같거나 낮은 같은 계열 무공에서 주무공으로 옮길 수 있는 성취. 없으면 0 */
@@ -112,6 +112,8 @@ export class Skill {
   static fromDict(d) {
     const skill = new Skill(d.key);
     skill.grade = d.grade ?? skill.grade;
+    // 예전 저장: 옛 신공은 이제 일절이고, 신공 품계는 정해진 무공만 갖는다
+    if (skill.grade === "천상" || (skill.grade === "신공" && DB.skills[d.key].grade !== "신공")) skill.grade = "일절";
     skill.mastery = d.mastery ?? 0;
     skill.secretUnlocked = !!d.secret_unlocked;
     return skill;

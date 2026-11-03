@@ -367,11 +367,16 @@ export function applyEffects(player, effects) {
 
   if (effects.style_skill) {
     const main = player.bestSkill()?.category;
-    const list = Object.keys(DB.skills).filter((k) => DB.skills[k].legend && DB.skills[k].category === main && !player.hasSkill(k));
+    const wanted = effects.style_skill.grade;
+    const list = Object.keys(DB.skills).filter((k) => {
+      const s = DB.skills[k];
+      if (s.category !== main || s.grade !== wanted || player.hasSkill(k)) return false;
+      return wanted === "신공" || s.legend;
+    });
     if (list.length) {
       const skill = new Skill(list[Math.floor(rng.random() * list.length)]);
       summary.push(`📕 새 무공 「${skill.name}」`, ...player.learnSkill(skill));
-      player.note(`전설의 무공 「${skill.name}」을(를) 얻었다.`);
+      player.note(`${wanted} 「${skill.name}」을(를) 얻었다.`);
     } else {
       summary.push(`무리+${player.gainStat("martial", 4)}`);
     }

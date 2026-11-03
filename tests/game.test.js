@@ -4,7 +4,7 @@ import { test } from "node:test";
 import { seed } from "./helpers.js";
 import { listAssets } from "../tools/build_asset_list.js";
 import { Battle, Enemy, useConsumable } from "../www/js/battle.js";
-import { Player, Skill } from "../www/js/character.js";
+import { GRADE_ORDER, Player, Skill } from "../www/js/character.js";
 import { DB } from "../www/js/data.js";
 import { applyEffects, canStartChain, checkRequires, enemyIntro, eventView, LAST_CHAIN_TURN, pickRandomEvent, resolveChoice, validateChains, validateEvents } from "../www/js/events.js";
 import { Game } from "../www/js/game.js";
@@ -1133,7 +1133,7 @@ test("유산은 천마를 쓰러뜨린 뒤 열리고, 남기고, 이어받으면
   assert.ok(openLegacy());
   const first = new Game();
   first.start("무림초출");
-  first.player.learnSkill(Skill.fromDict({ key: "양가창법", grade: "신공", mastery: 80 }));
+  first.player.learnSkill(Skill.fromDict({ key: "양가창법", grade: "일절", mastery: 80 }));
   first.player.weapon = "운철보검";
   first.finishGame(false);
   const options = first.legacyOptions();
@@ -1319,7 +1319,7 @@ test("무기 계열마다 무공 수가 같고 등급이 고르다", () => {
   for (const style of styles) {
     const list = attacks.filter((s) => s.category === style);
     assert.equal(list.length, 12, style);
-    for (const [grade, min] of [["기본", 2], ["명품", 3], ["상승", 3], ["신공", 2]]) {
+    for (const [grade, min] of [["기본", 2], ["명품", 3], ["상승", 3], ["일절", 1], ["신공", 1]]) {
       assert.ok(list.filter((s) => s.grade === grade).length >= min, `${style} ${grade}`);
     }
     const sold = list.filter((s) => Object.values(DB.market).some((i) => i.effects.some((e) => e.skill === s.key || e.skill === s.name)));
@@ -1562,7 +1562,8 @@ test("출신 서사: 8개 모두 일류 이유, 천마와의 인연, 맺음말�
   }
 });
 
-test("성취 100을 넘겨 더 쌓아야 승급하고, 승급은 신공까지다", () => {
+test("성취 100을 넘겨 더 쌓아야 승급하고, 승급은 일절까지다", () => {
+  assert.deepEqual(GRADE_ORDER, ["기본", "명품", "상승", "일절", "신공"]);
   const s = new Skill("기초검법");
   s.mastery = 95;
   assert.deepEqual(s.gainMastery(5), []);
@@ -1575,16 +1576,53 @@ test("성취 100을 넘겨 더 쌓아야 승급하고, 승급은 신공까지다
   top.grade = "상승";
   top.mastery = 100;
   top.gainMastery(1);
-  assert.equal(top.grade, "신공", "상승에서 신공으로는 오른다");
+  assert.equal(top.grade, "일절", "상승에서 일절로는 오른다");
   top.mastery = 100;
   assert.deepEqual(top.gainMastery(50).filter((m) => m.includes("승급")), []);
-  assert.equal(top.grade, "신공", "신공에서 천상으로는 오르지 않는다");
+  assert.equal(top.grade, "일절", "일절에서 신공으로는 오르지 않는다");
   assert.equal(top.mastery, 100);
-  const sky = new Skill("기초검법");
-  sky.grade = "천상";
-  sky.mastery = 100;
-  sky.gainMastery(5);
-  assert.equal(sky.grade, "천상");
+});
+
+test("신공은 계열마다 하나씩이고 출신이나 카르마 인연으로만 얻는다", () => {
+  const tops = Object.keys(DB.skills).filter((k) => DB.skills[k].grade === "신공");
+  assert.equal(tops.length, 7);
+  assert.equal(new Set(tops.map((k) => DB.skills[k].category)).size, 7);
+  const allowed = (r) => !!(r?.origin || r?.unlocked);
+  const problems = [];
+  const scan = (node, ok, where) => {
+    if (Array.isArray(node)) return node.forEach((n) => scan(n, ok, where));
+    if (!node || typeof node !== "object") return undefined;
+    const here = ok || allowed(node.requires);
+    const gives = (node.skill && tops.includes(node.skill)) || node.style_skill?.grade === "신공";
+    if (gives && !here) problems.push(where);
+    return Object.values(node).forEach((v) => scan(v, here, where));
+  };
+  for (const [key, event] of Object.entries(DB.events)) scan(event, false, key);
+  for (const f of DB.fortunes) scan(f, false, f.text);
+  assert.deepEqual(problems, []);
+  for (const k of tops) {
+    assert.ok(!Object.values(DB.market).some((i) => i.effects.some((e) => e.skill === k)), `${k}는 장터에 없다`);
+    assert.ok(!Object.values(DB.enemies).some((e) => e.drop?.skill === k), `${k}는 적이 떨구지 않는다`);
+    assert.ok(Object.values(DB.events).some((e) => e.requires?.origin && JSON.stringify(e).includes(k)), `${k} 출신 이야기`);
+  }
+  for (const key of ["숨겨진유적", "협객의묘", "생사의문"]) {
+    assert.ok(Object.values(DB.events).some((e) => e.requires?.unlocked === key && JSON.stringify(e).includes('"grade":"신공"')), key);
+  }
+});
+
+test("예전 저장의 신공은 일절로 바뀐다", () => {
+  assert.equal(Skill.fromDict({ key: "무상도결", grade: "신공", mastery: 10 }).grade, "일절");
+  assert.equal(Skill.fromDict({ key: "기초검법", grade: "천상", mastery: 10 }).grade, "일절");
+  assert.equal(Skill.fromDict({ key: "제왕검형", grade: "신공", mastery: 10 }).grade, "신공");
+});
+
+test("카르마 인연의 신공은 주무공 계열로 받고, 이미 익혔으면 대신 무리가 오른다", () => {
+  const p = new Player();
+  const before = p.martial;
+  applyEffects(p, { style_skill: { grade: "신공" } });
+  assert.ok(p.hasSkill("제왕검형"));
+  applyEffects(p, { style_skill: { grade: "신공" } });
+  assert.ok(p.martial > before);
 });
 
 test("새 장의 성장은 장마다, 회복은 해마다다", () => {
