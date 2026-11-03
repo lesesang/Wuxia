@@ -997,7 +997,7 @@ test("이벤트에서 만들어 쓰는 인연 표시는 어딘가에서 얻을 �
 });
 
 test("새 출신은 서장과 첫 무기 문장을 갖는다", () => {
-  for (const origin of ["탈영병"]) {
+  for (const origin of ["백호대장"]) {
     const p = new Player(origin);
     assert.notEqual(eventView(p, "시작_병기고").text, DB.events.시작_병기고.text);
     assert.ok(Object.values(DB.storyEvents).some((e) => e.requires?.origin === origin && e.turn === 1));
@@ -1058,7 +1058,7 @@ test("모든 출신은 시작 경지가 일류인 까닭을 설명하고 맺음�
     assert.ok(new Player(key).realm === "일류", key);
     if (!["남궁세가", "곤륜파", "하오문", "권마계승"].includes(key)) assert.ok(origin.desc.includes("일류"), key);
   }
-  assert.ok(new Player("탈영병").hasSkill("백호도법"));
+  assert.ok(new Player("백호대장").hasSkill("백호도법"));
 });
 
 test("강호행의 굵직한 일이 기록으로 남고 저장된다", () => {
@@ -1319,7 +1319,7 @@ test("무기 계열마다 무공 수가 같고 등급이 고르다", () => {
 });
 
 test("새 출신은 저마다 서장과 무기 문장, 이야기가 있다", () => {
-  for (const origin of ["하북팽가", "악가서자", "개방제자", "소림속가", "마교탈주", "살막탈주", "당가방계", "황보막내", "녹림소채주", "점소이", "회귀자"]) {
+  for (const origin of ["하북팽가", "악가소장주", "개방후개", "소림수제자", "소교주", "소막주", "당가소주", "황보막내", "녹림후계", "금군교두", "회귀자"]) {
     assert.ok(DB.origins.origins[origin].desc.includes("일류"));
     assert.ok(Object.values(DB.storyEvents).some((e) => e.requires?.origin === origin && e.turn === 1));
     assert.notEqual(eventView(new Player(origin), "시작_병기고").text, DB.events.시작_병기고.text);
@@ -1401,8 +1401,63 @@ test("없어진 출신을 샀던 기록은 카르마로 돌려준다", () => {
 });
 
 test("개방과 당가 출신은 사문을 지니고 시작한다", () => {
-  assert.equal(new Player("개방제자").sect, "개방");
-  assert.equal(new Player("당가방계").sect, "당가");
+  assert.equal(new Player("개방후개").sect, "개방");
+  assert.equal(new Player("당가소주").sect, "당가");
+});
+
+// ---------- 생사경과 출신의 위치 ----------
+
+test("생사경은 기록대로 천마를 이긴 순간에만 판정된다", () => {
+  const req = DB.realms.saengsa;
+  assert.deepEqual([req.min_stat, req.battles, req.hp_ratio, req.qi_ratio], [95, 50, 0.8, 0.8]);
+  const hero = () => {
+    const g = newGame();
+    const p = g.player;
+    p.external = p.internal = p.martial = p.mind = 99;
+    p.realm = "현경";
+    p.battles = 60;
+    p.hp = p.maxHp();
+    p.qi = p.maxQi();
+    return g;
+  };
+  const win = hero();
+  win.finishGame(true);
+  assert.equal(win.ending.key, "생사경");
+  assert.equal(win.player.realm, "생사경");
+  const hurt = hero();
+  hurt.player.qi = Math.floor(hurt.player.maxQi() * 0.5);
+  hurt.finishGame(true);
+  assert.notEqual(hurt.ending.key, "생사경", "기력이 모자라면 아니다");
+  const dead = hero();
+  dead.finishGame(false);
+  assert.equal(dead.ending.key, "사망");
+  const climbing = hero();
+  climbing.player.realm = "현경";
+  assert.equal(breakthroughBlock(climbing.player), null, "일반 돌파로는 오르지 못한다");
+});
+
+test("어떤 사건이나 인연도 생사경 조건을 건드리지 않는다", () => {
+  const text = JSON.stringify([DB.events, DB.karma.content, DB.traits]);
+  assert.ok(!text.includes("생사경"));
+  const shown = DB.karma.achievements.filter((a) => !a.hidden);
+  assert.ok(!JSON.stringify(shown).includes("생사경"), "히든 엔딩을 미리 알리지 않는다");
+});
+
+test("출신은 낮은 처지가 아니라 세계관에서 좋은 위치의 인물이다", () => {
+  const text = JSON.stringify(Object.values(DB.origins.origins).map((o) => [o.name, o.desc]));
+  for (const word of ["방계", "서자", "탈주", "도망자", "탈영", "점소이", "파문"]) assert.ok(!text.includes(word), word);
+});
+
+test("이름이 바뀐 출신은 해금과 저장을 잃지 않는다", () => {
+  const data = loadMeta();
+  data.unlocked_origins = ["무림초출", "탈영병", "점소이"];
+  saveMeta(data);
+  assert.deepEqual(loadMeta().unlocked_origins, ["무림초출", "백호대장", "금군교두"]);
+  const dict = new Player("백호대장").toDict();
+  dict.origin_key = "탈영병";
+  const p = Player.fromDict(dict);
+  assert.equal(p.originKey, "백호대장");
+  assert.equal(p.origin, "백호대의 대장");
 });
 
 // ---------- 전체 플레이 ----------

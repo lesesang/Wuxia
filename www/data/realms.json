@@ -34,14 +34,13 @@
     "절정": 0.06,
     "초절정": 0.14,
     "화경": 0.24,
-    "현경": 0.36,
-    "생사경": 0.5
+    "현경": 0.36
   },
   "saengsa": {
     "min_stat": 95,
     "battles": 50,
-    "hp_ratio": 0.7,
-    "qi_ratio": 0.3
+    "hp_ratio": 0.8,
+    "qi_ratio": 0.8
   },
   "good_ending": {
     "min_realm": "화경",

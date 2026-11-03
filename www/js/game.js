@@ -466,6 +466,8 @@ export class Game {
       gain.total += item.karma;
     }
     addKarma(gain.total);
+    // 생사경은 천마를 넘어선 그 순간에만 이르는 경지다
+    if (key === "생사경") p.realm = "생사경";
     p.alive = false;
     this.ending = {
       key, title: endings.titles[key], seal: endings.seals[key], karma: gain.total, karmaLines: gain.lines,
@@ -500,7 +502,7 @@ function karmaGain(player, key, victory) {
   const reached = Object.keys(realm).filter((k) => realmIndex(player.realm) >= realmIndex(k));
   const wants = [...reached, ...(victory ? ["격파"] : []), ...(key === "생사경" ? ["생사경"] : [])];
   for (const k of claimMilestones(wants)) {
-    add(k === "격파" ? "첫 천마 격파" : `처음 오른 ${k}`, k === "격파" ? win : k === "생사경" ? saengsa : realm[k]);
+    add(k === "격파" ? "첫 천마 격파" : `처음 이른 ${k}`, k === "격파" ? win : k === "생사경" ? saengsa : realm[k]);
   }
   return { total, lines };
 }
