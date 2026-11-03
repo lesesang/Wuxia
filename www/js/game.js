@@ -1,0 +1,386 @@
+// 한 회차의 진행을 맡는 상태 기계. 화면(ui.js)은 이 객체의 상태를 그리고 메서드를 부른다.
+import { Battle, enemyPool, Enemy, useConsumable } from "./battle.js";
+import { Player, Skill, STAT_NAMES } from "./character.js";
+import { DB } from "./data.js";
+import { applyEffects, pickFortune, pickRandomEvent, resolveChoice, storyEventForTurn } from "./events.js";
+import { buy, openMarket } from "./market.js";
+import {
+  addKarma, clearCheckpoint, loadCheckpoint, loadMeta, recordRun, saveCheckpoint, updateGlobalCodex, updateKnown,
+} from "./meta.js";
+import { pickWeighted, randInt, rng } from "./rng.js";
+import {
+  actionLine, applyGrowth, breakthroughBlock, byname, checkBreakthrough, checkGoodEnding, checkSaengsa, fameRank,
+  getChapter, getChapterInfo, getMonth, isMarketTurn, monthLine, realmIndex, sumEffect, traitSlots,
+} from "./rules.js";
+
+const NATURAL_REGEN = 5;
+const EXPLORE_BATTLE = 0.45;
+const EXPLORE_EVENT = 0.40;
+const SPARRING_CHANCE = 0.3;
+const GAUNTLET_REST = 20;
+const LOG_LIMIT = 40;
+const VALID_ACTIONS = ["수련", "명상", "탐색", "휴식"];
+const VALID_BATTLE_ACTIONS = ["기본공격", "비기", "심법", "경공", "소비품", "도주"];
+
+export class Game {
+  constructor() { this.reset(); }
+
+  reset() {
+    this.player = null;
+    this.log = [];
+    this.battle = null;
+    this.market = null;
+    this.event = null;          // {key, forced}
+    this.gauntlet = null;
+    this.ending = null;
+    this.pendingNext = false;
+  }
+
+  get active() { return this.player !== null; }
+
+  get busy() {
+    return !!(this.battle || this.market || this.event || this.pendingNext || !this.player?.alive);
+  }
+
+  setLog(lines) { this.log = lines.slice(-LOG_LIMIT); }
+  addLog(lines) { this.setLog([...this.log, ...lines]); }
+
+  // ---------- 시작과 복구 ----------
+
+  /** 새 회차 시작. 잠긴 출신이면 false */
+  start(originKey = "무림초출", selectedTraits = []) {
+    const meta = loadMeta();
+    if (!meta.unlocked_origins.includes(originKey) || !DB.origins.origins[originKey]) return false;
+    const traits = [...new Set(selectedTraits)].filter((t) => meta.unlocked_traits.includes(t))
+      .slice(0, traitSlots(meta.total_karma));
+
+    this.reset();
+    this.player = new Player(originKey, traits);
+    updateKnown(this.player.skills.map((s) => s.key));
+    const intro = getChapterInfo(1);
+    this.enterTurn([`📖 ${intro.title} (${intro.year}년차) — ${intro.desc}`]);
+    return true;
+  }
+
+  /** 새 턴 공통 처리: 체크포인트를 저장하고 줄거리 이벤트를 연다. */
+  enterTurn(log) {
+    this.setLog(log);
+    saveCheckpoint(this.player.toDict(), this.log);
+    this.openStoryEvent();
+  }
+
+  openStoryEvent() {
+    const key = storyEventForTurn(this.player);
+    if (key) this.event = { key, forced: true };
+  }
+
+  /** 저장된 턴 시작 지점에서 이어 한다. 없으면 false */
+  continueFromSave() {
+    const checkpoint = loadCheckpoint();
+    if (!checkpoint) return false;
+    this.reset();
+    this.player = Player.fromDict(checkpoint.player);
+    this.setLog(checkpoint.log || []);
+    this.openStoryEvent();
+    return true;
+  }
+
+  restart() {
+    this.reset();
+    clearCheckpoint();
+  }
+
+  // ---------- 행동 ----------
+
+  action(name) {
+    if (!this.active || this.busy || !VALID_ACTIONS.includes(name)) return;
+    this.setLog([]);
+    const p = this.player;
+    if (name === "수련") {
+      const ext = this.grow("external");
+      const mar = this.grow("martial");
+      this.addLog([actionLine("수련"), `외공+${ext}, 무리+${mar}`]);
+      if (rng.random() < SPARRING_CHANCE) {
+        p.battles += 1;
+        this.addLog(["지나던 무인과 대련을 나누었다. (전투 경험 +1)"]);
+      }
+      const skill = p.bestSkill();
+      if (skill) this.addLog(skill.gainMastery(p.masteryGainAmount()));
+    } else if (name === "명상") {
+      const internal = this.grow("internal");
+      const mind = this.grow("mind");
+      const [, qi] = p.healPercent(0, 15);
+      this.addLog([actionLine("명상"), `내공+${internal}, 심경+${mind}, 기력+${qi}`]);
+      const skill = p.bestOfType("심공");
+      if (skill) this.addLog(skill.gainMastery(p.masteryGainAmount()));
+    } else if (name === "휴식") {
+      const [hp, qi] = p.healPercent(35, 45);
+      let result = `체력+${hp}, 기력+${qi}`;
+      if (p.injury) {
+        p.addInjury(-1);
+        result += `, 내상 ${p.injury ? `${p.injury}단계로 호전` : "완치"}`;
+      }
+      this.addLog([actionLine("휴식"), result]);
+    } else {
+      this.explore();
+    }
+    if (!this.battle && !this.event) this.pendingNext = true;
+  }
+
+  grow(stat) {
+    const p = this.player;
+    let amount = randInt(1, 3);
+    if (rng.random() < p.mind / 300) amount += 1; // 심경이 높으면 가끔 1 더 오른다
+    return p.gainStat(stat, applyGrowth(amount, p.traits, stat));
+  }
+
+  explore() {
+    const roll = rng.random();
+    const bonus = sumEffect(this.player.traits, "fortune_rate", "percent") / 100;
+    if (roll < bonus) return this.fortune();
+    if (roll < EXPLORE_BATTLE + bonus) return this.startBattle(this.pickEnemy());
+    if (roll < EXPLORE_BATTLE + EXPLORE_EVENT) {
+      const key = pickRandomEvent(this.player);
+      if (key) {
+        this.event = { key, forced: false };
+        return undefined;
+      }
+    }
+    return this.fortune();
+  }
+
+  fortune() {
+    const p = this.player;
+    const fortune = pickFortune(p);
+    const summary = applyEffects(p, fortune.effects);
+    const silver = p.gainSilver(randInt(6, 12) * getChapter(p.turn));
+    this.addLog([`기연! ${fortune.text}`, [...summary, `은자+${silver}`].join(", ")]);
+  }
+
+  pickEnemy() {
+    let pool = enemyPool(getChapter(this.player.turn));
+    if (realmIndex(this.player.realm) < realmIndex("초절정")) {
+      const easier = pool.filter((k) => DB.enemies[k].tier !== "강적");
+      if (easier.length) pool = easier;
+    }
+    return pickWeighted(pool, pool.map((k) => DB.enemies[k].weight));
+  }
+
+  startBattle(key) {
+    const enemy = new Enemy(key);
+    this.player.recordEnemyEncounter(key);
+    this.battle = new Battle(this.player, enemy);
+    this.addLog([`⚔️ ${enemy.name}과(와) 마주쳤다!`, ...(enemy.intro ? [enemy.intro] : []), ...this.battle.log]);
+    this.battle.log = [];
+  }
+
+  startFinalBattle() {
+    const p = this.player;
+    const enemy = new Enemy("천마");
+    let weaken = p.bossWeaken;
+    if (p.hasFlag("단목휘_동맹")) {
+      weaken += 15;
+      this.addLog(["🗡️ 뒤에서 익숙한 웃음소리가 들렸다. \"다리 값 받으러 왔소.\" 단목휘의 검이 천마의 옆구리를 스쳤다!"]);
+    }
+    if (weaken) {
+      const percent = Math.min(weaken, 60);
+      enemy.maxHp = Math.trunc(enemy.maxHp * (100 - percent) / 100);
+      enemy.hp = enemy.maxHp;
+      this.addLog([`천마의 기세가 꺾인 채 싸움이 시작된다. (체력 ${percent}% 감소)`]);
+    }
+    p.recordEnemyEncounter("천마");
+    this.battle = new Battle(p, enemy, true);
+    this.addLog(["⚡ 강호행의 마지막 결전이 시작된다.", ...this.battle.log]);
+    this.battle.log = [];
+  }
+
+  // ---------- 이벤트 ----------
+
+  chooseEvent(index) {
+    if (!this.event) return;
+    const state = this.event;
+    const result = resolveChoice(this.player, state.key, index);
+    if (!result) return;
+
+    const lines = [`「${DB.events[state.key].title}」`, result.text];
+    if (result.summary.length) lines.push(result.summary.join(", "));
+    this.setLog(state.forced ? [...this.log, ...lines] : lines);
+    this.event = null;
+
+    const { effects } = result;
+    if (effects.ending) {
+      this.finishGame(true, effects.ending);
+      return;
+    }
+    if (effects.final_battle) {
+      this.startFinalBattle();
+    } else if (effects.battle) {
+      this.startBattle(effects.battle);
+    } else if (effects.gauntlet) {
+      const { enemies, reward, name } = effects.gauntlet;
+      this.gauntlet = { name, enemies: enemies.slice(1), reward, round: 1, total: enemies.length };
+      this.startBattle(enemies[0]);
+    }
+    if (!this.battle && !state.forced) this.pendingNext = true;
+  }
+
+  // ---------- 전투 ----------
+
+  battleAction(action = "기본공격", itemKey = null) {
+    if (!this.battle || !VALID_BATTLE_ACTIONS.includes(action)) return;
+    const { battle, player } = this;
+    if (action === "도주" && battle.isFinal) return;
+
+    const result = battle.runRound(action, player.bestSkill(), itemKey);
+    this.addLog(battle.log);
+    battle.log = [];
+    if (!result) return;
+
+    this.battle = null;
+    if (result.victory && this.gauntlet && !battle.isFinal) {
+      if (this.continueGauntlet()) return;
+    } else {
+      this.gauntlet = null;
+    }
+
+    if (result.victory) this.addLog([`승리! (전투 경험 +${result.exp})`]);
+    else if (result.fled) this.addLog(["가까스로 전장을 벗어났다."]);
+    else this.addLog(["패배..."]);
+
+    if (battle.isFinal || player.hp <= 0) this.finishGame(result.victory);
+    else this.pendingNext = true;
+  }
+
+  continueGauntlet() {
+    const { gauntlet, player } = this;
+    if (gauntlet.enemies.length) {
+      const next = gauntlet.enemies.shift();
+      gauntlet.round += 1;
+      player.healPercent(GAUNTLET_REST, GAUNTLET_REST);
+      this.addLog([`잠시 숨을 고른다. (${gauntlet.name} ${gauntlet.round}/${gauntlet.total}전)`]);
+      this.startBattle(next);
+      return true;
+    }
+    const summary = applyEffects(player, gauntlet.reward);
+    this.addLog([`🏆 ${gauntlet.name}을(를) 제패했다! 강호가 그 이름을 외친다.`, summary.join(", ")]);
+    this.gauntlet = null;
+    return false;
+  }
+
+  useItem(key) {
+    if (!this.active || this.battle || !this.player.alive) return;
+    if (DB.market[key] && this.player.inventory[key] > 0) useConsumable(this.player, key);
+  }
+
+  setMainSkill(key) {
+    if (!this.active || this.battle) return;
+    const skill = this.player.getSkill(key);
+    if (skill?.type === "공격무공") this.player.mainSkill = key;
+  }
+
+  // ---------- 턴 넘김과 시장 ----------
+
+  advanceTurn() {
+    if (!this.active || !this.pendingNext || this.market) return;
+    if (isMarketTurn(this.player.turn)) {
+      this.market = openMarket(this.player.turn, this.player);
+      return;
+    }
+    this.startNextTurn();
+  }
+
+  startNextTurn() {
+    const p = this.player;
+    const lines = [...this.commitCodex(), ...this.checkRealm()];
+    p.turn += 1;
+    if ([13, 25, 37, 49].includes(p.turn)) {
+      const info = getChapterInfo(p.turn);
+      lines.push(`📖 ${info.title} (${info.year}년차) — ${info.desc}`);
+    }
+    const hp = NATURAL_REGEN + sumEffect(p.traits, "turn_regen", "hp_pct");
+    const qi = NATURAL_REGEN + sumEffect(p.traits, "turn_regen", "qi_pct");
+    p.healPercent(hp, qi);
+    const hint = breakthroughBlock(p);
+    if (hint) lines.push(hint);
+    if (p.injury) lines.push(`가슴 안쪽이 욱신거린다. (내상 ${p.injury}단계, 회복으로 낫는다)`);
+    lines.push(monthLine(getMonth(p.turn)));
+    this.pendingNext = false;
+    this.enterTurn(lines);
+  }
+
+  /** 직전 턴의 조우와 습득을 영구 도감에 반영한다. */
+  commitCodex() {
+    const added = this.player.commitPendingEncounters();
+    updateGlobalCodex(added);
+    updateKnown(this.player.skills.map((s) => s.key));
+    return added.map((key) => `📖 강호 도감에 「${DB.enemies[key]?.name ?? key}」이(가) 기록되었다.`);
+  }
+
+  checkRealm() {
+    const p = this.player;
+    const next = checkBreakthrough(p);
+    if (!next) return [];
+    const lines = [`🌟 경지 돌파! ${p.realm} → ${next}`];
+    p.realm = next;
+    // 심경이 충분히 높지 않으면 돌파가 거칠어 내상을 입는다
+    if (rng.random() < Math.max(0, 60 - p.mind) * 0.01) {
+      p.healPercent(-25, -25);
+      lines.push("심경이 흔들려 기가 역류했다. 간신히 돌파했지만 내상을 입었다. (체력·기력 -25%)");
+    } else {
+      p.healPercent(50, 50);
+      lines.push("막혀 있던 혈맥이 뚫리며 온몸에 기운이 찬다. (체력·기력 회복)");
+    }
+    return lines;
+  }
+
+  marketBuy(key) {
+    if (!this.market) return;
+    const [success, message] = buy(this.player, this.market, key);
+    this.market.message = message;
+    if (success) updateKnown([], [key]);
+  }
+
+  marketLeave() {
+    if (!this.market) return;
+    this.market = null;
+    this.startNextTurn();
+  }
+
+  // ---------- 엔딩 ----------
+
+  finishGame(victory, forced = null) {
+    const p = this.player;
+    this.addLog(this.commitCodex());
+    const key = forced
+      || ((!victory || p.hp <= 0) ? "사망"
+        : checkSaengsa(p) ? "생사경"
+          : checkGoodEnding(p) ? "기본" : "배드");
+    const { endings } = DB;
+    addKarma(endings.karma[key]);
+    p.alive = false;
+    this.ending = {
+      key, title: endings.titles[key], seal: endings.seals[key], karma: endings.karma[key],
+      text: endings.text[key], epilogue: buildEpilogue(p, key),
+    };
+    recordRun({
+      ending: key, origin: p.origin, realm: p.realm, turn: Math.min(p.turn, p.maxTurn),
+      kills: p.kills, title: byname(p), fame: fameRank(p.fame),
+    });
+    this.pendingNext = false;
+    this.battle = null;
+    this.event = null;
+    this.market = null;
+    clearCheckpoint();
+  }
+}
+
+export function buildEpilogue(player, ending) {
+  if (!["기본", "생사경", "배드"].includes(ending)) return [];
+  const { endings } = DB;
+  const lines = [endings.epilogue[player.dominantAlignment() || "중립"]];
+  if (endings.sect_epilogue[player.sect]) lines.push(endings.sect_epilogue[player.sect]);
+  for (const [flag, text] of endings.flag_epilogue) if (player.hasFlag(flag)) lines.push(text);
+  return lines;
+}
+
+export { Skill, STAT_NAMES };

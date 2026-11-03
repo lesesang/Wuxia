@@ -1,0 +1,51 @@
+{
+  "order": [
+    "일류",
+    "절정",
+    "초절정",
+    "화경",
+    "현경",
+    "생사경"
+  ],
+  "requirements": {
+    "절정": {
+      "avg": 35,
+      "min_stat": 30,
+      "battles": 5
+    },
+    "초절정": {
+      "avg": 50,
+      "min_stat": 45,
+      "battles": 7
+    },
+    "화경": {
+      "avg": 65,
+      "min_stat": 60,
+      "battles": 12
+    },
+    "현경": {
+      "avg": 80,
+      "min_stat": 75,
+      "battles": 18
+    }
+  },
+  "combat_bonus": {
+    "일류": 0,
+    "절정": 0.06,
+    "초절정": 0.14,
+    "화경": 0.24,
+    "현경": 0.36,
+    "생사경": 0.5
+  },
+  "saengsa": {
+    "min_stat": 95,
+    "battles": 25,
+    "hp_ratio": 0.6,
+    "qi_ratio": 0.3
+  },
+  "good_ending": {
+    "min_realm": "화경",
+    "hp_ratio": 0.15,
+    "qi_ratio": 0.0
+  }
+}

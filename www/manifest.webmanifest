@@ -1,0 +1,18 @@
+{
+  "name": "무협 로그라이크",
+  "short_name": "무협",
+  "description": "다섯 해 동안 무공을 닦아 천마봉에 오르는 한국어 텍스트 로그라이크",
+  "lang": "ko",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#181d22",
+  "theme_color": "#181d22",
+  "categories": ["games"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

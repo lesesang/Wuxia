@@ -1,7 +1,4 @@
-__pycache__/
-*.pyc
-.pytest_cache/
 .venv/
-saves/*.json
-saves/*.tmp
-saves/*.broken
+node_modules/
+android/
+ios/
