@@ -802,8 +802,8 @@ test("계열마다 무공과 무기가 고르게 있다", () => {
     assert.ok(attacks.filter((s) => s.category === style).length >= 3, style);
   }
   for (const style of ["검법", "도법", "창법", "봉법", "권법", "장법", "암기"]) {
-    const weapons = Object.values(DB.market).filter((i) => i.markets.length && i.effects.some((e) => e.style === style));
-    assert.equal(weapons.length, 4, style);
+    const weapons = Object.values(DB.market).filter((i) => i.category === "무기" && i.markets.length && i.effects.some((e) => e.style === style));
+    assert.equal(weapons.length, 6, style);
   }
 });
 
@@ -1319,13 +1319,90 @@ test("무기 계열마다 무공 수가 같고 등급이 고르다", () => {
 });
 
 test("새 출신은 저마다 서장과 무기 문장, 이야기가 있다", () => {
-  for (const origin of ["세외도객", "양가서자", "육선문포두", "소림속가", "마교탈주", "살문탈주"]) {
+  for (const origin of ["하북팽가", "악가서자", "개방제자", "소림속가", "마교탈주", "살막탈주", "당가방계", "황보막내", "녹림소채주", "점소이", "회귀자"]) {
     assert.ok(DB.origins.origins[origin].desc.includes("일류"));
     assert.ok(Object.values(DB.storyEvents).some((e) => e.requires?.origin === origin && e.turn === 1));
     assert.notEqual(eventView(new Player(origin), "시작_병기고").text, DB.events.시작_병기고.text);
     assert.ok(Object.values(DB.randomEvents).filter((e) => e.requires?.origin === origin).length >= 2);
     assert.ok(DB.enemies.천마.intros.some((i) => i.requires.origin === origin));
   }
+});
+
+// ---------- 도구, 도감, 업적 ----------
+
+test("계열마다 수련 도구와 전투 도구가 하나씩 있다", () => {
+  for (const style of ["검법", "도법", "창법", "봉법", "권법", "장법", "암기"]) {
+    const tools = Object.values(DB.market).filter((i) => i.category === "도구" && i.effects[0].style === style);
+    assert.equal(tools.filter((i) => i.effects[0].type === "mastery").length, 1, style);
+    assert.equal(tools.filter((i) => i.effects[0].type === "atk_buff").length, 1, style);
+  }
+});
+
+test("수련 도구는 숙련도를 올리고 맞지 않으면 절반이다", () => {
+  const p = new Player();
+  p.addItem("매화숫돌");
+  p.addItem("베기짚단");
+  const main = p.bestSkill();
+  useConsumable(p, "매화숫돌");
+  assert.equal(main.mastery, 25);
+  useConsumable(p, "베기짚단");
+  assert.equal(main.mastery, 37);
+});
+
+test("전투 도구는 전투에서만 쓰고 공격력을 올린다", () => {
+  const game = newGame();
+  game.player.addItem("벽력검유");
+  game.useItem("벽력검유");
+  assert.equal(game.player.inventory.벽력검유, 1, "전투 밖에서는 쓰이지 않는다");
+  const battle = new Battle(game.player, new Enemy("낭인", 1));
+  battle.useItem("벽력검유");
+  assert.equal(battle.atkBuff.percent, 40);
+  game.player.addItem("맹호도유");
+  battle.useItem("맹호도유");
+  assert.equal(battle.atkBuff.percent, 20, "다른 계열은 절반");
+});
+
+test("겪은 사건이 도감에 남고 번외 시간은 남지 않는다", () => {
+  const game = new Game();
+  game.start("무림초출");
+  assert.equal(game.event.key, "시작_병기고");
+  game.chooseEvent(0);
+  assert.ok(!loadMeta().known_events.includes("시작_병기고"), "첫 무기는 기록하지 않는다");
+  const key = game.event.key;
+  game.chooseEvent(0);
+  assert.ok(loadMeta().known_events.includes(key));
+});
+
+test("업적이 기록되고 카르마를 주며 한 번만 받는다", () => {
+  const data = loadMeta();
+  Object.assign(data, { achievements: [], known_events: [], origin_wins: [], total_runs: 0, milestones: ["절정", "초절정", "화경", "현경", "격파"] });
+  saveMeta(data);
+  const game = newGame();
+  game.player.kills = 40;
+  game.finishGame(true);
+  assert.ok(loadMeta().achievements.includes("백인"));
+  assert.ok(loadMeta().achievements.includes("첫승리"));
+  assert.ok(game.ending.karmaLines.some((l) => l.includes("백 명의 이름")));
+  const again = newGame();
+  again.player.kills = 40;
+  again.finishGame(true);
+  assert.ok(!again.ending.karmaLines.some((l) => l.includes("백 명의 이름")));
+  assert.deepEqual(loadMeta().origin_wins, ["무림초출"]);
+});
+
+test("없어진 출신을 샀던 기록은 카르마로 돌려준다", () => {
+  const data = loadMeta();
+  data.unlocked_origins = ["무림초출", "세외도객", "살문탈주"];
+  data.current_karma = 0;
+  saveMeta(data);
+  const after = loadMeta();
+  assert.equal(after.current_karma, 10);
+  assert.deepEqual(after.unlocked_origins, ["무림초출"]);
+});
+
+test("개방과 당가 출신은 사문을 지니고 시작한다", () => {
+  assert.equal(new Player("개방제자").sect, "개방");
+  assert.equal(new Player("당가방계").sect, "당가");
 });
 
 // ---------- 전체 플레이 ----------

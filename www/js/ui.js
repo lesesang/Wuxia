@@ -47,10 +47,13 @@ function codexModal() {
   const enemies = meta.global_codex.filter((k) => DB.enemies[k]);
   const skills = meta.known_skills.filter((k) => DB.skills[k]);
   const items = meta.known_items.filter((k) => DB.market[k]);
+  const events = meta.known_events.filter((k) => DB.events[k]);
   const tabs = [
     ["enemies", `인물 ${enemies.length}/${Object.keys(DB.enemies).length}`],
     ["skills", `무공 ${skills.length}/${Object.keys(DB.skills).length}`],
     ["items", `보물 ${items.length}/${Object.keys(DB.market).length}`],
+    ["events", `인연 ${events.length}/${Object.keys(DB.events).length}`],
+    ["achievements", `업적 ${meta.achievements.length}/${DB.karma.achievements.length}`],
     ["endings", "결말"],
     ["runs", "회차 기록"],
   ];
@@ -67,6 +70,15 @@ function codexModal() {
       const i = DB.market[k];
       return entry(i.name, i.category, i.desc);
     }),
+    events: list(events, "강호에서 겪은 사건이 이곳에 기록됩니다.", (k) => {
+      const e = DB.events[k];
+      const label = e.chain ? `연계 「${DB.chains[e.chain.id].title}」 ${e.chain.index + 1}/${e.chain.total}편` : e.kind === "story" ? "줄거리" : e.requires?.sect ? "사문" : e.requires?.origin ? "출신 이야기" : "강호 사건";
+      return entry(e.title, label, e.text.split(/(?<=[.?!"])\s/)[0]);
+    }),
+    achievements: DB.karma.achievements.map((a) => {
+      const done = meta.achievements.includes(a.key);
+      return entry(`${done ? "✓ " : ""}${a.name}`, a.karma ? `카르마 +${a.karma}` : "", a.desc);
+    }).join(""),
     endings: Object.keys(DB.endings.titles).map((k) => entry(
       meta.endings_seen.includes(k) ? DB.endings.titles[k] : "아직 보지 못한 결말", `카르마 +${DB.endings.karma[k]}`)).join(""),
     runs: `<p class="codex-meta">끝낸 강호행 ${meta.total_runs}회</p>${list(meta.runs, "강호행을 끝내면 이곳에 기록됩니다.", (r) => entry(
@@ -92,7 +104,7 @@ function helpModal() {
     "적의 필살기는 한 합 전에 ⚠️로 예고됩니다. <b>경공</b>으로 흘려내면 다음 공격이 강해집니다.",
     "<b>심법</b>은 숨을 고르며 회복하고 점혈을 풉니다. 위험하면 <b>도주</b>도 방법입니다.",
     "내상은 전투가 끝나도 남고 주는 피해를 줄입니다."])}
-    ${section("시장과 성장", ["매년 말 시장이 열리고 달을 쓰지 않습니다. 더 나은 무기와 방어구가 항상 진열되고, 익힌 무공과 맞는 물건이 더 자주 나옵니다.", "무기는 주무공과 계열이 맞아야 제 힘을 냅니다. 맞지 않으면 3/4만 나옵니다.", "사건의 선택으로 정도, 사도, 마도 성향이 쌓이고 혜택과 파는 물건이 달라집니다."])}
+    ${section("시장과 성장", ["매년 말 시장이 열리고 달을 쓰지 않습니다. 더 나은 무기와 방어구가 항상 진열되고, 익힌 무공과 맞는 물건이 더 자주 나옵니다.", "도구는 계열이 맞으면 제 효과를 내고 맞지 않으면 절반입니다. 수련 도구는 언제든, 전투 도구는 전투 중에 씁니다.", "무기는 주무공과 계열이 맞아야 제 힘을 냅니다. 맞지 않으면 3/4만 나옵니다.", "사건의 선택으로 정도, 사도, 마도 성향이 쌓이고 혜택과 파는 물건이 달라집니다."])}
     ${section("저장", ["매달 초 자동으로 저장됩니다. 도중에 끄면 그달의 처음부터 이어 합니다."])}
     <label class="guide-off"><input type="checkbox" id="guide-off" class="toggle" ${storage.get("wuxia-show-guide") === "off" ? "checked" : ""}> 강호행을 시작할 때 이 안내문을 보지 않기</label>`);
 }
@@ -320,8 +332,8 @@ function statusModal() {
 
   const bag = inventory.map(([key, count]) => `<div class="skill-row"><div class="skill-head">
     <span>${esc(DB.market[key].name)} ×${count}<br><span class="skill-meta">${esc(DB.market[key].desc)}</span></span>
-    ${!game.battle && p.alive ? `<button class="mini-btn" data-act="use-item" data-key="${esc(key)}">사용</button>` : ""}</div></div>`).join("")
-    || `<p class="codex-empty">시장에서 산 소비품이 이곳에 들어옵니다.</p>`;
+    ${!game.battle && p.alive && !DB.market[key].battle_only ? `<button class="mini-btn" data-act="use-item" data-key="${esc(key)}">사용</button>` : ""}</div></div>`).join("")
+    || `<p class="codex-empty">시장에서 산 소비품과 도구가 이곳에 들어옵니다.</p>`;
 
   const panels = {
     stats: `<div class="modal-section">
@@ -349,7 +361,7 @@ function statusModal() {
         ${row("은자", p.silver)}
         ${row("무기", weapon ? `${weapon} (공격력 +${equipmentBonus(p, "weapon")})` : "없음")}
         ${row("방어구", armor ? `${armor} (받는 피해 -${equipmentBonus(p, "armor")})` : "없음")}
-      </div><div class="modal-section"><h4>소비품</h4>${bag}</div>`,
+      </div><div class="modal-section"><h4>소비품과 도구</h4>${bag}</div>`,
   };
   const tabs = [["stats", "능력치"], ["skills", "무공"], ["bag", "가방"], ["history", "기록"]];
   return modalShell("status-modal", "내 상태", `

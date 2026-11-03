@@ -8,7 +8,7 @@ import {
 } from "./events.js";
 import { buy, openMarket } from "./market.js";
 import {
-  activeContent, addKarma, claimMilestones, clearCheckpoint, extraSlots, loadCheckpoint, loadMeta, recordRun, saveCheckpoint,
+  activeContent, addKarma, claimAchievements, claimMilestones, clearCheckpoint, extraSlots, loadCheckpoint, loadMeta, recordRun, saveCheckpoint,
   storeLegacy, takeLegacy, updateGlobalCodex, updateKnown, upgradeLevel, upgradeTraits,
 } from "./meta.js";
 import { pickWeighted, randInt, rng } from "./rng.js";
@@ -352,6 +352,7 @@ export class Game {
   }
 
   useItem(key) {
+    if (DB.market[key]?.battle_only) return;
     if (!this.active || this.battle || !this.player.alive) return;
     if (DB.market[key] && this.player.inventory[key] > 0) useConsumable(this.player, key);
   }
@@ -459,6 +460,11 @@ export class Game {
           : checkGoodEnding(p) ? "기본" : "배드");
     const { endings } = DB;
     const gain = karmaGain(p, key, victory);
+    const fresh = claimAchievements(p, key, victory);
+    for (const item of fresh) {
+      gain.lines.push(`업적 「${item.name}」${item.karma ? ` +${item.karma}` : ""}`);
+      gain.total += item.karma;
+    }
     addKarma(gain.total);
     p.alive = false;
     this.ending = {

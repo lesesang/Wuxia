@@ -147,6 +147,7 @@ export class Player {
     this.chronicle = [];
     this.content = [];
     this.chains = [];
+    this.chainsDone = 0;
     this.alignment = newAlignment();
     this.flags = [];
     this.seenEvents = [];
@@ -272,7 +273,7 @@ export class Player {
       inventory: this.inventory, boss_weaken: this.bossWeaken, alignment: this.alignment,
       flags: this.flags, seen_events: this.seenEvents, kills: this.kills,
       fame: this.fame, sect: this.sect, injury: this.injury,
-      turn: this.turn, max_turn: this.maxTurn, alive: this.alive, chronicle: this.chronicle, content: this.content, chains: this.chains,
+      turn: this.turn, max_turn: this.maxTurn, alive: this.alive, chronicle: this.chronicle, content: this.content, chains: this.chains, chains_done: this.chainsDone,
     };
   }
 
@@ -285,6 +286,7 @@ export class Player {
     p.chronicle = d.chronicle ?? [];
     p.content = d.content ?? [];
     p.chains = d.chains ?? [];
+    p.chainsDone = d.chains_done ?? 0;
     p.realm = d.realm;
     p.external = d.external;
     p.internal = d.internal;
