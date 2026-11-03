@@ -22,7 +22,7 @@ export function dominant(alignment) {
 
 export function benefitText(alignment) {
   const top = dominant(alignment);
-  if (top === "정도") return `시장 가격 ${JUNG_DISCOUNT}% 할인`;
+  if (top === "정도") return `장터 가격 ${JUNG_DISCOUNT}% 할인`;
   if (top === "사도") return `얻는 은자 ${SA_SILVER_BONUS}% 증가`;
   if (top === "마도") return `주는 피해 ${MA_DAMAGE_BONUS}% 증가, 회복 효율 ${MA_HEAL_PENALTY}% 감소`;
   return "아직 어느 길에도 서지 않았다";
@@ -75,7 +75,7 @@ export function applyGrowth(amount, traits, stat) {
 }
 
 // ---------- 문파 ----------
-export const ORIGIN_SECTS = { 곤륜파: "곤륜", 남궁세가: "남궁", 하오문: "하오문", 개방제자: "개방", 당가무사: "당가", 소림속가: "소림", 신교사자: "마교" };
+export const ORIGIN_SECTS = { 남궁세가: "남궁", 하오문: "하오문", 개방제자: "개방", 신교사자: "마교" };
 export const sectBonus = (player, field) => DB.sects[player.sect]?.bonus?.[field] || 0;
 
 // ---------- 경지 ----------
@@ -106,7 +106,7 @@ export function breakthroughBlock(player) {
   const req = DB.realms.requirements[next];
   const stats = statsOf(player);
   if (average(stats) >= req.avg && Math.min(...stats) >= req.min_stat && player.battles < req.battles) {
-    return `${next}의 문턱이 보이지만 실전이 모자라다. (전투 경험 ${player.battles}/${req.battles}, 탐색에서 싸워야 는다)`;
+    return `${next}의 문턱이 보이지만 실전이 모자라다. (실전 경험 ${player.battles}/${req.battles}, 탐색에서 싸워야 는다)`;
   }
   return null;
 }

@@ -96,7 +96,7 @@ export class Game {
     const p = this.player;
     const skills = p.skills.filter((s) => GRADE_ORDER.indexOf(s.grade) >= 1)
       .sort((a, b) => GRADE_ORDER.indexOf(b.grade) - GRADE_ORDER.indexOf(a.grade)).slice(0, 4)
-      .map((s) => ({ kind: "skill", key: s.key, grade: s.grade, label: `${s.name} (${s.grade} 등급)` }));
+      .map((s) => ({ kind: "skill", key: s.key, grade: s.grade, label: `${s.name} (${s.grade} 품계)` }));
     const gear = [p.weapon, p.armor].filter((k) => DB.market[k]?.markets.length)
       .map((k) => ({ kind: "gear", key: k, label: DB.market[k].name }));
     return [...skills, ...gear];
@@ -160,7 +160,7 @@ export class Game {
       if (rng.random() < SPARRING_CHANCE) {
         const silver = p.gainSilver(randInt(6, 10) * getChapter(p.turn));
         p.battles += 1;
-        this.addLog([`지나던 무인과 대련을 나누고 사례를 받았다. (전투 경험 +1, 은자 +${silver})`]);
+        this.addLog([`지나던 무인과 대련을 나누고 사례를 받았다. (실전 경험 +1, 은자 +${silver})`]);
       }
       const skill = p.bestSkill();
       if (skill) this.addLog(skill.gainMastery(p.masteryGainAmount() * TRAIN_MASTERY_RATE));
@@ -168,7 +168,7 @@ export class Game {
       const internal = this.grow("internal");
       const mind = this.grow("mind");
       const [, qi] = p.healPercent(0, 15);
-      this.addLog([actionLine("명상"), `내공+${internal}, 심경+${mind}, 기력+${qi}`]);
+      this.addLog([actionLine("명상"), `내공+${internal}, 심경+${mind}, 내력+${qi}`]);
       const skill = p.bestOfType("심공");
       if (skill) this.addLog(skill.gainMastery(p.masteryGainAmount()));
       // 고요한 중에 깨달음이 오면 주무공도 함께 깊어진다
@@ -178,7 +178,7 @@ export class Game {
     } else if (name === "휴식") {
       const rate = 1 + sumEffect(p.traits, "heal_rate", "percent") / 100;
       const [hp, qi] = p.healPercent(35 * rate, 45 * rate);
-      let result = `체력+${hp}, 기력+${qi}`;
+      let result = `체력+${hp}, 내력+${qi}`;
       if (p.injury) {
         p.addInjury(-1);
         result += `, 내상 ${p.injury ? `${p.injury}단계로 호전` : "완치"}`;
@@ -320,7 +320,7 @@ export class Game {
 
     if (result.victory && ["강적", "보스"].includes(battle.enemy.tier)) player.note(`${battle.enemy.name}을(를) 쓰러뜨렸다.`);
     if (!result.victory && !result.fled) player.note(`${battle.enemy.name}에게 쓰러졌다.`);
-    if (result.victory) this.addLog([`승리! (전투 경험 +${result.exp})`]);
+    if (result.victory) this.addLog([`승리! (실전 경험 +${result.exp})`]);
     else if (result.fled) this.addLog(["가까스로 전장을 벗어났다."]);
     else this.addLog(["패배..."]);
 
@@ -387,7 +387,7 @@ export class Game {
     }
     const hint = breakthroughBlock(p);
     if (hint) lines.push(hint);
-    if (p.injury) lines.push(`가슴 안쪽이 욱신거린다. (내상 ${p.injury}단계, 회복으로 낫는다)`);
+    if (p.injury) lines.push(`가슴 안쪽이 욱신거린다. (내상 ${p.injury}단계, 요양으로 낫는다)`);
     lines.push(monthLine(getMonth(p.turn)));
     this.pendingNext = false;
     this.enterTurn(lines);
@@ -400,13 +400,13 @@ export class Game {
     const growth = sumEffect(p.traits, "chapter_growth", "amount");
     if (growth) {
       for (const stat of Object.keys(STAT_NAMES)) p.gainStat(stat, growth);
-      lines.push(`대기만성: 모든 능력치 +${growth}`);
+      lines.push(`대기만성: 모든 기량 +${growth}`);
     }
     const hadInjury = p.injury > 0;
     p.injury = 0;
     p.hp = p.maxHp();
     p.qi = p.maxQi();
-    lines.push(`🌟 한 시절을 마치고 몸을 추슬렀다. 체력과 기력이 가득 차고 ${hadInjury ? "내상이 말끔히 나았다" : "몸이 가뿐하다"}.`);
+    lines.push(`🌟 한 시절을 마치고 몸을 추슬렀다. 체력과 내력이 가득 차고 ${hadInjury ? "내상이 말끔히 나았다" : "몸이 가뿐하다"}.`);
     return lines;
   }
 
@@ -415,7 +415,7 @@ export class Game {
     const added = this.player.commitPendingEncounters();
     updateGlobalCodex(added);
     updateKnown(this.player.skills.map((s) => s.key));
-    return added.map((key) => `📖 강호 도감에 「${DB.enemies[key]?.name ?? key}」이(가) 기록되었다.`);
+    return added.map((key) => `📖 강호 강호록에 「${DB.enemies[key]?.name ?? key}」이(가) 기록되었다.`);
   }
 
   checkRealm() {
@@ -428,10 +428,10 @@ export class Game {
     // 심경이 충분히 높지 않으면 돌파가 거칠어 내상을 입는다
     if (rng.random() < Math.max(0, 60 - p.mind) * 0.01) {
       p.healPercent(-25, -25);
-      lines.push("심경이 흔들려 기가 역류했다. 간신히 돌파했지만 내상을 입었다. (체력·기력 -25%)");
+      lines.push("심경이 흔들려 기가 역류했다. 간신히 돌파했지만 내상을 입었다. (체력·내력 -25%)");
     } else {
       p.healPercent(50, 50);
-      lines.push("막혀 있던 혈맥이 뚫리며 온몸에 기운이 찬다. (체력·기력 회복)");
+      lines.push("막혀 있던 혈맥이 뚫리며 온몸에 기운이 찬다. (체력·내력 회복)");
     }
     return lines;
   }
@@ -462,7 +462,7 @@ export class Game {
     const gain = karmaGain(p, key, victory);
     const fresh = claimAchievements(p, key, victory);
     for (const item of fresh) {
-      gain.lines.push(`업적 「${item.name}」${item.karma ? ` +${item.karma}` : ""}`);
+      gain.lines.push(`공적 「${item.name}」${item.karma ? ` +${item.karma}` : ""}`);
       gain.total += item.karma;
     }
     addKarma(gain.total);

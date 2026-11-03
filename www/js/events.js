@@ -6,7 +6,7 @@ import { updateKnown } from "./meta.js";
 import { pick, pickWeighted, rng } from "./rng.js";
 import { ALIGNMENTS, applyGrowth, fameRankChanged, getChapter, realmIndex, sumEffect } from "./rules.js";
 
-export const EVENT_STAT_SCALE = 0.3; // 사건·기연의 능력치 상승 배율 (밸런스 조정용)
+export const EVENT_STAT_SCALE = 0.3; // 사건·기연의 기량 상승 배율 (밸런스 조정용)
 
 /** 만족하지 못한 첫 조건의 설명. 모두 만족하면 null */
 export function unmetReason(player, requires) {
@@ -217,7 +217,7 @@ function equipReward(player, key) {
     player[effect.slot] = key;
     return [`「${name}」 장착`];
   }
-  return [`「${name}」을(를) 받았지만 지금 장비가 더 좋다`];
+  return [`「${name}」을(를) 받았지만 지금 병장기가 더 좋다`];
 }
 
 const STARTER_WEAPONS = {
@@ -226,26 +226,26 @@ const STARTER_WEAPONS = {
 const STARTER_SKILLS = {
   검법: "기초검법", 도법: "기초도법", 창법: "기초창법", 봉법: "기초봉법", 권법: "육합권", 장법: "기초장법", 암기: "유엽비도",
 };
-const STARTER_MASTERY = 10;
 
 /** 시작 무기를 고른다. 계열이 다르면 그 계열의 기초 무공을 익혀 주무공으로 삼는다. */
 function takeStartWeapon(player, style) {
-  const summary = [];
-  const main = player.bestSkill();
-  if (main?.category === style) {
-    summary.push(`${main.name} 숙련도+${STARTER_MASTERY}`, ...main.gainMastery(STARTER_MASTERY));
-  } else {
-    const key = STARTER_SKILLS[style];
-    if (!player.hasSkill(key)) {
-      const skill = new Skill(key);
-      summary.push(`📕 새 무공 「${skill.name}」`, ...player.learnSkill(skill));
-    }
-    player.mainSkill = key;
-  }
+  // 강호초출은 고른 병기에 맞는 무공 하나로 시작한다
+  const key = STARTER_SKILLS[style];
+  player.skills = player.skills.filter((s) => s.type !== "공격무공");
+  const skill = new Skill(key);
+  const summary = [`📕 무공 「${skill.name}」`, ...player.learnSkill(skill)];
+  player.mainSkill = key;
   return [...summary, ...equipReward(player, STARTER_WEAPONS[style])];
 }
 
-const REWARD_BONUSES = [10, 26, 50, 80]; // 보상 무기의 네 단계
+/** 강호초출의 첫 심법을 정한다. */
+function takeStartMindset(player, key) {
+  player.skills = player.skills.filter((s) => s.type !== "심공");
+  const skill = new Skill(key);
+  return [`📕 심법 「${skill.name}」`, ...player.learnSkill(skill)];
+}
+
+const REWARD_BONUSES = [10, 26, 50, 80]; // 보상 병기의 네 단계
 
 /** 주무공 계열에 맞는 무기를 단계(1~4)에 따라 준다. */
 function styleWeaponReward(player, tier) {
@@ -277,7 +277,7 @@ export function applyEffects(player, effects) {
   if ("hp_pct" in effects || "qi_pct" in effects) {
     const [hp, qi] = player.healPercent(effects.hp_pct || 0, effects.qi_pct || 0);
     if (hp) summary.push(`체력${signed(hp)}`);
-    if (qi) summary.push(`기력${signed(qi)}`);
+    if (qi) summary.push(`내력${signed(qi)}`);
   }
 
   if ("set_silver" in effects) {
@@ -342,7 +342,7 @@ export function applyEffects(player, effects) {
     const skill = player.bestSkill();
     if (skill) {
       const messages = skill.gainMastery(effects.mastery);
-      summary.push(`${skill.name} 숙련도+${effects.mastery}`, ...messages);
+      summary.push(`${skill.name} 성취+${effects.mastery}`, ...messages);
     }
   }
 
@@ -378,6 +378,7 @@ export function applyEffects(player, effects) {
   }
 
   if (effects.start_weapon) summary.push(...takeStartWeapon(player, effects.start_weapon));
+  if (effects.start_mindset) summary.push(...takeStartMindset(player, effects.start_mindset));
   if (effects.style_weapon) summary.push(...styleWeaponReward(player, effects.style_weapon));
   if (effects.equip) summary.push(...equipReward(player, effects.equip));
 
@@ -403,7 +404,7 @@ export function validateEvents() {
     if (effects.equip && !DB.market[effects.equip]) errors.push(`${where}: 없는 품목 ${effects.equip}`);
     if (effects.join_sect && !DB.sects[effects.join_sect]) errors.push(`${where}: 없는 문파 ${effects.join_sect}`);
     for (const stat of Object.keys(effects.stats || {})) {
-      if (!STAT_NAMES[stat]) errors.push(`${where}: 없는 능력치 ${stat}`);
+      if (!STAT_NAMES[stat]) errors.push(`${where}: 없는 기량 ${stat}`);
     }
     for (const name of Object.keys(effects.alignment || {})) {
       if (!ALIGNMENTS.includes(name)) errors.push(`${where}: 없는 성향 ${name}`);
@@ -418,7 +419,7 @@ export function validateEvents() {
     }
     if (r.sect && !DB.sects[r.sect]) errors.push(`${where}: 없는 문파 ${r.sect}`);
     if (r.origin && !DB.origins.origins[r.origin]) errors.push(`${where}: 없는 출신 ${r.origin}`);
-    if (r.trait && !DB.traits[r.trait]) errors.push(`${where}: 없는 특성 ${r.trait}`);
+    if (r.trait && !DB.traits[r.trait]) errors.push(`${where}: 없는 자질 ${r.trait}`);
   };
   for (const [key, event] of Object.entries(DB.events)) {
     checkRequiresData(key, event.requires);

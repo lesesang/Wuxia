@@ -18,11 +18,13 @@ import { storage } from "../www/js/storage.js";
 function newGame(origin = "무림초출") {
   const game = new Game();
   game.start(origin);
-  // 번외 시간에는 지금 무공에 맞는 무기를 고른다
-  if (game.event && DB.events[game.event.key].prelude) {
-    const index = DB.events[game.event.key].choices.findIndex(
-      (c) => c.outcomes[0].effects.start_weapon === game.player.bestSkill().category);
-    game.chooseEvent(index + (eventView(game.player, game.event.key).choices.length - 7));
+  // 강호초출은 번외 시간에 기초검법과 토납법을 고른다
+  while (game.event && DB.events[game.event.key].prelude) {
+    const index = DB.events[game.event.key].choices.findIndex((c) => {
+      const e = c.outcomes[0].effects;
+      return e.start_weapon === "검법" || e.start_mindset === "토납법";
+    });
+    game.chooseEvent(index);
   }
   if (game.event) firstChoice(game);
   return game;
@@ -146,11 +148,11 @@ test("무공은 기력을 쓰고 모자라면 맨손", () => {
   p.qi = 0;
   battle.useSkill(skill);
   assert.equal(p.qi, 0);
-  assert.ok(battle.log.some((l) => l.includes("기력이 모자라")));
+  assert.ok(battle.log.some((l) => l.includes("내력이 모자라")));
 });
 
 test("심법은 회복하고 점혈을 푼다", () => {
-  const p = new Player("곤륜파");
+  const p = new Player("남궁세가");
   p.qi = 10;
   p.hp = 50;
   const battle = new Battle(p, new Enemy("산적"));
@@ -405,7 +407,7 @@ test("문파 입문은 사문이 없을 때만", () => {
   assert.ok(!checkRequires(p, DB.randomEvents.무당_입문.requires));
   assert.ok(checkRequires(p, DB.randomEvents.소림_동인진.requires));
   assert.ok(!checkRequires(p, DB.randomEvents.소림_비전.requires));
-  assert.equal(new Player("곤륜파").sect, "곤륜");
+  assert.equal(new Player("남궁세가").sect, "남궁");
 });
 
 test("비무대회는 세 번 싸우고 보상을 준다", () => {
@@ -593,11 +595,11 @@ test("기록 내보내기와 가져오기", () => {
 });
 
 test("예전 PC 버전 legend_data.json도 가져온다", () => {
-  assert.ok(importRecords(JSON.stringify({ current_karma: 3, total_karma: 9, unlocked_origins: ["무림초출", "곤륜파"], unlocked_traits: [] })));
+  assert.ok(importRecords(JSON.stringify({ current_karma: 3, total_karma: 9, unlocked_origins: ["무림초출", "남궁세가"], unlocked_traits: [] })));
   const data = loadMeta();
   assert.equal(data.total_karma, 9);
   assert.deepEqual(data.runs, []);
-  assert.ok(data.unlocked_origins.includes("곤륜파"));
+  assert.ok(data.unlocked_origins.includes("남궁세가"));
 });
 
 test("엉뚱한 파일은 거절한다", () => {
@@ -626,7 +628,7 @@ test("카르마로 개방하면 차감된다", () => {
   const data = loadMeta();
   data.current_karma = 5;
   saveMeta(data);
-  assert.ok(unlockOrigin("곤륜파", 5));
+  assert.ok(unlockOrigin("남궁세가", 5));
   assert.equal(loadMeta().current_karma, 0);
   assert.ok(!unlockOrigin("하오문", 5));
 });
@@ -708,7 +710,7 @@ test("사문이 있으면 어긋나는 세력 선택지가 보이지 않는다",
 });
 
 test("어떻게 플레이해도 사문이 있으면 입문 사건이 뽑히지 않는다", () => {
-  const p = new Player("곤륜파");
+  const p = new Player("남궁세가");
   for (const turn of [1, 25, 49, 73, 97]) {
     p.turn = turn;
     for (let i = 0; i < 300; i++) {
@@ -719,9 +721,9 @@ test("어떻게 플레이해도 사문이 있으면 입문 사건이 뽑히지 �
 });
 
 test("입문 효과는 사문이 있으면 덮어쓰지 않는다", () => {
-  const p = new Player("곤륜파");
+  const p = new Player("남궁세가");
   applyEffects(p, { join_sect: "마교" });
-  assert.equal(p.sect, "곤륜");
+  assert.equal(p.sect, "남궁");
 });
 
 test("상황별 반응: 지닌 물건에 따라 선택지가 생기고 쓰면 사라진다", () => {
@@ -836,7 +838,7 @@ test("주무공과 맞지 않는 무기는 3/4만 적용된다", () => {
   assert.equal(equipmentBonus(p, "weapon"), 60);
 });
 
-test("시작하자마자 달이 지나지 않는 번외 시간에 첫 무기를 고른다", () => {
+test("강호초출은 달이 지나지 않는 번외 시간에 첫 병기와 첫 심법을 고른다", () => {
   const game = new Game();
   game.start("무림초출");
   assert.equal(game.event.key, "시작_병기고");
@@ -844,25 +846,38 @@ test("시작하자마자 달이 지나지 않는 번외 시간에 첫 무기를 
   assert.equal(view.choices.length, 7);
   game.chooseEvent(view.choices.find((c) => c.label.includes("창")).index);
   assert.equal(game.player.turn, 1);
-  assert.equal(game.player.bestSkill().category, "창법");
+  assert.equal(game.player.bestSkill().key, "기초창법");
+  assert.equal(game.player.skills.filter((s) => s.type === "공격무공").length, 1, "고른 계열 무공 하나로 시작한다");
   assert.equal(game.player.weapon, "낡은창");
+  assert.equal(game.event.key, "시작_심법");
+  game.chooseEvent(eventView(game.player, game.event.key).choices.find((c) => c.label.includes("양생공")).index);
+  assert.equal(game.player.bestOfType("심공").key, "양생공");
+  assert.equal(game.player.skills.filter((s) => s.type === "심공").length, 1);
   assert.equal(game.event.key, "서장_무림초출", "곧바로 서장으로 이어진다");
   game.chooseEvent(0);
   assert.equal(game.player.turn, 1);
   assert.ok(!game.pendingNext && !game.event, "첫 달의 행동은 그대로 남아 있다");
 });
 
-test("지금 무공과 같은 계열을 고르면 무공이 바뀌지 않고 숙련도를 얻는다", () => {
-  const game = new Game();
-  const meta = loadMeta();
-  meta.unlocked_origins = Object.keys(DB.origins.origins);
-  saveMeta(meta);
-  game.start("권마계승");
-  const main = game.player.bestSkill();
-  const view = eventView(game.player, game.event.key);
-  game.chooseEvent(view.choices.find((c) => c.label.includes("권대")).index);
-  assert.equal(game.player.bestSkill().key, main.key);
-  assert.equal(main.mastery, 10);
+test("출신은 여덟이고 일곱 계열에 하나씩이며 심법이 모두 다르다", () => {
+  const order = DB.origins.order;
+  assert.equal(order.length, 8);
+  assert.equal(order[0], "무림초출");
+  assert.equal(DB.origins.origins.무림초출.name, "강호초출");
+  const rest = order.slice(1);
+  const styles = rest.map((k) => new Player(k).bestSkill().category).sort();
+  assert.deepEqual(styles, ["검법", "권법", "도법", "봉법", "암기", "장법", "창법"].sort());
+  const hearts = order.map((k) => new Player(k).bestOfType("심공").key);
+  assert.equal(new Set(hearts).size, 8);
+  for (const k of rest) {
+    const g = new Game();
+    const meta = loadMeta();
+    meta.unlocked_origins = order;
+    saveMeta(meta);
+    g.start(k);
+    assert.ok(!DB.events[g.event.key].prelude, `${k}는 번외 고르기가 없다`);
+    assert.equal(DB.market[g.player.weapon].effects[0].style, g.player.bestSkill().category, k);
+  }
 });
 
 test("장이 끝나면 체력, 기력, 내상이 모두 회복된다", () => {
@@ -920,8 +935,7 @@ test("독인은 독에 당하지 않고 맑은 정신은 점혈되지 않는다"
 });
 
 test("새 출신은 물건과 은자, 무기를 들고 시작한다", () => {
-  assert.equal(new Player("대장간자식").weapon, "박달곤");
-  assert.equal(new Player("의원제자").inventory.해독단, 2);
+  assert.equal(new Player("남궁세가").weapon, "낡은검");
   assert.ok(new Player("표국표사").silver > new Player().silver);
 });
 
@@ -996,13 +1010,6 @@ test("이벤트에서 만들어 쓰는 인연 표시는 어딘가에서 얻을 �
   for (const flag of used) assert.ok(given.has(flag), flag);
 });
 
-test("새 출신은 서장과 첫 무기 문장을 갖는다", () => {
-  for (const origin of ["백호무관"]) {
-    const p = new Player(origin);
-    assert.notEqual(eventView(p, "시작_병기고").text, DB.events.시작_병기고.text);
-    assert.ok(Object.values(DB.storyEvents).some((e) => e.requires?.origin === origin && e.turn === 1));
-  }
-});
 
 test("잠이 보약과 약손은 회복량을 늘린다", () => {
   const heal = (traits, act) => {
@@ -1058,13 +1065,12 @@ test("모든 출신은 시작 경지가 일류인 까닭을 설명하고 맺음�
     assert.ok(new Player(key).realm === "일류", key);
     if (!["남궁세가", "곤륜파", "하오문", "권마계승"].includes(key)) assert.ok(origin.desc.includes("일류"), key);
   }
-  assert.ok(new Player("백호무관").hasSkill("백호도법"));
-});
+  });
 
 test("강호행의 굵직한 일이 기록으로 남고 저장된다", () => {
   const game = newGame();
   game.chooseEvent(0);
-  assert.ok(game.player.chronicle.some((c) => c.text.startsWith("첫 무기")));
+  assert.ok(game.player.chronicle.some((c) => c.text.startsWith("첫 병기")));
   game.player.note("시험");
   assert.equal(Player.fromDict(game.player.toDict()).chronicle.at(-1).text, "시험");
   const old = game.player.toDict();
@@ -1318,13 +1324,13 @@ test("무기 계열마다 무공 수가 같고 등급이 고르다", () => {
   }
 });
 
-test("새 출신은 저마다 서장과 무기 문장, 이야기가 있다", () => {
-  for (const origin of ["하북팽가", "악가전인", "개방제자", "소림속가", "신교사자", "살막살수", "당가무사", "황보막내", "녹림채주", "금군교두", "회귀자"]) {
-    assert.ok(DB.origins.origins[origin].desc.includes("일류"));
-    assert.ok(Object.values(DB.storyEvents).some((e) => e.requires?.origin === origin && e.turn === 1));
-    assert.notEqual(eventView(new Player(origin), "시작_병기고").text, DB.events.시작_병기고.text);
-    assert.ok(Object.values(DB.randomEvents).filter((e) => e.requires?.origin === origin).length >= 2);
-    assert.ok(DB.enemies.천마.intros.some((i) => i.requires.origin === origin));
+test("각 출신에 서장과 맺음말, 천마 대사가 있다", () => {
+  for (const origin of DB.origins.order) {
+    assert.ok(Object.values(DB.storyEvents).some((e) => e.requires?.origin === origin && e.turn === 1), origin);
+    assert.ok(DB.endings.origin_epilogue[origin], origin);
+  }
+  for (const origin of DB.origins.order.slice(1)) {
+    assert.ok(DB.enemies.천마.intros.some((i) => i.requires.origin === origin), origin);
   }
 });
 
@@ -1367,7 +1373,8 @@ test("겪은 사건이 도감에 남고 번외 시간은 남지 않는다", () =
   game.start("무림초출");
   assert.equal(game.event.key, "시작_병기고");
   game.chooseEvent(0);
-  assert.ok(!loadMeta().known_events.includes("시작_병기고"), "첫 무기는 기록하지 않는다");
+  game.chooseEvent(0);
+  assert.ok(!loadMeta().known_events.includes("시작_병기고"), "첫 병기는 기록하지 않는다");
   const key = game.event.key;
   game.chooseEvent(0);
   assert.ok(loadMeta().known_events.includes(key));
@@ -1400,9 +1407,8 @@ test("없어진 출신을 샀던 기록은 카르마로 돌려준다", () => {
   assert.deepEqual(after.unlocked_origins, ["무림초출"]);
 });
 
-test("개방과 당가 출신은 사문을 지니고 시작한다", () => {
+test("개방 출신은 사문을 지니고 시작한다", () => {
   assert.equal(new Player("개방제자").sect, "개방");
-  assert.equal(new Player("당가무사").sect, "당가");
 });
 
 // ---------- 생사경과 출신의 위치 ----------
@@ -1448,16 +1454,19 @@ test("출신은 너무 낮지도 높지도 않은 어엿한 위치의 인물이�
   for (const word of ["방계", "서자", "탈주", "도망자", "탈영", "점소이", "파문", "소가주", "소장주", "소막주", "소교주", "소표두", "수제자", "후개", "후계"]) assert.ok(!text.includes(word), word);
 });
 
-test("이름이 바뀐 출신은 해금과 저장을 잃지 않는다", () => {
+test("이름이 바뀐 출신은 해금과 저장을 잃지 않고, 없어진 출신은 카르마로 돌려준다", () => {
   const data = loadMeta();
-  data.unlocked_origins = ["무림초출", "탈영병", "점소이"];
+  data.unlocked_origins = ["무림초출", "소교주", "곤륜파"];
+  data.current_karma = 0;
   saveMeta(data);
-  assert.deepEqual(loadMeta().unlocked_origins, ["무림초출", "백호무관", "금군교두"]);
-  const dict = new Player("백호무관").toDict();
-  dict.origin_key = "탈영병";
+  const after = loadMeta();
+  assert.deepEqual(after.unlocked_origins, ["무림초출", "신교사자"]);
+  assert.equal(after.current_karma, 5);
+  const dict = new Player("신교사자").toDict();
+  dict.origin_key = "소교주";
   const p = Player.fromDict(dict);
-  assert.equal(p.originKey, "백호무관");
-  assert.equal(p.origin, "변방 백호대의 무관");
+  assert.equal(p.originKey, "신교사자");
+  assert.equal(p.origin, "천마신교의 사자");
 });
 
 test("카르마를 늘리는 강화는 없고, 샀던 것은 돌려준다", () => {

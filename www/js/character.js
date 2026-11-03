@@ -9,7 +9,7 @@ import {
 
 export const GRADE_ORDER = ["기본", "명품", "상승", "신공", "천상"];
 const GRADE_BONUS = 0.25;       // 승급 1단계당 위력 계수 증가
-const MASTERY_BONUS = 0.003;    // 숙련도 1당 위력 계수 증가
+const MASTERY_BONUS = 0.003;    // 성취 1당 위력 계수 증가
 const EFFECT_GRADE_BONUS = 0.2; // 심공·경공 승급 1단계당 효과 증가율
 
 export const START_SILVER = 30;
@@ -53,7 +53,7 @@ export class Skill {
     this.mastery = Math.min(100, this.mastery + amount);
     if (this.canEvolve()) {
       this.evolve();
-      messages.push(`🌟 ${this.name}이(가) ${this.grade} 등급으로 승급했다!`);
+      messages.push(`🌟 ${this.name}이(가) ${this.grade} 품계로 승급했다!`);
     }
     if (this.checkSecretUnlock()) messages.push(`✨ 비기 「${this.secretName}」이(가) 터득되었다!`);
     return messages;
