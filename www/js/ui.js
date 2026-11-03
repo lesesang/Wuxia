@@ -53,7 +53,7 @@ function codexModal() {
     ["skills", `무공 ${skills.length}/${Object.keys(DB.skills).length}`],
     ["items", `보물 ${items.length}/${Object.keys(DB.market).length}`],
     ["events", `인연 ${events.length}/${Object.keys(DB.events).length}`],
-    ["achievements", `업적 ${meta.achievements.length}/${DB.karma.achievements.length}`],
+    ["achievements", `업적 ${meta.achievements.length}`],
     ["endings", "결말"],
     ["runs", "회차 기록"],
   ];
@@ -75,11 +75,11 @@ function codexModal() {
       const label = e.chain ? `연계 「${DB.chains[e.chain.id].title}」 ${e.chain.index + 1}/${e.chain.total}편` : e.kind === "story" ? "줄거리" : e.requires?.sect ? "사문" : e.requires?.origin ? "출신 이야기" : "강호 사건";
       return entry(e.title, label, e.text.split(/(?<=[.?!"])\s/)[0]);
     }),
-    achievements: DB.karma.achievements.map((a) => {
+    achievements: DB.karma.achievements.filter((a) => !a.hidden || meta.achievements.includes(a.key)).map((a) => {
       const done = meta.achievements.includes(a.key);
       return entry(`${done ? "✓ " : ""}${a.name}`, a.karma ? `카르마 +${a.karma}` : "", a.desc);
     }).join(""),
-    endings: Object.keys(DB.endings.titles).map((k) => entry(
+    endings: Object.keys(DB.endings.titles).filter((k) => k !== "생사경" || meta.endings_seen.includes(k)).map((k) => entry(
       meta.endings_seen.includes(k) ? DB.endings.titles[k] : "아직 보지 못한 결말", `카르마 +${DB.endings.karma[k]}`)).join(""),
     runs: `<p class="codex-meta">끝낸 강호행 ${meta.total_runs}회</p>${list(meta.runs, "강호행을 끝내면 이곳에 기록됩니다.", (r) => entry(
       DB.endings.titles[r.ending] || r.ending, `${r.origin}, ${r.realm}, ${r.title}`, `${r.turn}달까지 진행, ${r.kills}명 처치`))}`,

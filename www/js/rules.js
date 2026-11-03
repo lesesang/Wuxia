@@ -75,7 +75,7 @@ export function applyGrowth(amount, traits, stat) {
 }
 
 // ---------- 문파 ----------
-export const ORIGIN_SECTS = { 곤륜파: "곤륜", 남궁세가: "남궁", 하오문: "하오문", 개방제자: "개방", 당가방계: "당가" };
+export const ORIGIN_SECTS = { 곤륜파: "곤륜", 남궁세가: "남궁", 하오문: "하오문", 개방후개: "개방", 당가소주: "당가", 소림수제자: "소림", 소교주: "마교" };
 export const sectBonus = (player, field) => DB.sects[player.sect]?.bonus?.[field] || 0;
 
 // ---------- 경지 ----------
@@ -123,12 +123,10 @@ export function realmProgress(player) {
   };
 }
 
-const SAENGSA_GATE_BONUS = 10; // 생사의 문을 지나면 생사경의 능력치 조건이 낮아진다
-
+/** 히든 엔딩. 일반 돌파로는 오르지 못하고 천마를 쓰러뜨린 그 순간에만 판정한다. */
 export function checkSaengsa(player) {
   const req = DB.realms.saengsa;
-  const minStat = req.min_stat - (player.hasFlag("생사의문") ? SAENGSA_GATE_BONUS : 0);
-  return Math.min(...statsOf(player)) >= minStat && player.battles >= req.battles
+  return Math.min(...statsOf(player)) >= req.min_stat && player.battles >= req.battles
     && player.hp >= player.maxHp() * req.hp_ratio && player.qi >= player.maxQi() * req.qi_ratio;
 }
 

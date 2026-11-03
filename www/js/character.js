@@ -1,5 +1,6 @@
 // 무공과 플레이어
 import { DB } from "./data.js";
+import { RENAMED_ORIGINS } from "./meta.js";
 import { randInt } from "./rng.js";
 import {
   dominant, hasEffect, MA_HEAL_PENALTY, newAlignment, ORIGIN_SECTS, SA_SILVER_BONUS, sectBonus,
@@ -280,9 +281,10 @@ export class Player {
   /** 없는 값은 기본값으로 채워 이전 저장도 읽는다. */
   static fromDict(d) {
     const p = Object.create(Player.prototype);
-    p.origin = DB.origins.origins[d.origin_key] ? d.origin : DB.origins.origins.무림초출.name;
-    // 없어진 출신으로 저장된 판은 무림초출로 이어 간다
-    p.originKey = DB.origins.origins[d.origin_key] ? d.origin_key : "무림초출";
+    p.origin = DB.origins.origins[RENAMED_ORIGINS[d.origin_key] || d.origin_key]?.name ?? DB.origins.origins.무림초출.name;
+    // 이름이 바뀐 출신은 새 이름으로, 없어진 출신은 무림초출로 이어 간다
+    const key = RENAMED_ORIGINS[d.origin_key] || d.origin_key;
+    p.originKey = DB.origins.origins[key] ? key : "무림초출";
     p.chronicle = d.chronicle ?? [];
     p.content = d.content ?? [];
     p.chains = d.chains ?? [];

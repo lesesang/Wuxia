@@ -6,6 +6,8 @@ const LEGEND_KEY = "wuxia-legend";
 const SAVE_KEY = "wuxia-save";
 const RUN_HISTORY_LIMIT = 10;
 // 게임에서 빠진 출신을 해금했던 기록은 지우고 카르마를 돌려준다
+// 이름이 바뀐 출신은 해금을 그대로 옮겨 준다
+export const RENAMED_ORIGINS = { 탈영병: "백호대장", 악가서자: "악가소장주", 당가방계: "당가소주", 마교탈주: "소교주", 살막탈주: "소막주", 점소이: "금군교두", 개방제자: "개방후개", 소림속가: "소림수제자", 녹림소채주: "녹림후계" };
 const REMOVED_ORIGINS = { 낙방서생: 5, 세외도객: 5, 양가서자: 5, 육선문포두: 5, 살문탈주: 5 };
 
 const defaults = () => ({
@@ -32,6 +34,10 @@ export function loadMeta() {
 }
 
 function refundRemoved(data) {
+  if (data.unlocked_origins.some((k) => RENAMED_ORIGINS[k])) {
+    data.unlocked_origins = data.unlocked_origins.map((k) => RENAMED_ORIGINS[k] || k);
+    storage.set(LEGEND_KEY, JSON.stringify(data));
+  }
   for (const [key, cost] of Object.entries(REMOVED_ORIGINS)) {
     if (data.unlocked_origins.includes(key)) {
       data.unlocked_origins = data.unlocked_origins.filter((k) => k !== key);
