@@ -2,7 +2,7 @@
 import { GRADE_ORDER, Skill, STAT_NAMES } from "./character.js";
 import { DB } from "./data.js";
 import { bonusFor, equipmentBonus, styleWeight } from "./market.js";
-import { updateKnown } from "./meta.js";
+import { recordEventPick, updateKnown } from "./meta.js";
 import { pick, pickWeighted, rng } from "./rng.js";
 import { ALIGNMENTS, applyGrowth, fameRankChanged, getChapter, realmIndex, sumEffect } from "./rules.js";
 
@@ -200,6 +200,7 @@ export function resolveChoice(player, key, index) {
   if (!choice || !checkRequires(player, choice.requires)) return null;
   const outcome = pickWeighted(choice.outcomes, choice.outcomes.map((o) => o.weight ?? 1));
   const effects = outcome.effects || {};
+  if (!DB.events[key].prelude) recordEventPick(key, eventText(player, key), choice.label, outcome.text);
   const summary = applyEffects(player, effects);
   if (!player.seenEvents.includes(key)) player.seenEvents.push(key);
   if (!DB.events[key].prelude) updateKnown([], [], [key]);
@@ -246,12 +247,14 @@ function takeStartWeapon(player, style) {
   const skill = new Skill(key);
   const summary = [`📕 무공 「${skill.name}」`, ...player.learnSkill(skill)];
   player.mainSkill = key;
-  return [...summary, ...equipReward(player, STARTER_WEAPONS[style])];
+  return [...summary, ...equipReward(player, STARTER_WEAPONS[style]), ...grantStartGifts(player)];
 }
 
 /** 강호초출의 첫 심법을 정한다. */
 function takeStartMindset(player, key) {
-  player.skills = player.skills.filter((s) => s.type !== "심공");
+  // 고른 심법으로 바꾼다. 자질로 받은 심법은 그대로 둔다
+  const defaults = DB.origins.origins[player.originKey].skills || [];
+  player.skills = player.skills.filter((s) => s.type !== "심공" || !defaults.includes(s.key));
   const skill = new Skill(key);
   return [`📕 심법 「${skill.name}」`, ...player.learnSkill(skill)];
 }
@@ -266,6 +269,49 @@ function styleWeaponReward(player, tier) {
     .sort((a, b) => DB.market[a].price - DB.market[b].price);
   if (!weapons.length) return [`은자+${player.gainSilver(DB.market.운철보검.price)}`];
   return equipReward(player, weapons[Math.min(tier, weapons.length) - 1]);
+}
+
+/** 주무공 계열에 맞는 도구. kind는 mastery(수련) 또는 atk_buff(전투) */
+function styleTool(style, kind) {
+  return Object.keys(DB.market).find((k) => DB.market[k].effects.some((e) => e.type === kind && e.style === style));
+}
+
+/**
+ * 주무공 계열을 따라가는 시작 선물을 준다. 자질, 기틀, 누적 보상에서 온다.
+ * 강호초출은 첫 병기를 고른 뒤에 받는다.
+ */
+export function grantStartGifts(player) {
+  const lines = [];
+  const effects = player.traits.flatMap((k) => DB.traits[k]?.effects || []);
+  const main = player.bestSkill();
+  const style = main?.category;
+  if (!style) return lines;
+  const total = (type, field) => effects.filter((e) => e.type === type).reduce((sum, e) => sum + (e[field] || 0), 0);
+  const tier = Math.min(2, total("start_style_weapon", "tier"));
+  if (tier) lines.push(...styleWeaponReward(player, tier));
+  for (const [type, kind] of [["start_style_tool", "mastery"], ["start_battle_tool", "atk_buff"]]) {
+    const amount = total(type, "amount");
+    const tool = amount && styleTool(style, kind);
+    if (tool) {
+      player.addItem(tool, amount);
+      updateKnown([], [tool]);
+      lines.push(`「${DB.market[tool].name}」 ${amount}개 획득`);
+    }
+  }
+  for (const effect of effects.filter((e) => e.type === "start_style_skill")) {
+    const keys = Object.keys(DB.skills).filter((k) => {
+      const s = DB.skills[k];
+      return s.type === "공격무공" && s.category === style && s.grade === effect.grade && !s.origin && !player.hasSkill(k);
+    });
+    if (keys.length) {
+      const skill = new Skill(pick(keys));
+      player.learnSkill(skill);
+      lines.push(`📕 새 무공 「${skill.name}」`);
+    }
+  }
+  const mastery = total("start_mastery", "amount");
+  if (mastery) lines.push(...main.gainMastery(mastery));
+  return lines;
 }
 
 const signed = (n) => (n >= 0 ? `+${n}` : `${n}`);

@@ -6,11 +6,11 @@ import { listAssets } from "../tools/build_asset_list.js";
 import { Battle, Enemy, useConsumable } from "../www/js/battle.js";
 import { GRADE_ORDER, Player, Skill } from "../www/js/character.js";
 import { DB } from "../www/js/data.js";
-import { applyEffects, canStartChain, checkRequires, enemyIntro, eventView, LAST_CHAIN_TURN, pickRandomEvent, resolveChoice, validateChains, validateEvents } from "../www/js/events.js";
+import { applyEffects, grantStartGifts, canStartChain, checkRequires, enemyIntro, eventView, LAST_CHAIN_TURN, pickRandomEvent, resolveChoice, validateChains, validateEvents } from "../www/js/events.js";
 import { Game } from "../www/js/game.js";
 import { blockReason, buy, equipmentBonus, openMarket, priceOf } from "../www/js/market.js";
 import {
-  activeContent, buyContent, buyUpgrade, exportRecords, importRecords, loadCheckpoint, loadMeta, openLegacy, saveMeta, takeLegacy, toggleContent, unlockOrigin,
+  activeContent, buyContent, buyUpgrade, exportRecords, importRecords, loadCheckpoint, loadEventLog, loadMeta, nextReward, openLegacy, saveMeta, takeLegacy, toggleContent, unlockOrigin,
 } from "../www/js/meta.js";
 import { applyGrowth, breakthroughBlock, byname, fameRank, getChapter, getYear, marketTurns, traitSlots } from "../www/js/rules.js";
 import { storage } from "../www/js/storage.js";
@@ -1164,21 +1164,145 @@ function withKarma(amount, extra = {}) {
   saveMeta(data);
 }
 
-test("환생 강화는 장착 없이 적용되고 단계마다 비용이 오른다", () => {
+test("기틀은 장착 없이 적용되고 단계마다 비용이 오른다", () => {
   withKarma(30);
-  assert.ok(buyUpgrade("근골"));
-  assert.ok(buyUpgrade("근골"));
-  assert.equal(loadMeta().current_karma, 18);
+  assert.ok(buyUpgrade("강골"));
+  assert.ok(buyUpgrade("강골"));
+  assert.equal(loadMeta().current_karma, 24);
   const game = new Game();
   game.start("무림초출");
   assert.equal(game.player.external, 32);
-  assert.ok(buyUpgrade("근골"));
-  assert.ok(!buyUpgrade("근골"), "최고 단계를 넘을 수 없다");
+  assert.ok(buyUpgrade("강골"));
+  assert.ok(!buyUpgrade("강골"), "최고 단계를 넘을 수 없다");
   withKarma(0);
 });
 
+test("능력치 기틀과 자질은 네 기량에 고르게 있다", () => {
+  const stats = ["external", "internal", "martial", "mind"];
+  const upgrades = Object.values(DB.karma.upgrades);
+  for (const type of ["start_stat", "growth_rate"]) {
+    const found = stats.map((stat) => upgrades.filter((u) => u.effects.length === 1 && u.effects[0].type === type && u.effects[0].stat === stat));
+    assert.ok(found.every((list) => list.length === 1), type);
+    assert.ok(found.every((list) => JSON.stringify(list[0].costs) === JSON.stringify(found[0][0].costs)), `${type} 비용`);
+  }
+  const traits = Object.values(DB.traits).filter((t) => !t.hidden && t.effects.length === 1);
+  for (const [type, value] of [["start_stat", 10], ["growth_rate", 10]]) {
+    for (const stat of stats) {
+      const field = type === "start_stat" ? "amount" : "percent";
+      assert.ok(traits.some((t) => t.effects[0].type === type && t.effects[0].stat === stat && t.effects[0][field] === value), `${type} ${stat}`);
+    }
+  }
+});
+
+test("예전 묶음 강화는 낱개 기틀로 옮겨진다", () => {
+  withKarma(0);
+  const data = loadMeta();
+  data.upgrades = { 근골: 2, 심지: 1 };
+  saveMeta(data);
+  const after = loadMeta();
+  assert.deepEqual(after.upgrades, { 강골: 2, 혜안: 2, 원기: 1, 명경: 1 });
+  data.upgrades = {};
+  saveMeta(data);
+});
+
+test("카르마 상점에 전생과 회차 표현이 없다. 유산만 예외다", () => {
+  const texts = (list) => list.map((x) => `${x.name} ${x.desc}`).join(" ");
+  const { upgrades, content, rewards, achievements } = DB.karma;
+  const shop = texts([...Object.values(upgrades), ...Object.values(content), ...rewards, ...achievements]);
+  const traits = texts(Object.values(DB.traits).filter((t) => !t.hidden));
+  for (const word of ["전생", "환생", "회차", "윤회", "다음 생", "번의 생"]) {
+    assert.ok(!shop.includes(word), `상점 ${word}`);
+    assert.ok(!traits.includes(word), `자질 ${word}`);
+  }
+});
+
+test("출신마다 전용 자질과 인연이 있고 그 출신만 쓴다", () => {
+  for (const key of DB.origins.order) {
+    const traits = Object.keys(DB.traits).filter((t) => DB.traits[t].origin === key);
+    assert.equal(traits.length, 1, `${key} 자질`);
+    const content = Object.keys(DB.karma.content).filter((c) => DB.karma.content[c].origin === key);
+    assert.equal(content.length, 1, `${key} 인연`);
+    assert.ok(Object.values(DB.events).some((e) => e.requires?.origin === key && e.requires?.unlocked === content[0]), `${key} 인연 사건`);
+    const trait = traits[0];
+    const reacts = Object.values(DB.events).filter((e) => (e.variants || []).some((v) => v.requires?.trait === trait));
+    assert.ok(reacts.length >= 3, `${key} 자질 반응 ${reacts.length}`);
+  }
+  const data = loadMeta();
+  data.unlocked_origins = Object.keys(DB.origins.origins);
+  data.unlocked_traits = ["창궁의혈통"];
+  saveMeta(data);
+  const game = new Game();
+  game.start("하오문", ["창궁의혈통"]);
+  assert.ok(!game.player.traits.includes("창궁의혈통"), "다른 출신은 장착할 수 없다");
+  game.start("남궁세가", ["창궁의혈통"]);
+  assert.ok(game.player.traits.includes("창궁의혈통"));
+  assert.equal(game.player.skills.find((s) => s.key === "창궁검법").mastery, 30);
+  data.unlocked_traits = [];
+  saveMeta(data);
+});
+
+test("사건 반응 자질은 실제로 사건에 반응한다", () => {
+  for (const [key, trait] of Object.entries(DB.traits)) {
+    if (trait.hidden || !trait.reacts) continue;
+    const n = Object.values(DB.events).filter((e) => (e.variants || []).some((v) => v.requires?.trait === key)).length;
+    assert.ok(n >= 3, `${key} ${n}`);
+  }
+});
+
+test("시작 선물은 주무공 계열을 따른다", () => {
+  const p = new Player("하북팽가", ["손에익은병기", "수련도구", "비장의도구", "가전비급"]);
+  const lines = grantStartGifts(p);
+  assert.ok(lines.length >= 4);
+  assert.ok(equipmentBonus(p, "weapon") >= 10);
+  assert.equal(DB.market[p.weapon].effects[0].style, "도법");
+  assert.equal(p.inventory.베기짚단, 2);
+  assert.equal(p.inventory.맹호도유, 2);
+  assert.ok(p.skills.some((s) => s.category === "도법" && s.grade === "명품" && s.key !== "오호단문도"));
+  const drifter = new Player("무림초출", ["수련도구", "현기의호흡"]);
+  applyEffects(drifter, { start_weapon: "창법", start_mindset: "양생공" });
+  assert.equal(drifter.inventory.납창추, 2, "강호초출은 첫 병기를 고른 뒤 받는다");
+  assert.ok(drifter.hasSkill("곤륜현기공"), "자질로 받은 심법은 첫 심법을 골라도 남는다");
+});
+
+test("누적 카르마 보상은 넘긴 만큼 적용되고 자질 칸과 맞는다", () => {
+  const { rewards } = DB.karma;
+  assert.ok(rewards.every((r, i) => i === 0 || r.at > rewards[i - 1].at));
+  let slots = 1;
+  for (const r of rewards.filter((x) => x.slot)) {
+    slots += 1;
+    assert.equal(traitSlots(r.at), slots);
+    assert.equal(traitSlots(r.at - 1), slots - 1);
+  }
+  const data = loadMeta();
+  const before = data.total_karma;
+  data.total_karma = 120;
+  data.unlocked_origins = Object.keys(DB.origins.origins);
+  saveMeta(data);
+  const game = new Game();
+  game.start("남궁세가");
+  assert.ok(game.player.traits.includes("누적_120"));
+  assert.ok(!game.player.traits.includes("누적_150"));
+  assert.equal(nextReward(loadMeta()).at, 150);
+  data.total_karma = before;
+  saveMeta(data);
+});
+
+test("강호록은 사건에서 본 본문과 고른 선택, 결과를 남긴다", () => {
+  const p = new Player();
+  resolveChoice(p, "폐사찰", 0);
+  const entry = loadEventLog().폐사찰;
+  assert.ok(entry.texts.length >= 1);
+  assert.ok(entry.texts[0].includes("노승"));
+  const [label, results] = Object.entries(entry.picks)[0];
+  assert.ok(label.length && results[0].length);
+  assert.ok(JSON.parse(exportRecords()).event_log.폐사찰, "내보내기에 들어간다");
+  resolveChoice(p, "주막싸움", 0);
+  resolveChoice(p, "주막싸움", 2);
+  assert.equal(Object.keys(loadEventLog().주막싸움.picks).length, 2, "고른 선택마다 따로 남는다");
+});
+
 test("강화는 상태 창과 고르는 화면에 특성으로 보이지 않는다", () => {
-  assert.ok(DB.traits.환생_근골_1.hidden);
+  assert.ok(DB.traits.환생_강골_1.hidden);
   assert.ok(Object.values(DB.traits).filter((t) => !t.hidden).every((t) => t.rarity));
 });
 
@@ -1473,11 +1597,11 @@ test("업적이 기록되고 카르마를 주며 한 번만 받는다", () => {
   game.finishGame(true);
   assert.ok(loadMeta().achievements.includes("백인"));
   assert.ok(loadMeta().achievements.includes("첫승리"));
-  assert.ok(game.ending.karmaLines.some((l) => l.includes("백 명의 이름")));
+  assert.ok(game.ending.karmaLines.some((l) => l.includes("마흔 명의 이름")));
   const again = newGame();
   again.player.kills = 40;
   again.finishGame(true);
-  assert.ok(!again.ending.karmaLines.some((l) => l.includes("백 명의 이름")));
+  assert.ok(!again.ending.karmaLines.some((l) => l.includes("마흔 명의 이름")));
   assert.deepEqual(loadMeta().origin_wins, ["무림초출"]);
 });
 
@@ -1556,12 +1680,12 @@ test("이름이 바뀐 출신은 해금과 저장을 잃지 않고, 없어진 �
 test("카르마를 늘리는 강화는 없고, 샀던 것은 돌려준다", () => {
   assert.ok(!DB.karma.upgrades.윤회);
   const data = loadMeta();
-  data.upgrades = { 윤회: 2, 근골: 1 };
+  data.upgrades = { 윤회: 2, 강골: 1 };
   data.current_karma = 1;
   saveMeta(data);
   const after = loadMeta();
   assert.equal(after.current_karma, 16);
-  assert.deepEqual(after.upgrades, { 근골: 1 });
+  assert.deepEqual(after.upgrades, { 강골: 1 });
   data.upgrades = {};
   saveMeta(after);
 });

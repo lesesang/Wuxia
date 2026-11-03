@@ -2,13 +2,13 @@
 import { Battle, enemyPool, Enemy, useConsumable } from "./battle.js";
 import { GRADE_ORDER, Player, Skill, STAT_NAMES } from "./character.js";
 import { DB } from "./data.js";
-import {
+import { grantStartGifts,
   advanceChain, applyEffects, dueChainEvent, enemyIntro, LAST_CHAIN_TURN, pickFortune, pickRandomEvent, resolveChoice,
   startChain, storyEventForTurn,
 } from "./events.js";
 import { buy, openMarket } from "./market.js";
 import {
-  activeContent, addKarma, claimAchievements, claimMilestones, clearCheckpoint, extraSlots, loadCheckpoint, loadMeta, recordRun, saveCheckpoint,
+  activeContent, addKarma, claimAchievements, claimMilestones, clearCheckpoint, extraSlots, rewardTraits, loadCheckpoint, loadMeta, recordRun, saveCheckpoint,
   storeLegacy, takeLegacy, updateGlobalCodex, updateKnown, upgradeTraits,
 } from "./meta.js";
 import { pickWeighted, randInt, rng } from "./rng.js";
@@ -54,20 +54,22 @@ export class Game {
 
   // ---------- 시작과 복구 ----------
 
-  /** 새 생 시작. 잠긴 출신이면 false */
+  /** 새 강호행 시작. 잠긴 출신이면 false */
   start(originKey = "무림초출", selectedTraits = [], legacyIndex = null) {
     const meta = loadMeta();
     if (!meta.unlocked_origins.includes(originKey) || !DB.origins.origins[originKey]) return false;
-    const traits = [...new Set(selectedTraits)].filter((t) => meta.unlocked_traits.includes(t))
+    const traits = [...new Set(selectedTraits)]
+      .filter((t) => meta.unlocked_traits.includes(t) && (!DB.traits[t].origin || DB.traits[t].origin === originKey))
       .slice(0, traitSlots(meta.total_karma) + extraSlots(meta));
 
     this.reset();
-    this.player = new Player(originKey, [...traits, ...upgradeTraits(meta)]);
+    this.player = new Player(originKey, [...traits, ...upgradeTraits(meta), ...rewardTraits(meta)]);
     this.player.content = activeContent(meta);
+    const giftLines = DB.origins.origins[originKey].choose_start ? [] : grantStartGifts(this.player);
     const legacyLines = legacyIndex !== null && meta.legacy_open ? this.inheritLegacy(legacyIndex) : [];
     updateKnown(this.player.skills.map((s) => s.key));
     const intro = getChapterInfo(1);
-    this.enterTurn([`📖 ${intro.title} (1년차) — ${intro.desc}`, ...legacyLines]);
+    this.enterTurn([`📖 ${intro.title} (1년차) — ${intro.desc}`, ...giftLines, ...legacyLines]);
     return true;
   }
 

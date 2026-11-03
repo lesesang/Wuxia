@@ -40,7 +40,7 @@ export const isMarketTurn = (turn) => String(turn) in DB.chapters.market_turns;
 export const marketName = (turn) => DB.chapters.market_turns[String(turn)];
 
 // ---------- 특성 ----------
-const SLOT_THRESHOLDS = [[0, 1], [30, 2], [90, 3]];
+const SLOT_THRESHOLDS = [[0, 1], [30, 2], [90, 3], [250, 4]];
 
 export function traitSlots(totalKarma) {
   let slots = 1;

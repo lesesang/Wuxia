@@ -40,6 +40,10 @@ function battleChoice(game) {
 
 for (let run = 0; run < count; run++) {
   const game = new Game();
+  // 판마다 쌓이는 카르마가 누적 보상으로 끼어들지 않게 한다
+  const fresh = loadMeta();
+  fresh.total_karma = 0;
+  saveMeta(fresh);
   game.start(origin);
   let lastYear = -1; let fight = null;
   for (let i = 0; i < 6000 && game.player.alive; i++) {
