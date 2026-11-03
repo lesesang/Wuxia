@@ -1162,5 +1162,835 @@
       "multiplier": 2.0,
       "qi_cost": 32
     }
+  },
+  "낙일검법": {
+    "name": "낙일검법",
+    "type": "공격무공",
+    "category": "검법",
+    "grade": "상승",
+    "base_multiplier": 1.52,
+    "qi_cost": 9,
+    "desc": "해가 지는 순간의 빛처럼 마지막 일 초에 모든 것을 싣는다.",
+    "forms": [
+      "잔양",
+      "석조",
+      "낙일"
+    ],
+    "secret_technique": {
+      "name": "일검낙일",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    }
+  },
+  "청명검결": {
+    "name": "청명검결",
+    "type": "공격무공",
+    "category": "검법",
+    "grade": "상승",
+    "base_multiplier": 1.52,
+    "qi_cost": 9,
+    "desc": "맑은 날의 하늘처럼 빈틈을 남기지 않는 검결.",
+    "forms": [
+      "청천",
+      "명월",
+      "무운"
+    ],
+    "secret_technique": {
+      "name": "청명일색",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    }
+  },
+  "낙월도법": {
+    "name": "낙월도법",
+    "type": "공격무공",
+    "category": "도법",
+    "grade": "명품",
+    "base_multiplier": 1.25,
+    "qi_cost": 6,
+    "desc": "달이 떨어지듯 위에서 아래로 곧게 베는 도법.",
+    "forms": [
+      "월락",
+      "참월",
+      "낙하"
+    ],
+    "secret_technique": {
+      "name": "낙월무흔",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 40
+    }
+  },
+  "회풍도법": {
+    "name": "회풍도법",
+    "type": "공격무공",
+    "category": "도법",
+    "grade": "명품",
+    "base_multiplier": 1.25,
+    "qi_cost": 6,
+    "desc": "몸을 돌리며 연달아 베는 도법. 여럿을 상대할 때 빛난다.",
+    "forms": [
+      "회선",
+      "풍륜",
+      "연환참"
+    ],
+    "secret_technique": {
+      "name": "회풍만리",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 40
+    }
+  },
+  "단혼도법": {
+    "name": "단혼도법",
+    "type": "공격무공",
+    "category": "도법",
+    "grade": "상승",
+    "base_multiplier": 1.52,
+    "qi_cost": 9,
+    "desc": "칼 한 번에 혼을 끊는다는 사파의 쾌도.",
+    "forms": [
+      "쾌참",
+      "단혼",
+      "무성"
+    ],
+    "secret_technique": {
+      "name": "일도단혼",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    }
+  },
+  "풍뢰도법": {
+    "name": "풍뢰도법",
+    "type": "공격무공",
+    "category": "도법",
+    "grade": "상승",
+    "base_multiplier": 1.52,
+    "qi_cost": 9,
+    "desc": "바람처럼 다가가 벼락처럼 내려친다.",
+    "forms": [
+      "풍기",
+      "뇌락",
+      "풍뢰교가"
+    ],
+    "secret_technique": {
+      "name": "풍뢰천하",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    }
+  },
+  "패천도결": {
+    "name": "패천도결",
+    "type": "공격무공",
+    "category": "도법",
+    "grade": "신공",
+    "base_multiplier": 1.9,
+    "qi_cost": 14,
+    "desc": "하늘을 베겠다던 광인이 남긴 도결.",
+    "forms": [
+      "패도",
+      "개천",
+      "멸지"
+    ],
+    "secret_technique": {
+      "name": "패천일도",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 2.8,
+      "qi_cost": 70
+    },
+    "legend": true
+  },
+  "무상도결": {
+    "name": "무상도결",
+    "type": "공격무공",
+    "category": "도법",
+    "grade": "신공",
+    "base_multiplier": 1.9,
+    "qi_cost": 14,
+    "desc": "형을 버린 끝에 남은 단 하나의 칼.",
+    "forms": [
+      "무상",
+      "무형",
+      "귀일"
+    ],
+    "secret_technique": {
+      "name": "무상참",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 2.8,
+      "qi_cost": 70
+    },
+    "legend": true
+  },
+  "오호창법": {
+    "name": "오호창법",
+    "type": "공격무공",
+    "category": "창법",
+    "grade": "기본",
+    "base_multiplier": 1.12,
+    "qi_cost": 4,
+    "desc": "군문에서 처음 배우는 다섯 가지 찌르기.",
+    "forms": [
+      "직자",
+      "횡란",
+      "회창"
+    ],
+    "secret_technique": {
+      "name": "오호단창",
+      "unlock_grade": "명품",
+      "unlock_mastery": 50,
+      "multiplier": 1.9,
+      "qi_cost": 30
+    }
+  },
+  "이화창법": {
+    "name": "이화창법",
+    "type": "공격무공",
+    "category": "창법",
+    "grade": "명품",
+    "base_multiplier": 1.25,
+    "qi_cost": 6,
+    "desc": "배꽃이 지듯 창끝이 흩어지는 창법.",
+    "forms": [
+      "이화",
+      "난점",
+      "낙화"
+    ],
+    "secret_technique": {
+      "name": "이화만천",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 40
+    }
+  },
+  "악가창법": {
+    "name": "악가창법",
+    "type": "공격무공",
+    "category": "창법",
+    "grade": "명품",
+    "base_multiplier": 1.25,
+    "qi_cost": 6,
+    "desc": "충절의 장수 집안에 전하는 창법. 곧고 무겁다.",
+    "forms": [
+      "정충",
+      "보국",
+      "파로"
+    ],
+    "secret_technique": {
+      "name": "정충일창",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 40
+    }
+  },
+  "칠탐사창": {
+    "name": "칠탐사창",
+    "type": "공격무공",
+    "category": "창법",
+    "grade": "명품",
+    "base_multiplier": 1.25,
+    "qi_cost": 6,
+    "desc": "뱀처럼 일곱 번 머리를 내미는 창법.",
+    "forms": [
+      "사출",
+      "칠탐",
+      "독아"
+    ],
+    "secret_technique": {
+      "name": "칠사연환",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 40
+    }
+  },
+  "낙혼창법": {
+    "name": "낙혼창법",
+    "type": "공격무공",
+    "category": "창법",
+    "grade": "상승",
+    "base_multiplier": 1.52,
+    "qi_cost": 9,
+    "desc": "찌르기 전에 기세로 상대의 혼을 빼앗는다.",
+    "forms": [
+      "위압",
+      "낙혼",
+      "관심"
+    ],
+    "secret_technique": {
+      "name": "탈혼일점",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    }
+  },
+  "뇌정창법": {
+    "name": "뇌정창법",
+    "type": "공격무공",
+    "category": "창법",
+    "grade": "상승",
+    "base_multiplier": 1.52,
+    "qi_cost": 9,
+    "desc": "창끝에 내력을 실어 벼락처럼 찌른다.",
+    "forms": [
+      "뇌섬",
+      "정벽",
+      "천뢰"
+    ],
+    "secret_technique": {
+      "name": "뇌정만균",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    }
+  },
+  "청룡창법": {
+    "name": "청룡창법",
+    "type": "공격무공",
+    "category": "창법",
+    "grade": "상승",
+    "base_multiplier": 1.52,
+    "qi_cost": 9,
+    "desc": "청룡이 몸을 틀듯 창을 휘감는다.",
+    "forms": [
+      "청룡출수",
+      "반룡",
+      "승천"
+    ],
+    "secret_technique": {
+      "name": "청룡회천",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    }
+  },
+  "용담신창": {
+    "name": "용담신창",
+    "type": "공격무공",
+    "category": "창법",
+    "grade": "신공",
+    "base_multiplier": 1.9,
+    "qi_cost": 14,
+    "desc": "한 자루 창으로 만군 사이를 일곱 번 드나들었다는 전설의 창법.",
+    "forms": [
+      "칠진칠출",
+      "용담",
+      "호위"
+    ],
+    "secret_technique": {
+      "name": "용담무쌍",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 2.8,
+      "qi_cost": 70
+    },
+    "legend": true
+  },
+  "무상창결": {
+    "name": "무상창결",
+    "type": "공격무공",
+    "category": "창법",
+    "grade": "신공",
+    "base_multiplier": 1.9,
+    "qi_cost": 14,
+    "desc": "창이 곧 몸이요 몸이 곧 창이라는 경지.",
+    "forms": [
+      "무상",
+      "일점",
+      "귀진"
+    ],
+    "secret_technique": {
+      "name": "무상일창",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 2.8,
+      "qi_cost": 70
+    },
+    "legend": true
+  },
+  "오호곤법": {
+    "name": "오호곤법",
+    "type": "공격무공",
+    "category": "봉법",
+    "grade": "기본",
+    "base_multiplier": 1.12,
+    "qi_cost": 4,
+    "desc": "길거리 무인이면 누구나 아는 다섯 수의 곤법.",
+    "forms": [
+      "타두",
+      "소퇴",
+      "붕곤"
+    ],
+    "secret_technique": {
+      "name": "오호타곤",
+      "unlock_grade": "명품",
+      "unlock_mastery": 50,
+      "multiplier": 1.9,
+      "qi_cost": 30
+    }
+  },
+  "나한곤법": {
+    "name": "나한곤법",
+    "type": "공격무공",
+    "category": "봉법",
+    "grade": "명품",
+    "base_multiplier": 1.25,
+    "qi_cost": 6,
+    "desc": "절집 무승들이 익히는 묵직한 곤법.",
+    "forms": [
+      "나한",
+      "복호",
+      "항룡"
+    ],
+    "secret_technique": {
+      "name": "나한복마",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 40
+    }
+  },
+  "천지곤법": {
+    "name": "천지곤법",
+    "type": "공격무공",
+    "category": "봉법",
+    "grade": "명품",
+    "base_multiplier": 1.25,
+    "qi_cost": 6,
+    "desc": "하늘과 땅을 번갈아 치는 곤법.",
+    "forms": [
+      "천타",
+      "지소",
+      "천지일기"
+    ],
+    "secret_technique": {
+      "name": "천지개벽",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 40
+    }
+  },
+  "풍마곤법": {
+    "name": "풍마곤법",
+    "type": "공격무공",
+    "category": "봉법",
+    "grade": "상승",
+    "base_multiplier": 1.52,
+    "qi_cost": 9,
+    "desc": "미친 듯 휘두르는 듯하나 한 치도 어긋나지 않는다.",
+    "forms": [
+      "풍마",
+      "난타",
+      "광풍"
+    ],
+    "secret_technique": {
+      "name": "풍마난무",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    }
+  },
+  "여의곤법": {
+    "name": "여의곤법",
+    "type": "공격무공",
+    "category": "봉법",
+    "grade": "상승",
+    "base_multiplier": 1.52,
+    "qi_cost": 9,
+    "desc": "늘었다 줄었다 하듯 거리를 속이는 곤법.",
+    "forms": [
+      "여의",
+      "신축",
+      "변환"
+    ],
+    "secret_technique": {
+      "name": "여의천균",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    }
+  },
+  "항마곤법": {
+    "name": "항마곤법",
+    "type": "공격무공",
+    "category": "봉법",
+    "grade": "상승",
+    "base_multiplier": 1.52,
+    "qi_cost": 9,
+    "desc": "마귀를 때려잡는다는 절집의 비전 곤법.",
+    "forms": [
+      "항마",
+      "파사",
+      "현정"
+    ],
+    "secret_technique": {
+      "name": "항마대곤",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    }
+  },
+  "제천곤결": {
+    "name": "제천곤결",
+    "type": "공격무공",
+    "category": "봉법",
+    "grade": "신공",
+    "base_multiplier": 1.9,
+    "qi_cost": 14,
+    "desc": "하늘과 겨루겠다는 뜻을 담은 곤법의 끝.",
+    "forms": [
+      "제천",
+      "요천",
+      "파운"
+    ],
+    "secret_technique": {
+      "name": "제천일곤",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 2.8,
+      "qi_cost": 70
+    },
+    "legend": true
+  },
+  "무상곤결": {
+    "name": "무상곤결",
+    "type": "공격무공",
+    "category": "봉법",
+    "grade": "신공",
+    "base_multiplier": 1.9,
+    "qi_cost": 14,
+    "desc": "막대 하나로 천하를 쓸어 낸 노인의 곤결.",
+    "forms": [
+      "무상",
+      "소천",
+      "귀원"
+    ],
+    "secret_technique": {
+      "name": "일곤소천",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 2.8,
+      "qi_cost": 70
+    },
+    "legend": true
+  },
+  "맹호권": {
+    "name": "맹호권",
+    "type": "공격무공",
+    "category": "권법",
+    "grade": "명품",
+    "base_multiplier": 1.25,
+    "qi_cost": 6,
+    "desc": "호랑이가 덮치듯 전신을 실어 치는 권법.",
+    "forms": [
+      "맹호",
+      "출림",
+      "하산"
+    ],
+    "secret_technique": {
+      "name": "맹호파산",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 40
+    }
+  },
+  "구궁권": {
+    "name": "구궁권",
+    "type": "공격무공",
+    "category": "권법",
+    "grade": "상승",
+    "base_multiplier": 1.52,
+    "qi_cost": 9,
+    "desc": "아홉 방위를 밟으며 끊임없이 치는 권법.",
+    "forms": [
+      "구궁",
+      "이형",
+      "연격"
+    ],
+    "secret_technique": {
+      "name": "구궁귀일",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    }
+  },
+  "파산권": {
+    "name": "파산권",
+    "type": "공격무공",
+    "category": "권법",
+    "grade": "상승",
+    "base_multiplier": 1.52,
+    "qi_cost": 9,
+    "desc": "산을 부순다는 무식한 권법. 실제로 바위는 부순다.",
+    "forms": [
+      "개산",
+      "붕권",
+      "파산"
+    ],
+    "secret_technique": {
+      "name": "일권파산",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    }
+  },
+  "천강권경": {
+    "name": "천강권경",
+    "type": "공격무공",
+    "category": "권법",
+    "grade": "신공",
+    "base_multiplier": 1.9,
+    "qi_cost": 14,
+    "desc": "하늘의 강기를 주먹에 싣는다는 권경.",
+    "forms": [
+      "천강",
+      "강기",
+      "천붕"
+    ],
+    "secret_technique": {
+      "name": "천강일권",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 2.8,
+      "qi_cost": 70
+    },
+    "legend": true
+  },
+  "무상권결": {
+    "name": "무상권결",
+    "type": "공격무공",
+    "category": "권법",
+    "grade": "신공",
+    "base_multiplier": 1.9,
+    "qi_cost": 14,
+    "desc": "형을 다 잊은 뒤 남는 한 주먹.",
+    "forms": [
+      "무상",
+      "귀진",
+      "일권"
+    ],
+    "secret_technique": {
+      "name": "무상일권",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 2.8,
+      "qi_cost": 70
+    },
+    "legend": true
+  },
+  "철사장": {
+    "name": "철사장",
+    "type": "공격무공",
+    "category": "장법",
+    "grade": "기본",
+    "base_multiplier": 1.12,
+    "qi_cost": 4,
+    "desc": "모래와 쇠를 치며 손바닥을 단련하는 기초 장법.",
+    "forms": [
+      "철사",
+      "단장",
+      "쌍추"
+    ],
+    "secret_technique": {
+      "name": "철사일장",
+      "unlock_grade": "명품",
+      "unlock_mastery": 50,
+      "multiplier": 1.9,
+      "qi_cost": 30
+    }
+  },
+  "한빙면장": {
+    "name": "한빙면장",
+    "type": "공격무공",
+    "category": "장법",
+    "grade": "상승",
+    "base_multiplier": 1.52,
+    "qi_cost": 9,
+    "desc": "솜처럼 부드럽게 닿아 뼛속을 얼린다.",
+    "forms": [
+      "면장",
+      "한빙",
+      "동골"
+    ],
+    "secret_technique": {
+      "name": "한빙천리",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    }
+  },
+  "대력금강장": {
+    "name": "대력금강장",
+    "type": "공격무공",
+    "category": "장법",
+    "grade": "상승",
+    "base_multiplier": 1.52,
+    "qi_cost": 9,
+    "desc": "소림 외문의 금강 장력.",
+    "forms": [
+      "금강",
+      "대력",
+      "파석"
+    ],
+    "secret_technique": {
+      "name": "금강일장",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    }
+  },
+  "여래신장": {
+    "name": "여래신장",
+    "type": "공격무공",
+    "category": "장법",
+    "grade": "신공",
+    "base_multiplier": 1.9,
+    "qi_cost": 14,
+    "desc": "부처의 손바닥이라 불리는 전설의 장법.",
+    "forms": [
+      "여래",
+      "불광",
+      "대자대비"
+    ],
+    "secret_technique": {
+      "name": "만불조종",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 2.8,
+      "qi_cost": 70
+    },
+    "legend": true
+  },
+  "매화침법": {
+    "name": "매화침법",
+    "type": "공격무공",
+    "category": "암기",
+    "grade": "명품",
+    "base_multiplier": 1.25,
+    "qi_cost": 6,
+    "desc": "매화 꽃잎처럼 작은 침을 흩뿌린다.",
+    "forms": [
+      "일침",
+      "매화",
+      "만점"
+    ],
+    "secret_technique": {
+      "name": "매화만천",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 40
+    }
+  },
+  "철련자술": {
+    "name": "철련자술",
+    "type": "공격무공",
+    "category": "암기",
+    "grade": "명품",
+    "base_multiplier": 1.25,
+    "qi_cost": 6,
+    "desc": "쇠구슬을 튕겨 혈도를 치는 기술.",
+    "forms": [
+      "탄지",
+      "철련",
+      "연주"
+    ],
+    "secret_technique": {
+      "name": "연주탄",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 40
+    }
+  },
+  "낭아표법": {
+    "name": "낭아표법",
+    "type": "공격무공",
+    "category": "암기",
+    "grade": "명품",
+    "base_multiplier": 1.25,
+    "qi_cost": 6,
+    "desc": "이리 이빨 모양의 표창을 던지는 기술.",
+    "forms": [
+      "낭아",
+      "회표",
+      "쌍표"
+    ],
+    "secret_technique": {
+      "name": "낭아회선",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 40
+    }
+  },
+  "무영신침": {
+    "name": "무영신침",
+    "type": "공격무공",
+    "category": "암기",
+    "grade": "신공",
+    "base_multiplier": 1.9,
+    "qi_cost": 14,
+    "desc": "보이지 않는다는 침. 맞은 사람도 모른다.",
+    "forms": [
+      "무영",
+      "무성",
+      "무흔"
+    ],
+    "secret_technique": {
+      "name": "무영일침",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 2.8,
+      "qi_cost": 70
+    },
+    "legend": true
+  },
+  "만리추혼": {
+    "name": "만리추혼",
+    "type": "공격무공",
+    "category": "암기",
+    "grade": "신공",
+    "base_multiplier": 1.9,
+    "qi_cost": 14,
+    "desc": "던진 뒤에도 쫓아간다는 전설의 비도술.",
+    "forms": [
+      "추혼",
+      "회선",
+      "만리"
+    ],
+    "secret_technique": {
+      "name": "만리일비",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 2.8,
+      "qi_cost": 70
+    },
+    "legend": true
   }
 }

@@ -363,3 +363,6 @@ body { word-break: keep-all; overflow-wrap: anywhere; }
 .legacy-panel h4 { color: var(--gold); margin: 0 0 .5rem; font-weight: 400; }
 .legacy-note { color: var(--gold); font-size: .92rem; }
 .karma-lines { color: var(--paper-dim); font-size: .82rem; margin: 0 0 .5rem; }
+
+.shop-link { background: none; border: 1px solid var(--gold); color: var(--gold); font: inherit; font-size: .85rem; padding: .3rem .55rem; cursor: pointer; white-space: nowrap; }
+.chain-strip { font-size: .8rem; color: var(--gold); padding: .25rem 0 0; line-height: 1.5; }

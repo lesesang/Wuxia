@@ -2,7 +2,10 @@
 import { Battle, enemyPool, Enemy, useConsumable } from "./battle.js";
 import { GRADE_ORDER, Player, Skill, STAT_NAMES } from "./character.js";
 import { DB } from "./data.js";
-import { applyEffects, enemyIntro, pickFortune, pickRandomEvent, resolveChoice, storyEventForTurn } from "./events.js";
+import {
+  advanceChain, applyEffects, dueChainEvent, enemyIntro, LAST_CHAIN_TURN, pickFortune, pickRandomEvent, resolveChoice,
+  startChain, storyEventForTurn,
+} from "./events.js";
 import { buy, openMarket } from "./market.js";
 import {
   activeContent, addKarma, claimMilestones, clearCheckpoint, extraSlots, loadCheckpoint, loadMeta, recordRun, saveCheckpoint,
@@ -114,9 +117,18 @@ export class Game {
     this.openStoryEvent();
   }
 
+  /** 그달의 줄거리와 연계 인카운터를 연다. 천마봉 전에는 남은 연계를 먼저 끝낸다. */
   openStoryEvent() {
-    const key = storyEventForTurn(this.player);
-    if (key) this.event = { key, forced: true };
+    const p = this.player;
+    const urgent = p.turn >= LAST_CHAIN_TURN && p.chains.length > 0;
+    const story = urgent ? null : storyEventForTurn(p);
+    if (story) {
+      this.event = { key: story, forced: true };
+      return;
+    }
+    const chainKey = dueChainEvent(p);
+    // 연계 한 편은 그달을 쓴다. 다만 마지막 달에 몰리면 달을 쓰지 않는다.
+    if (chainKey) this.event = { key: chainKey, forced: urgent };
   }
 
   /** 저장된 달 시작 지점에서 이어 한다. 없으면 false */
@@ -262,6 +274,11 @@ export class Game {
     this.event = null;
 
     const { effects } = result;
+    const { chain } = DB.events[state.key];
+    if (chain) {
+      if (effects.chain_start) startChain(this.player, chain.id);
+      else if (chain.index > 0) advanceChain(this.player, chain.id, !!effects.chain_abandon);
+    }
     if (effects.ending) {
       this.finishGame(true, effects.ending);
       return;
@@ -275,9 +292,11 @@ export class Game {
       this.gauntlet = { name, enemies: enemies.slice(1), reward, round: 1, total: enemies.length };
       this.startBattle(enemies[0]);
     }
-    if (!this.battle && !state.forced) this.pendingNext = true;
-    // 번외 시간의 선택 뒤에는 그달의 줄거리로 바로 이어진다
-    if (!this.battle && DB.events[state.key].prelude) this.openStoryEvent();
+    if (this.battle) return;
+    // 달을 쓰지 않는 사건 뒤에는 그달의 다음 사건으로 바로 이어진다
+    if (state.forced) this.openStoryEvent();
+    else if (this.chainsMustFinish()) this.openStoryEvent();
+    else this.pendingNext = true;
   }
 
   // ---------- 전투 ----------
@@ -306,7 +325,13 @@ export class Game {
     else this.addLog(["패배..."]);
 
     if (battle.isFinal || player.hp <= 0) this.finishGame(result.victory);
+    else if (this.chainsMustFinish()) this.openStoryEvent();
     else this.pendingNext = true;
+  }
+
+  /** 천마봉 앞에서 끝나지 않은 연계가 남아 있으면 달을 넘기지 않는다. */
+  chainsMustFinish() {
+    return this.player.turn >= LAST_CHAIN_TURN && this.player.chains.length > 0;
   }
 
   continueGauntlet() {

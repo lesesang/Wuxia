@@ -4,6 +4,7 @@
  "data/chapters.json",
  "data/endings.json",
  "data/enemies.json",
+ "data/events_chains.json",
  "data/events_jianghu.json",
  "data/events_random.json",
  "data/events_sect.json",
