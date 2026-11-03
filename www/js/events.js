@@ -34,6 +34,14 @@ export function unmetReason(player, requires) {
   if (r.unlocked && !player.content.includes(r.unlocked)) return "아직 인연이 닿지 않았다";
   if (r.dominant && player.dominantAlignment() !== r.dominant) return `${r.dominant}의 길이 아니다`;
   if (r.min_turn && player.turn < r.min_turn) return "아직 때가 아니다";
+  if (r.main_skill && player.bestSkill()?.key !== r.main_skill) return "쓰는 무공이 다르다";
+  if (r.main_grade && player.bestSkill()?.grade !== r.main_grade) return "쓰는 무공의 품계가 다르다";
+  if (r.mindset_grade && player.bestOfType("심공")?.grade !== r.mindset_grade) return "쓰는 심법의 품계가 다르다";
+  if (r.movement_grade && player.bestOfType("경공")?.grade !== r.movement_grade) return "쓰는 경공의 품계가 다르다";
+  if (r.hp_below && player.hp * 100 >= player.maxHp() * r.hp_below) return "아직 몸이 성하다";
+  if (r.hp_above && player.hp * 100 <= player.maxHp() * r.hp_above) return "몸이 성치 않다";
+  if (r.min_kills && player.kills < r.min_kills) return "쓰러뜨린 적이 모자라다";
+  if (r.max_kills !== undefined && player.kills > r.max_kills) return "쓰러뜨린 적이 많다";
   if (r.min_chapter && getChapter(player.turn) < r.min_chapter) return "아직 때가 아니다";
   if (r.min_fame && player.fame < r.min_fame) return `명성 ${r.min_fame} 필요`;
   if (r.max_fame !== undefined && player.fame > r.max_fame) return "이미 이름이 너무 알려졌다";
