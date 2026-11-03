@@ -207,5 +207,155 @@
     },
     "생사경": 10,
     "격파": 5
-  }
+  },
+  "achievements": [
+    {
+      "key": "첫승리",
+      "name": "천마를 넘다",
+      "desc": "천마를 쓰러뜨린다.",
+      "type": "win",
+      "karma": 0
+    },
+    {
+      "key": "맨몸승리",
+      "name": "맨몸의 전설",
+      "desc": "특성 없이 천마를 쓰러뜨린다.",
+      "type": "win_plain",
+      "karma": 8
+    },
+    {
+      "key": "생사경",
+      "name": "생사의 경계",
+      "desc": "생사경 엔딩을 본다.",
+      "type": "ending",
+      "value": "생사경",
+      "karma": 0
+    },
+    {
+      "key": "마도천하",
+      "name": "두 번째 그림자",
+      "desc": "마도천하 엔딩을 본다.",
+      "type": "ending",
+      "value": "귀순",
+      "karma": 4
+    },
+    {
+      "key": "상처",
+      "name": "상처뿐인 승리",
+      "desc": "상처뿐인 승리 엔딩을 본다.",
+      "type": "ending",
+      "value": "배드",
+      "karma": 2
+    },
+    {
+      "key": "백인",
+      "name": "백 명의 이름",
+      "desc": "한 강호행에서 적 40명을 쓰러뜨린다.",
+      "type": "kills",
+      "value": 40,
+      "karma": 3
+    },
+    {
+      "key": "명성",
+      "name": "천하가 아는 이름",
+      "desc": "명성 60을 넘긴다.",
+      "type": "fame",
+      "value": 60,
+      "karma": 3
+    },
+    {
+      "key": "사문",
+      "name": "소속",
+      "desc": "사문을 가진 채 강호행을 마친다.",
+      "type": "sect",
+      "karma": 1
+    },
+    {
+      "key": "연계1",
+      "name": "시작한 일은 끝낸다",
+      "desc": "연계 인카운터 하나를 끝맺는다.",
+      "type": "chains",
+      "value": 1,
+      "karma": 2
+    },
+    {
+      "key": "연계3",
+      "name": "세 이야기",
+      "desc": "한 강호행에서 연계 인카운터 셋을 끝맺는다.",
+      "type": "chains",
+      "value": 3,
+      "karma": 5
+    },
+    {
+      "key": "무공8",
+      "name": "잡학",
+      "desc": "공격무공 여덟을 익힌다.",
+      "type": "attacks",
+      "value": 8,
+      "karma": 3
+    },
+    {
+      "key": "전설무공",
+      "name": "전설을 얻다",
+      "desc": "전설의 무공을 얻는다.",
+      "type": "legend",
+      "karma": 4
+    },
+    {
+      "key": "출신3",
+      "name": "여러 생",
+      "desc": "세 출신으로 천마를 쓰러뜨린다.",
+      "type": "origins",
+      "value": 3,
+      "karma": 5
+    },
+    {
+      "key": "출신7",
+      "name": "강호의 모든 얼굴",
+      "desc": "일곱 출신으로 천마를 쓰러뜨린다.",
+      "type": "origins",
+      "value": 7,
+      "karma": 12
+    },
+    {
+      "key": "회차5",
+      "name": "다시 강호로",
+      "desc": "강호행을 다섯 번 끝낸다.",
+      "type": "runs",
+      "value": 5,
+      "karma": 2
+    },
+    {
+      "key": "회차20",
+      "name": "스무 번의 생",
+      "desc": "강호행을 스무 번 끝낸다.",
+      "type": "runs",
+      "value": 20,
+      "karma": 6
+    },
+    {
+      "key": "부호",
+      "name": "강호 거상",
+      "desc": "은자 1000을 지닌 채 강호행을 마친다.",
+      "type": "silver",
+      "value": 1000,
+      "karma": 3
+    },
+    {
+      "key": "사건50",
+      "name": "강호를 돌아다니다",
+      "desc": "인연을 50가지 겪는다.",
+      "type": "events",
+      "value": 50,
+      "karma": 3
+    },
+    {
+      "key": "사건120",
+      "name": "강호 박물지",
+      "desc": "인연을 120가지 겪는다.",
+      "type": "events",
+      "value": 120,
+      "karma": 6
+    }
+  ]
 }

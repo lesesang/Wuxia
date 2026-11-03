@@ -80,7 +80,7 @@ function play({ style = "섞어서", useMarket = true, origin = "무림초출", 
       game.chooseEvent((special || choice(open)).index);
     } else if (game.market) {
       const keys = useMarket ? game.market.stock
-        .filter((s) => s.left > 0 && !blockReason(p, s.key) && s.key !== "혈마단").map((s) => s.key) : [];
+        .filter((s) => s.left > 0 && !blockReason(p, s.key) && DB.market[s.key].category !== "도구" && s.key !== "혈마단").map((s) => s.key) : [];
       if (keys.length) game.marketBuy(keys.sort((a, b) => buyPriority(a) - buyPriority(b))[0]);
       else game.marketLeave();
     } else if (game.battle) {

@@ -75,7 +75,7 @@ export function applyGrowth(amount, traits, stat) {
 }
 
 // ---------- 문파 ----------
-export const ORIGIN_SECTS = { 곤륜파: "곤륜", 남궁세가: "남궁", 하오문: "하오문" };
+export const ORIGIN_SECTS = { 곤륜파: "곤륜", 남궁세가: "남궁", 하오문: "하오문", 개방제자: "개방", 당가방계: "당가" };
 export const sectBonus = (player, field) => DB.sects[player.sect]?.bonus?.[field] || 0;
 
 // ---------- 경지 ----------

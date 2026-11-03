@@ -89,6 +89,7 @@ export function advanceChain(player, id, abandoned = false) {
   const finished = chain.next >= DB.chains[id].keys.length;
   if (abandoned || finished) {
     player.chains = player.chains.filter((c) => c.id !== id);
+    if (!abandoned) player.chainsDone += 1;
     player.note(abandoned ? `「${DB.chains[id].title}」 일에서 손을 뗐다.` : `「${DB.chains[id].title}」 일을 끝맺었다.`);
     return;
   }
@@ -190,6 +191,7 @@ export function resolveChoice(player, key, index) {
   const effects = outcome.effects || {};
   const summary = applyEffects(player, effects);
   if (!player.seenEvents.includes(key)) player.seenEvents.push(key);
+  if (!DB.events[key].prelude) updateKnown([], [], [key]);
   return { text: outcome.text, label: choice.label, summary, effects };
 }
 
@@ -243,11 +245,13 @@ function takeStartWeapon(player, style) {
   return [...summary, ...equipReward(player, STARTER_WEAPONS[style])];
 }
 
+const REWARD_BONUSES = [10, 26, 50, 80]; // 보상 무기의 네 단계
+
 /** 주무공 계열에 맞는 무기를 단계(1~4)에 따라 준다. */
 function styleWeaponReward(player, tier) {
   const style = player.bestSkill()?.category;
   const weapons = Object.keys(DB.market)
-    .filter((k) => DB.market[k].markets.length && DB.market[k].effects.some((e) => e.slot === "weapon" && e.style === style))
+    .filter((k) => DB.market[k].markets.length && DB.market[k].effects.some((e) => e.slot === "weapon" && e.style === style && REWARD_BONUSES.includes(e.bonus)))
     .sort((a, b) => DB.market[a].price - DB.market[b].price);
   if (!weapons.length) return [`은자+${player.gainSilver(DB.market.운철보검.price)}`];
   return equipReward(player, weapons[Math.min(tier, weapons.length) - 1]);

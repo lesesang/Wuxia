@@ -91,6 +91,9 @@ export function useConsumable(player, key) {
     if (effect.type === "heal") {
       if (effect.stat === "hp") player.healPercent(effect.percent * rate, 0);
       else player.healPercent(0, effect.percent * rate);
+    } else if (effect.type === "mastery") {
+      const main = player.bestSkill();
+      if (main) main.gainMastery(main.category === effect.style ? effect.amount : Math.floor(effect.amount / 2));
     } else if (effect.type === "cure" && effect.what === "injury") {
       player.addInjury(-(effect.amount ?? 1));
     }
@@ -316,6 +319,11 @@ export class Battle {
     }
     const item = DB.market[key];
     if (item.effects.some((e) => e.type === "cure" && e.what === "poison")) this.poison = null;
+    const tool = item.effects.find((e) => e.type === "atk_buff");
+    if (tool) {
+      const full = this.player.bestSkill()?.category === tool.style;
+      this.atkBuff = { percent: full ? tool.percent : Math.floor(tool.percent / 2), rounds: tool.rounds + 1 };
+    }
     useConsumable(this.player, key);
     this.log.push(`${item.name}을(를) 썼다. (${item.desc})`);
   }

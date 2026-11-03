@@ -35,7 +35,7 @@ export function equipmentBonus(player, slot) {
 /** 무기와 비급이 어느 무공 계열의 것인지. 계열이 없으면 null */
 function itemStyle(key) {
   for (const effect of DB.market[key].effects) {
-    if (effect.type === "equip" && effect.style) return effect.style;
+    if (effect.style) return effect.style;
     if (effect.type === "skill" && DB.skills[effect.skill]?.type === "공격무공") return DB.skills[effect.skill].category;
   }
   return null;
@@ -49,11 +49,12 @@ export function styleWeight(player, key) {
   return player.skillsOfType("공격무공").some((s) => s.category === style) ? KNOWN_STYLE_WEIGHT : 1;
 }
 
-const SHELVES = [["약", 3], ["내공과 경공", 1], ["공격 비급", 2]];
+const SHELVES = [["약", 3], ["내공과 경공", 1], ["공격 비급", 2], ["도구", 1]];
 
 function shelfOf(key) {
   const item = DB.market[key];
   if (item.category === "영약" || item.category === "소비품") return "약";
+  if (item.category === "도구") return "도구";
   const effect = item.effects.find((e) => e.type === "skill");
   if (!effect) return "기타";
   return DB.skills[effect.skill]?.type === "공격무공" ? "공격 비급" : "내공과 경공";
@@ -99,7 +100,7 @@ export function openMarket(turn, player) {
     stock.push(...weightedSample(items, (k) => styleWeight(player, k), size));
   }
   const others = pool.filter((k) => !stock.includes(k));
-  stock.push(...weightedSample(others, (k) => styleWeight(player, k), Math.max(0, STOCK_SIZE + sumEffect(player.traits, "extra_stock", "amount") - stock.length)));
+  stock.push(...weightedSample(others, (k) => styleWeight(player, k), Math.max(0, STOCK_SIZE - stock.length) + sumEffect(player.traits, "extra_stock", "amount")));
   return {
     name: marketName(turn),
     special: number === 5,
@@ -117,7 +118,7 @@ export function priceOf(player, key) {
 function effectIsUseful(player, effect, key) {
   if (effect.type === "equip") return bonusFor(player, key) > equipmentBonus(player, effect.slot);
   switch (effect.type) {
-    case "heal": case "cure": return (effect.percent ?? 1) > 0;
+    case "heal": case "cure": case "mastery": case "atk_buff": return (effect.percent ?? 1) > 0;
     case "stat": return player[effect.stat] < STAT_CAP;
     case "skill": return !player.hasSkill(effect.skill);
     case "boss_weaken": return player.bossWeaken === 0;

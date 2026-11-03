@@ -2050,5 +2050,579 @@
         "skill": "낭아표법"
       }
     ]
+  },
+  "청강검": {
+    "name": "청강검",
+    "category": "무기",
+    "price": 190,
+    "markets": [
+      2,
+      3,
+      4
+    ],
+    "desc": "푸른빛이 도는 잘 벼린 검. 검법에 맞음, 공격력 +38",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 38,
+        "style": "검법"
+      }
+    ]
+  },
+  "자전검": {
+    "name": "자전검",
+    "category": "무기",
+    "price": 380,
+    "markets": [
+      3,
+      4,
+      5
+    ],
+    "desc": "번개 무늬가 도는 명검. 검법에 맞음, 공격력 +65",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 65,
+        "style": "검법"
+      }
+    ]
+  },
+  "안령도": {
+    "name": "안령도",
+    "category": "무기",
+    "price": 190,
+    "markets": [
+      2,
+      3,
+      4
+    ],
+    "desc": "기러기 깃처럼 가볍고 날이 긴 칼. 도법에 맞음, 공격력 +38",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 38,
+        "style": "도법"
+      }
+    ]
+  },
+  "참마도": {
+    "name": "참마도",
+    "category": "무기",
+    "price": 380,
+    "markets": [
+      3,
+      4,
+      5
+    ],
+    "desc": "말까지 벤다는 큰 칼. 도법에 맞음, 공격력 +65",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 65,
+        "style": "도법"
+      }
+    ]
+  },
+  "장팔사모": {
+    "name": "장팔사모",
+    "category": "무기",
+    "price": 190,
+    "markets": [
+      2,
+      3,
+      4
+    ],
+    "desc": "뱀처럼 굽은 날의 긴 창. 창법에 맞음, 공격력 +38",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 38,
+        "style": "창법"
+      }
+    ]
+  },
+  "방천화극": {
+    "name": "방천화극",
+    "category": "무기",
+    "price": 380,
+    "markets": [
+      3,
+      4,
+      5
+    ],
+    "desc": "초승달 날이 달린 극. 창법에 맞음, 공격력 +65",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 65,
+        "style": "창법"
+      }
+    ]
+  },
+  "제미곤": {
+    "name": "제미곤",
+    "category": "무기",
+    "price": 190,
+    "markets": [
+      2,
+      3,
+      4
+    ],
+    "desc": "눈썹 높이로 맞춘 단단한 곤. 봉법에 맞음, 공격력 +38",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 38,
+        "style": "봉법"
+      }
+    ]
+  },
+  "반룡곤": {
+    "name": "반룡곤",
+    "category": "무기",
+    "price": 380,
+    "markets": [
+      3,
+      4,
+      5
+    ],
+    "desc": "용 무늬를 감은 쇠곤. 봉법에 맞음, 공격력 +65",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 65,
+        "style": "봉법"
+      }
+    ]
+  },
+  "호피권갑": {
+    "name": "호피 권갑",
+    "category": "무기",
+    "price": 190,
+    "markets": [
+      2,
+      3,
+      4
+    ],
+    "desc": "호랑이 가죽을 덧댄 권갑. 권법에 맞음, 공격력 +38",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 38,
+        "style": "권법"
+      }
+    ]
+  },
+  "용린권갑": {
+    "name": "용린 권갑",
+    "category": "무기",
+    "price": 380,
+    "markets": [
+      3,
+      4,
+      5
+    ],
+    "desc": "비늘처럼 쇠를 엮은 권갑. 권법에 맞음, 공격력 +65",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 65,
+        "style": "권법"
+      }
+    ]
+  },
+  "흑사장갑": {
+    "name": "흑사 장갑",
+    "category": "무기",
+    "price": 190,
+    "markets": [
+      2,
+      3,
+      4
+    ],
+    "desc": "검은 철사로 엮은 장갑. 장법에 맞음, 공격력 +38",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 38,
+        "style": "장법"
+      }
+    ]
+  },
+  "금사장갑": {
+    "name": "금사 장갑",
+    "category": "무기",
+    "price": 380,
+    "markets": [
+      3,
+      4,
+      5
+    ],
+    "desc": "금실을 섞어 짠 장갑. 장법에 맞음, 공격력 +65",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 65,
+        "style": "장법"
+      }
+    ]
+  },
+  "유엽표": {
+    "name": "유엽표",
+    "category": "무기",
+    "price": 190,
+    "markets": [
+      2,
+      3,
+      4
+    ],
+    "desc": "버들잎 모양의 표창 묶음. 암기에 맞음, 공격력 +38",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 38,
+        "style": "암기"
+      }
+    ]
+  },
+  "매화침통": {
+    "name": "매화침통",
+    "category": "무기",
+    "price": 380,
+    "markets": [
+      3,
+      4,
+      5
+    ],
+    "desc": "매화 무늬 통에서 침을 쏘아 낸다. 암기에 맞음, 공격력 +65",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 65,
+        "style": "암기"
+      }
+    ]
+  },
+  "매화숫돌": {
+    "name": "매화 숫돌",
+    "category": "도구",
+    "price": 70,
+    "markets": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "desc": "검날을 갈며 검로를 되짚는다. 쓰면 주무공 숙련도 +25. 검법이 아니면 절반.",
+    "effects": [
+      {
+        "type": "mastery",
+        "amount": 25,
+        "style": "검법"
+      }
+    ]
+  },
+  "벽력검유": {
+    "name": "벽력 검유",
+    "category": "도구",
+    "price": 60,
+    "markets": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "battle_only": true,
+    "desc": "검날에 바르면 기운이 오래 머문다. 전투에서 쓰면 세 합 동안 주는 피해 +40%. 검법이 아니면 절반.",
+    "effects": [
+      {
+        "type": "atk_buff",
+        "percent": 40,
+        "rounds": 3,
+        "style": "검법"
+      }
+    ]
+  },
+  "베기짚단": {
+    "name": "베기 짚단",
+    "category": "도구",
+    "price": 70,
+    "markets": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "desc": "짚단 천 개를 베며 손을 익힌다. 쓰면 주무공 숙련도 +25. 도법이 아니면 절반.",
+    "effects": [
+      {
+        "type": "mastery",
+        "amount": 25,
+        "style": "도법"
+      }
+    ]
+  },
+  "맹호도유": {
+    "name": "맹호 도유",
+    "category": "도구",
+    "price": 60,
+    "markets": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "battle_only": true,
+    "desc": "칼등에 바르면 내려칠 때 무게가 실린다. 전투에서 쓰면 세 합 동안 주는 피해 +40%. 도법이 아니면 절반.",
+    "effects": [
+      {
+        "type": "atk_buff",
+        "percent": 40,
+        "rounds": 3,
+        "style": "도법"
+      }
+    ]
+  },
+  "납창추": {
+    "name": "납 창추",
+    "category": "도구",
+    "price": 70,
+    "markets": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "desc": "창끝에 달아 찌르기를 단련한다. 쓰면 주무공 숙련도 +25. 창법이 아니면 절반.",
+    "effects": [
+      {
+        "type": "mastery",
+        "amount": 25,
+        "style": "창법"
+      }
+    ]
+  },
+  "파갑창날": {
+    "name": "파갑 창날",
+    "category": "도구",
+    "price": 60,
+    "markets": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "battle_only": true,
+    "desc": "갑옷을 뚫는 예비 창날. 전투에서 쓰면 세 합 동안 주는 피해 +40%. 창법이 아니면 절반.",
+    "effects": [
+      {
+        "type": "atk_buff",
+        "percent": 40,
+        "rounds": 3,
+        "style": "창법"
+      }
+    ]
+  },
+  "무쇠수련곤": {
+    "name": "무쇠 수련곤",
+    "category": "도구",
+    "price": 70,
+    "markets": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "desc": "평소의 세 배 무게인 곤. 쓰면 주무공 숙련도 +25. 봉법이 아니면 절반.",
+    "effects": [
+      {
+        "type": "mastery",
+        "amount": 25,
+        "style": "봉법"
+      }
+    ]
+  },
+  "쇠테고리": {
+    "name": "쇠테 고리",
+    "category": "도구",
+    "price": 60,
+    "markets": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "battle_only": true,
+    "desc": "곤 끝에 끼우면 타격이 무거워진다. 전투에서 쓰면 세 합 동안 주는 피해 +40%. 봉법이 아니면 절반.",
+    "effects": [
+      {
+        "type": "atk_buff",
+        "percent": 40,
+        "rounds": 3,
+        "style": "봉법"
+      }
+    ]
+  },
+  "철사모래자루": {
+    "name": "철사 모래 자루",
+    "category": "도구",
+    "price": 70,
+    "markets": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "desc": "주먹을 단련하는 모래 자루. 쓰면 주무공 숙련도 +25. 권법이 아니면 절반.",
+    "effects": [
+      {
+        "type": "mastery",
+        "amount": 25,
+        "style": "권법"
+      }
+    ]
+  },
+  "철지환": {
+    "name": "철지환",
+    "category": "도구",
+    "price": 60,
+    "markets": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "battle_only": true,
+    "desc": "손가락에 끼우는 쇠고리. 전투에서 쓰면 세 합 동안 주는 피해 +40%. 권법이 아니면 절반.",
+    "effects": [
+      {
+        "type": "atk_buff",
+        "percent": 40,
+        "rounds": 3,
+        "style": "권법"
+      }
+    ]
+  },
+  "철사항아리": {
+    "name": "철사 항아리",
+    "category": "도구",
+    "price": 70,
+    "markets": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "desc": "손바닥을 꽂아 단련하는 항아리. 쓰면 주무공 숙련도 +25. 장법이 아니면 절반.",
+    "effects": [
+      {
+        "type": "mastery",
+        "amount": 25,
+        "style": "장법"
+      }
+    ]
+  },
+  "열양가루": {
+    "name": "열양 가루",
+    "category": "도구",
+    "price": 60,
+    "markets": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "battle_only": true,
+    "desc": "손바닥에 바르면 장력이 뜨거워진다. 전투에서 쓰면 세 합 동안 주는 피해 +40%. 장법이 아니면 절반.",
+    "effects": [
+      {
+        "type": "atk_buff",
+        "percent": 40,
+        "rounds": 3,
+        "style": "장법"
+      }
+    ]
+  },
+  "과녁목패": {
+    "name": "과녁 목패",
+    "category": "도구",
+    "price": 70,
+    "markets": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "desc": "바람 부는 날 맞히는 작은 목패. 쓰면 주무공 숙련도 +25. 암기이 아니면 절반.",
+    "effects": [
+      {
+        "type": "mastery",
+        "amount": 25,
+        "style": "암기"
+      }
+    ]
+  },
+  "마비독물": {
+    "name": "마비 독물",
+    "category": "도구",
+    "price": 60,
+    "markets": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "battle_only": true,
+    "desc": "암기 끝에 바르는 독물. 전투에서 쓰면 세 합 동안 주는 피해 +40%. 암기이 아니면 절반.",
+    "effects": [
+      {
+        "type": "atk_buff",
+        "percent": 40,
+        "rounds": 3,
+        "style": "암기"
+      }
+    ]
   }
 }

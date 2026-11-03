@@ -6,7 +6,7 @@ const LEGEND_KEY = "wuxia-legend";
 const SAVE_KEY = "wuxia-save";
 const RUN_HISTORY_LIMIT = 10;
 // 게임에서 빠진 출신을 해금했던 기록은 지우고 카르마를 돌려준다
-const REMOVED_ORIGINS = { 낙방서생: 5 };
+const REMOVED_ORIGINS = { 낙방서생: 5, 세외도객: 5, 양가서자: 5, 육선문포두: 5, 살문탈주: 5 };
 
 const defaults = () => ({
   current_karma: 0, total_karma: 0,
@@ -14,6 +14,7 @@ const defaults = () => ({
   global_codex: [], known_skills: [], known_items: [],
   endings_seen: [], runs: [], total_runs: 0,
   upgrades: {}, content: [], content_off: [], legacy_open: false, legacies: [], milestones: [],
+  known_events: [], achievements: [], origin_wins: [],
 });
 
 export function loadMeta() {
@@ -161,9 +162,41 @@ function addToList(listName, keys) {
 
 export const updateGlobalCodex = (keys) => addToList("global_codex", keys);
 
-export function updateKnown(skillKeys = [], itemKeys = []) {
+export function updateKnown(skillKeys = [], itemKeys = [], eventKeys = []) {
   addToList("known_skills", skillKeys);
   addToList("known_items", itemKeys);
+  addToList("known_events", eventKeys);
+}
+
+/** 강호행 끝에 새로 이룬 업적을 기록하고 돌려준다. */
+export function claimAchievements(player, ending, victory) {
+  const data = loadMeta();
+  if (victory && !data.origin_wins.includes(player.originKey)) data.origin_wins.push(player.originKey);
+  const fresh = DB.karma.achievements.filter((a) => !data.achievements.includes(a.key) && achievementMet(a, player, ending, victory, data));
+  data.achievements.push(...fresh.map((a) => a.key));
+  saveMeta(data);
+  return fresh;
+}
+
+function achievementMet(a, p, ending, victory, data) {
+  const visibleTraits = p.traits.filter((k) => !DB.traits[k]?.hidden);
+  const attacks = p.skills.filter((s) => s.type === "공격무공").length;
+  switch (a.type) {
+    case "win": return victory;
+    case "win_plain": return victory && !visibleTraits.length;
+    case "ending": return ending === a.value;
+    case "kills": return p.kills >= a.value;
+    case "fame": return p.fame >= a.value;
+    case "sect": return !!p.sect;
+    case "chains": return p.chainsDone >= a.value;
+    case "attacks": return attacks >= a.value;
+    case "legend": return p.skills.some((s) => DB.skills[s.key].legend);
+    case "origins": return data.origin_wins.length >= a.value;
+    case "runs": return data.total_runs + 1 >= a.value;
+    case "silver": return p.silver >= a.value;
+    case "events": return data.known_events.length >= a.value;
+    default: return false;
+  }
 }
 
 export function recordRun(summary) {
@@ -205,7 +238,7 @@ export function importRecords(text) {
   const legend = data?.format === "wuxia-records" ? data.legend : data;
   if (!legend || typeof legend.current_karma !== "number" || typeof legend.total_karma !== "number") return false;
   const merged = { ...defaults(), ...legend };
-  for (const key of ["unlocked_origins", "unlocked_traits", "global_codex", "known_skills", "known_items", "endings_seen", "runs", "content", "content_off", "legacies", "milestones"]) {
+  for (const key of ["unlocked_origins", "unlocked_traits", "global_codex", "known_skills", "known_items", "endings_seen", "runs", "content", "content_off", "legacies", "milestones", "known_events", "achievements", "origin_wins"]) {
     if (!Array.isArray(merged[key])) merged[key] = defaults()[key];
   }
   saveMeta(merged);
