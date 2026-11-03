@@ -112,7 +112,7 @@
     "grade": "명품",
     "base_multiplier": 1.1,
     "qi_cost": 7,
-    "desc": "권마가 남긴 권법. 강하지만 기력을 거칠게 태운다.",
+    "desc": "권마가 남긴 권법. 강하지만 내력을 거칠게 태운다.",
     "secret_technique": {
       "name": "권마강림",
       "unlock_grade": "상승",
@@ -264,7 +264,7 @@
     "grade": "기본",
     "base_multiplier": 1.0,
     "qi_cost": 0,
-    "desc": "숨을 고르는 가장 기초적인 심공. 싸움 중에도 기력을 되찾는다.",
+    "desc": "숨을 고르는 가장 기초적인 심공. 싸움 중에도 내력을 되찾는다.",
     "effect": {
       "heal_hp_pct": 5,
       "heal_qi_pct": 15,
@@ -437,7 +437,7 @@
     "grade": "명품",
     "base_multiplier": 1.25,
     "qi_cost": 5,
-    "desc": "칼을 쓰지 않는 듯 쓰는 무당의 검. 기력을 적게 먹는다.",
+    "desc": "칼을 쓰지 않는 듯 쓰는 무당의 검. 내력을 적게 먹는다.",
     "forms": [
       "기수식",
       "운수",
@@ -734,7 +734,7 @@
     "grade": "신공",
     "base_multiplier": 1.0,
     "qi_cost": 0,
-    "desc": "음과 양이 돌면 기력이 끝나지 않는다.",
+    "desc": "음과 양이 돌면 내력이 끝나지 않는다.",
     "effect": {
       "heal_hp_pct": 18,
       "heal_qi_pct": 45,

@@ -1,4 +1,4 @@
-// 이벤트. 정해진 턴의 줄거리와 탐색 중 사건을 JSON으로 관리한다. 형식은 docs/콘텐츠-가이드.md 참고.
+// 이벤트. 정해진 달의 줄거리와 탐색 중 사건을 JSON으로 관리한다. 형식은 docs/콘텐츠-가이드.md 참고.
 import { Skill, STAT_NAMES } from "./character.js";
 import { DB } from "./data.js";
 import { equipmentBonus } from "./market.js";
@@ -6,7 +6,7 @@ import { updateKnown } from "./meta.js";
 import { pick, pickWeighted } from "./rng.js";
 import { ALIGNMENTS, applyGrowth, fameRankChanged, getChapter, realmIndex } from "./rules.js";
 
-export const EVENT_STAT_SCALE = 0.3; // 사건·기연의 능력치 상승 배율 (밸런스 조정용)
+export const EVENT_STAT_SCALE = 0.3; // 사건·기연의 기량 상승 배율 (밸런스 조정용)
 
 /** 만족하지 못한 첫 조건의 설명. 모두 만족하면 null */
 export function unmetReason(player, requires) {
@@ -22,6 +22,14 @@ export function unmetReason(player, requires) {
   if (r.no_skill && player.hasSkill(r.no_skill)) return "이미 익혔다";
   if (r.sect && player.sect !== r.sect) return "다른 문파의 일이다";
   if (r.no_sect && player.sect) return "이미 사문이 있다";
+  if (r.has_sect && !player.sect) return "사문이 없다";
+  // sect_side: 사문이 없거나, 사문의 성향이 이 값일 때만 그 세력에 설 수 있다
+  if (r.sect_side && player.sect && DB.sects[player.sect]?.alignment !== r.sect_side) return "사문이 허락하지 않는다";
+  if (r.item && !(player.inventory[r.item] > 0)) return `${DB.market[r.item].name} 필요`;
+  if (r.equip && player.weapon !== r.equip && player.armor !== r.equip) return `${DB.market[r.equip].name} 필요`;
+  if (r.any_skill && !r.any_skill.some((k) => player.hasSkill(k))) return "필요한 무공이 없다";
+  if (r.injured && !player.injury) return "내상이 없다";
+  if (r.dominant && player.dominantAlignment() !== r.dominant) return `${r.dominant}의 길이 아니다`;
   if (r.min_fame && player.fame < r.min_fame) return `명성 ${r.min_fame} 필요`;
   for (const [name, value] of Object.entries(r.max_alignment || {})) {
     if ((player.alignment[name] || 0) > value) return `${name}의 기운이 너무 짙다`;
@@ -65,21 +73,47 @@ export function pickFortune(player) {
     && checkRequires(player, f.requires)));
 }
 
+/**
+ * 상황별 반응(variants)을 반영한 선택지 목록.
+ * 조건이 맞는 반응의 선택지가 기본 선택지 앞에 붙는다. 선택 번호는 이 목록 기준이다.
+ */
+function eventChoices(player, key) {
+  const event = DB.events[key];
+  const extra = (event.variants || [])
+    .filter((v) => v.choices && checkRequires(player, v.requires))
+    .flatMap((v) => v.choices.map((c) => ({ ...c, tag: c.tag ?? v.tag ?? null })));
+  return [...extra, ...event.choices];
+}
+
+/** 조건이 맞는 첫 반응의 본문. 없으면 기본 본문. */
+function eventText(player, key) {
+  const event = DB.events[key];
+  const variant = (event.variants || []).find((v) => v.text && checkRequires(player, v.requires));
+  return variant ? variant.text : event.text;
+}
+
 export function eventView(player, key) {
   const event = DB.events[key];
   const choices = [];
-  event.choices.forEach((choice, index) => {
+  eventChoices(player, key).forEach((choice, index) => {
     const locked = unmetReason(player, choice.requires);
-    // 천마봉의 숨겨진 길은 조건이 맞을 때만 보여 준다
-    if (locked && choice.label.startsWith("(") && event.kind === "final") return;
-    choices.push({ index, label: choice.label, locked });
+    // hidden 선택지는 조건이 맞을 때만 보여 준다
+    if (locked && choice.hidden) return;
+    choices.push({ index, label: choice.label, locked, tag: choice.tag || null });
   });
-  return { key, title: event.title, text: event.text, choices };
+  return { key, title: event.title, text: eventText(player, key), choices };
+}
+
+/** 적이 플레이어를 보고 하는 말. 상황에 맞는 대사가 있으면 그것을 쓴다. */
+export function enemyIntro(player, enemyKey) {
+  const data = DB.enemies[enemyKey];
+  const special = (data.intros || []).find((i) => checkRequires(player, i.requires));
+  return special ? special.text : (data.intro || null);
 }
 
 /** 선택을 처리하고 {text, summary, effects}를 돌려준다. 고를 수 없으면 null */
 export function resolveChoice(player, key, index) {
-  const choice = DB.events[key].choices[index];
+  const choice = eventChoices(player, key)[index];
   if (!choice || !checkRequires(player, choice.requires)) return null;
   const outcome = pickWeighted(choice.outcomes, choice.outcomes.map((o) => o.weight ?? 1));
   const effects = outcome.effects || {};
@@ -96,7 +130,7 @@ function equipReward(player, key) {
     player[effect.slot] = key;
     return [`「${name}」 장착`];
   }
-  return [`「${name}」을(를) 받았지만 지금 장비가 더 좋다`];
+  return [`「${name}」을(를) 받았지만 지금 병장기가 더 좋다`];
 }
 
 const signed = (n) => (n >= 0 ? `+${n}` : `${n}`);
@@ -117,8 +151,8 @@ export function applyEffects(player, effects) {
 
   if ("hp_pct" in effects || "qi_pct" in effects) {
     const [hp, qi] = player.healPercent(effects.hp_pct || 0, effects.qi_pct || 0);
-    if (hp) summary.push(`체력${signed(hp)}`);
-    if (qi) summary.push(`기력${signed(qi)}`);
+    if (hp) summary.push(`기혈${signed(hp)}`);
+    if (qi) summary.push(`내력${signed(qi)}`);
   }
 
   if ("set_silver" in effects) {
@@ -158,16 +192,27 @@ export function applyEffects(player, effects) {
     summary.push(`내상${signed(effects.injury)}`);
   }
 
-  if (effects.join_sect) {
+  if (effects.join_sect && !player.sect) {
     player.sect = effects.join_sect;
     summary.push(`「${DB.sects[player.sect].name}」 입문`);
+  }
+
+  if (effects.leave_sect && player.sect) {
+    summary.push(`「${DB.sects[player.sect].name}」을(를) 떠남`);
+    player.sect = null;
+  }
+
+  if (effects.consume_item && player.inventory[effects.consume_item] > 0) {
+    player.inventory[effects.consume_item] -= 1;
+    if (player.inventory[effects.consume_item] <= 0) delete player.inventory[effects.consume_item];
+    summary.push(`「${DB.market[effects.consume_item].name}」 사용`);
   }
 
   if (effects.mastery) {
     const skill = player.bestSkill();
     if (skill) {
       const messages = skill.gainMastery(effects.mastery);
-      summary.push(`${skill.name} 숙련도+${effects.mastery}`, ...messages);
+      summary.push(`${skill.name} 성취+${effects.mastery}`, ...messages);
     }
   }
 
@@ -203,16 +248,37 @@ export function validateEvents() {
     if (effects.equip && !DB.market[effects.equip]) errors.push(`${where}: 없는 품목 ${effects.equip}`);
     if (effects.join_sect && !DB.sects[effects.join_sect]) errors.push(`${where}: 없는 문파 ${effects.join_sect}`);
     for (const stat of Object.keys(effects.stats || {})) {
-      if (!STAT_NAMES[stat]) errors.push(`${where}: 없는 능력치 ${stat}`);
+      if (!STAT_NAMES[stat]) errors.push(`${where}: 없는 기량 ${stat}`);
     }
     for (const name of Object.keys(effects.alignment || {})) {
       if (!ALIGNMENTS.includes(name)) errors.push(`${where}: 없는 성향 ${name}`);
     }
   };
-  for (const [key, event] of Object.entries(DB.events)) {
-    for (const choice of event.choices) {
-      for (const outcome of choice.outcomes) checkEffects(key, outcome.effects || {});
+  const checkRequiresData = (where, r = {}) => {
+    for (const item of [r.item, r.equip].filter(Boolean)) {
+      if (!DB.market[item]) errors.push(`${where}: 없는 품목 ${item}`);
     }
+    for (const skill of [r.skill, r.no_skill, ...(r.any_skill || [])].filter(Boolean)) {
+      if (!DB.skills[skill]) errors.push(`${where}: 없는 무공 ${skill}`);
+    }
+    if (r.sect && !DB.sects[r.sect]) errors.push(`${where}: 없는 문파 ${r.sect}`);
+    if (r.origin && !DB.origins.origins[r.origin]) errors.push(`${where}: 없는 출신 ${r.origin}`);
+  };
+  for (const [key, event] of Object.entries(DB.events)) {
+    checkRequiresData(key, event.requires);
+    const allChoices = [...event.choices, ...(event.variants || []).flatMap((v) => v.choices || [])];
+    for (const variant of event.variants || []) checkRequiresData(key, variant.requires);
+    for (const choice of allChoices) {
+      checkRequiresData(key, choice.requires);
+      for (const outcome of choice.outcomes) {
+        checkEffects(key, outcome.effects || {});
+        const item = outcome.effects?.consume_item;
+        if (item && !DB.market[item]) errors.push(`${key}: 없는 품목 ${item}`);
+      }
+    }
+  }
+  for (const [key, enemy] of Object.entries(DB.enemies)) {
+    for (const intro of enemy.intros || []) checkRequiresData(key, intro.requires);
   }
   DB.fortunes.forEach((fortune, i) => checkEffects(`기연 ${i}`, fortune.effects));
   return errors;

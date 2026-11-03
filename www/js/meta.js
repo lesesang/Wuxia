@@ -1,4 +1,4 @@
-// 회차를 넘어 남는 기록(카르마, 해금, 도감)과 턴 체크포인트
+// 생을 넘어 남는 기록(공덕, 개방, 강호록)과 달 체크포인트
 import { storage } from "./storage.js";
 
 const LEGEND_KEY = "wuxia-legend";
@@ -72,7 +72,7 @@ export function recordRun(summary) {
   saveMeta(data);
 }
 
-// ---------- 턴 체크포인트 ----------
+// ---------- 달 체크포인트 ----------
 
 export const saveCheckpoint = (playerDict, log) =>
   storage.set(SAVE_KEY, JSON.stringify({ player: playerDict, log }));

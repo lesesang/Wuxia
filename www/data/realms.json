@@ -16,17 +16,17 @@
     "초절정": {
       "avg": 50,
       "min_stat": 45,
-      "battles": 16
+      "battles": 14
     },
     "화경": {
       "avg": 65,
       "min_stat": 60,
-      "battles": 28
+      "battles": 24
     },
     "현경": {
       "avg": 80,
       "min_stat": 75,
-      "battles": 42
+      "battles": 36
     }
   },
   "combat_bonus": {

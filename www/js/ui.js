@@ -25,6 +25,7 @@ const app = () => document.getElementById("app");
 
 const esc = (value) => String(value ?? "").replace(/[&<>"']/g,
   (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const TIER_NAMES = { 일반: "잡배", 난적: "난적", 강적: "강적", 보스: "마두" };
 const percent = (part, whole) => Math.min(100, Math.trunc(part / whole * 100));
 
 // ---------- 공통 조각 ----------
@@ -50,27 +51,27 @@ function codexModal() {
     ["skills", `무공 ${skills.length}/${Object.keys(DB.skills).length}`],
     ["items", `보물 ${items.length}/${Object.keys(DB.market).length}`],
     ["endings", "결말"],
-    ["runs", "회차 기록"],
+    ["runs", "지난 생"],
   ];
   const panels = {
-    enemies: list(enemies, "탐색에서 적을 만나면 다음 턴에 이곳에 기록됩니다.", (k) => {
+    enemies: list(enemies, "행각에서 적을 만나면 다음 달에 이곳에 기록됩니다.", (k) => {
       const e = DB.enemies[k];
-      return entry(e.name, `${e.tier}, ${e.realm} 경지, 체력 ${e.hp}, 공격력 ${e.attack}`, e.desc);
+      return entry(e.name, `${TIER_NAMES[e.tier] || e.tier}, ${e.realm} 경지`, e.desc);
     }),
     skills: list(skills, "무공을 익히면 이곳에 기록됩니다.", (k) => {
       const s = DB.skills[k];
-      return entry(s.name, `${s.type}, ${s.grade} 등급`, s.desc);
+      return entry(s.name, `${s.type}, ${s.grade} 품계`, s.desc);
     }),
-    items: list(items, "시장에서 물건을 사면 이곳에 기록됩니다.", (k) => {
+    items: list(items, "장터에서 물건을 사면 이곳에 기록됩니다.", (k) => {
       const i = DB.market[k];
       return entry(i.name, i.category, i.desc);
     }),
     endings: Object.keys(DB.endings.titles).map((k) => entry(
-      meta.endings_seen.includes(k) ? DB.endings.titles[k] : "아직 보지 못한 결말", `카르마 +${DB.endings.karma[k]}`)).join(""),
+      meta.endings_seen.includes(k) ? DB.endings.titles[k] : "아직 보지 못한 결말", `공덕 +${DB.endings.karma[k]}`)).join(""),
     runs: `<p class="codex-meta">끝낸 강호행 ${meta.total_runs}회</p>${list(meta.runs, "강호행을 끝내면 이곳에 기록됩니다.", (r) => entry(
-      DB.endings.titles[r.ending] || r.ending, `${r.origin}, ${r.realm}, ${r.title}`, `${r.turn}턴까지 진행, ${r.kills}명 처치`))}`,
+      DB.endings.titles[r.ending] || r.ending, `${r.origin}, ${r.realm}, ${r.title}`, `${r.turn}달까지 진행, ${r.kills}명 처치`))}`,
   };
-  return modalShell("codex-modal", "강호 도감", `
+  return modalShell("codex-modal", "강호 강호록", `
     <div class="tabs">${tabs.map(([key, label]) => `<button class="tab-btn${ui.tab === key ? " active" : ""}" data-act="tab" data-tab="${key}">${esc(label)}</button>`).join("")}</div>
     <div class="tab-panel active">${panels[ui.tab]}</div>`);
 }
@@ -78,42 +79,42 @@ function codexModal() {
 function helpModal() {
   const section = (title, lines) => `<div class="modal-section"><h4>${title}</h4>${lines.map((l) => `<p class="help-line">${l}</p>`).join("")}</div>`;
   return modalShell("help-modal", "강호 입문서", `
-    ${section("목표", ["10년(120턴) 뒤 겨울, 천마봉에서 천마를 쓰러뜨립니다.", "죽어도 카르마가 남아 다음 강호행에서 출신과 특성을 해금할 수 있습니다."])}
+    ${section("목표", ["10년(120달) 뒤 겨울, 천마봉에서 천마를 쓰러뜨립니다.", "죽어도 공덕이 남아 다음 강호행에서 출신과 천품을 개방할 수 있습니다."])}
     ${section("매달 하는 일", [
-    "<b>탐색</b>: 전투, 사건, 기연 중 하나가 일어납니다. 가장 크게 성장하지만 위험합니다.",
-    "<b>수련</b>: 외공과 무리, 주무공 숙련도가 오릅니다. 대련으로 실전 경험을 얻기도 합니다.",
-    "<b>명상</b>: 내공과 심경이 오르고 기력을 되찾습니다.",
-    "<b>회복</b>: 체력과 기력을 채우고 내상을 치료합니다. 싸우기 전에 몸을 챙기세요."])}
-    ${section("경지", ["능력치와 <b>실전 경험</b>이 함께 차야 돌파합니다. 위쪽 띠에서 남은 조건을 볼 수 있습니다.", "경지가 오르면 주는 피해가 크게 늘고 받는 피해가 줄어듭니다."])}
+    "<b>행각</b>: 강호를 떠돌며 전투, 사건, 기연 중 하나를 만납니다. 가장 크게 성장하지만 위험합니다.",
+    "<b>수련</b>: 외공과 무리, 주무공 성취가 오릅니다. 대련으로 실전 경험을 얻기도 합니다.",
+    "<b>운기</b>: 내공과 심경이 오르고 내력을 되찾습니다. 초식을 깨치기도 합니다.",
+    "<b>요양</b>: 기혈과 내력을 채우고 내상을 치료합니다. 싸우기 전에 몸을 챙기세요."])}
+    ${section("경지", ["기량과 <b>실전 경험</b>이 함께 차야 돌파합니다. 위쪽 띠에서 남은 조건을 볼 수 있습니다.", "경지가 오르면 주는 피해가 크게 늘고 받는 피해가 줄어듭니다."])}
     ${section("전투", [
-    "무공은 기력을 씁니다. 기력이 없으면 맨손으로 싸웁니다.",
-    "적의 필살기는 한 라운드 전에 ⚠️로 예고됩니다. <b>경공</b>으로 흘려내면 다음 공격이 강해집니다.",
+    "무공은 내력을 씁니다. 내력이 없으면 맨손으로 싸웁니다.",
+    "적의 필살기는 한 합 전에 ⚠️로 예고됩니다. <b>경공</b>으로 흘려내면 다음 공격이 강해집니다.",
     "<b>심법</b>은 숨을 고르며 회복하고 점혈을 풉니다. 위험하면 <b>도주</b>도 방법입니다.",
     "내상은 전투가 끝나도 남고 주는 피해를 줄입니다."])}
-    ${section("시장과 성장", ["매년 말 시장이 열리고 턴을 쓰지 않습니다. 더 나은 무기와 방어구가 항상 진열됩니다.", "사건의 선택으로 정도, 사도, 마도 성향이 쌓이고 혜택과 파는 물건이 달라집니다."])}
-    ${section("저장", ["매달 초 자동으로 저장됩니다. 도중에 끄면 그달의 처음부터 이어 합니다."])}`);
+    ${section("장터와 성장", ["매년 말 장터가 열리고 달을 쓰지 않습니다. 더 나은 병기와 호신구가 항상 진열됩니다.", "사건의 선택으로 정도, 사도, 마도 성향이 쌓이고 혜택과 파는 물건이 달라집니다."])}
+    ${section("행적", ["매달 초 행적이 저절로 적힙니다. 도중에 끄면 그달의 처음부터 잇습니다."])}`);
 }
 
 function settingsModal() {
   const speed = storage.get("wuxia-speed") ?? "18";
   const font = storage.get("wuxia-font") ?? "normal";
   const option = (value, label, current) => `<option value="${value}"${value === current ? " selected" : ""}>${label}</option>`;
-  return modalShell("settings-modal", "게임 설정", `
-    <div class="setting-row"><label for="set-volume">BGM 볼륨</label>
+  return modalShell("settings-modal", "채비", `
+    <div class="setting-row"><label for="set-volume">풍류 가락</label>
       <input type="range" id="set-volume" min="0" max="100" step="5" value="${getVolume()}"></div>
-    <div class="setting-row"><label for="set-speed">텍스트 속도</label>
-      <select id="set-speed">${option("0", "바로 표시", speed)}${option("35", "느리게", speed)}${option("18", "보통", speed)}${option("7", "빠르게", speed)}</select></div>
-    <div class="setting-row"><label for="set-font">글자 크기</label>
+    <div class="setting-row"><label for="set-speed">글 흐르는 빠르기</label>
+      <select id="set-speed">${option("0", "단숨에", speed)}${option("35", "느리게", speed)}${option("18", "보통", speed)}${option("7", "빠르게", speed)}</select></div>
+    <div class="setting-row"><label for="set-font">글씨 크기</label>
       <select id="set-font">${option("small", "작게", font)}${option("normal", "보통", font)}${option("large", "크게", font)}</select></div>
-    <div class="setting-row"><span>언어</span><span class="muted">한국어</span></div>
-    ${installPrompt ? `<div class="setting-row"><span>앱처럼 쓰기</span><button class="mini-btn" data-act="install">홈 화면에 추가</button></div>` : ""}
-    <div class="setting-row"><span>기록 옮기기<br><small class="muted">카르마, 도감, 진행 중인 턴</small></span>
-      <span class="setting-buttons"><button class="mini-btn" data-act="export">내보내기</button>
-      <label class="mini-btn file-btn">가져오기<input type="file" id="import-file" accept=".json,application/json"></label></span></div>
-    <div class="setting-row"><span>도움말</span><button class="mini-btn" data-act="open" data-modal="help-modal">강호 입문서</button></div>
+    <div class="setting-row"><span>글</span><span class="muted">한글</span></div>
+    ${installPrompt ? `<div class="setting-row"><span>곁에 두기</span><button class="mini-btn" data-act="install">홈 화면에 놓기</button></div>` : ""}
+    <div class="setting-row"><span>행적 옮기기<br><small class="muted">공덕, 강호록, 진행 중인 달을 파일로</small></span>
+      <span class="setting-buttons"><button class="mini-btn" data-act="export">베껴 두기</button>
+      <label class="mini-btn file-btn">불러오기<input type="file" id="import-file" accept=".json,application/json"></label></span></div>
+    <div class="setting-row"><span>입문서</span><button class="mini-btn" data-act="open" data-modal="help-modal">펼치기</button></div>
     ${ui.notice ? `<p class="market-message">${esc(ui.notice)}</p>` : ""}
-    ${game.active && game.player.alive ? `<div class="setting-row danger-row"><span>이번 강호행 포기<br><small class="muted">카르마와 도감은 남습니다</small></span>
-      <button class="mini-btn danger-mini" data-act="open" data-modal="reset-modal">포기하기</button></div>` : ""}`);
+    ${game.active && game.player.alive ? `<div class="setting-row danger-row"><span>강호를 떠난다<br><small class="muted">공덕과 강호록은 남습니다</small></span>
+      <button class="mini-btn danger-mini" data-act="open" data-modal="reset-modal">떠나기</button></div>` : ""}`);
 }
 
 // ---------- 메인 화면 ----------
@@ -128,14 +129,14 @@ function renderTitle() {
     <h1 class="title-name">무협<br>로그라이크</h1>
     <p class="hero-line">십 년 뒤 겨울, 천마봉에서 누군가 기다린다.<br>그때까지 어떤 무인이 될지는 당신이 정한다.</p>
     <div class="title-actions">
-      ${hasSave ? `<button class="start-btn" data-act="continue">이어하기<small>${esc(save.origin)}, ${esc(save.realm)}, ${Math.min(save.turn, MAX_TURN)}턴째</small></button>` : ""}
+      ${hasSave ? `<button class="start-btn" data-act="continue">강호행 잇기<small>${esc(save.origin)}, ${esc(save.realm)}, ${Math.min(save.turn, MAX_TURN)}달째</small></button>` : ""}
       <button class="${hasSave ? "continue-btn" : "start-btn"}" data-act="setup">새 강호행</button>
     </div>
-    <p class="karma-display">💠 카르마 ${meta.current_karma} (누적 ${meta.total_karma})${meta.total_runs ? `, 끝낸 강호행 ${meta.total_runs}회` : ""}</p>
+    <p class="karma-display">💠 공덕 ${meta.current_karma} (누적 ${meta.total_karma})${meta.total_runs ? `, 끝낸 강호행 ${meta.total_runs}회` : ""}</p>
     <div class="title-links">
       <button class="link-btn" data-act="open" data-modal="help-modal">❓ 입문서</button>
-      <button class="link-btn" data-act="open" data-modal="codex-modal">📖 도감</button>
-      <button class="link-btn" data-act="open" data-modal="settings-modal">⚙️ 설정</button>
+      <button class="link-btn" data-act="open" data-modal="codex-modal">📖 강호록</button>
+      <button class="link-btn" data-act="open" data-modal="settings-modal">⚙️ 채비</button>
     </div>
   </div>
   ${helpModal()}${codexModal()}${settingsModal()}`;
@@ -165,7 +166,7 @@ function renderSetup() {
       ${sect ? `<span class="pick-stats block">사문: ${esc(sect.name)} (${esc(sect.bonus_text)})</span>` : ""}`;
     if (!meta.unlocked_origins.includes(key)) {
       return `<div class="pick-row locked"><div class="pick-main"><div class="pick-name">🔒 ${esc(o.name)}</div>${detail}</div>
-        <button class="unlock-btn" data-act="unlock-origin" data-key="${esc(key)}" ${meta.current_karma < o.cost ? "disabled" : ""}>💠 ${o.cost}<br>해금</button></div>`;
+        <button class="unlock-btn" data-act="unlock-origin" data-key="${esc(key)}" ${meta.current_karma < o.cost ? "disabled" : ""}>💠 ${o.cost}<br>열기</button></div>`;
     }
     return `<div class="pick-row"><label class="pick-label"><input type="radio" name="origin" value="${esc(key)}" ${ui.origin === key ? "checked" : ""}>
       <span class="pick-main"><span class="pick-name">${esc(o.name)}</span>${detail}</span></label></div>`;
@@ -178,7 +179,7 @@ function renderSetup() {
       const name = `${esc(t.name)}<span class="rarity rarity-${esc(t.rarity)}">${esc(t.rarity)}</span>`;
       if (!meta.unlocked_traits.includes(key)) {
         return `<div class="pick-row locked"><div class="pick-main"><div class="pick-name">🔒 ${name}</div><p class="pick-desc">${esc(t.desc)}</p></div>
-          <button class="unlock-btn" data-act="unlock-trait" data-key="${esc(key)}" ${meta.current_karma < t.cost ? "disabled" : ""}>💠 ${t.cost}<br>해금</button></div>`;
+          <button class="unlock-btn" data-act="unlock-trait" data-key="${esc(key)}" ${meta.current_karma < t.cost ? "disabled" : ""}>💠 ${t.cost}<br>열기</button></div>`;
       }
       const checked = ui.traits.has(key);
       return `<div class="pick-row"><label class="pick-label"><input type="checkbox" name="trait" value="${esc(key)}" ${checked ? "checked" : ""} ${!checked && ui.traits.size >= slots ? "disabled" : ""}>
@@ -193,15 +194,15 @@ function renderSetup() {
     </div>
     <div class="setup-tabs">
       <button class="tab-btn${ui.setupTab === "origin" ? " active" : ""}" data-act="setup-tab" data-tab="origin">출신</button>
-      <button class="tab-btn${ui.setupTab === "trait" ? " active" : ""}" data-act="setup-tab" data-tab="trait">특성 ${ui.traits.size}/${slots}</button>
+      <button class="tab-btn${ui.setupTab === "trait" ? " active" : ""}" data-act="setup-tab" data-tab="trait">천품 ${ui.traits.size}/${slots}</button>
     </div>
     <div class="home-wrap">
-      ${ui.setupTab === "origin" ? origins : `<p class="section-note">${next ? `특성을 ${slots}개 장착할 수 있습니다. 누적 카르마 ${next}이 되면 하나 더 열립니다.` : "특성 슬롯이 모두 열렸습니다."}</p>${traits}`}
+      ${ui.setupTab === "origin" ? origins : `<p class="section-note">${next ? `천품을 ${slots}개 장착할 수 있습니다. 누적 공덕 ${next}이 되면 하나 더 열립니다.` : "천품 자리가 모두 열렸습니다."}</p>${traits}`}
     </div>
-    <div class="setup-bar"><div class="setup-summary">${esc(originName)}${ui.traits.size ? `, 특성 ${ui.traits.size}개` : ""}</div>
+    <div class="setup-bar"><div class="setup-summary">${esc(originName)}${ui.traits.size ? `, 천품 ${ui.traits.size}개` : ""}</div>
       <button class="start-btn" data-act="${hasSave ? "confirm-start" : "start"}">강호로 나선다</button></div>
     ${modalShell("confirm-start-modal", "새 강호행을 시작할까요?", `
-      <p class="modal-text">저장된 진행이 사라집니다. 카르마와 도감은 남습니다.</p>
+      <p class="modal-text">적어 둔 행적이 사라집니다. 공덕과 강호록은 남습니다.</p>
       <button class="danger-btn" data-act="start">새로 시작</button>`)}`;
 }
 
@@ -210,11 +211,11 @@ function renderSetup() {
 function sidebar() {
   const bag = Object.values(game.player.inventory).reduce((a, b) => a + b, 0);
   return `<div class="sidebar">
-    <button data-act="open-status" data-tab="stats">🧍<span class="sb-label">상태</span></button>
+    <button data-act="open-status" data-tab="stats">🧍<span class="sb-label">행장</span></button>
     <button data-act="open-status" data-tab="skills">🥋<span class="sb-label">무공</span></button>
-    <button data-act="open-status" data-tab="bag">🎒<span class="sb-label">가방${bag ? ` ${bag}` : ""}</span></button>
-    <button data-act="open" data-modal="codex-modal">📖<span class="sb-label">도감</span></button>
-    <button data-act="open" data-modal="settings-modal">⚙️<span class="sb-label">설정</span></button>
+    <button data-act="open-status" data-tab="bag">🎒<span class="sb-label">행낭${bag ? ` ${bag}` : ""}</span></button>
+    <button data-act="open" data-modal="codex-modal">📖<span class="sb-label">강호록</span></button>
+    <button data-act="open" data-modal="settings-modal">⚙️<span class="sb-label">채비</span></button>
   </div>`;
 }
 
@@ -236,55 +237,55 @@ function statusModal() {
     const button = s.type === "공격무공" && !game.battle
       ? `<button class="mini-btn${isMain ? " on" : ""}" data-act="main-skill" data-key="${esc(s.key)}" ${isMain ? "disabled" : ""}>${isMain ? "주무공" : "주무공으로"}</button>` : "";
     const secret = s.secretName
-      ? `<div class="skill-meta">비기 「${esc(s.secretName)}」: ${s.secretUnlocked ? "해방됨" : `${esc(s.secretUnlockGrade)} 등급, 숙련도 ${s.secretUnlockMastery}에 해방`}</div>` : "";
+      ? `<div class="skill-meta">비기 「${esc(s.secretName)}」: ${s.secretUnlocked ? "터득함" : `${esc(s.secretUnlockGrade)} 품계, 성취 ${s.secretUnlockMastery}에 터득`}</div>` : "";
     return `<div class="skill-row"><div class="skill-head"><span>${esc(s.name)} <span class="skill-meta">${esc(s.type)}, ${esc(s.grade)}</span></span>${button}</div>
-      <div class="mastery"><span class="stat-track"><span style="width:${s.mastery}%"></span></span><span class="skill-meta">숙련도 ${s.mastery}</span></div>
+      <div class="mastery"><span class="stat-track"><span style="width:${s.mastery}%"></span></span><span class="skill-meta">성취 ${s.mastery}</span></div>
       ${secret}<div class="skill-meta">${esc(s.desc)}</div></div>`;
   }).join("") || `<p class="codex-empty">아직 익힌 무공이 없습니다.</p>`;
 
   const bag = inventory.map(([key, count]) => `<div class="skill-row"><div class="skill-head">
     <span>${esc(DB.market[key].name)} ×${count}<br><span class="skill-meta">${esc(DB.market[key].desc)}</span></span>
-    ${!game.battle && p.alive ? `<button class="mini-btn" data-act="use-item" data-key="${esc(key)}">사용</button>` : ""}</div></div>`).join("")
-    || `<p class="codex-empty">시장에서 산 소비품이 이곳에 들어옵니다.</p>`;
+    ${!game.battle && p.alive ? `<button class="mini-btn" data-act="use-item" data-key="${esc(key)}">쓰기</button>` : ""}</div></div>`).join("")
+    || `<p class="codex-empty">장터에서 산 상비약이 이곳에 들어옵니다.</p>`;
 
   const panels = {
     stats: `<div class="modal-section">
-        ${statRow("외공", p.external, "체력, 공격력")}${statRow("내공", p.internal, "기력, 비기 위력")}
-        ${statRow("무리", p.martial, "공격력, 명중, 숙련도")}${statRow("심경", p.mind, "치명타, 수련, 돌파")}
+        ${statRow("외공", p.external, "기혈, 위력")}${statRow("내공", p.internal, "내력, 비기 위력")}
+        ${statRow("무리", p.martial, "위력, 명중, 성취")}${statRow("심경", p.mind, "급소 타격, 수련, 돌파")}
       </div>
       <div class="modal-section">
         ${row("출신", p.origin)}${row("사문", sect ? `${sect.name} (${sect.bonus_text})` : "없음")}
         ${row("명성", `${p.fame} (${fameRank(p.fame)})`)}
-        ${p.injury ? row("내상", `${p.injury}단계, 주는 피해 -${p.injury * INJURY_PENALTY}%, 회복으로 치료`) : ""}
-        ${row("전투 경험", `${p.battles} (${p.kills}명 처치)`)}
+        ${p.injury ? row("내상", `${p.injury}단계, 주는 피해 -${p.injury * INJURY_PENALTY}%, 요양으로 치료`) : ""}
+        ${row("실전 경험", `${p.battles} (${p.kills}명 처치)`)}
       </div>
       ${progress ? `<div class="modal-section"><h4>다음 경지: ${esc(progress.next)}</h4>
-        ${row("평균 능력치", `${progress.avg} / ${progress.avgRequired}`)}
-        ${row("최저 능력치", `${progress.min} / ${progress.minRequired}`)}
-        ${row("전투 경험", `${progress.battles} / ${progress.battlesRequired}`)}</div>` : ""}
+        ${row("평균 기량", `${progress.avg} / ${progress.avgRequired}`)}
+        ${row("최저 기량", `${progress.min} / ${progress.minRequired}`)}
+        ${row("실전 경험", `${progress.battles} / ${progress.battlesRequired}`)}</div>` : ""}
       <div class="modal-section"><h4>성향과 별호: ${esc(byname(p))}</h4>
         ${ALIGNMENTS.map((name) => `<div class="align-row"><span>${name}</span><div class="align-track"><div class="a-${name}" style="width:${Math.min(p.alignment[name] * 5, 100)}%"></div></div><span>${p.alignment[name]}</span></div>`).join("")}
         <p class="skill-meta">${esc(benefitText(p.alignment))}</p>
       </div>
-      ${traits.length ? `<div class="modal-section"><h4>특성</h4>${traits.map((t) => `<div class="skill-row">${esc(t.name)}<div class="skill-meta">${esc(t.desc)}</div></div>`).join("")}</div>` : ""}`,
+      ${traits.length ? `<div class="modal-section"><h4>천품</h4>${traits.map((t) => `<div class="skill-row">${esc(t.name)}<div class="skill-meta">${esc(t.desc)}</div></div>`).join("")}</div>` : ""}`,
     skills: skills,
     bag: `<div class="modal-section">
         ${row("은자", p.silver)}
-        ${row("무기", weapon ? `${weapon} (공격력 +${equipmentBonus(p, "weapon")})` : "없음")}
-        ${row("방어구", armor ? `${armor} (받는 피해 -${equipmentBonus(p, "armor")})` : "없음")}
-      </div><div class="modal-section"><h4>소비품</h4>${bag}</div>`,
+        ${row("병기", weapon ? `${weapon} (위력 +${equipmentBonus(p, "weapon")})` : "없음")}
+        ${row("호신구", armor ? `${armor} (받는 피해 -${equipmentBonus(p, "armor")})` : "없음")}
+      </div><div class="modal-section"><h4>상비약</h4>${bag}</div>`,
   };
-  const tabs = [["stats", "능력치"], ["skills", "무공"], ["bag", "가방"]];
-  return modalShell("status-modal", "내 무인", `
+  const tabs = [["stats", "기량"], ["skills", "무공"], ["bag", "행낭"]];
+  return modalShell("status-modal", "무인 행장", `
     <div class="tabs">${tabs.map(([key, label]) => `<button class="tab-btn${ui.statusTab === key ? " active" : ""}" data-act="status-tab" data-tab="${key}">${label}</button>`).join("")}</div>
     <div class="tab-panel active">${panels[ui.statusTab]}</div>`);
 }
 
 function gameModals() {
   return `${statusModal()}${codexModal()}${settingsModal()}${helpModal()}
-  ${modalShell("reset-modal", "이번 강호행을 포기할까요?", `
-    <p class="modal-text">이번 회차의 진행이 사라지고 메인 화면으로 돌아갑니다. 카르마와 도감은 남습니다.</p>
-    <button class="danger-btn" data-act="restart">포기하고 메인으로</button>`)}`;
+  ${modalShell("reset-modal", "강호를 떠나시겠습니까?", `
+    <p class="modal-text">이번 강호행이 여기서 끝나고 산문 앞으로 돌아갑니다. 공덕과 강호록은 남습니다.</p>
+    <button class="danger-btn" data-act="restart">강호를 떠난다</button>`)}`;
 }
 
 function renderBattle() {
@@ -296,7 +297,7 @@ function renderBattle() {
   const movement = p.bestOfType("경공");
   const warning = b.nextSpecialWarning();
   const secretReady = skill?.secretUnlocked && p.qi >= skill.secretQiCost && !b.sealed;
-  const state = [`제 ${b.roundNum + 1} 라운드`];
+  const state = [`제 ${b.roundNum + 1} 합`];
   if (gauntlet) state.push(`${gauntlet.name} ${gauntlet.round}/${gauntlet.total}전`);
   const tags = [];
   if (b.poison) tags.push(["bad", `중독 ${b.poison.rounds}`]);
@@ -308,28 +309,28 @@ function renderBattle() {
   const lowHp = p.hp < p.maxHp() * 0.3;
 
   const secretNote = !skill ? "무공 없음"
-    : skill.secretUnlocked ? `기력 ${skill.secretQiCost}`
-      : `${skill.secretUnlockGrade}, 숙련 ${skill.secretUnlockMastery} 해방`;
+    : skill.secretUnlocked ? `내력 ${skill.secretQiCost}`
+      : `${skill.secretUnlockGrade}, 성취 ${skill.secretUnlockMastery} 터득`;
   const items = Object.entries(p.inventory).filter(([k]) => DB.market[k]);
-  const attackNote = !skill ? "기력 소모 없음"
+  const attackNote = !skill ? "내력 소모 없음"
     : b.sealed ? "혈도가 막혀 맨손 공격"
-      : p.qi < skill.qiCost ? "기력이 모자라 맨손 공격" : `기력 ${skill.qiCost}`;
+      : p.qi < skill.qiCost ? "내력이 모자라 맨손 공격" : `내력 ${skill.qiCost}`;
 
   app().innerHTML = `<div class="battle-top">
       <h1 class="battle-title">${b.isFinal ? "천마와의 결전" : "전투"}<small>${esc(state.join(", "))}</small></h1>
-      <button class="round-menu" data-act="open-status" data-tab="stats" aria-label="내 무인 보기">🧍</button>
+      <button class="round-menu" data-act="open-status" data-tab="stats" aria-label="무인 행장 보기">🧍</button>
     </div>
     <div class="vs-row">
       <div class="combatant" data-side="player"><div class="name">${esc(p.origin)}</div>
         <div class="hpbar-outer${lowHp ? " danger" : ""}"><div class="hpbar-inner mine" data-bar="player" style="width:${percent(p.hp, p.maxHp())}%"></div></div>
-        <div class="hpnum">체력 <b>${p.hp}</b>/${p.maxHp()}</div>
+        <div class="hpnum">기혈 <b>${p.hp}</b>/${p.maxHp()}</div>
         <div class="qibar"><div style="width:${percent(p.qi, p.maxQi())}%"></div></div>
-        <div class="hpnum">기력 ${p.qi}/${p.maxQi()}</div></div>
+        <div class="hpnum">내력 ${p.qi}/${p.maxQi()}</div></div>
       <div class="vs-mark">VS</div>
       <div class="combatant" data-side="enemy"><div class="name">${esc(b.enemy.name)}</div>
         <div class="hpbar-outer"><div class="hpbar-inner enemy" data-bar="enemy" style="width:${percent(b.enemy.hp, b.enemy.maxHp)}%"></div></div>
-        <div class="hpnum">체력 <b>${b.enemy.hp}</b>/${b.enemy.maxHp}</div>
-        <div class="enemy-tier">${esc(b.enemy.tier)}${b.enemy.armor ? `, 방어 ${b.enemy.armor}` : ""}</div></div>
+        <div class="hpnum">기혈 <b>${b.enemy.hp}</b>/${b.enemy.maxHp}</div>
+        <div class="enemy-tier">${esc(TIER_NAMES[b.enemy.tier] || b.enemy.tier)}${b.enemy.armor ? `, 호신강기 ${b.enemy.armor}` : ""}</div></div>
     </div>
     ${tags.length ? `<div class="battle-tags">${tags.map(([kind, label]) => `<span class="tag ${kind}">${esc(label)}</span>`).join("")}</div>` : ""}
     ${warning ? `<p class="battle-warning">⚠️ 다음은 「${esc(warning)}」${movement ? " — 경공으로 흘려낼 수 있다" : ""}</p>` : ""}
@@ -339,17 +340,17 @@ function renderBattle() {
       <div class="battle-actions">
         <button class="bt-btn" data-act="battle" data-action="비기" ${secretReady ? "" : "disabled"}>✨ ${skill?.secretUnlocked ? esc(skill.secretName) : "비기"}<small>${esc(secretNote)}</small></button>
         <button class="bt-btn${b.sealed ? " suggest" : ""}" data-act="battle" data-action="심법" ${mindset ? "" : "disabled"}>🧘 ${mindset ? esc(mindset.name) : "심법"}<small>${mindset ? "회복, 점혈 해제" : "익힌 심공 없음"}</small></button>
-        <button class="bt-btn${warning && movement ? " suggest" : ""}" data-act="battle" data-action="경공" ${movement && p.qi >= movement.qiCost ? "" : "disabled"}>💨 ${movement ? esc(movement.name) : "경공"}<small>${movement ? `기력 ${movement.qiCost}, 회피 ${movement.effectValue("evade")}%` : "익힌 경공 없음"}</small></button>
+        <button class="bt-btn${warning && movement ? " suggest" : ""}" data-act="battle" data-action="경공" ${movement && p.qi >= movement.qiCost ? "" : "disabled"}>💨 ${movement ? esc(movement.name) : "경공"}<small>${movement ? `내력 ${movement.qiCost}, 회피 ${movement.effectValue("evade")}%` : "익힌 경공 없음"}</small></button>
         ${b.isFinal ? "" : `<button class="bt-btn flee" data-act="battle" data-action="도주">🏃 도주<small>실패하면 공격받음</small></button>`}
       </div>
-      ${items.length ? `<div class="battle-items">${items.map(([key, count]) => `<button class="item-btn${lowHp && DB.market[key].effects.some((e) => e.type === "heal") ? " suggest" : ""}" data-act="battle" data-action="소비품" data-key="${esc(key)}">${esc(DB.market[key].name)} ×${count}</button>`).join("")}</div>` : ""}
+      ${items.length ? `<div class="battle-items">${items.map(([key, count]) => `<button class="item-btn${lowHp && DB.market[key].effects.some((e) => e.type === "heal") ? " suggest" : ""}" data-act="battle" data-action="상비약" data-key="${esc(key)}">${esc(DB.market[key].name)} ×${count}</button>`).join("")}</div>` : ""}
     </div>${gameModals()}`;
   const log = document.querySelector(".battle-log");
   if (log) log.scrollTop = log.scrollHeight;
   animateBars(p.hp, p.maxHp(), b.enemy.hp, b.enemy.maxHp, b);
 }
 
-/** 체력 막대가 깎이는 모습과 피해 숫자를 보여 준다. */
+/** 기혈 막대가 깎이는 모습과 피해 숫자를 보여 준다. */
 function animateBars(playerHp, playerMax, enemyHp, enemyMax, battle) {
   const previous = ui.bars?.battle === battle ? ui.bars : null;
   ui.bars = { battle, playerHp, enemyHp };
@@ -386,13 +387,13 @@ function topbar() {
   const turn = Math.min(p.turn, p.maxTurn);
   return `<div class="topbar"><div class="topbar-inner">
     <div class="topbar-row1">
-      <span class="turn-info">${getYear(turn)}년차 ${getMonth(turn)}월<small>${esc(getChapterInfo(turn).title)}, ${p.turn}/${p.maxTurn}턴</small></span>
+      <span class="turn-info">${getYear(turn)}년차 ${getMonth(turn)}월<small>${esc(getChapterInfo(turn).title)}, ${p.turn}/${p.maxTurn}달</small></span>
       <span class="realm-info">${esc(p.realm)}<small>${esc(byname(p))}</small></span>
     </div>
     <div class="turn-track"><span style="width:${percent(turn, p.maxTurn)}%"></span></div>
     <div class="topbar-row2">
-      <div class="resource${p.hp < p.maxHp() * 0.35 ? " danger" : ""}"><span class="label">체력</span><div class="bar-track"><div class="bar-fill bar-hp" style="width:${percent(p.hp, p.maxHp())}%"></div></div><span class="num">${p.hp}/${p.maxHp()}</span></div>
-      <div class="resource"><span class="label">기력</span><div class="bar-track"><div class="bar-fill bar-qi" style="width:${percent(p.qi, p.maxQi())}%"></div></div><span class="num">${p.qi}/${p.maxQi()}</span></div>
+      <div class="resource${p.hp < p.maxHp() * 0.35 ? " danger" : ""}"><span class="label">기혈</span><div class="bar-track"><div class="bar-fill bar-hp" style="width:${percent(p.hp, p.maxHp())}%"></div></div><span class="num">${p.hp}/${p.maxHp()}</span></div>
+      <div class="resource"><span class="label">내력</span><div class="bar-track"><div class="bar-fill bar-qi" style="width:${percent(p.qi, p.maxQi())}%"></div></div><span class="num">${p.qi}/${p.maxQi()}</span></div>
     </div>
     <div class="topbar-stats">
       <span>외공 <b>${p.external}</b></span><span>내공 <b>${p.internal}</b></span>
@@ -412,11 +413,11 @@ function renderEnding() {
       <h2 class="ending-title">${esc(ending.title)}</h2>
       <p class="ending-text">${esc(ending.text)}</p>
       ${ending.epilogue.map((l) => `<p class="epilogue">${esc(l)}</p>`).join("")}
-      <p class="karma-gain">💠 카르마 +${ending.karma} (보유 ${meta.current_karma}, 누적 ${meta.total_karma})</p>
-      <p class="ending-hint">카르마로 새 출신과 특성을 해금해 다시 도전할 수 있습니다.</p>
+      <p class="karma-gain">💠 공덕 +${ending.karma} (보유 ${meta.current_karma}, 누적 ${meta.total_karma})</p>
+      <p class="ending-hint">공덕으로 새 출신과 천품을 개방해 다시 도전할 수 있습니다.</p>
       <div class="run-facts">
         <div><b>${esc(p.realm)}</b>경지</div><div><b>${esc(byname(p))}</b>별호</div>
-        <div><b>${Math.min(p.turn, p.maxTurn)}턴</b>진행</div><div><b>${p.kills}명</b>처치</div>
+        <div><b>${Math.min(p.turn, p.maxTurn)}달</b>진행</div><div><b>${p.kills}명</b>처치</div>
         <div><b>${esc(fameRank(p.fame))}</b>명성</div>
       </div></div></div>
     <div class="action-area"><div class="action-inner"><button class="next-btn" data-act="restart">다시 강호로</button></div></div>`;
@@ -424,15 +425,15 @@ function renderEnding() {
 
 function compareNote(player, key) {
   const effect = DB.market[key].effects.find((e) => e.type === "equip");
-  if (!effect) return player.inventory[key] ? `가방에 ${player.inventory[key]}개` : "";
-  const label = effect.slot === "weapon" ? "공격력" : "받는 피해 감소";
+  if (!effect) return player.inventory[key] ? `행낭에 ${player.inventory[key]}개` : "";
+  const label = effect.slot === "weapon" ? "위력" : "받는 피해 감소";
   return `지금 ${label} +${equipmentBonus(player, effect.slot)} → +${effect.bonus}`;
 }
 
 function renderMarket() {
   const { market, player } = game;
   const stock = stockView(player, market).map((item) => {
-    const label = item.sold ? "판매 완료" : item.blocked === "효과 없음" ? "필요 없음" : `은자 ${item.price}`;
+    const label = item.sold ? "동남" : item.blocked === "효과 없음" ? "쓸모없음" : `은자 ${item.price}`;
     const note = item.sold ? "" : compareNote(player, item.key);
     return `<div class="market-item${item.sold ? " sold" : ""}"><div class="item-info">
       <div class="item-name">${esc(item.name)}<span class="item-category">${esc(item.category)}${item.stackable && !item.sold ? `, ${item.left}개 남음` : ""}</span></div>
@@ -441,10 +442,10 @@ function renderMarket() {
   }).join("");
   return `<div class="stage market-stage${market.special ? " market-special" : ""}"><div class="market-inner">
       <h2 class="market-title">${market.special ? "🌑" : "🏪"} ${esc(market.name)}</h2>
-      <p class="market-sub">${market.special ? "결전을 앞둔 밤, 누군가 말없이 보따리를 풀어 놓는다." : "턴을 쓰지 않습니다. 다음 시장은 일 년 뒤입니다."}</p>
+      <p class="market-sub">${market.special ? "결전을 앞둔 밤, 누군가 말없이 보따리를 풀어 놓는다." : "달을 쓰지 않습니다. 다음 장터는 일 년 뒤입니다."}</p>
       ${market.message ? `<p class="market-message">${esc(market.message)}</p>` : ""}
       ${stock}</div></div>
-    <div class="action-area"><div class="action-inner"><button class="next-btn" data-act="leave-market">${market.special ? "⚔️ 떠나서 결전으로" : `▶️ 시장을 떠난다 (은자 ${player.silver})`}</button></div></div>`;
+    <div class="action-area"><div class="action-inner"><button class="next-btn" data-act="leave-market">${market.special ? "⚔️ 떠나서 결전으로" : `▶️ 장터를 떠난다 (은자 ${player.silver})`}</button></div></div>`;
 }
 
 function renderEvent() {
@@ -453,7 +454,7 @@ function renderEvent() {
   return `<div class="stage"><div class="stage-inner"><div class="event-sheet">
       <h2 class="event-title">${esc(view.title)}</h2>
       <div class="event-body"><p class="event-text" data-type>${esc(view.text)}</p>
-        ${view.choices.map((c) => `<button class="choice-btn" data-act="choose" data-index="${c.index}" ${c.locked ? "disabled" : ""}>${esc(c.label)}${c.locked ? `<small>${esc(c.locked)}</small>` : ""}</button>`).join("")}
+        ${view.choices.map((c) => `<button class="choice-btn${c.tag ? " special" : ""}" data-act="choose" data-index="${c.index}" ${c.locked ? "disabled" : ""}>${c.tag ? `<span class="choice-tag">${esc(c.tag)}</span>` : ""}${esc(c.label)}${c.locked ? `<small>${esc(c.locked)}</small>` : ""}</button>`).join("")}
       </div></div></div></div>
     <div class="action-area"><div class="action-inner"><p class="hint flush">${p.turn >= p.maxTurn ? "이 선택 뒤에는 돌아갈 수 없다." : "선택지의 결과는 고르기 전까지 알 수 없다."}</p></div></div>`;
 }
@@ -487,16 +488,16 @@ function renderTurn() {
   const lowHp = p.hp < p.maxHp() * 0.45;
   const lowQi = p.qi < p.maxQi() * 0.25;
   const needRest = lowHp || lowQi || p.injury >= 2;
-  const advice = lowHp ? "체력이 낮습니다. 탐색 전에 회복하는 것이 안전합니다."
-    : p.injury >= 2 ? "내상이 깊습니다. 회복하면 나아집니다."
-      : lowQi ? "기력이 부족합니다. 회복이나 명상으로 채우세요." : null;
+  const advice = lowHp ? "기혈이 낮습니다. 행각 전에 요양하는 것이 안전합니다."
+    : p.injury >= 2 ? "내상이 깊습니다. 요양하면 나아집니다."
+      : lowQi ? "내력이 부족합니다. 요양이나 운기로 채우세요." : null;
   const action = (value, label, note, extra = "") => `<button class="act-btn${extra}" data-act="action" data-action="${value}">${label}<small>${note}</small></button>`;
-  const market = nextMarket ? (nextMarket === p.turn ? "이번 달 말에 시장이 열립니다." : `다음 시장까지 ${nextMarket - p.turn}개월`) : "";
+  const market = nextMarket ? (nextMarket === p.turn ? "이번 달 말에 장터가 열립니다." : `다음 장터까지 ${nextMarket - p.turn}개월`) : "";
   const controls = game.pendingNext
-    ? `<button class="next-btn" data-act="next">${nextMarket === p.turn ? "🏪 시장으로" : "▶️ 다음 달로"}</button>`
+    ? `<button class="next-btn" data-act="next">${nextMarket === p.turn ? "🏪 장터로" : "▶️ 다음 달로"}</button>`
     : `${advice ? `<p class="advice">${advice}</p>` : ""}<div class="actions">
-        ${action("탐색", "🗺️ 탐색", "전투, 사건, 기연")}${action("수련", "⚔️ 수련", "외공, 무리, 숙련도")}
-        ${action("명상", "🧘 명상", "내공, 심경, 기력")}${action("휴식", "💤 회복", "체력, 기력, 내상", needRest ? " suggest" : "")}
+        ${action("탐색", "🗺️ 행각", "전투, 사건, 기연")}${action("수련", "⚔️ 수련", "외공, 무리, 성취")}
+        ${action("명상", "🧘 운기", "내공, 심경, 내력")}${action("휴식", "💤 요양", "기혈, 내력, 내상", needRest ? " suggest" : "")}
       </div>
       ${market ? `<p class="hint">${market}</p>` : ""}`;
   return `<div class="stage" aria-live="polite"><div class="stage-inner">${body}</div></div>
@@ -595,10 +596,10 @@ function downloadRecords() {
   const blob = new Blob([exportRecords()], { type: "application/json" });
   const link = document.createElement("a");
   link.href = URL.createObjectURL(blob);
-  link.download = "무협로그라이크-기록.json";
+  link.download = "강호행-행적.json";
   link.click();
   URL.revokeObjectURL(link.href);
-  ui.notice = "기록 파일을 내려받았습니다.";
+  ui.notice = "행적을 베껴 두었습니다.";
   render();
 }
 
@@ -685,7 +686,7 @@ export function installInput() {
       document.documentElement.dataset.font = target.value;
     } else if (target.id === "import-file" && target.files[0]) {
       const ok = importRecords(await target.files[0].text());
-      ui.notice = ok ? "기록을 가져왔습니다." : "이 파일은 게임 기록이 아닙니다.";
+      ui.notice = ok ? "행적을 불러왔습니다." : "이 파일은 강호행의 행적이 아닙니다.";
       render();
     }
   });

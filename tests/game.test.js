@@ -6,7 +6,7 @@ import { listAssets } from "../tools/build_asset_list.js";
 import { Battle, Enemy } from "../www/js/battle.js";
 import { Player, Skill } from "../www/js/character.js";
 import { DB } from "../www/js/data.js";
-import { applyEffects, checkRequires, eventView, pickRandomEvent, validateEvents } from "../www/js/events.js";
+import { applyEffects, checkRequires, enemyIntro, eventView, pickRandomEvent, resolveChoice, validateEvents } from "../www/js/events.js";
 import { Game } from "../www/js/game.js";
 import { blockReason, buy, openMarket, priceOf } from "../www/js/market.js";
 import {
@@ -44,7 +44,7 @@ test("이벤트 키가 파일끼리 겹치지 않는다", () => {
   }
 });
 
-test("시장, 특성, 출신이 실제 무공을 가리킨다", () => {
+test("장터, 천품, 출신이 실제 무공을 가리킨다", () => {
   for (const item of Object.values(DB.market)) {
     for (const e of item.effects) if (e.type === "skill") assert.ok(DB.skills[e.skill], e.skill);
   }
@@ -71,18 +71,18 @@ test("챕터마다 사건, 적이 충분하다", () => {
 
 // ---------- 설계 결정 ----------
 
-test("능력치 상한은 99", () => {
+test("기량 상한은 99", () => {
   const p = new Player();
   p.external = 98;
   assert.equal(p.gainStat("external", 5), 1);
   assert.equal(p.external, 99);
 });
 
-test("출신 해금 비용은 무림초출 0, 나머지 5", () => {
+test("출신 개방 비용은 무림초출 0, 나머지 5", () => {
   for (const [key, o] of Object.entries(DB.origins.origins)) assert.equal(o.cost, key === "무림초출" ? 0 : 5);
 });
 
-test("턴은 다음 버튼으로만 넘어간다", () => {
+test("달은 다음 버튼으로만 넘어간다", () => {
   const game = newGame();
   game.advanceTurn();
   assert.equal(game.player.turn, 1);
@@ -95,7 +95,7 @@ test("턴은 다음 버튼으로만 넘어간다", () => {
   assert.equal(game.player.turn, 2);
 });
 
-test("도감은 다음 턴 시작에 기록된다", () => {
+test("강호록은 다음 달 시작에 기록된다", () => {
   const game = newGame();
   game.player.pendingEncounters = ["산적"];
   assert.ok(!loadMeta().global_codex.includes("산적"));
@@ -104,7 +104,7 @@ test("도감은 다음 턴 시작에 기록된다", () => {
   assert.ok(loadMeta().global_codex.includes("산적"));
 });
 
-test("처치 보상은 능력치 2종, 등급 범위 안", () => {
+test("처치 보상은 기량 2종, 품계 범위 안", () => {
   seed(1);
   const p = new Player();
   const before = [p.external, p.internal, p.martial, p.mind];
@@ -120,18 +120,18 @@ test("처치 보상은 능력치 2종, 등급 범위 안", () => {
 
 // ---------- 전투 ----------
 
-test("무공 진화와 비기 해방", () => {
+test("무공 승급과 비기 터득", () => {
   const skill = new Skill("기초검법");
   const multiplier = skill.effectiveMultiplier();
   const messages = skill.gainMastery(100);
   assert.equal(skill.grade, "명품");
   assert.equal(skill.mastery, 30);
-  assert.ok(messages.some((m) => m.includes("진화")));
+  assert.ok(messages.some((m) => m.includes("승급")));
   assert.ok(skill.effectiveMultiplier() > multiplier);
-  assert.ok(skill.gainMastery(20).some((m) => m.includes("해방")));
+  assert.ok(skill.gainMastery(20).some((m) => m.includes("터득")));
 });
 
-test("무공은 기력을 쓰고 모자라면 맨손", () => {
+test("무공은 내력을 쓰고 모자라면 맨손", () => {
   const p = new Player();
   const skill = p.bestSkill();
   const battle = new Battle(p, new Enemy("천마"));
@@ -140,7 +140,7 @@ test("무공은 기력을 쓰고 모자라면 맨손", () => {
   p.qi = 0;
   battle.useSkill(skill);
   assert.equal(p.qi, 0);
-  assert.ok(battle.log.some((l) => l.includes("기력이 모자라")));
+  assert.ok(battle.log.some((l) => l.includes("내력이 모자라")));
 });
 
 test("심법은 회복하고 점혈을 푼다", () => {
@@ -180,7 +180,7 @@ test("경공은 실패해도 피해를 줄이고 성공하면 반격이 강해�
   if (hit) assert.ok(hit < DB.enemies.천마.attack);
 });
 
-test("필살기는 직전 라운드에 예고된다", () => {
+test("필살기는 직전 합에 예고된다", () => {
   const enemy = new Enemy("낭인");
   const battle = new Battle(new Player(), enemy);
   battle.roundNum = 2;
@@ -188,14 +188,14 @@ test("필살기는 직전 라운드에 예고된다", () => {
   assert.equal(enemy.specialForRound(3).name, "발도");
 });
 
-test("천마는 체력이 줄면 강해진다", () => {
+test("천마는 기혈이 줄면 강해진다", () => {
   const enemy = new Enemy("천마");
   enemy.hp = Math.trunc(enemy.maxHp * 0.2);
   assert.ok(enemy.advancePhase() && enemy.advancePhase());
   assert.ok(enemy.attackMultiplier() > 1.2);
 });
 
-test("방어구가 있어도 피해는 최소 1", () => {
+test("호신구가 있어도 피해는 최소 1", () => {
   const p = new Player();
   p.armor = "천잠보의";
   const battle = new Battle(p, new Enemy("산적"));
@@ -213,7 +213,7 @@ test("전투 임시 버프는 끝나면 되돌린다", () => {
   assert.equal(p.external, base);
 });
 
-test("일반 전투 사망은 곧바로 엔딩과 카르마", () => {
+test("일반 전투 사망은 곧바로 엔딩과 공덕", () => {
   const game = newGame();
   game.player.hp = 1;
   game.startBattle("천마");
@@ -227,7 +227,7 @@ test("일반 전투 사망은 곧바로 엔딩과 카르마", () => {
   assert.equal(game.player.external, ext);
 });
 
-test("천마는 엔딩 때 도감에 기록된다", () => {
+test("천마는 엔딩 때 강호록에 기록된다", () => {
   const game = newGame();
   game.player.hp = 1;
   toTurnEnd(game, 120);
@@ -249,7 +249,7 @@ test("최종전에서는 도망칠 수 없다", () => {
   assert.equal(game.ending, null);
 });
 
-test("특성 불굴은 전투마다 한 번", () => {
+test("천품 불굴은 전투마다 한 번", () => {
   const p = new Player("무림초출", ["불굴"]);
   const battle = new Battle(p, new Enemy("천마"));
   battle.roundNum = 1;
@@ -266,7 +266,7 @@ test("금강불괴는 내상을 막는다", () => {
   assert.equal(p.injury, 0);
 });
 
-test("내상은 피해를 줄이고 회복으로 낫는다", () => {
+test("내상은 피해를 줄이고 요양으로 낫는다", () => {
   const game = newGame();
   const battle = new Battle(game.player, new Enemy("천마"));
   const plain = battle.attackScale();
@@ -276,7 +276,7 @@ test("내상은 피해를 줄이고 회복으로 낫는다", () => {
   assert.equal(game.player.injury, 1);
 });
 
-test("적 중독은 라운드마다 피해를 준다", () => {
+test("적 중독은 합마다 피해를 준다", () => {
   const p = new Player();
   p.sect = "당가";
   const enemy = new Enemy("산적");
@@ -314,7 +314,7 @@ test("초식 이름이 전투 문장에 나온다", () => {
 
 // ---------- 이벤트와 성향 ----------
 
-test("25턴 줄거리는 행동을 쓰지 않고 고를 때까지 막는다", () => {
+test("25달 줄거리는 행동을 쓰지 않고 고를 때까지 막는다", () => {
   const game = newGame();
   toTurnEnd(game, 24);
   game.advanceTurn();
@@ -338,7 +338,7 @@ test("조건이 안 맞는 선택은 거절된다", () => {
   assert.ok(game.event);
 });
 
-test("무작위 사건은 회차당 한 번", () => {
+test("무작위 사건은 생당 한 번", () => {
   const p = new Player();
   p.seenEvents = Object.keys(DB.randomEvents);
   assert.equal(pickRandomEvent(p), null);
@@ -356,7 +356,7 @@ test("성향 혜택", () => {
   assert.ok(new Battle(p, new Enemy("천마")).attackScale() > new Battle(new Player(), new Enemy("천마")).attackScale());
 });
 
-test("능력치는 1 아래로 내려가지 않고 효과 요약이 나온다", () => {
+test("기량은 1 아래로 내려가지 않고 효과 요약이 나온다", () => {
   const p = new Player();
   p.mind = 2;
   const summary = applyEffects(p, { stats: { mind: -5 }, silver: 10, skill: "매화검법", item: "금창약" });
@@ -379,7 +379,7 @@ test("마도 10이면 천마봉에서 귀순할 수 있다", () => {
   assert.equal(game.ending.key, "귀순");
 });
 
-test("단목휘와 동맹이면 천마 체력이 줄어든다", () => {
+test("단목휘와 동맹이면 천마 기혈이 줄어든다", () => {
   const game = newGame();
   toTurnEnd(game, 119);
   game.player.addFlag("단목휘_동맹");
@@ -450,13 +450,14 @@ test("실전 경험만 모자라면 알려 준다", () => {
   assert.equal(breakthroughBlock(p), null);
 });
 
-// ---------- 시장 ----------
+// ---------- 장터 ----------
 
-test("시장은 턴을 쓰지 않고 소비품은 가방에 들어간다", () => {
+test("장터는 달을 쓰지 않고 상비약은 행낭에 들어간다", () => {
   const game = newGame();
   const p = game.player;
   Object.assign(p, { turn: 12, silver: 200, hp: 50 });
   game.action("수련");
+  p.silver = 200;
   game.advanceTurn();
   assert.ok(game.market);
   assert.equal(p.turn, 12);
@@ -473,7 +474,7 @@ test("시장은 턴을 쓰지 않고 소비품은 가방에 들어간다", () =>
   assert.equal(p.turn, 13);
 });
 
-test("진열은 겹치지 않고 아는 비급은 빠지며 더 좋은 장비가 있다", () => {
+test("진열은 겹치지 않고 아는 비급은 빠지며 더 좋은 병장기가 있다", () => {
   const p = new Player();
   p.learnSkill(new Skill("초상비"));
   for (const turn of [12, 24, 36, 48, 60, 72, 84, 96, 108, 119]) {
@@ -507,14 +508,14 @@ test("은자가 없거나 진열에 없으면 살 수 없다", () => {
   assert.ok(!buy(p, market, "금창약")[0]);
 });
 
-test("지금보다 나쁜 장비는 효과 없음", () => {
+test("지금보다 나쁜 병장기는 효과 없음", () => {
   const p = new Player();
   p.silver = 999;
   p.weapon = "운철보검";
   assert.equal(blockReason(p, "철검"), "효과 없음");
 });
 
-test("비기를 해방한 주무공은 자동으로 바뀌지 않는다", () => {
+test("비기를 터득한 주무공은 자동으로 바뀌지 않는다", () => {
   const p = new Player();
   const current = p.bestSkill();
   current.secretUnlocked = true;
@@ -525,7 +526,7 @@ test("비기를 해방한 주무공은 자동으로 바뀌지 않는다", () => 
 
 // ---------- 저장 ----------
 
-test("저장은 턴 시작 지점으로 복구된다", () => {
+test("저장은 달 시작 지점으로 복구된다", () => {
   const game = newGame();
   game.player.silver = 77;
   game.pendingNext = true;
@@ -539,7 +540,7 @@ test("저장은 턴 시작 지점으로 복구된다", () => {
   assert.equal(fresh.pendingNext, false);
 });
 
-test("120턴에서 복구하면 천마봉 선택부터", () => {
+test("120달에서 복구하면 천마봉 선택부터", () => {
   const game = newGame();
   toTurnEnd(game, 119);
   game.advanceTurn();
@@ -599,11 +600,11 @@ test("엉뚱한 파일은 거절한다", () => {
 
 // ---------- 메타 ----------
 
-test("특성 슬롯은 누적 카르마로 늘어난다", () => {
+test("천품 자리는 누적 공덕으로 늘어난다", () => {
   assert.deepEqual([0, 19, 20, 49, 50].map(traitSlots), [1, 1, 2, 2, 3]);
 });
 
-test("잠긴 출신과 슬롯을 넘는 특성은 막힌다", () => {
+test("잠긴 출신과 자리를 넘는 천품은 막힌다", () => {
   const data = loadMeta();
   data.unlocked_traits = ["금전운", "철옹성"];
   saveMeta(data);
@@ -614,7 +615,7 @@ test("잠긴 출신과 슬롯을 넘는 특성은 막힌다", () => {
   assert.deepEqual(game.player.traits, ["금전운"]);
 });
 
-test("카르마로 해금하면 차감된다", () => {
+test("공덕으로 개방하면 차감된다", () => {
   const data = loadMeta();
   data.current_karma = 5;
   saveMeta(data);
@@ -625,7 +626,7 @@ test("카르마로 해금하면 차감된다", () => {
 
 // ---------- 시간과 난이도 ----------
 
-test("게임은 120턴, 10년이다", () => {
+test("게임은 120달, 10년이다", () => {
   const p = new Player();
   assert.equal(p.maxTurn, 120);
   assert.equal(getYear(120), 10);
@@ -658,7 +659,7 @@ test("모든 적이 기준 시기를 가진다", () => {
   }
 });
 
-test("60턴 시절의 저장은 시간표를 늘려 이어 간다", () => {
+test("60달 시절의 저장은 시간표를 늘려 이어 간다", () => {
   const p = new Player();
   const old = { ...p.toDict(), turn: 30, max_turn: 60, battles: 10 };
   const moved = Player.fromDict(old);
@@ -667,11 +668,126 @@ test("60턴 시절의 저장은 시간표를 늘려 이어 간다", () => {
   assert.equal(moved.battles, 20);
 });
 
-test("성장 특성은 작은 수에서 두 배가 되지 않는다", () => {
+test("성장 천품은 작은 수에서 두 배가 되지 않는다", () => {
   seed(5);
   let total = 0;
   for (let i = 0; i < 1000; i++) total += applyGrowth(1, ["무골"], "external");
   assert.ok(total > 1050 && total < 1150, String(total));
+});
+
+// ---------- 소속과 상황별 반응 ----------
+
+test("문파 입문은 모두 사문이 없을 때만 나온다", () => {
+  for (const [key, event] of Object.entries(DB.events)) {
+    const joins = event.choices.some((c) => c.outcomes.some((o) => o.effects?.join_sect));
+    if (joins) assert.ok(event.requires?.no_sect, key);
+  }
+});
+
+test("사문이 있으면 어긋나는 세력 선택지가 보이지 않는다", () => {
+  const labels = (p) => eventView(p, "2장_세력").choices.map((c) => c.label).join("|");
+  const free = new Player();
+  assert.ok(labels(free).includes("무림맹") && labels(free).includes("사도련") && labels(free).includes("붉은"));
+  const monk = new Player();
+  monk.sect = "소림";
+  assert.ok(labels(monk).includes("무림맹") && !labels(monk).includes("사도련") && !labels(monk).includes("붉은"));
+  const poison = new Player();
+  poison.sect = "당가";
+  assert.ok(!labels(poison).includes("무림맹") && labels(poison).includes("사도련"));
+  const cult = new Player();
+  cult.sect = "마교";
+  assert.ok(!labels(cult).includes("무림맹") && !labels(cult).includes("사도련"));
+  assert.ok(!eventView(monk, "4장_풍운").choices.some((c) => c.label.includes("마교의 선봉")));
+});
+
+test("어떻게 플레이해도 사문이 있으면 입문 사건이 뽑히지 않는다", () => {
+  const p = new Player("곤륜파");
+  for (const turn of [1, 25, 49, 73, 97]) {
+    p.turn = turn;
+    for (let i = 0; i < 300; i++) {
+      const key = pickRandomEvent(p);
+      assert.ok(!key || !DB.randomEvents[key].requires?.no_sect, key);
+    }
+  }
+});
+
+test("입문 효과는 사문이 있으면 덮어쓰지 않는다", () => {
+  const p = new Player("곤륜파");
+  applyEffects(p, { join_sect: "마교" });
+  assert.equal(p.sect, "곤륜");
+});
+
+test("상황별 반응: 지닌 물건에 따라 선택지가 생기고 쓰면 사라진다", () => {
+  const p = new Player();
+  const count = () => eventView(p, "독사의계곡").choices.length;
+  const base = count();
+  p.addItem("해독단");
+  assert.equal(count(), base + 1);
+  const view = eventView(p, "독사의계곡");
+  assert.equal(view.choices[0].tag, "해독단");
+  assert.ok(resolveChoice(p, "독사의계곡", view.choices[0].index));
+  assert.ok(!p.inventory.해독단);
+});
+
+test("상황별 반응: 출신과 사문에 따라 본문이 달라진다", () => {
+  const plain = eventView(new Player(), "표국호위").text;
+  const data = loadMeta();
+  saveMeta(data);
+  assert.notEqual(eventView(new Player("남궁세가"), "표국호위").text, plain);
+  const monk = new Player();
+  monk.sect = "소림";
+  assert.notEqual(eventView(monk, "폐사찰").text, eventView(new Player(), "폐사찰").text);
+});
+
+test("상황별 반응: 상태와 무공, 병기에 따라 달라진다", () => {
+  const p = new Player();
+  const base = eventView(p, "명의").choices.length;
+  p.addInjury(1);
+  assert.equal(eventView(p, "명의").choices.length, base + 1);
+  const q = new Player();
+  const finalBase = eventView(q, "결전_천마봉").choices.length;
+  q.learnSkill(new Skill("태허검결"));
+  q.weapon = "태산신검";
+  assert.equal(eventView(q, "결전_천마봉").choices.length, finalBase + 2);
+});
+
+test("상황별 반응: 선택 번호는 반응 선택지를 포함해 맞게 처리된다", () => {
+  const game = newGame();
+  game.player.addItem("해독단");
+  game.event = { key: "독사의계곡", forced: false };
+  const view = eventView(game.player, "독사의계곡");
+  const last = view.choices.at(-1);
+  game.chooseEvent(last.index);
+  assert.equal(game.event, null);
+  assert.equal(game.player.inventory.해독단, 1);
+});
+
+test("적의 대사가 상황에 따라 달라진다", () => {
+  const plain = enemyIntro(new Player(), "천마");
+  assert.notEqual(enemyIntro(new Player("남궁세가"), "천마"), plain);
+  assert.notEqual(enemyIntro(new Player("권마계승"), "천마"), plain);
+});
+
+test("손을 씻으면 사문을 떠나고 새 입문이 열린다", () => {
+  const p = new Player("하오문");
+  applyEffects(p, { leave_sect: true });
+  assert.equal(p.sect, null);
+  assert.ok(checkRequires(p, DB.randomEvents.개방_입문.requires));
+});
+
+test("화면과 문장에 예전 용어가 남아 있지 않다", () => {
+  const old = /카르마|도감|라운드|체력|기력|치명타|숙련도|능력치/;
+  const values = [];
+  const collect = (node) => {
+    if (typeof node === "string") values.push(node);
+    else if (Array.isArray(node)) node.forEach(collect);
+    else if (node && typeof node === "object") Object.values(node).forEach(collect);
+  };
+  for (const name of ["skills", "enemies", "market", "traits", "sects", "flavor", "fortunes", "origins", "chapters", "endings", "events"]) collect(DB[name]);
+  const bad = values.filter((v) => old.test(v));
+  assert.deepEqual(bad, []);
+  const ui = readFileSync(new URL("../www/js/ui.js", import.meta.url), "utf-8");
+  assert.ok(!/["`>]\s*[^"`<]*(시장|가방|카르마)/.test(ui.replace(/\/\/.*$/gm, "")), "ui 문자열");
 });
 
 // ---------- 전체 플레이 ----------
@@ -695,7 +811,7 @@ for (const origin of ["무림초출", "남궁세가", "곤륜파", "하오문", 
           for (const entry of game.market.stock) game.marketBuy(entry.key);
           game.marketLeave();
         } else if (game.battle) {
-          const action = pick(["기본공격", "기본공격", "비기", "심법", "경공", "소비품", "도주"]);
+          const action = pick(["기본공격", "기본공격", "비기", "심법", "경공", "상비약", "도주"]);
           game.battleAction(action, Object.keys(p.inventory)[0] ?? null);
         } else if (game.pendingNext) {
           game.advanceTurn();

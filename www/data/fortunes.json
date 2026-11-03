@@ -1,22 +1,200 @@
 [
-  {"text": "절벽 틈에서 옛 고수가 벽에 손가락으로 새긴 검로를 찾았다.", "effects": {"stats": {"martial": 3}}},
-  {"text": "산중에서 백 년 묵은 영지를 캤다.", "effects": {"stats": {"internal": 3}, "qi_pct": 20}},
-  {"text": "지나가던 노인이 무심코 던진 한마디가 벼락처럼 박혔다.", "effects": {"stats": {"mind": 3}}},
-  {"text": "무너진 사당 아래에서 옛 무인의 쇠 호완을 찾아 찼다.", "effects": {"stats": {"external": 3}}},
-  {"text": "폭포 뒤 동굴에서 앉은 채 굳은 해골이 쥔 구결을 보았다.", "effects": {"mastery": 14, "stats": {"internal": 1}}},
-  {"text": "맹호와 맞닥뜨렸다가 한나절을 겨룬 끝에 서로 물러났다.", "effects": {"stats": {"external": 2, "mind": 1}}},
-  {"text": "두 고수의 비무를 먼발치에서 지켜보았다. 눈이 트이는 듯했다.", "effects": {"stats": {"martial": 2, "mind": 1}}},
-  {"text": "병든 무인을 돌봐 주었더니 떠나며 금창약을 남겼다.", "effects": {"item": "금창약", "stats": {"mind": 1}}},
-  {"text": "낡은 다리 밑에서 누가 잃어버린 회기단 한 병을 주웠다.", "effects": {"item": "회기단"}},
-  {"text": "빗속에서 낙수가 돌을 뚫는 모습을 한참 보았다.", "effects": {"mastery": 12, "stats": {"mind": 1}}},
-  {"text": "노을 지는 강에 칼을 씻다가 문득 초식의 군더더기가 보였다.", "effects": {"mastery": 16}},
-  {"text": "버려진 도관에서 먼지 쌓인 도경을 몇 장 건졌다.", "effects": {"stats": {"internal": 2, "mind": 1}}},
-  {"text": "신비한 온천에 몸을 담그니 묵은 상처가 씻겼다.", "chapters": [2, 3, 4, 5], "effects": {"hp_pct": 60, "qi_pct": 60, "injury": -1}},
-  {"text": "주운 동전을 던지며 놀던 아이들의 손목에서 비도의 이치를 보았다.", "effects": {"stats": {"martial": 3}}},
-  {"text": "짐꾼 일을 하며 한 달을 보냈다. 하체가 쇠처럼 굳었다.", "chapters": [1, 2], "effects": {"stats": {"external": 3}}},
-  {"text": "전장에 떨어진 비단 쪽지에 십이마장의 진법 일부가 적혀 있었다.", "chapters": [4, 5], "effects": {"stats": {"martial": 2, "mind": 2}, "fame": 1}},
-  {"text": "천 년 묵은 고목 아래서 하룻밤 자니 진기가 저절로 돌았다.", "chapters": [3, 4, 5], "effects": {"stats": {"internal": 4}}},
-  {"text": "구해 준 소년이 알고 보니 유명 표국의 도련님이었다. 사례가 두둑했다.", "effects": {"silver": 30, "fame": 2}},
-  {"text": "객잔 벽의 낙서가 어느 고수의 심득이었다. 칼로 긁어 외웠다.", "chapters": [2, 3, 4], "effects": {"mastery": 10, "stats": {"mind": 2}}},
-  {"text": "흰 수염 도인이 복숭아 하나를 건네고 사라졌다. 씨가 금빛이었다.", "chapters": [3, 4, 5], "effects": {"stats": {"external": 1, "internal": 1, "martial": 1, "mind": 1}, "hp_pct": 20}}
+  {
+    "text": "절벽 틈에서 옛 고수가 벽에 손가락으로 새긴 검로를 찾았다.",
+    "effects": {
+      "stats": {
+        "martial": 3
+      }
+    }
+  },
+  {
+    "text": "산중에서 백 년 묵은 영지를 캤다.",
+    "effects": {
+      "stats": {
+        "internal": 3
+      },
+      "qi_pct": 20
+    }
+  },
+  {
+    "text": "지나가던 노인이 무심코 던진 한마디가 벼락처럼 박혔다.",
+    "effects": {
+      "stats": {
+        "mind": 3
+      }
+    }
+  },
+  {
+    "text": "무너진 사당 아래에서 옛 무인의 쇠 호완을 찾아 찼다.",
+    "effects": {
+      "stats": {
+        "external": 3
+      }
+    }
+  },
+  {
+    "text": "폭포 뒤 동굴에서 앉은 채 굳은 해골이 쥔 구결을 보았다.",
+    "effects": {
+      "mastery": 14,
+      "stats": {
+        "internal": 1
+      }
+    }
+  },
+  {
+    "text": "맹호와 맞닥뜨렸다가 한나절을 겨룬 끝에 서로 물러났다.",
+    "effects": {
+      "stats": {
+        "external": 2,
+        "mind": 1
+      }
+    }
+  },
+  {
+    "text": "두 고수의 비무를 먼발치에서 지켜보았다. 눈이 트이는 듯했다.",
+    "effects": {
+      "stats": {
+        "martial": 2,
+        "mind": 1
+      }
+    }
+  },
+  {
+    "text": "병든 무인을 돌봐 주었더니 떠나며 금창약을 남겼다.",
+    "effects": {
+      "item": "금창약",
+      "stats": {
+        "mind": 1
+      }
+    }
+  },
+  {
+    "text": "낡은 다리 밑에서 누가 잃어버린 회기단 한 병을 주웠다.",
+    "effects": {
+      "item": "회기단"
+    }
+  },
+  {
+    "text": "빗속에서 낙수가 돌을 뚫는 모습을 한참 보았다.",
+    "effects": {
+      "mastery": 12,
+      "stats": {
+        "mind": 1
+      }
+    }
+  },
+  {
+    "text": "노을 지는 강에 칼을 씻다가 문득 초식의 군더더기가 보였다.",
+    "effects": {
+      "mastery": 16
+    }
+  },
+  {
+    "text": "버려진 도관에서 먼지 쌓인 도경을 몇 장 건졌다.",
+    "effects": {
+      "stats": {
+        "internal": 2,
+        "mind": 1
+      }
+    }
+  },
+  {
+    "text": "신비한 온천에 몸을 담그니 묵은 상처가 씻겼다.",
+    "chapters": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "effects": {
+      "hp_pct": 60,
+      "qi_pct": 60,
+      "injury": -1
+    }
+  },
+  {
+    "text": "주운 동전을 던지며 놀던 아이들의 손목에서 비도의 이치를 보았다.",
+    "effects": {
+      "stats": {
+        "martial": 3
+      }
+    }
+  },
+  {
+    "text": "짐꾼 일을 하며 한 달을 보냈다. 하체가 쇠처럼 굳었다.",
+    "chapters": [
+      1,
+      2
+    ],
+    "effects": {
+      "stats": {
+        "external": 3
+      }
+    }
+  },
+  {
+    "text": "전장에 떨어진 비단 쪽지에 십이마장의 진법 일부가 적혀 있었다.",
+    "chapters": [
+      4,
+      5
+    ],
+    "effects": {
+      "stats": {
+        "martial": 2,
+        "mind": 2
+      },
+      "fame": 1
+    }
+  },
+  {
+    "text": "천 년 묵은 고목 아래서 하룻밤 자니 진기가 저절로 돌았다.",
+    "chapters": [
+      3,
+      4,
+      5
+    ],
+    "effects": {
+      "stats": {
+        "internal": 4
+      }
+    }
+  },
+  {
+    "text": "구해 준 소년이 알고 보니 유명 표국의 도련님이었다. 사례가 두둑했다.",
+    "effects": {
+      "silver": 30,
+      "fame": 2
+    }
+  },
+  {
+    "text": "객잔 벽의 낙서가 어느 고수의 심득이었다. 칼로 긁어 외웠다.",
+    "chapters": [
+      2,
+      3,
+      4
+    ],
+    "effects": {
+      "mastery": 10,
+      "stats": {
+        "mind": 2
+      }
+    }
+  },
+  {
+    "text": "흰 수염 도인이 복숭아 하나를 건네고 사라졌다. 씨가 금빛이었다.",
+    "chapters": [
+      3,
+      4,
+      5
+    ],
+    "effects": {
+      "stats": {
+        "external": 1,
+        "internal": 1,
+        "martial": 1,
+        "mind": 1
+      },
+      "hp_pct": 20
+    }
+  }
 ]
