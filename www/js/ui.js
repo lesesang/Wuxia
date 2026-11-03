@@ -274,7 +274,7 @@ function renderTitle() {
       ${hasSave ? `<button class="start-btn" data-act="continue">이어하기<small>${esc(save.origin)}, ${esc(save.realm)}, ${Math.min(save.turn, MAX_TURN)}달째</small></button>` : ""}
       <button class="${hasSave ? "continue-btn" : "start-btn"}" data-act="setup">새 강호행</button>
     </div>
-    <p class="karma-display">💠 카르마 ${meta.current_karma} (누적 ${meta.total_karma})${meta.total_runs ? `, 끝낸 강호행 ${meta.total_runs}회` : ""}</p>
+    <p class="karma-display">💠 카르마 ${meta.current_karma} (누적 ${meta.total_karma})${nextReward(meta) ? `, 다음 누적 보상까지 ${nextReward(meta).at - meta.total_karma}` : ""}</p>
     <div class="title-links">
       <button class="link-btn" data-act="shop">💠 카르마 상점${affordableCount(meta) ? ` (살 수 있는 것 ${affordableCount(meta)})` : ""}</button>
       <button class="link-btn" data-act="open" data-modal="help-modal">❓ 입문서</button>
@@ -496,9 +496,11 @@ function statusModal() {
   const traits = p.traits.map((k) => DB.traits[k]).filter((t) => t && !t.hidden);
 
   const skills = p.skills.map((s) => {
-    const isMain = main?.key === s.key;
-    const button = s.type === "공격무공" && !game.battle
-      ? `<button class="mini-btn${isMain ? " on" : ""}" data-act="main-skill" data-key="${esc(s.key)}" ${isMain ? "disabled" : ""}>${isMain ? "주무공" : "주무공으로"}</button>` : "";
+    const inUse = { 공격무공: main, 심공: p.bestOfType("심공"), 경공: p.bestOfType("경공") }[s.type];
+    const isMain = inUse?.key === s.key;
+    const names = { 공격무공: "주무공", 심공: "쓰는 심법", 경공: "쓰는 경공" };
+    const button = !game.battle
+      ? `<button class="mini-btn${isMain ? " on" : ""}" data-act="main-skill" data-key="${esc(s.key)}" ${isMain ? "disabled" : ""}>${isMain ? names[s.type] : `${names[s.type]}으로`}</button>` : "";
     const moved = !game.battle && p.alive ? s.masteryFor(main) : 0;
     const transfer = moved ? `<button class="mini-btn transfer-btn" data-act="transfer-mastery" data-key="${esc(s.key)}">주무공에 성취 +${moved} 옮기기</button>` : "";
     const secret = s.secretName

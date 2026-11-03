@@ -11,6 +11,8 @@ const RUN_HISTORY_LIMIT = 10;
 export const RENAMED_ORIGINS = { 마교탈주: "혈지생환", 소교주: "혈지생환", 신교사자: "혈지생환", 개방후개: "개방제자" };
 const REMOVED_ORIGINS = { 곤륜파: 5, 금군교두: 5, 낙방서생: 5, 녹림소채주: 5, 녹림채주: 5, 녹림후계: 5, 당가무사: 5, 당가방계: 5, 당가소주: 5, 대장간자식: 5, 백호대장: 5, 백호무관: 5, 살막살수: 5, 살막탈주: 5, 살문탈주: 5, 세외도객: 5, 소림속가: 5, 소림수제자: 5, 소막주: 5, 악가서자: 5, 악가소장주: 5, 악가전인: 5, 양가서자: 5, 육선문포두: 5, 의원제자: 5, 점소이: 5, 탈영병: 5, 황보막내: 5, 회귀자: 5 };
 
+// 없어진 자질은 산 값을 돌려준다
+const REMOVED_TRAITS = { 무골: 5, 기재: 5, 넓은단전: 5, 맑은마음: 5, 맷집: 7, 경공의재능: 4, 줄행랑: 2, 손에익은병기: 6, 약손: 3 };
 const SPLIT_UPGRADES = { 근골: ["강골", "혜안"], 심지: ["원기", "명경"] };
 
 const defaults = () => ({
@@ -37,6 +39,13 @@ export function loadMeta() {
 }
 
 function refundRemoved(data) {
+  for (const [key, cost] of Object.entries(REMOVED_TRAITS)) {
+    if (data.unlocked_traits.includes(key)) {
+      data.unlocked_traits = data.unlocked_traits.filter((k) => k !== key);
+      data.current_karma += cost;
+      storage.set(LEGEND_KEY, JSON.stringify(data));
+    }
+  }
   // 둘씩 묶여 있던 시작 능력치 강화는 같은 단계의 낱개 강화로 옮긴다
   let moved = false;
   for (const [oldKey, parts] of Object.entries(SPLIT_UPGRADES)) {

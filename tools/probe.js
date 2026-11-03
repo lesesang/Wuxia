@@ -1,6 +1,7 @@
 // 난이도 곡선 측정: 해마다 플레이어의 강함과 전투 소모, 챕터별 사망률을 본다.
 //   node tools/probe.js 300 [출신]
 import { readFile } from "node:fs/promises";
+import { pickArts } from "./arts.js";
 import { Battle } from "../www/js/battle.js";
 import { DB, loadData } from "../www/js/data.js";
 import { eventView } from "../www/js/events.js";
@@ -75,6 +76,7 @@ for (let run = 0; run < count; run++) {
       const rank = (k) => { const it = DB.market[k]; const t = it.effects.map((e) => e.type); return t.includes("equip") ? 0 : t.includes("skill") ? 1 : it.consumable ? 2 : 3; };
       if (keys.length) game.marketBuy(keys.sort((a, b) => rank(a) - rank(b))[0]); else game.marketLeave();
     } else if (game.battle) {
+      pickArts(game.player);
       game.battleAction(...battleChoice(game));
     } else if (game.pendingNext) {
       game.advanceTurn();

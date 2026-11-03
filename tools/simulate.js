@@ -1,3 +1,4 @@
+import { pickArts } from "./arts.js";
 // 밸런스 확인 도구: 규칙대로 움직이는 봇이 게임을 여러 번 끝까지 플레이한다.
 //   node tools/simulate.js 300            (조건마다 300판)
 //   node tools/simulate.js 300 시장       (이름에 "시장"이 들어간 조건만)
@@ -83,6 +84,7 @@ function play({ style = "섞어서", useMarket = true, origin = "무림초출", 
       if (keys.length) game.marketBuy(keys.sort((a, b) => buyPriority(a) - buyPriority(b))[0]);
       else game.marketLeave();
     } else if (game.battle) {
+      pickArts(game.player);
       game.battleAction(...battleChoice(game));
     } else if (game.pendingNext) {
       game.advanceTurn();
