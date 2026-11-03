@@ -648,7 +648,8 @@
       "unlock_mastery": 40,
       "multiplier": 3.0,
       "qi_cost": 80
-    }
+    },
+    "origin": "남궁세가"
   },
   "천수나찰": {
     "name": "천수나찰",
@@ -691,7 +692,8 @@
       "unlock_mastery": 30,
       "multiplier": 3.0,
       "qi_cost": 80
-    }
+    },
+    "origin": "권마계승"
   },
   "오호단문도": {
     "name": "오호단문도",
@@ -2123,6 +2125,404 @@
       "heal_qi_pct": 22,
       "atk_buff_pct": 0,
       "buff_rounds": 0
+    }
+  },
+  "무극검결": {
+    "name": "무극검결",
+    "type": "공격무공",
+    "category": "검법",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "검의 끝에 이른 이름 없는 고수가 남긴 검결. 어느 가문의 것도 아니다.",
+    "forms": [
+      "무극",
+      "무형",
+      "귀원"
+    ],
+    "secret_technique": {
+      "name": "무극일검",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    }
+  },
+  "개천권결": {
+    "name": "개천권결",
+    "type": "공격무공",
+    "category": "권법",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "주먹 하나로 산문을 열었다는 전설의 권결.",
+    "forms": [
+      "개산",
+      "개천",
+      "벽력"
+    ],
+    "secret_technique": {
+      "name": "개천일권",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    }
+  },
+  "오호단혼도": {
+    "name": "오호단혼도",
+    "type": "공격무공",
+    "category": "도법",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "오호단문도의 끝. 다섯 호랑이가 한 칼에 든다. 팽가 형제들이 함께 다듬었다.",
+    "forms": [
+      "맹호출림",
+      "오호분시",
+      "단문"
+    ],
+    "secret_technique": {
+      "name": "오호단혼",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "origin": "하북팽가"
+  },
+  "철마신창": {
+    "name": "철마신창",
+    "type": "공격무공",
+    "category": "창법",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "철마표국 총표두가 평생 숨겨 온 창법. 표물을 지키는 창은 물러서지 않는다.",
+    "forms": [
+      "철마돌격",
+      "호표",
+      "만리행"
+    ],
+    "secret_technique": {
+      "name": "만리표행",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "origin": "표국표사"
+  },
+  "타구신봉": {
+    "name": "타구신봉",
+    "type": "공격무공",
+    "category": "봉법",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "역대 방주만 읽었다는 타구봉의 끝. 개를 때리듯 고수를 때린다.",
+    "forms": [
+      "봉타쌍견",
+      "악구난로",
+      "사면팔방"
+    ],
+    "secret_technique": {
+      "name": "타구대진",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "origin": "개방제자"
+  },
+  "적혈신장": {
+    "name": "적혈신장",
+    "type": "공격무공",
+    "category": "장법",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "피 연못이 손바닥에 남긴 마기를 다스려 완성한 장법.",
+    "forms": [
+      "적련",
+      "혈수",
+      "화지"
+    ],
+    "secret_technique": {
+      "name": "혈해역류",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "origin": "혈지생환"
+  },
+  "무영비도": {
+    "name": "무영비도",
+    "type": "공격무공",
+    "category": "암기",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "하오문 장부의 뒷장에만 전하는 비도술. 소문보다 먼저 닿는다.",
+    "forms": [
+      "무영",
+      "무성",
+      "무흔"
+    ],
+    "secret_technique": {
+      "name": "무영일비",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "origin": "하오문"
+  },
+  "창궁현천공": {
+    "name": "창궁현천공",
+    "type": "심공",
+    "category": "심공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 0,
+    "desc": "역대 가주만 앉았던 석실의 심법. 하늘처럼 고르게 차오른다.",
+    "effect": {
+      "heal_hp_pct": 25,
+      "heal_qi_pct": 40,
+      "atk_buff_pct": 30,
+      "buff_rounds": 3
+    },
+    "origin": "남궁세가"
+  },
+  "오호맹혼공": {
+    "name": "오호맹혼공",
+    "type": "심공",
+    "category": "심공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 0,
+    "desc": "다섯 형제가 새벽마다 맞추던 호흡. 기세가 호랑이처럼 치솟는다.",
+    "effect": {
+      "heal_hp_pct": 12,
+      "heal_qi_pct": 30,
+      "atk_buff_pct": 50,
+      "buff_rounds": 3
+    },
+    "origin": "하북팽가"
+  },
+  "철마금신공": {
+    "name": "철마금신공",
+    "type": "심공",
+    "category": "심공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 0,
+    "desc": "철마공의 끝. 쓰러지지 않는 것이 표사의 일이다.",
+    "effect": {
+      "heal_hp_pct": 40,
+      "heal_qi_pct": 30,
+      "atk_buff_pct": 15,
+      "buff_rounds": 3
+    },
+    "origin": "표국표사"
+  },
+  "소요무애공": {
+    "name": "소요무애공",
+    "type": "심공",
+    "category": "심공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 0,
+    "desc": "소요공의 끝. 술에 취한 듯 걸림이 없어 내력이 끝없이 돈다.",
+    "effect": {
+      "heal_hp_pct": 25,
+      "heal_qi_pct": 55,
+      "atk_buff_pct": 15,
+      "buff_rounds": 3
+    },
+    "origin": "개방제자"
+  },
+  "권마혈천결": {
+    "name": "권마혈천결",
+    "type": "심공",
+    "category": "심공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 0,
+    "desc": "권마심결의 끝. 피를 끓여 하늘을 친다. 몸이 상해도 멈추지 않는다.",
+    "effect": {
+      "heal_hp_pct": -5,
+      "heal_qi_pct": 35,
+      "atk_buff_pct": 65,
+      "buff_rounds": 3
+    },
+    "origin": "권마계승"
+  },
+  "혈지환생공": {
+    "name": "혈지환생공",
+    "type": "심공",
+    "category": "심공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 0,
+    "desc": "피 연못에서 되살아난 몸의 호흡. 태우던 피가 이제 몸을 살린다.",
+    "effect": {
+      "heal_hp_pct": 15,
+      "heal_qi_pct": 45,
+      "atk_buff_pct": 40,
+      "buff_rounds": 3
+    },
+    "origin": "혈지생환"
+  },
+  "암향귀원공": {
+    "name": "암향귀원공",
+    "type": "심공",
+    "category": "심공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 0,
+    "desc": "숨을 지워 기운을 되돌리는 하오문의 끝. 내력 회복이 무섭게 빠르다.",
+    "effect": {
+      "heal_hp_pct": 15,
+      "heal_qi_pct": 65,
+      "atk_buff_pct": 10,
+      "buff_rounds": 3
+    },
+    "origin": "하오문"
+  },
+  "혼원일기공": {
+    "name": "혼원일기공",
+    "type": "심공",
+    "category": "심공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 0,
+    "desc": "천지의 기운을 한 호흡으로 모은다는 전설의 심법.",
+    "effect": {
+      "heal_hp_pct": 28,
+      "heal_qi_pct": 42,
+      "atk_buff_pct": 28,
+      "buff_rounds": 3
+    }
+  },
+  "창궁비운보": {
+    "name": "창궁비운보",
+    "type": "경공",
+    "category": "경공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 10,
+    "desc": "남궁의 불탄 회랑에 새겨진 걸음. 구름을 타듯 흘리고 되받는다.",
+    "effect": {
+      "evade": 92,
+      "counter_pct": 170,
+      "flee_bonus": 45
+    },
+    "origin": "남궁세가"
+  },
+  "맹호하산보": {
+    "name": "맹호하산보",
+    "type": "경공",
+    "category": "경공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 12,
+    "desc": "산에서 내려오는 호랑이의 걸음. 피하는 것이 곧 덮치는 것이다.",
+    "effect": {
+      "evade": 85,
+      "counter_pct": 230,
+      "flee_bonus": 35
+    },
+    "origin": "하북팽가"
+  },
+  "만리행보": {
+    "name": "만리행보",
+    "type": "경공",
+    "category": "경공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 8,
+    "desc": "표로 만 리가 몸에 밴 걸음. 지치지 않고 어디로든 빠져나간다.",
+    "effect": {
+      "evade": 90,
+      "counter_pct": 140,
+      "flee_bonus": 70
+    },
+    "origin": "표국표사"
+  },
+  "취선보": {
+    "name": "취선보",
+    "type": "경공",
+    "category": "경공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 11,
+    "desc": "취한 신선의 걸음. 넘어질 듯 넘어지지 않는다.",
+    "effect": {
+      "evade": 95,
+      "counter_pct": 160,
+      "flee_bonus": 50
+    },
+    "origin": "개방제자"
+  },
+  "패왕보": {
+    "name": "패왕보",
+    "type": "경공",
+    "category": "경공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 12,
+    "desc": "땅을 갈라 힘을 얻는 권마의 걸음. 받아치는 주먹이 무겁다.",
+    "effect": {
+      "evade": 80,
+      "counter_pct": 260,
+      "flee_bonus": 30
+    },
+    "origin": "권마계승"
+  },
+  "혈영신법": {
+    "name": "혈영신법",
+    "type": "경공",
+    "category": "경공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 12,
+    "desc": "붉은 소매들을 따돌리며 익힌 핏빛 그림자의 신법.",
+    "effect": {
+      "evade": 92,
+      "counter_pct": 190,
+      "flee_bonus": 55
+    },
+    "origin": "혈지생환"
+  },
+  "부운무종보": {
+    "name": "부운무종보",
+    "type": "경공",
+    "category": "경공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 10,
+    "desc": "부운보의 끝. 간 곳도 온 곳도 남지 않는다.",
+    "effect": {
+      "evade": 97,
+      "counter_pct": 130,
+      "flee_bonus": 80
+    },
+    "origin": "하오문"
+  },
+  "이형환위": {
+    "name": "이형환위",
+    "type": "경공",
+    "category": "경공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 10,
+    "desc": "몸은 여기 있는데 그림자가 먼저 자리를 바꾼다는 전설의 보법.",
+    "effect": {
+      "evade": 95,
+      "counter_pct": 180,
+      "flee_bonus": 50
     }
   }
 }

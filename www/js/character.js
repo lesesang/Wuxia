@@ -248,7 +248,7 @@ export class Player {
   }
 
   bestOfType(type) {
-    const score = (s) => s.gradesGained() * 1000 + Object.values(s.effect).reduce((t, v) => t + Math.max(v, 0), 0);
+    const score = (s) => GRADE_ORDER.indexOf(s.grade) * 1000 + Object.values(s.effect).reduce((t, v) => t + Math.max(v, 0), 0);
     const options = this.skillsOfType(type);
     if (!options.length) return null;
     return options.reduce((a, b) => (score(b) > score(a) ? b : a));

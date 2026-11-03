@@ -371,7 +371,8 @@ export function applyEffects(player, effects) {
     const list = Object.keys(DB.skills).filter((k) => {
       const s = DB.skills[k];
       if (s.category !== main || s.grade !== wanted || player.hasSkill(k)) return false;
-      return wanted === "신공" || s.legend;
+      // 출신 전용 신공은 그 출신의 이야기에서만 나온다
+      return wanted === "신공" ? !s.origin : s.legend;
     });
     if (list.length) {
       const skill = new Skill(list[Math.floor(rng.random() * list.length)]);

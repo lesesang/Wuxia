@@ -1318,8 +1318,8 @@ test("무기 계열마다 무공 수가 같고 등급이 고르다", () => {
   const attacks = Object.values(DB.skills).filter((s) => s.type === "공격무공");
   for (const style of styles) {
     const list = attacks.filter((s) => s.category === style);
-    assert.equal(list.length, 12, style);
-    for (const [grade, min] of [["기본", 2], ["명품", 3], ["상승", 3], ["일절", 1], ["신공", 1]]) {
+    assert.equal(list.length, 13, style);
+    for (const [grade, min] of [["기본", 2], ["명품", 3], ["상승", 3], ["일절", 1], ["신공", 2]]) {
       assert.ok(list.filter((s) => s.grade === grade).length >= min, `${style} ${grade}`);
     }
     const sold = list.filter((s) => Object.values(DB.market).some((i) => i.effects.some((e) => e.skill === s.key || e.skill === s.name)));
@@ -1583,31 +1583,53 @@ test("성취 100을 넘겨 더 쌓아야 승급하고, 승급은 일절까지다
   assert.equal(top.mastery, 100);
 });
 
-test("신공은 계열마다 하나씩이고 출신이나 카르마 인연으로만 얻는다", () => {
+test("신공은 공격, 심법, 보법에 있고 출신이나 카르마 인연으로만 얻는다", () => {
   const tops = Object.keys(DB.skills).filter((k) => DB.skills[k].grade === "신공");
-  assert.equal(tops.length, 7);
-  assert.equal(new Set(tops.map((k) => DB.skills[k].category)).size, 7);
-  const allowed = (r) => !!(r?.origin || r?.unlocked);
+  const origins = DB.origins.order.filter((o) => o !== "무림초출");
+  for (const type of ["공격무공", "심공", "경공"]) {
+    for (const o of origins) {
+      assert.equal(tops.filter((k) => DB.skills[k].type === type && DB.skills[k].origin === o).length, 1, `${o} ${type}`);
+    }
+    assert.ok(tops.some((k) => DB.skills[k].type === type && !DB.skills[k].origin), `공용 ${type}`);
+  }
+  const free = tops.filter((k) => DB.skills[k].type === "공격무공" && !DB.skills[k].origin).map((k) => DB.skills[k].category);
+  assert.equal(new Set(free).size, 7, "강호 신공은 계열마다 하나");
   const problems = [];
-  const scan = (node, ok, where) => {
-    if (Array.isArray(node)) return node.forEach((n) => scan(n, ok, where));
+  const scan = (node, req, where) => {
+    if (Array.isArray(node)) return node.forEach((n) => scan(n, req, where));
     if (!node || typeof node !== "object") return undefined;
-    const here = ok || allowed(node.requires);
-    const gives = (node.skill && tops.includes(node.skill)) || node.style_skill?.grade === "신공";
-    if (gives && !here) problems.push(where);
+    const here = { origin: node.requires?.origin ?? req.origin, unlocked: node.requires?.unlocked ?? req.unlocked };
+    const allowed = here.origin || here.unlocked;
+    if (node.style_skill?.grade === "신공" && !allowed) problems.push(where);
+    if (tops.includes(node.skill)) {
+      const owner = DB.skills[node.skill].origin;
+      if (owner ? here.origin !== owner : !allowed) problems.push(`${where}: ${node.skill}`);
+    }
     return Object.values(node).forEach((v) => scan(v, here, where));
   };
-  for (const [key, event] of Object.entries(DB.events)) scan(event, false, key);
-  for (const f of DB.fortunes) scan(f, false, f.text);
+  for (const [key, event] of Object.entries(DB.events)) scan(event, {}, key);
+  for (const f of DB.fortunes) scan(f, {}, f.text);
   assert.deepEqual(problems, []);
   for (const k of tops) {
     assert.ok(!Object.values(DB.market).some((i) => i.effects.some((e) => e.skill === k)), `${k}는 장터에 없다`);
     assert.ok(!Object.values(DB.enemies).some((e) => e.drop?.skill === k), `${k}는 적이 떨구지 않는다`);
-    assert.ok(Object.values(DB.events).some((e) => e.requires?.origin && JSON.stringify(e).includes(k)), `${k} 출신 이야기`);
+    const owner = DB.skills[k].origin;
+    if (owner) assert.ok(Object.values(DB.events).some((e) => e.requires?.origin === owner && JSON.stringify(e).includes(`"${k}"`)), `${k} 출신 이야기`);
+    else if (DB.skills[k].type !== "공격무공") assert.ok(Object.values(DB.events).some((e) => e.requires?.unlocked && JSON.stringify(e).includes(`"${k}"`)), `${k} 카르마 인연`);
   }
-  for (const key of ["숨겨진유적", "협객의묘", "생사의문"]) {
-    assert.ok(Object.values(DB.events).some((e) => e.requires?.unlocked === key && JSON.stringify(e).includes('"grade":"신공"')), key);
-  }
+  assert.ok(Object.values(DB.events).some((e) => e.requires?.unlocked && JSON.stringify(e).includes('"grade":"신공"')), "강호 신공 카르마 인연");
+  assert.ok(Object.values(DB.events).some((e) => e.requires?.origin === "무림초출" && JSON.stringify(e).includes('"grade":"신공"')), "강호초출 이야기");
+});
+
+test("주무공 계열 신공 보상은 다른 출신의 전용 신공을 주지 않고, 익힌 신공 심법이 우선한다", () => {
+  const p = new Player();
+  applyEffects(p, { style_skill: { grade: "신공" } });
+  assert.ok(p.hasSkill("무극검결"));
+  assert.ok(!p.hasSkill("제왕검형"));
+  const toNap = p.skills.find((s) => s.type === "심공");
+  toNap.grade = "일절";
+  applyEffects(p, { skill: "혼원일기공" });
+  assert.equal(p.bestOfType("심공").key, "혼원일기공");
 });
 
 test("예전 저장의 신공은 일절로 바뀐다", () => {
@@ -1620,7 +1642,7 @@ test("카르마 인연의 신공은 주무공 계열로 받고, 이미 익혔으
   const p = new Player();
   const before = p.martial;
   applyEffects(p, { style_skill: { grade: "신공" } });
-  assert.ok(p.hasSkill("제왕검형"));
+  assert.ok(p.hasSkill("무극검결"));
   applyEffects(p, { style_skill: { grade: "신공" } });
   assert.ok(p.martial > before);
 });

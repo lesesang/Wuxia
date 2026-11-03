@@ -94,7 +94,8 @@ export class Game {
   /** 이번 강호행에서 유산으로 남길 수 있는 것들 */
   legacyOptions() {
     const p = this.player;
-    const skills = p.skills.filter((s) => GRADE_ORDER.indexOf(s.grade) >= 1)
+    // 신공은 출신과 카르마 인연으로만 얻으므로 유산으로 넘기지 못한다
+    const skills = p.skills.filter((s) => GRADE_ORDER.indexOf(s.grade) >= 1 && DB.skills[s.key].grade !== "신공")
       .sort((a, b) => GRADE_ORDER.indexOf(b.grade) - GRADE_ORDER.indexOf(a.grade)).slice(0, 4)
       .map((s) => ({ kind: "skill", key: s.key, grade: s.grade, label: `${s.name} (${s.grade} 품계)` }));
     const gear = [p.weapon, p.armor].filter((k) => DB.market[k]?.markets.length)
