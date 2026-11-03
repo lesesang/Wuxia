@@ -1280,8 +1280,8 @@ test("자질의 기량 효과는 네 기량에 고르다", () => {
   }
 });
 
-test("끝난 판의 카르마는 장, 경지, 결말을 따로 더한다", () => {
-  const finish = (turn, realm, victory) => {
+test("끝난 판의 카르마: 천마까지 가면 결과가 장을 대체하고 경지를 더한다", () => {
+  const finish = (turn, realm, victory, setup = () => {}) => {
     withKarma(0);
     const data = loadMeta();
     data.achievements = DB.karma.achievements.map((x) => x.key); // 공적 카르마는 빼고 잰다
@@ -1290,15 +1290,29 @@ test("끝난 판의 카르마는 장, 경지, 결말을 따로 더한다", () =>
     game.start("무림초출");
     Object.assign(game.player, { turn, realm });
     game.player.fame = 0;
+    setup(game.player);
     game.finishGame(victory);
     return game.ending;
   };
   assert.equal(finish(10, "일류", false).karma, 1, "1장, 일류");
   assert.equal(finish(100, "화경", false).karma, 5 + 3, "5장, 화경");
+  assert.equal(finish(120, "현경", false).karma, 5 + 4, "천마에게 지면 5와 경지");
   const hurt = finish(120, "일류", true);
   assert.equal(hurt.key, "배드");
-  assert.equal(hurt.karma, 5 + 4, "5장과 상처뿐인 승리");
-  assert.ok(hurt.karmaLines.some((l) => l.includes("도달한 장")));
+  assert.equal(hurt.karma, 7, "상처뿐인 승리 7, 장은 더하지 않는다");
+  assert.ok(!hurt.karmaLines.some((l) => l.includes("도달한 장")));
+  const hero = (p) => { p.hp = p.maxHp(); p.qi = p.maxQi(); };
+  const legend = finish(120, "화경", true, hero);
+  assert.equal(legend.key, "기본");
+  assert.equal(legend.karma, 10 + 3);
+  const saengsa = finish(120, "현경", true, (p) => {
+    p.external = p.internal = p.martial = p.mind = 999;
+    p.battles = 60;
+    hero(p);
+  });
+  assert.equal(saengsa.key, "생사경");
+  assert.equal(saengsa.karma, 25, "생사경은 경지를 더하지 않고 총 25");
+  assert.equal(DB.endings.karma.귀순, 7);
   const clean = loadMeta();
   clean.achievements = [];
   saveMeta(clean);
@@ -1337,7 +1351,7 @@ test("결말의 틀은 다섯이고 문장이 상황에 따라 달라진다", ()
 
 test("처음 이른 경지에 주는 카르마는 없고 생사경은 강호의 전설 다음 결말이다", () => {
   assert.equal(DB.karma.milestones, undefined);
-  assert.equal(DB.endings.karma.생사경, 15);
+  assert.equal(DB.endings.karma.생사경, 25);
   assert.ok(DB.endings.karma.생사경 > DB.endings.karma.기본);
   const order = Object.keys(DB.endings.titles);
   assert.equal(order.indexOf("생사경"), order.indexOf("기본") + 1);
@@ -1408,8 +1422,8 @@ test("큰 그릇은 세 번까지 사고 없어진 자질은 값을 돌려준다
   withKarma(0);
 });
 
-test("생사경 결말의 카르마는 15이다", () => {
-  assert.equal(DB.endings.karma.생사경, 15);
+test("생사경 결말의 카르마는 25이다", () => {
+  assert.equal(DB.endings.karma.생사경, 25);
 });
 
 test("자질의 새 효과가 동작한다", () => {
