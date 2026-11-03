@@ -522,7 +522,7 @@ export class Game {
   }
 }
 
-/** 판이 끝나면 도달한 장과 경지, 결말의 값을 따로 받는다. */
+/** 천마까지 가지 못하면 도달한 장의 값을, 천마까지 갔으면 그 결과의 값을 받고 경지를 더한다. 생사경은 경지이자 결말이라 값 하나로 끝난다. */
 function karmaGain(player, key, victory) {
   const lines = [];
   let total = 0;
@@ -532,8 +532,9 @@ function karmaGain(player, key, victory) {
       lines.push(`${label} +${amount}`);
     }
   };
-  add("도달한 장", getChapter(Math.min(player.turn, player.maxTurn)));
-  add(DB.endings.titles[key], DB.endings.karma[key]);
+  if (key === "사망") add("도달한 장", getChapter(Math.min(player.turn, player.maxTurn)));
+  else add(DB.endings.titles[key], DB.endings.karma[key]);
+  if (key === "생사경") return { total, lines };
   add("경지", realmIndex(player.realm));
   return { total, lines };
 }
