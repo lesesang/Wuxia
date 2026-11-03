@@ -370,3 +370,7 @@ body { word-break: keep-all; overflow-wrap: anywhere; }
 .market-group { color: var(--gold); font-weight: 400; font-size: .9rem; margin: 1rem 0 .3rem; }
 
 .transfer-btn { margin-top: .4rem; width: 100%; }
+/* 결전의 막간 */
+.battle-panel.interlude { border: 1px solid var(--gold); padding: .7rem; background: rgba(0,0,0,.35); max-height: 52vh; overflow-y: auto; }
+.interlude-title { margin: 0 0 .3rem; font-size: 1.05rem; color: var(--gold); }
+.interlude-text { margin: 0 0 .6rem; font-size: .9rem; line-height: 1.6; }

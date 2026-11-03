@@ -415,8 +415,14 @@ function renderBattle() {
     : b.sealed ? "혈도가 막혀 맨손 공격"
       : p.qi < skill.qiCost ? "내력이 모자라 맨손 공격" : `내력 ${skill.qiCost}`;
 
+  const actName = b.isFinal ? `천마와의 결전, 제${["일", "이", "삼"][b.enemy.phase] ?? "삼"}막` : "전투";
+  const interlude = b.interlude ? `<div class="battle-panel interlude">
+      <h2 class="interlude-title">${esc(b.interlude.title)}</h2>
+      <p class="interlude-text">${esc(b.interlude.text)}</p>
+      ${b.interlude.choices.map((c, i) => `<button class="choice-btn${c.tag ? " special" : ""}" data-act="interlude" data-key="${i}">${c.tag ? `<span class="choice-tag">${esc(c.tag)}</span> ` : ""}${esc(c.label)}</button>`).join("")}
+    </div>` : null;
   app().innerHTML = `<div class="battle-top">
-      <h1 class="battle-title">${b.isFinal ? "천마와의 결전" : "전투"}<small>${esc(state.join(", "))}</small></h1>
+      <h1 class="battle-title">${actName}<small>${esc(state.join(", "))}</small></h1>
       <button class="round-menu" data-act="open-status" data-tab="stats" aria-label="신상 보기">🧍</button>
     </div>
     <div class="vs-row">
@@ -434,7 +440,7 @@ function renderBattle() {
     ${tags.length ? `<div class="battle-tags">${tags.map(([kind, label]) => `<span class="tag ${kind}">${esc(label)}</span>`).join("")}</div>` : ""}
     ${warning ? `<p class="battle-warning">⚠️ 다음은 「${esc(warning)}」${movement ? " — 경공으로 흘려낼 수 있다" : ""}</p>` : ""}
     <div class="battle-log" aria-live="polite">${b.roundNum === 0 ? `<p class="enemy-desc">${esc(b.enemy.desc)}</p>` : ""}${game.log.slice(-12).map((l) => `<p>${esc(l)}</p>`).join("")}</div>
-    <div class="battle-panel">
+    ${interlude ?? `<div class="battle-panel">
       <button class="bt-btn main" data-act="battle" data-action="기본공격">⚔️ ${skill ? esc(skill.name) : "맨손 공격"}<small>${esc(attackNote)}</small></button>
       <div class="battle-actions">
         <button class="bt-btn" data-act="battle" data-action="비기" ${secretReady ? "" : "disabled"}>✨ ${skill?.secretUnlocked ? esc(skill.secretName) : "비기"}<small>${esc(secretNote)}</small></button>
@@ -443,7 +449,7 @@ function renderBattle() {
         ${b.isFinal ? "" : `<button class="bt-btn flee" data-act="battle" data-action="도주">🏃 도주<small>실패하면 공격받음</small></button>`}
       </div>
       ${items.length ? `<div class="battle-items">${items.map(([key, count]) => `<button class="item-btn${lowHp && DB.market[key].effects.some((e) => e.type === "heal") ? " suggest" : ""}" data-act="battle" data-action="소비품" data-key="${esc(key)}">${esc(DB.market[key].name)} ×${count}</button>`).join("")}</div>` : ""}
-    </div>${gameModals()}`;
+    </div>`}${gameModals()}`;
   const log = document.querySelector(".battle-log");
   if (log) log.scrollTop = log.scrollHeight;
   animateBars(p.hp, p.maxHp(), b.enemy.hp, b.enemy.maxHp, b);
@@ -782,6 +788,7 @@ const actions = {
   next: () => { game.advanceTurn(); render(); },
   choose: (el) => { game.chooseEvent(Number(el.dataset.index)); render(); },
   battle: (el) => { game.battleAction(el.dataset.action, el.dataset.key ?? null); render(); },
+  interlude: (el) => { game.battleInterlude(Number(el.dataset.key)); render(); },
   buy: (el) => { game.marketBuy(el.dataset.key); render(); },
   "leave-market": () => { game.marketLeave(); render(); },
   "main-skill": (el) => { game.setMainSkill(el.dataset.key); render(); },

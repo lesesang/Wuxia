@@ -242,11 +242,7 @@ export class Game {
   startFinalBattle() {
     const p = this.player;
     const enemy = new Enemy("천마");
-    let weaken = p.bossWeaken;
-    if (p.hasFlag("단목휘_동맹")) {
-      weaken += 15;
-      this.addLog(["🗡️ 뒤에서 익숙한 웃음소리가 들렸다. \"다리 값 받으러 왔소.\" 단목휘의 검이 천마의 옆구리를 스쳤다!"]);
-    }
+    const weaken = p.bossWeaken;
     if (weaken) {
       const percent = Math.min(weaken, 60);
       enemy.maxHp = Math.trunc(enemy.maxHp * (100 - percent) / 100);
@@ -302,10 +298,19 @@ export class Game {
 
   // ---------- 전투 ----------
 
+  /** 결전 막간의 선택 */
+  battleInterlude(index) {
+    if (!this.battle?.chooseInterlude(index)) return;
+    this.addLog(this.battle.log);
+    this.battle.log = [];
+  }
+
   battleAction(action = "기본공격", itemKey = null) {
     if (!this.battle || !VALID_BATTLE_ACTIONS.includes(action)) return;
     const { battle, player } = this;
     if (action === "도주" && battle.isFinal) return;
+    // 막간을 고르지 않고 합을 진행하면 첫 선택지를 따른다
+    if (battle.interlude) this.battleInterlude(0);
 
     const result = battle.runRound(action, player.bestSkill(), itemKey);
     this.addLog(battle.log);
