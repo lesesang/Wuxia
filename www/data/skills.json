@@ -2105,7 +2105,7 @@
     "grade": "기본",
     "base_multiplier": 1.0,
     "qi_cost": 0,
-    "desc": "피 연못에서 배운 신교의 심공. 몸을 태워 내력과 위력을 얻는다.",
+    "desc": "피 연못에서 몸에 밴 마공의 호흡. 몸을 태워 내력과 위력을 얻는다.",
     "effect": {
       "heal_hp_pct": -2,
       "heal_qi_pct": 20,

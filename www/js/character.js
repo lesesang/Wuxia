@@ -8,6 +8,8 @@ import {
 } from "./rules.js";
 
 export const GRADE_ORDER = ["기본", "명품", "상승", "신공", "천상"];
+const SAME_GRADE_TRANSFER = 0.5;  // 같은 품계 무공의 성취를 옮기는 비율
+const LOWER_GRADE_TRANSFER = 0.3; // 낮은 품계 무공의 성취를 옮기는 비율
 const GRADE_BONUS = 0.25;       // 승급 1단계당 위력 계수 증가
 const MASTERY_BONUS = 0.003;    // 성취 1당 위력 계수 증가
 const EFFECT_GRADE_BONUS = 0.2; // 심공·경공 승급 1단계당 효과 증가율
@@ -60,6 +62,14 @@ export class Skill {
   }
 
   canEvolve() { return this.grade !== "천상" && this.mastery >= 100; }
+
+  /** 품계가 같거나 낮은 같은 계열 무공에서 주무공으로 옮길 수 있는 성취. 없으면 0 */
+  masteryFor(main) {
+    if (this.type !== "공격무공" || !main || main === this || main.category !== this.category) return 0;
+    const gap = GRADE_ORDER.indexOf(main.grade) - GRADE_ORDER.indexOf(this.grade);
+    if (gap < 0) return 0;
+    return Math.floor(this.mastery * (gap === 0 ? SAME_GRADE_TRANSFER : LOWER_GRADE_TRANSFER));
+  }
 
   evolve() {
     if (!this.canEvolve()) return false;

@@ -1195,7 +1195,13 @@ function runToEnd(game, { accept = true, giveUp = false, onEvent = () => {} } = 
   for (let i = 0; i < 6000 && game.player.alive; i++) {
     const p = game.player;
     p.hp = p.maxHp();
-    if (game.battle) { game.battle.enemy.hp = 1; game.battleAction("기본공격"); continue; }
+    if (game.battle) {
+      // 연계 일정만 보는 시험이라 약한 몸으로 강적에게 죽지 않게 한다
+      game.battle.enemy.hp = 1;
+      game.battle.enemy.attack = 0;
+      game.battleAction("기본공격");
+      continue;
+    }
     if (game.event) {
       onEvent(game);
       const view = eventView(p, game.event.key);
@@ -1460,13 +1466,13 @@ test("이름이 바뀐 출신은 해금과 저장을 잃지 않고, 없어진 �
   data.current_karma = 0;
   saveMeta(data);
   const after = loadMeta();
-  assert.deepEqual(after.unlocked_origins, ["무림초출", "신교사자"]);
+  assert.deepEqual(after.unlocked_origins, ["무림초출", "혈지생환"]);
   assert.equal(after.current_karma, 5);
-  const dict = new Player("신교사자").toDict();
+  const dict = new Player("혈지생환").toDict();
   dict.origin_key = "소교주";
   const p = Player.fromDict(dict);
-  assert.equal(p.originKey, "신교사자");
-  assert.equal(p.origin, "천마신교의 사자");
+  assert.equal(p.originKey, "혈지생환");
+  assert.equal(p.origin, "피 연못의 생환자");
 });
 
 test("카르마를 늘리는 강화는 없고, 샀던 것은 돌려준다", () => {
@@ -1492,6 +1498,68 @@ test("격파 기록과 가장 오래 간 달이 남는다", () => {
   game.finishGame(true);
   assert.equal(loadMeta().total_wins, 1);
   assert.equal(loadMeta().best_turn, 50);
+});
+
+// ---------- 성취 옮기기 ----------
+
+test("같은 계열의 낮거나 같은 품계 무공만 주무공으로 성취를 옮긴다", () => {
+  const game = newGame();
+  const p = game.player;
+  const main = p.bestSkill();
+  main.grade = "명품";
+  main.mastery = 10;
+  const same = new Skill("매화검법");
+  same.grade = "명품";
+  same.mastery = 40;
+  const low = new Skill("운룡검법");
+  low.grade = "기본";
+  low.mastery = 50;
+  const high = new Skill("천뢰검법");
+  high.grade = "상승";
+  high.mastery = 50;
+  const other = new Skill("기초도법");
+  other.mastery = 50;
+  p.skills.push(same, low, high, other);
+  assert.equal(same.masteryFor(main), 20);
+  assert.equal(low.masteryFor(main), 15);
+  assert.equal(high.masteryFor(main), 0, "더 높은 품계는 옮기지 못한다");
+  assert.equal(other.masteryFor(main), 0, "다른 계열은 옮기지 못한다");
+  assert.equal(main.masteryFor(main), 0);
+  p.mainSkill = main.key;
+  game.transferMastery(same.key);
+  assert.equal(main.mastery, 30);
+  assert.equal(same.mastery, 0);
+  game.transferMastery(high.key);
+  assert.equal(high.mastery, 50);
+  assert.equal(main.mastery, 30);
+});
+
+test("옮긴 성취로 승급할 수 있고 전투 중에는 옮길 수 없다", () => {
+  const game = newGame();
+  const p = game.player;
+  const main = p.bestSkill();
+  main.mastery = 90;
+  const low = new Skill("운룡검법");
+  low.mastery = 60;
+  p.skills.push(low);
+  const grade = main.grade;
+  game.battle = {};
+  game.transferMastery(low.key);
+  assert.equal(low.mastery, 60);
+  game.battle = null;
+  game.transferMastery(low.key);
+  assert.notEqual(main.grade, grade);
+});
+
+test("출신 서사: 8개 모두 일류 이유, 천마와의 인연, 맺음말을 갖고 천마의 수하가 없다", () => {
+  const text = JSON.stringify(Object.values(DB.origins.origins));
+  assert.ok(!text.includes("사자"));
+  assert.ok(!Object.keys(DB.origins.origins).includes("신교사자"));
+  assert.equal(new Player("혈지생환").sect, null);
+  for (const key of ["혈지생환", "하북팽가", "표국표사", "개방제자", "하오문"]) {
+    assert.ok(Object.values(DB.randomEvents).filter((e) => e.requires?.origin === key).length >= 2, key);
+    assert.ok(DB.storyEvents.결전_천마봉.variants.some((v) => v.requires.origin === key), key);
+  }
 });
 
 // ---------- 전체 플레이 ----------

@@ -357,6 +357,18 @@ export class Game {
     if (DB.market[key] && this.player.inventory[key] > 0) useConsumable(this.player, key);
   }
 
+  /** 같은 계열 무공의 성취 일부를 주무공으로 옮긴다. 옮긴 무공의 성취는 0이 된다. */
+  transferMastery(key) {
+    if (!this.active || this.battle || !this.player.alive) return;
+    const p = this.player;
+    const from = p.getSkill(key);
+    const main = p.bestSkill();
+    const amount = from?.masteryFor(main);
+    if (!amount) return;
+    from.mastery = 0;
+    this.addLog([`「${from.name}」의 이치를 「${main.name}」에 녹였다. (성취 +${amount})`, ...main.gainMastery(amount)]);
+  }
+
   setMainSkill(key) {
     if (!this.active || this.battle) return;
     const skill = this.player.getSkill(key);

@@ -368,3 +368,5 @@ body { word-break: keep-all; overflow-wrap: anywhere; }
 .chain-strip { font-size: .8rem; color: var(--gold); padding: .25rem 0 0; line-height: 1.5; }
 
 .market-group { color: var(--gold); font-weight: 400; font-size: .9rem; margin: 1rem 0 .3rem; }
+
+.transfer-btn { margin-top: .4rem; width: 100%; }
