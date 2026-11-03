@@ -1,14 +1,14 @@
 {
   "강건한_육체": {
     "name": "강건한 육체",
-    "desc": "시작 외공이 12 높고 외공 성장이 15% 늘어난다.",
+    "desc": "시작 외공이 120 높고 외공 성장이 15% 늘어난다.",
     "rarity": "일반",
     "cost": 5,
     "effects": [
       {
         "type": "start_stat",
         "stat": "external",
-        "amount": 12
+        "amount": 120
       },
       {
         "type": "growth_rate",
@@ -19,14 +19,14 @@
   },
   "선천진기": {
     "name": "선천진기",
-    "desc": "시작 내공이 12 높고 내공 성장이 15% 늘어난다.",
+    "desc": "시작 내공이 120 높고 내공 성장이 15% 늘어난다.",
     "rarity": "일반",
     "cost": 5,
     "effects": [
       {
         "type": "start_stat",
         "stat": "internal",
-        "amount": 12
+        "amount": 120
       },
       {
         "type": "growth_rate",
@@ -37,7 +37,7 @@
   },
   "전투광": {
     "name": "전투광",
-    "desc": "전투가 시작되면 외공이 전투 중에만 5 오른다 (99 한계 초과 가능). 전투가 끝나면 체력과 내력을 각각 25% 즉시 회복한다.",
+    "desc": "전투가 시작되면 네 기량이 전투 중에만 40 오른다. 전투가 끝나면 체력과 내력을 각각 25% 회복한다.",
     "rarity": "희귀",
     "cost": 8,
     "effects": [
@@ -45,7 +45,28 @@
         "type": "battle_buff",
         "trigger": "on_battle_start",
         "stat": "external",
-        "amount": 5,
+        "amount": 40,
+        "temporary": true
+      },
+      {
+        "type": "battle_buff",
+        "trigger": "on_battle_start",
+        "stat": "internal",
+        "amount": 40,
+        "temporary": true
+      },
+      {
+        "type": "battle_buff",
+        "trigger": "on_battle_start",
+        "stat": "martial",
+        "amount": 40,
+        "temporary": true
+      },
+      {
+        "type": "battle_buff",
+        "trigger": "on_battle_start",
+        "stat": "mind",
+        "amount": 40,
         "temporary": true
       },
       {
@@ -64,19 +85,19 @@
   },
   "천생근골": {
     "name": "천생근골",
-    "desc": "시작 외공과 무리가 6 높고 성장이 각각 12% 늘어난다.",
+    "desc": "시작 외공과 무리가 60 높고 성장이 각각 12% 늘어난다.",
     "rarity": "희귀",
     "cost": 8,
     "effects": [
       {
         "type": "start_stat",
         "stat": "external",
-        "amount": 6
+        "amount": 60
       },
       {
         "type": "start_stat",
         "stat": "martial",
-        "amount": 6
+        "amount": 60
       },
       {
         "type": "growth_rate",
@@ -92,19 +113,19 @@
   },
   "오성": {
     "name": "오성",
-    "desc": "시작 내공과 심경이 6 높고 성장이 각각 12% 늘어난다.",
+    "desc": "시작 내공과 심경이 60 높고 성장이 각각 12% 늘어난다.",
     "rarity": "희귀",
     "cost": 8,
     "effects": [
       {
         "type": "start_stat",
         "stat": "internal",
-        "amount": 6
+        "amount": 60
       },
       {
         "type": "start_stat",
         "stat": "mind",
-        "amount": 6
+        "amount": 60
       },
       {
         "type": "growth_rate",
@@ -177,29 +198,29 @@
   },
   "천하제일기재": {
     "name": "천하제일기재",
-    "desc": "모든 기량이 10 높게 시작하고 성장이 각각 5% 늘어난다.",
+    "desc": "모든 기량이 100 높게 시작하고 성장이 각각 5% 늘어난다.",
     "rarity": "전설",
     "cost": 15,
     "effects": [
       {
         "type": "start_stat",
         "stat": "external",
-        "amount": 10
+        "amount": 100
       },
       {
         "type": "start_stat",
         "stat": "internal",
-        "amount": 10
+        "amount": 100
       },
       {
         "type": "start_stat",
         "stat": "martial",
-        "amount": 10
+        "amount": 100
       },
       {
         "type": "start_stat",
         "stat": "mind",
-        "amount": 10
+        "amount": 100
       },
       {
         "type": "growth_rate",
@@ -433,56 +454,51 @@
   },
   "대기만성": {
     "name": "대기만성",
-    "desc": "시작 기량이 모두 4 낮지만 새 장이 열릴 때마다 모든 기량이 4 오른다.",
+    "desc": "시작 기량이 모두 40 낮지만 새 장이 열릴 때마다 모든 기량이 40 오른다.",
     "rarity": "희귀",
     "cost": 8,
     "effects": [
       {
         "type": "start_stat",
         "stat": "external",
-        "amount": -4
+        "amount": -40
       },
       {
         "type": "start_stat",
         "stat": "internal",
-        "amount": -4
+        "amount": -40
       },
       {
         "type": "start_stat",
         "stat": "martial",
-        "amount": -4
+        "amount": -40
       },
       {
         "type": "start_stat",
         "stat": "mind",
-        "amount": -4
+        "amount": -40
       },
       {
         "type": "chapter_growth",
-        "amount": 4
+        "amount": 40
       }
     ]
   },
   "병약한몸": {
     "name": "병약한 몸",
-    "desc": "시작 외공이 8 낮지만 내공과 심경 성장이 30% 늘어난다.",
+    "desc": "시작 내공이 160 높지만 외공이 80 낮다. 약으로 자란 몸이라 앓는 사람의 사정을 안다.",
     "rarity": "일반",
     "cost": 3,
     "effects": [
       {
         "type": "start_stat",
-        "stat": "external",
-        "amount": -8
-      },
-      {
-        "type": "growth_rate",
         "stat": "internal",
-        "percent": 30
+        "amount": 160
       },
       {
-        "type": "growth_rate",
-        "stat": "mind",
-        "percent": 30
+        "type": "start_stat",
+        "stat": "external",
+        "amount": -80
       }
     ],
     "reacts": true
@@ -602,74 +618,69 @@
   },
   "입담꾼": {
     "name": "입담꾼",
-    "desc": "명성 10으로 시작하고 시작 심경이 8 높다. 말로 풀리는 일이 많다.",
+    "desc": "명성 12로 시작하고 은자 30을 더 든다. 말로 풀리는 일이 많다.",
     "rarity": "일반",
     "cost": 3,
     "effects": [
       {
         "type": "start_fame",
-        "amount": 10
+        "amount": 12
       },
       {
-        "type": "start_stat",
-        "stat": "mind",
-        "amount": 8
+        "type": "start_silver",
+        "amount": 30
       }
     ],
     "reacts": true
   },
   "저잣거리아이": {
     "name": "저잣거리 아이",
-    "desc": "은자 없이 시작하지만 시작 심경이 10, 무리가 6 높다. 밑바닥 사람들과 말이 통한다.",
+    "desc": "시작 심경이 160 높지만 무리가 80 낮다. 밑바닥 사람들과 말이 통한다.",
     "rarity": "일반",
-    "cost": 2,
+    "cost": 3,
     "effects": [
-      {
-        "type": "start_silver",
-        "amount": -30
-      },
       {
         "type": "start_stat",
         "stat": "mind",
-        "amount": 10
+        "amount": 160
       },
       {
         "type": "start_stat",
         "stat": "martial",
-        "amount": 6
+        "amount": -80
       }
     ],
     "reacts": true
   },
   "천둥벌거숭이": {
     "name": "천둥벌거숭이",
-    "desc": "시작 외공이 16 높지만 심경이 8 낮다. 겁이 없어 남다른 길이 열린다.",
+    "desc": "시작 외공이 160 높지만 심경이 80 낮다. 겁이 없어 남다른 길이 열린다.",
     "rarity": "일반",
-    "cost": 2,
+    "cost": 3,
     "effects": [
       {
         "type": "start_stat",
         "stat": "external",
-        "amount": 16
+        "amount": 160
       },
       {
         "type": "start_stat",
         "stat": "mind",
-        "amount": -8
+        "amount": -80
       }
     ],
     "reacts": true
   },
   "타고난안목": {
     "name": "타고난 안목",
-    "desc": "시작 무리가 12 높고 무리 성장이 15% 늘어난다.",
+    "desc": "시작 무리가 120 높고 무리 성장이 15% 늘어난다.",
     "rarity": "일반",
     "cost": 5,
     "effects": [
       {
         "type": "start_stat",
         "stat": "martial",
-        "amount": 12
+        "amount": 120
       },
       {
         "type": "growth_rate",
@@ -680,14 +691,14 @@
   },
   "총명": {
     "name": "총명",
-    "desc": "시작 심경이 12 높고 심경 성장이 15% 늘어난다.",
+    "desc": "시작 심경이 120 높고 심경 성장이 15% 늘어난다.",
     "rarity": "일반",
     "cost": 5,
     "effects": [
       {
         "type": "start_stat",
         "stat": "mind",
-        "amount": 12
+        "amount": 120
       },
       {
         "type": "growth_rate",
@@ -818,19 +829,17 @@
   },
   "글읽는무인": {
     "name": "글 읽는 무인",
-    "desc": "시작 심경이 8 높고 심경 성장이 10% 늘어난다. 글과 진법, 설법이 얽힌 사건에서 알아듣는다.",
+    "desc": "심법 회복이 20% 늘고 무공 성취를 20% 더 빠르게 얻는다. 글과 진법, 설법이 얽힌 사건에서 알아듣는다.",
     "rarity": "일반",
     "cost": 3,
     "effects": [
       {
-        "type": "start_stat",
-        "stat": "mind",
-        "amount": 8
+        "type": "mindset_power",
+        "percent": 20
       },
       {
-        "type": "growth_rate",
-        "stat": "mind",
-        "percent": 10
+        "type": "mastery_rate",
+        "percent": 20
       }
     ],
     "reacts": true
@@ -851,18 +860,18 @@
   },
   "산사람": {
     "name": "산사람",
-    "desc": "기연을 만날 확률이 12% 오르고 시작 외공이 4 높다. 산과 짐승, 약초가 얽힌 사건에서 길을 안다.",
+    "desc": "기연을 만날 확률이 15% 오르고 매달 체력을 3% 더 회복한다. 산과 짐승, 약초가 얽힌 사건에서 길을 안다.",
     "rarity": "일반",
     "cost": 4,
     "effects": [
       {
         "type": "fortune_rate",
-        "percent": 12
+        "percent": 15
       },
       {
-        "type": "start_stat",
-        "stat": "external",
-        "amount": 4
+        "type": "turn_regen",
+        "hp_pct": 3,
+        "qi_pct": 0
       }
     ],
     "reacts": true
@@ -1032,6 +1041,24 @@
       {
         "type": "evolve_mastery",
         "amount": 60
+      }
+    ]
+  },
+  "잔재주꾼": {
+    "name": "잔재주꾼",
+    "desc": "시작 무리가 160 높지만 내공이 80 낮다. 남의 초식을 흉내 내는 데 능하다.",
+    "rarity": "일반",
+    "cost": 3,
+    "effects": [
+      {
+        "type": "start_stat",
+        "stat": "martial",
+        "amount": 160
+      },
+      {
+        "type": "start_stat",
+        "stat": "internal",
+        "amount": -80
       }
     ]
   }

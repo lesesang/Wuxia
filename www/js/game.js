@@ -3,7 +3,7 @@ import { Battle, enemyPool, Enemy, statureEnemy, useConsumable } from "./battle.
 import { GRADE_ORDER, Player, Skill, STAT_NAMES } from "./character.js";
 import { DB } from "./data.js";
 import { grantStartGifts,
-  advanceChain, applyEffects, dueChainEvent, enemyIntro, LAST_CHAIN_TURN, pickFortune, pickRandomEvent, resolveChoice,
+  advanceChain, applyEffects, checkRequires, dueChainEvent, enemyIntro, LAST_CHAIN_TURN, pickFortune, pickRandomEvent, resolveChoice,
   startChain, storyEventForTurn,
 } from "./events.js";
 import { buy, openMarket } from "./market.js";
@@ -27,6 +27,7 @@ const INSIGHT_CHANCE = 0.3;
 const GAUNTLET_REST = 20;
 const LOG_LIMIT = 40;
 const VALID_ACTIONS = ["수련", "명상", "탐색", "휴식"];
+const SAME_SIDE_WEIGHT = 0.3;
 const VALID_BATTLE_ACTIONS = ["기본공격", "비기", "심법", "경공", "소비품", "도주"];
 
 export class Game {
@@ -194,8 +195,8 @@ export class Game {
 
   grow(stat) {
     const p = this.player;
-    let amount = 1;
-    if (rng.random() < TRAIN_BONUS_BASE + p.mind / 500) amount += 1; // 심경이 높으면 2 오를 때가 많아진다
+    let amount = randInt(8, 12);
+    if (rng.random() < TRAIN_BONUS_BASE + p.mind / 5000) amount += randInt(8, 12); // 심경이 높으면 두 배 오를 때가 많아진다
     return p.gainStat(stat, applyGrowth(amount, p.traits, stat));
   }
 
@@ -223,12 +224,16 @@ export class Game {
   }
 
   pickEnemy() {
-    let pool = enemyPool(getChapter(this.player.turn));
+    const p = this.player;
+    // 성향과 명성에 따라 찾아오는 적이 있다. 같은 편은 덜 덤빈다
+    let pool = enemyPool(getChapter(p.turn)).filter((k) => checkRequires(p, DB.enemies[k].requires));
+    const mine = p.dominantAlignment() || DB.sects[p.sect]?.alignment;
+    const weightOf = (k) => (mine && DB.enemies[k].side === mine ? DB.enemies[k].weight * SAME_SIDE_WEIGHT : DB.enemies[k].weight);
     if (realmIndex(this.player.realm) < realmIndex("초절정")) {
       const easier = pool.filter((k) => DB.enemies[k].tier !== "강적");
       if (easier.length) pool = easier;
     }
-    return pickWeighted(pool, pool.map((k) => DB.enemies[k].weight));
+    return pickWeighted(pool, pool.map(weightOf));
   }
 
   startBattle(key) {
@@ -454,7 +459,7 @@ export class Game {
     p.realm = next;
     p.note(`${next}의 경지에 올랐다.`);
     // 심경이 충분히 높지 않으면 돌파가 거칠어 내상을 입는다
-    if (rng.random() < Math.max(0, 60 - p.mind) * 0.01) {
+    if (rng.random() < Math.max(0, 600 - p.mind) * 0.001) {
       p.healPercent(-25, -25);
       lines.push("심경이 흔들려 기가 역류했다. 간신히 돌파했지만 내상을 입었다. (체력·내력 -25%)");
     } else {
@@ -529,12 +534,7 @@ function karmaGain(player, key, victory) {
   };
   add("도달한 장", getChapter(Math.min(player.turn, player.maxTurn)) - 1);
   add("경지", realmIndex(player.realm));
-  const { realm, 생사경: saengsa, 격파: win } = DB.karma.milestones;
-  const reached = Object.keys(realm).filter((k) => realmIndex(player.realm) >= realmIndex(k));
-  const wants = [...reached, ...(victory ? ["격파"] : []), ...(key === "생사경" ? ["생사경"] : [])];
-  for (const k of claimMilestones(wants)) {
-    add(k === "격파" ? "첫 천마 격파" : `처음 이른 ${k}`, k === "격파" ? win : k === "생사경" ? saengsa : realm[k]);
-  }
+  if (victory) for (const k of claimMilestones(["격파"])) add("첫 천마 격파", DB.karma.milestones[k]);
   return { total, lines };
 }
 

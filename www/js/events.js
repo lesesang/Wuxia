@@ -1,12 +1,12 @@
 // 이벤트. 정해진 달의 줄거리와 탐색 중 사건을 JSON으로 관리한다. 형식은 docs/콘텐츠-가이드.md 참고.
-import { GRADE_ORDER, Skill, STAT_NAMES } from "./character.js";
+import { GRADE_ORDER, Skill, STAT_NAMES, STAT_SCALE } from "./character.js";
 import { DB } from "./data.js";
 import { bonusFor, equipmentBonus, styleWeight } from "./market.js";
 import { recordEventPick, updateKnown } from "./meta.js";
 import { pick, pickWeighted, rng } from "./rng.js";
 import { ALIGNMENTS, applyGrowth, fameRankChanged, getChapter, realmIndex, sumEffect } from "./rules.js";
 
-export const EVENT_STAT_SCALE = 0.3; // 사건·기연의 기량 상승 배율 (밸런스 조정용)
+export const EVENT_STAT_SCALE = 3; // 사건과 기연의 기량 상승 배율. 데이터에 적힌 값의 세 배가 오른다
 
 /** 만족하지 못한 첫 조건의 설명. 모두 만족하면 null */
 export function unmetReason(player, requires) {
@@ -328,8 +328,9 @@ export function applyEffects(player, effects) {
       const scaled = Math.max(1, Math.round(amount * rate));
       summary.push(`${STAT_NAMES[stat]}+${player.gainStat(stat, applyGrowth(scaled, player.traits, stat))}`);
     } else {
-      player[stat] = Math.max(1, player[stat] + amount);
-      summary.push(`${STAT_NAMES[stat]}${amount}`);
+      const lost = amount * STAT_SCALE;
+      player[stat] = Math.max(1, player[stat] + lost);
+      summary.push(`${STAT_NAMES[stat]}${lost}`);
     }
   }
 

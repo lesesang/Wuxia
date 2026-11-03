@@ -1,5 +1,5 @@
 // 달제 전투. 적의 필살기는 직전 합에 예고되고, 경공으로 흘려낼 수 있다.
-import { MAX_INJURY, Skill, STAT_NAMES } from "./character.js";
+import { MAX_INJURY, Skill, STAT_NAMES, STAT_SCALE } from "./character.js";
 import { DB } from "./data.js";
 import { checkRequires, reactiveLine } from "./events.js";
 import { equipmentBonus } from "./market.js";
@@ -12,7 +12,7 @@ const INTERNAL_ATTACK_RATE = 0.3;
 const FLEE_BASE = 0.5;
 export const INJURY_PENALTY = 7;
 const FAME_BY_TIER = { 일반: 1, 난적: 2, 강적: 4, 보스: 10 };
-const STAT_GROWTH_RANGE = { 일반: [1, 2], 난적: [1, 3], 강적: [2, 4], 보스: [5, 10] };
+const STAT_GROWTH_RANGE = { 일반: [10, 20], 난적: [10, 30], 강적: [20, 40], 보스: [50, 100] };
 
 /** 표(12달 간격)에서 해당 달의 값을 읽는다. */
 function curveAt(curve, turn) {
@@ -138,7 +138,7 @@ export class Battle {
     this.interlude = null;   // 결전의 막간. 고르기 전에는 합이 진행되지 않는다
     this.guard = null;
     this.alliesSeen = [];
-    // 전투 시작 시 발동하는 특성 효과 (99 한계 무시, 전투가 끝나면 되돌림)
+    // 전투 시작 시 발동하는 특성 효과 (한계 무시, 전투가 끝나면 되돌림)
     for (const buff of battleBuffs(player.traits, "on_battle_start")) {
       player[buff.stat] += buff.amount;
       this.tempBuffs.push([buff.stat, buff.amount]);
@@ -178,26 +178,26 @@ export class Battle {
 
   attackPower(skill = null) {
     const p = this.player;
-    let base = p.external + p.martial + equipmentBonus(p, "weapon") + p.internal * INTERNAL_ATTACK_RATE;
+    let base = (p.external + p.martial + p.internal * INTERNAL_ATTACK_RATE) / STAT_SCALE + equipmentBonus(p, "weapon");
     if (skill) base *= skill.effectiveMultiplier();
     return Math.max(1, Math.trunc(base * this.attackScale()));
   }
 
   secretPower(skill) {
     const p = this.player;
-    const base = p.external + p.martial + equipmentBonus(p, "weapon") + p.internal * SECRET_INTERNAL_RATE;
+    const base = (p.external + p.martial + p.internal * SECRET_INTERNAL_RATE) / STAT_SCALE + equipmentBonus(p, "weapon");
     return Math.max(1, Math.trunc(base * skill.effectiveMultiplier() * skill.secretMultiplier * this.attackScale()
       * (1 + sumEffect(p.traits, "secret_power", "percent") / 100)));
   }
 
   hits() {
     const bonus = sumEffect(this.player.traits, "hit_bonus", "percent") / 100;
-    return rng.random() < BASE_HIT + bonus + this.player.martial * 0.001 - this.enemy.evasion;
+    return rng.random() < BASE_HIT + bonus + this.player.martial * 0.0001 - this.enemy.evasion;
   }
 
   critChance() {
     const p = this.player;
-    return p.mind / 400 + (sumEffect(p.traits, "crit", "percent") + sectBonus(p, "crit")) / 100;
+    return p.mind / 4000 + (sumEffect(p.traits, "crit", "percent") + sectBonus(p, "crit")) / 100;
   }
 
   strike(power, label, skill = null) {
@@ -236,7 +236,7 @@ export class Battle {
     let power = sectBonus(this.player, "poison");
     if (skill?.inflict) power += skill.inflict.poison || 0;
     power += sumEffect(this.player.traits, "inflict_poison", "power");
-    if (power) this.enemyPoison = { damage: power + Math.floor(this.player.internal / 5), rounds: 3 };
+    if (power) this.enemyPoison = { damage: power + Math.floor(this.player.internal / 50), rounds: 3 };
   }
 
   skillLabel(skill) {
@@ -292,7 +292,7 @@ export class Battle {
   /** 주화입마: 마공의 비기는 심경이 70보다 낮을수록 위험하다. */
   checkQiDeviation(skill) {
     if (!skill.risky) return;
-    if (rng.random() < Math.max(0, 70 - this.player.mind) * 0.015) {
+    if (rng.random() < Math.max(0, 700 - this.player.mind) * 0.0015) {
       this.player.addInjury(1);
       this.log.push(`🩸 기가 역류한다! 주화입마의 기운에 내상을 입었다. (내상 ${this.player.injury}단계)`);
     }

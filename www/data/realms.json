@@ -9,23 +9,23 @@
   ],
   "requirements": {
     "절정": {
-      "avg": 35,
-      "min_stat": 30,
+      "avg": 350,
+      "min_stat": 300,
       "battles": 8
     },
     "초절정": {
-      "avg": 50,
-      "min_stat": 45,
+      "avg": 500,
+      "min_stat": 450,
       "battles": 14
     },
     "화경": {
-      "avg": 65,
-      "min_stat": 60,
+      "avg": 650,
+      "min_stat": 600,
       "battles": 24
     },
     "현경": {
-      "avg": 80,
-      "min_stat": 75,
+      "avg": 800,
+      "min_stat": 750,
       "battles": 36
     }
   },
@@ -37,7 +37,7 @@
     "현경": 0.36
   },
   "saengsa": {
-    "min_stat": 95,
+    "min_stat": 950,
     "battles": 50,
     "hp_ratio": 0.8,
     "qi_ratio": 0.8

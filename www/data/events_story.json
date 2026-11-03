@@ -1083,7 +1083,7 @@
       {
         "requires": {
           "stat_min": {
-            "martial": 85
+            "martial": 850
           }
         },
         "tag": "무리",
@@ -1105,7 +1105,7 @@
       {
         "requires": {
           "stat_min": {
-            "mind": 85
+            "mind": 850
           }
         },
         "tag": "심안",

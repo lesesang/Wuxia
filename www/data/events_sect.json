@@ -280,7 +280,7 @@
         "label": "난간 없는 길을 걷는다",
         "requires": {
           "stat_min": {
-            "mind": 25
+            "mind": 250
           }
         },
         "outcomes": [

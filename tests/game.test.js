@@ -79,11 +79,11 @@ test("챕터마다 사건, 적이 충분하다", () => {
 
 // ---------- 설계 결정 ----------
 
-test("능력치 상한은 99", () => {
+test("능력치 상한은 999", () => {
   const p = new Player();
-  p.external = 98;
+  p.external = 998;
   assert.equal(p.gainStat("external", 5), 1);
-  assert.equal(p.external, 99);
+  assert.equal(p.external, 999);
 });
 
 test("출신 개방 비용은 무림초출 0, 나머지 5", () => {
@@ -123,7 +123,7 @@ test("처치 보상은 능력치 2종, 등급 범위 안", () => {
   assert.ok(battle.runRound("기본공격").victory);
   const gains = [p.external, p.internal, p.martial, p.mind].map((v, i) => v - before[i]);
   assert.equal(gains.filter((g) => g > 0).length, 2);
-  assert.ok(gains.every((g) => g >= 0 && g <= 2));
+  assert.ok(gains.every((g) => g >= 0 && g <= 20));
 });
 
 // ---------- 전투 ----------
@@ -216,7 +216,7 @@ test("전투 임시 버프는 끝나면 되돌린다", () => {
   const base = p.external;
   const enemy = new Enemy("산적");
   const battle = new Battle(p, enemy);
-  assert.equal(p.external, base + 5);
+  assert.equal(p.external, base + 40);
   battle.finish(false, true);
   assert.equal(p.external, base);
 });
@@ -448,7 +448,7 @@ test("문파 입문은 사문이 없을 때만", () => {
 test("비무대회는 세 번 싸우고 보상을 준다", () => {
   const game = newGame();
   const p = game.player;
-  Object.assign(p, { external: 95, martial: 95, internal: 95, mind: 95, hp: 575, qi: 575 });
+  Object.assign(p, { external: 950, martial: 950, internal: 950, mind: 950, hp: 575, qi: 575 });
   toTurnEnd(game, 59);
   game.advanceTurn();
   assert.equal(game.event.key, "천하제일비무");
@@ -487,7 +487,7 @@ test("별호와 명성", () => {
 
 test("전투 경험만 모자라면 알려 준다", () => {
   const p = new Player();
-  p.external = p.internal = p.martial = p.mind = 40;
+  p.external = p.internal = p.martial = p.mind = 400;
   assert.ok(breakthroughBlock(p).includes("실전"));
   p.battles = 8;
   assert.equal(breakthroughBlock(p), null);
@@ -715,7 +715,7 @@ test("60달 시절의 저장은 시간표를 늘려 이어 간다", () => {
 test("성장 특성은 작은 수에서 두 배가 되지 않는다", () => {
   seed(5);
   let total = 0;
-  for (let i = 0; i < 1000; i++) total += applyGrowth(1, ["글읽는무인"], "mind");
+  for (let i = 0; i < 1000; i++) total += applyGrowth(1, ["오성"], "mind");
   assert.ok(total > 1050 && total < 1150, String(total));
 });
 
@@ -817,7 +817,7 @@ test("상황별 반응: 출신, 무공, 명성, 능력치, 시작 특성이 고�
   assert.ok(eventView(p, "수로채").text.includes("대협"));
   p.fame = 0;
   assert.ok(eventView(p, "살막의명부").text.includes("두 냥"));
-  p.external = 70;
+  p.external = 700;
   assert.ok(eventView(p, "철권씨름").choices.some((c) => c.label.includes("한 손으로")));
 });
 
@@ -993,7 +993,7 @@ test("새 특성들이 작동한다", () => {
   const herb = new Player("무림초출", ["약초꾼"]);
   assert.equal(herb.inventory.금창약, 5);
   assert.equal(new Player("무림초출", ["가보의호구"]).armor, "철사갑의");
-  assert.equal(new Player("무림초출", ["대기만성"]).external, new Player().external - 4);
+  assert.equal(new Player("무림초출", ["대기만성"]).external, new Player().external - 40);
   const keen = new Player("무림초출", ["눈썰미"]);
   assert.ok(openMarket(12, keen).stock.length > openMarket(12, new Player()).stock.length);
   const game = newGame();
@@ -1001,7 +1001,7 @@ test("새 특성들이 작동한다", () => {
   const before = game.player.external;
   game.player.turn = 24;
   game.startNextTurn();
-  assert.equal(game.player.external, before + 4);
+  assert.equal(game.player.external, before + 40);
 });
 
 test("독인은 독에 당하지 않고 맑은 정신은 점혈되지 않는다", () => {
@@ -1171,7 +1171,7 @@ test("기틀은 장착 없이 적용되고 단계마다 비용이 오른다", ()
   assert.equal(loadMeta().current_karma, 24);
   const game = new Game();
   game.start("무림초출");
-  assert.equal(game.player.external, 32);
+  assert.equal(game.player.external, 320);
   assert.ok(buyUpgrade("강골"));
   assert.ok(!buyUpgrade("강골"), "최고 단계를 넘을 수 없다");
   withKarma(0);
@@ -1187,7 +1187,7 @@ test("능력치 기틀과 자질은 네 기량에 고르게 있다", () => {
   }
   const single = Object.values(DB.traits).filter((t) => !t.hidden && t.effects.length === 2);
   for (const stat of stats) {
-    assert.ok(single.some((t) => t.effects.some((e) => e.type === "start_stat" && e.stat === stat && e.amount === 12)
+    assert.ok(single.some((t) => t.effects.some((e) => e.type === "start_stat" && e.stat === stat && e.amount === 120)
       && t.effects.some((e) => e.type === "growth_rate" && e.stat === stat && e.percent === 15)), stat);
   }
 });
@@ -1212,6 +1212,82 @@ test("새로 얻거나 품계가 높아도 쓰던 무공이 바뀌지 않는다"
   assert.equal(p.bestOfType("심공").key, "오호맹혼공");
   const again = Player.fromDict(p.toDict());
   assert.equal(again.bestOfType("심공").key, "오호맹혼공");
+});
+
+test("성향과 명성에 따라 찾아오는 적이 달라진다", () => {
+  const seen = (setup, turn = 60, n = 400) => {
+    const game = newGame();
+    setup(game.player);
+    game.player.turn = turn;
+    const names = new Set();
+    for (let i = 0; i < n; i++) names.add(game.pickEnemy());
+    return names;
+  };
+  const dark = seen((p) => { p.alignment.마도 = 10; });
+  assert.ok(dark.has("구파협객"), "마도를 걸으면 정파 협객이 나온다");
+  assert.ok(!dark.has("사파복수귀"));
+  const right = seen((p) => { p.alignment.정도 = 10; });
+  assert.ok(right.has("사파복수귀"));
+  assert.ok(!right.has("구파협객"), "정도에게는 정파 협객이 덤비지 않는다");
+  const shady = seen((p) => { p.alignment.사도 = 10; });
+  assert.ok(shady.has("포도대장"));
+  const plain = seen(() => {});
+  assert.ok(!plain.has("구파협객") && !plain.has("포도대장") && !plain.has("사파복수귀"));
+  const famous = seen((p) => { p.fame = 150; p.realm = "화경"; }, 80);
+  assert.ok(famous.has("십대고수"), "이름이 높으면 고수가 찾아온다");
+  const nameless = seen((p) => { p.fame = 0; }, 30);
+  assert.ok(nameless.has("무명사냥꾼"), "이름이 없으면 얕보인다");
+  for (const dominant of ["마도", "정도", "사도"]) {
+    for (const chapter of [2, 3, 4, 5]) {
+      assert.ok(Object.values(DB.enemies).some((e) => e.requires?.dominant === dominant && e.chapters.includes(chapter)), `${dominant} ${chapter}장`);
+    }
+  }
+});
+
+test("성향과 명성에 따라 사건이 달라진다", () => {
+  const p = new Player();
+  p.alignment.마도 = 10;
+  assert.ok(eventView(p, "쫓기는소녀").text.includes("그쪽이 낫다"));
+  assert.ok(checkRequires(p, DB.events.마도_토벌령.requires));
+  assert.ok(!checkRequires(p, DB.events.정도_은인.requires));
+  const events = Object.values(DB.events);
+  for (const dominant of ["마도", "정도", "사도"]) {
+    assert.ok(events.filter((e) => e.requires?.dominant === dominant).length >= 2, dominant);
+    assert.ok(events.filter((e) => (e.variants || []).some((v) => v.requires?.dominant === dominant)).length >= 4, `${dominant} 반응`);
+  }
+  assert.ok(events.filter((e) => e.requires?.min_fame >= 60).length >= 3);
+});
+
+test("기량 최대는 999이고 예전 저장은 단위를 맞춘다", () => {
+  const p = new Player();
+  p.external = 995;
+  assert.equal(p.gainStat("external", 50), 4);
+  assert.equal(p.external, 999);
+  const old = { ...new Player().toDict(), external: 30, internal: 28, martial: 28, mind: 28 };
+  delete old.stat_scale;
+  const loaded = Player.fromDict(old);
+  assert.equal(loaded.external, 300);
+  assert.equal(Player.fromDict(loaded.toDict()).external, 300);
+  assert.equal(DB.realms.saengsa.min_stat, 950);
+});
+
+test("자질의 기량 효과는 네 기량에 고르다", () => {
+  const stats = ["external", "internal", "martial", "mind"];
+  const total = (type, field) => stats.map((stat) => Object.values(DB.traits).filter((t) => !t.hidden)
+    .flatMap((t) => t.effects).filter((e) => e.type === type && e.stat === stat).reduce((sum, e) => sum + e[field], 0));
+  for (const [type, field] of [["start_stat", "amount"], ["growth_rate", "percent"], ["battle_buff", "amount"]]) {
+    assert.equal(new Set(total(type, field)).size, 1, `${type} ${total(type, field)}`);
+  }
+});
+
+test("처음 이른 경지에 주는 카르마는 없고 생사경은 강호의 전설 다음 결말이다", () => {
+  assert.deepEqual(Object.keys(DB.karma.milestones), ["격파"]);
+  assert.equal(DB.endings.karma.생사경, 10);
+  assert.ok(DB.endings.karma.생사경 > DB.endings.karma.기본);
+  const order = Object.keys(DB.endings.titles);
+  assert.equal(order.indexOf("생사경"), order.indexOf("기본") + 1);
+  assert.equal(DB.karma.rewards[DB.karma.rewards.length - 1].at, 1000);
+  for (const r of DB.karma.rewards.filter((x) => x.slot)) assert.ok(r.desc.includes("하나 더"));
 });
 
 test("적은 장에 맞는 위상으로 나온다", () => {
@@ -1279,7 +1355,6 @@ test("큰 그릇은 세 번까지 사고 없어진 자질은 값을 돌려준다
 
 test("생사경 결말의 카르마는 10이다", () => {
   assert.equal(DB.endings.karma.생사경, 10);
-  assert.equal(DB.karma.milestones.생사경, 0);
 });
 
 test("자질의 새 효과가 동작한다", () => {
@@ -1473,13 +1548,13 @@ test("카르마는 도달한 장과 경지, 처음 이룬 일만큼 늘어난다
   game.player.turn = 80;
   game.player.realm = "화경";
   game.finishGame(false);
-  assert.equal(game.ending.karma, 1 + 3 + 3 + 1 + 2 + 3);
+  assert.equal(game.ending.karma, 1 + 3 + 3);
   const again = new Game();
   again.start("무림초출");
   again.player.turn = 80;
   again.player.realm = "화경";
   again.finishGame(false);
-  assert.equal(again.ending.karma, 1 + 3 + 3, "처음 보상은 한 번뿐이다");
+  assert.equal(again.ending.karma, 1 + 3 + 3, "처음 이른 경지에 주는 보상은 없다");
   withKarma(0);
 });
 
@@ -1492,7 +1567,7 @@ test("수상한 누군가에게 카르마로 거래한다", () => {
   assert.equal(blockReason(game.player, "운명의패"), "카르마 부족");
   const before = game.player.external;
   assert.ok(buy(game.player, market, "생사단")[0]);
-  assert.equal(game.player.external, before + 3);
+  assert.equal(game.player.external, before + 30);
   assert.equal(loadMeta().current_karma, 1);
   withKarma(0);
 });
@@ -1730,11 +1805,11 @@ test("개방 출신은 사문을 지니고 시작한다", () => {
 
 test("생사경은 기록대로 천마를 이긴 순간에만 판정된다", () => {
   const req = DB.realms.saengsa;
-  assert.deepEqual([req.min_stat, req.battles, req.hp_ratio, req.qi_ratio], [95, 50, 0.8, 0.8]);
+  assert.deepEqual([req.min_stat, req.battles, req.hp_ratio, req.qi_ratio], [950, 50, 0.8, 0.8]);
   const hero = () => {
     const g = newGame();
     const p = g.player;
-    p.external = p.internal = p.martial = p.mind = 99;
+    p.external = p.internal = p.martial = p.mind = 999;
     p.realm = "현경";
     p.battles = 60;
     p.hp = p.maxHp();
@@ -1967,7 +2042,7 @@ test("새 장의 성장은 장마다, 회복은 해마다다", () => {
   p.turn = 24;
   game.event = null;
   game.startNextTurn();
-  assert.equal(p.external, before + 4);
+  assert.equal(p.external, before + 40);
 });
 
 // ---------- 전체 플레이 ----------
@@ -2001,7 +2076,7 @@ for (const origin of DB.origins.order) {
         assert.ok(p.hp >= 0 && p.qi >= 0 && p.silver >= 0 && Number.isInteger(p.hp));
         assert.ok(p.turn <= 120);
         for (const stat of ["external", "internal", "martial", "mind"]) {
-          assert.ok(p[stat] >= 1 && p[stat] <= 110, `${stat} ${p[stat]}`);
+          assert.ok(p[stat] >= 1 && p[stat] <= 1100, `${stat} ${p[stat]}`);
         }
         assert.ok(game.log.every((l) => typeof l === "string" && !l.includes("undefined") && !l.includes("NaN")));
       }
