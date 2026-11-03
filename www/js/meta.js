@@ -179,15 +179,6 @@ export function takeLegacy(index) {
   return entry || null;
 }
 
-/** 처음 이룬 일에 주는 카르마. 이미 받은 것은 건너뛴다. */
-export function claimMilestones(keys) {
-  const data = loadMeta();
-  const fresh = keys.filter((k) => !data.milestones.includes(k));
-  data.milestones.push(...fresh);
-  saveMeta(data);
-  return fresh;
-}
-
 export const unlockOrigin = (key, cost) => unlock("unlocked_origins", key, cost);
 export const unlockTrait = (key, cost) => unlock("unlocked_traits", key, cost);
 

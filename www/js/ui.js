@@ -369,7 +369,7 @@ function rewardPanel(meta) {
     const done = meta.total_karma >= r.at;
     return `<div class="reward-row${done ? " done" : ""}"><span class="reward-at">${r.at}</span><span class="reward-main"><b>${done ? "✓ " : ""}${esc(r.name)}</b><span class="pick-desc block">${esc(r.desc)}</span></span></div>`;
   }).join("");
-  const { milestones, achievements } = DB.karma;
+  const { achievements } = DB.karma;
   const endings = Object.entries(DB.endings.karma).filter(([k]) => !["생사경", "사망"].includes(k)).map(([k, v]) => `${DB.endings.titles[k]} +${v}`).join(", ");
   const left = achievements.filter((a) => !a.hidden && !meta.achievements.includes(a.key));
   const total = left.reduce((sum, a) => sum + a.karma, 0);
@@ -378,10 +378,9 @@ function rewardPanel(meta) {
       <p>누적 카르마 <b>${meta.total_karma}</b>${next ? `, 다음 「${esc(next.name)}」까지 ${next.at - meta.total_karma}` : ", 모두 받았습니다"}</p></div>
     ${rows}
     <h4 class="shop-group">카르마를 얻는 길</h4>
+    <p class="help-line"><b>도달한 장</b>: 1장 +1부터 5장 +5까지</p>
     <p class="help-line"><b>경지</b>: 판이 끝날 때 오른 경지에 따라 절정 +1, 초절정 +2, 화경 +3, 현경 +4</p>
-    <p class="help-line"><b>도달한 장</b>: 천마를 넘지 못하고 끝나면 1장 +1부터 5장 +5까지</p>
-    <p class="help-line"><b>결말</b>: 결말을 보면 도달한 장 대신 받습니다. ${esc(endings)}</p>
-    <p class="help-line"><b>첫 천마 격파</b>: +${milestones.격파}</p>
+    <p class="help-line"><b>결말</b>: 장과 경지에 더해 받습니다. ${esc(endings)}</p>
     <p class="help-line"><b>공적</b>: 아직 이루지 못한 공적 ${left.length}개, 합쳐서 +${total}. 강호록의 공적 칸에서 볼 수 있습니다.</p>`;
 }
 

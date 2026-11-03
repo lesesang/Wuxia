@@ -33,6 +33,8 @@ export function unmetReason(player, requires) {
   if (r.trait && !player.traits.includes(r.trait)) return "타고난 바가 다르다";
   if (r.unlocked && !player.content.includes(r.unlocked)) return "아직 인연이 닿지 않았다";
   if (r.dominant && player.dominantAlignment() !== r.dominant) return `${r.dominant}의 길이 아니다`;
+  if (r.min_turn && player.turn < r.min_turn) return "아직 때가 아니다";
+  if (r.min_chapter && getChapter(player.turn) < r.min_chapter) return "아직 때가 아니다";
   if (r.min_fame && player.fame < r.min_fame) return `명성 ${r.min_fame} 필요`;
   if (r.max_fame !== undefined && player.fame > r.max_fame) return "이미 이름이 너무 알려졌다";
   if (r.realm_max && realmIndex(player.realm) > realmIndex(r.realm_max)) return "경지가 이미 높다";

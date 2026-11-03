@@ -512,16 +512,13 @@
     "shelf": 3,
     "gear_tier": 2
   },
-  "milestones": {
-    "격파": 5
-  },
   "achievements": [
     {
       "key": "첫승리",
       "name": "천마를 넘다",
       "desc": "천마를 쓰러뜨린다.",
       "type": "win",
-      "karma": 0
+      "karma": 5
     },
     {
       "key": "맨몸승리",

@@ -7,7 +7,7 @@ import { Battle, Enemy, statureEnemy, useConsumable } from "../www/js/battle.js"
 import { GRADE_ORDER, Player, Skill } from "../www/js/character.js";
 import { DB } from "../www/js/data.js";
 import { applyEffects, grantStartGifts, canStartChain, checkRequires, enemyIntro, eventView, LAST_CHAIN_TURN, pickRandomEvent, resolveChoice, validateChains, validateEvents } from "../www/js/events.js";
-import { Game } from "../www/js/game.js";
+import { buildEpilogue, Game } from "../www/js/game.js";
 import { blockReason, buy, equipmentBonus, openMarket, priceOf } from "../www/js/market.js";
 import {
   activeContent, buyContent, buyUpgrade, exportRecords, importRecords, extraSlots, loadCheckpoint, loadEventLog, loadMeta, nextReward, recordEventPick, openLegacy, saveMeta, takeLegacy, toggleContent, unlockOrigin,
@@ -1280,11 +1280,10 @@ test("자질의 기량 효과는 네 기량에 고르다", () => {
   }
 });
 
-test("끝난 판의 카르마는 경지와 장이고, 천마를 넘으면 결말이 장을 대체한다", () => {
+test("끝난 판의 카르마는 장, 경지, 결말을 따로 더한다", () => {
   const finish = (turn, realm, victory) => {
     withKarma(0);
     const data = loadMeta();
-    data.milestones = ["격파"];
     data.achievements = DB.karma.achievements.map((x) => x.key); // 공적 카르마는 빼고 잰다
     saveMeta(data);
     const game = new Game();
@@ -1296,19 +1295,49 @@ test("끝난 판의 카르마는 경지와 장이고, 천마를 넘으면 결말
   };
   assert.equal(finish(10, "일류", false).karma, 1, "1장, 일류");
   assert.equal(finish(100, "화경", false).karma, 5 + 3, "5장, 화경");
-  const win = finish(120, "화경", true);
-  assert.ok(!win.karmaLines.some((l) => l.includes("도달한 장")));
-  assert.equal(win.karma, DB.endings.karma[win.key] + 3, "결말이 장을 대체한다");
-  withKarma(0);
+  const hurt = finish(120, "일류", true);
+  assert.equal(hurt.key, "배드");
+  assert.equal(hurt.karma, 5 + 4, "5장과 상처뿐인 승리");
+  assert.ok(hurt.karmaLines.some((l) => l.includes("도달한 장")));
   const clean = loadMeta();
   clean.achievements = [];
-  clean.milestones = [];
   saveMeta(clean);
+  withKarma(0);
+});
+
+test("첫 천마 격파의 카르마는 공적으로 받는다", () => {
+  assert.equal(DB.karma.milestones, undefined);
+  assert.equal(DB.karma.achievements.find((a) => a.key === "첫승리").karma, 5);
+});
+
+test("결말의 틀은 다섯이고 문장이 상황에 따라 달라진다", () => {
+  assert.deepEqual(Object.keys(DB.endings.titles).sort(), ["귀순", "기본", "배드", "사망", "생사경"].sort());
+  for (const key of Object.keys(DB.endings.titles)) {
+    const groups = DB.endings.frames[key];
+    assert.ok(groups.length >= 2, key);
+    if (key !== "기본") {
+      for (const origin of DB.origins.order) {
+        assert.ok(groups.flat().some((row) => row.requires.origin === origin), `${key} ${origin}`);
+      }
+    }
+  }
+  const text = (origin, setup, ending) => {
+    const p = new Player(origin);
+    setup(p);
+    return buildEpilogue(p, ending).join(" ");
+  };
+  assert.notEqual(text("남궁세가", () => {}, "사망"), text("하오문", () => {}, "사망"));
+  assert.ok(text("하오문", (p) => { p.fame = 150; p.turn = 100; }, "사망").includes("잔이 하나씩"));
+  assert.ok(text("하오문", (p) => { p.fame = 0; }, "사망").includes("무명"));
+  assert.ok(text("하오문", (p) => { p.alignment.마도 = 10; }, "사망").includes("잔치"));
+  assert.ok(text("하북팽가", () => {}, "귀순").includes("네 형"));
+  const all = JSON.stringify(DB.endings.frames);
+  for (const word of ["전생", "회차", "다음 생"]) assert.ok(!all.includes(word), word);
 });
 
 test("처음 이른 경지에 주는 카르마는 없고 생사경은 강호의 전설 다음 결말이다", () => {
-  assert.deepEqual(Object.keys(DB.karma.milestones), ["격파"]);
-  assert.equal(DB.endings.karma.생사경, 10);
+  assert.equal(DB.karma.milestones, undefined);
+  assert.equal(DB.endings.karma.생사경, 15);
   assert.ok(DB.endings.karma.생사경 > DB.endings.karma.기본);
   const order = Object.keys(DB.endings.titles);
   assert.equal(order.indexOf("생사경"), order.indexOf("기본") + 1);
@@ -1379,8 +1408,8 @@ test("큰 그릇은 세 번까지 사고 없어진 자질은 값을 돌려준다
   withKarma(0);
 });
 
-test("생사경 결말의 카르마는 10이다", () => {
-  assert.equal(DB.endings.karma.생사경, 10);
+test("생사경 결말의 카르마는 15이다", () => {
+  assert.equal(DB.endings.karma.생사경, 15);
 });
 
 test("자질의 새 효과가 동작한다", () => {
