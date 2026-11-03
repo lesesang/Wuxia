@@ -131,7 +131,7 @@ test("처치 보상은 능력치 2종, 등급 범위 안", () => {
 test("무공 승급과 비기 터득", () => {
   const skill = new Skill("기초검법");
   const multiplier = skill.effectiveMultiplier();
-  const messages = skill.gainMastery(100);
+  const messages = skill.gainMastery(101);
   assert.equal(skill.grade, "명품");
   assert.equal(skill.mastery, 30);
   assert.ok(messages.some((m) => m.includes("승급")));
@@ -880,23 +880,23 @@ test("출신은 여덟이고 일곱 계열에 하나씩이며 심법이 모두 �
   }
 });
 
-test("장이 끝나면 체력, 기력, 내상이 모두 회복된다", () => {
+test("새해가 시작되면 체력, 내력, 내상이 모두 회복된다", () => {
   const game = newGame();
   const p = game.player;
-  p.turn = 24;
+  p.turn = 12;
   p.hp = 1;
   p.qi = 0;
   p.addInjury(3);
   game.pendingNext = true;
   game.market = null;
   game.startNextTurn();
-  assert.equal(p.turn, 25);
+  assert.equal(p.turn, 13);
   assert.equal(p.hp, p.maxHp());
   assert.equal(p.qi, p.maxQi());
   assert.equal(p.injury, 0);
 });
 
-test("장 중간에는 내상이 그대로 남는다", () => {
+test("해 중간에는 내상이 그대로 남는다", () => {
   const game = newGame();
   const p = game.player;
   p.addInjury(2);
@@ -1560,6 +1560,45 @@ test("출신 서사: 8개 모두 일류 이유, 천마와의 인연, 맺음말�
     assert.ok(Object.values(DB.randomEvents).filter((e) => e.requires?.origin === key).length >= 2, key);
     assert.ok(DB.storyEvents.결전_천마봉.variants.some((v) => v.requires.origin === key), key);
   }
+});
+
+test("성취 100을 넘겨 더 쌓아야 승급하고, 승급은 신공까지다", () => {
+  const s = new Skill("기초검법");
+  s.mastery = 95;
+  assert.deepEqual(s.gainMastery(5), []);
+  assert.equal(s.mastery, 100);
+  assert.equal(s.grade, "기본", "정확히 100이면 아직 승급하지 않는다");
+  assert.ok(s.gainMastery(1).some((m) => m.includes("승급")));
+  assert.equal(s.grade, "명품");
+  assert.equal(s.mastery, 30);
+  const top = new Skill("기초검법");
+  top.grade = "상승";
+  top.mastery = 100;
+  top.gainMastery(1);
+  assert.equal(top.grade, "신공", "상승에서 신공으로는 오른다");
+  top.mastery = 100;
+  assert.deepEqual(top.gainMastery(50).filter((m) => m.includes("승급")), []);
+  assert.equal(top.grade, "신공", "신공에서 천상으로는 오르지 않는다");
+  assert.equal(top.mastery, 100);
+  const sky = new Skill("기초검법");
+  sky.grade = "천상";
+  sky.mastery = 100;
+  sky.gainMastery(5);
+  assert.equal(sky.grade, "천상");
+});
+
+test("새 장의 성장은 장마다, 회복은 해마다다", () => {
+  const game = newGame();
+  const p = game.player;
+  p.traits = ["대기만성"];
+  const before = p.external;
+  p.turn = 12;
+  game.startNextTurn();
+  assert.equal(p.external, before, "1년이 지나도 대기만성은 그대로");
+  p.turn = 24;
+  game.event = null;
+  game.startNextTurn();
+  assert.equal(p.external, before + 3);
 });
 
 // ---------- 전체 플레이 ----------

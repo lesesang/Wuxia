@@ -104,7 +104,7 @@ function helpModal() {
     "적의 필살기는 한 합 전에 ⚠️로 예고됩니다. <b>경공</b>으로 흘려내면 다음 공격이 강해집니다.",
     "<b>심법</b>은 숨을 고르며 회복하고 점혈을 풉니다. 위험하면 <b>도주</b>도 방법입니다.",
     "내상은 전투가 끝나도 남고 주는 피해를 줄입니다."])}
-    ${section("장터와 성장", ["매년 말 장터가 열리고 달을 쓰지 않습니다. 더 나은 병기와 호신구가 항상 진열되고, 익힌 무공과 맞는 물건이 더 자주 나옵니다.", "도구는 계열이 맞으면 제 효과를 내고 맞지 않으면 절반입니다. 수련 도구는 언제든, 전투 도구는 전투 중에 씁니다.", "같은 계열 무공의 성취는 품계가 같으면 절반, 낮으면 3할을 주무공으로 옮길 수 있습니다. 신상의 무공 칸에서 합니다.", "병기는 주무공과 계열이 맞아야 제 힘을 냅니다. 맞지 않으면 3/4만 나옵니다.", "사건의 선택으로 정도, 사도, 마도 성향이 쌓이고 혜택과 파는 물건이 달라집니다."])}
+    ${section("장터와 성장", ["매년 말 장터가 열리고 달을 쓰지 않습니다. 더 나은 병기와 호신구가 항상 진열되고, 익힌 무공과 맞는 물건이 더 자주 나옵니다.", "도구는 계열이 맞으면 제 효과를 내고 맞지 않으면 절반입니다. 수련 도구는 언제든, 전투 도구는 전투 중에 씁니다.", "같은 계열 무공의 성취는 품계가 같으면 절반, 낮으면 3할을 주무공으로 옮길 수 있습니다. 신상의 무공 칸에서 합니다.", "새해가 밝으면 체력과 내력이 가득 차고 내상이 낫습니다.", "무공은 성취 100을 넘겨 더 쌓으면 다음 품계로 승급합니다. 신공이 승급의 끝입니다.", "병기는 주무공과 계열이 맞아야 제 힘을 냅니다. 맞지 않으면 3/4만 나옵니다.", "사건의 선택으로 정도, 사도, 마도 성향이 쌓이고 혜택과 파는 물건이 달라집니다."])}
     ${section("저장", ["매달 초 자동으로 저장됩니다. 도중에 끄면 그달의 처음부터 이어 합니다."])}
     <label class="guide-off"><input type="checkbox" id="guide-off" class="toggle" ${storage.get("wuxia-show-guide") === "off" ? "checked" : ""}> 강호행을 시작할 때 이 안내문을 보지 않기</label>`);
 }
@@ -337,7 +337,7 @@ function statusModal() {
     const secret = s.secretName
       ? `<div class="skill-meta">비기 「${esc(s.secretName)}」: ${s.secretUnlocked ? "터득함" : `${esc(s.secretUnlockGrade)} 품계, 성취 ${s.secretUnlockMastery}에 터득`}</div>` : "";
     return `<div class="skill-row"><div class="skill-head"><span>${esc(s.name)} <span class="skill-meta">${esc(s.type)}, ${esc(s.grade)}</span></span>${button}</div>
-      <div class="mastery"><span class="stat-track"><span style="width:${s.mastery}%"></span></span><span class="skill-meta">성취 ${s.mastery}</span></div>
+      <div class="mastery"><span class="stat-track"><span style="width:${s.mastery}%"></span></span><span class="skill-meta">성취 ${s.mastery}${s.mastery >= 100 ? (s.canEvolve() ? ", 다음 성취에 승급" : ", 더 오르지 않음") : ""}</span></div>
       ${secret}<div class="skill-meta">${esc(s.desc)}</div>${transfer}</div>`;
   }).join("") || `<p class="codex-empty">아직 익힌 무공이 없습니다.</p>`;
 

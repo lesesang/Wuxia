@@ -395,8 +395,9 @@ export class Game {
     p.healPercent(hp, qi);
     if (CHAPTER_STARTS.includes(p.turn)) {
       const info = getChapterInfo(p.turn);
-      lines.push(`📖 ${info.title} (${getYear(p.turn)}년차) — ${info.desc}`, ...this.chapterRest());
+      lines.push(`📖 ${info.title} (${getYear(p.turn)}년차) — ${info.desc}`, ...this.chapterGrowth());
     }
+    if (getMonth(p.turn) === 1) lines.push(...this.yearRest());
     const hint = breakthroughBlock(p);
     if (hint) lines.push(hint);
     if (p.injury) lines.push(`가슴 안쪽이 욱신거린다. (내상 ${p.injury}단계, 요양으로 낫는다)`);
@@ -405,21 +406,23 @@ export class Game {
     this.enterTurn(lines);
   }
 
-  /** 장이 끝나면 쌓인 상처를 모두 털어 낸다. */
-  chapterRest() {
+  /** 새 장이 열릴 때의 성장 */
+  chapterGrowth() {
     const p = this.player;
-    const lines = [];
     const growth = sumEffect(p.traits, "chapter_growth", "amount");
-    if (growth) {
-      for (const stat of Object.keys(STAT_NAMES)) p.gainStat(stat, growth);
-      lines.push(`대기만성: 모든 기량 +${growth}`);
-    }
+    if (!growth) return [];
+    for (const stat of Object.keys(STAT_NAMES)) p.gainStat(stat, growth);
+    return [`대기만성: 모든 기량 +${growth}`];
+  }
+
+  /** 새해가 밝으면 쌓인 상처를 모두 털어 낸다. */
+  yearRest() {
+    const p = this.player;
     const hadInjury = p.injury > 0;
     p.injury = 0;
     p.hp = p.maxHp();
     p.qi = p.maxQi();
-    lines.push(`🌟 한 시절을 마치고 몸을 추슬렀다. 체력과 내력이 가득 차고 ${hadInjury ? "내상이 말끔히 나았다" : "몸이 가뿐하다"}.`);
-    return lines;
+    return [`🌟 ${getYear(p.turn)}년차가 밝았다. 몸을 추슬러 체력과 내력이 가득 차고 ${hadInjury ? "내상이 말끔히 나았다" : "몸이 가뿐하다"}.`];
   }
 
   /** 직전 달의 조우와 습득을 영구 도감에 반영한다. */
