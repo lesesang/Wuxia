@@ -1,10 +1,11 @@
-// 생을 넘어 남는 기록(공덕, 개방, 도감)과 달 체크포인트
+// 강호행을 넘어 남는 기록(카르마, 해금, 강화, 유산, 도감)과 달 체크포인트
+import { DB } from "./data.js";
 import { storage } from "./storage.js";
 
 const LEGEND_KEY = "wuxia-legend";
 const SAVE_KEY = "wuxia-save";
 const RUN_HISTORY_LIMIT = 10;
-// 게임에서 빠진 출신을 해금했던 기록은 지우고 공덕을 돌려준다
+// 게임에서 빠진 출신을 해금했던 기록은 지우고 카르마를 돌려준다
 const REMOVED_ORIGINS = { 낙방서생: 5 };
 
 const defaults = () => ({
@@ -12,6 +13,7 @@ const defaults = () => ({
   unlocked_origins: ["무림초출"], unlocked_traits: [],
   global_codex: [], known_skills: [], known_items: [],
   endings_seen: [], runs: [], total_runs: 0,
+  upgrades: {}, content: [], content_off: [], legacy_open: false, legacies: [], milestones: [],
 });
 
 export function loadMeta() {
@@ -55,6 +57,93 @@ function unlock(listName, key, cost) {
   data[listName].push(key);
   saveMeta(data);
   return true;
+}
+
+export function spendKarma(cost) {
+  const data = loadMeta();
+  if (data.current_karma < cost) return false;
+  data.current_karma -= cost;
+  saveMeta(data);
+  return true;
+}
+
+export function upgradeLevel(key, data = loadMeta()) { return data.upgrades[key] || 0; }
+
+/** 환생 강화를 한 단계 올린다. */
+export function buyUpgrade(key) {
+  const data = loadMeta();
+  const level = data.upgrades[key] || 0;
+  const cost = DB.karma.upgrades[key]?.costs[level];
+  if (cost === undefined || data.current_karma < cost) return false;
+  data.current_karma -= cost;
+  data.upgrades[key] = level + 1;
+  saveMeta(data);
+  return true;
+}
+
+/** 강화 단계에 해당하는 숨은 특성 목록 */
+export function upgradeTraits(data = loadMeta()) {
+  return Object.entries(data.upgrades).flatMap(([key, level]) =>
+    Array.from({ length: level }, (_, i) => `환생_${key}_${i + 1}`)).filter((k) => DB.traits[k]);
+}
+
+export const extraSlots = (data = loadMeta()) => data.upgrades.그릇 || 0;
+
+export function buyContent(key) {
+  const data = loadMeta();
+  const cost = DB.karma.content[key]?.cost;
+  if (cost === undefined || data.content.includes(key) || data.current_karma < cost) return false;
+  data.current_karma -= cost;
+  data.content.push(key);
+  saveMeta(data);
+  return true;
+}
+
+export function toggleContent(key) {
+  const data = loadMeta();
+  data.content_off = data.content_off.includes(key)
+    ? data.content_off.filter((k) => k !== key) : [...data.content_off, key];
+  saveMeta(data);
+}
+
+export const activeContent = (data = loadMeta()) => data.content.filter((k) => !data.content_off.includes(k));
+
+// ---------- 전설의 유산 ----------
+
+const WIN_ENDINGS = ["기본", "배드", "생사경", "귀순"];
+export const legacyAvailable = (data = loadMeta()) => data.endings_seen.some((k) => WIN_ENDINGS.includes(k));
+
+export function openLegacy() {
+  const data = loadMeta();
+  const { cost } = DB.karma.legacy;
+  if (data.legacy_open || !legacyAvailable(data) || data.current_karma < cost) return false;
+  data.current_karma -= cost;
+  data.legacy_open = true;
+  saveMeta(data);
+  return true;
+}
+
+/** 유산을 보관한다. 자리가 차면 가장 오래된 것이 사라진다. */
+export function storeLegacy(entry) {
+  const data = loadMeta();
+  data.legacies = [...data.legacies, entry].slice(-DB.karma.legacy.shelf);
+  saveMeta(data);
+}
+
+export function takeLegacy(index) {
+  const data = loadMeta();
+  const [entry] = data.legacies.splice(index, 1);
+  saveMeta(data);
+  return entry || null;
+}
+
+/** 처음 이룬 일에 주는 카르마. 이미 받은 것은 건너뛴다. */
+export function claimMilestones(keys) {
+  const data = loadMeta();
+  const fresh = keys.filter((k) => !data.milestones.includes(k));
+  data.milestones.push(...fresh);
+  saveMeta(data);
+  return fresh;
 }
 
 export const unlockOrigin = (key, cost) => unlock("unlocked_origins", key, cost);
@@ -116,7 +205,7 @@ export function importRecords(text) {
   const legend = data?.format === "wuxia-records" ? data.legend : data;
   if (!legend || typeof legend.current_karma !== "number" || typeof legend.total_karma !== "number") return false;
   const merged = { ...defaults(), ...legend };
-  for (const key of ["unlocked_origins", "unlocked_traits", "global_codex", "known_skills", "known_items", "endings_seen", "runs"]) {
+  for (const key of ["unlocked_origins", "unlocked_traits", "global_codex", "known_skills", "known_items", "endings_seen", "runs", "content", "content_off", "legacies", "milestones"]) {
     if (!Array.isArray(merged[key])) merged[key] = defaults()[key];
   }
   saveMeta(merged);

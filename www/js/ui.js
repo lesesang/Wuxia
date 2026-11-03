@@ -6,7 +6,8 @@ import { eventView } from "./events.js";
 import { Game } from "./game.js";
 import { bonusFor, equipmentBonus, itemName, stockView } from "./market.js";
 import {
-  exportRecords, importRecords, loadCheckpoint, loadMeta, unlockOrigin, unlockTrait,
+  buyContent, buyUpgrade, exportRecords, extraSlots, importRecords, legacyAvailable, loadCheckpoint, loadMeta, openLegacy,
+  toggleContent, unlockOrigin, unlockTrait, upgradeLevel,
 } from "./meta.js";
 import {
   ALIGNMENTS, benefitText, byname, fameRank, getChapterInfo, getMonth, getYear, marketTurns, nextSlotThreshold,
@@ -18,7 +19,7 @@ import { storage } from "./storage.js";
 const game = new Game();
 const ui = {
   screen: "title", setupTab: "origin", origin: "무림초출", traits: new Set(),
-  traitFilter: "전체", modal: null, tab: "enemies", statusTab: "stats", notice: null, lastTyped: "", bars: null,
+  traitFilter: "전체", legacy: null, modal: null, tab: "enemies", statusTab: "stats", notice: null, lastTyped: "", bars: null,
 };
 let installPrompt = null;
 const app = () => document.getElementById("app");
@@ -67,7 +68,7 @@ function codexModal() {
       return entry(i.name, i.category, i.desc);
     }),
     endings: Object.keys(DB.endings.titles).map((k) => entry(
-      meta.endings_seen.includes(k) ? DB.endings.titles[k] : "아직 보지 못한 결말", `공덕 +${DB.endings.karma[k]}`)).join(""),
+      meta.endings_seen.includes(k) ? DB.endings.titles[k] : "아직 보지 못한 결말", `카르마 +${DB.endings.karma[k]}`)).join(""),
     runs: `<p class="codex-meta">끝낸 강호행 ${meta.total_runs}회</p>${list(meta.runs, "강호행을 끝내면 이곳에 기록됩니다.", (r) => entry(
       DB.endings.titles[r.ending] || r.ending, `${r.origin}, ${r.realm}, ${r.title}`, `${r.turn}달까지 진행, ${r.kills}명 처치`))}`,
   };
@@ -79,7 +80,7 @@ function codexModal() {
 function helpModal() {
   const section = (title, lines) => `<div class="modal-section"><h4>${title}</h4>${lines.map((l) => `<p class="help-line">${l}</p>`).join("")}</div>`;
   return modalShell("help-modal", "강호 입문서", `
-    ${section("목표", ["10년(120달) 뒤 겨울, 천마봉에서 천마를 쓰러뜨립니다.", "죽어도 공덕이 남아 다음 강호행에서 출신과 특성을 개방할 수 있습니다."])}
+    ${section("목표", ["10년(120달) 뒤 겨울, 천마봉에서 천마를 쓰러뜨립니다.", "처음에는 어렵습니다. 죽어도 카르마가 남고, 멀리 갈수록 많이 받습니다.", "카르마로 출신과 특성, 항상 적용되는 환생 강화, 새 인연을 얻을 수 있습니다. 천마를 한 번 쓰러뜨리면 전설의 유산도 열 수 있습니다."])}
     ${section("매달 하는 일", [
     "<b>탐색</b>: 강호를 떠돌며 전투, 사건, 기연 중 하나를 만납니다. 가장 크게 성장하지만 위험합니다.",
     "<b>수련</b>: 외공과 무리, 주무공 숙련도가 오릅니다. 대련으로 전투 경험을 얻기도 합니다.",
@@ -109,14 +110,14 @@ function settingsModal() {
       <select id="set-font">${option("small", "작게", font)}${option("normal", "보통", font)}${option("large", "크게", font)}</select></div>
     <div class="setting-row"><span>언어</span><span class="muted">한국어</span></div>
     ${installPrompt ? `<div class="setting-row"><span>앱처럼 쓰기</span><button class="mini-btn" data-act="install">홈 화면에 추가</button></div>` : ""}
-    <div class="setting-row"><span>기록 옮기기<br><small class="muted">공덕, 도감, 진행 중인 달을 파일로</small></span>
+    <div class="setting-row"><span>기록 옮기기<br><small class="muted">카르마, 도감, 진행 중인 달을 파일로</small></span>
       <span class="setting-buttons"><button class="mini-btn" data-act="export">내보내기</button>
       <label class="mini-btn file-btn">가져오기<input type="file" id="import-file" accept=".json,application/json"></label></span></div>
     <div class="setting-row"><label for="set-guide">강호행 시작 때 안내문 보기</label>
       <input type="checkbox" id="set-guide" class="toggle" ${storage.get("wuxia-show-guide") === "off" ? "" : "checked"}></div>
     <div class="setting-row"><span>입문서</span><button class="mini-btn" data-act="open" data-modal="help-modal">보기</button></div>
     ${ui.notice ? `<p class="market-message">${esc(ui.notice)}</p>` : ""}
-    ${game.active && game.player.alive ? `<div class="setting-row danger-row"><span>이번 강호행 포기<br><small class="muted">공덕과 도감은 남습니다</small></span>
+    ${game.active && game.player.alive ? `<div class="setting-row danger-row"><span>이번 강호행 포기<br><small class="muted">카르마와 도감은 남습니다</small></span>
       <button class="mini-btn danger-mini" data-act="open" data-modal="reset-modal">포기하기</button></div>` : ""}`);
 }
 
@@ -135,7 +136,7 @@ function renderTitle() {
       ${hasSave ? `<button class="start-btn" data-act="continue">이어하기<small>${esc(save.origin)}, ${esc(save.realm)}, ${Math.min(save.turn, MAX_TURN)}달째</small></button>` : ""}
       <button class="${hasSave ? "continue-btn" : "start-btn"}" data-act="setup">새 강호행</button>
     </div>
-    <p class="karma-display">💠 공덕 ${meta.current_karma} (누적 ${meta.total_karma})${meta.total_runs ? `, 끝낸 강호행 ${meta.total_runs}회` : ""}</p>
+    <p class="karma-display">💠 카르마 ${meta.current_karma} (누적 ${meta.total_karma})${meta.total_runs ? `, 끝낸 강호행 ${meta.total_runs}회` : ""}</p>
     <div class="title-links">
       <button class="link-btn" data-act="open" data-modal="help-modal">❓ 입문서</button>
       <button class="link-btn" data-act="open" data-modal="codex-modal">📖 도감</button>
@@ -150,11 +151,50 @@ function statBars(o) {
   return `<span class="mini-stats">${bar("외공", o.external)}${bar("내공", o.internal)}${bar("무리", o.martial)}${bar("심경", o.mind)}</span>`;
 }
 
+function upgradeShop(meta) {
+  const rows = Object.entries(DB.karma.upgrades).map(([key, u]) => {
+    const level = upgradeLevel(key, meta);
+    const cost = u.costs[level];
+    const button = cost === undefined ? `<span class="pick-stats">최고 단계</span>`
+      : `<button class="unlock-btn" data-act="buy-upgrade" data-key="${esc(key)}" ${meta.current_karma < cost ? "disabled" : ""}>💠 ${cost}<br>올리기</button>`;
+    return `<div class="pick-row"><div class="pick-main"><div class="pick-name">${esc(u.name)} <span class="rarity">${level}/${u.costs.length}단계</span></div>
+      <p class="pick-desc">${esc(u.desc)}</p></div>${button}</div>`;
+  }).join("");
+  return `<p class="section-note">환생 강화는 장착하지 않아도 모든 강호행에 적용됩니다.</p>${rows}`;
+}
+
+function contentShop(meta) {
+  const rows = Object.entries(DB.karma.content).map(([key, c]) => {
+    const owned = meta.content.includes(key);
+    const button = owned
+      ? `<label class="content-toggle"><input type="checkbox" class="toggle" data-content="${esc(key)}" ${meta.content_off.includes(key) ? "" : "checked"}> 등장</label>`
+      : `<button class="unlock-btn" data-act="buy-content" data-key="${esc(key)}" ${meta.current_karma < c.cost ? "disabled" : ""}>💠 ${c.cost}<br>해금</button>`;
+    return `<div class="pick-row${owned ? "" : " locked"}"><div class="pick-main"><div class="pick-name">${owned ? "" : "🔒 "}${esc(c.name)}</div><p class="pick-desc">${esc(c.desc)}</p></div>${button}</div>`;
+  }).join("");
+  return `<p class="section-note">해금한 인연은 강호에서 만날 수 있습니다. 이번에 보고 싶지 않으면 꺼 둘 수 있습니다.</p>${rows}`;
+}
+
+function chosenLegacy(meta) { return ui.legacy === null ? null : meta.legacies[ui.legacy] || null; }
+
+function legacyShop(meta) {
+  const { cost, shelf } = DB.karma.legacy;
+  if (!meta.legacy_open) {
+    if (!legacyAvailable(meta)) return `<p class="section-note">🔒 전설의 유산은 천마를 한 번 쓰러뜨리면 열 수 있습니다.</p>`;
+    return `<div class="pick-row locked"><div class="pick-main"><div class="pick-name">🔒 전설의 유산</div>
+      <p class="pick-desc">강호행이 끝날 때 무공이나 장비 하나를 남기고, 다음 강호행에서 이어받습니다.</p></div>
+      <button class="unlock-btn" data-act="open-legacy" ${meta.current_karma < cost ? "disabled" : ""}>💠 ${cost}<br>해금</button></div>`;
+  }
+  const rows = meta.legacies.map((l, i) => `<div class="pick-row"><label class="pick-label"><input type="radio" name="legacy" value="${i}" ${ui.legacy === i ? "checked" : ""}>
+    <span class="pick-main"><span class="pick-name">${esc(l.label)}</span><span class="pick-desc block">전대 「${esc(l.from)}」, ${esc(l.origin)}</span></span></label></div>`).join("");
+  return `<p class="section-note">강호행이 끝날 때 하나를 남깁니다. ${shelf}개까지 보관하고, 이어받으면 사라집니다. 무공은 한 등급 낮아지고 장비는 낮은 단계로 돌아옵니다.</p>
+    ${rows ? `<div class="pick-row"><label class="pick-label"><input type="radio" name="legacy" value="" ${ui.legacy === null ? "checked" : ""}><span class="pick-main"><span class="pick-name">이어받지 않는다</span></span></label></div>${rows}` : `<p class="codex-empty">아직 남겨 둔 유산이 없습니다.</p>`}`;
+}
+
 function renderSetup() {
   document.body.className = "home setup-screen";
   setMood("calm");
   const meta = loadMeta();
-  const slots = traitSlots(meta.total_karma);
+  const slots = traitSlots(meta.total_karma) + extraSlots(meta);
   const next = nextSlotThreshold(meta.total_karma);
   const hasSave = loadCheckpoint() !== null;
   ui.traits = new Set([...ui.traits].filter((t) => meta.unlocked_traits.includes(t)));
@@ -178,6 +218,7 @@ function renderSetup() {
   const rarities = ["전체", "일반", "희귀", "전설"];
   const filterRow = `<div class="filter-row">${rarities.map((r) => `<button class="filter-btn${ui.traitFilter === r ? " on" : ""}" data-act="trait-filter" data-key="${r}">${r}</button>`).join("")}</div>`;
   const traits = Object.keys(DB.traits)
+    .filter((key) => !DB.traits[key].hidden)
     .filter((key) => ui.traitFilter === "전체" || DB.traits[key].rarity === ui.traitFilter)
     .sort((a, b) => Number(ui.traits.has(b)) - Number(ui.traits.has(a))
       || Number(meta.unlocked_traits.includes(b)) - Number(meta.unlocked_traits.includes(a)))
@@ -202,14 +243,17 @@ function renderSetup() {
     <div class="setup-tabs">
       <button class="tab-btn${ui.setupTab === "origin" ? " active" : ""}" data-act="setup-tab" data-tab="origin">출신</button>
       <button class="tab-btn${ui.setupTab === "trait" ? " active" : ""}" data-act="setup-tab" data-tab="trait">특성 ${ui.traits.size}/${slots}</button>
+      <button class="tab-btn${ui.setupTab === "upgrade" ? " active" : ""}" data-act="setup-tab" data-tab="upgrade">강화</button>
+      <button class="tab-btn${ui.setupTab === "content" ? " active" : ""}" data-act="setup-tab" data-tab="content">인연</button>
+      <button class="tab-btn${ui.setupTab === "legacy" ? " active" : ""}" data-act="setup-tab" data-tab="legacy">유산</button>
     </div>
     <div class="home-wrap">
-      ${ui.setupTab === "origin" ? origins : `<p class="section-note">${next ? `특성을 ${slots}개 장착할 수 있습니다. 누적 공덕 ${next}이 되면 하나 더 열립니다.` : "특성 칸이 모두 열렸습니다."}</p>${filterRow}${traits}`}
+      ${ui.setupTab === "upgrade" ? upgradeShop(meta) : ui.setupTab === "content" ? contentShop(meta) : ui.setupTab === "legacy" ? legacyShop(meta) : ui.setupTab === "origin" ? origins : `<p class="section-note">${next ? `특성을 ${slots}개 장착할 수 있습니다. 누적 카르마 ${next}이 되면 하나 더 열립니다.` : "특성 칸이 모두 열렸습니다."}</p>${filterRow}${traits}`}
     </div>
-    <div class="setup-bar"><div class="setup-summary">${esc(originName)}${ui.traits.size ? `, 특성 ${ui.traits.size}개` : ""}</div>
+    <div class="setup-bar"><div class="setup-summary">${esc(originName)}${ui.traits.size ? `, 특성 ${ui.traits.size}개` : ""}${chosenLegacy(meta) ? `, 유산 「${esc(chosenLegacy(meta).label)}」` : ""}</div>
       <button class="start-btn" data-act="${hasSave ? "confirm-start" : "start"}">강호로 나선다</button></div>
     ${modalShell("confirm-start-modal", "새 강호행을 시작할까요?", `
-      <p class="modal-text">저장된 진행이 사라집니다. 공덕과 도감은 남습니다.</p>
+      <p class="modal-text">저장된 진행이 사라집니다. 카르마와 도감은 남습니다.</p>
       <button class="danger-btn" data-act="start">새로 시작</button>`)}`;
 }
 
@@ -241,7 +285,7 @@ function statusModal() {
   const armor = itemName(p.armor);
   const main = p.bestSkill();
   const inventory = Object.entries(p.inventory).filter(([k]) => DB.market[k]);
-  const traits = p.traits.map((k) => DB.traits[k]).filter(Boolean);
+  const traits = p.traits.map((k) => DB.traits[k]).filter((t) => t && !t.hidden);
 
   const skills = p.skills.map((s) => {
     const isMain = main?.key === s.key;
@@ -296,7 +340,7 @@ function statusModal() {
 function gameModals() {
   return `${statusModal()}${codexModal()}${settingsModal()}${helpModal()}
   ${modalShell("reset-modal", "이번 강호행을 포기할까요?", `
-    <p class="modal-text">이번 회차의 진행이 사라지고 첫 화면으로 돌아갑니다. 공덕과 도감은 남습니다.</p>
+    <p class="modal-text">이번 회차의 진행이 사라지고 첫 화면으로 돌아갑니다. 카르마와 도감은 남습니다.</p>
     <button class="danger-btn" data-act="restart">포기하고 첫 화면으로</button>`)}`;
 }
 
@@ -416,6 +460,16 @@ function topbar() {
     ${p.alive ? goalStrip() : ""}</div></div>`;
 }
 
+function legacyPanel() {
+  const { ending } = game;
+  if (!loadMeta().legacy_open) return "";
+  if (ending.legacyLeft) return `<p class="legacy-note">🏺 「${esc(ending.legacyLeft)}」을(를) 다음 강호행에 남겼습니다.</p>`;
+  const options = game.legacyOptions();
+  if (!options.length) return `<p class="legacy-note">남길 만한 것이 없습니다.</p>`;
+  return `<div class="legacy-panel"><h4>🏺 전설의 유산: 하나를 남긴다</h4>
+    ${options.map((o, i) => `<button class="choice-btn" data-act="leave-legacy" data-key="${i}">${esc(o.label)}</button>`).join("")}</div>`;
+}
+
 function renderEnding() {
   const p = game.player;
   const { ending } = game;
@@ -426,8 +480,10 @@ function renderEnding() {
       <p class="ending-text">${esc(ending.text)}</p>
       ${ending.epilogue.map((l) => `<p class="epilogue">${esc(l)}</p>`).join("")}
       ${p.chronicle.length ? `<details class="chronicle"><summary>이번 강호행 돌아보기</summary>${chronicleList(p)}</details>` : ""}
-      <p class="karma-gain">💠 공덕 +${ending.karma} (보유 ${meta.current_karma}, 누적 ${meta.total_karma})</p>
-      <p class="ending-hint">공덕으로 새 출신과 특성을 해금해 다시 도전할 수 있습니다.</p>
+      ${legacyPanel()}
+      <p class="karma-gain">💠 카르마 +${ending.karma} (보유 ${meta.current_karma}, 누적 ${meta.total_karma})</p>
+      <p class="karma-lines">${(ending.karmaLines || []).map(esc).join(", ")}</p>
+      <p class="ending-hint">카르마로 출신과 특성, 환생 강화, 인연, 유산을 얻어 다시 도전할 수 있습니다.</p>
       <div class="run-facts">
         <div><b>${esc(p.realm)}</b>경지</div><div><b>${esc(byname(p))}</b>별호</div>
         <div><b>${Math.min(p.turn, p.maxTurn)}달</b>진행</div><div><b>${p.kills}명</b>처치</div>
@@ -453,7 +509,7 @@ function compareNote(player, key) {
 function renderMarket() {
   const { market, player } = game;
   const stock = stockView(player, market).map((item) => {
-    const label = item.sold ? "품절" : item.blocked === "효과 없음" ? "필요 없음" : `은자 ${item.price}`;
+    const label = item.sold ? "품절" : item.blocked === "효과 없음" ? "필요 없음" : item.karma ? `💠 ${item.karma}` : `은자 ${item.price}`;
     const note = item.sold ? "" : compareNote(player, item.key);
     return `<div class="market-item${item.sold ? " sold" : ""}"><div class="item-info">
       <div class="item-name">${esc(item.name)}<span class="item-category">${esc(item.category)}${item.stackable && !item.sold ? `, ${item.left}개 남음` : ""}</span></div>
@@ -639,7 +695,8 @@ const actions = {
   title: () => { ui.screen = "title"; render(); },
   start: () => {
     closeModalQuietly();
-    game.start(ui.origin, [...ui.traits]);
+    game.start(ui.origin, [...ui.traits], ui.legacy);
+    ui.legacy = null;
     ui.screen = "title";
     render();
     // 처음 하는 사람에게는 입문서를 먼저 보여 준다
@@ -647,6 +704,10 @@ const actions = {
   },
   "confirm-start": () => { openModal("confirm-start-modal"); },
   continue: () => { game.continueFromSave(); render(); },
+  "buy-upgrade": (el) => { buyUpgrade(el.dataset.key); render(); },
+  "buy-content": (el) => { buyContent(el.dataset.key); render(); },
+  "open-legacy": () => { openLegacy(); render(); },
+  "leave-legacy": (el) => { game.leaveLegacy(Number(el.dataset.key)); render(); },
   "unlock-origin": (el) => { unlockOrigin(el.dataset.key, DB.origins.origins[el.dataset.key].cost); render(); },
   "unlock-trait": (el) => { unlockTrait(el.dataset.key, DB.traits[el.dataset.key].cost); render(); },
   action: (el) => { game.action(el.dataset.action); render(); },
@@ -699,6 +760,11 @@ export function installInput() {
       render();
     } else if (target.id === "set-speed") {
       storage.set("wuxia-speed", target.value);
+    } else if (target.name === "legacy") {
+      ui.legacy = target.value === "" ? null : Number(target.value);
+      render();
+    } else if (target.dataset.content) {
+      toggleContent(target.dataset.content);
     } else if (target.id === "set-guide") {
       storage.set("wuxia-show-guide", target.checked ? "on" : "off");
     } else if (target.id === "guide-off") {

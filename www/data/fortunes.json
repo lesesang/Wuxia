@@ -543,5 +543,67 @@
     "effects": {
       "mastery": 12
     }
+  },
+  {
+    "text": "벼랑 밑 동굴 천장에서 한 방울씩 떨어지는 젖빛 물을 받았다. 공청석유였다.",
+    "requires": {
+      "unlocked": "전설기연"
+    },
+    "effects": {
+      "item": "공청석유"
+    }
+  },
+  {
+    "text": "쓰러진 노승을 간호했더니 깨어나 대환단 한 알을 내놓고 떠났다.",
+    "requires": {
+      "unlocked": "전설기연"
+    },
+    "effects": {
+      "item": "대환단"
+    }
+  },
+  {
+    "text": "백 년 묵은 소나무 뿌리 아래 함이 있었다. 안에는 잘 보존된 비급이 있었다.",
+    "requires": {
+      "unlocked": "전설기연"
+    },
+    "effects": {
+      "random_skill": {
+        "max_grade": "상승"
+      }
+    }
+  },
+  {
+    "text": "천 년 묵은 영지를 먹은 노루를 놓아주었더니 이튿날 그 노루가 영지 한 뿌리를 물어 왔다.",
+    "requires": {
+      "unlocked": "전설기연"
+    },
+    "effects": {
+      "stats": {
+        "internal": 8
+      },
+      "hp_pct": 30
+    }
+  },
+  {
+    "text": "이름 모를 고수가 달밤에 초식 하나를 보여 주고 사라졌다. 평생 잊지 못할 일 초였다.",
+    "requires": {
+      "unlocked": "전설기연"
+    },
+    "effects": {
+      "mastery": 30,
+      "stats": {
+        "martial": 5
+      }
+    }
+  },
+  {
+    "text": "저잣거리 관상쟁이가 내 얼굴을 보더니 돈을 받지 않고 복을 빌어 주었다. 그날 길에서 큰돈을 주웠다.",
+    "requires": {
+      "unlocked": "전설기연"
+    },
+    "effects": {
+      "silver": 150
+    }
   }
 ]

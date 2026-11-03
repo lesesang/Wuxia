@@ -31,6 +31,7 @@ export function unmetReason(player, requires) {
   if (r.injured && !player.injury) return "내상이 없다";
   if (r.main_category && player.bestSkill()?.category !== r.main_category) return `${r.main_category}을 쓰는 무인이 아니다`;
   if (r.trait && !player.traits.includes(r.trait)) return "타고난 바가 다르다";
+  if (r.unlocked && !player.content.includes(r.unlocked)) return "아직 인연이 닿지 않았다";
   if (r.dominant && player.dominantAlignment() !== r.dominant) return `${r.dominant}의 길이 아니다`;
   if (r.min_fame && player.fame < r.min_fame) return `명성 ${r.min_fame} 필요`;
   for (const [name, value] of Object.entries(r.max_alignment || {})) {
