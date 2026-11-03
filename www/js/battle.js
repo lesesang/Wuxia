@@ -1,6 +1,7 @@
 // 달제 전투. 적의 필살기는 직전 합에 예고되고, 경공으로 흘려낼 수 있다.
 import { MAX_INJURY, Skill, STAT_NAMES } from "./character.js";
 import { DB } from "./data.js";
+import { checkRequires, reactiveLine } from "./events.js";
 import { equipmentBonus } from "./market.js";
 import { pick, randInt, rng, uniform } from "./rng.js";
 import { applyGrowth, battleBuffs, hasEffect, MA_DAMAGE_BONUS, realmBonus, sectBonus, sumEffect } from "./rules.js";
@@ -38,6 +39,7 @@ export class Enemy {
     this.evasion = data.evasion || 0;
     this.specials = data.specials || [];
     this.phases = data.phases || [];
+    this.outros = data.outros || [];
     this.drop = data.drop || null;
     this.intro = data.intro || null;
     this.outro = data.outro || null;
@@ -60,13 +62,14 @@ export class Enemy {
   takeDamage(amount) { this.hp = Math.max(0, this.hp - amount); }
   attackMultiplier() { return this.phase === 0 ? 1 : this.phases[this.phase - 1].attack_mult; }
 
-  /** 체력이 다음 단계 기준 아래로 내려가면 단계를 올리고 그 문구를 돌려준다. */
+  /** 체력이 다음 단계 기준 아래로 내려가면 단계를 올리고 그 단계를 돌려준다. */
   advancePhase() {
     if (this.phase < this.phases.length) {
       const next = this.phases[this.phase];
       if (this.hp <= this.maxHp * next.hp_pct / 100) {
         this.phase += 1;
-        return next.text;
+        if (next.specials) this.specials = next.specials;
+        return next;
       }
     }
     return null;
@@ -116,6 +119,9 @@ export class Battle {
     this.sealed = 0;
     this.enemyPoison = null;
     this.standUsed = false;
+    this.interlude = null;   // 결전의 막간. 고르기 전에는 합이 진행되지 않는다
+    this.guard = null;
+    this.alliesSeen = [];
     // 전투 시작 시 발동하는 특성 효과 (99 한계 무시, 전투가 끝나면 되돌림)
     for (const buff of battleBuffs(player.traits, "on_battle_start")) {
       player[buff.stat] += buff.amount;
@@ -348,6 +354,7 @@ export class Battle {
     base *= 1 - realmBonus(this.player.realm) / 2;
     base *= 1 - sectBonus(this.player, "damage_reduce") / 100;
     base *= 1 - sumEffect(this.player.traits, "damage_reduce", "percent") / 100;
+    if (this.guard) base *= 1 - this.guard.percent / 100;
     return Math.max(1, Math.trunc(base * uniform(0.9, 1.1)) - equipmentBonus(this.player, "armor"));
   }
 
@@ -437,6 +444,60 @@ export class Battle {
       this.atkBuff.rounds -= 1;
       if (this.atkBuff.rounds <= 0) this.atkBuff = null;
     }
+    if (this.guard) {
+      this.guard.rounds -= 1;
+      if (this.guard.rounds <= 0) this.guard = null;
+    }
+  }
+
+  // ---------- 결전의 막간 ----------
+
+  /** 단계가 바뀔 때 막간을 연다. 맺은 인연이 끼어들고, 다음 합을 어떻게 맞을지 고른다. */
+  openInterlude(phase) {
+    const data = phase.interlude;
+    if (!data) return false;
+    let joined = 0;
+    for (const ally of data.allies || []) {
+      if (joined >= (data.max_allies ?? 2)) break;
+      if (this.alliesSeen.includes(ally.key) || !checkRequires(this.player, ally.requires)) continue;
+      this.alliesSeen.push(ally.key);
+      this.log.push(ally.text);
+      this.applyInterludeEffects(ally.effects);
+      joined += 1;
+    }
+    const choices = data.choices.filter((c) => checkRequires(this.player, c.requires));
+    this.interlude = { title: data.title, text: reactiveLine(this.player, data.texts, data.text), choices };
+    return true;
+  }
+
+  chooseInterlude(index) {
+    const choice = this.interlude?.choices[index];
+    if (!choice) return false;
+    this.interlude = null;
+    this.log.push(choice.text);
+    this.applyInterludeEffects(choice.effects);
+    return true;
+  }
+
+  applyInterludeEffects(fx = {}) {
+    const p = this.player;
+    if (fx.boss_hp_pct) {
+      const damage = Math.trunc(this.enemy.maxHp * fx.boss_hp_pct / 100);
+      this.enemy.hp = Math.max(1, this.enemy.hp - damage);
+      this.log.push(`${this.enemy.name}의 체력이 ${damage} 깎였다.`);
+    }
+    if (fx.hp_pct > 0 || fx.qi_pct > 0) {
+      p.healPercent(Math.max(fx.hp_pct || 0, 0), Math.max(fx.qi_pct || 0, 0));
+    }
+    if (fx.hp_pct < 0) p.hp = Math.max(1, p.hp + Math.trunc(p.maxHp() * fx.hp_pct / 100));
+    if (fx.atk_buff) this.atkBuff = { percent: fx.atk_buff.percent, rounds: fx.atk_buff.rounds + 1 };
+    if (fx.guard) this.guard = { percent: fx.guard.percent, rounds: fx.guard.rounds + 1 };
+    if (fx.counter_pct) this.counterPct = fx.counter_pct;
+    if (fx.clear) {
+      this.sealed = 0;
+      this.poison = null;
+    }
+    for (const flag of fx.flags || []) p.addFlag(flag);
   }
 
   // ---------- 진행 ----------
@@ -464,8 +525,10 @@ export class Battle {
 
     if (!this.enemy.isAlive()) return this.finish(true);
 
-    const phaseText = this.enemy.advancePhase();
-    if (phaseText) this.log.push(`⚠️ ${phaseText}`);
+    const phase = this.enemy.advancePhase();
+    if (phase) this.log.push(`⚠️ ${reactiveLine(this.player, phase.texts, phase.text)}`);
+    // 막간이 열리는 합에는 적도 기세를 고른다
+    if (phase && this.openInterlude(phase)) return null;
 
     this.enemyAttack(evadeSkill);
     if (this.player.hp > 0) this.tickEffects();
@@ -485,7 +548,8 @@ export class Battle {
     if (victory) {
       this.player.battles += exp;
       this.player.kills += 1;
-      if (this.enemy.outro) this.log.push(this.enemy.outro);
+      const outro = reactiveLine(this.player, this.enemy.outros, this.enemy.outro);
+      if (outro) this.log.push(outro);
       this.log.push(`${this.enemy.name}을(를) 쓰러뜨렸다! 실전 경험 +${exp}`);
       this.player.fame += FAME_BY_TIER[this.enemy.tier] || 0;
       this.applyStatGrowth();

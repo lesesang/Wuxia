@@ -387,14 +387,49 @@ test("마도 10이면 천마봉에서 귀순할 수 있다", () => {
   assert.equal(game.ending.key, "귀순");
 });
 
-test("단목휘와 동맹이면 천마 체력이 줄어든다", () => {
+test("결전은 세 막이고 막간에서 인연이 끼어들고 선택을 한다", () => {
   const game = newGame();
   toTurnEnd(game, 119);
   game.player.addFlag("단목휘_동맹");
   game.advanceTurn();
   game.marketLeave();
   game.chooseEvent(0);
-  assert.equal(game.battle.enemy.maxHp, Math.trunc(DB.enemies.천마.hp * 0.85));
+  const { battle } = game;
+  assert.equal(battle.enemy.maxHp, DB.enemies.천마.hp);
+  game.player.hp = game.player.maxHp() * 50;
+  battle.enemy.hp = Math.trunc(battle.enemy.maxHp * 0.55);
+  const before = battle.enemy.hp;
+  game.battleAction("심법");
+  assert.ok(battle.interlude, "제이막 막간이 열린다");
+  assert.equal(battle.enemy.phase, 1);
+  assert.ok(battle.enemy.hp <= before - Math.trunc(battle.enemy.maxHp * 0.15), "단목휘가 끼어든다");
+  assert.ok(game.log.some((l) => l.includes("다리 값")));
+  const round = battle.roundNum;
+  game.battleInterlude(0);
+  assert.equal(battle.interlude, null);
+  assert.equal(battle.roundNum, round, "막간을 고르는 데 합을 쓰지 않는다");
+  assert.ok(battle.atkBuff);
+  battle.enemy.hp = Math.trunc(battle.enemy.maxHp * 0.2);
+  game.battleAction("심법");
+  assert.ok(battle.interlude, "제삼막 막간이 열린다");
+  assert.ok(battle.interlude.choices.some((c) => c.tag === "출신"));
+  assert.ok(battle.enemy.specials.some((s) => s.name === "천마멸겁"));
+  game.battleAction("심법");
+  assert.equal(battle.interlude, null, "고르지 않으면 첫 선택지를 따른다");
+});
+
+test("결전 막간과 맺음말은 출신마다 다르고 생사경 조건을 건드리지 않는다", () => {
+  const { 천마 } = DB.enemies;
+  const act3 = 천마.phases[1].interlude;
+  for (const key of DB.origins.order) {
+    assert.ok(act3.choices.some((c) => c.requires?.origin === key), `${key} 결단`);
+    assert.ok(천마.outros.some((o) => o.requires?.origin === key), `${key} 맺음말`);
+    assert.ok(천마.phases[0].interlude.texts.some((t) => t.requires?.origin === key), `${key} 제이막`);
+  }
+  for (const choice of [...act3.choices, ...act3.allies]) {
+    assert.ok(!choice.effects.stats, "막간은 능력치를 올리지 않는다");
+  }
+  for (const choice of act3.choices) assert.ok(!(choice.effects.hp_pct > 0), "제삼막 선택은 체력을 채우지 않는다");
 });
 
 // ---------- 문파, 대회, 명성 ----------
@@ -758,6 +793,49 @@ test("상황별 반응: 상태와 무공, 무기에 따라 달라진다", () => 
   q.learnSkill(new Skill("태허검결"));
   q.weapon = "태산신검";
   assert.equal(eventView(q, "결전_천마봉").choices.length, finalBase + 2);
+});
+
+test("상황별 반응: 출신, 무공, 명성, 능력치, 시작 특성이 고르게 쓰인다", () => {
+  const events = Object.values(DB.events).filter((e) => e.kind !== "story" && e.kind !== "final" && !e.chain && !e.requires?.origin && !e.requires?.sect && !e.requires?.no_sect);
+  const uses = { origin: 0, min_fame: 0, max_fame: 0, stat_min: 0, trait: 0, any_skill: 0, main_category: 0 };
+  let reactive = 0;
+  for (const event of events) {
+    if (event.variants?.length) reactive += 1;
+    for (const variant of event.variants || []) {
+      for (const key of Object.keys(uses)) if (variant.requires?.[key]) uses[key] += 1;
+    }
+  }
+  assert.ok(reactive / events.length >= 0.75, `반응 있는 사건 ${reactive}/${events.length}`);
+  assert.ok(uses.origin >= 25, "출신 반응");
+  assert.ok(uses.min_fame >= 15, "명성 높을 때");
+  assert.ok(uses.max_fame >= 6, "명성 낮을 때");
+  assert.ok(uses.stat_min >= 10, "능력치");
+  assert.ok(uses.trait >= 25, "시작 특성");
+  assert.ok(uses.any_skill >= 5, "지닌 무공");
+  const p = new Player();
+  p.fame = 150;
+  assert.ok(eventView(p, "수로채").text.includes("대협"));
+  p.fame = 0;
+  assert.ok(eventView(p, "살막의명부").text.includes("두 냥"));
+  p.external = 70;
+  assert.ok(eventView(p, "철권씨름").choices.some((c) => c.label.includes("한 손으로")));
+});
+
+test("적의 대사가 명성과 경지에 따라 달라진다", () => {
+  const p = new Player();
+  p.fame = 150;
+  assert.ok(enemyIntro(p, "산적").includes("저 얼굴"));
+  p.fame = 0;
+  assert.ok(enemyIntro(p, "산적").includes("초행길"));
+});
+
+test("천마의 맺음말은 출신을 따른다", () => {
+  const p = new Player("표국표사");
+  const enemy = new Enemy("천마");
+  const battle = new Battle(p, enemy, true);
+  enemy.hp = 0;
+  battle.finish(true);
+  assert.ok(battle.log.some((l) => l.includes("표물, 도착했소")));
 });
 
 test("상황별 반응: 선택 번호는 반응 선택지를 포함해 맞게 처리된다", () => {

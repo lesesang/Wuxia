@@ -34,11 +34,16 @@ export function unmetReason(player, requires) {
   if (r.unlocked && !player.content.includes(r.unlocked)) return "아직 인연이 닿지 않았다";
   if (r.dominant && player.dominantAlignment() !== r.dominant) return `${r.dominant}의 길이 아니다`;
   if (r.min_fame && player.fame < r.min_fame) return `명성 ${r.min_fame} 필요`;
+  if (r.max_fame !== undefined && player.fame > r.max_fame) return "이미 이름이 너무 알려졌다";
+  if (r.realm_max && realmIndex(player.realm) > realmIndex(r.realm_max)) return "경지가 이미 높다";
   for (const [name, value] of Object.entries(r.max_alignment || {})) {
     if ((player.alignment[name] || 0) > value) return `${name}의 기운이 너무 짙다`;
   }
   for (const [stat, value] of Object.entries(r.stat_min || {})) {
     if (player[stat] < value) return `${STAT_NAMES[stat]} ${value} 필요`;
+  }
+  for (const [stat, value] of Object.entries(r.stat_max || {})) {
+    if (player[stat] > value) return `${STAT_NAMES[stat]}이(가) 이미 높다`;
   }
   for (const [name, value] of Object.entries(r.alignment_min || {})) {
     const current = player.alignment[name] || 0;
@@ -177,6 +182,12 @@ export function eventView(player, key) {
 }
 
 /** 적이 플레이어를 보고 하는 말. 상황에 맞는 대사가 있으면 그것을 쓴다. */
+/** 조건에 맞는 첫 대사. 없으면 기본 대사 */
+export function reactiveLine(player, list, fallback = null) {
+  const special = (list || []).find((i) => checkRequires(player, i.requires));
+  return special ? special.text : fallback;
+}
+
 export function enemyIntro(player, enemyKey) {
   const data = DB.enemies[enemyKey];
   const special = (data.intros || []).find((i) => checkRequires(player, i.requires));
