@@ -1,5 +1,5 @@
 // 한 생의 진행을 맡는 상태 기계. 화면(ui.js)은 이 객체의 상태를 그리고 메서드를 부른다.
-import { Battle, enemyPool, Enemy, useConsumable } from "./battle.js";
+import { Battle, enemyPool, Enemy, statureEnemy, useConsumable } from "./battle.js";
 import { GRADE_ORDER, Player, Skill, STAT_NAMES } from "./character.js";
 import { DB } from "./data.js";
 import { grantStartGifts,
@@ -83,14 +83,13 @@ export class Game {
       const skill = Skill.fromDict({ key: entry.key, grade: inheritedGrade(entry.grade), mastery: 0 });
       name = skill.name;
       if (!p.hasSkill(skill.key)) p.learnSkill(skill);
-      if (skill.type === "공격무공") p.mainSkill = skill.key;
     } else {
       const key = inheritedGear(entry.key);
       name = DB.market[key].name;
       p[DB.market[key].effects.find((e) => e.type === "equip").slot] = key;
     }
     p.note(`전대 「${entry.from}」의 유산 「${name}」을(를) 이어받았다.`);
-    return [`🏺 전대 「${entry.from}」이(가) 남긴 「${name}」을(를) 이어받았다. 세월에 조금 무뎌졌지만 아직 쓸 만하다.`];
+    return [`🏺 전대 「${entry.from}」이(가) 남긴 「${name}」을(를) 이어받았다. 세월에 조금 무뎌졌지만 아직 쓸 만하다.${entry.kind === "skill" ? " 신상의 무공 칸에서 골라 쓸 수 있다." : ""}`];
   }
 
   /** 이번 강호행에서 유산으로 남길 수 있는 것들 */
@@ -233,10 +232,12 @@ export class Game {
   }
 
   startBattle(key) {
-    const enemy = new Enemy(key, this.player.turn);
-    this.player.recordEnemyEncounter(key);
+    // 지금 장에 어울리지 않는 적이면 같은 갈래에서 위상이 맞는 적으로 나온다
+    const fitting = statureEnemy(key, getChapter(this.player.turn));
+    const enemy = new Enemy(fitting, this.player.turn);
+    this.player.recordEnemyEncounter(fitting);
     this.battle = new Battle(this.player, enemy);
-    const intro = enemyIntro(this.player, key);
+    const intro = enemyIntro(this.player, fitting);
     this.addLog([`⚔️ ${enemy.name}과(와) 마주쳤다!`, ...(intro ? [intro] : []), ...this.battle.log]);
     this.battle.log = [];
   }
@@ -381,6 +382,7 @@ export class Game {
     if (!this.active || this.battle) return;
     const skill = this.player.getSkill(key);
     if (skill?.type === "공격무공") this.player.mainSkill = key;
+    else if (skill) this.player.chosenArts[skill.type] = key;
   }
 
   // ---------- 달 넘김과 시장 ----------
@@ -436,9 +438,12 @@ export class Game {
   /** 직전 달의 조우와 습득을 영구 도감에 반영한다. */
   commitCodex() {
     const added = this.player.commitPendingEncounters();
-    updateGlobalCodex(added);
+    // 이미 강호록에 있는 인물은 다시 알리지 않는다
+    const known = loadMeta().global_codex;
+    const fresh = added.filter((key) => !known.includes(key));
+    updateGlobalCodex(fresh);
     updateKnown(this.player.skills.map((s) => s.key));
-    return added.map((key) => `📖 강호 강호록에 「${DB.enemies[key]?.name ?? key}」이(가) 기록되었다.`);
+    return fresh.map((key) => `📖 강호록에 「${DB.enemies[key]?.name ?? key}」이(가) 기록되었다.`);
   }
 
   checkRealm() {
@@ -488,7 +493,11 @@ export class Game {
       gain.lines.push(`공적 「${item.name}」${item.karma ? ` +${item.karma}` : ""}`);
       gain.total += item.karma;
     }
+    const before = loadMeta().total_karma;
     addKarma(gain.total);
+    for (const reward of DB.karma.rewards) {
+      if (before < reward.at && before + gain.total >= reward.at) gain.lines.push(`누적 보상 「${reward.name}」을(를) 받았다.`);
+    }
     // 생사경은 천마를 넘어선 그 순간에만 이르는 경지다
     if (key === "생사경") p.realm = "생사경";
     p.alive = false;

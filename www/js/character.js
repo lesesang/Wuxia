@@ -78,7 +78,7 @@ export class Skill {
   evolve() {
     if (!this.canEvolve()) return false;
     this.grade = GRADE_ORDER[GRADE_ORDER.indexOf(this.grade) + 1];
-    this.mastery = 30;
+    this.mastery = this.evolveMastery ?? 30;
     return true;
   }
 
@@ -140,12 +140,13 @@ export class Player {
     }
     this.hp = this.maxHp();
     this.qi = this.maxQi();
-    this.battles = 0;
+    this.battles = sumEffect(traitKeys, "start_battles", "amount");
     this.encounteredEnemies = [];
     this.pendingEncounters = [];
 
     this.skills = [];
     this.mainSkill = null;
+    this.chosenArts = {}; // 쓰는 심법과 경공
     for (const key of [...(data.skills || []), ...startSkills(traitKeys)]) {
       if (!this.hasSkill(key)) this.learnSkill(new Skill(key));
     }
@@ -226,17 +227,22 @@ export class Player {
   learnSkill(skill) {
     const owned = this.getSkill(skill.key);
     if (owned) return [`이미 아는 무공이다. ${owned.name}의 이해가 깊어졌다.`, ...owned.gainMastery(25)];
+    // 새로 얻었거나 품계가 높아도 쓰던 무공을 바꾸지 않는다. 바꾸는 것은 플레이어의 몫이다
+    const current = skill.type === "공격무공" ? this.getSkill(this.mainSkill) : this.bestOfType(skill.type);
     this.skills.push(skill);
-    if (skill.type !== "공격무공") return [];
-    const current = this.mainSkill ? this.getSkill(this.mainSkill) : null;
+    this.applyEvolveTrait(skill);
     if (!current) {
-      this.mainSkill = skill.key;
-    } else if (skill.effectiveMultiplier() > current.effectiveMultiplier()) {
-      // 비기까지 터득한 무공은 함부로 바꾸지 않고 플레이어에게 맡긴다
-      if (current.secretUnlocked) return [`상태 창에서 「${skill.name}」을(를) 주무공으로 바꿀 수 있다.`];
-      this.mainSkill = skill.key;
+      if (skill.type === "공격무공") this.mainSkill = skill.key;
+      else this.chosenArts[skill.type] = skill.key;
+      return [];
     }
-    return [];
+    return [`「${skill.name}」은(는) 신상의 무공 칸에서 골라 쓸 수 있다.`];
+  }
+
+  /** 승급 뒤 성취를 높여 주는 자질을 무공에 적어 둔다. */
+  applyEvolveTrait(skill) {
+    const amount = sumEffect(this.traits, "evolve_mastery", "amount");
+    if (amount) skill.evolveMastery = amount;
   }
 
   bestSkill() {
@@ -248,10 +254,8 @@ export class Player {
   }
 
   bestOfType(type) {
-    const score = (s) => GRADE_ORDER.indexOf(s.grade) * 1000 + Object.values(s.effect).reduce((t, v) => t + Math.max(v, 0), 0);
-    const options = this.skillsOfType(type);
-    if (!options.length) return null;
-    return options.reduce((a, b) => (score(b) > score(a) ? b : a));
+    const chosen = this.getSkill(this.chosenArts[type]);
+    return chosen && chosen.type === type ? chosen : this.skillsOfType(type)[0] ?? null;
   }
 
   addItem(key, count = 1) { this.inventory[key] = (this.inventory[key] || 0) + count; }
@@ -285,7 +289,7 @@ export class Player {
       external: this.external, internal: this.internal, martial: this.martial, mind: this.mind,
       hp: this.hp, qi: this.qi, battles: this.battles,
       encountered_enemies: this.encounteredEnemies, pending_encounters: this.pendingEncounters,
-      skills: this.skills.map((s) => s.toDict()), main_skill: this.mainSkill,
+      skills: this.skills.map((s) => s.toDict()), main_skill: this.mainSkill, chosen_arts: this.chosenArts,
       traits: this.traits, silver: this.silver, weapon: this.weapon, armor: this.armor,
       inventory: this.inventory, boss_weaken: this.bossWeaken, alignment: this.alignment,
       flags: this.flags, seen_events: this.seenEvents, kills: this.kills,
@@ -317,7 +321,17 @@ export class Player {
     p.pendingEncounters = [...(d.pending_encounters || [])];
     p.skills = (d.skills || []).map((s) => Skill.fromDict(s));
     p.mainSkill = d.main_skill ?? null;
-    p.traits = [...(d.traits || [])];
+    p.chosenArts = { ...(d.chosen_arts || {}) };
+    if (!d.chosen_arts) {
+      // 예전 저장은 쓰던 대로 품계가 가장 높은 것을 고른 것으로 친다
+      const score = (s) => GRADE_ORDER.indexOf(s.grade) * 1000 + Object.values(s.effect).reduce((t, v) => t + Math.max(v, 0), 0);
+      for (const type of ["심공", "경공"]) {
+        const options = p.skillsOfType(type);
+        if (options.length) p.chosenArts[type] = options.reduce((a, b) => (score(b) > score(a) ? b : a)).key;
+      }
+    }
+    p.traits = (d.traits || []).filter((k) => DB.traits[k]);
+    p.skills.forEach((s) => p.applyEvolveTrait(s));
     p.silver = d.silver ?? 0;
     p.weapon = d.weapon ?? null;
     p.armor = d.armor ?? null;

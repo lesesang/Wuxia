@@ -256,7 +256,9 @@ function takeStartMindset(player, key) {
   const defaults = DB.origins.origins[player.originKey].skills || [];
   player.skills = player.skills.filter((s) => s.type !== "심공" || !defaults.includes(s.key));
   const skill = new Skill(key);
-  return [`📕 심법 「${skill.name}」`, ...player.learnSkill(skill)];
+  player.learnSkill(skill);
+  player.chosenArts.심공 = key;
+  return [`📕 심법 「${skill.name}」`];
 }
 
 const REWARD_BONUSES = [10, 26, 50, 80]; // 보상 병기의 네 단계

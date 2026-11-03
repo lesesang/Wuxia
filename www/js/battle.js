@@ -85,6 +85,22 @@ export class Enemy {
   }
 }
 
+/**
+ * 장에 맞는 적을 찾는다. 적의 ranks는 어울리는 장의 범위이고, above와 below는 같은 갈래의
+ * 윗길과 아랫길이다. 사문의 시험처럼 정해진 인물은 ranks가 없어 그대로 나온다.
+ */
+export function statureEnemy(key, chapter) {
+  let current = key;
+  for (let i = 0; i < 8; i++) {
+    const { ranks, above, below } = DB.enemies[current];
+    if (!ranks) return current;
+    if (chapter > ranks[1] && above) current = above;
+    else if (chapter < ranks[0] && below) current = below;
+    else return current;
+  }
+  return current;
+}
+
 export const enemyPool = (chapter) =>
   Object.keys(DB.enemies).filter((k) => (DB.enemies[k].chapters || []).includes(chapter));
 
@@ -219,6 +235,7 @@ export class Battle {
   applyPoisonOnHit(skill) {
     let power = sectBonus(this.player, "poison");
     if (skill?.inflict) power += skill.inflict.poison || 0;
+    power += sumEffect(this.player.traits, "inflict_poison", "power");
     if (power) this.enemyPoison = { damage: power + Math.floor(this.player.internal / 5), rounds: 3 };
   }
 
@@ -232,16 +249,21 @@ export class Battle {
 
   basicAttack() { return this.strike(this.attackPower(), "맨손으로 일격!"); }
 
+  /** 자질을 뺀 공격무공의 내력 소모 */
+  artCost(skill) {
+    return Math.ceil(skill.qiCost * (1 - sumEffect(this.player.traits, "qi_cost_cut", "percent") / 100));
+  }
+
   useSkill(skill) {
     if (this.sealed) {
       this.log.push("혈도가 막혀 무공을 펼칠 수 없다.");
       return this.basicAttack();
     }
-    if (this.player.qi < skill.qiCost) {
+    if (this.player.qi < this.artCost(skill)) {
       this.log.push(`내력이 모자라 ${skill.name}을(를) 펼치지 못했다.`);
       return this.basicAttack();
     }
-    this.player.qi -= skill.qiCost;
+    this.player.qi -= this.artCost(skill);
     const damage = this.strike(this.attackPower(skill), this.skillLabel(skill), skill);
     this.log.push(...skill.gainMastery(this.player.masteryGainAmount()));
     return damage;
@@ -283,7 +305,7 @@ export class Battle {
       this.log.push("아직 익힌 심공이 없다.");
       return;
     }
-    const boost = 1 + sectBonus(p, "heal_bonus") / 100;
+    const boost = 1 + (sectBonus(p, "heal_bonus") + sumEffect(p.traits, "mindset_power", "percent")) / 100;
     const hpValue = skill.effectValue("heal_hp_pct");
     const qiValue = skill.effectValue("heal_qi_pct");
     const [hpChange, qiChange] = p.healPercent(hpValue > 0 ? hpValue * boost : hpValue, qiValue * boost);

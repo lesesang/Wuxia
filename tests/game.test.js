@@ -3,14 +3,14 @@ import { readdirSync, readFileSync } from "node:fs";
 import { test } from "node:test";
 import { seed } from "./helpers.js";
 import { listAssets } from "../tools/build_asset_list.js";
-import { Battle, Enemy, useConsumable } from "../www/js/battle.js";
+import { Battle, Enemy, statureEnemy, useConsumable } from "../www/js/battle.js";
 import { GRADE_ORDER, Player, Skill } from "../www/js/character.js";
 import { DB } from "../www/js/data.js";
 import { applyEffects, grantStartGifts, canStartChain, checkRequires, enemyIntro, eventView, LAST_CHAIN_TURN, pickRandomEvent, resolveChoice, validateChains, validateEvents } from "../www/js/events.js";
 import { Game } from "../www/js/game.js";
 import { blockReason, buy, equipmentBonus, openMarket, priceOf } from "../www/js/market.js";
 import {
-  activeContent, buyContent, buyUpgrade, exportRecords, importRecords, loadCheckpoint, loadEventLog, loadMeta, nextReward, openLegacy, saveMeta, takeLegacy, toggleContent, unlockOrigin,
+  activeContent, buyContent, buyUpgrade, exportRecords, importRecords, extraSlots, loadCheckpoint, loadEventLog, loadMeta, nextReward, recordEventPick, openLegacy, saveMeta, takeLegacy, toggleContent, unlockOrigin,
 } from "../www/js/meta.js";
 import { applyGrowth, breakthroughBlock, byname, fameRank, getChapter, getYear, marketTurns, traitSlots } from "../www/js/rules.js";
 import { storage } from "../www/js/storage.js";
@@ -565,7 +565,7 @@ test("비기를 터득한 주무공은 자동으로 바뀌지 않는다", () => 
   current.secretUnlocked = true;
   const messages = p.learnSkill(new Skill("태허검결"));
   assert.equal(p.mainSkill, current.key);
-  assert.ok(messages.some((m) => m.includes("주무공")));
+  assert.ok(messages.some((m) => m.includes("골라 쓸 수")));
 });
 
 // ---------- 저장 ----------
@@ -715,7 +715,7 @@ test("60달 시절의 저장은 시간표를 늘려 이어 간다", () => {
 test("성장 특성은 작은 수에서 두 배가 되지 않는다", () => {
   seed(5);
   let total = 0;
-  for (let i = 0; i < 1000; i++) total += applyGrowth(1, ["무골"], "external");
+  for (let i = 0; i < 1000; i++) total += applyGrowth(1, ["글읽는무인"], "mind");
   assert.ok(total > 1050 && total < 1150, String(total));
 });
 
@@ -989,10 +989,10 @@ test("새 특성들이 작동한다", () => {
   assert.equal(equipmentBonus(sword, "weapon"), 10);
   const lone = new Player("무림초출", ["외길"]);
   lone.weapon = "철검";
-  assert.equal(equipmentBonus(lone, "weapon"), 13);
+  assert.equal(equipmentBonus(lone, "weapon"), 14);
   const herb = new Player("무림초출", ["약초꾼"]);
-  assert.equal(herb.inventory.금창약, 3);
-  assert.equal(new Player("무림초출", ["가보의호구"]).armor, "가죽호구");
+  assert.equal(herb.inventory.금창약, 5);
+  assert.equal(new Player("무림초출", ["가보의호구"]).armor, "철사갑의");
   assert.equal(new Player("무림초출", ["대기만성"]).external, new Player().external - 4);
   const keen = new Player("무림초출", ["눈썰미"]);
   assert.ok(openMarket(12, keen).stock.length > openMarket(12, new Player()).stock.length);
@@ -1001,7 +1001,7 @@ test("새 특성들이 작동한다", () => {
   const before = game.player.external;
   game.player.turn = 24;
   game.startNextTurn();
-  assert.equal(game.player.external, before + 3);
+  assert.equal(game.player.external, before + 4);
 });
 
 test("독인은 독에 당하지 않고 맑은 정신은 점혈되지 않는다", () => {
@@ -1089,7 +1089,7 @@ test("이벤트에서 만들어 쓰는 인연 표시는 어딘가에서 얻을 �
 });
 
 
-test("잠이 보약과 약손은 회복량을 늘린다", () => {
+test("잠이 보약과 약초꾼은 회복량을 늘린다", () => {
   const heal = (traits, act) => {
     const p = new Player("무림초출", traits);
     p.hp = 1;
@@ -1103,10 +1103,10 @@ test("잠이 보약과 약손은 회복량을 늘린다", () => {
   };
   assert.ok(heal(["잠이보약"], rest) > heal([], rest));
   const potion = (p) => { p.inventory.금창약 = 1; useConsumable(p, "금창약"); };
-  assert.ok(heal(["약손"], potion) > heal([], potion));
+  assert.ok(heal(["약초꾼"], potion) > heal([], potion));
 });
 
-test("맷집은 받는 피해를 줄인다", () => {
+test("철옹성은 받는 피해를 줄인다", () => {
   const taken = (traits) => {
     const p = new Player("무림초출", traits);
     const b = new Battle(p, new Enemy("낭인", 1));
@@ -1114,7 +1114,7 @@ test("맷집은 받는 피해를 줄인다", () => {
     for (let i = 0; i < 300; i++) sum += b.incoming();
     return sum;
   };
-  assert.ok(taken(["맷집"]) < taken([]));
+  assert.ok(taken(["철옹성"]) < taken([]));
 });
 
 test("특성에 따라 사건 선택지가 늘어난다", () => {
@@ -1185,13 +1185,119 @@ test("능력치 기틀과 자질은 네 기량에 고르게 있다", () => {
     assert.ok(found.every((list) => list.length === 1), type);
     assert.ok(found.every((list) => JSON.stringify(list[0].costs) === JSON.stringify(found[0][0].costs)), `${type} 비용`);
   }
-  const traits = Object.values(DB.traits).filter((t) => !t.hidden && t.effects.length === 1);
-  for (const [type, value] of [["start_stat", 10], ["growth_rate", 10]]) {
-    for (const stat of stats) {
-      const field = type === "start_stat" ? "amount" : "percent";
-      assert.ok(traits.some((t) => t.effects[0].type === type && t.effects[0].stat === stat && t.effects[0][field] === value), `${type} ${stat}`);
+  const single = Object.values(DB.traits).filter((t) => !t.hidden && t.effects.length === 2);
+  for (const stat of stats) {
+    assert.ok(single.some((t) => t.effects.some((e) => e.type === "start_stat" && e.stat === stat && e.amount === 12)
+      && t.effects.some((e) => e.type === "growth_rate" && e.stat === stat && e.percent === 15)), stat);
+  }
+});
+
+test("새로 얻거나 품계가 높아도 쓰던 무공이 바뀌지 않는다", () => {
+  const p = new Player("하북팽가");
+  const main = p.mainSkill;
+  const mind = p.bestOfType("심공").key;
+  assert.ok(p.learnSkill(new Skill("오호단혼도")).some((l) => l.includes("골라 쓸 수")));
+  p.learnSkill(new Skill("오호맹혼공"));
+  p.learnSkill(new Skill("이형환위"));
+  assert.equal(p.mainSkill, main);
+  assert.equal(p.bestOfType("심공").key, mind);
+  assert.equal(p.bestOfType("경공").key, "이형환위", "처음 익힌 경공은 바로 쓴다");
+  p.learnSkill(new Skill("초상비"));
+  assert.equal(p.bestOfType("경공").key, "이형환위");
+  const game = new Game();
+  game.player = p;
+  game.setMainSkill("오호단혼도");
+  game.setMainSkill("오호맹혼공");
+  assert.equal(p.bestSkill().key, "오호단혼도");
+  assert.equal(p.bestOfType("심공").key, "오호맹혼공");
+  const again = Player.fromDict(p.toDict());
+  assert.equal(again.bestOfType("심공").key, "오호맹혼공");
+});
+
+test("적은 장에 맞는 위상으로 나온다", () => {
+  for (const [key, e] of Object.entries(DB.enemies)) {
+    for (const chapter of e.chapters || []) {
+      if (e.ranks) assert.ok(chapter >= e.ranks[0] && chapter <= e.ranks[1], `${key} ${chapter}장`);
+    }
+    if (!e.ranks) continue;
+    for (const chapter of [1, 2, 3, 4, 5]) {
+      const fit = DB.enemies[statureEnemy(key, chapter)];
+      const below = chapter < e.ranks[0] && !e.below;
+      const above = chapter > e.ranks[1] && !e.above;
+      if (!below && !above) assert.ok(!fit.ranks || (chapter >= fit.ranks[0] && chapter <= fit.ranks[1]) || !fit.above || !fit.below, `${key} ${chapter}장 ${fit.name}`);
     }
   }
+  assert.equal(statureEnemy("산적", 1), "산적");
+  assert.notEqual(statureEnemy("산적", 5), "산적", "5장에 산적이 나오지 않는다");
+  assert.equal(statureEnemy("낭인", 4), "독고객");
+  assert.equal(statureEnemy("낭인", 5), "혈마대귀");
+  assert.equal(statureEnemy("십이마장", 3), "화경마인");
+  assert.equal(statureEnemy("권마의그림자", 2), "권마의그림자", "정해진 인물은 그대로 나온다");
+  const game = newGame();
+  game.player.turn = 100;
+  game.startBattle("산적");
+  assert.equal(game.battle.enemy.name, DB.enemies[statureEnemy("산적", 5)].name);
+});
+
+test("이미 강호록에 있는 인물은 다시 알리지 않는다", () => {
+  const data = loadMeta();
+  data.global_codex = data.global_codex.filter((k) => k !== "산적");
+  saveMeta(data);
+  const game = newGame();
+  game.player.recordEnemyEncounter("산적");
+  assert.equal(game.commitCodex().length, 1);
+  const second = newGame();
+  second.player.recordEnemyEncounter("산적");
+  assert.equal(second.commitCodex().length, 0);
+  recordEventPick("시험사건", "본문", "선택", "결과");
+  const before = JSON.stringify(loadEventLog().시험사건);
+  recordEventPick("시험사건", "본문", "선택", "결과");
+  assert.equal(JSON.stringify(loadEventLog().시험사건), before, "같은 선택과 결과는 다시 쓰지 않는다");
+  recordEventPick("시험사건", "본문", "다른 선택", "다른 결과");
+  assert.equal(Object.keys(loadEventLog().시험사건.picks).length, 2, "고르지 않았던 선택은 기록한다");
+  delete loadEventLog().시험사건;
+});
+
+test("큰 그릇은 세 번까지 사고 없어진 자질은 값을 돌려준다", () => {
+  withKarma(500);
+  assert.ok(buyUpgrade("그릇"));
+  assert.ok(buyUpgrade("그릇"));
+  assert.ok(buyUpgrade("그릇"));
+  assert.ok(!buyUpgrade("그릇"));
+  assert.equal(extraSlots(loadMeta()), 3);
+  withKarma(0);
+  const data = loadMeta();
+  data.unlocked_traits = ["무골", "외길"];
+  saveMeta(data);
+  const after = loadMeta();
+  assert.deepEqual(after.unlocked_traits, ["외길"]);
+  assert.equal(after.current_karma, 5);
+  after.unlocked_traits = [];
+  saveMeta(after);
+  withKarma(0);
+});
+
+test("생사경 결말의 카르마는 10이다", () => {
+  assert.equal(DB.endings.karma.생사경, 10);
+  assert.equal(DB.karma.milestones.생사경, 0);
+});
+
+test("자질의 새 효과가 동작한다", () => {
+  const veteran = new Player("무림초출", ["백전노장"]);
+  assert.equal(veteran.battles, 8);
+  const p = new Player("무림초출", ["절세미공"]);
+  const skill = p.bestSkill();
+  skill.mastery = 100;
+  skill.gainMastery(1);
+  assert.equal(skill.grade, "명품");
+  assert.equal(skill.mastery, 60);
+  const q = new Player("남궁세가", ["이기어검"]);
+  const battle = new Battle(q, new Enemy("산적"));
+  assert.ok(battle.artCost(q.bestSkill()) < q.bestSkill().qiCost || q.bestSkill().qiCost <= 1);
+  const poison = new Player("남궁세가", ["독인"]);
+  const b2 = new Battle(poison, new Enemy("산적"));
+  b2.applyPoisonOnHit(poison.bestSkill());
+  assert.ok(b2.enemyPoison);
 });
 
 test("예전 묶음 강화는 낱개 기틀로 옮겨진다", () => {
@@ -1250,17 +1356,17 @@ test("사건 반응 자질은 실제로 사건에 반응한다", () => {
 });
 
 test("시작 선물은 주무공 계열을 따른다", () => {
-  const p = new Player("하북팽가", ["손에익은병기", "수련도구", "비장의도구", "가전비급"]);
+  const p = new Player("하북팽가", ["병기광", "수련도구", "비장의도구", "가전비급"]);
   const lines = grantStartGifts(p);
   assert.ok(lines.length >= 4);
   assert.ok(equipmentBonus(p, "weapon") >= 10);
   assert.equal(DB.market[p.weapon].effects[0].style, "도법");
-  assert.equal(p.inventory.베기짚단, 2);
-  assert.equal(p.inventory.맹호도유, 2);
+  assert.equal(p.inventory.베기짚단, 4);
+  assert.equal(p.inventory.맹호도유, 4);
   assert.ok(p.skills.some((s) => s.category === "도법" && s.grade === "명품" && s.key !== "오호단문도"));
   const drifter = new Player("무림초출", ["수련도구", "현기의호흡"]);
   applyEffects(drifter, { start_weapon: "창법", start_mindset: "양생공" });
-  assert.equal(drifter.inventory.납창추, 2, "강호초출은 첫 병기를 고른 뒤 받는다");
+  assert.equal(drifter.inventory.납창추, 4, "강호초출은 첫 병기를 고른 뒤 받는다");
   assert.ok(drifter.hasSkill("곤륜현기공"), "자질로 받은 심법은 첫 심법을 골라도 남는다");
 });
 
@@ -1348,7 +1454,8 @@ test("유산은 천마를 쓰러뜨린 뒤 열리고, 남기고, 이어받으면
   next.start("무림초출", [], 0);
   const skill = next.player.skills.find((s) => s.key === "양가창법");
   assert.equal(skill.grade, "상승", "한 등급 낮아지고 상승을 넘지 않는다");
-  assert.equal(next.player.mainSkill, "양가창법");
+  assert.ok(next.player.hasSkill("양가창법"));
+  assert.notEqual(next.player.mainSkill, "양가창법", "이어받아도 쓰던 주무공은 그대로다");
   assert.equal(loadMeta().legacies.length, 0);
 
   first.ending.legacyLeft = null;
@@ -1823,7 +1930,7 @@ test("신공은 공격, 심법, 보법에 있고 출신이나 카르마 인연�
   assert.ok(Object.values(DB.events).some((e) => e.requires?.origin === "무림초출" && JSON.stringify(e).includes('"grade":"신공"')), "강호초출 이야기");
 });
 
-test("주무공 계열 신공 보상은 다른 출신의 전용 신공을 주지 않고, 익힌 신공 심법이 우선한다", () => {
+test("주무공 계열 신공 보상은 다른 출신의 전용 신공을 주지 않고, 쓰던 심법은 그대로다", () => {
   const p = new Player();
   applyEffects(p, { style_skill: { grade: "신공" } });
   assert.ok(p.hasSkill("무극검결"));
@@ -1831,7 +1938,7 @@ test("주무공 계열 신공 보상은 다른 출신의 전용 신공을 주지
   const toNap = p.skills.find((s) => s.type === "심공");
   toNap.grade = "일절";
   applyEffects(p, { skill: "혼원일기공" });
-  assert.equal(p.bestOfType("심공").key, "혼원일기공");
+  assert.equal(p.bestOfType("심공").key, toNap.key, "새로 얻어도 쓰던 심법을 그대로 쓴다");
 });
 
 test("예전 저장의 신공은 일절로 바뀐다", () => {
@@ -1860,7 +1967,7 @@ test("새 장의 성장은 장마다, 회복은 해마다다", () => {
   p.turn = 24;
   game.event = null;
   game.startNextTurn();
-  assert.equal(p.external, before + 3);
+  assert.equal(p.external, before + 4);
 });
 
 // ---------- 전체 플레이 ----------
