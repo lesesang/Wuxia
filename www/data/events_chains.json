@@ -1075,11 +1075,11 @@
             "label": "도객을 꺾고 비급을 완성한다",
             "outcomes": [
               {
-                "text": "마지막 조각이 맞물리자 비급이 온전한 신공이 되었다.",
+                "text": "마지막 조각이 맞물리자 비급이 온전한 일절이 되었다.",
                 "effects": {
                   "battle": "귀도객",
                   "style_skill": {
-                    "grade": "신공"
+                    "grade": "일절"
                   },
                   "fame": 3
                 }
@@ -1500,7 +1500,7 @@
                 "effects": {
                   "battle": "혈마잔영",
                   "style_skill": {
-                    "grade": "신공"
+                    "grade": "일절"
                   },
                   "fame": 4
                 }
