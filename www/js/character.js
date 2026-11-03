@@ -14,6 +14,7 @@ const EFFECT_GRADE_BONUS = 0.2; // 심공·경공 진화 1단계당 효과 증�
 export const START_SILVER = 30;
 export const STAT_CAP = 99;
 export const MAX_INJURY = 3;
+export const MAX_TURN = 120;
 export const STAT_NAMES = { external: "외공", internal: "내공", martial: "무리", mind: "심경" };
 
 export class Skill {
@@ -144,7 +145,7 @@ export class Player {
     this.sect = ORIGIN_SECTS[originKey] || null;
     this.injury = 0;
     this.turn = 1;
-    this.maxTurn = 60;
+    this.maxTurn = MAX_TURN;
     this.alive = true;
   }
 
@@ -226,7 +227,7 @@ export class Player {
   }
 
   addItem(key, count = 1) { this.inventory[key] = (this.inventory[key] || 0) + count; }
-  masteryGainAmount() { return randInt(2, 4) + Math.floor(this.martial / 25); }
+  masteryGainAmount() { return randInt(1, 2) + Math.floor(this.martial / 50); }
 
   recordEnemyEncounter(key) {
     if (!this.encounteredEnemies.includes(key) && !this.pendingEncounters.includes(key)) {
@@ -287,8 +288,13 @@ export class Player {
     p.sect = d.sect !== undefined ? d.sect : (ORIGIN_SECTS[p.originKey] || null);
     p.injury = d.injury ?? 0;
     p.turn = d.turn;
-    p.maxTurn = d.max_turn;
+    p.maxTurn = MAX_TURN;
     p.alive = d.alive;
+    // 60턴 시절의 저장은 시간표를 두 배로 늘려 이어 간다
+    if (d.max_turn === 60) {
+      p.turn = d.turn * 2 - 1;
+      p.battles *= 2;
+    }
     return p;
   }
 }

@@ -6,7 +6,7 @@ import { updateKnown } from "./meta.js";
 import { pick, pickWeighted } from "./rng.js";
 import { ALIGNMENTS, applyGrowth, fameRankChanged, getChapter, realmIndex } from "./rules.js";
 
-export const EVENT_STAT_SCALE = 0.6; // 사건·기연의 능력치 상승 배율 (밸런스 조정용)
+export const EVENT_STAT_SCALE = 0.3; // 사건·기연의 능력치 상승 배율 (밸런스 조정용)
 
 /** 만족하지 못한 첫 조건의 설명. 모두 만족하면 null */
 export function unmetReason(player, requires) {

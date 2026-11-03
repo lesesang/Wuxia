@@ -1,6 +1,6 @@
 # 무협 로그라이크
 
-5년(60턴) 동안 무공을 닦고 강호의 선택을 거쳐 천마봉에 오르는 한국어 텍스트 로그라이크 RPG입니다.
+10년(120턴) 동안 무공을 닦고 강호의 선택을 거쳐 천마봉에 오르는 한국어 텍스트 로그라이크 RPG입니다.
 죽어도 카르마가 남아 다음 회차의 출신과 특성을 해금합니다.
 
 **플레이: https://lesesang.github.io/Wuxia/**
@@ -27,7 +27,8 @@
 ```
 npm test                     # 자동 테스트
 npm run serve                # http://localhost:8000 에서 실행
-node tools/simulate.js 300   # 봇으로 밸런스 확인
+node tools/simulate.js 300   # 봇으로 조건별 승률 확인
+node tools/probe.js 300      # 해마다 성장과 장별 난이도 측정
 ```
 
 `www/`에 파일을 더하면 `node tools/build_asset_list.js`로 오프라인 목록을 다시 만듭니다.

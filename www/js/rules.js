@@ -1,6 +1,6 @@
 // 성향, 챕터, 경지, 특성, 문파, 명성처럼 상태를 갖지 않는 규칙들
 import { DB } from "./data.js";
-import { pick } from "./rng.js";
+import { pick, rng } from "./rng.js";
 
 // ---------- 성향 ----------
 export const ALIGNMENTS = ["정도", "사도", "마도"];
@@ -29,9 +29,11 @@ export function benefitText(alignment) {
 }
 
 // ---------- 챕터와 시장 ----------
-export const getChapter = (turn) => Math.min(5, Math.floor((turn - 1) / 12) + 1);
+export const CHAPTER_LENGTH = 24;
+export const CHAPTER_STARTS = [25, 49, 73, 97];
+export const getChapter = (turn) => Math.min(5, Math.floor((turn - 1) / CHAPTER_LENGTH) + 1);
 export const getChapterInfo = (turn) => DB.chapters.chapters[String(getChapter(turn))];
-export const getYear = (turn) => getChapterInfo(turn).year;
+export const getYear = (turn) => Math.ceil(turn / 12);
 export const getMonth = (turn) => ((turn - 1) % 12) + 1;
 export const marketTurns = () => Object.keys(DB.chapters.market_turns).map(Number).sort((a, b) => a - b);
 export const isMarketTurn = (turn) => String(turn) in DB.chapters.market_turns;
@@ -62,11 +64,14 @@ export const startSkills = (traits) => effectsOfType(traits, "start_skill").map(
 export const battleBuffs = (traits, trigger) =>
   effectsOfType(traits, "battle_buff").filter((e) => e.trigger === trigger);
 
-/** 특성의 성장률 보정 적용, 소수점 올림 */
+/** 특성의 성장률 보정. 소수점 아래는 그 확률로 1이 더 오른다. */
 export function applyGrowth(amount, traits, stat) {
   const percent = effectsOfType(traits, "growth_rate")
     .filter((e) => e.stat === stat).reduce((total, e) => total + e.percent, 0);
-  return percent ? Math.ceil(amount * (1 + percent / 100) - 1e-9) : amount;
+  if (!percent) return amount;
+  const exact = amount * (1 + percent / 100);
+  const whole = Math.floor(exact);
+  return whole + (rng.random() < exact - whole ? 1 : 0);
 }
 
 // ---------- 문파 ----------
@@ -145,13 +150,13 @@ export const fameRankChanged = (before, after) =>
 
 /** 강호에서 불리는 별호. 성향과 주무공 계열로 정해지고 명성이 오르면 뒷글자가 무거워진다. */
 export function byname(player) {
-  if (player.fame < 8) return "이름 없는 무인";
+  if (player.fame < 10) return "이름 없는 무인";
   const top = dominant(player.alignment) || "중립";
   const category = player.bestSkill()?.category || "맨손";
   const names = DB.flavor.bynames;
   const prefixes = names.prefix[top];
   const seed = [...player.origin].reduce((total, c) => total + c.codePointAt(0), 0);
   const suffixes = names.suffix[category] || names.suffix.맨손;
-  const tier = player.fame < 30 ? 0 : player.fame < 65 ? 1 : 2;
+  const tier = player.fame < 40 ? 0 : player.fame < 100 ? 1 : 2;
   return prefixes[seed % prefixes.length] + suffixes[tier];
 }

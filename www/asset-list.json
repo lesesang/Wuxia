@@ -1,5 +1,6 @@
 [
  "css/game.css",
+ "data/balance.json",
  "data/chapters.json",
  "data/endings.json",
  "data/enemies.json",
