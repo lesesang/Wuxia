@@ -391,7 +391,7 @@ function goalStrip() {
   if (!progress) return `<div class="goal">천마봉까지 ${Math.max(0, p.maxTurn - p.turn)}개월</div>`;
   const part = (label, now, need) => `<span class="${now >= need ? "done" : ""}">${label} ${now}/${need}</span>`;
   return `<div class="goal"><b>${esc(progress.next)}까지</b>
-    ${part("평균", progress.avg, progress.avgRequired)}${part("최저", progress.min, progress.minRequired)}${part("실전", progress.battles, progress.battlesRequired)}</div>`;
+    ${part("평균", progress.avg, progress.avgRequired)}${part("최저", progress.min, progress.minRequired)}${part("전투 경험", progress.battles, progress.battlesRequired)}</div>`;
 }
 
 function topbar() {
