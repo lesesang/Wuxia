@@ -17,7 +17,8 @@ const EFFECT_GRADE_BONUS = 0.2; // 심공·경공 승급 1단계당 효과 증�
 
 export const START_SILVER = 30;
 const CHRONICLE_LIMIT = 40;
-export const STAT_CAP = 99;
+export const STAT_CAP = 999;
+export const STAT_SCALE = 10; // 기량 10이 예전 기량 1에 해당한다. 공식은 이 값으로 나누어 쓴다
 export const MAX_INJURY = 3;
 export const MAX_TURN = 120;
 export const STAT_NAMES = { external: "외공", internal: "내공", martial: "무리", mind: "심경" };
@@ -178,11 +179,11 @@ export class Player {
     this.alive = true;
   }
 
-  maxHp() { return 100 + this.external * 5; }
-  maxQi() { return 100 + this.internal * 5; }
+  maxHp() { return 100 + Math.trunc(this.external / 2); }
+  maxQi() { return 100 + Math.trunc(this.internal / 2); }
   dominantAlignment() { return dominant(this.alignment); }
 
-  /** 능력치를 올리고 상한 99를 적용한다. 실제로 오른 양을 돌려준다. */
+  /** 능력치를 올리고 상한 999를 적용한다. 실제로 오른 양을 돌려준다. */
   gainStat(stat, amount) {
     const before = this[stat];
     const after = Math.max(before, Math.min(STAT_CAP, before + amount));
@@ -260,7 +261,7 @@ export class Player {
 
   addItem(key, count = 1) { this.inventory[key] = (this.inventory[key] || 0) + count; }
   masteryGainAmount() {
-    const base = randInt(1, 2) + Math.floor(this.martial / 50);
+    const base = randInt(1, 2) + Math.floor(this.martial / 500);
     const rate = sumEffect(this.traits, "mastery_rate", "percent");
     return rate ? Math.round(base * (100 + rate) / 100) : base;
   }
@@ -286,7 +287,7 @@ export class Player {
   toDict() {
     return {
       origin: this.origin, origin_key: this.originKey, realm: this.realm,
-      external: this.external, internal: this.internal, martial: this.martial, mind: this.mind,
+      stat_scale: STAT_SCALE, external: this.external, internal: this.internal, martial: this.martial, mind: this.mind,
       hp: this.hp, qi: this.qi, battles: this.battles,
       encountered_enemies: this.encounteredEnemies, pending_encounters: this.pendingEncounters,
       skills: this.skills.map((s) => s.toDict()), main_skill: this.mainSkill, chosen_arts: this.chosenArts,
@@ -314,6 +315,8 @@ export class Player {
     p.internal = d.internal;
     p.martial = d.martial;
     p.mind = d.mind;
+    // 기량 최대가 99이던 때의 저장은 단위를 맞춘다
+    if (!d.stat_scale) for (const stat of ["external", "internal", "martial", "mind"]) p[stat] *= STAT_SCALE;
     p.hp = d.hp;
     p.qi = d.qi;
     p.battles = d.battles ?? 0;

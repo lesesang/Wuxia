@@ -286,7 +286,7 @@ function renderTitle() {
 }
 
 function statBars(o) {
-  const bar = (label, value) => `<span class="mini-stat"><span>${label}</span><span class="mini-track"><span style="width:${value * 2}%"></span></span><span>${value}</span></span>`;
+  const bar = (label, value) => `<span class="mini-stat"><span>${label}</span><span class="mini-track"><span style="width:${value / 5}%"></span></span><span>${value}</span></span>`;
   return `<span class="mini-stats">${bar("외공", o.external)}${bar("내공", o.internal)}${bar("무리", o.martial)}${bar("심경", o.mind)}</span>`;
 }
 
@@ -370,7 +370,6 @@ function rewardPanel(meta) {
     return `<div class="reward-row${done ? " done" : ""}"><span class="reward-at">${r.at}</span><span class="reward-main"><b>${done ? "✓ " : ""}${esc(r.name)}</b><span class="pick-desc block">${esc(r.desc)}</span></span></div>`;
   }).join("");
   const { milestones, achievements } = DB.karma;
-  const realm = Object.entries(milestones.realm).map(([k, v]) => `${k} +${v}`).join(", ");
   const endings = Object.entries(DB.endings.karma).filter(([k]) => k !== "생사경").map(([k, v]) => `${DB.endings.titles[k]} +${v}`).join(", ");
   const left = achievements.filter((a) => !a.hidden && !meta.achievements.includes(a.key));
   const total = left.reduce((sum, a) => sum + a.karma, 0);
@@ -380,7 +379,7 @@ function rewardPanel(meta) {
     ${rows}
     <h4 class="shop-group">카르마를 얻는 길</h4>
     <p class="help-line"><b>결말</b>: ${esc(endings)}</p>
-    <p class="help-line"><b>처음 이른 경지</b>: ${esc(realm)}, 첫 천마 격파 +${milestones.격파}</p>
+    <p class="help-line"><b>강호행마다</b>: 도달한 장과 오른 경지에 따라 더 받습니다. 첫 천마 격파 +${milestones.격파}</p>
     <p class="help-line"><b>공적</b>: 아직 이루지 못한 공적 ${left.length}개, 합쳐서 +${total}. 강호록의 공적 칸에서 볼 수 있습니다.</p>`;
 }
 
@@ -486,7 +485,7 @@ function statusModal() {
   const p = game.player;
   const row = (label, value) => `<div class="stat-row"><span>${esc(label)}</span><span>${esc(value)}</span></div>`;
   const statRow = (name, value, note) => `<div class="stat-line"><span class="stat-name">${name}<small>${note}</small></span>
-    <span class="stat-track"><span style="width:${Math.min(value, 99)}%"></span></span><span class="stat-value">${value}</span></div>`;
+    <span class="stat-track"><span style="width:${Math.min(value / 10, 100)}%"></span></span><span class="stat-value">${value}</span></div>`;
   const sect = DB.sects[p.sect];
   const progress = realmProgress(p);
   const weapon = itemName(p.weapon);

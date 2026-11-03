@@ -3,7 +3,7 @@
     "강골": {
       "group": "타고난 바탕",
       "name": "강골",
-      "desc": "시작 외공이 단계마다 2 높다.",
+      "desc": "시작 외공이 단계마다 20 높다.",
       "costs": [
         2,
         4,
@@ -13,14 +13,14 @@
         {
           "type": "start_stat",
           "stat": "external",
-          "amount": 2
+          "amount": 20
         }
       ]
     },
     "원기": {
       "group": "타고난 바탕",
       "name": "원기",
-      "desc": "시작 내공이 단계마다 2 높다.",
+      "desc": "시작 내공이 단계마다 20 높다.",
       "costs": [
         2,
         4,
@@ -30,14 +30,14 @@
         {
           "type": "start_stat",
           "stat": "internal",
-          "amount": 2
+          "amount": 20
         }
       ]
     },
     "혜안": {
       "group": "타고난 바탕",
       "name": "혜안",
-      "desc": "시작 무리가 단계마다 2 높다.",
+      "desc": "시작 무리가 단계마다 20 높다.",
       "costs": [
         2,
         4,
@@ -47,14 +47,14 @@
         {
           "type": "start_stat",
           "stat": "martial",
-          "amount": 2
+          "amount": 20
         }
       ]
     },
     "명경": {
       "group": "타고난 바탕",
       "name": "명경",
-      "desc": "시작 심경이 단계마다 2 높다.",
+      "desc": "시작 심경이 단계마다 20 높다.",
       "costs": [
         2,
         4,
@@ -64,7 +64,7 @@
         {
           "type": "start_stat",
           "stat": "mind",
-          "amount": 2
+          "amount": 20
         }
       ]
     },
@@ -513,13 +513,6 @@
     "gear_tier": 2
   },
   "milestones": {
-    "realm": {
-      "절정": 1,
-      "초절정": 2,
-      "화경": 3,
-      "현경": 5
-    },
-    "생사경": 0,
     "격파": 5
   },
   "achievements": [
@@ -700,7 +693,7 @@
     {
       "at": 30,
       "name": "자질 칸",
-      "desc": "자질을 2개까지 장착할 수 있다.",
+      "desc": "자질을 하나 더 장착할 수 있다.",
       "slot": true,
       "effects": []
     },
@@ -735,34 +728,34 @@
     {
       "at": 90,
       "name": "자질 칸",
-      "desc": "자질을 3개까지 장착할 수 있다.",
+      "desc": "자질을 하나 더 장착할 수 있다.",
       "slot": true,
       "effects": []
     },
     {
       "at": 120,
       "name": "단단한 기초",
-      "desc": "네 기량이 모두 2 높게 시작한다.",
+      "desc": "네 기량이 모두 20 높게 시작한다.",
       "effects": [
         {
           "type": "start_stat",
           "stat": "external",
-          "amount": 2
+          "amount": 20
         },
         {
           "type": "start_stat",
           "stat": "internal",
-          "amount": 2
+          "amount": 20
         },
         {
           "type": "start_stat",
           "stat": "martial",
-          "amount": 2
+          "amount": 20
         },
         {
           "type": "start_stat",
           "stat": "mind",
-          "amount": 2
+          "amount": 20
         }
       ]
     },
@@ -803,34 +796,45 @@
     {
       "at": 250,
       "name": "자질 칸",
-      "desc": "자질을 4개까지 장착할 수 있다.",
+      "desc": "자질을 하나 더 장착할 수 있다.",
       "slot": true,
       "effects": []
     },
     {
       "at": 300,
       "name": "깊은 기초",
-      "desc": "네 기량이 모두 3 높게 시작한다.",
+      "desc": "네 기량이 모두 30 높게 시작한다.",
       "effects": [
         {
           "type": "start_stat",
           "stat": "external",
-          "amount": 3
+          "amount": 30
         },
         {
           "type": "start_stat",
           "stat": "internal",
-          "amount": 3
+          "amount": 30
         },
         {
           "type": "start_stat",
           "stat": "martial",
-          "amount": 3
+          "amount": 30
         },
         {
           "type": "start_stat",
           "stat": "mind",
-          "amount": 3
+          "amount": 30
+        }
+      ]
+    },
+    {
+      "at": 350,
+      "name": "비상 도구",
+      "desc": "주무공 계열 전투 도구를 2개 들고 시작한다.",
+      "effects": [
+        {
+          "type": "start_battle_tool",
+          "amount": 2
         }
       ]
     },
@@ -846,9 +850,27 @@
       ]
     },
     {
+      "at": 450,
+      "name": "트인 복",
+      "desc": "탐색에서 기연을 만날 확률이 5% 오른다.",
+      "effects": [
+        {
+          "type": "fortune_rate",
+          "percent": 5
+        }
+      ]
+    },
+    {
       "at": 500,
+      "name": "자질 칸",
+      "desc": "자질을 하나 더 장착할 수 있다.",
+      "slot": true,
+      "effects": []
+    },
+    {
+      "at": 600,
       "name": "두둑한 전낭",
-      "desc": "은자 200을 더 들고 시작하고 호구를 입고 시작한다.",
+      "desc": "은자 200을 더 들고 철사갑의를 입고 시작한다.",
       "effects": [
         {
           "type": "start_silver",
@@ -863,27 +885,88 @@
     {
       "at": 700,
       "name": "강호의 그릇",
-      "desc": "네 기량이 모두 5 높게 시작한다.",
+      "desc": "네 기량이 모두 50 높게 시작한다.",
       "effects": [
         {
           "type": "start_stat",
           "stat": "external",
-          "amount": 5
+          "amount": 50
         },
         {
           "type": "start_stat",
           "stat": "internal",
-          "amount": 5
+          "amount": 50
         },
         {
           "type": "start_stat",
           "stat": "martial",
-          "amount": 5
+          "amount": 50
         },
         {
           "type": "start_stat",
           "stat": "mind",
+          "amount": 50
+        }
+      ]
+    },
+    {
+      "at": 800,
+      "name": "몸에 밴 실전",
+      "desc": "실전 경험 5를 쌓은 채로 시작한다.",
+      "effects": [
+        {
+          "type": "start_battles",
           "amount": 5
+        }
+      ]
+    },
+    {
+      "at": 900,
+      "name": "넉넉한 약상자",
+      "desc": "금창약 2개, 구명단 1개, 해독단 1개를 더 들고 시작한다.",
+      "effects": [
+        {
+          "type": "start_item",
+          "item": "금창약",
+          "amount": 2
+        },
+        {
+          "type": "start_item",
+          "item": "구명단",
+          "amount": 1
+        },
+        {
+          "type": "start_item",
+          "item": "해독단",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "at": 1000,
+      "name": "강호의 끝",
+      "desc": "자질을 하나 더 장착할 수 있고 네 기량이 모두 50 높게 시작한다.",
+      "slot": true,
+      "effects": [
+        {
+          "type": "start_stat",
+          "stat": "external",
+          "amount": 50
+        },
+        {
+          "type": "start_stat",
+          "stat": "internal",
+          "amount": 50
+        },
+        {
+          "type": "start_stat",
+          "stat": "martial",
+          "amount": 50
+        },
+        {
+          "type": "start_stat",
+          "stat": "mind",
+          "amount": 50
         }
       ]
     }

@@ -54,12 +54,12 @@
       2,
       3
     ],
-    "desc": "호랑이 뼈로 담근 약주. 외공이 4 오른다.",
+    "desc": "호랑이 뼈로 담근 약주. 외공이 40 오른다.",
     "effects": [
       {
         "type": "stat",
         "stat": "external",
-        "amount": 4
+        "amount": 40
       }
     ]
   },
@@ -72,12 +72,12 @@
       2,
       3
     ],
-    "desc": "진기를 북돋는 단약. 내공이 4 오른다.",
+    "desc": "진기를 북돋는 단약. 내공이 40 오른다.",
     "effects": [
       {
         "type": "stat",
         "stat": "internal",
-        "amount": 4
+        "amount": 40
       }
     ]
   },
@@ -90,12 +90,12 @@
       2,
       3
     ],
-    "desc": "이름 없는 고수의 수련 기록. 무리가 4 오른다.",
+    "desc": "이름 없는 고수의 수련 기록. 무리가 40 오른다.",
     "effects": [
       {
         "type": "stat",
         "stat": "martial",
-        "amount": 4
+        "amount": 40
       }
     ]
   },
@@ -108,12 +108,12 @@
       2,
       3
     ],
-    "desc": "마음을 가라앉히는 환약. 심경이 4 오른다.",
+    "desc": "마음을 가라앉히는 환약. 심경이 40 오른다.",
     "effects": [
       {
         "type": "stat",
         "stat": "mind",
-        "amount": 4
+        "amount": 40
       }
     ]
   },
@@ -126,12 +126,12 @@
       4,
       5
     ],
-    "desc": "천년 석굴에 맺힌 영액. 내공이 12 오른다.",
+    "desc": "천년 석굴에 맺힌 영액. 내공이 120 오른다.",
     "effects": [
       {
         "type": "stat",
         "stat": "internal",
-        "amount": 12
+        "amount": 120
       }
     ]
   },
@@ -143,27 +143,27 @@
       4,
       5
     ],
-    "desc": "강호 제일의 영단. 네 기량이 모두 6 오른다.",
+    "desc": "강호 제일의 영단. 네 기량이 모두 60 오른다.",
     "effects": [
       {
         "type": "stat",
         "stat": "external",
-        "amount": 6
+        "amount": 60
       },
       {
         "type": "stat",
         "stat": "internal",
-        "amount": 6
+        "amount": 60
       },
       {
         "type": "stat",
         "stat": "martial",
-        "amount": 6
+        "amount": 60
       },
       {
         "type": "stat",
         "stat": "mind",
-        "amount": 6
+        "amount": 60
       }
     ]
   },
@@ -365,17 +365,17 @@
       5
     ],
     "always": true,
-    "desc": "마도의 금단 약물. 외공과 무리가 12씩 오르지만 체력을 30% 잃는다.",
+    "desc": "마도의 금단 약물. 외공과 무리가 120씩 오르지만 체력을 30% 잃는다.",
     "effects": [
       {
         "type": "stat",
         "stat": "external",
-        "amount": 12
+        "amount": 120
       },
       {
         "type": "stat",
         "stat": "martial",
-        "amount": 12
+        "amount": 120
       },
       {
         "type": "heal",
@@ -622,27 +622,27 @@
       3,
       4
     ],
-    "desc": "사람 모양으로 자란 영초. 네 기량이 모두 3 오른다.",
+    "desc": "사람 모양으로 자란 영초. 네 기량이 모두 30 오른다.",
     "effects": [
       {
         "type": "stat",
         "stat": "external",
-        "amount": 3
+        "amount": 30
       },
       {
         "type": "stat",
         "stat": "internal",
-        "amount": 3
+        "amount": 30
       },
       {
         "type": "stat",
         "stat": "martial",
-        "amount": 3
+        "amount": 30
       },
       {
         "type": "stat",
         "stat": "mind",
-        "amount": 3
+        "amount": 30
       }
     ]
   },
@@ -655,12 +655,12 @@
       3,
       4
     ],
-    "desc": "만년설에서 자란 영지. 심경이 8 오른다.",
+    "desc": "만년설에서 자란 영지. 심경이 80 오른다.",
     "effects": [
       {
         "type": "stat",
         "stat": "mind",
-        "amount": 8
+        "amount": 80
       }
     ]
   },
@@ -673,12 +673,12 @@
       3,
       4
     ],
-    "desc": "산군의 뼈를 달인 것. 외공이 8 오른다.",
+    "desc": "산군의 뼈를 달인 것. 외공이 80 오른다.",
     "effects": [
       {
         "type": "stat",
         "stat": "external",
-        "amount": 8
+        "amount": 80
       }
     ]
   },
@@ -691,12 +691,12 @@
       3,
       4
     ],
-    "desc": "어느 고수의 평생 메모. 무리가 8 오른다.",
+    "desc": "어느 고수의 평생 메모. 무리가 80 오른다.",
     "effects": [
       {
         "type": "stat",
         "stat": "martial",
-        "amount": 8
+        "amount": 80
       }
     ]
   },
@@ -1538,7 +1538,7 @@
     "markets": [
       5
     ],
-    "desc": "죽은 자의 몫을 당겨 쓰는 단약. 체력과 내력이 가득 차고 모든 기량이 3 오른다. 카르마로 거래한다.",
+    "desc": "죽은 자의 몫을 당겨 쓰는 단약. 체력과 내력이 가득 차고 모든 기량이 30 오른다. 카르마로 거래한다.",
     "effects": [
       {
         "type": "heal",
@@ -1553,22 +1553,22 @@
       {
         "type": "stat",
         "stat": "external",
-        "amount": 3
+        "amount": 30
       },
       {
         "type": "stat",
         "stat": "internal",
-        "amount": 3
+        "amount": 30
       },
       {
         "type": "stat",
         "stat": "martial",
-        "amount": 3
+        "amount": 30
       },
       {
         "type": "stat",
         "stat": "mind",
-        "amount": 3
+        "amount": 30
       }
     ]
   },

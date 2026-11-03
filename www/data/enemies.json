@@ -49,7 +49,8 @@
       1,
       1
     ],
-    "above": "녹림호걸"
+    "above": "녹림호걸",
+    "side": "사도"
   },
   "낭인": {
     "name": "떠돌이 낭인",
@@ -185,7 +186,8 @@
       1,
       2
     ],
-    "above": "녹림채주"
+    "above": "녹림채주",
+    "side": "사도"
   },
   "녹림호걸": {
     "name": "녹림 호걸",
@@ -224,7 +226,8 @@
       3
     ],
     "above": "독고객",
-    "below": "산적"
+    "below": "산적",
+    "side": "사도"
   },
   "사파자객": {
     "name": "사파 자객",
@@ -284,7 +287,8 @@
       3
     ],
     "above": "살막살수",
-    "below": "낭인"
+    "below": "낭인",
+    "side": "사도"
   },
   "절정고수": {
     "name": "절정의 떠돌이 고수",
@@ -392,7 +396,8 @@
       4
     ],
     "above": "혈마대귀",
-    "below": "녹림호걸"
+    "below": "녹림호걸",
+    "side": "마도"
   },
   "독문고수": {
     "name": "독문의 고수",
@@ -449,7 +454,8 @@
       4
     ],
     "above": "사도련향주",
-    "below": "녹림채주"
+    "below": "녹림채주",
+    "side": "사도"
   },
   "철혈대원": {
     "name": "철혈대 대원",
@@ -570,7 +576,8 @@
       3,
       5
     ],
-    "below": "절정고수"
+    "below": "절정고수",
+    "side": "마도"
   },
   "마교장로": {
     "name": "마교 장로",
@@ -605,6 +612,18 @@
     "hp_style": 1.0,
     "attack_style": 1.0,
     "intros": [
+      {
+        "requires": {
+          "dominant": "마도"
+        },
+        "text": "\"우리 쪽 냄새가 나는구나. 그래도 교주 앞에 설 자리는 하나다.\""
+      },
+      {
+        "requires": {
+          "dominant": "정도"
+        },
+        "text": "\"맹의 개로구나. 네 이름은 교단 장부에 이미 있다.\""
+      },
       {
         "requires": {
           "sect": "마교"
@@ -647,7 +666,8 @@
       4,
       5
     ],
-    "below": "철혈대원"
+    "below": "철혈대원",
+    "side": "마도"
   },
   "혈마대귀": {
     "name": "혈마대의 귀졸",
@@ -695,7 +715,8 @@
       4,
       5
     ],
-    "below": "독고객"
+    "below": "독고객",
+    "side": "마도"
   },
   "십이마장": {
     "name": "십이마장",
@@ -764,7 +785,8 @@
       4,
       5
     ],
-    "below": "화경마인"
+    "below": "화경마인",
+    "side": "마도"
   },
   "단목휘": {
     "name": "단목휘",
@@ -929,7 +951,8 @@
       3,
       5
     ],
-    "below": "종남검수"
+    "below": "종남검수",
+    "side": "정도"
   },
   "천마": {
     "name": "천마",
@@ -1310,7 +1333,7 @@
               },
               "requires": {
                 "stat_min": {
-                  "mind": 60
+                  "mind": 600
                 }
               },
               "tag": "심안"
@@ -1326,7 +1349,7 @@
               },
               "requires": {
                 "stat_min": {
-                  "martial": 60
+                  "martial": 600
                 }
               },
               "tag": "무리"
@@ -1339,7 +1362,7 @@
               },
               "requires": {
                 "stat_min": {
-                  "internal": 60
+                  "internal": 600
                 }
               },
               "tag": "내공"
@@ -1359,7 +1382,7 @@
               },
               "requires": {
                 "stat_min": {
-                  "external": 60
+                  "external": 600
                 }
               },
               "tag": "외공"
@@ -2286,7 +2309,8 @@
       1,
       2
     ],
-    "above": "귀도객"
+    "above": "귀도객",
+    "side": "사도"
   },
   "배신표사": {
     "name": "배신한 표사",
@@ -2339,7 +2363,8 @@
       1,
       2
     ],
-    "above": "수적두목"
+    "above": "수적두목",
+    "side": "사도"
   },
   "귀도객": {
     "name": "귀도객",
@@ -2387,7 +2412,8 @@
       3
     ],
     "above": "독고객",
-    "below": "낭인"
+    "below": "낭인",
+    "side": "사도"
   },
   "금의위밀정": {
     "name": "금의위 밀정",
@@ -2492,7 +2518,8 @@
       3
     ],
     "above": "장강수적",
-    "below": "배신표사"
+    "below": "배신표사",
+    "side": "사도"
   },
   "독고객": {
     "name": "독고객",
@@ -2549,7 +2576,8 @@
       4
     ],
     "above": "혈마대귀",
-    "below": "귀도객"
+    "below": "귀도객",
+    "side": "사도"
   },
   "장강수적": {
     "name": "장강수로채 정예",
@@ -2598,7 +2626,8 @@
       4
     ],
     "above": "사도련향주",
-    "below": "수적두목"
+    "below": "수적두목",
+    "side": "사도"
   },
   "십이마장귀곡": {
     "name": "제칠마장 귀곡자",
@@ -2646,7 +2675,8 @@
       4,
       5
     ],
-    "below": "화경마인"
+    "below": "화경마인",
+    "side": "마도"
   },
   "천년혈망": {
     "name": "천년 혈망",
@@ -2741,7 +2771,8 @@
       5,
       5
     ],
-    "below": "십이마장"
+    "below": "십이마장",
+    "side": "마도"
   },
   "무영": {
     "name": "제일마장 무영",
@@ -2790,7 +2821,8 @@
       5,
       5
     ],
-    "below": "십이마장"
+    "below": "십이마장",
+    "side": "마도"
   },
   "천마친위대": {
     "name": "천마 친위대",
@@ -2848,7 +2880,8 @@
       3,
       5
     ],
-    "below": "혈교혈승"
+    "below": "혈교혈승",
+    "side": "마도"
   },
   "혈수인": {
     "name": "혈수인",
@@ -3191,7 +3224,8 @@
       3,
       5
     ],
-    "below": "화경마인"
+    "below": "화경마인",
+    "side": "마도"
   },
   "곤륜역도": {
     "name": "곤륜의 사숙",
@@ -3589,7 +3623,8 @@
       1,
       2
     ],
-    "above": "세가무사"
+    "above": "세가무사",
+    "side": "정도"
   },
   "녹림채주": {
     "name": "녹림 채주",
@@ -3642,7 +3677,8 @@
       3
     ],
     "above": "독문고수",
-    "below": "흑풍채두목"
+    "below": "흑풍채두목",
+    "side": "사도"
   },
   "종남검수": {
     "name": "종남파 검수",
@@ -3695,7 +3731,8 @@
       3
     ],
     "above": "철혈대원",
-    "below": "배신표사"
+    "below": "배신표사",
+    "side": "정도"
   },
   "혈교혈승": {
     "name": "혈교의 혈승",
@@ -3754,7 +3791,8 @@
       3,
       5
     ],
-    "below": "절정고수"
+    "below": "절정고수",
+    "side": "마도"
   },
   "동창번자": {
     "name": "동창의 번자",
@@ -3928,6 +3966,18 @@
         "requires": {
           "dominant": "사도"
         },
+        "text": "\"같은 밥그릇이 하나 줄면 내 몫이 늘지. 원망은 마시오.\""
+      },
+      {
+        "requires": {
+          "dominant": "정도"
+        },
+        "text": "\"협사 나리, 값은 얼마요? 없다고요? 그게 가장 비싼 값이지.\""
+      },
+      {
+        "requires": {
+          "dominant": "사도"
+        },
         "text": "\"우리 쪽 사람 냄새가 나는군. 값을 맞춰 볼까?\""
       },
       {
@@ -3941,7 +3991,8 @@
       3,
       5
     ],
-    "below": "독문고수"
+    "below": "독문고수",
+    "side": "사도"
   },
   "점창제자": {
     "name": "점창 제자",
@@ -3972,7 +4023,8 @@
       1,
       3
     ],
-    "above": "세가무사"
+    "above": "세가무사",
+    "side": "정도"
   },
   "세가호위": {
     "name": "세가 호위",
@@ -4003,7 +4055,8 @@
       1,
       2
     ],
-    "above": "세가무사"
+    "above": "세가무사",
+    "side": "정도"
   },
   "살막살수": {
     "name": "살막의 살수",
@@ -4059,7 +4112,8 @@
       2,
       5
     ],
-    "below": "낭인"
+    "below": "낭인",
+    "side": "사도"
   },
   "세가무사": {
     "name": "세가의 무사",
@@ -4104,7 +4158,8 @@
       3,
       5
     ],
-    "below": "세가호위"
+    "below": "세가호위",
+    "side": "정도"
   },
   "철봉승": {
     "name": "철봉 탁발승",
@@ -4137,5 +4192,787 @@
     ],
     "above": "세가무사",
     "below": "낭인"
+  },
+  "젊은협객": {
+    "name": "젊은 협객",
+    "tier": "일반",
+    "realm": "절정",
+    "hp": 350,
+    "attack": 32,
+    "exp_reward": 1,
+    "silver": [
+      15,
+      24
+    ],
+    "chapters": [
+      2,
+      3
+    ],
+    "weight": 5,
+    "evasion": 0.12,
+    "desc": "마두의 소문을 듣고 칼을 뽑은 정파 후기지수. 무섭지만 물러서지 않는다.",
+    "specials": [
+      {
+        "name": "일심검",
+        "every": 3,
+        "mult": 1.6
+      }
+    ],
+    "intro": "\"그대가 그 마두인가. 이름은 묻지 않겠다.\"",
+    "level": 25,
+    "hp_style": 0.86,
+    "attack_style": 1.13,
+    "ranks": [
+      2,
+      3
+    ],
+    "requires": {
+      "dominant": "마도"
+    },
+    "side": "정도",
+    "intros": [
+      {
+        "requires": {
+          "origin": "혈지생환"
+        },
+        "text": "\"손바닥이 붉은 마인이라 들었다. 연못이 뭔지는 모르나 오늘 끝내겠다.\""
+      },
+      {
+        "requires": {
+          "min_fame": 60
+        },
+        "text": "\"스승님은 말리셨소. 그래도 그대의 이름 아래 죽은 이들이 있으니.\""
+      }
+    ]
+  },
+  "구파협객": {
+    "name": "구파의 협객",
+    "tier": "난적",
+    "realm": "절정",
+    "hp": 1590,
+    "attack": 62,
+    "exp_reward": 2,
+    "silver": [
+      28,
+      46
+    ],
+    "chapters": [
+      3,
+      4
+    ],
+    "weight": 5,
+    "armor": 3,
+    "desc": "구파일방이 보낸 협객. 정파의 이름을 등에 지고 온다.",
+    "specials": [
+      {
+        "name": "정기참",
+        "every": 3,
+        "mult": 1.8
+      },
+      {
+        "name": "점혈수",
+        "every": 5,
+        "mult": 1.2,
+        "seal": 1
+      }
+    ],
+    "intro": "\"구파의 이름으로 묻는다. 그 마기를 어디서 얻었나.\"",
+    "level": 49,
+    "hp_style": 1.1,
+    "attack_style": 1.12,
+    "ranks": [
+      3,
+      4
+    ],
+    "requires": {
+      "dominant": "마도"
+    },
+    "side": "정도",
+    "intros": [
+      {
+        "requires": {
+          "sect": "마교"
+        },
+        "text": "\"천마신교의 무리구나. 살려 둘 이유가 없다.\""
+      },
+      {
+        "requires": {
+          "origin": "남궁세가"
+        },
+        "text": "\"남궁의 후예가 어찌 마도에 떨어졌소. 가문의 이름이 아깝소.\""
+      }
+    ]
+  },
+  "나한승": {
+    "name": "소림 나한승",
+    "tier": "일반",
+    "realm": "초절정",
+    "hp": 1615,
+    "attack": 68,
+    "exp_reward": 1,
+    "silver": [
+      20,
+      29
+    ],
+    "chapters": [
+      3,
+      4
+    ],
+    "weight": 4,
+    "desc": "마를 항복시키러 내려온 소림의 무승들.",
+    "specials": [
+      {
+        "name": "나한권",
+        "every": 3,
+        "mult": 1.7
+      }
+    ],
+    "intro": "\"나무아미타불. 시주의 업은 소승들이 대신 끊겠소.\"",
+    "level": 61,
+    "hp_style": 1.09,
+    "attack_style": 1.09,
+    "ranks": [
+      3,
+      4
+    ],
+    "requires": {
+      "dominant": "마도"
+    },
+    "side": "정도",
+    "intros": [
+      {
+        "requires": {
+          "sect": "소림"
+        },
+        "text": "\"숭산의 물을 진 자가 이 꼴이 되었구나. 파문이 곧 자비다.\""
+      }
+    ]
+  },
+  "정파명숙": {
+    "name": "정파의 명숙",
+    "tier": "강적",
+    "realm": "화경",
+    "hp": 4450,
+    "attack": 99,
+    "exp_reward": 3,
+    "silver": [
+      63,
+      91
+    ],
+    "chapters": [
+      4,
+      5
+    ],
+    "weight": 3,
+    "armor": 7,
+    "desc": "강호가 받드는 어른. 은퇴했다 칼을 다시 들었다.",
+    "specials": [
+      {
+        "name": "대협일검",
+        "every": 3,
+        "mult": 2.1
+      },
+      {
+        "name": "호연지기",
+        "every": 5,
+        "mult": 1.3,
+        "qi_drain": 15
+      }
+    ],
+    "intro": "\"늙은이가 칼을 든 까닭을 알겠지. 네가 만든 일이다.\"",
+    "level": 73,
+    "hp_style": 1.22,
+    "attack_style": 1.19,
+    "ranks": [
+      4,
+      5
+    ],
+    "requires": {
+      "dominant": "마도"
+    },
+    "side": "정도",
+    "intros": [
+      {
+        "requires": {
+          "flag": "찬탈"
+        },
+        "text": "\"천마의 자리를 노린다지. 그 자리는 비어야 한다.\""
+      }
+    ]
+  },
+  "맹주호법": {
+    "name": "맹주의 호법",
+    "tier": "난적",
+    "realm": "현경",
+    "hp": 4720,
+    "attack": 102,
+    "exp_reward": 2,
+    "silver": [
+      56,
+      77
+    ],
+    "chapters": [
+      5
+    ],
+    "weight": 5,
+    "armor": 10,
+    "desc": "맹주가 직접 보낸 정파 제일의 칼.",
+    "intro": "\"맹주의 명이다. 천마를 치러 가는 길에 너부터 벤다.\"",
+    "specials": [
+      {
+        "name": "맹주령",
+        "every": 3,
+        "mult": 2.2
+      },
+      {
+        "name": "금강호체",
+        "every": 6,
+        "mult": 1.2,
+        "heal_pct": 3
+      }
+    ],
+    "level": 97,
+    "hp_style": 1.0,
+    "attack_style": 1.0,
+    "ranks": [
+      5,
+      5
+    ],
+    "requires": {
+      "dominant": "마도"
+    },
+    "side": "정도"
+  },
+  "마교척살조": {
+    "name": "마교 척살조",
+    "tier": "일반",
+    "realm": "절정",
+    "hp": 350,
+    "attack": 32,
+    "exp_reward": 1,
+    "silver": [
+      15,
+      24
+    ],
+    "chapters": [
+      2,
+      3
+    ],
+    "weight": 5,
+    "evasion": 0.12,
+    "desc": "정파의 이름 높은 자를 지우러 다니는 붉은 소매들.",
+    "specials": [
+      {
+        "name": "암습",
+        "every": 3,
+        "mult": 1.5,
+        "poison": {
+          "damage": 8,
+          "rounds": 3
+        }
+      }
+    ],
+    "intro": "\"맹의 개로구나. 조용히 죽어 주어라.\"",
+    "level": 25,
+    "hp_style": 0.86,
+    "attack_style": 1.13,
+    "ranks": [
+      2,
+      3
+    ],
+    "requires": {
+      "dominant": "정도"
+    },
+    "side": "마도",
+    "intros": [
+      {
+        "requires": {
+          "origin": "혈지생환"
+        },
+        "text": "\"연못의 아이가 정파 흉내를 내는구나. 돌아갈 때가 되었다.\""
+      }
+    ]
+  },
+  "사파복수귀": {
+    "name": "사파의 복수귀",
+    "tier": "난적",
+    "realm": "절정",
+    "hp": 1590,
+    "attack": 62,
+    "exp_reward": 2,
+    "silver": [
+      28,
+      46
+    ],
+    "chapters": [
+      3,
+      4
+    ],
+    "weight": 5,
+    "armor": 3,
+    "desc": "내가 쓰러뜨린 사파 무리의 형제들. 은원은 대를 잇는다.",
+    "specials": [
+      {
+        "name": "원한의 칼",
+        "every": 3,
+        "mult": 1.9
+      }
+    ],
+    "intro": "\"네 칼에 죽은 내 형 이름을 아느냐. 모르겠지.\"",
+    "level": 49,
+    "hp_style": 1.1,
+    "attack_style": 1.12,
+    "ranks": [
+      3,
+      4
+    ],
+    "requires": {
+      "dominant": "정도"
+    },
+    "side": "사도",
+    "intros": [
+      {
+        "requires": {
+          "min_fame": 60
+        },
+        "text": "\"대협이라 부르더군. 내 집에서는 다른 이름으로 부른다.\""
+      }
+    ]
+  },
+  "마교암살귀": {
+    "name": "마교 암살귀",
+    "tier": "일반",
+    "realm": "화경",
+    "hp": 1990,
+    "attack": 72,
+    "exp_reward": 1,
+    "silver": [
+      28,
+      42
+    ],
+    "chapters": [
+      4,
+      5
+    ],
+    "weight": 4,
+    "desc": "맹의 지휘부만 골라 치는 천마의 그림자.",
+    "specials": [
+      {
+        "name": "혈영살",
+        "every": 3,
+        "mult": 1.9,
+        "poison": {
+          "damage": 14,
+          "rounds": 3
+        }
+      }
+    ],
+    "intro": "\"천마께서 그대 목을 궁금해하신다.\"",
+    "level": 73,
+    "hp_style": 1.0,
+    "attack_style": 1.0,
+    "ranks": [
+      4,
+      5
+    ],
+    "requires": {
+      "dominant": "정도"
+    },
+    "side": "마도"
+  },
+  "천마사냥개": {
+    "name": "천마의 사냥개",
+    "tier": "강적",
+    "realm": "화경",
+    "hp": 7040,
+    "attack": 116,
+    "exp_reward": 3,
+    "silver": [
+      63,
+      91
+    ],
+    "chapters": [
+      5
+    ],
+    "weight": 3,
+    "armor": 7,
+    "desc": "천마가 직접 풀어 놓은 추적자.",
+    "specials": [
+      {
+        "name": "광견",
+        "every": 3,
+        "mult": 2.2
+      },
+      {
+        "name": "흡혈",
+        "every": 5,
+        "mult": 1.3,
+        "heal_pct": 3
+      }
+    ],
+    "intro": "\"정도의 희망이라 들었다. 맛이 궁금하구나.\"",
+    "level": 97,
+    "hp_style": 1.22,
+    "attack_style": 1.19,
+    "ranks": [
+      5,
+      5
+    ],
+    "requires": {
+      "dominant": "정도"
+    },
+    "side": "마도"
+  },
+  "현상금꾼": {
+    "name": "현상금 사냥꾼",
+    "tier": "일반",
+    "realm": "절정",
+    "hp": 350,
+    "attack": 32,
+    "exp_reward": 1,
+    "silver": [
+      15,
+      24
+    ],
+    "chapters": [
+      2,
+      3
+    ],
+    "weight": 5,
+    "evasion": 0.12,
+    "desc": "객잔 벽의 방문을 보고 온 사내들.",
+    "specials": [
+      {
+        "name": "암습",
+        "every": 3,
+        "mult": 1.5,
+        "poison": {
+          "damage": 8,
+          "rounds": 3
+        }
+      }
+    ],
+    "intro": "\"네 머리 값이 은자 삼백이더군. 미안하게 됐소.\"",
+    "level": 25,
+    "hp_style": 0.86,
+    "attack_style": 1.13,
+    "ranks": [
+      2,
+      3
+    ],
+    "requires": {
+      "dominant": "사도"
+    },
+    "intros": [
+      {
+        "requires": {
+          "origin": "하오문"
+        },
+        "text": "\"장부쟁이. 네 머리 값 소문은 네가 판 거냐?\""
+      }
+    ]
+  },
+  "포도대장": {
+    "name": "포도대장",
+    "tier": "난적",
+    "realm": "절정",
+    "hp": 1590,
+    "attack": 62,
+    "exp_reward": 2,
+    "silver": [
+      28,
+      46
+    ],
+    "chapters": [
+      3,
+      4
+    ],
+    "weight": 5,
+    "armor": 3,
+    "desc": "관아의 칼. 강호의 일이라도 돈이 얽히면 찾아온다.",
+    "specials": [
+      {
+        "name": "포승",
+        "every": 3,
+        "mult": 1.5,
+        "seal": 1
+      }
+    ],
+    "intro": "\"장물의 주인을 찾아 여기까지 왔다. 포박을 받아라.\"",
+    "level": 49,
+    "hp_style": 1.1,
+    "attack_style": 1.12,
+    "ranks": [
+      3,
+      4
+    ],
+    "requires": {
+      "dominant": "사도"
+    }
+  },
+  "동창추포대": {
+    "name": "동창 추포대",
+    "tier": "일반",
+    "realm": "초절정",
+    "hp": 1990,
+    "attack": 72,
+    "exp_reward": 1,
+    "silver": [
+      40,
+      60
+    ],
+    "chapters": [
+      4,
+      5
+    ],
+    "weight": 4,
+    "level": 73,
+    "hp_style": 1.0,
+    "attack_style": 1.0,
+    "desc": "사도련의 돈줄을 쫓는 환관의 칼들.",
+    "intro": "\"황명이다. 네 장부를 내놓아라.\"",
+    "specials": [
+      {
+        "name": "수춘일섬",
+        "every": 3,
+        "mult": 2.0
+      }
+    ],
+    "ranks": [
+      4,
+      5
+    ],
+    "requires": {
+      "dominant": "사도"
+    }
+  },
+  "맹집법사": {
+    "name": "맹의 집법사",
+    "tier": "강적",
+    "realm": "화경",
+    "hp": 7040,
+    "attack": 116,
+    "exp_reward": 3,
+    "silver": [
+      63,
+      91
+    ],
+    "chapters": [
+      5
+    ],
+    "weight": 3,
+    "armor": 7,
+    "desc": "강호의 법을 지키는 맹의 칼. 값으로 움직이지 않는다.",
+    "specials": [
+      {
+        "name": "집법",
+        "every": 3,
+        "mult": 2.2
+      },
+      {
+        "name": "단죄",
+        "every": 5,
+        "mult": 1.4,
+        "injury": true
+      }
+    ],
+    "intro": "\"은자로 안 되는 일이 있다는 것을 오늘 배울 것이다.\"",
+    "level": 97,
+    "hp_style": 1.22,
+    "attack_style": 1.19,
+    "ranks": [
+      5,
+      5
+    ],
+    "requires": {
+      "dominant": "사도"
+    }
+  },
+  "이름사냥꾼": {
+    "name": "이름 사냥꾼",
+    "tier": "일반",
+    "realm": "절정",
+    "hp": 350,
+    "attack": 32,
+    "exp_reward": 1,
+    "silver": [
+      15,
+      24
+    ],
+    "chapters": [
+      2,
+      3
+    ],
+    "weight": 3,
+    "evasion": 0.12,
+    "desc": "내 이름을 꺾어 제 이름을 얻으려는 젊은이들.",
+    "specials": [
+      {
+        "name": "암습",
+        "every": 3,
+        "mult": 1.5,
+        "poison": {
+          "damage": 8,
+          "rounds": 3
+        }
+      }
+    ],
+    "intro": "\"그 이름, 오늘 내가 받아 가겠소.\"",
+    "level": 25,
+    "hp_style": 0.86,
+    "attack_style": 1.13,
+    "ranks": [
+      2,
+      3
+    ],
+    "requires": {
+      "min_fame": 30
+    }
+  },
+  "천하도전자": {
+    "name": "천하의 도전자",
+    "tier": "난적",
+    "realm": "절정",
+    "hp": 2445,
+    "attack": 84,
+    "exp_reward": 2,
+    "silver": [
+      28,
+      46
+    ],
+    "chapters": [
+      3,
+      4
+    ],
+    "weight": 3,
+    "armor": 3,
+    "desc": "강호를 떠돌며 이름난 자에게만 도전장을 내미는 고수.",
+    "specials": [
+      {
+        "name": "회선검",
+        "every": 3,
+        "mult": 1.8
+      }
+    ],
+    "intro": "\"소문을 듣고 왔소. 소문만큼이면 좋겠소.\"",
+    "level": 61,
+    "hp_style": 1.1,
+    "attack_style": 1.12,
+    "ranks": [
+      3,
+      4
+    ],
+    "requires": {
+      "min_fame": 60
+    }
+  },
+  "십대고수": {
+    "name": "천하십대고수의 하나",
+    "tier": "강적",
+    "realm": "화경",
+    "hp": 7040,
+    "attack": 116,
+    "exp_reward": 3,
+    "silver": [
+      63,
+      91
+    ],
+    "chapters": [
+      4,
+      5
+    ],
+    "weight": 3,
+    "armor": 7,
+    "desc": "명부에 이름이 오른 고수. 내 이름이 불편한 모양이다.",
+    "specials": [
+      {
+        "name": "일대종사",
+        "every": 3,
+        "mult": 2.2
+      }
+    ],
+    "intro": "\"명부의 자리는 열 개뿐이라네.\"",
+    "level": 97,
+    "hp_style": 1.22,
+    "attack_style": 1.19,
+    "ranks": [
+      4,
+      5
+    ],
+    "requires": {
+      "min_fame": 100
+    }
+  },
+  "무명사냥꾼": {
+    "name": "무명 사냥꾼",
+    "tier": "일반",
+    "realm": "일류",
+    "hp": 485,
+    "attack": 33,
+    "exp_reward": 1,
+    "silver": [
+      7,
+      13
+    ],
+    "chapters": [
+      2,
+      3
+    ],
+    "weight": 3,
+    "desc": "이름 없는 무인만 골라 터는 놈들.",
+    "specials": [
+      {
+        "name": "발도",
+        "every": 3,
+        "mult": 1.6
+      }
+    ],
+    "intro": "\"뒤를 봐줄 이름도 없는 놈이구나. 잘됐다.\"",
+    "level": 25,
+    "hp_style": 1.18,
+    "attack_style": 1.16,
+    "ranks": [
+      2,
+      3
+    ],
+    "requires": {
+      "max_fame": 9
+    }
+  },
+  "강호승냥이": {
+    "name": "강호의 승냥이",
+    "tier": "일반",
+    "realm": "화경",
+    "hp": 2535,
+    "attack": 77,
+    "exp_reward": 1,
+    "silver": [
+      28,
+      42
+    ],
+    "chapters": [
+      4,
+      5
+    ],
+    "weight": 4,
+    "desc": "전란 통에 이름 없는 자를 뜯어먹는 무리.",
+    "specials": [
+      {
+        "name": "동귀어진",
+        "every": 4,
+        "mult": 2.2
+      }
+    ],
+    "intro": "\"정마대전에 이름 없는 시체 하나 는다고 누가 알겠나.\"",
+    "level": 85,
+    "hp_style": 1.0,
+    "attack_style": 1.0,
+    "ranks": [
+      4,
+      5
+    ],
+    "requires": {
+      "max_fame": 29
+    }
   }
 }
