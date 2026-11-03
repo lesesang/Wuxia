@@ -2,7 +2,7 @@
 import { Skill, STAT_CAP } from "./character.js";
 import { DB } from "./data.js";
 import { pickWeighted } from "./rng.js";
-import { getChapter, JUNG_DISCOUNT, marketName, sumEffect } from "./rules.js";
+import { getChapter, hasEffect, JUNG_DISCOUNT, marketName, sumEffect } from "./rules.js";
 
 const STOCK_SIZE = 10;
 
@@ -21,7 +21,10 @@ export function bonusFor(player, key) {
   if (!effect) return 0;
   if (effect.slot !== "weapon" || !effect.style) return effect.bonus;
   const main = player.bestSkill();
-  return !main || main.category === effect.style ? effect.bonus : Math.floor(effect.bonus * MISMATCH_RATE);
+  if (main?.category === effect.style) {
+    return Math.floor(effect.bonus * (100 + sumEffect(player.traits, "main_weapon_bonus", "percent")) / 100);
+  }
+  return !main || hasEffect(player.traits, "no_mismatch") ? effect.bonus : Math.floor(effect.bonus * MISMATCH_RATE);
 }
 
 export function equipmentBonus(player, slot) {
@@ -95,7 +98,7 @@ export function openMarket(turn, player) {
     stock.push(...weightedSample(items, (k) => styleWeight(player, k), size));
   }
   const others = pool.filter((k) => !stock.includes(k));
-  stock.push(...weightedSample(others, (k) => styleWeight(player, k), Math.max(0, STOCK_SIZE - stock.length)));
+  stock.push(...weightedSample(others, (k) => styleWeight(player, k), Math.max(0, STOCK_SIZE + sumEffect(player.traits, "extra_stock", "amount") - stock.length)));
   return {
     name: marketName(turn),
     special: number === 5,

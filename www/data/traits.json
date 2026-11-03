@@ -256,5 +256,233 @@
         "type": "no_injury"
       }
     ]
+  },
+  "병기광": {
+    "name": "병기광",
+    "desc": "어떤 무기든 손에 익는다. 주무공과 계열이 달라도 공격력이 줄지 않는다.",
+    "rarity": "일반",
+    "cost": 4,
+    "effects": [
+      {
+        "type": "no_mismatch"
+      }
+    ]
+  },
+  "외길": {
+    "name": "외길",
+    "desc": "주무공과 계열이 맞는 무기의 공격력이 30% 늘어난다.",
+    "rarity": "희귀",
+    "cost": 6,
+    "effects": [
+      {
+        "type": "main_weapon_bonus",
+        "percent": 30
+      }
+    ]
+  },
+  "배수진": {
+    "name": "배수진",
+    "desc": "체력이 30% 이하일 때 주는 피해가 30% 늘어난다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "low_hp_power",
+        "below": 30,
+        "percent": 30
+      }
+    ]
+  },
+  "기선제압": {
+    "name": "기선제압",
+    "desc": "전투의 첫 합에서 주는 피해가 50% 늘어난다.",
+    "rarity": "일반",
+    "cost": 4,
+    "effects": [
+      {
+        "type": "first_strike",
+        "percent": 50
+      }
+    ]
+  },
+  "독인": {
+    "name": "독인",
+    "desc": "독에 당하지 않는다.",
+    "rarity": "일반",
+    "cost": 4,
+    "effects": [
+      {
+        "type": "poison_immune"
+      }
+    ]
+  },
+  "맑은정신": {
+    "name": "맑은 정신",
+    "desc": "혈도를 짚여 무공이 봉쇄당하지 않는다.",
+    "rarity": "일반",
+    "cost": 3,
+    "effects": [
+      {
+        "type": "seal_immune"
+      }
+    ]
+  },
+  "약초꾼": {
+    "name": "약초꾼",
+    "desc": "금창약 3개와 회기단 2개를 들고 시작한다.",
+    "rarity": "일반",
+    "cost": 2,
+    "effects": [
+      {
+        "type": "start_item",
+        "item": "금창약",
+        "amount": 3
+      },
+      {
+        "type": "start_item",
+        "item": "회기단",
+        "amount": 2
+      }
+    ]
+  },
+  "눈썰미": {
+    "name": "눈썰미",
+    "desc": "시장에 물건이 2개 더 진열된다.",
+    "rarity": "일반",
+    "cost": 4,
+    "effects": [
+      {
+        "type": "extra_stock",
+        "amount": 2
+      }
+    ]
+  },
+  "전장의아이": {
+    "name": "전장의 아이",
+    "desc": "전투에서 이기면 전투 경험을 1 더 얻는다.",
+    "rarity": "희귀",
+    "cost": 6,
+    "effects": [
+      {
+        "type": "battle_exp",
+        "amount": 1
+      }
+    ]
+  },
+  "유람객": {
+    "name": "유람객",
+    "desc": "사건과 기연에서 오르는 능력치가 50% 늘어난다.",
+    "rarity": "일반",
+    "cost": 5,
+    "effects": [
+      {
+        "type": "event_growth",
+        "percent": 50
+      }
+    ]
+  },
+  "대기만성": {
+    "name": "대기만성",
+    "desc": "시작 능력치가 모두 4 낮지만, 새 장이 열릴 때마다 모든 능력치가 3 오른다.",
+    "rarity": "희귀",
+    "cost": 8,
+    "effects": [
+      {
+        "type": "start_stat",
+        "stat": "external",
+        "amount": -4
+      },
+      {
+        "type": "start_stat",
+        "stat": "internal",
+        "amount": -4
+      },
+      {
+        "type": "start_stat",
+        "stat": "martial",
+        "amount": -4
+      },
+      {
+        "type": "start_stat",
+        "stat": "mind",
+        "amount": -4
+      },
+      {
+        "type": "chapter_growth",
+        "amount": 3
+      }
+    ]
+  },
+  "병약한몸": {
+    "name": "병약한 몸",
+    "desc": "외공이 8 낮게 시작하지만 내공과 심경 성장이 20% 늘어난다.",
+    "rarity": "일반",
+    "cost": 3,
+    "effects": [
+      {
+        "type": "start_stat",
+        "stat": "external",
+        "amount": -8
+      },
+      {
+        "type": "growth_rate",
+        "stat": "internal",
+        "percent": 20
+      },
+      {
+        "type": "growth_rate",
+        "stat": "mind",
+        "percent": 20
+      }
+    ]
+  },
+  "일취월장": {
+    "name": "일취월장",
+    "desc": "무공 숙련도를 40% 더 빠르게 얻는다.",
+    "rarity": "일반",
+    "cost": 5,
+    "effects": [
+      {
+        "type": "mastery_rate",
+        "percent": 40
+      }
+    ]
+  },
+  "줄행랑": {
+    "name": "줄행랑",
+    "desc": "전투에서 달아날 확률이 30% 오른다.",
+    "rarity": "일반",
+    "cost": 2,
+    "effects": [
+      {
+        "type": "flee_rate",
+        "percent": 30
+      }
+    ]
+  },
+  "가보의호구": {
+    "name": "가보의 호구",
+    "desc": "집안에 전해진 가죽 호구를 입고 시작한다.",
+    "rarity": "일반",
+    "cost": 3,
+    "effects": [
+      {
+        "type": "start_equip",
+        "item": "가죽호구"
+      }
+    ]
+  },
+  "낙천가": {
+    "name": "낙천가",
+    "desc": "매달 기력을 5% 더 회복한다.",
+    "rarity": "일반",
+    "cost": 3,
+    "effects": [
+      {
+        "type": "turn_regen",
+        "hp_pct": 0,
+        "qi_pct": 5
+      }
+    ]
   }
 }

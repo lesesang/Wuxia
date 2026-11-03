@@ -273,5 +273,166 @@
         "martial": 1
       }
     }
+  },
+  {
+    "text": "낡은 표지판 뒤에 누가 숨겨 둔 약병을 찾았다.",
+    "effects": {
+      "item": "금창약"
+    }
+  },
+  {
+    "text": "길가 약초 덤불에서 해독에 쓰는 풀을 한 줌 뜯었다.",
+    "chapters": [
+      1,
+      2,
+      3
+    ],
+    "effects": {
+      "item": "해독단"
+    }
+  },
+  {
+    "text": "이름 모를 대장장이가 무기를 공짜로 손봐 주었다.",
+    "effects": {
+      "mastery": 8
+    }
+  },
+  {
+    "text": "소나기를 피해 든 동굴 벽에서 옛사람의 수련 흔적을 보았다.",
+    "effects": {
+      "stats": {
+        "martial": 2,
+        "mind": 1
+      }
+    }
+  },
+  {
+    "text": "처음 보는 열매를 먹었더니 온몸에 열이 돌았다.",
+    "effects": {
+      "stats": {
+        "internal": 3
+      },
+      "hp_pct": 15
+    }
+  },
+  {
+    "text": "늙은 마부가 말 다루는 숨 고르기를 일러 주었는데 내공에도 맞았다.",
+    "chapters": [
+      1,
+      2,
+      3
+    ],
+    "effects": {
+      "stats": {
+        "internal": 2
+      }
+    }
+  },
+  {
+    "text": "저잣거리에서 받은 사주가 묘하게 들어맞았다. 마음이 놓였다.",
+    "effects": {
+      "stats": {
+        "mind": 2
+      },
+      "qi_pct": 20
+    }
+  },
+  {
+    "text": "폐허의 무너진 벽에서 비급 한 장이 떨어졌다.",
+    "chapters": [
+      2,
+      3,
+      4
+    ],
+    "requires": {
+      "dominant": "사도"
+    },
+    "effects": {
+      "random_skill": {
+        "max_grade": "명품"
+      },
+      "silver": 30
+    }
+  },
+  {
+    "text": "쓰러진 사람의 맥을 짚어 살렸다. 어느 집안의 어른이었다.",
+    "requires": {
+      "origin": "의원제자"
+    },
+    "effects": {
+      "fame": 3,
+      "silver": 60,
+      "alignment": {
+        "정도": 1
+      }
+    }
+  },
+  {
+    "text": "길에 떨어진 쇠 조각의 결이 좋아 주워 팔았다.",
+    "requires": {
+      "origin": "대장간자식"
+    },
+    "effects": {
+      "silver": 50
+    }
+  },
+  {
+    "text": "옛 표행길의 주막 주인이 나를 알아보고 음식을 내왔다.",
+    "requires": {
+      "origin": "표국표사"
+    },
+    "effects": {
+      "hp_pct": 30,
+      "qi_pct": 20,
+      "stats": {
+        "mind": 1
+      }
+    }
+  },
+  {
+    "text": "문파의 후배가 길에서 나를 알아보고 약을 나눠 주었다.",
+    "requires": {
+      "has_sect": true
+    },
+    "effects": {
+      "item": "회기단",
+      "fame": 1
+    }
+  },
+  {
+    "text": "주먹을 맞댄 나무의 흠집이 초식처럼 보였다.",
+    "requires": {
+      "main_category": "권법"
+    },
+    "effects": {
+      "mastery": 12
+    }
+  },
+  {
+    "text": "던진 돌이 물 위를 일곱 번 튀었다. 손목의 비밀을 알았다.",
+    "requires": {
+      "main_category": "암기"
+    },
+    "effects": {
+      "mastery": 12
+    }
+  },
+  {
+    "text": "대나무 숲에서 바람을 찌르다 창끝의 흔들림이 멎었다.",
+    "requires": {
+      "main_category": "창법"
+    },
+    "effects": {
+      "mastery": 12
+    }
+  },
+  {
+    "text": "한 칼에 장작을 쪼개는 나무꾼의 힘 쓰는 법을 보았다.",
+    "requires": {
+      "main_category": "도법"
+    },
+    "effects": {
+      "mastery": 12
+    }
   }
 ]

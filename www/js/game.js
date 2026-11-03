@@ -232,6 +232,8 @@ export class Game {
       this.startBattle(enemies[0]);
     }
     if (!this.battle && !state.forced) this.pendingNext = true;
+    // 번외 시간의 선택 뒤에는 그달의 줄거리로 바로 이어진다
+    if (!this.battle && DB.events[state.key].prelude) this.openStoryEvent();
   }
 
   // ---------- 전투 ----------
@@ -303,19 +305,36 @@ export class Game {
     const p = this.player;
     const lines = [...this.commitCodex(), ...this.checkRealm()];
     p.turn += 1;
-    if (CHAPTER_STARTS.includes(p.turn)) {
-      const info = getChapterInfo(p.turn);
-      lines.push(`📖 ${info.title} (${getYear(p.turn)}년차) — ${info.desc}`);
-    }
     const hp = NATURAL_REGEN + sumEffect(p.traits, "turn_regen", "hp_pct");
     const qi = NATURAL_REGEN + sumEffect(p.traits, "turn_regen", "qi_pct");
     p.healPercent(hp, qi);
+    if (CHAPTER_STARTS.includes(p.turn)) {
+      const info = getChapterInfo(p.turn);
+      lines.push(`📖 ${info.title} (${getYear(p.turn)}년차) — ${info.desc}`, ...this.chapterRest());
+    }
     const hint = breakthroughBlock(p);
     if (hint) lines.push(hint);
     if (p.injury) lines.push(`가슴 안쪽이 욱신거린다. (내상 ${p.injury}단계, 회복으로 낫는다)`);
     lines.push(monthLine(getMonth(p.turn)));
     this.pendingNext = false;
     this.enterTurn(lines);
+  }
+
+  /** 장이 끝나면 쌓인 상처를 모두 털어 낸다. */
+  chapterRest() {
+    const p = this.player;
+    const lines = [];
+    const growth = sumEffect(p.traits, "chapter_growth", "amount");
+    if (growth) {
+      for (const stat of Object.keys(STAT_NAMES)) p.gainStat(stat, growth);
+      lines.push(`대기만성: 모든 능력치 +${growth}`);
+    }
+    const hadInjury = p.injury > 0;
+    p.injury = 0;
+    p.hp = p.maxHp();
+    p.qi = p.maxQi();
+    lines.push(`🌟 한 시절을 마치고 몸을 추슬렀다. 체력과 기력이 가득 차고 ${hadInjury ? "내상이 말끔히 나았다" : "몸이 가뿐하다"}.`);
+    return lines;
   }
 
   /** 직전 달의 조우와 습득을 영구 도감에 반영한다. */
