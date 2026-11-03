@@ -177,6 +177,13 @@ export class Battle {
     }
     let damage = power * uniform(0.9, 1.1);
     const notes = [];
+    const p = this.player;
+    if (this.roundNum <= 1) damage *= 1 + sumEffect(p.traits, "first_strike", "percent") / 100;
+    const desperate = p.traits.flatMap((k) => DB.traits[k]?.effects || []).find((e) => e.type === "low_hp_power");
+    if (desperate && p.hp <= p.maxHp() * desperate.below / 100) {
+      damage *= 1 + desperate.percent / 100;
+      notes.push("배수진!");
+    }
     if (this.counterPct) {
       damage *= 1 + this.counterPct / 100;
       notes.push("빈틈을 찔렀다!");
@@ -311,6 +318,7 @@ export class Battle {
     let chance = FLEE_BASE;
     const skill = this.player.bestOfType("경공");
     if (skill) chance += skill.effectValue("flee_bonus") / 100;
+    chance += sumEffect(this.player.traits, "flee_rate", "percent") / 100;
     if (rng.random() < chance) {
       this.log.push("도주에 성공했다.");
       return true;
@@ -357,7 +365,9 @@ export class Battle {
 
   applySpecialEffects(special) {
     const p = this.player;
-    if (special.seal) {
+    if (special.seal && hasEffect(this.player.traits, "seal_immune")) {
+      this.log.push("혈도를 노렸지만 정신이 맑아 흘려보냈다.");
+    } else if (special.seal) {
       this.sealed = special.seal + 1;
       this.log.push(`혈도를 짚였다! (${special.seal}합 동안 무공 봉쇄, 심법으로 풀 수 있다)`);
     }
@@ -365,7 +375,9 @@ export class Battle {
       p.addInjury(1);
       this.log.push(`장력이 내부를 흔든다! (내상 ${p.injury}단계)`);
     }
-    if (special.poison) {
+    if (special.poison && hasEffect(this.player.traits, "poison_immune")) {
+      this.log.push("독이 들었지만 몸이 아무렇지 않다.");
+    } else if (special.poison) {
       this.poison = { ...special.poison };
       this.log.push(`독이 퍼진다. (${this.poison.rounds}합 동안 매 합 ${this.poison.damage} 피해)`);
     }
@@ -454,7 +466,7 @@ export class Battle {
     this.revertTempBuffs();
     if (fled) return { victory: false, fled: true, exp: 0 };
 
-    const exp = victory ? this.enemy.expReward : 0;
+    const exp = victory ? this.enemy.expReward + sumEffect(this.player.traits, "battle_exp", "amount") : 0;
     if (victory) {
       this.player.battles += exp;
       this.player.kills += 1;

@@ -132,10 +132,16 @@ export class Player {
       if (!this.hasSkill(key)) this.learnSkill(new Skill(key));
     }
 
-    this.silver = START_SILVER + sumEffect(traitKeys, "start_silver", "amount");
-    this.weapon = null;
+    this.silver = START_SILVER + (data.silver || 0) + sumEffect(traitKeys, "start_silver", "amount");
+    this.weapon = data.weapon || null;
     this.armor = null;
-    this.inventory = {};
+    this.inventory = { ...(data.items || {}) };
+    for (const key of traitKeys) {
+      for (const effect of DB.traits[key]?.effects || []) {
+        if (effect.type === "start_item") this.inventory[effect.item] = (this.inventory[effect.item] || 0) + effect.amount;
+        if (effect.type === "start_equip") this.armor = effect.item;
+      }
+    }
     this.bossWeaken = 0;
     this.alignment = newAlignment();
     this.flags = [];
@@ -227,7 +233,11 @@ export class Player {
   }
 
   addItem(key, count = 1) { this.inventory[key] = (this.inventory[key] || 0) + count; }
-  masteryGainAmount() { return randInt(1, 2) + Math.floor(this.martial / 50); }
+  masteryGainAmount() {
+    const base = randInt(1, 2) + Math.floor(this.martial / 50);
+    const rate = sumEffect(this.traits, "mastery_rate", "percent");
+    return rate ? Math.round(base * (100 + rate) / 100) : base;
+  }
 
   recordEnemyEncounter(key) {
     if (!this.encounteredEnemies.includes(key) && !this.pendingEncounters.includes(key)) {

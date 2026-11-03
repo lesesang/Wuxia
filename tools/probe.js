@@ -57,7 +57,12 @@ for (let run = 0; run < count; run++) {
       fight = { battle: game.battle, hp: p.hp, ch: getChapter(p.turn), tier: game.battle.enemy.tier };
     }
     const wasBattle = game.battle;
-    if (game.event) {
+    if (game.event && DB.events[game.event.key].prelude) {
+      // 사람은 대개 지금 무공에 맞는 무기를 고른다
+      const list = eventView(p, game.event.key).choices;
+      const own = list.find((c) => DB.events[game.event.key].choices[c.index]?.outcomes[0].effects.start_weapon === p.bestSkill().category);
+      game.chooseEvent((own || choice(list)).index);
+    } else if (game.event) {
       const open = eventView(p, game.event.key).choices.filter((c) => !c.locked);
       const top = p.dominantAlignment();
       game.chooseEvent((top && open.find((c) => c.label.startsWith(`(${top})`) && !c.label.includes("무릎")) || choice(open)).index);

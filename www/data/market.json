@@ -1423,5 +1423,110 @@
         "style": "암기"
       }
     ]
+  },
+  "낡은검": {
+    "name": "낡은 검",
+    "category": "무기",
+    "price": 10,
+    "markets": [],
+    "desc": "날이 조금 이가 빠졌지만 곧다. 검법에 맞음, 공격력 +5",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 5,
+        "style": "검법"
+      }
+    ]
+  },
+  "낡은도": {
+    "name": "낡은 도",
+    "category": "무기",
+    "price": 10,
+    "markets": [],
+    "desc": "무겁고 투박한 칼. 도법에 맞음, 공격력 +5",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 5,
+        "style": "도법"
+      }
+    ]
+  },
+  "낡은창": {
+    "name": "낡은 창",
+    "category": "무기",
+    "price": 10,
+    "markets": [],
+    "desc": "자루에 손때가 까맣게 묻었다. 창법에 맞음, 공격력 +5",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 5,
+        "style": "창법"
+      }
+    ]
+  },
+  "낡은곤봉": {
+    "name": "낡은 곤봉",
+    "category": "무기",
+    "price": 10,
+    "markets": [],
+    "desc": "여러 번 부러졌다 이어 붙인 곤봉. 봉법에 맞음, 공격력 +5",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 5,
+        "style": "봉법"
+      }
+    ]
+  },
+  "낡은권대": {
+    "name": "낡은 권대",
+    "category": "무기",
+    "price": 10,
+    "markets": [],
+    "desc": "피와 땀이 밴 가죽 띠. 권법에 맞음, 공격력 +5",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 5,
+        "style": "권법"
+      }
+    ]
+  },
+  "낡은장갑": {
+    "name": "낡은 장갑",
+    "category": "무기",
+    "price": 10,
+    "markets": [],
+    "desc": "손끝이 해진 가죽 장갑. 장법에 맞음, 공격력 +5",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 5,
+        "style": "장법"
+      }
+    ]
+  },
+  "낡은비도": {
+    "name": "낡은 비도",
+    "category": "무기",
+    "price": 10,
+    "markets": [],
+    "desc": "녹을 벗겨 낸 비도 몇 자루. 암기에 맞음, 공격력 +5",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 5,
+        "style": "암기"
+      }
+    ]
   }
 }

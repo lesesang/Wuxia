@@ -18,6 +18,12 @@ import { storage } from "../www/js/storage.js";
 function newGame(origin = "무림초출") {
   const game = new Game();
   game.start(origin);
+  // 번외 시간에는 지금 무공에 맞는 무기를 고른다
+  if (game.event && DB.events[game.event.key].prelude) {
+    const index = DB.events[game.event.key].choices.findIndex(
+      (c) => c.outcomes[0].effects.start_weapon === game.player.bestSkill().category);
+    game.chooseEvent(index + (eventView(game.player, game.event.key).choices.length - 7));
+  }
   if (game.event) firstChoice(game);
   return game;
 }
@@ -56,7 +62,7 @@ test("시장, 특성, 출신이 실제 무공을 가리킨다", () => {
 
 test("출신별 서장과 챕터 줄거리가 있다", () => {
   const stories = Object.values(DB.storyEvents);
-  const prologues = new Set(stories.filter((e) => e.turn === 1).map((e) => e.requires.origin));
+  const prologues = new Set(stories.filter((e) => e.turn === 1 && !e.prelude).map((e) => e.requires.origin));
   assert.deepEqual([...prologues].sort(), Object.keys(DB.origins.origins).sort());
   const turns = stories.map((e) => e.turn);
   for (const t of [25, 49, 60, 73, 97, 115, 120]) assert.ok(turns.includes(t));
@@ -556,10 +562,10 @@ test("120달에서 복구하면 천마봉 선택부터", () => {
 test("줄거리 선택 전 저장에서 복구하면 다시 고른다", () => {
   const game = new Game();
   game.start("무림초출");
-  assert.equal(game.event.key, "서장_무림초출");
+  assert.equal(game.event.key, "시작_병기고");
   const fresh = new Game();
   fresh.continueFromSave();
-  assert.equal(fresh.event.key, "서장_무림초출");
+  assert.equal(fresh.event.key, "시작_병기고");
 });
 
 test("손상된 저장도 게임을 멈추지 않는다", () => {
@@ -796,7 +802,7 @@ test("계열마다 무공과 무기가 고르게 있다", () => {
     assert.ok(attacks.filter((s) => s.category === style).length >= 3, style);
   }
   for (const style of ["검법", "도법", "창법", "봉법", "권법", "장법", "암기"]) {
-    const weapons = Object.values(DB.market).filter((i) => i.effects.some((e) => e.style === style));
+    const weapons = Object.values(DB.market).filter((i) => i.markets.length && i.effects.some((e) => e.style === style));
     assert.equal(weapons.length, 4, style);
   }
 });
@@ -830,14 +836,107 @@ test("주무공과 맞지 않는 무기는 3/4만 적용된다", () => {
   assert.equal(equipmentBonus(p, "weapon"), 60);
 });
 
-test("무림초출은 첫 무기를 고를 수 있다", () => {
+test("시작하자마자 달이 지나지 않는 번외 시간에 첫 무기를 고른다", () => {
+  const game = new Game();
+  game.start("무림초출");
+  assert.equal(game.event.key, "시작_병기고");
+  const view = eventView(game.player, game.event.key);
+  assert.equal(view.choices.length, 7);
+  game.chooseEvent(view.choices.find((c) => c.label.includes("창")).index);
+  assert.equal(game.player.turn, 1);
+  assert.equal(game.player.bestSkill().category, "창법");
+  assert.equal(game.player.weapon, "낡은창");
+  assert.equal(game.event.key, "서장_무림초출", "곧바로 서장으로 이어진다");
+  game.chooseEvent(0);
+  assert.equal(game.player.turn, 1);
+  assert.ok(!game.pendingNext && !game.event, "첫 달의 행동은 그대로 남아 있다");
+});
+
+test("지금 무공과 같은 계열을 고르면 무공이 바뀌지 않고 숙련도를 얻는다", () => {
+  const game = new Game();
+  const meta = loadMeta();
+  meta.unlocked_origins = Object.keys(DB.origins.origins);
+  saveMeta(meta);
+  game.start("권마계승");
+  const main = game.player.bestSkill();
+  const view = eventView(game.player, game.event.key);
+  game.chooseEvent(view.choices.find((c) => c.label.includes("권대")).index);
+  assert.equal(game.player.bestSkill().key, main.key);
+  assert.equal(main.mastery, 10);
+});
+
+test("장이 끝나면 체력, 기력, 내상이 모두 회복된다", () => {
   const game = newGame();
+  const p = game.player;
+  p.turn = 24;
+  p.hp = 1;
+  p.qi = 0;
+  p.addInjury(3);
+  game.pendingNext = true;
+  game.market = null;
+  game.startNextTurn();
+  assert.equal(p.turn, 25);
+  assert.equal(p.hp, p.maxHp());
+  assert.equal(p.qi, p.maxQi());
+  assert.equal(p.injury, 0);
+});
+
+test("장 중간에는 내상이 그대로 남는다", () => {
+  const game = newGame();
+  const p = game.player;
+  p.addInjury(2);
   game.pendingNext = true;
   game.advanceTurn();
-  assert.equal(game.event.key, "서장_병기고");
-  const view = eventView(game.player, game.event.key);
-  game.chooseEvent(view.choices.find((c) => c.label.includes("창")).index);
-  assert.equal(game.player.bestSkill().category, "창법");
+  assert.equal(p.injury, 2);
+});
+
+test("새 특성들이 작동한다", () => {
+  const sword = new Player("무림초출", ["병기광"]);
+  sword.weapon = "박도";
+  assert.equal(equipmentBonus(sword, "weapon"), 10);
+  const lone = new Player("무림초출", ["외길"]);
+  lone.weapon = "철검";
+  assert.equal(equipmentBonus(lone, "weapon"), 13);
+  const herb = new Player("무림초출", ["약초꾼"]);
+  assert.equal(herb.inventory.금창약, 3);
+  assert.equal(new Player("무림초출", ["가보의호구"]).armor, "가죽호구");
+  assert.equal(new Player("무림초출", ["대기만성"]).external, new Player().external - 4);
+  const keen = new Player("무림초출", ["눈썰미"]);
+  assert.ok(openMarket(12, keen).stock.length > openMarket(12, new Player()).stock.length);
+  const game = newGame();
+  game.player.traits = ["대기만성"];
+  const before = game.player.external;
+  game.player.turn = 24;
+  game.startNextTurn();
+  assert.equal(game.player.external, before + 3);
+});
+
+test("독인은 독에 당하지 않고 맑은 정신은 점혈되지 않는다", () => {
+  const p = new Player("무림초출", ["독인", "맑은정신"]);
+  const battle = new Battle(p, new Enemy("낭인"));
+  battle.enemy.specials = [{ name: "독수", every: 1, mult: 1, poison: { damage: 5, rounds: 3 }, seal: 2 }];
+  battle.runRound("기본공격", p.bestSkill());
+  assert.ok(!battle.poison && !battle.sealed);
+});
+
+test("새 출신은 물건과 은자, 무기를 들고 시작한다", () => {
+  assert.equal(new Player("대장간자식").weapon, "박달곤");
+  assert.equal(new Player("의원제자").inventory.해독단, 2);
+  assert.ok(new Player("표국표사").silver > new Player().silver);
+});
+
+test("특성 반응이 선택지를 바꾼다", () => {
+  const plain = new Player();
+  const poison = new Player("무림초출", ["독인"]);
+  assert.ok(eventView(poison, "독버섯숲").choices.length > eventView(plain, "독버섯숲").choices.length);
+});
+
+test("주무공에 맞는 무기를 받는다", () => {
+  const p = new Player();
+  p.learnSkill(new Skill("기초창법"));
+  p.mainSkill = "기초창법";
+  applyEffects(p, { style_weapon: 3 });
+  assert.equal(p.weapon, "현철창");
 });
 
 test("문장에서 플레이어 무기를 검으로 단정하지 않는다", () => {

@@ -4,7 +4,7 @@ import { DB } from "./data.js";
 import { bonusFor, equipmentBonus, styleWeight } from "./market.js";
 import { updateKnown } from "./meta.js";
 import { pick, pickWeighted } from "./rng.js";
-import { ALIGNMENTS, applyGrowth, fameRankChanged, getChapter, realmIndex } from "./rules.js";
+import { ALIGNMENTS, applyGrowth, fameRankChanged, getChapter, realmIndex, sumEffect } from "./rules.js";
 
 export const EVENT_STAT_SCALE = 0.3; // 사건·기연의 능력치 상승 배율 (밸런스 조정용)
 
@@ -30,6 +30,7 @@ export function unmetReason(player, requires) {
   if (r.any_skill && !r.any_skill.some((k) => player.hasSkill(k))) return "필요한 무공이 없다";
   if (r.injured && !player.injury) return "내상이 없다";
   if (r.main_category && player.bestSkill()?.category !== r.main_category) return `${r.main_category}을 쓰는 무인이 아니다`;
+  if (r.trait && !player.traits.includes(r.trait)) return "타고난 바가 다르다";
   if (r.dominant && player.dominantAlignment() !== r.dominant) return `${r.dominant}의 길이 아니다`;
   if (r.min_fame && player.fame < r.min_fame) return `명성 ${r.min_fame} 필요`;
   for (const [name, value] of Object.entries(r.max_alignment || {})) {
@@ -148,6 +149,41 @@ function equipReward(player, key) {
   return [`「${name}」을(를) 받았지만 지금 장비가 더 좋다`];
 }
 
+const STARTER_WEAPONS = {
+  검법: "낡은검", 도법: "낡은도", 창법: "낡은창", 봉법: "낡은곤봉", 권법: "낡은권대", 장법: "낡은장갑", 암기: "낡은비도",
+};
+const STARTER_SKILLS = {
+  검법: "기초검법", 도법: "기초도법", 창법: "기초창법", 봉법: "기초봉법", 권법: "육합권", 장법: "기초장법", 암기: "유엽비도",
+};
+const STARTER_MASTERY = 10;
+
+/** 시작 무기를 고른다. 계열이 다르면 그 계열의 기초 무공을 익혀 주무공으로 삼는다. */
+function takeStartWeapon(player, style) {
+  const summary = [];
+  const main = player.bestSkill();
+  if (main?.category === style) {
+    summary.push(`${main.name} 숙련도+${STARTER_MASTERY}`, ...main.gainMastery(STARTER_MASTERY));
+  } else {
+    const key = STARTER_SKILLS[style];
+    if (!player.hasSkill(key)) {
+      const skill = new Skill(key);
+      summary.push(`📕 새 무공 「${skill.name}」`, ...player.learnSkill(skill));
+    }
+    player.mainSkill = key;
+  }
+  return [...summary, ...equipReward(player, STARTER_WEAPONS[style])];
+}
+
+/** 주무공 계열에 맞는 무기를 단계(1~4)에 따라 준다. */
+function styleWeaponReward(player, tier) {
+  const style = player.bestSkill()?.category;
+  const weapons = Object.keys(DB.market)
+    .filter((k) => DB.market[k].markets.length && DB.market[k].effects.some((e) => e.slot === "weapon" && e.style === style))
+    .sort((a, b) => DB.market[a].price - DB.market[b].price);
+  if (!weapons.length) return [`은자+${player.gainSilver(DB.market.운철보검.price)}`];
+  return equipReward(player, weapons[Math.min(tier, weapons.length) - 1]);
+}
+
 const signed = (n) => (n >= 0 ? `+${n}` : `${n}`);
 
 /** 전투·엔딩을 제외한 효과를 적용하고 요약 문구 목록을 돌려준다. */
@@ -156,7 +192,8 @@ export function applyEffects(player, effects) {
 
   for (const [stat, amount] of Object.entries(effects.stats || {})) {
     if (amount >= 0) {
-      const scaled = Math.max(1, Math.round(amount * EVENT_STAT_SCALE));
+      const rate = EVENT_STAT_SCALE * (100 + sumEffect(player.traits, "event_growth", "percent")) / 100;
+      const scaled = Math.max(1, Math.round(amount * rate));
       summary.push(`${STAT_NAMES[stat]}+${player.gainStat(stat, applyGrowth(scaled, player.traits, stat))}`);
     } else {
       player[stat] = Math.max(1, player[stat] + amount);
@@ -250,6 +287,8 @@ export function applyEffects(player, effects) {
     }
   }
 
+  if (effects.start_weapon) summary.push(...takeStartWeapon(player, effects.start_weapon));
+  if (effects.style_weapon) summary.push(...styleWeaponReward(player, effects.style_weapon));
   if (effects.equip) summary.push(...equipReward(player, effects.equip));
 
   if (effects.item) {
@@ -289,6 +328,7 @@ export function validateEvents() {
     }
     if (r.sect && !DB.sects[r.sect]) errors.push(`${where}: 없는 문파 ${r.sect}`);
     if (r.origin && !DB.origins.origins[r.origin]) errors.push(`${where}: 없는 출신 ${r.origin}`);
+    if (r.trait && !DB.traits[r.trait]) errors.push(`${where}: 없는 특성 ${r.trait}`);
   };
   for (const [key, event] of Object.entries(DB.events)) {
     checkRequiresData(key, event.requires);
