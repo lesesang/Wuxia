@@ -1280,6 +1280,32 @@ test("자질의 기량 효과는 네 기량에 고르다", () => {
   }
 });
 
+test("끝난 판의 카르마는 경지와 장이고, 천마를 넘으면 결말이 장을 대체한다", () => {
+  const finish = (turn, realm, victory) => {
+    withKarma(0);
+    const data = loadMeta();
+    data.milestones = ["격파"];
+    data.achievements = DB.karma.achievements.map((x) => x.key); // 공적 카르마는 빼고 잰다
+    saveMeta(data);
+    const game = new Game();
+    game.start("무림초출");
+    Object.assign(game.player, { turn, realm });
+    game.player.fame = 0;
+    game.finishGame(victory);
+    return game.ending;
+  };
+  assert.equal(finish(10, "일류", false).karma, 1, "1장, 일류");
+  assert.equal(finish(100, "화경", false).karma, 5 + 3, "5장, 화경");
+  const win = finish(120, "화경", true);
+  assert.ok(!win.karmaLines.some((l) => l.includes("도달한 장")));
+  assert.equal(win.karma, DB.endings.karma[win.key] + 3, "결말이 장을 대체한다");
+  withKarma(0);
+  const clean = loadMeta();
+  clean.achievements = [];
+  clean.milestones = [];
+  saveMeta(clean);
+});
+
 test("처음 이른 경지에 주는 카르마는 없고 생사경은 강호의 전설 다음 결말이다", () => {
   assert.deepEqual(Object.keys(DB.karma.milestones), ["격파"]);
   assert.equal(DB.endings.karma.생사경, 10);
