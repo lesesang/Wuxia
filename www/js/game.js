@@ -493,7 +493,7 @@ export class Game {
           : checkGoodEnding(p) ? "기본" : "배드");
     const { endings } = DB;
     const gain = karmaGain(p, key, victory);
-    const fresh = claimAchievements(p, key, victory);
+    const fresh = claimAchievements(p, key, victory && key !== "귀순");
     for (const item of fresh) {
       gain.lines.push(`공적 「${item.name}」${item.karma ? ` +${item.karma}` : ""}`);
       gain.total += item.karma;
@@ -557,16 +557,14 @@ function inheritedGear(key) {
 }
 
 export function buildEpilogue(player, ending) {
-  const { endings } = DB;
-  const framed = (endings.frames[ending] || []).map((group) => reactiveLine(player, group)).filter(Boolean);
-  if (!["기본", "생사경", "배드"].includes(ending)) return framed;
-  const lines = [];
-  // 상처뿐인 승리는 성향과 출신의 맺음말을 제 문장으로 쓴다
-  if (ending !== "배드") lines.push(endings.epilogue[player.dominantAlignment() || "중립"]);
-  if (endings.sect_epilogue[player.sect]) lines.push(endings.sect_epilogue[player.sect]);
-  if (ending !== "배드" && endings.origin_epilogue[player.originKey]) lines.push(endings.origin_epilogue[player.originKey]);
-  for (const [flag, text] of endings.flag_epilogue) if (player.hasFlag(flag)) lines.push(text);
-  return [...framed, ...lines];
+  // 묶음마다 주제가 하나다. 조건이 맞는 첫 문장만 쓰므로 같은 주제의 문장이 부딪치지 않는다
+  return DB.endings.frames[ending].flatMap((group) => {
+    if (Array.isArray(group)) {
+      const line = reactiveLine(player, group);
+      return line ? [line] : [];
+    }
+    return group.rows.filter((row) => checkRequires(player, row.requires)).slice(0, group.many).map((row) => row.text);
+  });
 }
 
 export { Skill, STAT_NAMES };

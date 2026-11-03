@@ -10,7 +10,7 @@ import { applyEffects, grantStartGifts, canStartChain, checkRequires, enemyIntro
 import { buildEpilogue, Game } from "../www/js/game.js";
 import { blockReason, buy, equipmentBonus, openMarket, priceOf } from "../www/js/market.js";
 import {
-  activeContent, buyContent, buyUpgrade, exportRecords, importRecords, extraSlots, loadCheckpoint, loadEventLog, loadMeta, nextReward, recordEventPick, openLegacy, saveMeta, takeLegacy, toggleContent, unlockOrigin,
+  activeContent, buyContent, buyUpgrade, exportRecords, importRecords, extraSlots, loadCheckpoint, legacyAvailable, loadEventLog, loadMeta, nextReward, recordEventPick, openLegacy, saveMeta, takeLegacy, toggleContent, unlockOrigin,
 } from "../www/js/meta.js";
 import { applyGrowth, breakthroughBlock, byname, fameRank, getChapter, getYear, marketTurns, traitSlots } from "../www/js/rules.js";
 import { storage } from "../www/js/storage.js";
@@ -1139,7 +1139,7 @@ test("없어진 출신은 카르마를 돌려주고 저장도 이어 갈 수 있
 
 test("모든 출신은 시작 경지가 일류인 까닭을 설명하고 맺음말이 있다", () => {
   for (const [key, origin] of Object.entries(DB.origins.origins)) {
-    assert.ok(DB.endings.origin_epilogue[key], key);
+    assert.ok(DB.endings.frames.기본.flat().some((r) => r.requires?.origin === key), key);
     assert.ok(new Player(key).realm === "일류", key);
     if (!["남궁세가", "곤륜파", "하오문", "권마계승"].includes(key)) assert.ok(origin.desc.includes("일류"), key);
   }
@@ -1324,17 +1324,27 @@ test("첫 천마 격파의 카르마는 공적으로 받는다", () => {
   assert.equal(DB.karma.achievements.find((a) => a.key === "첫승리").karma, 5);
 });
 
-test("결말의 틀은 다섯이고 문장이 상황에 따라 달라진다", () => {
+const endingRows = (key) => DB.endings.frames[key].flatMap((g) => (Array.isArray(g) ? g : g.rows));
+
+test("결말은 출신, 성향, 명성, 쓰던 무공마다 문장이 있다", () => {
   assert.deepEqual(Object.keys(DB.endings.titles).sort(), ["귀순", "기본", "배드", "사망", "생사경"].sort());
   for (const key of Object.keys(DB.endings.titles)) {
-    const groups = DB.endings.frames[key];
-    assert.ok(groups.length >= 2, key);
-    if (key !== "기본") {
-      for (const origin of DB.origins.order) {
-        assert.ok(groups.flat().some((row) => row.requires.origin === origin), `${key} ${origin}`);
-      }
+    const rows = endingRows(key);
+    for (const origin of DB.origins.order) assert.ok(rows.some((r) => r.requires.origin === origin), `${key} ${origin}`);
+    for (const style of ["검법", "도법", "창법", "봉법", "권법", "장법", "암기"]) {
+      assert.ok(rows.some((r) => r.requires.main_category === style), `${key} ${style}`);
     }
+    assert.ok(rows.some((r) => r.requires.min_fame), `${key} 높은 명성`);
+    assert.ok(rows.some((r) => r.requires.max_fame), `${key} 낮은 명성`);
   }
+  for (const key of ["사망", "배드", "기본", "생사경"]) {
+    for (const side of ["정도", "사도", "마도"]) assert.ok(endingRows(key).some((r) => r.requires.dominant === side), `${key} ${side}`);
+  }
+  const attacks = Object.keys(DB.skills).filter((k) => DB.skills[k].grade === "신공" && DB.skills[k].type === "공격무공");
+  for (const k of attacks) assert.ok(endingRows("기본").some((r) => r.requires.main_skill === k), k);
+});
+
+test("결말 문장은 상황을 따르고 서로 부딪치지 않는다", () => {
   const text = (origin, setup, ending) => {
     const p = new Player(origin);
     setup(p);
@@ -1345,8 +1355,62 @@ test("결말의 틀은 다섯이고 문장이 상황에 따라 달라진다", ()
   assert.ok(text("하오문", (p) => { p.fame = 0; }, "사망").includes("무명"));
   assert.ok(text("하오문", (p) => { p.alignment.마도 = 10; }, "사망").includes("잔치"));
   assert.ok(text("하북팽가", () => {}, "귀순").includes("네 형"));
+  // 이벤트 결과를 겪지 않았으면 겪은 것처럼 말하지 않는다
+  assert.ok(text("개방제자", () => {}, "기본").includes("범인은 아직"));
+  assert.ok(text("개방제자", (p) => p.addFlag("개방_범인"), "기본").includes("범인은 찾았소"));
+  assert.ok(!text("남궁세가", (p) => p.addFlag("가문복수"), "기본").includes("창궁의 깃발"));
+  assert.ok(!text("표국표사", () => {}, "배드").includes("표물은 닿았다"));
+  // 쓰는 무공을 따른다. 익히기만 한 신공은 말하지 않는다
+  const p = new Player("남궁세가");
+  p.learnSkill(new Skill("제왕검형"));
+  assert.ok(!buildEpilogue(p, "기본").join(" ").includes("제왕검형"));
+  p.mainSkill = "제왕검형";
+  assert.ok(buildEpilogue(p, "기본").join(" ").includes("제왕검형"));
+  // 모든 경우를 돌려 빈 값이나 겹친 문장, 어긋나는 명성 문장이 없는지 본다
+  const famousWords = ["천하가", "별호"];
+  for (const key of Object.keys(DB.endings.titles)) {
+    for (const origin of DB.origins.order) {
+      for (const side of [null, "정도", "사도", "마도"]) {
+        for (const fame of [0, 20, 40, 70, 150]) {
+          const q = new Player(origin);
+          q.fame = fame;
+          if (side) q.alignment[side] = 12;
+          q.turn = 120;
+          for (const flag of ["찬탈", "단목휘_죽음", "단목휘_동맹", "제자_완성", "가문재건"]) if (fame === 150) q.addFlag(flag);
+          const lines = buildEpilogue(q, key);
+          assert.ok(lines.length >= 2, `${key} ${origin}`);
+          assert.equal(new Set(lines).size, lines.length, `${key} 겹친 문장`);
+          for (const line of lines) {
+            assert.ok(typeof line === "string" && line.length > 3 && !/undefined|null|NaN/.test(line), line);
+          }
+          if (fame <= 29) for (const w of famousWords) assert.ok(!lines.join(" ").includes(w), `${key} 무명인데 ${w}`);
+        }
+      }
+    }
+  }
+  assert.ok(!text("남궁세가", (p) => p.addFlag("찬탈"), "배드").includes("끝내 사실"));
   const all = JSON.stringify(DB.endings.frames);
   for (const word of ["전생", "회차", "다음 생"]) assert.ok(!all.includes(word), word);
+  for (const key of ["사망", "귀순"]) assert.ok(!endingRows(key).some((r) => /천마를 (쓰러|넘)/.test(r.text)), key);
+});
+
+test("마도천하는 천마를 넘은 것으로 치지 않는다", () => {
+  withKarma(0);
+  const data = loadMeta();
+  data.achievements = [];
+  data.endings_seen = [];
+  data.total_wins = 0;
+  data.origin_wins = [];
+  saveMeta(data);
+  const game = new Game();
+  game.start("무림초출");
+  game.finishGame(true, "귀순");
+  const after = loadMeta();
+  assert.ok(!after.achievements.includes("첫승리"));
+  assert.equal(after.total_wins, 0);
+  assert.deepEqual(after.origin_wins, []);
+  assert.ok(!legacyAvailable(after));
+  withKarma(0);
 });
 
 test("처음 이른 경지에 주는 카르마는 없고 생사경은 강호의 전설 다음 결말이다", () => {
@@ -1786,7 +1850,7 @@ test("무기 계열마다 무공 수가 같고 등급이 고르다", () => {
 test("각 출신에 서장과 맺음말, 천마 대사가 있다", () => {
   for (const origin of DB.origins.order) {
     assert.ok(Object.values(DB.storyEvents).some((e) => e.requires?.origin === origin && e.turn === 1), origin);
-    assert.ok(DB.endings.origin_epilogue[origin], origin);
+    assert.ok(DB.endings.frames.기본.flat().some((r) => r.requires?.origin === origin), origin);
   }
   for (const origin of DB.origins.order.slice(1)) {
     assert.ok(DB.enemies.천마.intros.some((i) => i.requires.origin === origin), origin);

@@ -152,7 +152,7 @@ export const activeContent = (data = loadMeta()) => data.content.filter((k) => !
 
 // ---------- 전설의 유산 ----------
 
-const WIN_ENDINGS = ["기본", "배드", "생사경", "귀순"];
+const WIN_ENDINGS = ["기본", "배드", "생사경"];
 export const legacyAvailable = (data = loadMeta()) => data.endings_seen.some((k) => WIN_ENDINGS.includes(k));
 
 export function openLegacy() {
@@ -260,7 +260,7 @@ function achievementMet(a, p, ending, victory, data) {
 export function recordRun(summary) {
   const data = loadMeta();
   data.total_runs += 1;
-  if (["기본", "배드", "생사경", "귀순"].includes(summary.ending)) data.total_wins = (data.total_wins || 0) + 1;
+  if (WIN_ENDINGS.includes(summary.ending)) data.total_wins = (data.total_wins || 0) + 1;
   data.best_turn = Math.max(data.best_turn || 0, summary.turn || 0);
   data.runs = [summary, ...data.runs].slice(0, RUN_HISTORY_LIMIT);
   if (!data.endings_seen.includes(summary.ending)) data.endings_seen.push(summary.ending);
