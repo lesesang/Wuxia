@@ -214,6 +214,7 @@ export class Game {
     if (!result) return;
 
     const lines = [`「${DB.events[state.key].title}」`, result.text];
+    if (DB.events[state.key].kind === "story") this.player.note(`${DB.events[state.key].title}: ${result.label}`);
     if (result.summary.length) lines.push(result.summary.join(", "));
     this.setLog(state.forced ? [...this.log, ...lines] : lines);
     this.event = null;
@@ -256,6 +257,8 @@ export class Game {
       this.gauntlet = null;
     }
 
+    if (result.victory && ["강적", "보스"].includes(battle.enemy.tier)) player.note(`${battle.enemy.name}을(를) 쓰러뜨렸다.`);
+    if (!result.victory && !result.fled) player.note(`${battle.enemy.name}에게 쓰러졌다.`);
     if (result.victory) this.addLog([`승리! (전투 경험 +${result.exp})`]);
     else if (result.fled) this.addLog(["가까스로 전장을 벗어났다."]);
     else this.addLog(["패배..."]);
@@ -275,6 +278,7 @@ export class Game {
       return true;
     }
     const summary = applyEffects(player, gauntlet.reward);
+    player.note(`${gauntlet.name}을(를) 제패했다.`);
     this.addLog([`🏆 ${gauntlet.name}을(를) 제패했다! 강호가 그 이름을 외친다.`, summary.join(", ")]);
     this.gauntlet = null;
     return false;
@@ -352,6 +356,7 @@ export class Game {
     if (!next) return [];
     const lines = [`🌟 경지 돌파! ${p.realm} → ${next}`];
     p.realm = next;
+    p.note(`${next}의 경지에 올랐다.`);
     // 심경이 충분히 높지 않으면 돌파가 거칠어 내상을 입는다
     if (rng.random() < Math.max(0, 60 - p.mind) * 0.01) {
       p.healPercent(-25, -25);
@@ -409,6 +414,7 @@ export function buildEpilogue(player, ending) {
   const { endings } = DB;
   const lines = [endings.epilogue[player.dominantAlignment() || "중립"]];
   if (endings.sect_epilogue[player.sect]) lines.push(endings.sect_epilogue[player.sect]);
+  if (endings.origin_epilogue[player.originKey]) lines.push(endings.origin_epilogue[player.originKey]);
   for (const [flag, text] of endings.flag_epilogue) if (player.hasFlag(flag)) lines.push(text);
   return lines;
 }
