@@ -29,7 +29,7 @@ const RENAMED_ITEMS = { 귀두도: "귀면도", 참마도: "항마대도", 적�
 const renamedItem = (key) => RENAMED_ITEMS[key] || key;
 
 const STAT_SOFT_CAP = 850;  // 기량이 이 값을 넘으면 더디게 오른다
-const STAT_SOFT_RATE = 0.4;
+const STAT_SOFT_RATE = 0.45;
 export const STAT_SCALE = 10; // 기량 10이 예전 기량 1에 해당한다. 공식은 이 값으로 나누어 쓴다
 export const MAX_INJURY = 3;
 export const MAX_TURN = 120;

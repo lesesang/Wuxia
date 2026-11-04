@@ -72,6 +72,24 @@
             ]
           },
           {
+            "label": "문하생들을 본보기로 쓰러뜨린다",
+            "outcomes": [
+              {
+                "text": "맨 앞의 소년이 먼저 쓰러졌다. 뒤에 선 자들의 무릎이 먼저 꺾였다.",
+                "effects": {
+                  "battle": "낭인",
+                  "stats": {
+                    "martial": 2
+                  },
+                  "foe": "무관 문하생",
+                  "alignment": {
+                    "마도": 30
+                  }
+                }
+              }
+            ]
+          },
+          {
             "label": "여기서 손을 뗀다",
             "outcomes": [
               {
@@ -179,6 +197,34 @@
                     "사도": 40
                   },
                   "full_growth": true
+                }
+              }
+            ]
+          },
+          {
+            "label": "무관주를 쓰러뜨리고 그의 거래를 이어받는다",
+            "outcomes": [
+              {
+                "text": "과부의 은자는 돌려주지 않았다. 마교 쪽 장부에 적힌 이름이 내 이름으로 바뀌었다.",
+                "effects": {
+                  "battle": "귀도객",
+                  "fame": 4,
+                  "flags": [
+                    "복수의끝"
+                  ],
+                  "foe": "무관주 곽도명",
+                  "style_gear": {
+                    "grade": "양품"
+                  },
+                  "stats": {
+                    "martial": 7,
+                    "mind": 7
+                  },
+                  "silver": 120,
+                  "full_growth": true,
+                  "alignment": {
+                    "마도": 60
+                  }
                 }
               }
             ]
@@ -397,6 +443,33 @@
                 }
               }
             ]
+          },
+          {
+            "label": "수령을 쓰러뜨리고 곡식을 내 사람에게만 푼다",
+            "outcomes": [
+              {
+                "text": "고을 사람 절반이 내 앞에 줄을 섰다. 그들의 눈이 수령을 볼 때보다 더 낮았다.",
+                "effects": {
+                  "fame": 6,
+                  "flags": [
+                    "역병을막다"
+                  ],
+                  "hp_pct": -10,
+                  "grade_item": {
+                    "grade": "명품",
+                    "category": "소비품"
+                  },
+                  "stats": {
+                    "mind": 9,
+                    "internal": 9
+                  },
+                  "full_growth": true,
+                  "alignment": {
+                    "마도": 40
+                  }
+                }
+              }
+            ]
           }
         ]
       }
@@ -598,6 +671,29 @@
                 }
               }
             ]
+          },
+          {
+            "label": "사람을 쓰러뜨리는 법만 가르쳐 내보낸다",
+            "outcomes": [
+              {
+                "text": "아이는 말없이 절을 했다. 몇 해 뒤 들려오는 그 이름에는 늘 피 냄새가 묻어 있었다.",
+                "effects": {
+                  "boss_weaken": 6,
+                  "flags": [
+                    "제자_완성"
+                  ],
+                  "fame": 3,
+                  "mastery": 60,
+                  "stats": {
+                    "martial": 9
+                  },
+                  "full_growth": true,
+                  "alignment": {
+                    "마도": 40
+                  }
+                }
+              }
+            ]
           }
         ]
       }
@@ -686,6 +782,23 @@
                     "external": 3
                   },
                   "foe": "수로채 정예"
+                }
+              }
+            ]
+          },
+          {
+            "label": "졸개 하나를 돛대에 매달아 나머지를 부린다",
+            "outcomes": [
+              {
+                "text": "어부였다는 말은 더 나오지 않았다. 다들 시키는 대로 했다.",
+                "effects": {
+                  "stats": {
+                    "mind": 3
+                  },
+                  "fame": 1,
+                  "alignment": {
+                    "마도": 30
+                  }
                 }
               }
             ]
@@ -823,6 +936,30 @@
                   },
                   "foe": "장강 총채주",
                   "full_growth": true
+                }
+              }
+            ]
+          },
+          {
+            "label": "총채주를 쓰러뜨리고 강을 내 것으로 삼는다",
+            "outcomes": [
+              {
+                "text": "뱃사공들도 돌아서지 못했다. 강물이 며칠 붉었고 통행세는 이제 내게 온다.",
+                "effects": {
+                  "battle": "수적두목",
+                  "fame": 6,
+                  "flags": [
+                    "수로평정"
+                  ],
+                  "silver": 420,
+                  "foe": "장강 총채주",
+                  "style_gear": {
+                    "grade": "명품"
+                  },
+                  "full_growth": true,
+                  "alignment": {
+                    "마도": 60
+                  }
                 }
               }
             ]
@@ -973,6 +1110,26 @@
                 }
               }
             ]
+          },
+          {
+            "label": "가짜를 쓰러뜨려 저잣거리에 내건다",
+            "outcomes": [
+              {
+                "text": "내 별호를 쓰면 어떻게 되는지 고을마다 소문이 났다.",
+                "effects": {
+                  "battle": "낭인",
+                  "fame": 8,
+                  "foe": "내 별호를 쓰는 낭인",
+                  "style_gear": {
+                    "grade": "명품"
+                  },
+                  "full_growth": true,
+                  "alignment": {
+                    "마도": 40
+                  }
+                }
+              }
+            ]
           }
         ],
         "variants": [
@@ -1105,6 +1262,20 @@
             ]
           },
           {
+            "label": "약방 주인을 쓰러뜨리고 조각을 챙긴다",
+            "outcomes": [
+              {
+                "text": "할아버지가 평생 지킨 것이라 했다. 지키는 사람이 없어졌다.",
+                "effects": {
+                  "fame": -1,
+                  "alignment": {
+                    "마도": 30
+                  }
+                }
+              }
+            ]
+          },
+          {
             "label": "여기서 손을 뗀다",
             "outcomes": [
               {
@@ -1155,6 +1326,25 @@
                     "martial": 9
                   },
                   "full_growth": true
+                }
+              }
+            ]
+          },
+          {
+            "label": "도객을 꺾고 그에게 시킨 자까지 찾아낸다",
+            "outcomes": [
+              {
+                "text": "마지막 조각보다 그 이름이 더 쓸모 있었다. 그자도 오래 살지 못했다.",
+                "effects": {
+                  "battle": "귀도객",
+                  "style_skill": {
+                    "grade": "일절"
+                  },
+                  "fame": 3,
+                  "foe": "셋째 조각의 도객",
+                  "alignment": {
+                    "마도": 30
+                  }
                 }
               }
             ]
@@ -1244,6 +1434,22 @@
                   },
                   "alignment": {
                     "사도": 20
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "label": "복면인들 편에 서서 남문을 지켜 준다",
+            "outcomes": [
+              {
+                "text": "그날 밤 낙양 절반이 불탔다. 호법이 달아난 길은 복면인들이 일러 주었다.",
+                "effects": {
+                  "stats": {
+                    "martial": 3
+                  },
+                  "alignment": {
+                    "마도": 40
                   }
                 }
               }
@@ -1523,6 +1729,30 @@
                 }
               }
             ]
+          },
+          {
+            "label": "호법을 쓰러뜨려 회의장 한가운데 내건다",
+            "outcomes": [
+              {
+                "text": "범인은 그것으로 끝났다. 공자가 칼을 쥔 채 나를 보았다. 그 눈에 고마움은 없었다.",
+                "effects": {
+                  "battle": "무림맹추격대",
+                  "boss_weaken": 12,
+                  "fame": 5,
+                  "flags": [
+                    "맹주의아들"
+                  ],
+                  "foe": "배신한 호법",
+                  "style_gear": {
+                    "grade": "보물"
+                  },
+                  "full_growth": true,
+                  "alignment": {
+                    "마도": 40
+                  }
+                }
+              }
+            ]
           }
         ]
       }
@@ -1602,6 +1832,26 @@
                   },
                   "boss_weaken": 6,
                   "full_growth": true
+                }
+              }
+            ]
+          },
+          {
+            "label": "절하는 틈을 노려 먼저 친다",
+            "outcomes": [
+              {
+                "text": "예를 갖추지 않았다. 머리 흰 노인이 처음으로 웃었다. \"그래. 천마에게는 그렇게 가야지.\"",
+                "effects": {
+                  "battle": "혈마잔영",
+                  "style_skill": {
+                    "grade": "일절"
+                  },
+                  "fame": 4,
+                  "spar": true,
+                  "foe": "낙일봉의 백발 무인",
+                  "alignment": {
+                    "마도": 30
+                  }
                 }
               }
             ]
@@ -1781,6 +2031,29 @@
                 }
               }
             ]
+          },
+          {
+            "label": "지는 매화를 밟고 살수로 비무를 청한다",
+            "outcomes": [
+              {
+                "text": "장로의 칼끝이 한 번 흔들렸다. 그날 화산은 나를 손님으로 부르지 않았다.",
+                "effects": {
+                  "battle": "종남검수",
+                  "mastery": 60,
+                  "fame": 6,
+                  "style_weapon": 3,
+                  "spar": true,
+                  "foe": "화산 장로",
+                  "stats": {
+                    "martial": 10
+                  },
+                  "full_growth": true,
+                  "alignment": {
+                    "마도": 20
+                  }
+                }
+              }
+            ]
           }
         ]
       }
@@ -1861,6 +2134,22 @@
             ]
           },
           {
+            "label": "상대 공자의 손목을 꺾어 혼사를 끝낸다",
+            "outcomes": [
+              {
+                "text": "혼사는 없던 일이 되었다. 양가 모두 내 이름을 입에 올리지 않게 되었다.",
+                "effects": {
+                  "battle": "세가공자",
+                  "fame": 2,
+                  "foe": "혼담의 공자",
+                  "alignment": {
+                    "마도": 30
+                  }
+                }
+              }
+            ]
+          },
+          {
             "label": "여기서 손을 뗀다",
             "outcomes": [
               {
@@ -1912,6 +2201,29 @@
                     "사도": 40
                   },
                   "full_growth": true
+                }
+              }
+            ]
+          },
+          {
+            "label": "대청의 어른들까지 모두 쓰러뜨린다",
+            "outcomes": [
+              {
+                "text": "혼례 대청이 조용해졌다. 장부는 필요 없게 되었다.",
+                "effects": {
+                  "battle": "사도련향주",
+                  "boss_weaken": 10,
+                  "fame": 6,
+                  "foe": "뒷돈 받은 향주",
+                  "style_gear": {
+                    "grade": "명품",
+                    "slot": "armor"
+                  },
+                  "silver": 300,
+                  "full_growth": true,
+                  "alignment": {
+                    "마도": 50
+                  }
                 }
               }
             ]
@@ -2105,6 +2417,31 @@
                     "사도": 40
                   },
                   "full_growth": true
+                }
+              }
+            ]
+          },
+          {
+            "label": "끄나풀의 손목을 꺾어 품평회 탁자에 올린다",
+            "outcomes": [
+              {
+                "text": "그해 품평회의 일등은 말할 것도 없었다. 다만 술맛을 칭찬하는 사람이 없었다.",
+                "effects": {
+                  "battle": "흑풍채두목",
+                  "fame": 3,
+                  "silver": 160,
+                  "hp_pct": 20,
+                  "foe": "주루 뒷배 두목",
+                  "style_gear": {
+                    "grade": "양품"
+                  },
+                  "stats": {
+                    "external": 7
+                  },
+                  "full_growth": true,
+                  "alignment": {
+                    "마도": 30
+                  }
                 }
               }
             ]
@@ -2330,6 +2667,22 @@
                     "mind": 4
                   },
                   "fame": 2
+                }
+              }
+            ]
+          },
+          {
+            "label": "횃불 든 호위들을 제방 밑에 묻는다",
+            "outcomes": [
+              {
+                "text": "돌이 모자라던 참이었다. 인부들이 그 자리를 밟지 않고 돌아다녔다.",
+                "effects": {
+                  "battle": "세가호위",
+                  "fame": 3,
+                  "foe": "수령의 세가 호위",
+                  "alignment": {
+                    "마도": 40
+                  }
                 }
               }
             ]

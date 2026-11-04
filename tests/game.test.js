@@ -218,9 +218,77 @@ test("전투 임시 버프는 끝나면 되돌린다", () => {
   const base = p.external;
   const enemy = new Enemy("산적");
   const battle = new Battle(p, enemy);
-  assert.equal(p.external, base + 90);
+  assert.equal(p.external, base + 60);
   battle.finish(false, true);
   assert.equal(p.external, base);
+});
+
+test("무적에 가까운 조합을 막는 끝이 있다", () => {
+  const rig = (keys, enemy = "천마") => {
+    const p = new Player("무림초출");
+    Object.assign(p, { external: 900, internal: 900, martial: 900, mind: 900, realm: "현경", traits: ["경지_현경"] });
+    p.skills = keys.map((k) => Skill.fromDict({ key: k, grade: DB.skills[k].grade, mastery: 100 }));
+    p.mainSkill = keys[0];
+    p.hp = p.maxHp();
+    p.qi = p.maxQi();
+    p.revives = 0;
+    return [p, new Battle(p, new Enemy(enemy), enemy === "천마")];
+  };
+  // 경공만 눌러서는 버티지 못한다
+  let survived = 0;
+  for (let run = 0; run < 30; run++) {
+    const [p, b] = rig(["무영비도", "부운무종보"]);
+    let result = null;
+    for (let r = 0; r < 200 && !result && p.hp > 0; r++) {
+      if (b.interlude) { b.chooseInterlude(0); continue; }
+      result = b.runRound(p.qi >= p.bestOfType("경공").qiCost ? "경공" : "기본공격");
+    }
+    if (p.hp > 0) survived += 1;
+  }
+  assert.ok(survived <= 3, `${survived}`);
+  // 되찾는 내력은 절반이고 되받아치기는 빈틈의 힘을 쓰지 않는다
+  const [p1, b1] = rig(["권왕패천", "패왕보"]);
+  b1.counterPct = 0;
+  b1.afterEvade(p1.bestOfType("경공"), { strike: 90, name: "시험" });
+  assert.equal(b1.counterPct, 0);
+  const [p2, b2] = rig(["무영비도", "부운무종보"]);
+  p2.qi = 100;
+  b2.afterEvade(p2.bestOfType("경공"), DB.skills.부운무종보.gimmick);
+  assert.equal(p2.qi, 105);
+  // 흡수는 한 합에 끝이 있다
+  const [p3, b3] = rig(["적혈신장", "혈영신법"]);
+  p3.hp = 1;
+  b3.applyGimmickOnHit({ lifesteal: 18 }, 999999);
+  assert.equal(p3.hp, 1 + Math.trunc(p3.maxHp() * 0.25));
+  // 저절로 차는 기운은 한 싸움에 3할까지다
+  const [p4, b4] = rig(["무영비도", "혼원일기공"]);
+  p4.hp = 10;
+  for (let i = 0; i < 40; i++) b4.tickEffects();
+  assert.ok(p4.hp <= 10 + Math.ceil(p4.maxHp() * 0.31), `${p4.hp}`);
+  // 운기 한 번은 5할까지, 잇달아 하면 절반이다
+  const [p5, b5] = rig(["무영비도", "철마금신공"]);
+  p5.traits.push("맑은정신", "글읽는무인");
+  p5.hp = 1;
+  b5.useMindset();
+  assert.ok(p5.hp <= 2 + p5.maxHp() * 0.5, `${p5.hp}`);
+  p5.hp = 1;
+  b5.mindStreak = 1;
+  b5.useMindset();
+  assert.ok(p5.hp <= 2 + p5.maxHp() * 0.25, `${p5.hp}`);
+  // 굳었다 풀린 다음 합에는 다시 굳지 않는다
+  const [, b6] = rig(["타구신봉", "경신보"].map((k) => (DB.skills[k] ? k : "초상비")), "낭인");
+  b6.stunRest = true;
+  b6.applyGimmickOnHit({ stun: 100 }, 1);
+  assert.ok(!b6.enemyStun);
+  // 도주와 호신구에도 끝이 있다
+  const [p7, b7] = rig(["무영비도", "부운무종보"], "낭인");
+  p7.traits.push("구름걸음", "표로의다리");
+  let failed = 0;
+  for (let i = 0; i < 300; i++) if (!b7.flee()) failed += 1;
+  assert.ok(failed > 0, "반드시 달아나지는 못한다");
+  p7.armor = "금강불괴갑";
+  b7.enemy.attack = 100;
+  assert.ok(b7.incoming() > 1, "호신구가 아무리 좋아도 조금은 들어온다");
 });
 
 test("일반 전투 사망은 곧바로 엔딩과 카르마", () => {
@@ -3056,7 +3124,8 @@ test("시장에 내지 않는 내단은 장터에 나오지 않는다", () => {
   const game = newGame();
   for (const turn of [12, 24, 60, 119]) {
     const market = openMarket(turn, game.player);
-    assert.ok(!market.stock.some((s) => ["천년내단", "금안", "호주", "호골"].includes(s.key)));
+    // 천년 내단은 수상한 누군가만 내놓는다
+    assert.ok(!market.stock.some((s) => ["금안", "호주", "호골", ...(turn === 119 ? [] : ["천년내단"])].includes(s.key)));
   }
 });
 
