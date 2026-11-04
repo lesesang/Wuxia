@@ -11,10 +11,10 @@ import {
   activeContent, addKarma, claimAchievements, clearCheckpoint, extraSlots, rewardTraits, loadCheckpoint, loadMeta, recordRun, saveCheckpoint,
   storeLegacy, takeLegacy, takeProvisions, updateGlobalCodex, updateKnown, upgradeTraits,
 } from "./meta.js";
-import { pickWeighted, randInt, rng } from "./rng.js";
+import { pick, pickWeighted, randInt, rng } from "./rng.js";
 import {
   actionLine, ALIGNMENT_CAP, alignTier, applyGrowth, breakthroughBlock, byname, CHAPTER_STARTS, checkBreakthrough, checkGoodEnding, checkSaengsa,
-  fameRank, FOCUS_DRIFT, focusedSide, getChapter, getChapterInfo, getMonth, getYear, isMarketTurn, monthLine, isNamed, perkTrait, realmFit, returnedLine, standIn, realmIndex, sumEffect, talkLine, traitSlots,
+  fameRank, FOCUS_DRIFT, focusedSide, getChapter, getChapterInfo, getMonth, getYear, isMarketTurn, monthLine, auraText, isNamed, perkTrait, realmFit, returnedLine, standIn, realmIndex, sumEffect, talkLine, traitSlots,
 } from "./rules.js";
 import { josa } from "./josa.js";
 
@@ -38,8 +38,9 @@ function breakthroughLines(p, next) {
   const lines = [...data.text];
   const side = p.dominantAlignment();
   const category = p.bestSkill()?.category;
-  for (const line of [data.origin?.[p.originKey], side && data.side?.[side], category && data.category?.[category]]) {
-    if (line) lines.push(line);
+  const fame = p.fame >= 60 ? data.fame?.높음 : p.fame <= 9 ? data.fame?.낮음 : null;
+  for (const line of [data.flourish && pick(data.flourish), data.origin?.[p.originKey], p.sect && data.sect?.[p.sect], side && data.side?.[side], category && data.category?.[category], fame]) {
+    if (line) lines.push(auraText(line, category));
   }
   return lines;
 }
@@ -293,6 +294,7 @@ export class Game {
     this.player.recordEnemyEncounter(fitting);
     this.battle = new Battle(this.player, enemy);
     this.battle.spar = spar;
+    this.battle.askStand = true;
     const back = !spar && isNamed(fitting) && this.player.slain.includes(fitting);
     const intro = back ? returnedLine(fitting) : enemyIntro(this.player, fitting);
     const called = enemy.title ? `${enemy.title} ${enemy.name}` : enemy.name;
@@ -312,6 +314,11 @@ export class Game {
     }
     p.recordEnemyEncounter("천마");
     this.battle = new Battle(p, enemy, true);
+    this.battle.askStand = true;
+    for (const c of this.battle.companions) {
+      this.battle.log.push(reactiveLine(p, c.joins, c.join));
+      p.note(`결전에 ${c.name}${josa(c.name, "이/가")} 달려왔다.`);
+    }
     const intro = enemyIntro(p, "천마");
     this.addLog(["⚡ 강호행의 마지막 결전이 시작된다. 천마는 생사경의 경지에 있다.", ...(intro ? [intro] : []), ...this.battle.log]);
     this.battle.log = [];
@@ -382,11 +389,30 @@ export class Game {
     // 막간을 고르지 않고 합을 진행하면 첫 선택지를 따른다
     if (battle.interlude) this.battleInterlude(0);
 
+    // 힘을 끌어모을지 고르지 않고 합을 진행하면 끌어모은다
+    if (battle.standPending) {
+      this.battleStand(true);
+      return;
+    }
+
     const result = battle.runRound(action, player.bestSkill(), itemKey);
     this.addLog(battle.log);
     battle.log = [];
-    if (!result) return;
+    if (result) this.closeBattle(battle, result);
+  }
 
+  /** 쓰러지는 순간의 선택. 힘을 끌어모을지, 여기서 눈을 감을지 */
+  battleStand(gather) {
+    const { battle } = this;
+    if (!battle?.standPending) return;
+    const result = battle.answerStand(gather);
+    this.addLog(battle.log);
+    battle.log = [];
+    if (result) this.closeBattle(battle, result);
+  }
+
+  closeBattle(battle, result) {
+    const { player } = this;
     this.battle = null;
     this.settleAfterBattle(result);
     if (result.victory && this.gauntlet && !battle.isFinal) {
@@ -574,7 +600,8 @@ export class Game {
     const perk = DB.realms.perks[next];
     if (perk) {
       if (!p.traits.includes(perkTrait(next))) p.traits.push(perkTrait(next));
-      lines.push(`✨ 경지의 특전 「${perk.name}」: ${perk.desc}`);
+      const category = p.bestSkill()?.category;
+      lines.push(`✨ 경지의 특전 「${auraText(perk.name, category)}」: ${auraText(perk.desc, category)}`);
     }
     // 심경이 충분히 높지 않으면 돌파가 거칠어 내상을 입는다
     if (rng.random() < Math.max(0, 600 - p.mind) * 0.001) {

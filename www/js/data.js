@@ -2,7 +2,7 @@
 export const DB = {};
 
 const FILES = ["skills", "enemies", "market", "traits", "sects", "flavor", "fortunes", "origins",
-  "chapters", "realms", "endings", "balance", "karma", "events_chains", "events_story", "events_random", "events_sect", "events_jianghu"];
+  "chapters", "realms", "endings", "balance", "karma", "companions", "events_chains", "events_story", "events_random", "events_sect", "events_jianghu"];
 
 /** read(파일이름)은 해당 JSON 내용을 돌려주는 비동기 함수 */
 export async function loadData(read) {

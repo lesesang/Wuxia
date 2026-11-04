@@ -17,6 +17,7 @@ export function unmetReason(player, requires) {
   if (r.not_origin?.includes(player.originKey)) return "그곳과는 씻지 못할 원한이 있다";
   if (r.no_dominant && player.dominantAlignment()) return "이미 한 길에 들어섰다";
   if (r.not_dominant?.includes(player.dominantAlignment())) return "그 길에는 어울리지 않는다";
+  if (r.dominant_in && !r.dominant_in.includes(player.dominantAlignment())) return "그 길이 아니다";
   if (r.flag && !player.hasFlag(r.flag)) return "아직 인연이 닿지 않았다";
   if (r.not_flag && player.hasFlag(r.not_flag)) return "이미 지나간 일이다";
   if (r.any_flag && !r.any_flag.some((f) => player.hasFlag(f))) return "아직 인연이 닿지 않았다";

@@ -125,10 +125,25 @@ export function realmFit(playerRealm, enemyRealm) {
   const gap = enemyRealmIndex(enemyRealm) - enemyRealmIndex(playerRealm);
   return table[String(Math.max(-3, Math.min(3, gap)))];
 }
+/** 특전의 글에 주무공 계열의 기운 이름을 넣는다. 검이면 검기와 검강, 권이면 권기와 권강이다 */
+export function auraText(text, category = "검법") {
+  const [qi, gang] = DB.realms.aura[category] || DB.realms.aura.검법;
+  return text.replaceAll("〈기〉", qi).replaceAll("〈강〉", gang);
+}
+
 /** 그 경지까지 얻은 특전 */
-export function realmPerks(realm) {
+export function realmPerks(realm, category = "검법") {
   const reached = realmIndex(realm);
-  return DB.realms.order.filter((name, i) => i <= reached && DB.realms.perks[name]).map((name) => ({ realm: name, ...DB.realms.perks[name] }));
+  return DB.realms.order.filter((name, i) => i <= reached && DB.realms.perks[name]).map((name) => {
+    const perk = DB.realms.perks[name];
+    return { realm: name, ...perk, name: auraText(perk.name, category), desc: auraText(perk.desc, category) };
+  });
+}
+
+/** 결전에 달려올 인연. 조건을 채운 사람 가운데 앞에서부터 정해진 수만 온다 */
+export const MAX_COMPANIONS = 3;
+export function activeCompanions(player) {
+  return Object.entries(DB.companions).filter(([, c]) => player.hasFlag(c.flag)).slice(0, MAX_COMPANIONS).map(([key, c]) => ({ key, ...c }));
 }
 /** 이름 있는 적인가. 이름 없는 적은 몇 번이고 나와도 이상하지 않다 */
 export const isNamed = (key) => { const e = DB.enemies[key]; return e?.named ?? !!e?.title; };

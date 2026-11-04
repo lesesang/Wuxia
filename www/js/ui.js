@@ -11,7 +11,7 @@ import {
 } from "./meta.js";
 import {
   ALIGNMENTS, benefitText, byname, fameRank, getChapterInfo, getMonth, getYear, marketTurns, nextSlotThreshold,
-  ORIGIN_SECTS, realmProgress, traitSlots, realmPerks } from "./rules.js";
+  ORIGIN_SECTS, realmProgress, traitSlots, realmPerks, activeCompanions, MAX_COMPANIONS } from "./rules.js";
 import { MAX_TURN } from "./character.js";
 import { storage } from "./storage.js";
 import { josa } from "./josa.js";
@@ -257,7 +257,8 @@ function helpModal() {
     "적의 필살기는 한 합 전에 ⚠️로 예고됩니다. <b>경공</b>으로 흘려내면 다음 공격이 강해집니다.",
     "<b>심법</b>은 숨을 고르며 회복하고 점혈을 풉니다. 위험하면 <b>도주</b>도 방법입니다.",
     "내상은 전투가 끝나도 남고 주는 피해를 줄입니다.",
-    "강호행마다 한 번, 쓰러지는 순간 체력은 최대의 절반, 내력은 최대의 절반만큼 차올라 다시 일어섭니다."])}
+    "강호행마다 한 번, 쓰러지는 순간 마지막 힘을 끌어모을 수 있습니다. 화면 가운데 창에서 고르며, 끌어모으면 체력과 내력이 최대의 절반만큼 차오릅니다."])}
+    ${section("결전에 달려오는 사람", [`강호에서 자주 마주치는 사람들과 인연을 끝까지 맺으면 천마와의 결전에 달려옵니다. 몇 합마다 대신 공격하거나, 회복시켜 주거나, 천마의 기세를 꺾거나, 함께 있는 것만으로 위력과 방어를 올려 줍니다. 한 번에 ${MAX_COMPANIONS}명까지 옵니다. 대부분 카르마로 인연을 사야 만날 수 있고, 내 성향과 출신에 따라 대하는 태도가 다릅니다.`])}
     ${section("장터와 성장", ["매년 말 장터가 열리고 달을 쓰지 않습니다. 더 나은 병기와 호신구가 항상 진열되고, 익힌 무공과 맞는 물건이 더 자주 나옵니다.", "도구는 계열이 맞으면 제 효과를 내고 맞지 않으면 절반입니다. 수련 도구는 언제든, 전투 도구는 전투 중에 씁니다.", "같은 계열 무공의 성취는 품계가 같으면 절반, 낮으면 3할을 주무공으로 옮길 수 있습니다. 신상의 무공 칸에서 합니다.", "새해가 밝으면 체력과 내력이 가득 차고 내상이 낫습니다.", "무공은 성취 100을 넘겨 더 쌓으면 다음 품계로 승급합니다. 일절이 승급의 끝입니다. 신공은 출신의 이야기나 카르마로 연 인연에서만 얻습니다.", "병기는 주무공과 계열이 맞아야 제 힘을 냅니다. 맞지 않으면 3/4만 나옵니다.", "사건의 선택으로 정도, 사도, 마도 성향이 최대 999까지 쌓입니다. 60, 200, 400, 600, 850에서 단계가 오르며 혜택이 커지고, 사람들의 대접과 사건, 결말이 달라집니다. 한 길에 집중하면 더 잘 오르지만 정도와 마도는 서로 깎아 먹고 사도도 양쪽과 조금씩 부딪칩니다."])}
     ${section("카르마를 얻는 길", [
     "<b>도달한 장</b>: 천마까지 가지 못하고 끝나면 1장 +1부터 5장 +5까지 받습니다. 천마에게 져도 +5입니다.",
@@ -559,6 +560,11 @@ function chronicleList(p) {
   return p.chronicle.map((c) => `<div class="chronicle-row"><span class="chronicle-date">${getYear(c.turn)}년차 ${getMonth(c.turn)}월</span><span>${esc(c.text)}</span></div>`).join("");
 }
 
+function companionList(p) {
+  const rows = activeCompanions(p);
+  return rows.length ? `<div class="modal-section"><h4>결전에 달려올 사람</h4>${rows.map((c) => `<div class="skill-row">${esc(c.name)}<div class="skill-meta">${esc(c.help_text)}</div></div>`).join("")}</div>` : "";
+}
+
 function statusModal() {
   const p = game.player;
   const row = (label, value) => `<div class="stat-row"><span>${esc(label)}</span><span>${esc(value)}</span></div>`;
@@ -602,7 +608,7 @@ function statusModal() {
         ${row("명성", `${p.fame} (${fameRank(p.fame)})`)}
         ${p.injury ? row("내상", `${p.injury}단계, 주는 피해 -${p.injury * INJURY_PENALTY}%, 요양으로 치료`) : ""}
         ${row("실전 경험", `${p.battles} (${p.kills}명 처치)`)}
-        ${row("되살아날 기회", `${p.revives}번`)}
+        ${row("끌어모을 마지막 힘", `${p.revives}번`)}
       </div>
       ${progress ? `<div class="modal-section"><h4>다음 경지: ${esc(progress.next)}</h4>
         ${row("평균 기량", `${progress.avg} / ${progress.avgRequired}`)}
@@ -612,7 +618,7 @@ function statusModal() {
         ${ALIGNMENTS.map((name) => `<div class="align-row"><span>${name}</span><div class="align-track"><div class="a-${name}" style="width:${Math.min(p.alignment[name] / 10, 100)}%"></div></div><span>${p.alignment[name]}</span></div>`).join("")}
         <p class="skill-meta">${esc(benefitText(p.alignment))}</p>
       </div>
-      ${realmPerks(p.realm).length ? `<div class="modal-section"><h4>경지의 특전</h4>${realmPerks(p.realm).map((k) => `<div class="skill-row">${esc(k.realm)}, ${esc(k.name)}<div class="skill-meta">${esc(k.desc)}</div></div>`).join("")}</div>` : ""}
+      ${companionList(p)}${realmPerks(p.realm, main?.category).length ? `<div class="modal-section"><h4>경지의 특전</h4>${realmPerks(p.realm, main?.category).map((k) => `<div class="skill-row">${esc(k.realm)}, ${esc(k.name)}<div class="skill-meta">${esc(k.desc)}</div></div>`).join("")}</div>` : ""}
       ${traits.length ? `<div class="modal-section"><h4>자질</h4>${traits.map((t) => `<div class="skill-row">${esc(t.name)}<div class="skill-meta">${esc(t.desc)}</div></div>`).join("")}</div>` : ""}`,
     skills: skills,
     history: chronicleList(p) || `<p class="codex-empty">아직 남길 만한 일이 없습니다.</p>`,
@@ -635,6 +641,20 @@ function gameModals() {
     <button class="danger-btn" data-act="restart">포기하고 첫 화면으로</button>`)}`;
 }
 
+/** 쓰러지는 순간 화면 가운데에 뜨는 선택 */
+function standBox(p, b) {
+  const talk = DB.flavor.last_stand;
+  const side = p.dominantAlignment();
+  const line = talk.origin[p.originKey] || (side && talk.side[side]) || talk.기본;
+  return `<div class="stand-overlay" role="dialog" aria-modal="true"><div class="stand-box">
+      <h3>${esc(b.enemy.name)} 앞에서 쓰러진다</h3>
+      <p>${esc(line)}</p>
+      <p class="stand-note">끌어모으면 체력과 내력이 최대의 절반만큼 차오릅니다. 남은 기회 ${p.revives}번.</p>
+      <button class="next-btn" data-act="stand" data-gather="1">🕯️ 마지막 힘을 끌어모은다</button>
+      <button class="danger-btn" data-act="stand" data-gather="">여기서 눈을 감는다</button>
+    </div></div>`;
+}
+
 function renderBattle() {
   document.body.className = "in-battle";
   setMood("battle");
@@ -653,6 +673,7 @@ function renderBattle() {
   if (b.atkBuff) tags.push(["good", `위력 +${b.atkBuff.percent}%`]);
   if (b.counterPct) tags.push(["good", `반격 +${b.counterPct}%`]);
   if (b.enemyPoison) tags.push(["good", "적 중독"]);
+  for (const c of b.companions) tags.push(["good", c.name]);
   const lowHp = p.hp < p.maxHp() * 0.3;
 
   const secretNote = !skill ? "무공 없음"
@@ -687,6 +708,7 @@ function renderBattle() {
     </div>
     ${tags.length ? `<div class="battle-tags">${tags.map(([kind, label]) => `<span class="tag ${kind}">${esc(label)}</span>`).join("")}</div>` : ""}
     ${warning ? `<p class="battle-warning">⚠️ 다음은 「${esc(warning)}」${movement ? " — 경공으로 흘려낼 수 있다" : ""}</p>` : ""}
+    ${b.standPending ? standBox(p, b) : ""}
     <div class="battle-log" aria-live="polite">${b.roundNum === 0 ? `<p class="enemy-desc">${esc(b.enemy.desc)}</p>` : ""}${game.log.slice(-12).map((l) => `<p>${esc(l)}</p>`).join("")}</div>
     ${interlude ?? `<div class="battle-panel">
       <button class="bt-btn main" data-act="battle" data-action="기본공격">⚔️ ${skill ? esc(skill.name) : "맨손 공격"}<small>${esc(attackNote)}</small></button>
@@ -1111,6 +1133,7 @@ const actions = {
   "finish-arts": () => { game.finishArtsPick(); render(); },
   "main-skill": (el) => { game.setMainSkill(el.dataset.key); render(); },
   "transfer-mastery": (el) => { game.transferMastery(el.dataset.key); render(); },
+  stand: (el) => { game.battleStand(!!el.dataset.gather); render(); },
   "use-item": (el) => { game.useItem(el.dataset.key); render(); },
   restart: () => {
     closeModalQuietly();
