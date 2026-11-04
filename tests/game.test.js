@@ -11,7 +11,7 @@ import { buildEpilogue, Game } from "../www/js/game.js";
 import { josa } from "../www/js/josa.js";
 import { blockReason, buy, equipmentBonus, openMarket, priceOf } from "../www/js/market.js";
 import {
-  activeContent, buyContent, buyUpgrade, exportRecords, importRecords, extraSlots, loadCheckpoint, legacyAvailable, loadEventLog, loadMeta, nextReward, recordEventPick, openLegacy, saveMeta, takeLegacy, toggleContent, unlockOrigin,
+  activeContent, addKarma, buyContent, buyProvision, refundProvision, upgradeTraits, buyUpgrade, exportRecords, importRecords, extraSlots, loadCheckpoint, legacyAvailable, loadEventLog, loadMeta, nextReward, recordEventPick, openLegacy, saveMeta, takeLegacy, toggleContent, unlockOrigin,
 } from "../www/js/meta.js";
 import { applyGrowth, breakthroughBlock, byname, fameRank, getChapter, getYear, marketTurns, traitSlots } from "../www/js/rules.js";
 import { storage } from "../www/js/storage.js";
@@ -1326,6 +1326,53 @@ test("공통 자질의 설명은 출신을 단정하지 않는다", () => {
   }
 });
 
+test("채비는 다음 강호행 한 번만 쓰이고 값이 싸며 네 기량이 같다", () => {
+  withKarma(50);
+  assert.ok(buyProvision("호골주"));
+  assert.ok(!buyProvision("호골주"), "같은 것은 하나만");
+  assert.ok(buyProvision("약꾸러미"));
+  assert.ok(buyProvision("노자"));
+  assert.ok(refundProvision("노자"));
+  assert.equal(loadMeta().current_karma, 47);
+  const first = new Game();
+  first.start("무림초출");
+  const second = new Game();
+  second.start("무림초출");
+  assert.equal(first.player.external, second.player.external + 40);
+  assert.equal(first.player.inventory.금창약, (second.player.inventory.금창약 || 0) + 3);
+  assert.deepEqual(loadMeta().provisions, []);
+  assert.ok(Object.values(DB.karma.provisions).every((p) => p.cost <= 3));
+  const singles = Object.values(DB.karma.provisions).map((p) => p.effects).filter((e) => e.length === 1 && e[0].type === "start_stat");
+  assert.deepEqual(singles.map((e) => e[0].stat).sort(), ["external", "internal", "martial", "mind"].sort());
+  assert.equal(new Set(singles.map((e) => e[0].amount)).size, 1);
+  withKarma(0);
+});
+
+test("출신 전용 기틀은 그 출신에만 적용된다", () => {
+  const data = loadMeta();
+  data.upgrades = { 창궁검리: 2 };
+  assert.equal(upgradeTraits(data, "남궁세가").length, 2);
+  assert.equal(upgradeTraits(data, "하오문").length, 0);
+});
+
+test("출신 고유 무공은 장터나 적에게서 얻지 못하고 권마의 시험은 권마 출신 전용이다", () => {
+  const owned = Object.keys(DB.skills).filter((k) => DB.skills[k].origin);
+  for (const k of owned) {
+    assert.ok(!Object.values(DB.market).some((i) => i.effects.some((e) => e.skill === k)), k);
+    assert.ok(!Object.values(DB.enemies).some((e) => e.drop?.skill === k), k);
+  }
+  assert.equal(DB.events.권마시험.requires.origin, "권마계승");
+  assert.equal(DB.karma.content.권마의시험.origin, "권마계승");
+});
+
+test("누적 카르마는 마지막 보상을 넘어도 계속 쌓인다", () => {
+  withKarma(0);
+  addKarma(1500);
+  assert.equal(loadMeta().total_karma, 1500);
+  assert.equal(loadMeta().current_karma, 1500);
+  withKarma(0);
+});
+
 test("조사는 받침에 맞게 붙는다", () => {
   assert.equal(josa("천마", "을/를"), "를");
   assert.equal(josa("낭인", "을/를"), "을");
@@ -1595,13 +1642,15 @@ test("카르마 상점에 전생과 회차 표현이 없다. 유산만 예외다
 test("출신마다 전용 자질과 인연이 있고 그 출신만 쓴다", () => {
   for (const key of DB.origins.order) {
     const traits = Object.keys(DB.traits).filter((t) => DB.traits[t].origin === key);
-    assert.equal(traits.length, 1, `${key} 자질`);
+    assert.equal(traits.length, 2, `${key} 자질`);
     const content = Object.keys(DB.karma.content).filter((c) => DB.karma.content[c].origin === key);
-    assert.equal(content.length, 1, `${key} 인연`);
-    assert.ok(Object.values(DB.events).some((e) => e.requires?.origin === key && e.requires?.unlocked === content[0]), `${key} 인연 사건`);
-    const trait = traits[0];
-    const reacts = Object.values(DB.events).filter((e) => (e.variants || []).some((v) => v.requires?.trait === trait));
-    assert.ok(reacts.length >= 3, `${key} 자질 반응 ${reacts.length}`);
+    assert.equal(content.length, 2, `${key} 인연`);
+    for (const c of content) assert.ok(Object.values(DB.events).some((e) => e.requires?.origin === key && e.requires?.unlocked === c), `${key} 인연 사건 ${c}`);
+    assert.equal(Object.values(DB.karma.upgrades).filter((u) => u.origin === key).length, 1, `${key} 기틀`);
+    for (const trait of traits) {
+      const reacts = Object.values(DB.events).filter((e) => (e.variants || []).some((v) => v.requires?.trait === trait));
+      assert.ok(reacts.length >= 2, `${trait} 반응 ${reacts.length}`);
+    }
   }
   const data = loadMeta();
   data.unlocked_origins = Object.keys(DB.origins.origins);

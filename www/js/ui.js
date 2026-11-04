@@ -6,7 +6,7 @@ import { eventView } from "./events.js";
 import { Game } from "./game.js";
 import { bonusFor, equipmentBonus, itemName, stockView } from "./market.js";
 import {
-  buyContent, buyUpgrade, exportRecords, extraSlots, importRecords, legacyAvailable, loadCheckpoint, loadEventLog, loadMeta, nextReward, openLegacy,
+  buyContent, buyProvision, buyUpgrade, exportRecords, extraSlots, importRecords, legacyAvailable, loadCheckpoint, loadEventLog, loadMeta, nextReward, openLegacy, refundProvision,
   toggleContent, unlockOrigin, unlockTrait, upgradeLevel,
 } from "./meta.js";
 import {
@@ -351,7 +351,7 @@ function shopPanels(meta) {
     const level = upgradeLevel(key, meta);
     const cost = u.costs[level];
     const name = `${esc(u.name)} <span class="rarity">${level}/${u.costs.length}단계</span>`;
-    const desc = `<p class="pick-desc">${esc(u.desc)}</p>`;
+    const desc = `<p class="pick-desc">${esc(u.desc)}</p>${originOnly(u.origin)}`;
     if (cost === undefined) return `<div class="pick-row"><div class="pick-main"><div class="pick-name">${name}</div>${desc}</div><span class="pick-stats">다 올림</span></div>`;
     return shopRow(name, desc, "buy-upgrade", key, cost, meta, "올리기");
   };
@@ -362,7 +362,16 @@ function shopPanels(meta) {
   const legacy = meta.legacy_open ? emptyNote("이미 열었습니다. 강호행을 시작할 때 유산을 고를 수 있습니다.")
     : !legacyAvailable(meta) ? emptyNote("천마를 한 번 쓰러뜨리면 살 수 있습니다.")
       : shopRow("전설의 유산", `<p class="pick-desc">강호행이 끝날 때 무공이나 병장기 하나를 남기고, 다음 강호행에서 이어받습니다.</p>`, "open-legacy", "", cost, meta);
+  const provisionGroups = [...new Set(Object.values(DB.karma.provisions).map((p) => p.group))];
+  const provisionRow = ([key, p]) => {
+    const desc = `<p class="pick-desc">${esc(p.desc)}</p>`;
+    if (!meta.provisions.includes(key)) return shopRow(esc(p.name), desc, "buy-provision", key, p.cost, meta, "챙기기");
+    return `<div class="pick-row"><div class="pick-main"><div class="pick-name">${esc(p.name)} <span class="rarity">챙겨 둠</span></div>${desc}</div>
+      <button class="unlock-btn" data-act="refund-provision" data-key="${esc(key)}">💠 ${p.cost}<br>물리기</button></div>`;
+  };
+  const provisions = provisionGroups.map((g) => `<h4 class="shop-group">${esc(g)}</h4>${Object.entries(DB.karma.provisions).filter(([, p]) => p.group === g).map(provisionRow).join("")}`).join("");
   return {
+    provision: `<p class="section-note">채비는 다음 강호행 한 번에만 쓰입니다. 시작할 때 저절로 꺼내 쓰고, 그 전에는 물릴 수 있습니다.</p>${provisions}`,
     origin: origins || emptyNote("모든 출신을 해금했습니다."),
     trait: filterRow() + (traits || emptyNote("이 갈래의 자질을 모두 해금했습니다.")),
     upgrade: `<p class="section-note">기틀은 장착하지 않아도 모든 강호행에 적용됩니다.</p>${upgrades}`,
@@ -386,7 +395,7 @@ function rewardPanel(meta) {
   const total = left.reduce((sum, a) => sum + a.karma, 0);
   return `<p class="section-note">카르마를 써도 줄지 않는 누적 카르마가 쌓이면 저절로 받습니다. 사거나 장착할 필요가 없습니다.</p>
     <div class="reward-progress"><div class="reward-track"><span style="width:${percent(Math.min(meta.total_karma, last), last)}%"></span></div>
-      <p>누적 카르마 <b>${meta.total_karma}</b>${next ? `, 다음 「${esc(next.name)}」까지 ${next.at - meta.total_karma}` : ", 모두 받았습니다"}</p></div>
+      <p>누적 카르마 <b>${meta.total_karma}</b>${next ? `, 다음 「${esc(next.name)}」까지 ${next.at - meta.total_karma}` : ", 보상은 모두 받았습니다. 카르마는 계속 쌓이고 상점에서 쓸 수 있습니다"}</p></div>
     ${rows}
     <h4 class="shop-group">카르마를 얻는 길</h4>
     <p class="help-line"><b>도달한 장</b>: 천마까지 가지 못하고 끝나면 1장 +1부터 5장 +5까지. 천마에게 져도 +5</p>
@@ -408,7 +417,7 @@ function renderShop() {
   document.body.className = "home setup-screen";
   setMood("calm");
   const meta = loadMeta();
-  const tabs = [["origin", "출신"], ["trait", "자질"], ["upgrade", "기틀"], ["content", "인연"], ["legacy", "유산"], ["reward", "누적"]];
+  const tabs = [["origin", "출신"], ["trait", "자질"], ["upgrade", "기틀"], ["content", "인연"], ["provision", "채비"], ["legacy", "유산"], ["reward", "누적"]];
   app().innerHTML = `<div class="setup-head">
       <button class="back-btn" data-act="shop-back" aria-label="뒤로">←</button>
       <h2>카르마 상점</h2>
@@ -974,6 +983,8 @@ const actions = {
   continue: () => { game.continueFromSave(); render(); },
   "buy-upgrade": (el) => { buyUpgrade(el.dataset.key); render(); },
   "buy-content": (el) => { buyContent(el.dataset.key); render(); },
+  "buy-provision": (el) => { buyProvision(el.dataset.key); render(); },
+  "refund-provision": (el) => { refundProvision(el.dataset.key); render(); },
   "open-legacy": () => { openLegacy(); render(); },
   "leave-legacy": (el) => { game.leaveLegacy(Number(el.dataset.key)); render(); },
   "unlock-origin": (el) => { unlockOrigin(el.dataset.key, DB.origins.origins[el.dataset.key].cost); render(); },

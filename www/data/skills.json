@@ -82,7 +82,8 @@
       "백운출수",
       "유성추월",
       "무애검"
-    ]
+    ],
+    "origin": "남궁세가"
   },
   "암향비도": {
     "name": "암향비도",
@@ -103,7 +104,8 @@
       "암향부동",
       "월하무흔",
       "일비충천"
-    ]
+    ],
+    "origin": "하오문"
   },
   "파천권": {
     "name": "파천권",
@@ -125,7 +127,8 @@
       "열지",
       "파천"
     ],
-    "risky": true
+    "risky": true,
+    "origin": "권마계승"
   },
   "매화검법": {
     "name": "매화검법",
@@ -359,7 +362,8 @@
       "evade": 70,
       "counter_pct": 80,
       "flee_bonus": 25
-    }
+    },
+    "origin": "하오문"
   },
   "유운신법": {
     "name": "유운신법",
@@ -714,7 +718,8 @@
       "unlock_mastery": 50,
       "multiplier": 2.2,
       "qi_cost": 40
-    }
+    },
+    "origin": "하북팽가"
   },
   "달마심공": {
     "name": "달마심공",
@@ -1545,7 +1550,8 @@
       "unlock_mastery": 50,
       "multiplier": 1.9,
       "qi_cost": 30
-    }
+    },
+    "origin": "개방제자"
   },
   "나한곤법": {
     "name": "나한곤법",
@@ -2035,7 +2041,8 @@
       "heal_qi_pct": 12,
       "atk_buff_pct": 8,
       "buff_rounds": 2
-    }
+    },
+    "origin": "남궁세가"
   },
   "오호심법": {
     "name": "오호심법",
@@ -2050,7 +2057,8 @@
       "heal_qi_pct": 8,
       "atk_buff_pct": 15,
       "buff_rounds": 2
-    }
+    },
+    "origin": "하북팽가"
   },
   "철마공": {
     "name": "철마공",
@@ -2065,7 +2073,8 @@
       "heal_qi_pct": 10,
       "atk_buff_pct": 0,
       "buff_rounds": 0
-    }
+    },
+    "origin": "표국표사"
   },
   "소요공": {
     "name": "소요공",
@@ -2080,7 +2089,8 @@
       "heal_qi_pct": 16,
       "atk_buff_pct": 0,
       "buff_rounds": 0
-    }
+    },
+    "origin": "개방제자"
   },
   "권마심결": {
     "name": "권마심결",
@@ -2095,7 +2105,8 @@
       "heal_qi_pct": 12,
       "atk_buff_pct": 20,
       "buff_rounds": 2
-    }
+    },
+    "origin": "권마계승"
   },
   "적혈공": {
     "name": "적혈공",
@@ -2110,7 +2121,8 @@
       "heal_qi_pct": 20,
       "atk_buff_pct": 12,
       "buff_rounds": 2
-    }
+    },
+    "origin": "혈지생환"
   },
   "암향심법": {
     "name": "암향심법",
@@ -2125,7 +2137,8 @@
       "heal_qi_pct": 22,
       "atk_buff_pct": 0,
       "buff_rounds": 0
-    }
+    },
+    "origin": "하오문"
   },
   "무극검결": {
     "name": "무극검결",

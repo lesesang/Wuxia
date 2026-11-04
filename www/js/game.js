@@ -9,7 +9,7 @@ import { grantStartGifts,
 import { buy, openMarket } from "./market.js";
 import {
   activeContent, addKarma, claimAchievements, clearCheckpoint, extraSlots, rewardTraits, loadCheckpoint, loadMeta, recordRun, saveCheckpoint,
-  storeLegacy, takeLegacy, updateGlobalCodex, updateKnown, upgradeTraits,
+  storeLegacy, takeLegacy, takeProvisions, updateGlobalCodex, updateKnown, upgradeTraits,
 } from "./meta.js";
 import { pickWeighted, randInt, rng } from "./rng.js";
 import {
@@ -65,13 +65,15 @@ export class Game {
       .slice(0, traitSlots(meta.total_karma) + extraSlots(meta));
 
     this.reset();
-    this.player = new Player(originKey, [...traits, ...upgradeTraits(meta), ...rewardTraits(meta)]);
+    const provisions = takeProvisions();
+    this.player = new Player(originKey, [...traits, ...upgradeTraits(meta, originKey), ...rewardTraits(meta), ...provisions.map((k) => `채비_${k}`)]);
     this.player.content = activeContent(meta);
     const giftLines = DB.origins.origins[originKey].choose_start ? [] : grantStartGifts(this.player);
     const legacyLines = legacyIndex !== null && meta.legacy_open ? this.inheritLegacy(legacyIndex) : [];
     updateKnown(this.player.skills.map((s) => s.key));
     const intro = getChapterInfo(1);
-    this.enterTurn([`📖 ${intro.title} (1년차) — ${intro.desc}`, ...giftLines, ...legacyLines]);
+    const provisionLines = provisions.length ? [`🎒 챙겨 온 채비: ${provisions.map((k) => DB.karma.provisions[k].name).join(", ")}`] : [];
+    this.enterTurn([`📖 ${intro.title} (1년차) — ${intro.desc}`, ...provisionLines, ...giftLines, ...legacyLines]);
     return true;
   }
 
