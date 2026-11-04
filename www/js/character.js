@@ -6,6 +6,7 @@ import {
   dominant, hasEffect, MA_HEAL_PENALTY, newAlignment, ORIGIN_SECTS, SA_SILVER_BONUS, sectBonus,
   startSkills, sumEffect,
 } from "./rules.js";
+import { josa } from "./josa.js";
 
 export const GRADE_ORDER = ["기본", "명품", "상승", "일절", "신공"];
 const SAME_GRADE_TRANSFER = 0.5;  // 같은 품계 무공의 성취를 옮기는 비율
@@ -57,11 +58,11 @@ export class Skill {
     // 성취가 100에 이른 뒤 더 쌓이면 승급한다. 정확히 100이면 다음 성취를 기다린다.
     if (this.mastery + amount > MAX_MASTERY && this.canEvolve()) {
       this.evolve();
-      messages.push(`🌟 ${this.name}이(가) ${this.grade} 품계로 승급했다!`);
+      messages.push(`🌟 ${this.name}${josa(this.name, "이/가")} ${this.grade} 품계로 승급했다!`);
     } else {
       this.mastery = Math.min(MAX_MASTERY, this.mastery + amount);
     }
-    if (this.checkSecretUnlock()) messages.push(`✨ 비기 「${this.secretName}」이(가) 터득되었다!`);
+    if (this.checkSecretUnlock()) messages.push(`✨ 비기 「${this.secretName}」${josa(this.secretName, "이/가")} 터득되었다!`);
     return messages;
   }
 
@@ -237,7 +238,7 @@ export class Player {
       else this.chosenArts[skill.type] = skill.key;
       return [];
     }
-    return [`「${skill.name}」은(는) 신상의 무공 칸에서 골라 쓸 수 있다.`];
+    return [`「${skill.name}」${josa(skill.name, "은/는")} 신상의 무공 칸에서 골라 쓸 수 있다.`];
   }
 
   /** 승급 뒤 성취를 높여 주는 자질을 무공에 적어 둔다. */

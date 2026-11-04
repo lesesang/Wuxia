@@ -265,7 +265,7 @@
     "grade": "기본",
     "base_multiplier": 1.0,
     "qi_cost": 0,
-    "desc": "숨을 고르는 가장 기초적인 심공. 싸움 중에도 내력을 되찾는다.",
+    "desc": "숨을 고르는 가장 기초적인 심법. 싸움 중에도 내력을 되찾는다.",
     "effect": {
       "heal_hp_pct": 5,
       "heal_qi_pct": 15,
@@ -295,7 +295,7 @@
     "grade": "상승",
     "base_multiplier": 1.0,
     "qi_cost": 0,
-    "desc": "근골을 바꾸는 심공. 상처가 빠르게 아문다.",
+    "desc": "근골을 바꾸는 심법. 상처가 빠르게 아문다.",
     "effect": {
       "heal_hp_pct": 20,
       "heal_qi_pct": 20,
@@ -417,7 +417,7 @@
     "grade": "상승",
     "base_multiplier": 1.55,
     "qi_cost": 10,
-    "desc": "소림 칠십이절예. 백 보 밖에서도 권력이 닿는다.",
+    "desc": "소림 칠십이절예. 백 보 밖에서도 권풍이 닿는다.",
     "forms": [
       "격산타우",
       "공권",
@@ -723,7 +723,7 @@
     "grade": "상승",
     "base_multiplier": 1.0,
     "qi_cost": 0,
-    "desc": "면벽의 심공. 몸이 금강처럼 굳고 마음은 잠잠하다.",
+    "desc": "면벽의 심법. 몸이 금강처럼 굳고 마음은 잠잠하다.",
     "effect": {
       "heal_hp_pct": 22,
       "heal_qi_pct": 22,
@@ -753,7 +753,7 @@
     "grade": "상승",
     "base_multiplier": 1.0,
     "qi_cost": 0,
-    "desc": "맑은 소리처럼 몸속을 씻어 내는 아미의 심공.",
+    "desc": "맑은 소리처럼 몸속을 씻어 내는 아미의 심법.",
     "effect": {
       "heal_hp_pct": 25,
       "heal_qi_pct": 25,
@@ -1999,7 +1999,7 @@
     "grade": "기본",
     "base_multiplier": 1.0,
     "qi_cost": 0,
-    "desc": "숨과 몸을 함께 기르는 심공. 내력보다 몸이 먼저 살아난다.",
+    "desc": "숨과 몸을 함께 기르는 심법. 내력보다 몸이 먼저 살아난다.",
     "effect": {
       "heal_hp_pct": 12,
       "heal_qi_pct": 8,
@@ -2014,7 +2014,7 @@
     "grade": "기본",
     "base_multiplier": 1.0,
     "qi_cost": 0,
-    "desc": "숨을 모아 기세로 바꾸는 심공. 잠시 위력이 오른다.",
+    "desc": "숨을 모아 기세로 바꾸는 심법. 잠시 위력이 오른다.",
     "effect": {
       "heal_hp_pct": 3,
       "heal_qi_pct": 10,
@@ -2059,7 +2059,7 @@
     "grade": "기본",
     "base_multiplier": 1.0,
     "qi_cost": 0,
-    "desc": "먼 길과 긴 싸움을 버티는 표국의 심공. 몸이 빨리 추슬러진다.",
+    "desc": "먼 길과 긴 싸움을 버티는 표국의 심법. 몸이 빨리 추슬러진다.",
     "effect": {
       "heal_hp_pct": 12,
       "heal_qi_pct": 10,
@@ -2074,7 +2074,7 @@
     "grade": "기본",
     "base_multiplier": 1.0,
     "qi_cost": 0,
-    "desc": "취한 듯 풀린 호흡으로 내력을 되찾는 개방의 심공.",
+    "desc": "취한 듯 풀린 호흡으로 내력을 되찾는 개방의 심법.",
     "effect": {
       "heal_hp_pct": 7,
       "heal_qi_pct": 16,
@@ -2220,7 +2220,7 @@
     "grade": "신공",
     "base_multiplier": 2.2,
     "qi_cost": 16,
-    "desc": "역대 방주만 읽었다는 타구봉의 끝. 개를 때리듯 고수를 때린다.",
+    "desc": "역대 방주만 읽었다는 타구봉의 끝. 봉 하나로 사방을 봉쇄한다.",
     "forms": [
       "봉타쌍견",
       "악구난로",

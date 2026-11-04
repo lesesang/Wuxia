@@ -32,6 +32,7 @@
  "js/data.js",
  "js/events.js",
  "js/game.js",
+ "js/josa.js",
  "js/main.js",
  "js/market.js",
  "js/meta.js",

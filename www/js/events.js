@@ -5,6 +5,7 @@ import { bonusFor, equipmentBonus, styleWeight } from "./market.js";
 import { recordEventPick, updateKnown } from "./meta.js";
 import { pick, pickWeighted, rng } from "./rng.js";
 import { ALIGNMENTS, applyGrowth, fameRankChanged, getChapter, realmIndex, sumEffect } from "./rules.js";
+import { josa } from "./josa.js";
 
 export const EVENT_STAT_SCALE = 3; // 사건과 기연의 기량 상승 배율. 데이터에 적힌 값의 세 배가 오른다
 
@@ -53,7 +54,7 @@ export function unmetReason(player, requires) {
     if (player[stat] < value) return `${STAT_NAMES[stat]} ${value} 필요`;
   }
   for (const [stat, value] of Object.entries(r.stat_max || {})) {
-    if (player[stat] > value) return `${STAT_NAMES[stat]}이(가) 이미 높다`;
+    if (player[stat] > value) return `${STAT_NAMES[stat]}${josa(STAT_NAMES[stat], "이/가")} 이미 높다`;
   }
   for (const [name, value] of Object.entries(r.alignment_min || {})) {
     const current = player.alignment[name] || 0;
@@ -239,7 +240,7 @@ function equipReward(player, key) {
     player[effect.slot] = key;
     return [`「${name}」 장착`];
   }
-  return [`「${name}」을(를) 받았지만 지금 병장기가 더 좋다`];
+  return [`「${name}」${josa(name, "을/를")} 받았지만 지금 병장기가 더 좋다`];
 }
 
 const STARTER_WEAPONS = {
@@ -397,8 +398,8 @@ export function applyEffects(player, effects) {
   }
 
   if (effects.leave_sect && player.sect) {
-    summary.push(`「${DB.sects[player.sect].name}」을(를) 떠남`);
-    player.note(`${DB.sects[player.sect].name}을(를) 떠났다.`);
+    summary.push(`「${DB.sects[player.sect].name}」${josa(DB.sects[player.sect].name, "을/를")} 떠남`);
+    player.note(`${DB.sects[player.sect].name}${josa(DB.sects[player.sect].name, "을/를")} 떠났다.`);
     player.sect = null;
   }
 
@@ -447,7 +448,7 @@ export function applyEffects(player, effects) {
     if (list.length) {
       const skill = new Skill(list[Math.floor(rng.random() * list.length)]);
       summary.push(`📕 새 무공 「${skill.name}」`, ...player.learnSkill(skill));
-      player.note(`${wanted} 「${skill.name}」을(를) 얻었다.`);
+      player.note(`${wanted} 「${skill.name}」${josa(skill.name, "을/를")} 얻었다.`);
     } else {
       summary.push(`무리+${player.gainStat("martial", 4)}`);
     }
