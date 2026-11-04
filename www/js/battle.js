@@ -24,7 +24,20 @@ const MIN_THROUGH_GUARD = 0.3; // 호신강기를 뚫고 들어오는 최소 비
 const VICTORY_TALK_RATE = 0.3;
 const SPAR_LOSS_HP = 0.1; // 비무에 진 뒤 남는 체력
 const MAX_KILL_POWER = 40; // 쓰러뜨린 적만큼 강해지는 자질의 끝
-const MAX_DAMAGE_REDUCE = 60; // 자질과 기틀을 겹쳐도 받는 피해를 이 이상 줄이지 못한다
+const MAX_DAMAGE_REDUCE = 45; // 자질과 기틀을 겹쳐도 받는 피해를 이 이상 줄이지 못한다
+const MIN_THROUGH_ARMOR = 0.2; // 호신구를 뚫고 들어오는 최소 비율
+const MAX_EVADE = 90; // 어떤 경공도 반드시 피하지는 못한다
+const STEP_STREAK_PENALTY = 15; // 경공을 잇달아 펼치면 걸음을 읽혀 회피가 이만큼씩 떨어진다
+const MIN_STREAK_EVADE = 30;
+const NORMAL_COUNTER_RATE = 0.5; // 필살기가 아닌 공격을 흘리면 되갚는 힘이 절반이다
+const REFUND_RATE = 0.5; // 다 피했을 때 되찾는 내력의 비율
+const MAX_FLEE = 0.9;
+const MAX_CRIT = 0.8;
+const MAX_LIFESTEAL_PCT = 25; // 한 합에 흡수로 채우는 체력의 끝(최대 체력 대비)
+const MAX_PASSIVE_REGEN = 30; // 합마다 저절로 차는 체력과 내력의 한 싸움 끝(최대치 대비)
+const MAX_MIND_HP = 50; // 한 번의 운기로 채우는 체력의 끝
+const MAX_MIND_QI = 70;
+const MIND_STREAK_RATE = 0.5; // 운기를 잇달아 하면 회복이 이만큼으로 준다
 export const INJURY_PENALTY = 7;
 const FAME_BY_TIER = { 일반: 1, 난적: 2, 강적: 4, 보스: 10 };
 const STAT_GROWTH_RANGE = { 일반: [9, 18], 난적: [10, 27], 강적: [18, 37], 보스: [50, 100] };
@@ -194,6 +207,12 @@ export class Battle {
     this.lifestealBuff = null;
     this.askStand = false;      // 쓰러지는 순간 힘을 끌어모을지 플레이어에게 묻는다
     this.standPending = false;
+    this.stepStreak = 0;     // 경공을 잇달아 펼친 수
+    this.mindStreak = 0;     // 운기를 잇달아 한 수
+    this.stolen = 0;         // 이번 합에 흡수한 체력
+    this.regenUsedHp = 0;    // 이번 싸움에 저절로 찬 체력
+    this.regenUsedQi = 0;
+    this.stunRest = false;   // 굳었다 풀린 다음 합
     this.companions = isFinal ? activeCompanions(player) : [];
     this.freeItemUsed = false;  // 한 합에 도구 하나는 합을 쓰지 않는다
     this.weaponG = gearGimmick(player, "weapon");
@@ -269,7 +288,7 @@ export class Battle {
 
   critChance() {
     const p = this.player;
-    return p.mind / 4000 + (sumEffect(p.traits, "crit", "percent") + sectBonus(p, "crit") + alignValue(p.alignment, "사도", "crit")) / 100;
+    return Math.min(MAX_CRIT, p.mind / 4000 + (sumEffect(p.traits, "crit", "percent") + sectBonus(p, "crit") + alignValue(p.alignment, "사도", "crit")) / 100);
   }
 
   /** 무공의 묘리에 병기의 숨은 힘을 더한다 */
@@ -322,7 +341,7 @@ export class Battle {
       notes.push("빈틈을 찔렀다.");
       this.counterPct = 0;
     }
-    if (this.forceCrit || rng.random() < this.critChance() + (g.crit || 0) / 100) {
+    if (this.forceCrit || rng.random() < Math.min(MAX_CRIT, this.critChance() + (g.crit || 0) / 100)) {
       this.forceCrit = false;
       damage *= 1.5 + (sumEffect(p.traits, "crit_power", "percent") + (g.crit_power || 0)) / 100;
       notes.push("회심의 일격이다.");
@@ -342,7 +361,10 @@ export class Battle {
     const p = this.player;
     const steal = (g.lifesteal || 0) + (this.lifestealBuff?.percent || 0);
     if (steal) {
-      const [healed] = p.healAmount(Math.trunc(damage * steal / 100), 0);
+      // 큰 피해를 주어도 한 합에 빨아들이는 양에는 끝이 있다
+      const room = Math.max(0, Math.trunc(p.maxHp() * MAX_LIFESTEAL_PCT / 100) - this.stolen);
+      const [healed] = p.healAmount(Math.min(room, Math.trunc(damage * steal / 100)), 0);
+      this.stolen += Math.max(0, healed);
       if (healed > 0) this.log.push(`(기운을 빨아들였다. 체력 +${healed})`);
     }
     if (g.qi_back) p.healPercent(0, g.qi_back);
@@ -352,7 +374,7 @@ export class Battle {
       this.log.push(`(${this.enemy.name}의 기세가 꺾였다.)`);
     }
     if (g.guard) this.guard = { percent: Math.max(g.guard, this.guard?.percent || 0), rounds: 1 };
-    if (g.stun && !this.enemyStun && rng.random() * 100 < (this.isFinal ? g.stun / 2 : g.stun)) {
+    if (g.stun && !this.enemyStun && !this.stunRest && rng.random() * 100 < (this.isFinal ? g.stun / 2 : g.stun)) {
       this.enemyStun = true;
       this.log.push(`(${this.enemy.name}의 몸이 굳었다.)`);
     }
@@ -467,7 +489,10 @@ export class Battle {
     const boost = 1 + (sectBonus(p, "heal_bonus") + sumEffect(p.traits, "mindset_power", "percent")) / 100;
     const hpValue = skill.effectValue("heal_hp_pct");
     const qiValue = skill.effectValue("heal_qi_pct");
-    const [hpChange, qiChange] = p.healPercent(hpValue > 0 ? hpValue * boost : hpValue, qiValue * boost);
+    // 운기 한 번에 채우는 양에는 끝이 있고, 잇달아 운기하면 숨이 얕아진다
+    const shallow = this.mindStreak > 0 ? MIND_STREAK_RATE : 1;
+    const hpGain = hpValue > 0 ? Math.min(MAX_MIND_HP, hpValue * boost) * shallow : hpValue;
+    const [hpChange, qiChange] = p.healPercent(hpGain, Math.min(MAX_MIND_QI, qiValue * boost) * shallow);
     const signed = (n) => (n >= 0 ? `+${n}` : `${n}`);
     this.log.push(`${skill.name}${josa(skill.name, "을/를")} 운기했다. (체력 ${signed(hpChange)}, 내력 ${signed(qiChange)})`);
     if (this.sealed) {
@@ -579,7 +604,7 @@ export class Battle {
     const skill = this.player.bestOfType("경공");
     if (skill) chance += skill.effectValue("flee_bonus") / 100;
     chance += sumEffect(this.player.traits, "flee_rate", "percent") / 100;
-    if (rng.random() < chance) {
+    if (rng.random() < Math.min(MAX_FLEE, chance)) {
       this.log.push("도주에 성공했다.");
       return true;
     }
@@ -600,7 +625,8 @@ export class Battle {
     if (this.guard) base *= 1 - this.guard.percent / 100;
     if (this.armorG?.guard_pct) base *= 1 - this.armorG.guard_pct / 100;
     for (const c of this.companions) base *= 1 - (c.help.guard || 0) / 100;
-    const raw = Math.max(1, Math.trunc(base * uniform(0.9, 1.1)) - equipmentBonus(this.player, "armor"));
+    const blow = Math.trunc(base * uniform(0.9, 1.1));
+    const raw = Math.max(1, Math.ceil(blow * MIN_THROUGH_ARMOR), blow - equipmentBonus(this.player, "armor"));
     // 호신강기는 맞을 때마다 일정한 양을 막는다. 다만 아무리 약한 공격도 조금은 들어온다
     const guard = sumEffect(this.player.traits, "flat_guard", "amount");
     const taken = guard ? Math.max(Math.ceil(raw * MIN_THROUGH_GUARD), raw - guard) : raw;
@@ -614,17 +640,25 @@ export class Battle {
     const name = special ? `${special.name}` : "공격";
     if (this.enemyStun) {
       this.enemyStun = false;
+      this.stunRest = true; // 풀린 다음 합에는 다시 굳지 않는다
       this.log.push(`${this.enemy.name}${josa(this.enemy.name, "이/가")} 몸을 추스르느라 이번 합에 손을 쓰지 못했다.`);
       return 0;
     }
+    this.stunRest = false;
 
     const g = evadeSkill?.activeGimmick();
     if (evadeSkill) {
-      const chance = evadeSkill.effectValue("evade") + sectBonus(this.player, "evade");
+      // 잇달아 펼치면 걸음을 읽힌다
+      const read = (this.stepStreak - 1) * STEP_STREAK_PENALTY;
+      const base = Math.min(MAX_EVADE, evadeSkill.effectValue("evade") + sectBonus(this.player, "evade"));
+      const chance = Math.max(Math.min(base, MIN_STREAK_EVADE), base - read);
+      if (read > 0) this.log.push(`${this.enemy.name}${josa(this.enemy.name, "이/가")} 걸음을 읽기 시작했다.`);
       if (randInt(1, 100) <= chance) {
-        this.counterPct = evadeSkill.effectValue("counter_pct");
-        this.log.push(`${this.enemy.name}의 ${name}${josa(name, "을/를")} 흘려냈다. (다음 공격 +${halpun(this.counterPct)})`);
+        const counter = Math.trunc(evadeSkill.effectValue("counter_pct") * (special ? 1 : NORMAL_COUNTER_RATE));
+        this.log.push(`${this.enemy.name}의 ${name}${josa(name, "을/를")} 흘려냈다. (다음 공격 +${halpun(counter)})`);
+        // 되받아치기는 빈틈을 찌르는 힘을 쓰지 않는다. 그 힘은 다음 공격의 몫이다
         this.afterEvade(evadeSkill, g);
+        this.counterPct = counter;
         return 0;
       }
     } else {
@@ -668,8 +702,8 @@ export class Battle {
     if (!g) return;
     const p = this.player;
     if (g.refund) {
-      p.qi = Math.min(p.maxQi(), p.qi + skill.qiCost);
-      this.log.push("(힘을 들이지 않았다. 쓴 내력을 되찾았다.)");
+      p.qi = Math.min(p.maxQi(), p.qi + Math.floor(skill.qiCost * REFUND_RATE));
+      this.log.push("(힘을 들이지 않았다. 쓴 내력의 절반을 되찾았다.)");
     }
     if (g.next_crit) this.forceCrit = true;
     if (g.step_heal) {
@@ -728,6 +762,12 @@ export class Battle {
   answerStand(gather) {
     if (!this.standPending) return null;
     this.standPending = false;
+    this.stepStreak = 0;     // 경공을 잇달아 펼친 수
+    this.mindStreak = 0;     // 운기를 잇달아 한 수
+    this.stolen = 0;         // 이번 합에 흡수한 체력
+    this.regenUsedHp = 0;    // 이번 싸움에 저절로 찬 체력
+    this.regenUsedQi = 0;
+    this.stunRest = false;   // 굳었다 풀린 다음 합
     if (!gather) {
       this.log.push("끌어모을 수 있는 힘을 그대로 놓았다. 눈이 감긴다.");
       return this.finish(false);
@@ -768,9 +808,14 @@ export class Battle {
       this.burn.rounds -= 1;
       if (this.burn.rounds <= 0) this.burn = null;
     }
-    const regen = sumEffect(this.player.traits, "round_regen", "hp_pct") + (this.armorG?.regen || 0);
-    const regenQi = sumEffect(this.player.traits, "round_regen", "qi_pct");
-    if ((regen || regenQi) && this.player.hp > 0) this.player.healPercent(regen, regenQi);
+    // 저절로 차오르는 기운은 한 싸움에 일정한 양까지다
+    const regen = Math.min(MAX_PASSIVE_REGEN - this.regenUsedHp, sumEffect(this.player.traits, "round_regen", "hp_pct") + (this.armorG?.regen || 0));
+    const regenQi = Math.min(MAX_PASSIVE_REGEN - this.regenUsedQi, sumEffect(this.player.traits, "round_regen", "qi_pct"));
+    if ((regen > 0 || regenQi > 0) && this.player.hp > 0) {
+      this.player.healPercent(regen, regenQi);
+      this.regenUsedHp += regen;
+      this.regenUsedQi += regenQi;
+    }
     if (this.regen && this.player.hp > 0) {
       this.player.healPercent(this.regen.hp, this.regen.qi);
       this.regen.rounds -= 1;
@@ -887,6 +932,10 @@ export class Battle {
     }
     this.freeItemUsed = false;
     this.roundNum += 1;
+    this.stolen = 0;
+    // 다른 일을 하면 잇달아 쓴 것이 끊긴다. 운기는 쓴 뒤에 세어 이번 운기가 앞의 운기를 볼 수 있게 한다
+    this.stepStreak = action === "경공" ? this.stepStreak + 1 : 0;
+    const mindNow = action === "심법";
     let evadeSkill = null;
 
     if (action === "도주" && !this.isFinal) {
@@ -905,6 +954,7 @@ export class Battle {
       this.basicAttack();
     }
 
+    this.mindStreak = mindNow ? this.mindStreak + 1 : 0;
     if (!this.enemy.isAlive()) return this.finish(true);
 
     const phase = this.enemy.advancePhase();

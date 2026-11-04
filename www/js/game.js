@@ -19,6 +19,7 @@ import {
 import { halpun, josa } from "./josa.js";
 
 const NATURAL_REGEN = 5;
+const MAX_TURN_REGEN = 30;
 const EXPLORE_BATTLE = 0.35; // 나머지는 사건과 기연
 const EXPLORE_EVENT = 0.45;
 const SPARRING_CHANCE = 0.65;
@@ -544,8 +545,9 @@ export class Game {
     const p = this.player;
     const lines = [...this.commitCodex(), ...this.checkRealm()];
     p.turn += 1;
-    const hp = NATURAL_REGEN + sumEffect(p.traits, "turn_regen", "hp_pct");
-    const qi = NATURAL_REGEN + sumEffect(p.traits, "turn_regen", "qi_pct");
+    // 달마다 저절로 차는 양에도 끝이 있어 요양할 일이 남는다
+    const hp = Math.min(MAX_TURN_REGEN, NATURAL_REGEN + sumEffect(p.traits, "turn_regen", "hp_pct"));
+    const qi = Math.min(MAX_TURN_REGEN, NATURAL_REGEN + sumEffect(p.traits, "turn_regen", "qi_pct"));
     p.healPercent(hp, qi);
     lines.push(...this.alignmentMonth());
     if (CHAPTER_STARTS.includes(p.turn)) {

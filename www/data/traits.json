@@ -1334,7 +1334,7 @@
   },
   "전투광": {
     "name": "싸움귀신",
-    "desc": "전투가 시작되면 네 기량이 전투 중에만 90 오른다. 전투가 끝나면 체력과 내력을 각각 2할 5푼 회복한다.",
+    "desc": "전투가 시작되면 네 기량이 전투 중에만 60 오른다. 전투가 끝나면 체력과 내력을 각각 1할 5푼 회복한다.",
     "rarity": "전설",
     "cost": 18,
     "effects": [
@@ -1342,47 +1342,47 @@
         "type": "battle_buff",
         "trigger": "on_battle_start",
         "stat": "external",
-        "amount": 90,
+        "amount": 60,
         "temporary": true
       },
       {
         "type": "battle_buff",
         "trigger": "on_battle_start",
         "stat": "internal",
-        "amount": 90,
+        "amount": 60,
         "temporary": true
       },
       {
         "type": "battle_buff",
         "trigger": "on_battle_start",
         "stat": "martial",
-        "amount": 90,
+        "amount": 60,
         "temporary": true
       },
       {
         "type": "battle_buff",
         "trigger": "on_battle_start",
         "stat": "mind",
-        "amount": 90,
+        "amount": 60,
         "temporary": true
       },
       {
         "type": "battle_buff",
         "trigger": "on_battle_end",
         "stat": "hp",
-        "percent": 25
+        "percent": 15
       },
       {
         "type": "battle_buff",
         "trigger": "on_battle_end",
         "stat": "qi",
-        "percent": 25
+        "percent": 15
       }
     ]
   },
   "불굴": {
     "name": "불사지체",
-    "desc": "전투에서 합마다 체력을 2푼, 달마다 체력을 1할 5푼 더 회복한다. 베여도 베여도 살이 차오른다.",
+    "desc": "전투에서 합마다 체력을 2푼(한 싸움에 3할까지), 달마다 체력을 1할 5푼 더 회복한다. 베여도 베여도 살이 차오른다.",
     "rarity": "전설",
     "cost": 18,
     "effects": [
