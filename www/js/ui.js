@@ -232,6 +232,16 @@ function helpModal() {
     "<b>심법</b>은 숨을 고르며 회복하고 점혈을 풉니다. 위험하면 <b>도주</b>도 방법입니다.",
     "내상은 전투가 끝나도 남고 주는 피해를 줄입니다."])}
     ${section("장터와 성장", ["매년 말 장터가 열리고 달을 쓰지 않습니다. 더 나은 병기와 호신구가 항상 진열되고, 익힌 무공과 맞는 물건이 더 자주 나옵니다.", "도구는 계열이 맞으면 제 효과를 내고 맞지 않으면 절반입니다. 수련 도구는 언제든, 전투 도구는 전투 중에 씁니다.", "같은 계열 무공의 성취는 품계가 같으면 절반, 낮으면 3할을 주무공으로 옮길 수 있습니다. 신상의 무공 칸에서 합니다.", "새해가 밝으면 체력과 내력이 가득 차고 내상이 낫습니다.", "무공은 성취 100을 넘겨 더 쌓으면 다음 품계로 승급합니다. 일절이 승급의 끝입니다. 신공은 출신의 이야기나 카르마로 연 인연에서만 얻습니다.", "병기는 주무공과 계열이 맞아야 제 힘을 냅니다. 맞지 않으면 3/4만 나옵니다.", "사건의 선택으로 정도, 사도, 마도 성향이 쌓이고 혜택과 파는 물건이 달라집니다."])}
+    ${section("카르마를 얻는 길", [
+    "<b>도달한 장</b>: 천마까지 가지 못하고 끝나면 1장 +1부터 5장 +5까지 받습니다. 천마에게 져도 +5입니다.",
+    `<b>결말</b>: 천마까지 가면 장 대신 받습니다. ${Object.entries(DB.endings.karma).filter(([k]) => !["생사경", "사망"].includes(k)).map(([k, v]) => `${esc(DB.endings.titles[k])} +${v}`).join(", ")}`,
+    "<b>경지</b>: 어느 쪽이든 오른 경지에 따라 더 받습니다. 절정 +1, 초절정 +2, 화경 +3, 현경 +4",
+    "<b>공적</b>: 처음 이룰 때 한 번 더 받습니다. 강호록의 공적 칸에서 볼 수 있습니다.",
+    "카르마는 써도 누적은 줄지 않고, 누적 보상을 다 받은 뒤에도 계속 쌓입니다."])}
+    ${section("생사경", [
+    "현경 너머의 숨은 경지이자 가장 높은 결말입니다. 돌파로는 오르지 못하고, 천마를 쓰러뜨린 바로 그 순간에만 판가름 납니다.",
+    "네 기량이 끝에 가깝고 실전이 충분히 쌓인 무인이, 체력과 내력을 넉넉히 남긴 채 천마를 넘어서면 이릅니다. 카르마는 모두 25를 받습니다."])}
+    ${section("겹쳐 받을 때", ["자질, 기틀, 채비, 누적 보상에서 받는 시작 병기와 갑의는 겹칠수록 한 단계씩 좋아지고, 끝을 넘으면 은자로 돌아옵니다. 같은 비급과 무공이 겹치면 성취가 됩니다."])}
     ${section("저장", ["매달 초 자동으로 저장됩니다. 도중에 끄면 그달의 처음부터 이어 합니다."])}
     <label class="guide-off"><input type="checkbox" id="guide-off" class="toggle" ${storage.get("wuxia-show-guide") === "off" ? "checked" : ""}> 강호행을 시작할 때 이 안내문을 보지 않기</label>`);
 }
@@ -306,17 +316,25 @@ const RARITY_ORDER = ["일반", "희귀", "전설"];
 
 /** 자질을 등급별 칸으로 묶어 그린다. 칸 안의 순서는 traits.json의 순서를 따른다. */
 function byRarity(keys, row) {
-  return RARITY_ORDER.map((rarity) => {
-    const rows = keys.filter((key) => DB.traits[key].rarity === rarity);
+  const common = RARITY_ORDER.map((rarity) => {
+    const rows = keys.filter((key) => DB.traits[key].rarity === rarity && !DB.traits[key].origin);
     return rows.length ? `<h4 class="shop-group">${rarity}</h4>${rows.map(row).join("")}` : "";
   }).join("");
+  const own = byOrigin(keys.filter((key) => DB.traits[key].origin), (key) => DB.traits[key].origin);
+  return common + (own.length ? `<h4 class="shop-group">출신 전용</h4>${own.map(row).join("")}` : "");
+}
+
+/** 출신 전용 항목은 출신 차례대로 모은다. 같은 출신끼리는 원래 순서를 지킨다. */
+function byOrigin(keys, originOf) {
+  const rank = (key) => DB.origins.order.indexOf(originOf(key));
+  return [...keys].sort((a, b) => rank(a) - rank(b));
 }
 
 function filterRow() {
   return `<div class="filter-row">${["전체", "능력", "물건과 무공", "사건 반응", "출신 전용"].map((r) => `<button class="filter-btn${ui.traitFilter === r ? " on" : ""}" data-act="trait-filter" data-key="${r}">${r}</button>`).join("")}</div>`;
 }
 
-const GIFT_EFFECTS = ["start_item", "start_equip", "start_skill", "start_style_weapon", "start_style_tool", "start_battle_tool", "start_style_skill"];
+const GIFT_EFFECTS = ["start_item", "start_armor", "start_skill", "start_style_weapon", "start_style_tool", "start_battle_tool", "start_style_skill"];
 
 /** 자질의 갈래. 고르는 화면과 상점의 분류에 쓴다. */
 function traitKind(t) {
@@ -347,6 +365,10 @@ function shopPanels(meta) {
   const traits = byRarity(visibleTraits().filter((k) => !meta.unlocked_traits.includes(k)),
     (k) => shopRow(traitName(DB.traits[k]), `<p class="pick-desc">${esc(DB.traits[k].desc)}</p>${originOnly(DB.traits[k].origin)}`, "unlock-trait", k, DB.traits[k].cost, meta));
   const groups = [...new Set(Object.values(DB.karma.upgrades).map((u) => u.group))];
+  const upgradeEntries = (g) => {
+    const entries = Object.entries(DB.karma.upgrades).filter(([, u]) => u.group === g);
+    return g === "출신 전용" ? byOrigin(entries, ([, u]) => u.origin) : entries;
+  };
   const upgradeRow = ([key, u]) => {
     const level = upgradeLevel(key, meta);
     const cost = u.costs[level];
@@ -355,9 +377,12 @@ function shopPanels(meta) {
     if (cost === undefined) return `<div class="pick-row"><div class="pick-main"><div class="pick-name">${name}</div>${desc}</div><span class="pick-stats">다 올림</span></div>`;
     return shopRow(name, desc, "buy-upgrade", key, cost, meta, "올리기");
   };
-  const upgrades = groups.map((g) => `<h4 class="shop-group">${esc(g)}</h4>${Object.entries(DB.karma.upgrades).filter(([, u]) => u.group === g).map(upgradeRow).join("")}`).join("");
-  const content = Object.entries(DB.karma.content).filter(([k]) => !meta.content.includes(k))
-    .map(([k, c]) => shopRow(esc(c.name), `<p class="pick-desc">${esc(c.desc)}</p>${originOnly(c.origin)}`, "buy-content", k, c.cost, meta)).join("");
+  const upgrades = groups.map((g) => `<h4 class="shop-group">${esc(g)}</h4>${upgradeEntries(g).map(upgradeRow).join("")}`).join("");
+  const contentRow = ([k, c]) => shopRow(esc(c.name), `<p class="pick-desc">${esc(c.desc)}</p>${originOnly(c.origin)}`, "buy-content", k, c.cost, meta);
+  const contentLeft = Object.entries(DB.karma.content).filter(([k]) => !meta.content.includes(k));
+  const contentOwn = byOrigin(contentLeft.filter(([, c]) => c.origin), ([, c]) => c.origin);
+  const content = contentLeft.filter(([, c]) => !c.origin).map(contentRow).join("")
+    + (contentOwn.length ? `<h4 class="shop-group">출신 전용</h4>${contentOwn.map(contentRow).join("")}` : "");
   const { cost } = DB.karma.legacy;
   const legacy = meta.legacy_open ? emptyNote("이미 열었습니다. 강호행을 시작할 때 유산을 고를 수 있습니다.")
     : !legacyAvailable(meta) ? emptyNote("천마를 한 번 쓰러뜨리면 살 수 있습니다.")
@@ -373,7 +398,7 @@ function shopPanels(meta) {
   return {
     provision: `<p class="section-note">채비는 다음 강호행 한 번에만 쓰입니다. 시작할 때 저절로 꺼내 쓰고, 그 전에는 물릴 수 있습니다.</p>${provisions}`,
     origin: origins || emptyNote("모든 출신을 해금했습니다."),
-    trait: filterRow() + (traits || emptyNote("이 갈래의 자질을 모두 해금했습니다.")),
+    trait: filterRow() + `<p class="section-note">시작 병기와 갑의, 비급은 자질과 기틀, 채비가 겹치면 더 좋아집니다. 입문서를 보세요.</p>` + (traits || emptyNote("이 갈래의 자질을 모두 해금했습니다.")),
     upgrade: `<p class="section-note">기틀은 장착하지 않아도 모든 강호행에 적용됩니다.</p>${upgrades}`,
     content: `<p class="section-note">해금한 인연은 강호에서 만날 수 있습니다.</p>${content || emptyNote("모든 인연을 해금했습니다.")}`,
     legacy,
@@ -389,19 +414,10 @@ function rewardPanel(meta) {
     const done = meta.total_karma >= r.at;
     return `<div class="reward-row${done ? " done" : ""}"><span class="reward-at">${r.at}</span><span class="reward-main"><b>${done ? "✓ " : ""}${esc(r.name)}</b><span class="pick-desc block">${esc(r.desc)}</span></span></div>`;
   }).join("");
-  const { achievements } = DB.karma;
-  const endings = Object.entries(DB.endings.karma).filter(([k]) => !["생사경", "사망"].includes(k)).map(([k, v]) => `${DB.endings.titles[k]} +${v}`).join(", ");
-  const left = achievements.filter((a) => !a.hidden && !meta.achievements.includes(a.key));
-  const total = left.reduce((sum, a) => sum + a.karma, 0);
   return `<p class="section-note">카르마를 써도 줄지 않는 누적 카르마가 쌓이면 저절로 받습니다. 사거나 장착할 필요가 없습니다.</p>
     <div class="reward-progress"><div class="reward-track"><span style="width:${percent(Math.min(meta.total_karma, last), last)}%"></span></div>
       <p>누적 카르마 <b>${meta.total_karma}</b>${next ? `, 다음 「${esc(next.name)}」까지 ${next.at - meta.total_karma}` : ", 보상은 모두 받았습니다. 카르마는 계속 쌓이고 상점에서 쓸 수 있습니다"}</p></div>
-    ${rows}
-    <h4 class="shop-group">카르마를 얻는 길</h4>
-    <p class="help-line"><b>도달한 장</b>: 천마까지 가지 못하고 끝나면 1장 +1부터 5장 +5까지. 천마에게 져도 +5</p>
-    <p class="help-line"><b>결말</b>: 장 대신 받습니다. ${esc(endings)}</p>
-    <p class="help-line"><b>경지</b>: 어느 쪽이든 오른 경지에 따라 더 받습니다. 절정 +1, 초절정 +2, 화경 +3, 현경 +4</p>
-    <p class="help-line"><b>공적</b>: 아직 이루지 못한 공적 ${left.length}개, 합쳐서 +${total}. 강호록의 공적 칸에서 볼 수 있습니다.</p>`;
+    ${rows}`;
 }
 
 function affordableCount(meta) {
@@ -430,7 +446,8 @@ function renderShop() {
 function chosenLegacy(meta) { return ui.legacy === null ? null : meta.legacies[ui.legacy] || null; }
 
 function contentSetup(meta) {
-  const rows = meta.content.filter((key) => !DB.karma.content[key].origin || DB.karma.content[key].origin === ui.origin).map((key) => `<div class="pick-row"><div class="pick-main"><div class="pick-name">${esc(DB.karma.content[key].name)}</div><p class="pick-desc">${esc(DB.karma.content[key].desc)}</p></div>
+  const rows = meta.content.filter((key) => !DB.karma.content[key].origin || DB.karma.content[key].origin === ui.origin)
+    .sort((a, b) => Number(!!DB.karma.content[a].origin) - Number(!!DB.karma.content[b].origin)).map((key) => `<div class="pick-row"><div class="pick-main"><div class="pick-name">${esc(DB.karma.content[key].name)}</div><p class="pick-desc">${esc(DB.karma.content[key].desc)}</p></div>
     <label class="content-toggle"><input type="checkbox" class="toggle" data-content="${esc(key)}" ${meta.content_off.includes(key) ? "" : "checked"}> 등장</label></div>`).join("");
   return rows ? `<p class="section-note">이번에 만나고 싶지 않은 인연은 꺼 둘 수 있습니다.</p>${rows}` : emptyNote("아직 해금한 인연이 없습니다. 카르마 상점에서 살 수 있습니다.");
 }
@@ -783,6 +800,26 @@ function renderMarket() {
     <div class="action-area"><div class="action-inner"><button class="next-btn" data-act="leave-market">${market.special ? "⚔️ 떠나서 결전으로" : `▶️ 장터를 떠난다 (은자 ${player.silver})`}</button></div></div>`;
 }
 
+/** 첫 달 전에 쓸 무공을 고르는 화면. 시간이 지나지 않는다. */
+function renderArtsPick() {
+  const p = game.player;
+  const names = { 공격무공: "주무공", 심공: "심법", 경공: "경공" };
+  const groups = Object.entries(names).filter(([type]) => p.skillsOfType(type).length).map(([type, label]) => {
+    const inUse = type === "공격무공" ? p.bestSkill() : p.bestOfType(type);
+    const rows = p.skillsOfType(type).map((s) => {
+      const on = inUse?.key === s.key;
+      const stat = s.type === "공격무공" ? `위력 ${s.effectiveMultiplier().toFixed(2)}배, 내력 ${s.qiCost}` : "";
+      return `<button class="choice-btn${on ? " special" : ""}" data-act="main-skill" data-key="${esc(s.key)}" ${on ? "disabled" : ""}>${on ? `<span class="choice-tag">쓰는 무공</span>` : ""}${esc(s.name)} <small>${esc(s.grade)}${stat ? `, ${esc(stat)}` : ""}<br>${esc(s.desc)}</small></button>`;
+    }).join("");
+    return `<h4 class="market-group">${label}</h4>${rows}`;
+  }).join("");
+  return `<div class="stage"><div class="stage-inner"><div class="event-sheet">
+      <h2 class="event-title">쓸 무공을 정한다</h2>
+      <div class="event-body"><p class="event-text">무공을 여럿 지니고 길을 나선다. 무엇을 앞세울지 먼저 정한다. 병기와 도구, 성취는 주무공에 맞춰 받는다.</p>
+      ${groups}</div></div></div></div>
+    <div class="action-area"><div class="action-inner"><button class="next-btn" data-act="finish-arts">▶️ 이대로 나선다</button><p class="hint flush">달이 지나지 않는 번외 시간입니다. 나중에도 신상에서 바꿀 수 있습니다.</p></div></div>`;
+}
+
 function renderEvent() {
   const p = game.player;
   const view = eventView(p, game.event.key);
@@ -844,6 +881,7 @@ function renderPlay() {
   setMood(game.market ? "market" : "calm");
   let middle;
   if (!game.player.alive) middle = renderEnding();
+  else if (game.pickingArts) middle = renderArtsPick();
   else if (game.market) middle = renderMarket();
   else if (game.event) middle = renderEvent();
   else middle = renderTurn();
@@ -1005,6 +1043,7 @@ const actions = {
   interlude: (el) => { game.battleInterlude(Number(el.dataset.key)); render(); },
   buy: (el) => { game.marketBuy(el.dataset.key); render(); },
   "leave-market": () => { game.marketLeave(); render(); },
+  "finish-arts": () => { game.finishArtsPick(); render(); },
   "main-skill": (el) => { game.setMainSkill(el.dataset.key); render(); },
   "transfer-mastery": (el) => { game.transferMastery(el.dataset.key); render(); },
   "use-item": (el) => { game.useItem(el.dataset.key); render(); },

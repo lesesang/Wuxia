@@ -17,6 +17,9 @@ const MASTERY_BONUS = 0.003;    // 성취 1당 위력 계수 증가
 const EFFECT_GRADE_BONUS = 0.2; // 심공·경공 승급 1단계당 효과 증가율
 
 export const START_SILVER = 30;
+const DUPLICATE_SKILL_MASTERY = 25;
+const START_ARMORS = ["가죽호구", "철사갑의", "금사보의"]; // 겹쳐 받으면 한 단계씩 좋아진다
+const SPARE_ARMOR_SILVER = 40; // 넘치는 갑의는 은자로 돌아온다
 const CHRONICLE_LIMIT = 40;
 export const STAT_CAP = 999;
 export const STAT_SCALE = 10; // 기량 10이 예전 기량 1에 해당한다. 공식은 이 값으로 나누어 쓴다
@@ -150,7 +153,9 @@ export class Player {
     this.mainSkill = null;
     this.chosenArts = {}; // 쓰는 심법과 경공
     for (const key of [...(data.skills || []), ...startSkills(traitKeys)]) {
-      if (!this.hasSkill(key)) this.learnSkill(new Skill(key));
+      // 같은 무공을 또 받으면 그만큼 깊어진다
+      if (this.hasSkill(key)) this.getSkill(key).gainMastery(DUPLICATE_SKILL_MASTERY);
+      else this.learnSkill(new Skill(key));
     }
 
     this.silver = START_SILVER + (data.silver || 0) + sumEffect(traitKeys, "start_silver", "amount");
@@ -160,8 +165,12 @@ export class Player {
     for (const key of traitKeys) {
       for (const effect of DB.traits[key]?.effects || []) {
         if (effect.type === "start_item") this.inventory[effect.item] = (this.inventory[effect.item] || 0) + effect.amount;
-        if (effect.type === "start_equip") this.armor = effect.item;
       }
+    }
+    const armorTier = sumEffect(traitKeys, "start_armor", "tier");
+    if (armorTier) {
+      this.armor = START_ARMORS[Math.min(armorTier, START_ARMORS.length) - 1];
+      this.silver += Math.max(0, armorTier - START_ARMORS.length) * SPARE_ARMOR_SILVER;
     }
     this.bossWeaken = 0;
     this.chronicle = [];
@@ -169,6 +178,11 @@ export class Player {
     this.chains = [];
     this.chainsDone = 0;
     this.alignment = newAlignment();
+    for (const key of traitKeys) {
+      for (const effect of DB.traits[key]?.effects || []) {
+        if (effect.type === "start_alignment") this.alignment[effect.side] += effect.amount;
+      }
+    }
     this.flags = [];
     this.seenEvents = [];
     this.kills = 0;
@@ -223,7 +237,12 @@ export class Player {
     this.injury = Math.max(0, Math.min(MAX_INJURY, this.injury + amount));
   }
 
-  adjustAlignment(name, amount) { this.alignment[name] = Math.max(0, (this.alignment[name] || 0) + amount); }
+  adjustAlignment(name, amount) {
+    // 그 길로 기운 자질이 있으면 오를 때 더 오른다
+    const extra = amount > 0 ? this.traits.flatMap((k) => DB.traits[k]?.effects || [])
+      .filter((e) => e.type === "alignment_gain" && e.side === name).reduce((sum, e) => sum + e.amount, 0) : 0;
+    this.alignment[name] = Math.max(0, (this.alignment[name] || 0) + amount + extra);
+  }
   hasFlag(flag) { return this.flags.includes(flag); }
   addFlag(flag) { if (!this.hasFlag(flag)) this.flags.push(flag); }
 

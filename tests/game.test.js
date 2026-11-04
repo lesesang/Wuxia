@@ -6,7 +6,7 @@ import { listAssets } from "../tools/build_asset_list.js";
 import { Battle, Enemy, statureEnemy, useConsumable } from "../www/js/battle.js";
 import { GRADE_ORDER, Player, Skill } from "../www/js/character.js";
 import { DB } from "../www/js/data.js";
-import { applyEffects, grantStartGifts, canStartChain, checkRequires, enemyIntro, eventView, LAST_CHAIN_TURN, pickRandomEvent, resolveChoice, validateChains, validateEvents } from "../www/js/events.js";
+import { applyEffects, grantStartGear, grantStartGifts, canStartChain, checkRequires, enemyIntro, eventView, LAST_CHAIN_TURN, pickRandomEvent, resolveChoice, validateChains, validateEvents } from "../www/js/events.js";
 import { buildEpilogue, Game } from "../www/js/game.js";
 import { josa } from "../www/js/josa.js";
 import { blockReason, buy, equipmentBonus, openMarket, priceOf } from "../www/js/market.js";
@@ -1441,6 +1441,69 @@ test("빠진 항목이 남은 저장을 읽어도 깨지지 않는다", () => {
   assert.equal(q.inventory.없는물건, undefined);
 });
 
+test("시작 병기와 갑의, 비급, 무공은 겹쳐도 효과가 사라지지 않는다", () => {
+  const armor = (traits) => new Player("무림초출", traits).armor;
+  assert.equal(armor(["환생_호구_1"]), "가죽호구");
+  assert.equal(armor(["가보의호구"]), "철사갑의");
+  assert.equal(armor(["가보의호구", "환생_호구_1"]), "금사보의");
+  const twoBooks = new Player("하북팽가", ["가전비급", "채비_명품비급"]);
+  const before = twoBooks.bestSkill().mastery;
+  assert.equal(grantStartGifts(twoBooks).length > 0, true);
+  assert.equal(twoBooks.bestSkill().mastery, before + 30);
+  const weapons = new Player("하북팽가", ["병기광", "환생_병기_1", "환생_병기_2", "채비_쓸만한병기"]);
+  const silver = weapons.silver;
+  grantStartGear(weapons);
+  assert.equal(weapons.silver, silver + 60);
+  assert.equal(equipmentBonus(weapons, "weapon") >= 50, true);
+  const seen = {};
+  for (const t of Object.values(DB.traits).filter((x) => !x.origin)) {
+    for (const e of t.effects || []) if (e.type === "start_skill") { assert.ok(!seen[e.skill], e.skill); seen[e.skill] = true; }
+  }
+  const low = new Player("하북팽가", ["배수진", "네형의칼"]);
+  const battle = new Battle(low, new Enemy("낭인"));
+  low.hp = 1;
+  rng.random = () => 0.5;
+  battle.strike(100, "시험");
+  assert.ok(battle.enemy.maxHp - battle.enemy.hp > 150, "몰릴 때의 효과는 더해진다");
+});
+
+test("무공을 여럿 들고 시작하면 달이 가기 전에 쓸 무공을 고르고 그에 맞춰 행장을 받는다", () => {
+  const data = loadMeta();
+  data.unlocked_origins = Object.keys(DB.origins.origins);
+  data.unlocked_traits = ["가전비급", "수련도구"];
+  data.total_karma = 40;
+  saveMeta(data);
+  const game = new Game();
+  game.start("하북팽가", ["가전비급", "수련도구"]);
+  assert.ok(game.pickingArts);
+  assert.equal(game.event, null);
+  const other = game.player.skillsOfType("공격무공").find((s) => s.key !== game.player.mainSkill);
+  game.setMainSkill(other.key);
+  game.finishArtsPick();
+  assert.ok(!game.pickingArts);
+  assert.equal(game.player.mainSkill, other.key);
+  assert.equal(game.event?.key, "서장_하북팽가");
+  const plain = new Game();
+  plain.start("하북팽가");
+  assert.ok(!plain.pickingArts);
+  withKarma(0);
+});
+
+test("성향 자질은 희귀 이상이고 오를 때 더 오른다", () => {
+  for (const t of Object.values(DB.traits)) {
+    if (t.effects?.some((e) => e.type === "start_alignment" || e.type === "alignment_gain")) assert.ok(["희귀", "전설"].includes(t.rarity), t.name);
+  }
+  const p = new Player("무림초출", ["호연지기"]);
+  assert.equal(p.alignment.정도, 5);
+  p.adjustAlignment("정도", 2);
+  assert.equal(p.alignment.정도, 8);
+  const killer = new Player("무림초출", ["천살성"]);
+  const b = new Battle(killer, new Enemy("낭인"));
+  const base = b.attackScale();
+  killer.kills = 1000;
+  assert.ok(Math.abs(b.attackScale() / base - 1.4) < 0.01);
+});
+
 test("조사는 받침에 맞게 붙는다", () => {
   assert.equal(josa("천마", "을/를"), "를");
   assert.equal(josa("낭인", "을/를"), "을");
@@ -1753,6 +1816,7 @@ test("시작 선물은 주무공 계열을 따른다", () => {
   assert.ok(p.skills.some((s) => s.category === "도법" && s.grade === "명품" && s.key !== "오호단문도"));
   const drifter = new Player("무림초출", ["수련도구", "현기의호흡"]);
   applyEffects(drifter, { start_weapon: "창법", start_mindset: "양생공" });
+  grantStartGear(drifter);
   assert.equal(drifter.inventory.납창추, 5, "강호초출은 첫 병기를 고른 뒤 받는다");
   assert.ok(drifter.hasSkill("곤륜현기공"), "자질로 받은 심법은 첫 심법을 골라도 남는다");
 });

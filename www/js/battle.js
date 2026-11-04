@@ -14,6 +14,7 @@ const SECRET_INTERNAL_RATE = 1.0;
 const MIND_GUARD_RATE = 6000; // 심경이 이 값일 때 받는 피해가 모두 사라지는 비율
 const MAX_MIND_GUARD = 0.15;
 const FLEE_BASE = 0.5;
+const MAX_KILL_POWER = 40; // 쓰러뜨린 적만큼 강해지는 자질의 끝
 const MAX_DAMAGE_REDUCE = 60; // 자질과 기틀을 겹쳐도 받는 피해를 이 이상 줄이지 못한다
 export const INJURY_PENALTY = 7;
 const FAME_BY_TIER = { 일반: 1, 난적: 2, 강적: 4, 보스: 10 };
@@ -181,6 +182,7 @@ export class Battle {
     const p = this.player;
     let scale = 1 + realmBonus(p.realm);
     scale *= 1 + sumEffect(p.traits, "damage_bonus", "percent") / 100;
+    scale *= 1 + Math.min(MAX_KILL_POWER, p.kills * sumEffect(p.traits, "kill_power", "percent")) / 100;
     scale *= 1 + sectBonus(p, "damage") / 100;
     scale *= 1 - p.injury * INJURY_PENALTY / 100;
     if (p.dominantAlignment() === "마도") scale *= 1 + MA_DAMAGE_BONUS / 100;
@@ -222,9 +224,12 @@ export class Battle {
     const notes = [];
     const p = this.player;
     if (this.roundNum <= 1) damage *= 1 + sumEffect(p.traits, "first_strike", "percent") / 100;
-    const desperate = p.traits.flatMap((k) => DB.traits[k]?.effects || []).find((e) => e.type === "low_hp_power");
-    if (desperate && p.hp <= p.maxHp() * desperate.below / 100) {
-      damage *= 1 + desperate.percent / 100;
+    // 몰릴수록 강해지는 효과는 조건이 맞는 것끼리 더한다
+    const desperate = p.traits.flatMap((k) => DB.traits[k]?.effects || [])
+      .filter((e) => e.type === "low_hp_power" && p.hp <= p.maxHp() * e.below / 100)
+      .reduce((sum, e) => sum + e.percent, 0);
+    if (desperate) {
+      damage *= 1 + desperate / 100;
       notes.push("배수진!");
     }
     if (this.counterPct) {
