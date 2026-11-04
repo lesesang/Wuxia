@@ -987,6 +987,7 @@ export class Battle {
       if (!this.spar) {
         this.player.kills += 1;
         if (!this.oneOff && isNamed(this.enemy.key) && !this.player.slain.includes(this.enemy.key)) this.player.slain.push(this.enemy.key);
+        if (this.isFinal && !this.player.slain.includes("천마")) this.player.slain.push("천마"); // 이제 천하제일인이라 불린다
         const flag = DB.enemies[this.enemy.key].kill_flag;
         if (flag) this.player.addFlag(flag);
         const side = dominant(this.player.alignment);
@@ -1001,7 +1002,7 @@ export class Battle {
       this.log.push(this.spar ? `${this.enemy.name}${josa(this.enemy.name, "을/를")} 꺾었다. 실전 경험 +${exp}` : `${this.enemy.name}${josa(this.enemy.name, "을/를")} 쓰러뜨렸다. 실전 경험 +${exp}`);
       const fameBefore = this.player.fame;
       this.player.fame += FAME_BY_TIER[this.enemy.tier] || 0;
-      const rank = fameRankChanged(fameBefore, this.player.fame);
+      const rank = fameRankChanged(this.player, fameBefore, this.player.fame);
       if (rank) {
         this.log.push(`강호에서 ${rank}${josa(rank, "으로")} 불리기 시작했다.`);
         this.player.note(`강호에서 ${rank}${josa(rank, "으로")} 불리기 시작했다.`);

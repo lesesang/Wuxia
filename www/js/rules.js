@@ -305,14 +305,19 @@ export function talkLine(player, table, seed = null) {
 export const monthLine = (month) => pick(DB.flavor.months[String(month)]);
 export const actionLine = (action) => pick(DB.flavor.actions[action]);
 
-export function fameRank(fame) {
-  let name = DB.flavor.fame_ranks[0][1];
-  for (const [threshold, rank] of DB.flavor.fame_ranks) if (fame >= threshold) name = rank;
-  return name;
+/** 명성으로 불리는 이름. 이름값과 성향을 함께 따르고, 높은 이름은 경지가 받쳐야 한다. 천하제일인은 천마를 넘어선 사람뿐이다 */
+export function fameRank(player, fame = player.fame) {
+  if (player.realm === "생사경" || player.slain.includes("천마")) return DB.flavor.fame_top;
+  const side = dominant(player.alignment);
+  let names = DB.flavor.fame_ranks[0].names;
+  for (const rank of DB.flavor.fame_ranks) {
+    if (fame >= rank.at && (!rank.realm_min || realmIndex(player.realm) >= realmIndex(rank.realm_min))) names = rank.names;
+  }
+  return names[side] ?? names.기본;
 }
 
-export const fameRankChanged = (before, after) =>
-  (fameRank(before) !== fameRank(after) ? fameRank(after) : null);
+export const fameRankChanged = (player, before, after) =>
+  (fameRank(player, before) !== fameRank(player, after) ? fameRank(player, after) : null);
 
 /**
  * 강호에서 불리는 별호. 앞글자는 성향과 그 깊이, 출신에서, 뒷글자는 주무공 계열과 명성에서 온다.
