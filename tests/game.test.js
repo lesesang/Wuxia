@@ -3152,3 +3152,45 @@ test("무공의 품계가 위상에 맞는다", () => {
   p.learnSkill(new Skill("타구봉법"));
   assert.equal(p.mainSkill, "타구봉법", "걸개곤법이 이어진다");
 });
+
+test("사건의 전투는 그 사건만의 이름으로 나오고 이름 있는 적으로 치지 않는다", () => {
+  const game = newGame();
+  game.player.turn = 30;
+  game.startBattle("낭인", false, "고리대의 왈패 대장");
+  assert.equal(game.battle.enemy.name, "고리대의 왈패 대장");
+  assert.equal(game.battle.enemy.desc, "");
+  assert.ok(game.log.some((l) => l.includes("왈패 대장")));
+  const g2 = newGame();
+  g2.player.turn = 30;
+  g2.startBattle("녹림채주", false, "이웃 채의 채주");
+  g2.battle.enemy.hp = 1;
+  g2.battle.enemy.evasion = -9;
+  while (g2.battle) g2.battleAction("기본공격");
+  assert.ok(!g2.player.slain.includes("녹림채주"), "사건 상대를 쓰러뜨려도 그 이름 있는 적이 죽은 것은 아니다");
+  // 사건 전투 대부분이 이름을 갖는다
+  let total = 0; let named = 0;
+  const walk = (o) => {
+    if (Array.isArray(o)) o.forEach(walk);
+    else if (o && typeof o === "object") {
+      if (o.battle) { total += 1; if (o.foe) named += 1; }
+      Object.values(o).forEach(walk);
+    }
+  };
+  for (const e of Object.values(DB.events)) walk(e.choices), walk(e.variants);
+  assert.ok(named / total > 0.7, `${named}/${total}`);
+});
+
+test("화면 글에 이모티콘을 쓰지 않는다", () => {
+  const emoji = /[\u{1F000}-\u{1FAFF}\u{2600}-\u{2712}\u{2714}\u{2716}-\u{27BF}]/u;
+  const walk = (o, where) => {
+    if (typeof o === "string") assert.ok(!emoji.test(o), `${where}: ${o}`);
+    else if (Array.isArray(o)) o.forEach((v) => walk(v, where));
+    else if (o && typeof o === "object") Object.values(o).forEach((v) => walk(v, where));
+  };
+  for (const name of ["events", "enemies", "companions", "endings", "karma", "traits", "fortunes", "flavor", "realms"]) walk(DB[name], name);
+});
+
+test("결전에 오는 사람은 고수다", () => {
+  for (const [k, c] of Object.entries(DB.companions)) assert.ok(!/점소이|소매치기|군졸/.test(c.name), k);
+  assert.ok(DB.companions.왕백로.help_text.includes("천하십대고수"));
+});

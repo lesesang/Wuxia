@@ -232,7 +232,7 @@ export function eventView(player, key) {
   });
   const title = event.chain ? `${event.title} (${event.chain.index + 1}/${event.chain.total})` : event.title;
   const talk = eventTalk(player, key);
-  return { key, title, text: talk ? `${talk} ${eventText(player, key)}` : eventText(player, key), choices, chain: event.chain ? DB.chains[event.chain.id].title : null };
+  return { key, title, text: talk ? `${eventText(player, key)} ${talk}` : eventText(player, key), choices, chain: event.chain ? DB.chains[event.chain.id].title : null };
 }
 
 /** 적이 플레이어를 보고 하는 말. 상황에 맞는 대사가 있으면 그것을 쓴다. */
@@ -312,7 +312,7 @@ function takeStartWeapon(player, style) {
   const skill = new Skill(key);
   // 십 년을 갈고닦은 무공이라 처음부터 성취가 있다
   skill.mastery = HOME_ART_MASTERY;
-  const summary = [`📕 십 년을 갈고닦은 무공 「${skill.name}」`, ...player.learnSkill(skill)];
+  const summary = [`십 년을 갈고닦은 무공 「${skill.name}」`, ...player.learnSkill(skill)];
   player.mainSkill = key;
   return [...summary, ...equipReward(player, STARTER_WEAPONS[style]), ...grantStartSkills(player)];
 }
@@ -326,7 +326,7 @@ function takeStartMindset(player, key) {
   skill.mastery = HOME_ART_MASTERY;
   player.learnSkill(skill);
   player.chosenArts.심공 = key;
-  return [`📕 십 년을 쉰 숨 「${skill.name}」`];
+  return [`십 년을 쉰 숨 「${skill.name}」`];
 }
 
 const REWARD_BONUSES = [10, 26, 50, 80]; // 보상 병기의 네 단계
@@ -365,7 +365,7 @@ export function grantStartSkills(player) {
     if (keys.length) {
       const skill = new Skill(pick(keys));
       player.learnSkill(skill);
-      lines.push(`📕 새 무공 「${skill.name}」`);
+      lines.push(`새 무공 「${skill.name}」`);
     }
   }
   return lines;
@@ -501,7 +501,7 @@ export function applyEffects(player, effects) {
     const skill = new Skill(effects.skill);
     const known = player.hasSkill(skill.key);
     const messages = player.learnSkill(skill);
-    if (!known) summary.push(`📕 새 무공 「${skill.name}」`);
+    if (!known) summary.push(`새 무공 「${skill.name}」`);
     summary.push(...messages);
   }
 
@@ -510,7 +510,7 @@ export function applyEffects(player, effects) {
   if (effects.random_skill) {
     const skill = randomBookSkill(player, effects.random_skill.max_grade);
     if (skill) {
-      summary.push(`📕 새 무공 「${skill.name}」`, ...player.learnSkill(skill));
+      summary.push(`새 무공 「${skill.name}」`, ...player.learnSkill(skill));
     } else {
       summary.push(`무리+${player.gainStat("martial", 2)}`);
     }
@@ -527,7 +527,7 @@ export function applyEffects(player, effects) {
     });
     if (list.length) {
       const skill = new Skill(list[Math.floor(rng.random() * list.length)]);
-      summary.push(`📕 새 무공 「${skill.name}」`, ...player.learnSkill(skill));
+      summary.push(`새 무공 「${skill.name}」`, ...player.learnSkill(skill));
       player.note(`${wanted} 「${skill.name}」${josa(skill.name, "을/를")} 얻었다.`);
     } else {
       summary.push(`무리+${player.gainStat("martial", 4)}`);
