@@ -1,9 +1,9 @@
 // 무공과 플레이어
 import { DB } from "./data.js";
 import { RENAMED_ORIGINS } from "./meta.js";
-import { randInt } from "./rng.js";
+import { randInt, rng } from "./rng.js";
 import {
-  ALIGN_CLASH, ALIGNMENT_CAP, ALIGNMENT_SCALE, alignValue, dominant, FOCUS_GAIN, hasEffect, newAlignment, ORIGIN_SECTS, sectBonus, perkTrait, realmPerks,
+  ALIGN_CLASH, ALIGNMENT_CAP, ALIGNMENT_SCALE, alignValue, dominant, FOCUS_GAIN, hasEffect, newAlignment, ORIGIN_SECTS, sectBonus, perkGrowthTraits, perkTrait, realmPerks,
   startSkills, sumEffect,
 } from "./rules.js";
 import { josa } from "./josa.js";
@@ -13,6 +13,7 @@ export const GIMMICK_GRADE = "상승"; // 이 품계부터 무공의 묘리가 �
 const SAME_GRADE_TRANSFER = 0.5;  // 같은 품계 무공의 성취를 옮기는 비율
 const LOWER_GRADE_TRANSFER = 0.3; // 낮은 품계 무공의 성취를 옮기는 비율
 const MAX_MASTERY = 100;
+const ATTACK_USE_RATE = 0.6;
 const GRADE_BONUS = 0.25;       // 승급 1단계당 위력 계수 증가
 const MASTERY_BONUS = 0.003;    // 성취 1당 위력 계수 증가
 const EFFECT_GRADE_BONUS = 0.2; // 심공·경공 승급 1단계당 효과 증가율
@@ -29,7 +30,7 @@ const RENAMED_ITEMS = { 귀두도: "귀면도", 참마도: "항마대도", 적�
 const renamedItem = (key) => RENAMED_ITEMS[key] || key;
 
 const STAT_SOFT_CAP = 850;  // 기량이 이 값을 넘으면 더디게 오른다
-const STAT_SOFT_RATE = 0.45;
+const STAT_SOFT_RATE = 0.5;
 export const STAT_SCALE = 10; // 기량 10이 예전 기량 1에 해당한다. 공식은 이 값으로 나누어 쓴다
 export const MAX_INJURY = 3;
 export const MAX_TURN = 120;
@@ -383,6 +384,12 @@ export class Player {
   ownsGear(key) { return this.weapon === key || this.armor === key || this.gear.includes(key); }
 
   addItem(key, count = 1) { this.inventory[key] = (this.inventory[key] || 0) + count; }
+  /** 공격 무공은 합마다 쓰므로 한 번에 쌓이는 성취가 적다 */
+  attackMasteryGain() {
+    const amount = this.masteryGainAmount() * ATTACK_USE_RATE;
+    return Math.floor(amount) + (rng.random() < amount % 1 ? 1 : 0);
+  }
+
   masteryGainAmount() {
     const base = randInt(1, 2) + Math.floor(this.martial / 500);
     const rate = sumEffect(this.traits, "mastery_rate", "percent");
@@ -436,6 +443,7 @@ export class Player {
     p.realm = d.realm;
     // 특전이 생기기 전의 기록도 그 경지의 특전을 받는다
     for (const perk of realmPerks(p.realm)) if (!(d.traits || []).includes(perkTrait(perk.realm))) (d.traits ||= []).push(perkTrait(perk.realm));
+    for (const key of perkGrowthTraits(p.realm)) if (!(d.traits || []).includes(key)) (d.traits ||= []).push(key);
     p.external = d.external;
     p.internal = d.internal;
     p.martial = d.martial;

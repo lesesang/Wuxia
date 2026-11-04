@@ -18,7 +18,8 @@ const DROP_MAIN_RATE = 3;    // 주무공과 같은 계열의 비급은 더 잘 
 const DROP_OTHER_RATE = 0.6;
 const DROP_HINT_RATE = 0.6;      // 적이 품은 무공이 있으면 먼저 그것이 나온다
 const DROP_MEDICINE_RATE = 0.05; // 약이 나올 확률
-const WIN_ART_MASTERY = 1; // 이기면 쓰던 심법과 경공도 조금 깊어진다
+const WIN_ART_MASTERY = 2; // 이기면 쓰던 심법과 경공도 조금 깊어진다
+const ART_USE_RATE = 2; // 심법과 경공은 자주 쓰지 않으므로 한 번에 더 쌓인다
 const REVIVE_RATE = 0.5;
 const MIN_THROUGH_GUARD = 0.3; // 호신강기를 뚫고 들어오는 최소 비율
 const VICTORY_TALK_RATE = 0.3;
@@ -434,7 +435,7 @@ export class Battle {
       damage += this.strike(power, count > 1 ? `${i === 0 ? `${label} ` : ""}제${i + 1}타` : label, skill);
     }
     this.applyRecoil(g);
-    this.log.push(...skill.gainMastery(this.player.masteryGainAmount()));
+    this.log.push(...skill.gainMastery(this.player.attackMasteryGain()));
     return damage;
   }
 
@@ -455,7 +456,7 @@ export class Battle {
     const damage = this.strike(this.secretPower(skill), `비기 ${skill.secretName}`, skill);
     this.applyRecoil(skill.activeGimmick());
     this.checkQiDeviation(skill);
-    this.log.push(...skill.gainMastery(this.player.masteryGainAmount()));
+    this.log.push(...skill.gainMastery(this.player.attackMasteryGain()));
     return damage;
   }
 
@@ -506,7 +507,7 @@ export class Battle {
       this.log.push(`기세가 오른다. (${rounds}합 동안 위력 +${halpun(percent)})`);
     }
     this.applyMindGimmick(skill);
-    this.log.push(...skill.gainMastery(p.masteryGainAmount()));
+    this.log.push(...skill.gainMastery(p.masteryGainAmount() * ART_USE_RATE));
   }
 
   /** 심법의 묘리. 운기할 때 드러난다. */
@@ -566,7 +567,7 @@ export class Battle {
     }
     this.player.qi -= skill.qiCost;
     this.log.push(`${skill.name}${josa(skill.name, "으로")} 몸을 띄웠다.`);
-    this.log.push(...skill.gainMastery(this.player.masteryGainAmount()));
+    this.log.push(...skill.gainMastery(this.player.masteryGainAmount() * ART_USE_RATE));
     return skill;
   }
 
