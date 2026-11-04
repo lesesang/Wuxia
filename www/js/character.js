@@ -3,7 +3,7 @@ import { DB } from "./data.js";
 import { RENAMED_ORIGINS } from "./meta.js";
 import { randInt } from "./rng.js";
 import {
-  ALIGNMENT_CAP, ALIGNMENT_SCALE, dominant, hasEffect, MA_HEAL_PENALTY, newAlignment, ORIGIN_SECTS, SA_SILVER_BONUS, sectBonus,
+  ALIGNMENT_CAP, ALIGNMENT_SCALE, alignValue, dominant, FOCUS_GAIN, hasEffect, newAlignment, ORIGIN_SECTS, sectBonus,
   startSkills, sumEffect,
 } from "./rules.js";
 import { josa } from "./josa.js";
@@ -17,6 +17,7 @@ const MASTERY_BONUS = 0.003;    // 성취 1당 위력 계수 증가
 const EFFECT_GRADE_BONUS = 0.2; // 심공·경공 승급 1단계당 효과 증가율
 
 export const START_SILVER = 30;
+export const HOME_ART_MASTERY = 40; // 출신이 오래 갈고닦은 무공의 처음 성취
 const DUPLICATE_SKILL_MASTERY = 25;
 const START_ARMORS = ["가죽호구", "철사갑의", "금사보의"]; // 겹쳐 받으면 한 단계씩 좋아진다
 const SPARE_ARMOR_SILVER = 40; // 넘치는 갑의는 은자로 돌아온다
@@ -152,7 +153,12 @@ export class Player {
     this.skills = [];
     this.mainSkill = null;
     this.chosenArts = {}; // 쓰는 심법과 경공
-    for (const key of [...(data.skills || []), ...startSkills(traitKeys)]) {
+    for (const key of data.skills || []) {
+      const skill = new Skill(key);
+      skill.mastery = HOME_ART_MASTERY;
+      this.learnSkill(skill);
+    }
+    for (const key of startSkills(traitKeys)) {
       // 같은 무공을 또 받으면 그만큼 깊어진다
       if (this.hasSkill(key)) this.getSkill(key).gainMastery(DUPLICATE_SKILL_MASTERY);
       else this.learnSkill(new Skill(key));
@@ -186,6 +192,7 @@ export class Player {
     this.flags = [];
     this.seenEvents = [];
     this.kills = 0;
+    this.alignMark = null;
     this.fame = sumEffect(traitKeys, "start_fame", "amount");
     this.sect = ORIGIN_SECTS[originKey] || null;
     this.injury = 0;
@@ -208,7 +215,7 @@ export class Player {
 
   /** 체력·기력을 최대치 비율로 바꾼다. 체력은 1 아래로 내려가지 않는다. [체력 변화, 기력 변화] */
   healPercent(hpPct = 0, qiPct = 0) {
-    const penalty = this.dominantAlignment() === "마도" ? 1 - MA_HEAL_PENALTY / 100 : 1;
+    const penalty = 1 - alignValue(this.alignment, "마도", "healCut") / 100;
     const hpChange = Math.trunc(this.maxHp() * hpPct / 100 * (hpPct > 0 ? penalty : 1));
     const qiChange = Math.trunc(this.maxQi() * qiPct / 100 * (qiPct > 0 ? penalty : 1));
     const hpBefore = this.hp;
@@ -226,7 +233,7 @@ export class Player {
 
   gainSilver(amount) {
     let percent = sumEffect(this.traits, "silver_rate", "percent") + sectBonus(this, "silver");
-    if (this.dominantAlignment() === "사도") percent += SA_SILVER_BONUS;
+    percent += alignValue(this.alignment, "사도", "silver");
     const gained = Math.trunc(amount * (1 + percent / 100));
     this.silver += gained;
     return gained;
@@ -241,7 +248,11 @@ export class Player {
     // 그 길로 기운 자질이 있으면 오를 때 더 오른다
     const extra = amount > 0 ? this.traits.flatMap((k) => DB.traits[k]?.effects || [])
       .filter((e) => e.type === "alignment_gain" && e.side === name).reduce((sum, e) => sum + e.amount, 0) : 0;
-    this.alignment[name] = Math.max(0, Math.min(ALIGNMENT_CAP, (this.alignment[name] || 0) + amount + extra));
+    // 앞선 길은 더 쉽게 오른다
+    const focus = amount > 0 && dominant(this.alignment) === name ? FOCUS_GAIN : 1;
+    const before = this.alignment[name] || 0;
+    this.alignment[name] = Math.max(0, Math.min(ALIGNMENT_CAP, Math.round(before + amount * focus + extra)));
+    return this.alignment[name] - before;
   }
   hasFlag(flag) { return this.flags.includes(flag); }
   addFlag(flag) { if (!this.hasFlag(flag)) this.flags.push(flag); }
@@ -321,7 +332,7 @@ export class Player {
       inventory: this.inventory, boss_weaken: this.bossWeaken, alignment: this.alignment,
       flags: this.flags, seen_events: this.seenEvents, kills: this.kills,
       fame: this.fame, sect: this.sect, injury: this.injury,
-      turn: this.turn, max_turn: this.maxTurn, alive: this.alive, chronicle: this.chronicle, content: this.content, chains: this.chains, chains_done: this.chainsDone,
+      align_mark: this.alignMark, turn: this.turn, max_turn: this.maxTurn, alive: this.alive, chronicle: this.chronicle, content: this.content, chains: this.chains, chains_done: this.chainsDone,
     };
   }
 
@@ -371,6 +382,7 @@ export class Player {
     p.flags = [...(d.flags || [])];
     p.seenEvents = [...(d.seen_events || [])];
     p.kills = d.kills ?? 0;
+    p.alignMark = d.align_mark ?? null;
     p.fame = d.fame ?? 0;
     p.sect = d.sect !== undefined ? d.sect : (ORIGIN_SECTS[p.originKey] || null);
     p.injury = d.injury ?? 0;

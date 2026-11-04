@@ -3,7 +3,7 @@ import { Skill, STAT_CAP } from "./character.js";
 import { DB } from "./data.js";
 import { loadMeta, spendKarma } from "./meta.js";
 import { pickWeighted } from "./rng.js";
-import { getChapter, hasEffect, JUNG_DISCOUNT, marketName, sumEffect } from "./rules.js";
+import { alignValue, getChapter, hasEffect, marketName, sumEffect } from "./rules.js";
 import { josa } from "./josa.js";
 
 const STOCK_SIZE = 10;
@@ -114,7 +114,7 @@ export function openMarket(turn, player) {
 
 export function priceOf(player, key) {
   let percent = sumEffect(player.traits, "market_discount", "percent");
-  if (player.dominantAlignment() === "정도") percent += JUNG_DISCOUNT;
+  percent += alignValue(player.alignment, "정도", "discount");
   return Math.max(1, Math.trunc(DB.market[key].price * (100 - Math.min(percent, MAX_DISCOUNT)) / 100));
 }
 

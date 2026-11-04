@@ -1,5 +1,5 @@
 // 이벤트. 정해진 달의 줄거리와 탐색 중 사건을 JSON으로 관리한다. 형식은 docs/콘텐츠-가이드.md 참고.
-import { GRADE_ORDER, Skill, STAT_NAMES, STAT_SCALE } from "./character.js";
+import { GRADE_ORDER, HOME_ART_MASTERY, Skill, STAT_NAMES, STAT_SCALE } from "./character.js";
 import { DB } from "./data.js";
 import { bonusFor, equipmentBonus, styleWeight } from "./market.js";
 import { recordEventPick, updateKnown } from "./meta.js";
@@ -245,7 +245,6 @@ function equipReward(player, key) {
   return [`「${name}」${josa(name, "을/를")} 받았지만 지금 병장기가 더 좋다`];
 }
 
-const TEN_YEARS_MASTERY = 40; // 강호초출이 문하에 든 날 고른 무공과 심법의 성취
 const STARTER_WEAPONS = {
   검법: "낡은검", 도법: "낡은도", 창법: "낡은창", 봉법: "낡은곤봉", 권법: "낡은권대", 장법: "낡은장갑", 암기: "낡은비도",
 };
@@ -263,7 +262,7 @@ function takeStartWeapon(player, style) {
   player.mainSkill = null;
   const skill = new Skill(key);
   // 십 년을 갈고닦은 무공이라 처음부터 성취가 있다
-  skill.mastery = TEN_YEARS_MASTERY;
+  skill.mastery = HOME_ART_MASTERY;
   const summary = [`📕 십 년을 갈고닦은 무공 「${skill.name}」`, ...player.learnSkill(skill)];
   player.mainSkill = key;
   return [...summary, ...equipReward(player, STARTER_WEAPONS[style]), ...grantStartSkills(player)];
@@ -275,7 +274,7 @@ function takeStartMindset(player, key) {
   const defaults = DB.origins.origins[player.originKey].skills || [];
   player.skills = player.skills.filter((s) => s.type !== "심공" || !defaults.includes(s.key));
   const skill = new Skill(key);
-  skill.mastery = TEN_YEARS_MASTERY;
+  skill.mastery = HOME_ART_MASTERY;
   player.learnSkill(skill);
   player.chosenArts.심공 = key;
   return [`📕 십 년을 쉰 숨 「${skill.name}」`];
@@ -397,8 +396,8 @@ export function applyEffects(player, effects) {
   }
 
   for (const [name, amount] of Object.entries(effects.alignment || {})) {
-    player.adjustAlignment(name, amount);
-    summary.push(`${name}${signed(amount)}`);
+    const change = player.adjustAlignment(name, amount);
+    if (change) summary.push(`${name}${signed(change)}`);
   }
 
   for (const flag of effects.flags || []) player.addFlag(flag);

@@ -13,8 +13,8 @@ import {
 } from "./meta.js";
 import { pickWeighted, randInt, rng } from "./rng.js";
 import {
-  actionLine, applyGrowth, breakthroughBlock, byname, CHAPTER_STARTS, checkBreakthrough, checkGoodEnding, checkSaengsa,
-  fameRank, getChapter, getChapterInfo, getMonth, getYear, isMarketTurn, monthLine, realmIndex, sumEffect, traitSlots,
+  actionLine, ALIGNMENT_CAP, alignTier, applyGrowth, breakthroughBlock, byname, CHAPTER_STARTS, checkBreakthrough, checkGoodEnding, checkSaengsa,
+  fameRank, FOCUS_DRIFT, focusedSide, getChapter, getChapterInfo, getMonth, getYear, isMarketTurn, monthLine, realmIndex, sumEffect, traitSlots,
 } from "./rules.js";
 import { josa } from "./josa.js";
 
@@ -457,6 +457,7 @@ export class Game {
     const hp = NATURAL_REGEN + sumEffect(p.traits, "turn_regen", "hp_pct");
     const qi = NATURAL_REGEN + sumEffect(p.traits, "turn_regen", "qi_pct");
     p.healPercent(hp, qi);
+    lines.push(...this.alignmentMonth());
     if (CHAPTER_STARTS.includes(p.turn)) {
       const info = getChapterInfo(p.turn);
       lines.push(`📖 ${info.title} (${getYear(p.turn)}년차) — ${info.desc}`, ...this.chapterGrowth());
@@ -468,6 +469,23 @@ export class Game {
     lines.push(monthLine(getMonth(p.turn)));
     this.pendingNext = false;
     this.enterTurn(lines);
+  }
+
+  /** 한 길에 집중한 무인은 달마다 그 길이 깊어진다. 단계가 오르면 알린다. */
+  alignmentMonth() {
+    const p = this.player;
+    const side = focusedSide(p.alignment);
+    if (side) p.alignment[side] = Math.min(ALIGNMENT_CAP, p.alignment[side] + FOCUS_DRIFT);
+    const tier = alignTier(p.alignment);
+    const mark = tier ? `${tier.side}${tier.step}` : null;
+    if (!tier || p.alignMark === mark) {
+      p.alignMark = mark;
+      return [];
+    }
+    p.alignMark = mark;
+    if (tier.step === 0) return [];
+    p.note(`강호가 「${tier.name}」${josa(tier.name, "이라고/라고")} 부르기 시작했다.`);
+    return [`🌟 강호가 「${tier.name}」${josa(tier.name, "이라고/라고")} 부르기 시작했다.`];
   }
 
   /** 새 장이 열릴 때의 성장 */

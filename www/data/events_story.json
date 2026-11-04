@@ -884,10 +884,74 @@
         ]
       },
       {
+        "label": "강호의 이름으로 천마에게 항복을 권한다",
+        "requires": {
+          "alignment_min": {
+            "정도": 800
+          }
+        },
+        "outcomes": [
+          {
+            "text": "구파일방의 깃발이 산허리를 덮었다. 내 뒤에 서지 않은 사람을 세는 편이 빨랐다. 천마가 처음으로 말을 고른다.",
+            "effects": {
+              "boss_weaken": 25,
+              "final_battle": true,
+              "stats": {
+                "mind": 3
+              }
+            }
+          }
+        ],
+        "hidden": true,
+        "tag": "정도"
+      },
+      {
+        "label": "천마교 곳간 열쇠를 천마 앞에 던진다",
+        "requires": {
+          "alignment_min": {
+            "사도": 800
+          }
+        },
+        "outcomes": [
+          {
+            "text": "호법의 절반은 이미 내 돈을 받았다. 천마의 등 뒤가 소리 없이 비었다.",
+            "effects": {
+              "boss_weaken": 25,
+              "final_battle": true,
+              "silver": 100
+            }
+          }
+        ],
+        "hidden": true,
+        "tag": "사도"
+      },
+      {
+        "label": "내가 데려온 마인들을 그의 호법들에게 풀어 놓는다",
+        "requires": {
+          "alignment_min": {
+            "마도": 800
+          }
+        },
+        "outcomes": [
+          {
+            "text": "마인이 마인을 물어뜯었다. 천마가 나를 보고 처음으로 일어섰다. \"네가 나를 닮았구나.\"",
+            "effects": {
+              "boss_weaken": 25,
+              "final_battle": true,
+              "stats": {
+                "internal": 3
+              }
+            }
+          }
+        ],
+        "hidden": true,
+        "tag": "마도"
+      },
+      {
         "label": "맹의 고수들이 봉우리를 에워싸게 한다",
         "requires": {
           "alignment_min": {
-            "정도": 200
+            "정도": 400
           }
         },
         "outcomes": [
@@ -909,7 +973,7 @@
         "label": "며칠 전 그의 술에 탄 독이 돌 때를 기다린다",
         "requires": {
           "alignment_min": {
-            "사도": 200
+            "사도": 400
           }
         },
         "outcomes": [
@@ -928,7 +992,7 @@
         "label": "무릎을 꿇는다. 천하를 함께 가지겠다",
         "requires": {
           "alignment_min": {
-            "마도": 200
+            "마도": 400
           }
         },
         "outcomes": [
@@ -946,7 +1010,7 @@
         "label": "그 자리를 내놓아라. 내가 다음 천마다",
         "requires": {
           "alignment_min": {
-            "마도": 200
+            "마도": 400
           }
         },
         "outcomes": [

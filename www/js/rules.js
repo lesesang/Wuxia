@@ -7,10 +7,16 @@ export const ALIGNMENTS = ["정도", "사도", "마도"];
 export const ALIGNMENT_CAP = 999;
 export const ALIGNMENT_SCALE = 20; // 성향이 낮은 수로 쌓이던 때의 저장을 옮길 때 쓴다
 const DOMINANT_THRESHOLD = 60;
-export const JUNG_DISCOUNT = 10;
-export const SA_SILVER_BONUS = 25;
-export const MA_DAMAGE_BONUS = 20;
-export const MA_HEAL_PENALTY = 10;
+export const FOCUS_RATIO = 2;      // 한 길이 둘째 길의 이만큼을 넘으면 그 길에 집중한 것으로 친다
+export const FOCUS_GAIN = 2;       // 앞선 길은 사건에서 이만큼 더 오른다
+export const FOCUS_DRIFT = 3;      // 집중한 길은 달마다 저절로 오른다
+export const KILL_ALIGN = { 사도: 6, 마도: 10 }; // 싸워 이길수록 깊어지는 길
+export const ALIGN_STEPS = [60, 250, 500, 750, 950];
+const ALIGN_TABLE = {
+  정도: { names: ["협행의 첫걸음", "협객", "대협", "협의 명숙", "강호의 등불"], discount: [8, 10, 12, 14, 16], guard: [0, 1, 2, 3, 4] },
+  사도: { names: ["사파의 첫걸음", "사파 고수", "사파 거물", "사파 거두", "사파 제왕"], silver: [25, 30, 35, 40, 50], crit: [2, 4, 6, 8, 10] },
+  마도: { names: ["마도의 첫걸음", "마인", "대마인", "마두", "천하 마존"], damage: [15, 20, 25, 30, 35], healCut: [3, 5, 6, 8, 10] },
+};
 
 export const newAlignment = () => ({ 정도: 0, 사도: 0, 마도: 0 });
 
@@ -22,12 +28,36 @@ export function dominant(alignment) {
   return tops.length > 1 ? null : tops[0];
 }
 
+/** 가장 높은 길과 그 깊이(0부터). 어느 길에도 서지 않았으면 null */
+export function alignTier(alignment) {
+  const side = dominant(alignment);
+  if (!side) return null;
+  const step = ALIGN_STEPS.reduce((best, at, index) => (alignment[side] >= at ? index : best), 0);
+  return { side, step, name: ALIGN_TABLE[side].names[step], ...Object.fromEntries(Object.entries(ALIGN_TABLE[side]).filter(([k]) => k !== "names").map(([k, list]) => [k, list[step]])) };
+}
+
+/** 그 길에서 받는 값. 다른 길이면 0 */
+export function alignValue(alignment, side, field) {
+  const tier = alignTier(alignment);
+  return tier?.side === side ? tier[field] : 0;
+}
+
+/** 한 길에 집중하고 있으면 그 길 */
+export function focusedSide(alignment) {
+  const side = dominant(alignment);
+  if (!side) return null;
+  const others = ALIGNMENTS.filter((a) => a !== side).map((a) => alignment[a] || 0);
+  return alignment[side] >= Math.max(...others) * FOCUS_RATIO ? side : null;
+}
+
 export function benefitText(alignment) {
-  const top = dominant(alignment);
-  if (top === "정도") return `장터 가격 ${JUNG_DISCOUNT}% 할인`;
-  if (top === "사도") return `얻는 은자 ${SA_SILVER_BONUS}% 증가`;
-  if (top === "마도") return `주는 피해 ${MA_DAMAGE_BONUS}% 증가, 회복 효율 ${MA_HEAL_PENALTY}% 감소`;
-  return "아직 어느 길에도 서지 않았다";
+  const tier = alignTier(alignment);
+  if (!tier) return "아직 어느 길에도 서지 않았다";
+  const at = ALIGN_STEPS[tier.step + 1];
+  const next = at ? ` 다음 단계는 ${at}.` : "";
+  if (tier.side === "정도") return `${tier.name}: 장터 가격 ${tier.discount}% 할인${tier.guard ? `, 받는 피해 ${tier.guard}% 감소` : ""}.${next}`;
+  if (tier.side === "사도") return `${tier.name}: 얻는 은자 ${tier.silver}% 증가${tier.crit ? `, 회심의 일격 확률 ${tier.crit}% 증가` : ""}.${next}`;
+  return `${tier.name}: 주는 피해 ${tier.damage}% 증가, 회복 효율 ${tier.healCut}% 감소.${next}`;
 }
 
 // ---------- 챕터와 시장 ----------
@@ -157,7 +187,8 @@ export function byname(player) {
   const top = dominant(player.alignment) || "중립";
   const category = player.bestSkill()?.category || "맨손";
   const names = DB.flavor.bynames;
-  const prefixes = names.prefix[top];
+  const deep = (alignTier(player.alignment)?.step ?? 0) >= 2;
+  const prefixes = (deep && names.prefix_high?.[top]) || names.prefix[top];
   const seed = [...player.origin].reduce((total, c) => total + c.codePointAt(0), 0);
   const suffixes = names.suffix[category] || names.suffix.맨손;
   const tier = player.fame < 40 ? 0 : player.fame < 100 ? 1 : 2;
