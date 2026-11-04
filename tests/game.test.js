@@ -8,6 +8,7 @@ import { GRADE_ORDER, Player, Skill } from "../www/js/character.js";
 import { DB } from "../www/js/data.js";
 import { applyEffects, grantStartGifts, canStartChain, checkRequires, enemyIntro, eventView, LAST_CHAIN_TURN, pickRandomEvent, resolveChoice, validateChains, validateEvents } from "../www/js/events.js";
 import { buildEpilogue, Game } from "../www/js/game.js";
+import { josa } from "../www/js/josa.js";
 import { blockReason, buy, equipmentBonus, openMarket, priceOf } from "../www/js/market.js";
 import {
   activeContent, buyContent, buyUpgrade, exportRecords, importRecords, extraSlots, loadCheckpoint, legacyAvailable, loadEventLog, loadMeta, nextReward, recordEventPick, openLegacy, saveMeta, takeLegacy, toggleContent, unlockOrigin,
@@ -1277,6 +1278,45 @@ test("자질의 기량 효과는 네 기량에 고르다", () => {
     .flatMap((t) => t.effects).filter((e) => e.type === type && e.stat === stat).reduce((sum, e) => sum + e[field], 0));
   for (const [type, field] of [["start_stat", "amount"], ["growth_rate", "percent"], ["battle_buff", "amount"]]) {
     assert.equal(new Set(total(type, field)).size, 1, `${type} ${total(type, field)}`);
+  }
+});
+
+test("두 기량 자질은 여섯 묶음이 모두 있고 같은 값이며 맞바꾸는 자질은 네 기량이 한 번씩 오르내린다", () => {
+  const stats = ["external", "internal", "martial", "mind"];
+  const starts = (t) => t.effects.filter((e) => e.type === "start_stat");
+  const traits = Object.values(DB.traits).filter((t) => !t.hidden);
+  const pairs = traits.filter((t) => starts(t).length === 2 && starts(t).every((e) => e.amount > 0));
+  const seen = new Set(pairs.map((t) => starts(t).map((e) => e.stat).sort().join("+")));
+  assert.equal(seen.size, 6, [...seen].join(" "));
+  assert.equal(pairs.length, 6);
+  assert.equal(new Set(pairs.map((t) => `${t.cost}/${t.rarity}/${starts(t)[0].amount}`)).size, 1);
+  const swaps = traits.filter((t) => starts(t).length === 2 && starts(t).some((e) => e.amount < 0));
+  for (const sign of [1, -1]) {
+    const moved = swaps.flatMap((t) => starts(t).filter((e) => Math.sign(e.amount) === sign).map((e) => e.stat)).sort();
+    assert.deepEqual(moved, [...stats].sort());
+  }
+});
+
+test("사건에 반응한다고 적힌 자질은 실제로 반응하는 사건이 있다", () => {
+  const text = readdirSync("www/data").filter((f) => f.startsWith("events_")).map((f) => readFileSync(`www/data/${f}`, "utf8")).join("");
+  for (const [key, trait] of Object.entries(DB.traits)) {
+    if (trait.reacts) assert.ok(text.includes(`"trait": "${key}"`), key);
+  }
+});
+
+test("조사는 받침에 맞게 붙는다", () => {
+  assert.equal(josa("천마", "을/를"), "를");
+  assert.equal(josa("낭인", "을/를"), "을");
+  assert.equal(josa("「백보신권」", "이/가"), "이");
+  assert.equal(josa("칼", "으로"), "로");
+  assert.equal(josa("봉", "으로"), "으로");
+});
+
+test("화면 문장에 받침 조사를 얼버무린 표기가 없다", () => {
+  for (const dir of ["www/data", "www/js"]) {
+    for (const f of readdirSync(dir)) {
+      assert.doesNotMatch(readFileSync(`${dir}/${f}`, "utf8"), /[을이은과와]\((를|가|는|와|과)\)/, f);
+    }
   }
 });
 

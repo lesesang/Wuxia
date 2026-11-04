@@ -16,6 +16,7 @@ import {
   actionLine, applyGrowth, breakthroughBlock, byname, CHAPTER_STARTS, checkBreakthrough, checkGoodEnding, checkSaengsa,
   fameRank, getChapter, getChapterInfo, getMonth, getYear, isMarketTurn, monthLine, realmIndex, sumEffect, traitSlots,
 } from "./rules.js";
+import { josa } from "./josa.js";
 
 const NATURAL_REGEN = 5;
 const EXPLORE_BATTLE = 0.35; // 나머지는 사건과 기연
@@ -89,8 +90,8 @@ export class Game {
       name = DB.market[key].name;
       p[DB.market[key].effects.find((e) => e.type === "equip").slot] = key;
     }
-    p.note(`전대 「${entry.from}」의 유산 「${name}」을(를) 이어받았다.`);
-    return [`🏺 전대 「${entry.from}」이(가) 남긴 「${name}」을(를) 이어받았다. 세월에 조금 무뎌졌지만 아직 쓸 만하다.${entry.kind === "skill" ? " 신상의 무공 칸에서 골라 쓸 수 있다." : ""}`];
+    p.note(`전대 「${entry.from}」의 유산 「${name}」${josa(name, "을/를")} 이어받았다.`);
+    return [`🏺 전대 「${entry.from}」${josa(entry.from, "이/가")} 남긴 「${name}」${josa(name, "을/를")} 이어받았다. 세월에 조금 무뎌졌지만 아직 쓸 만하다.${entry.kind === "skill" ? " 신상의 무공 칸에서 골라 쓸 수 있다." : ""}`];
   }
 
   /** 이번 강호행에서 유산으로 남길 수 있는 것들 */
@@ -243,7 +244,7 @@ export class Game {
     this.player.recordEnemyEncounter(fitting);
     this.battle = new Battle(this.player, enemy);
     const intro = enemyIntro(this.player, fitting);
-    this.addLog([`⚔️ ${enemy.name}과(와) 마주쳤다!`, ...(intro ? [intro] : []), ...this.battle.log]);
+    this.addLog([`⚔️ ${enemy.name}${josa(enemy.name, "과/와")} 마주쳤다!`, ...(intro ? [intro] : []), ...this.battle.log]);
     this.battle.log = [];
   }
 
@@ -332,11 +333,9 @@ export class Game {
       this.gauntlet = null;
     }
 
-    if (result.victory && ["강적", "보스"].includes(battle.enemy.tier)) player.note(`${battle.enemy.name}을(를) 쓰러뜨렸다.`);
+    if (result.victory && ["강적", "보스"].includes(battle.enemy.tier)) player.note(`${battle.enemy.name}${josa(battle.enemy.name, "을/를")} 쓰러뜨렸다.`);
     if (!result.victory && !result.fled) player.note(`${battle.enemy.name}에게 쓰러졌다.`);
-    if (result.victory) this.addLog([`승리! (실전 경험 +${result.exp})`]);
-    else if (result.fled) this.addLog(["가까스로 전장을 벗어났다."]);
-    else this.addLog(["패배..."]);
+    if (result.fled) this.addLog(["가까스로 전장을 벗어났다."]);
 
     if (battle.isFinal || player.hp <= 0) this.finishGame(result.victory);
     else if (this.chainsMustFinish()) this.openStoryEvent();
@@ -359,8 +358,8 @@ export class Game {
       return true;
     }
     const summary = applyEffects(player, gauntlet.reward);
-    player.note(`${gauntlet.name}을(를) 제패했다.`);
-    this.addLog([`🏆 ${gauntlet.name}을(를) 제패했다! 강호가 그 이름을 외친다.`, summary.join(", ")]);
+    player.note(`${gauntlet.name}${josa(gauntlet.name, "을/를")} 제패했다.`);
+    this.addLog([`🏆 ${gauntlet.name}${josa(gauntlet.name, "을/를")} 제패했다! 강호가 그 이름을 외친다.`, summary.join(", ")]);
     this.gauntlet = null;
     return false;
   }
@@ -448,7 +447,7 @@ export class Game {
     const fresh = added.filter((key) => !known.includes(key));
     updateGlobalCodex(fresh);
     updateKnown(this.player.skills.map((s) => s.key));
-    return fresh.map((key) => `📖 강호록에 「${DB.enemies[key]?.name ?? key}」이(가) 기록되었다.`);
+    return fresh.map((key) => `📖 강호록에 「${DB.enemies[key]?.name ?? key}」${josa(DB.enemies[key]?.name ?? key, "이/가")} 기록되었다.`);
   }
 
   checkRealm() {
@@ -501,7 +500,7 @@ export class Game {
     const before = loadMeta().total_karma;
     addKarma(gain.total);
     for (const reward of DB.karma.rewards) {
-      if (before < reward.at && before + gain.total >= reward.at) gain.lines.push(`누적 보상 「${reward.name}」을(를) 받았다.`);
+      if (before < reward.at && before + gain.total >= reward.at) gain.lines.push(`누적 보상 「${reward.name}」${josa(reward.name, "을/를")} 받았다.`);
     }
     // 생사경은 천마를 넘어선 그 순간에만 이르는 경지다
     if (key === "생사경") p.realm = "생사경";

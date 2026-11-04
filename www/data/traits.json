@@ -139,6 +139,118 @@
       }
     ]
   },
+  "혼원지체": {
+    "name": "혼원지체",
+    "desc": "시작 외공과 내공이 60 높고 성장이 각각 12% 늘어난다.",
+    "rarity": "희귀",
+    "cost": 8,
+    "effects": [
+      {
+        "type": "start_stat",
+        "stat": "external",
+        "amount": 60
+      },
+      {
+        "type": "start_stat",
+        "stat": "internal",
+        "amount": 60
+      },
+      {
+        "type": "growth_rate",
+        "stat": "external",
+        "percent": 12
+      },
+      {
+        "type": "growth_rate",
+        "stat": "internal",
+        "percent": 12
+      }
+    ]
+  },
+  "철심석장": {
+    "name": "철심석장",
+    "desc": "시작 외공과 심경이 60 높고 성장이 각각 12% 늘어난다.",
+    "rarity": "희귀",
+    "cost": 8,
+    "effects": [
+      {
+        "type": "start_stat",
+        "stat": "external",
+        "amount": 60
+      },
+      {
+        "type": "start_stat",
+        "stat": "mind",
+        "amount": 60
+      },
+      {
+        "type": "growth_rate",
+        "stat": "external",
+        "percent": 12
+      },
+      {
+        "type": "growth_rate",
+        "stat": "mind",
+        "percent": 12
+      }
+    ]
+  },
+  "통현지재": {
+    "name": "통현지재",
+    "desc": "시작 내공과 무리가 60 높고 성장이 각각 12% 늘어난다.",
+    "rarity": "희귀",
+    "cost": 8,
+    "effects": [
+      {
+        "type": "start_stat",
+        "stat": "internal",
+        "amount": 60
+      },
+      {
+        "type": "start_stat",
+        "stat": "martial",
+        "amount": 60
+      },
+      {
+        "type": "growth_rate",
+        "stat": "internal",
+        "percent": 12
+      },
+      {
+        "type": "growth_rate",
+        "stat": "martial",
+        "percent": 12
+      }
+    ]
+  },
+  "혜근": {
+    "name": "혜근",
+    "desc": "시작 무리와 심경이 60 높고 성장이 각각 12% 늘어난다.",
+    "rarity": "희귀",
+    "cost": 8,
+    "effects": [
+      {
+        "type": "start_stat",
+        "stat": "martial",
+        "amount": 60
+      },
+      {
+        "type": "start_stat",
+        "stat": "mind",
+        "amount": 60
+      },
+      {
+        "type": "growth_rate",
+        "stat": "martial",
+        "percent": 12
+      },
+      {
+        "type": "growth_rate",
+        "stat": "mind",
+        "percent": 12
+      }
+    ]
+  },
   "장사꾼기질": {
     "name": "장사꾼 기질",
     "desc": "은자 100을 더 들고 시작하고 장터 가격이 20% 싸다.",
@@ -516,7 +628,7 @@
     ]
   },
   "가보의호구": {
-    "name": "가보의 호구",
+    "name": "가보의 갑의",
     "desc": "집안에 전해진 철사갑의를 입고 시작한다.",
     "rarity": "일반",
     "cost": 4,
@@ -708,7 +820,7 @@
     ]
   },
   "수련도구": {
-    "name": "수련 꾸러미",
+    "name": "수련 도구 한 짐",
     "desc": "주무공 계열 수련 도구 4개를 들고 시작한다.",
     "rarity": "일반",
     "cost": 4,
@@ -776,7 +888,7 @@
     ]
   },
   "구명의은혜": {
-    "name": "구명의 은혜",
+    "name": "구명 보따리",
     "desc": "구명단 2개와 해독단 2개를 들고 시작한다.",
     "rarity": "일반",
     "cost": 5,
@@ -860,7 +972,7 @@
   },
   "산사람": {
     "name": "산사람",
-    "desc": "기연을 만날 확률이 15% 오르고 매달 체력을 3% 더 회복한다. 산과 짐승, 약초가 얽힌 사건에서 길을 안다.",
+    "desc": "기연을 만날 확률이 15% 오르고 매달 체력과 내력을 3%씩 더 회복한다. 산과 짐승, 약초가 얽힌 사건에서 길을 안다.",
     "rarity": "일반",
     "cost": 4,
     "effects": [
@@ -871,7 +983,7 @@
       {
         "type": "turn_regen",
         "hp_pct": 3,
-        "qi_pct": 0
+        "qi_pct": 3
       }
     ],
     "reacts": true
@@ -1009,7 +1121,7 @@
     "reacts": true
   },
   "이기어검": {
-    "name": "이기어검",
+    "name": "여력",
     "desc": "공격무공의 내력 소모가 20% 줄어든다. 긴 싸움에서 내력이 마르지 않는다.",
     "rarity": "희귀",
     "cost": 7,
@@ -1033,7 +1145,7 @@
     ]
   },
   "절세미공": {
-    "name": "숨은 고수의 안목",
+    "name": "디딤돌",
     "desc": "승급할 때 성취가 30이 아니라 60에서 다시 시작한다.",
     "rarity": "희귀",
     "cost": 7,
@@ -1046,7 +1158,7 @@
   },
   "잔재주꾼": {
     "name": "잔재주꾼",
-    "desc": "시작 무리가 160 높지만 내공이 80 낮다. 남의 초식을 흉내 내는 데 능하다.",
+    "desc": "시작 무리가 160 높지만 내공이 80 낮다. 남의 초식을 흉내 내는 데 능해 비무와 구경거리에서 남다른 길이 열린다.",
     "rarity": "일반",
     "cost": 3,
     "effects": [
@@ -1060,6 +1172,7 @@
         "stat": "internal",
         "amount": -80
       }
-    ]
+    ],
+    "reacts": true
   }
 }

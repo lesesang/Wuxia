@@ -5,6 +5,7 @@ import { checkRequires, reactiveLine } from "./events.js";
 import { equipmentBonus } from "./market.js";
 import { pick, randInt, rng, uniform } from "./rng.js";
 import { applyGrowth, battleBuffs, hasEffect, MA_DAMAGE_BONUS, realmBonus, sectBonus, sumEffect } from "./rules.js";
+import { josa } from "./josa.js";
 
 const BASE_HIT = 0.88;
 const SECRET_INTERNAL_RATE = 1.0;
@@ -139,10 +140,14 @@ export class Battle {
     this.guard = null;
     this.alliesSeen = [];
     // 전투 시작 시 발동하는 특성 효과 (한계 무시, 전투가 끝나면 되돌림)
+    const raised = new Map();
     for (const buff of battleBuffs(player.traits, "on_battle_start")) {
       player[buff.stat] += buff.amount;
       this.tempBuffs.push([buff.stat, buff.amount]);
-      this.log.push(`(자질 효과: ${STAT_NAMES[buff.stat]} 임시 +${buff.amount})`);
+      raised.set(buff.amount, [...(raised.get(buff.amount) ?? []), STAT_NAMES[buff.stat]]);
+    }
+    for (const [amount, names] of raised) {
+      this.log.push(`(자질 효과: ${names.length === 4 ? "네 기량" : names.join(", ")} 전투 중 +${amount})`);
     }
   }
 
@@ -202,7 +207,7 @@ export class Battle {
 
   strike(power, label, skill = null) {
     if (!this.hits()) {
-      this.log.push(`${label} — 그러나 ${this.enemy.name}이(가) 몸을 틀어 피했다.`);
+      this.log.push(`${label} — 그러나 ${this.enemy.name}${josa(this.enemy.name, "이/가")} 몸을 틀어 피했다.`);
       this.counterPct = 0;
       return 0;
     }
@@ -260,7 +265,7 @@ export class Battle {
       return this.basicAttack();
     }
     if (this.player.qi < this.artCost(skill)) {
-      this.log.push(`내력이 모자라 ${skill.name}을(를) 펼치지 못했다.`);
+      this.log.push(`내력이 모자라 ${skill.name}${josa(skill.name, "을/를")} 펼치지 못했다.`);
       return this.basicAttack();
     }
     this.player.qi -= this.artCost(skill);
@@ -302,7 +307,7 @@ export class Battle {
     const p = this.player;
     const skill = p.bestOfType("심공");
     if (!skill) {
-      this.log.push("아직 익힌 심공이 없다.");
+      this.log.push("아직 익힌 심법이 없다.");
       return;
     }
     const boost = 1 + (sectBonus(p, "heal_bonus") + sumEffect(p.traits, "mindset_power", "percent")) / 100;
@@ -310,7 +315,7 @@ export class Battle {
     const qiValue = skill.effectValue("heal_qi_pct");
     const [hpChange, qiChange] = p.healPercent(hpValue > 0 ? hpValue * boost : hpValue, qiValue * boost);
     const signed = (n) => (n >= 0 ? `+${n}` : `${n}`);
-    this.log.push(`${skill.name}을(를) 운기했다. (체력 ${signed(hpChange)}, 내력 ${signed(qiChange)})`);
+    this.log.push(`${skill.name}${josa(skill.name, "을/를")} 운기했다. (체력 ${signed(hpChange)}, 내력 ${signed(qiChange)})`);
     if (this.sealed) {
       this.sealed = 0;
       this.log.push("막혔던 혈도가 풀렸다.");
@@ -353,7 +358,7 @@ export class Battle {
       this.atkBuff = { percent: full ? tool.percent : Math.floor(tool.percent / 2), rounds: tool.rounds + 1 };
     }
     useConsumable(this.player, key);
-    this.log.push(`${item.name}을(를) 썼다. (${item.desc})`);
+    this.log.push(`${item.name}${josa(item.name, "을/를")} 썼다. (${item.desc})`);
   }
 
   flee() {
@@ -389,7 +394,7 @@ export class Battle {
       const chance = evadeSkill.effectValue("evade") + sectBonus(this.player, "evade");
       if (randInt(1, 100) <= chance) {
         this.counterPct = evadeSkill.effectValue("counter_pct");
-        this.log.push(`${this.enemy.name}의 ${name}을(를) 흘려냈다! (다음 공격 +${this.counterPct}%)`);
+        this.log.push(`${this.enemy.name}의 ${name}${josa(name, "을/를")} 흘려냈다! (다음 공격 +${this.counterPct}%)`);
         return 0;
       }
     }
@@ -558,7 +563,7 @@ export class Battle {
     if (!this.enemy.isAlive()) return this.finish(true);
 
     const warning = this.nextSpecialWarning();
-    if (warning) this.log.push(`⚠️ ${this.enemy.name}이(가) 「${warning}」의 기세를 끌어올린다!`);
+    if (warning) this.log.push(`⚠️ ${this.enemy.name}${josa(this.enemy.name, "이/가")} 「${warning}」의 기세를 끌어올린다!`);
     return null;
   }
 
@@ -572,7 +577,7 @@ export class Battle {
       this.player.kills += 1;
       const outro = reactiveLine(this.player, this.enemy.outros, this.enemy.outro);
       if (outro) this.log.push(outro);
-      this.log.push(`${this.enemy.name}을(를) 쓰러뜨렸다! 실전 경험 +${exp}`);
+      this.log.push(`${this.enemy.name}${josa(this.enemy.name, "을/를")} 쓰러뜨렸다! 실전 경험 +${exp}`);
       this.player.fame += FAME_BY_TIER[this.enemy.tier] || 0;
       this.applyStatGrowth();
       this.gainSilver();
@@ -595,7 +600,7 @@ export class Battle {
     if (drop && rng.random() < drop.chance && !this.player.hasSkill(drop.skill)) {
       const skill = new Skill(drop.skill);
       this.log.push(...this.player.learnSkill(skill));
-      this.log.push(`📕 품에서 비급이 떨어졌다. 새 무공 「${skill.name}」을(를) 익혔다!`);
+      this.log.push(`📕 품에서 비급이 떨어졌다. 새 무공 「${skill.name}」${josa(skill.name, "을/를")} 익혔다!`);
     }
   }
 

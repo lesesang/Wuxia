@@ -15,6 +15,7 @@ import {
 } from "./rules.js";
 import { MAX_TURN } from "./character.js";
 import { storage } from "./storage.js";
+import { josa } from "./josa.js";
 
 const game = new Game();
 const ui = {
@@ -268,7 +269,7 @@ function renderTitle() {
   const hasSave = loadCheckpoint() !== null;
   const save = hasSave ? loadCheckpoint().player : null;
   app().innerHTML = `<div class="title-wrap">
-    <h1 class="title-name">무협<br>로그라이크</h1>
+    <h1 class="title-name">강호<br>십년</h1>
     <p class="hero-line">십 년 뒤 겨울, 천마봉에서 누군가 기다린다.<br>그때까지 어떤 무인이 될지는 당신이 정한다.</p>
     <div class="title-actions">
       ${hasSave ? `<button class="start-btn" data-act="continue">이어하기<small>${esc(save.origin)}, ${esc(save.realm)}, ${Math.min(save.turn, MAX_TURN)}달째</small></button>` : ""}
@@ -505,7 +506,7 @@ function statusModal() {
     const transfer = moved ? `<button class="mini-btn transfer-btn" data-act="transfer-mastery" data-key="${esc(s.key)}">주무공에 성취 +${moved} 옮기기</button>` : "";
     const secret = s.secretName
       ? `<div class="skill-meta">비기 「${esc(s.secretName)}」: ${s.secretUnlocked ? "터득함" : `${esc(s.secretUnlockGrade)} 품계, 성취 ${s.secretUnlockMastery}에 터득`}</div>` : "";
-    return `<div class="skill-row"><div class="skill-head"><span>${esc(s.name)} <span class="skill-meta">${esc(s.type)}, ${esc(s.grade)}</span></span>${button}</div>
+    return `<div class="skill-row"><div class="skill-head"><span>${esc(s.name)} <span class="skill-meta">${esc(s.type === "심공" ? "심법" : s.type)}, ${esc(s.grade)}</span></span>${button}</div>
       <div class="mastery"><span class="stat-track"><span style="width:${s.mastery}%"></span></span><span class="skill-meta">성취 ${s.mastery}${s.mastery >= 100 ? (s.canEvolve() ? ", 다음 성취에 승급" : ", 더 오르지 않음") : ""}</span></div>
       ${secret}<div class="skill-meta">${esc(s.desc)}</div>${transfer}</div>`;
   }).join("") || `<p class="codex-empty">아직 익힌 무공이 없습니다.</p>`;
@@ -613,7 +614,7 @@ function renderBattle() {
       <button class="bt-btn main" data-act="battle" data-action="기본공격">⚔️ ${skill ? esc(skill.name) : "맨손 공격"}<small>${esc(attackNote)}</small></button>
       <div class="battle-actions">
         <button class="bt-btn" data-act="battle" data-action="비기" ${secretReady ? "" : "disabled"}>✨ ${skill?.secretUnlocked ? esc(skill.secretName) : "비기"}<small>${esc(secretNote)}</small></button>
-        <button class="bt-btn${b.sealed ? " suggest" : ""}" data-act="battle" data-action="심법" ${mindset ? "" : "disabled"}>🧘 ${mindset ? esc(mindset.name) : "심법"}<small>${mindset ? "회복, 점혈 해제" : "익힌 심공 없음"}</small></button>
+        <button class="bt-btn${b.sealed ? " suggest" : ""}" data-act="battle" data-action="심법" ${mindset ? "" : "disabled"}>🧘 ${mindset ? esc(mindset.name) : "심법"}<small>${mindset ? "회복, 점혈 해제" : "익힌 심법 없음"}</small></button>
         <button class="bt-btn${warning && movement ? " suggest" : ""}" data-act="battle" data-action="경공" ${movement && p.qi >= movement.qiCost ? "" : "disabled"}>💨 ${movement ? esc(movement.name) : "경공"}<small>${movement ? `내력 ${movement.qiCost}, 회피 ${movement.effectValue("evade")}%` : "익힌 경공 없음"}</small></button>
         ${b.isFinal ? "" : `<button class="bt-btn flee" data-act="battle" data-action="도주">🏃 도주<small>실패하면 공격받음</small></button>`}
       </div>
@@ -689,7 +690,7 @@ function topbar() {
 function legacyPanel() {
   const { ending } = game;
   if (!loadMeta().legacy_open) return "";
-  if (ending.legacyLeft) return `<p class="legacy-note">🏺 「${esc(ending.legacyLeft)}」을(를) 다음 강호행에 남겼습니다.</p>`;
+  if (ending.legacyLeft) return `<p class="legacy-note">🏺 「${esc(ending.legacyLeft)}」${josa(esc(ending.legacyLeft), "을/를")} 다음 강호행에 남겼습니다.</p>`;
   const options = game.legacyOptions();
   if (!options.length) return `<p class="legacy-note">남길 만한 것이 없습니다.</p>`;
   return `<div class="legacy-panel"><h4>🏺 전설의 유산: 하나를 남긴다</h4>
@@ -913,7 +914,7 @@ function downloadRecords() {
   const blob = new Blob([exportRecords()], { type: "application/json" });
   const link = document.createElement("a");
   link.href = URL.createObjectURL(blob);
-  link.download = "무협로그라이크-기록.json";
+  link.download = "강호십년-기록.json";
   link.click();
   URL.revokeObjectURL(link.href);
   ui.notice = "기록을 내려받았습니다.";
