@@ -3,7 +3,7 @@ import { DB } from "./data.js";
 import { RENAMED_ORIGINS } from "./meta.js";
 import { randInt } from "./rng.js";
 import {
-  dominant, hasEffect, MA_HEAL_PENALTY, newAlignment, ORIGIN_SECTS, SA_SILVER_BONUS, sectBonus,
+  ALIGNMENT_CAP, ALIGNMENT_SCALE, dominant, hasEffect, MA_HEAL_PENALTY, newAlignment, ORIGIN_SECTS, SA_SILVER_BONUS, sectBonus,
   startSkills, sumEffect,
 } from "./rules.js";
 import { josa } from "./josa.js";
@@ -241,7 +241,7 @@ export class Player {
     // 그 길로 기운 자질이 있으면 오를 때 더 오른다
     const extra = amount > 0 ? this.traits.flatMap((k) => DB.traits[k]?.effects || [])
       .filter((e) => e.type === "alignment_gain" && e.side === name).reduce((sum, e) => sum + e.amount, 0) : 0;
-    this.alignment[name] = Math.max(0, (this.alignment[name] || 0) + amount + extra);
+    this.alignment[name] = Math.max(0, Math.min(ALIGNMENT_CAP, (this.alignment[name] || 0) + amount + extra));
   }
   hasFlag(flag) { return this.flags.includes(flag); }
   addFlag(flag) { if (!this.hasFlag(flag)) this.flags.push(flag); }
@@ -313,7 +313,7 @@ export class Player {
   toDict() {
     return {
       origin: this.origin, origin_key: this.originKey, realm: this.realm,
-      stat_scale: STAT_SCALE, external: this.external, internal: this.internal, martial: this.martial, mind: this.mind,
+      stat_scale: STAT_SCALE, alignment_scale: ALIGNMENT_SCALE, external: this.external, internal: this.internal, martial: this.martial, mind: this.mind,
       hp: this.hp, qi: this.qi, battles: this.battles,
       encountered_enemies: this.encounteredEnemies, pending_encounters: this.pendingEncounters,
       skills: this.skills.map((s) => s.toDict()), main_skill: this.mainSkill, chosen_arts: this.chosenArts,
@@ -367,6 +367,7 @@ export class Player {
     p.inventory = Object.fromEntries(Object.entries(d.inventory || {}).filter(([k]) => DB.market[k]));
     p.bossWeaken = d.boss_weaken ?? 0;
     p.alignment = { ...newAlignment(), ...(d.alignment || {}) };
+    if (!d.alignment_scale) for (const name of Object.keys(p.alignment)) p.alignment[name] = Math.min(ALIGNMENT_CAP, p.alignment[name] * ALIGNMENT_SCALE);
     p.flags = [...(d.flags || [])];
     p.seenEvents = [...(d.seen_events || [])];
     p.kills = d.kills ?? 0;

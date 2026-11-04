@@ -245,6 +245,7 @@ function equipReward(player, key) {
   return [`「${name}」${josa(name, "을/를")} 받았지만 지금 병장기가 더 좋다`];
 }
 
+const TEN_YEARS_MASTERY = 40; // 강호초출이 문하에 든 날 고른 무공과 심법의 성취
 const STARTER_WEAPONS = {
   검법: "낡은검", 도법: "낡은도", 창법: "낡은창", 봉법: "낡은곤봉", 권법: "낡은권대", 장법: "낡은장갑", 암기: "낡은비도",
 };
@@ -261,7 +262,9 @@ function takeStartWeapon(player, style) {
   player.skills = player.skills.filter((s) => s.type !== "공격무공" || !defaults.includes(s.key));
   player.mainSkill = null;
   const skill = new Skill(key);
-  const summary = [`📕 무공 「${skill.name}」`, ...player.learnSkill(skill)];
+  // 십 년을 갈고닦은 무공이라 처음부터 성취가 있다
+  skill.mastery = TEN_YEARS_MASTERY;
+  const summary = [`📕 십 년을 갈고닦은 무공 「${skill.name}」`, ...player.learnSkill(skill)];
   player.mainSkill = key;
   return [...summary, ...equipReward(player, STARTER_WEAPONS[style]), ...grantStartSkills(player)];
 }
@@ -272,9 +275,10 @@ function takeStartMindset(player, key) {
   const defaults = DB.origins.origins[player.originKey].skills || [];
   player.skills = player.skills.filter((s) => s.type !== "심공" || !defaults.includes(s.key));
   const skill = new Skill(key);
+  skill.mastery = TEN_YEARS_MASTERY;
   player.learnSkill(skill);
   player.chosenArts.심공 = key;
-  return [`📕 심법 「${skill.name}」`];
+  return [`📕 십 년을 쉰 숨 「${skill.name}」`];
 }
 
 const REWARD_BONUSES = [10, 26, 50, 80]; // 보상 병기의 네 단계

@@ -4,7 +4,9 @@ import { pick, rng } from "./rng.js";
 
 // ---------- 성향 ----------
 export const ALIGNMENTS = ["정도", "사도", "마도"];
-const DOMINANT_THRESHOLD = 3;
+export const ALIGNMENT_CAP = 999;
+export const ALIGNMENT_SCALE = 20; // 성향이 낮은 수로 쌓이던 때의 저장을 옮길 때 쓴다
+const DOMINANT_THRESHOLD = 60;
 export const JUNG_DISCOUNT = 10;
 export const SA_SILVER_BONUS = 25;
 export const MA_DAMAGE_BONUS = 20;
