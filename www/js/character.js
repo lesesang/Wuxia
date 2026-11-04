@@ -194,6 +194,7 @@ export class Player {
     this.weapon = data.weapon || null;
     this.armor = null;
     this.gear = []; // 갈아 쓸 수 있게 챙겨 둔 병장기
+    this.person = { gender: "남", surname: "", given: "" };
     this.pendingLegacy = []; // 이어받기로 했지만 아직 흔적을 찾지 못한 유산
     this.inventory = { ...(data.items || {}) };
     for (const key of traitKeys) {
@@ -430,7 +431,7 @@ export class Player {
       hp: this.hp, qi: this.qi, battles: this.battles,
       encountered_enemies: this.encounteredEnemies, pending_encounters: this.pendingEncounters,
       skills: this.skills.map((s) => s.toDict()), main_skill: this.mainSkill, chosen_arts: this.chosenArts,
-      traits: this.traits, slain: this.slain, silver: this.silver, weapon: this.weapon, armor: this.armor, gear: this.gear, pending_legacy: this.pendingLegacy,
+      traits: this.traits, slain: this.slain, silver: this.silver, weapon: this.weapon, armor: this.armor, gear: this.gear, pending_legacy: this.pendingLegacy, person: this.person,
       inventory: this.inventory, boss_weaken: this.bossWeaken, alignment: this.alignment,
       flags: this.flags, seen_events: this.seenEvents, kills: this.kills,
       fame: this.fame, sect: this.sect, injury: this.injury,
@@ -483,6 +484,7 @@ export class Player {
     p.armor = DB.market[d.armor] ? d.armor : null;
     p.gear = (d.gear || []).map(renamedItem).filter((k) => DB.market[k]);
     p.pendingLegacy = d.pending_legacy ?? [];
+    p.person = d.person ?? { gender: "남", surname: "", given: "" };
     p.inventory = Object.fromEntries(Object.entries(d.inventory || {}).filter(([k]) => DB.market[k]));
     p.bossWeaken = d.boss_weaken ?? 0;
     p.alignment = { ...newAlignment(), ...(d.alignment || {}) };

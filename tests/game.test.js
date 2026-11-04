@@ -7,13 +7,13 @@ import { Battle, dropSkill, Enemy, statureEnemy, useConsumable } from "../www/js
 import { GRADE_ORDER, Player, Skill } from "../www/js/character.js";
 import { DB } from "../www/js/data.js";
 import { applyEffects, dueOriginEvent, pendingOriginEvents, grantStartGear, grantStartGifts, canStartChain, checkRequires, enemyIntro, eventView, LAST_CHAIN_TURN, pickRandomEvent, resolveChoice, storyEventForTurn, validateChains, validateEvents } from "../www/js/events.js";
-import { buildEpilogue, Game } from "../www/js/game.js";
+import { buildEpilogue, Game, settlePerson } from "../www/js/game.js";
 import { halpun, josa } from "../www/js/josa.js";
 import { blockReason, buy, equipmentBonus, ITEM_GRADES, openMarket, priceOf, sell } from "../www/js/market.js";
 import {
   activeContent, legacyPowers, upgradeLegacy, setUpgradeUse, upgradeLevel, addKarma, buyContent, buyProvision, refundProvision, upgradeTraits, buyUpgrade, exportRecords, importRecords, extraSlots, loadCheckpoint, legacyAvailable, loadEventLog, loadMeta, nextReward, recordEventPick, openLegacy, saveMeta, toggleContent, unlockOrigin,
 } from "../www/js/meta.js";
-import { alignTier, applyGrowth, breakthroughBlock, focusedSide, byname, fameRank, getChapter, getYear, marketTurns, sumEffect, talkLine, traitSlots } from "../www/js/rules.js";
+import { personalize, fullName, alignTier, applyGrowth, breakthroughBlock, focusedSide, byname, fameRank, getChapter, getYear, marketTurns, sumEffect, talkLine, traitSlots } from "../www/js/rules.js";
 import { rng } from "../www/js/rng.js";
 import { storage } from "../www/js/storage.js";
 
@@ -1475,7 +1475,7 @@ test("싸움이 걸린 결과는 이긴 뒤에 적용되고, 달아나면 다시
     game.chooseEvent(0);
     assert.ok(game.battle);
     assert.equal(game.player.silver, before, "싸우기 전에는 받지 않는다");
-    assert.ok(!game.log.some((l) => l.includes("혼인은 사양")));
+    assert.ok(!game.log.some((l) => l.includes("오늘은 재미있었어요")));
     game.player.qi = 0;
     if (flee) {
       rng.random = () => 0;
@@ -1487,7 +1487,7 @@ test("싸움이 걸린 결과는 이긴 뒤에 적용되고, 달아나면 다시
       rng.random = () => 0.5;
       game.battleAction("기본공격");
       assert.ok(game.player.silver > before);
-      assert.ok(game.log.some((l) => l.includes("혼인은 사양")));
+      assert.ok(game.log.some((l) => l.includes("오늘은 재미있었어요")));
     }
   };
   play(false);
@@ -1868,7 +1868,7 @@ test("결말 문장은 상황을 따르고 서로 부딪치지 않는다", () =>
   assert.ok(text("하오문", (p) => { p.fame = 150; p.turn = 100; }, "사망").includes("잔이 하나씩"));
   assert.ok(text("하오문", (p) => { p.fame = 0; }, "사망").includes("무명"));
   assert.ok(text("하오문", (p) => { p.alignment.마도 = 200; }, "사망").includes("잔치"));
-  assert.ok(text("하북팽가", () => {}, "귀순").includes("네 형"));
+  assert.ok(text("하북팽가", () => {}, "귀순").includes("〈네형"));
   // 이벤트 결과를 겪지 않았으면 겪은 것처럼 말하지 않는다
   assert.ok(text("개방제자", () => {}, "기본").includes("범인은 아직"));
   assert.ok(text("개방제자", (p) => p.addFlag("개방_범인"), "기본").includes("범인은 찾았소"));
@@ -3699,4 +3699,76 @@ test("절정 이상의 적은 이름이나 부대의 이름을 갖고 약한 세
     if (e.realm === "이류") assert.ok(!/오대세가|구파/.test(e.name), k);
   }
   assert.equal(DB.enemies.왕지네.name.startsWith("묵은"), false);
+});
+
+test("호칭은 성별과 이름을 따르고 받침에 맞는 조사를 쓴다", () => {
+  const he = { gender: "남", surname: "남궁", given: "무진" };
+  const she = { gender: "여", surname: "팽", given: "서린" };
+  assert.equal(fullName(he), "남궁 무진");
+  assert.equal(fullName(she), "팽서린");
+  assert.equal(personalize("〈성대협〉, 드시오", he), "남궁 대협, 드시오");
+  assert.equal(personalize("〈성대협〉, 드시오", she), "팽 여협, 드시오");
+  assert.equal(personalize("〈넷째형:은/는〉 왼발", he), "넷째 형은 왼발");
+  assert.equal(personalize("〈넷째형:은/는〉 왼발", she), "넷째 오라버니는 왼발");
+  assert.equal(personalize("〈이름:아/야〉", he), "무진아");
+  assert.equal(personalize("〈이름:아/야〉", she), "서린아");
+  assert.equal(personalize("〈네놈〉", she), "네년");
+  // 이름을 모르는 예전 저장
+  assert.equal(personalize("〈성명〉 〈대협〉", null), "무명 대협");
+});
+
+test("데이터의 자리표시는 모두 뜻이 있다", () => {
+  const leftovers = new Set(["별호", "유산", "이름"]);
+  const person = { gender: "여", surname: "위", given: "서린" };
+  const walk = (value) => {
+    if (typeof value === "string") {
+      for (const m of personalize(value, person).matchAll(/〈([^〉]*)〉/g)) assert.ok(leftovers.has(m[1]), `${m[0]}: ${value}`);
+    } else if (value && typeof value === "object") Object.values(value).forEach(walk);
+  };
+  Object.values(DB).forEach(walk);
+});
+
+test("가문의 성씨는 고정이고 비운 칸은 저절로 채운다", () => {
+  assert.equal(settlePerson("남궁세가", { surname: "김", given: "철수" }).surname, "남궁");
+  assert.equal(settlePerson("하북팽가", { gender: "여", given: "서린" }).surname, "팽");
+  const free = settlePerson("무림초출", { gender: "여", surname: "연<b>", given: "" });
+  assert.equal(free.surname, "연b");
+  assert.ok(DB.flavor.names.female.includes(free.given));
+  const male = settlePerson("표국표사", {});
+  assert.equal(male.gender, "남");
+  assert.ok(male.surname && male.given);
+});
+
+test("시작할 때 정한 성별과 이름이 저장을 거쳐 남고 성별 조건을 따른다", () => {
+  const game = new Game();
+  game.start("무림초출", [], [], { gender: "여", surname: "김", given: "서린" });
+  const p = game.player;
+  assert.deepEqual(p.person, { gender: "여", surname: "김", given: "서린" });
+  const again = Player.fromDict(p.toDict());
+  assert.equal(again.person.given, "서린");
+  assert.equal(checkRequires(p, { gender: "여" }), true);
+  assert.equal(checkRequires(p, { gender: "남" }), false);
+  assert.equal(eventView(p, "비무초친").text.includes("여인"), true);
+});
+
+test("명성이 낮을 때 성향을 아는 듯한 반응을 붙이지 않고 무명 푸념 말투를 쓰지 않는다", () => {
+  for (const table of ["month", "victory", "market"]) assert.equal(DB.flavor.talk[table].무명, undefined);
+  for (const [key, e] of Object.entries(DB.events)) {
+    for (const r of e.reacts ?? []) {
+      if (r.requires?.dominant || r.requires?.dominant_in) assert.ok(r.requires.min_fame >= 10, `${key}: ${r.text}`);
+    }
+  }
+});
+
+test("사도와 마도 선택지가 정도에 크게 뒤지지 않는다", () => {
+  const count = { 정도: 0, 사도: 0, 마도: 0 };
+  const walk = (o) => {
+    if (!o || typeof o !== "object") return;
+    if (o.alignment) for (const side of Object.keys(count)) if (o.alignment[side] > 0) count[side] += 1;
+    Object.values(o).forEach(walk);
+  };
+  walk(DB.events);
+  walk(DB.chains);
+  assert.ok(count.사도 >= count.정도 * 0.85, JSON.stringify(count));
+  assert.ok(count.마도 >= count.정도 * 0.85, JSON.stringify(count));
 });

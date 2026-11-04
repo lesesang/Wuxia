@@ -11,7 +11,7 @@ import {
 } from "./meta.js";
 import {
   ALIGNMENTS, benefitText, byname, fameRank, getChapterInfo, getMonth, getYear, marketTurns, nextSlotThreshold,
-  ORIGIN_SECTS, realmProgress, traitSlots, realmPerks, activeCompanions, MAX_COMPANIONS } from "./rules.js";
+  ORIGIN_SECTS, personalize, fullName, realmProgress, traitSlots, realmPerks, activeCompanions, MAX_COMPANIONS } from "./rules.js";
 import { MAX_TURN } from "./character.js";
 import { storage } from "./storage.js";
 import { halpun, josa } from "./josa.js";
@@ -19,7 +19,7 @@ import { halpun, josa } from "./josa.js";
 const game = new Game();
 const ui = {
   screen: "title", setupTab: "origin", origin: "무림초출", traits: new Set(),
-  modals: [], popsToIgnore: 0, traitFilter: "전체", codexQuery: "", codexFilter: "전체", codexRead: null, legacy: new Set(), legacyDrop: null, shopTab: "origin", shopFrom: "title", modal: null, tab: "enemies", statusTab: "stats", notice: null, lastTyped: "", bars: null,
+  modals: [], popsToIgnore: 0, traitFilter: "전체", codexQuery: "", codexFilter: "전체", codexRead: null, legacy: new Set(), legacyDrop: null, person: loadPerson(), shopTab: "origin", shopFrom: "title", modal: null, tab: "enemies", statusTab: "stats", notice: null, lastTyped: "", bars: null,
 };
 let installPrompt = null;
 const app = () => document.getElementById("app");
@@ -211,17 +211,20 @@ function codexModal() {
 function refreshCodex() {
   const body = document.querySelector("#codex-modal .codex-body");
   if (body) body.innerHTML = codexBody();
+  personalizeDom(body);
 }
 
 function refreshCodexList() {
   const list = document.querySelector("#codex-modal .codex-list");
   if (list) list.innerHTML = codexListHtml(codexRows(ui.tab, loadMeta()));
+  personalizeDom(list);
 }
 
 function helpModal() {
   const section = (title, lines) => `<div class="modal-section"><h4>${title}</h4>${lines.map((l) => `<p class="help-line">${l}</p>`).join("")}</div>`;
     const pages = {
     처음: `${section("목표", ["10년(120달) 뒤 겨울, 천마봉에서 천마를 쓰러뜨립니다.", "처음에는 어렵습니다. 죽어도 카르마가 남고, 멀리 갈수록 많이 받습니다.", "카르마로 출신과 자질, 항상 적용되는 기틀, 새 인연을 얻을 수 있습니다. 쌓인 카르마가 늘면 누적 보상도 저절로 받습니다. 채비는 다음 강호행 한 번에만 쓰는 값싼 준비물입니다. 천마를 한 번 쓰러뜨리면 전설의 유산도 열 수 있습니다."])}
+${section("이름과 성별", ["새 강호행을 시작할 때 성별과 성씨, 이름을 정합니다. 남궁과 팽가 출신은 성씨가 정해져 있고, 비워 두면 저절로 지어 줍니다. 사람들은 그 이름과 성별에 맞춰 부르고, 몇몇 사건은 성별에 따라 달라집니다."])}
 ${section("매달 하는 일", [
     "<b>탐색</b>: 강호를 떠돌며 전투, 사건, 기연 중 하나를 만납니다. 가장 크게 성장하지만 위험합니다.",
     "<b>수련</b>: 외공과 무리, 주무공 성취가 오릅니다. 대련으로 실전 경험을 얻기도 합니다.",
@@ -327,7 +330,7 @@ function renderTitle() {
     <h1 class="title-name">강호행</h1>
     <p class="hero-line">십 년 뒤 겨울, 천마봉에서 누군가 기다린다.<br>그때까지 어떤 무인이 될지는 당신이 정한다.</p>
     <div class="title-actions">
-      ${hasSave ? `<button class="start-btn" data-act="continue">이어하기<small>${esc(save.origin)}, ${esc(save.realm)}, ${Math.min(save.turn, MAX_TURN)}달째</small></button>` : ""}
+      ${hasSave ? `<button class="start-btn" data-act="continue">이어하기<small>${save.person ? `${esc(fullName(save.person))}, ` : ""}${esc(save.realm)}, ${Math.min(save.turn, MAX_TURN)}달째</small></button>` : ""}
       <button class="${hasSave ? "continue-btn" : "start-btn"}" data-act="setup">새 강호행</button>
     </div>
     <p class="karma-display">카르마 ${meta.current_karma} (누적 ${meta.total_karma})${nextReward(meta) ? `<small class="block">다음 누적 보상까지 ${nextReward(meta).at - meta.total_karma}</small>` : ""}</p>
@@ -526,6 +529,29 @@ function upgradeSetup(meta) {
   return rows ? `<p class="section-note">이번에 쓸 단계만 남길 수 있습니다. 내려도 산 단계는 그대로이고 언제든 되돌릴 수 있습니다.</p>${rows}` : emptyNote("아직 올린 기틀이 없습니다. 카르마 상점에서 살 수 있습니다.");
 }
 
+/** 지난번에 쓴 성별과 이름 */
+function loadPerson() {
+  try {
+    return { gender: "남", surname: "", given: "", ...JSON.parse(storage.get("wuxia-person") || "{}") };
+  } catch {
+    return { gender: "남", surname: "", given: "" };
+  }
+}
+
+/** 성별과 이름을 정하는 칸. 가문 출신은 성씨가 고정이다 */
+function personSetup() {
+  const fixed = DB.origins.origins[ui.origin]?.surname;
+  const radio = (value) => `<label class="person-gender"><input type="radio" name="person-gender" value="${value}" ${ui.person.gender === value ? "checked" : ""}> ${value === "남" ? "남성" : "여성"}</label>`;
+  return `<div class="person-setup">
+      <div class="person-row">${radio("남")}${radio("여")}</div>
+      <div class="person-row person-names">
+        <label>성씨<input id="person-surname" maxlength="4" autocomplete="off" value="${esc(fixed || ui.person.surname)}" ${fixed ? "disabled" : ""} placeholder="비우면 저절로"></label>
+        <label>이름<input id="person-given" maxlength="6" autocomplete="off" value="${esc(ui.person.given)}" placeholder="비우면 저절로"></label>
+      </div>
+      ${fixed ? `<p class="section-note">가문의 성씨는 바꿀 수 없습니다.</p>` : ""}
+    </div>`;
+}
+
 function legacySetup(meta) {
   if (!meta.legacy_open) return emptyNote("전설의 유산은 카르마 상점에서 열 수 있습니다.");
   const powers = legacyPowers(meta);
@@ -564,6 +590,7 @@ function renderSetup() {
       <h2>어떤 무인으로 시작할까</h2>
       <button class="shop-link" data-act="shop">카르마 ${meta.current_karma}, 상점</button>
     </div>
+    ${personSetup()}
     <div class="setup-tabs">
       <button class="tab-btn${ui.setupTab === "origin" ? " active" : ""}" data-act="setup-tab" data-tab="origin">출신</button>
       <button class="tab-btn${ui.setupTab === "trait" ? " active" : ""}" data-act="setup-tab" data-tab="trait">자질 ${ui.traits.size}/${slots}</button>
@@ -833,7 +860,7 @@ function topbar() {
   return `<div class="topbar"><div class="topbar-inner">
     <div class="topbar-row1">
       <span class="turn-info">${getYear(turn)}년차 ${getMonth(turn)}월<small>${esc(getChapterInfo(turn).title)}, ${p.turn}/${p.maxTurn}달</small></span>
-      <span class="realm-info">${esc(p.realm)}<small>${esc(byname(p))}</small></span>
+      <span class="realm-info">${esc(p.realm)}<small>${esc(fullName(p.person))}${byname(p) === "이름 없는 무인" ? "" : `, ${esc(byname(p))}`}</small></span>
     </div>
     <div class="turn-track"><span style="width:${percent(turn, p.maxTurn)}%"></span></div>
     <div class="topbar-row2">
@@ -878,6 +905,7 @@ function renderEnding() {
   return `<div class="stage"><div class="stage-inner ending-sheet">
       <div class="seal seal-${esc(ending.key)}">${esc(ending.seal)}</div>
       <h2 class="ending-title">${esc(ending.title)}</h2>
+      <p class="ending-name">${esc(fullName(p.person))}</p>
       <p class="ending-text">${esc(ending.text)}</p>
       ${ending.epilogue.map((l) => `<p class="epilogue">${esc(l)}</p>`).join("")}
       ${p.chronicle.length ? `<details class="chronicle"><summary>이번 강호행 돌아보기</summary>${chronicleList(p)}</details>` : ""}
@@ -1051,6 +1079,26 @@ function followLog() {
   if (stage) stage.scrollTop = stage.scrollHeight;
 }
 
+/** 화면에 나온 글의 호칭 자리표시를 지금 무인의 성별과 이름으로 바꾼다 */
+function personalizeDom(root) {
+  if (!root) return;
+  const person = game.player?.person ?? ui.person;
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+    if (node.nodeValue.includes("〈")) node.nodeValue = personalize(node.nodeValue, person);
+  }
+}
+
+/** 입문서와 도감처럼 따로 그리는 창의 글도 같은 호칭을 쓴다 */
+export function watchPerson() {
+  new MutationObserver((records) => {
+    for (const record of records) for (const node of record.addedNodes) {
+      if (node.nodeType === 1) personalizeDom(node);
+      else if (node.nodeType === 3 && node.nodeValue.includes("〈")) node.nodeValue = personalize(node.nodeValue, game.player?.person ?? ui.person);
+    }
+  }).observe(document.body, { childList: true, subtree: true });
+}
+
 function typeText() {
   const nodes = [...document.querySelectorAll("[data-type]")];
   const delay = parseInt(storage.get("wuxia-speed") ?? "18", 10);
@@ -1110,6 +1158,7 @@ export function render() {
   if (nextBox) nextBox.scrollTop = boxScroll;
   if (document.body.classList.contains("home")) window.scrollTo(0, homeScroll);
   else if (!document.body.classList.contains("in-battle")) window.scrollTo(0, 0);
+  personalizeDom(app());
   typeText();
   followLog();
 }
@@ -1195,7 +1244,7 @@ const actions = {
   title: () => { ui.screen = "title"; render(); },
   start: () => {
     closeModalQuietly();
-    game.start(ui.origin, [...ui.traits], [...ui.legacy]);
+    game.start(ui.origin, [...ui.traits], [...ui.legacy], ui.person);
     ui.legacy = new Set();
     ui.screen = "title";
     render();
@@ -1282,6 +1331,10 @@ export function installInput() {
     if (target.name === "origin") {
       ui.origin = target.value;
       render();
+    } else if (target.name === "person-gender") {
+      ui.person.gender = target.value;
+      storage.set("wuxia-person", JSON.stringify(ui.person));
+      render();
     } else if (target.name === "trait") {
       if (target.checked) ui.traits.add(target.value);
       else ui.traits.delete(target.value);
@@ -1312,6 +1365,10 @@ export function installInput() {
   });
 
   document.addEventListener("input", (event) => {
+    if (event.target.id === "person-surname" || event.target.id === "person-given") {
+      ui.person[event.target.id === "person-surname" ? "surname" : "given"] = event.target.value;
+      storage.set("wuxia-person", JSON.stringify(ui.person));
+    }
     if (event.target.id === "set-volume") setVolume(parseInt(event.target.value, 10));
   });
 

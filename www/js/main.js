@@ -1,7 +1,7 @@
 // 시작점: 데이터를 읽고 첫 화면을 그린다.
 import { installMusicTriggers } from "./audio.js";
 import { loadDataInBrowser } from "./data.js";
-import { applySavedFont, installInput, render } from "./ui.js";
+import { applySavedFont, installInput, render, watchPerson } from "./ui.js";
 
 async function boot() {
   applySavedFont();
@@ -13,6 +13,7 @@ async function boot() {
     throw error;
   }
   installInput();
+  watchPerson();
   installMusicTriggers();
   render();
 
