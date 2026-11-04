@@ -9,7 +9,7 @@ import { grantStartGear, grantStartSkills,
 import { bonusFor, buy, equipmentBonus, openMarket, sell } from "./market.js";
 import {
   activeContent, addKarma, claimAchievements, clearCheckpoint, extraSlots, rewardTraits, loadCheckpoint, loadMeta, recordRun, saveCheckpoint,
-  storeLegacy, takeLegacy, takeProvisions, updateGlobalCodex, updateKnown, upgradeTraits,
+  legacyPowers, storeLegacy, takeProvisions, updateGlobalCodex, updateKnown, upgradeTraits,
 } from "./meta.js";
 import { pick, pickWeighted, randInt, rng } from "./rng.js";
 import {
@@ -28,6 +28,8 @@ const ART_TRAIN_RATE = 2;
 const INSIGHT_CHANCE = 0.3;
 const GAUNTLET_REST = 20;
 const LOG_LIMIT = 40;
+const LEGACY_LAST_TURN = 12; // 이어받을 유산은 첫 해 안에 찾는다
+const LEGACY_FIND_RATE = 0.25;
 const VALID_ACTIONS = ["수련", "명상", "탐색", "휴식"];
 const SAME_SIDE_WEIGHT = 0.3;
 const VALID_BATTLE_ACTIONS = ["기본공격", "비기", "심법", "경공", "소비품", "도주"];
@@ -79,7 +81,7 @@ export class Game {
   // ---------- 시작과 복구 ----------
 
   /** 새 강호행 시작. 잠긴 출신이면 false */
-  start(originKey = "무림초출", selectedTraits = [], legacyIndex = null) {
+  start(originKey = "무림초출", selectedTraits = [], legacyPicks = []) {
     const meta = loadMeta();
     if (!meta.unlocked_origins.includes(originKey) || !DB.origins.origins[originKey]) return false;
     const traits = [...new Set(selectedTraits)]
@@ -91,54 +93,39 @@ export class Game {
     this.player = new Player(originKey, [...traits, ...upgradeTraits(meta, originKey), ...rewardTraits(meta), ...provisions.map((k) => `채비_${k}`)]);
     this.player.content = activeContent(meta);
     const giftLines = DB.origins.origins[originKey].choose_start ? [] : grantStartSkills(this.player);
-    const legacyLines = legacyIndex !== null && meta.legacy_open ? this.inheritLegacy(legacyIndex) : [];
+    // 고른 유산은 바로 받지 않는다. 첫 해 안에 그 흔적을 찾아낸다
+    if (meta.legacy_open) this.player.pendingLegacy = legacyPicks.map((i) => meta.legacies[i])
+      .filter((e) => e && (e.kind === "skill" ? DB.skills[e.key] : DB.market[e.key])).slice(0, legacyPowers(meta).take);
     updateKnown(this.player.skills.map((s) => s.key));
     const intro = getChapterInfo(1);
     const provisionLines = provisions.length ? [`챙겨 온 채비: ${provisions.map((k) => DB.karma.provisions[k].name).join(", ")}`] : [];
-    this.enterTurn([`${intro.title}, 1년차. ${intro.desc}`, ...provisionLines, ...giftLines, ...legacyLines]);
+    this.enterTurn([`${intro.title}, 1년차. ${intro.desc}`, ...provisionLines, ...giftLines]);
     return true;
-  }
-
-  /** 보관한 유산을 이어받는다. 한 번 쓰면 사라지고 전성기만은 못하다. */
-  inheritLegacy(index) {
-    const entry = takeLegacy(index);
-    if (!entry) return [];
-    const p = this.player;
-    let name;
-    if (entry.kind === "skill") {
-      const skill = Skill.fromDict({ key: entry.key, grade: inheritedGrade(entry.grade), mastery: 0 });
-      name = skill.name;
-      // 이미 익혔으면 유산은 성취가 된다
-      p.learnSkill(skill);
-    } else {
-      const key = inheritedGear(entry.key);
-      name = DB.market[key].name;
-      const { slot } = DB.market[key].effects.find((e) => e.type === "equip");
-      if (bonusFor(p, key) > equipmentBonus(p, slot)) p.equipGear(key);
-      else if (!p.ownsGear(key)) p.gear.push(key);
-    }
-    p.note(`전대 ${entry.from}의 유산 ${name}${josa(name, "을/를")} 이어받았다.`);
-    return [`전대 ${entry.from}${josa(entry.from, "이/가")} 남긴 ${name}${josa(name, "을/를")} 이어받았다. 세월에 조금 무뎌졌지만 아직 쓸 만하다.${entry.kind === "skill" ? " 신상의 무공 칸에서 골라 쓸 수 있다." : ""}`];
   }
 
   /** 이번 강호행에서 유산으로 남길 수 있는 것들 */
   legacyOptions() {
     const p = this.player;
-    // 신공은 출신과 카르마 인연으로만 얻으므로 유산으로 넘기지 못한다
-    const skills = p.skills.filter((s) => GRADE_ORDER.indexOf(s.grade) >= 1 && DB.skills[s.key].grade !== "신공" && !DB.skills[s.key].origin)
-      .sort((a, b) => GRADE_ORDER.indexOf(b.grade) - GRADE_ORDER.indexOf(a.grade)).slice(0, 4)
+    const { divine } = legacyPowers();
+    // 신공은 유산을 끝까지 강화해야 남길 수 있다
+    const skills = p.skills.filter((s) => GRADE_ORDER.indexOf(s.grade) >= 1 && (divine || s.grade !== "신공"))
+      .sort((a, b) => GRADE_ORDER.indexOf(b.grade) - GRADE_ORDER.indexOf(a.grade)).slice(0, 5)
       .map((s) => ({ kind: "skill", key: s.key, grade: s.grade, label: `${s.name} (${s.grade} 품계)` }));
-    const gear = [p.weapon, p.armor].filter((k) => DB.market[k]?.markets.length)
-      .map((k) => ({ kind: "gear", key: k, label: DB.market[k].name }));
+    const gear = [p.weapon, p.armor, ...p.gear].filter((k, i, all) => DB.market[k] && DB.market[k].grade !== "범품" && all.indexOf(k) === i)
+      .map((k) => ({ kind: "gear", key: k, label: `${DB.market[k].name} (${DB.market[k].grade})` }));
     return [...skills, ...gear];
   }
 
-  leaveLegacy(index) {
-    if (!this.ending || this.ending.legacyLeft || !loadMeta().legacy_open) return;
+  /** 끝날 때 유산을 남긴다. 보관이 가득 찼으면 지울 것을 골라야 한다 */
+  leaveLegacy(index, dropIndex = null) {
+    if (!this.ending || this.ending.legacyLeft || !loadMeta().legacy_open) return false;
     const option = this.legacyOptions()[index];
-    if (!option) return;
-    storeLegacy({ kind: option.kind, key: option.key, grade: option.grade, label: option.label, from: byname(this.player), origin: this.player.origin });
+    if (!option) return false;
+    const name = byname(this.player);
+    const entry = { kind: option.kind, key: option.key, grade: option.grade, label: option.label, from: name === "이름 없는 무인" ? "무명객" : name, origin: this.player.origin };
+    if (!storeLegacy(entry, dropIndex)) return false;
     this.ending.legacyLeft = option.label;
+    return true;
   }
 
   /** 새 달 공통 처리: 체크포인트를 저장하고 줄거리 이벤트를 연다. */
@@ -173,7 +160,12 @@ export class Game {
     }
     // 출신의 이야기는 결전 전에 반드시 찾아온다
     const originKey = dueOriginEvent(p);
-    if (originKey) this.event = { key: originKey, forced: true };
+    if (originKey) {
+      this.event = { key: originKey, forced: true };
+      return;
+    }
+    // 싸움이 이어져 첫 해가 저물도록 못 찾았으면 달이 시작할 때 흔적이 먼저 찾아온다
+    if (p.pendingLegacy.length && p.turn >= LEGACY_LAST_TURN) this.event = { key: "유산_발길", forced: true };
   }
 
   settleGifts() {
@@ -250,7 +242,17 @@ export class Game {
     } else {
       this.explore();
     }
-    if (!this.battle && !this.event) this.pendingNext = true;
+    if (!this.battle && !this.event) {
+      if (this.legacyFound()) this.event = { key: `유산_${name}`, forced: false };
+      else this.pendingNext = true;
+    }
+  }
+
+  /** 이어받기로 한 유산의 흔적을 이번 달에 찾아내는가. 첫 해가 끝나기 전에는 반드시 찾는다 */
+  legacyFound() {
+    const left = this.player.pendingLegacy.length;
+    if (!left) return false;
+    return this.player.turn >= LEGACY_LAST_TURN - left || rng.random() < LEGACY_FIND_RATE;
   }
 
   grow(stat) {
@@ -724,23 +726,6 @@ function karmaGain(player, key, victory) {
   if (key === "생사경") return { total, lines };
   add("경지", realmIndex(player.realm));
   return { total, lines };
-}
-
-/** 유산 무공은 한 등급 낮아지고 상승을 넘지 않는다. */
-function inheritedGrade(grade) {
-  const index = Math.max(0, GRADE_ORDER.indexOf(grade) - 1);
-  return GRADE_ORDER[Math.min(index, GRADE_ORDER.indexOf("상승"))];
-}
-
-/** 유산 장비는 같은 종류의 낮은 단계로 돌아온다. */
-function inheritedGear(key) {
-  const effect = DB.market[key].effects.find((e) => e.type === "equip");
-  const same = Object.keys(DB.market).filter((k) => {
-    const e = DB.market[k].effects.find((x) => x.type === "equip");
-    return e && DB.market[k].markets.length && e.slot === effect.slot && e.style === effect.style;
-  }).sort((a, b) => DB.market[a].price - DB.market[b].price);
-  const position = Math.min(same.indexOf(key), DB.karma.legacy.gear_tier - 1);
-  return same[Math.max(0, position)];
 }
 
 export function buildEpilogue(player, ending) {

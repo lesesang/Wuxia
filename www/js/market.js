@@ -15,6 +15,7 @@ const MAX_BOSS_WEAKEN = 60; // 천마의 체력은 이 이상 깎이지 않는�
 const MAX_DISCOUNT = 70;
 
 const LAST_MARKET_TURN = 119;
+const LAST_MARKET_MARKUP = 1.3;
 
 /** 시장 등급 1~4는 챕터를 따르고, 5는 마지막의 수상한 누군가 */
 const marketNumber = (turn) => (turn === LAST_MARKET_TURN ? 5 : Math.min(4, getChapter(turn)));
@@ -135,11 +136,27 @@ export function openMarket(turn, player) {
 export function priceOf(player, key) {
   let percent = sumEffect(player.traits, "market_discount", "percent");
   percent += alignValue(player.alignment, "정도", "discount");
-  return Math.max(1, Math.trunc(DB.market[key].price * (100 - Math.min(percent, MAX_DISCOUNT)) / 100));
+  // 수상한 누군가는 흔한 물건도 비싸게 내놓는다
+  const markup = player.turn === LAST_MARKET_TURN && !DB.market[key].always ? LAST_MARKET_MARKUP : 1;
+  return Math.max(1, Math.trunc(DB.market[key].price * markup * (100 - Math.min(percent, MAX_DISCOUNT)) / 100));
+}
+
+/** 신물 병장기를 내어 주는 증표가 가리키는 물건. 병기는 주무공에 맞는 것이다 */
+function gearFromToken(player, { grade, slot = "weapon" }) {
+  const main = player.bestSkill()?.category;
+  return Object.keys(DB.market).find((k) => {
+    const equip = DB.market[k].effects.find((e) => e.type === "equip");
+    return equip && equip.slot === slot && DB.market[k].grade === grade && (slot !== "weapon" || equip.style === main);
+  }) ?? null;
 }
 
 function effectIsUseful(player, effect, key) {
   if (effect.type === "equip") return !player.ownsGear(key);
+  if (effect.type === "main_gear") {
+    const target = gearFromToken(player, effect);
+    return !!target && !player.ownsGear(target);
+  }
+  if (effect.type === "last_strength") return true;
   switch (effect.type) {
     case "heal": case "cure": case "mastery": case "atk_buff": return (effect.percent ?? 1) > 0;
     case "stat": return player[effect.stat] < STAT_CAP;
@@ -150,7 +167,8 @@ function effectIsUseful(player, effect, key) {
 }
 
 export function blockReason(player, key) {
-  if (!DB.market[key].effects.some((e) => effectIsUseful(player, e, key))) return "효과 없음";
+  // 행낭에 넣는 물건은 쓸 때 효과가 나므로 언제든 살 수 있다
+  if (!DB.market[key].consumable && !DB.market[key].effects.some((e) => effectIsUseful(player, e, key))) return "효과 없음";
   if (DB.market[key].karma_price) return loadMeta().current_karma < DB.market[key].karma_price ? "카르마 부족" : null;
   if (player.silver < priceOf(player, key)) return "은자 부족";
   return null;
@@ -170,6 +188,12 @@ function applyEffect(player, key, effect) {
       break;
     case "skill": player.learnSkill(new Skill(effect.skill)); break;
     case "boss_weaken": player.bossWeaken += effect.percent; break;
+    case "last_strength": player.revives += effect.amount ?? 1; break;
+    case "main_gear": {
+      const target = gearFromToken(player, effect);
+      if (target && !player.ownsGear(target)) player.equipGear(target);
+      break;
+    }
     default:
   }
 }
@@ -249,7 +273,7 @@ export function sell(player, key) {
   return [true, `${name}${josa(name, "을/를")} 팔았다. (은자 +${price})`];
 }
 
-/** 이 병장기가 지금 묘리를 내는가. 병기는 주무공과 맞아야 한다. */
+/** 이 병장기가 지금 숨은 힘을 내는가. 병기는 주무공과 맞아야 한다. */
 export function gearGimmick(player, slot) {
   const item = DB.market[player[slot]];
   if (!item?.gimmick) return null;

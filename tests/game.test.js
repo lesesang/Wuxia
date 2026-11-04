@@ -11,7 +11,7 @@ import { buildEpilogue, Game } from "../www/js/game.js";
 import { halpun, josa } from "../www/js/josa.js";
 import { blockReason, buy, equipmentBonus, ITEM_GRADES, openMarket, priceOf, sell } from "../www/js/market.js";
 import {
-  activeContent, setUpgradeUse, upgradeLevel, addKarma, buyContent, buyProvision, refundProvision, upgradeTraits, buyUpgrade, exportRecords, importRecords, extraSlots, loadCheckpoint, legacyAvailable, loadEventLog, loadMeta, nextReward, recordEventPick, openLegacy, saveMeta, takeLegacy, toggleContent, unlockOrigin,
+  activeContent, legacyPowers, upgradeLegacy, setUpgradeUse, upgradeLevel, addKarma, buyContent, buyProvision, refundProvision, upgradeTraits, buyUpgrade, exportRecords, importRecords, extraSlots, loadCheckpoint, legacyAvailable, loadEventLog, loadMeta, nextReward, recordEventPick, openLegacy, saveMeta, toggleContent, unlockOrigin,
 } from "../www/js/meta.js";
 import { alignTier, applyGrowth, breakthroughBlock, focusedSide, byname, fameRank, getChapter, getYear, marketTurns, sumEffect, talkLine, traitSlots } from "../www/js/rules.js";
 import { rng } from "../www/js/rng.js";
@@ -878,7 +878,7 @@ test("계열마다 무공과 무기가 고르게 있다", () => {
   }
   for (const style of ["검법", "도법", "창법", "봉법", "권법", "장법", "암기"]) {
     const weapons = Object.values(DB.market).filter((i) => i.category === "무기" && i.markets.length && i.effects.some((e) => e.style === style));
-    assert.equal(weapons.length, 6, style);
+    assert.equal(weapons.length, 7, style);
   }
 });
 
@@ -1757,7 +1757,7 @@ test("결말은 출신, 성향, 명성, 쓰던 무공마다 문장이 있다", (
   for (const key of ["사망", "배드", "기본", "생사경"]) {
     for (const side of ["정도", "사도", "마도"]) assert.ok(endingRows(key).some((r) => r.requires.dominant === side), `${key} ${side}`);
   }
-  const attacks = Object.keys(DB.skills).filter((k) => DB.skills[k].grade === "신공" && DB.skills[k].type === "공격무공");
+  const attacks = Object.keys(DB.skills).filter((k) => DB.skills[k].grade === "신공" && DB.skills[k].type === "공격무공" && !DB.skills[k].reserved);
   for (const k of attacks) assert.ok(endingRows("기본").some((r) => r.requires.main_skill === k), k);
 });
 
@@ -2064,10 +2064,10 @@ test("모든 인연에 사건이나 기연이 있다", () => {
   for (const key of Object.keys(DB.karma.content)) assert.ok(text.includes(`"unlocked":"${key}"`), key);
 });
 
-test("유산은 천마를 쓰러뜨린 뒤 열리고, 남기고, 이어받으면 사라진다", () => {
-  withKarma(30);
+test("유산은 천마를 쓰러뜨린 뒤 열리고, 이어받아도 남으며, 첫 해 안에 찾아낸다", () => {
+  withKarma(100);
   assert.ok(!openLegacy(), "아직 천마를 쓰러뜨리지 못했다");
-  withKarma(30, { endings_seen: ["기본"] });
+  withKarma(100, { endings_seen: ["기본"] });
   assert.ok(openLegacy());
   const first = new Game();
   first.start("무림초출");
@@ -2075,25 +2075,130 @@ test("유산은 천마를 쓰러뜨린 뒤 열리고, 남기고, 이어받으면
   first.player.weapon = "운철보검";
   first.finishGame(false);
   const options = first.legacyOptions();
-  const index = options.findIndex((o) => o.key === "양가창법");
-  first.leaveLegacy(index);
-  first.leaveLegacy(index);
-  assert.equal(loadMeta().legacies.length, 1, "한 판에 하나만 남긴다");
+  assert.ok(first.leaveLegacy(options.findIndex((o) => o.key === "양가창법")));
+  assert.ok(!first.leaveLegacy(0), "한 판에 하나만 남긴다");
+  assert.equal(loadMeta().legacies.length, 1);
 
   const next = new Game();
-  next.start("무림초출", [], 0);
+  next.start("무림초출", [], [0]);
+  assert.ok(!next.player.hasSkill("양가창법"), "시작할 때 받지 않는다");
+  assert.equal(next.player.pendingLegacy.length, 1);
+  assert.equal(loadMeta().legacies.length, 1, "이어받아도 사라지지 않는다");
+  if (next.pickingArts) next.finishArtsPick();
+  // 어느 행동이든 찾을 수 있고, 첫 해가 끝나기 전에는 반드시 찾는다
+  next.player.turn = 11;
+  next.event = null;
+  next.action("휴식");
+  assert.equal(next.event?.key, "유산_휴식");
+  const view = eventView(next.player, "유산_휴식");
+  assert.ok(view.text.includes(loadMeta().legacies[0].from), "별호가 드러난다");
+  assert.ok(!view.text.includes("〈"), view.text);
+  next.chooseEvent(0);
   const skill = next.player.skills.find((s) => s.key === "양가창법");
-  assert.equal(skill.grade, "상승", "한 등급 낮아지고 상승을 넘지 않는다");
-  assert.ok(next.player.hasSkill("양가창법"));
+  assert.equal(skill.grade, "상승", "한 품계 낮아지고 상승을 넘지 않는다");
   assert.notEqual(next.player.mainSkill, "양가창법", "이어받아도 쓰던 주무공은 그대로다");
-  assert.equal(loadMeta().legacies.length, 0);
+  assert.equal(next.player.pendingLegacy.length, 0);
 
+  // 달이 시작할 때도 찾아온다
+  const late = new Game();
+  late.start("무림초출", [], [0]);
+  late.player.turn = 12;
+  late.event = null;
+  late.pickingArts = false;
+  late.openStoryEvent();
+  assert.equal(late.event?.key, "유산_발길");
+
+  // 보관이 차면 지울 것을 골라야 한다
+  withKarma(0, { endings_seen: ["기본"], legacy_open: true, legacies: [1, 2, 3].map((n) => ({ kind: "skill", key: "양가창법", grade: "명품", label: `유산${n}`, from: "무명객", origin: "무림초출" })) });
   first.ending.legacyLeft = null;
-  first.leaveLegacy(options.findIndex((o) => o.key === "운철보검"));
+  const gearIndex = first.legacyOptions().findIndex((o) => o.key === "운철보검");
+  assert.ok(!first.leaveLegacy(gearIndex), "지울 것을 고르지 않으면 남기지 못한다");
+  assert.ok(first.leaveLegacy(gearIndex, 0));
+  assert.deepEqual(loadMeta().legacies.map((l) => l.label), ["유산2", "유산3", first.ending.legacyLeft]);
   const third = new Game();
-  third.start("무림초출", [], 0);
-  assert.equal(third.player.weapon, "강철검", "장비는 낮은 단계로 돌아온다");
+  third.start("무림초출", [], [2]);
+  third.player.turn = 11;
+  third.player.weapon = "낡은검";
+  third.pickingArts = false;
+  third.giftsDone = true;
+  third.event = null;
+  third.action("휴식");
+  third.chooseEvent(0);
+  assert.equal(third.player.weapon, "강철검", "병장기는 낮은 단계로 돌아온다");
   withKarma(0);
+});
+
+test("유산 강화: 이어받을 수와 보관 수가 늘고, 단계와 품계가 그대로 오며, 신공을 남긴다", () => {
+  withKarma(500, { endings_seen: ["기본"], legacy_open: true, legacy_level: 0 });
+  const stages = [];
+  for (let i = 0; i < 5; i++) {
+    assert.ok(upgradeLegacy());
+    stages.push(legacyPowers());
+  }
+  assert.ok(!upgradeLegacy(), "다섯 단계가 끝이다");
+  assert.deepEqual(stages.map((p) => [p.take, p.shelf]), [[2, 4], [2, 4], [3, 5], [3, 5], [3, 5]]);
+  assert.ok(stages[1].keepGear && !stages[0].keepGear);
+  assert.ok(stages[3].keepGrade && !stages[2].keepGrade);
+  assert.ok(stages[4].divine && !stages[3].divine);
+
+  const g = new Game();
+  g.start("무림초출");
+  g.player.learnSkill(Skill.fromDict({ key: "무극검결", grade: "신공", mastery: 10 }));
+  g.player.weapon = "운철보검";
+  g.finishGame(false);
+  assert.ok(g.legacyOptions().some((o) => o.key === "무극검결"));
+  g.leaveLegacy(g.legacyOptions().findIndex((o) => o.key === "무극검결"));
+  g.ending.legacyLeft = null;
+  g.leaveLegacy(g.legacyOptions().findIndex((o) => o.key === "운철보검"));
+  const n = new Game();
+  n.start("무림초출", [], [0, 1]);
+  n.pickingArts = false;
+  n.giftsDone = true;
+  n.player.turn = 11;
+  n.event = null;
+  n.action("휴식");
+  n.chooseEvent(0);
+  assert.equal(n.player.skills.find((s) => s.key === "무극검결").grade, "신공");
+  n.pendingNext = false;
+  n.event = null;
+  n.action("명상");
+  n.chooseEvent(0);
+  assert.equal(n.player.weapon, "운철보검");
+  withKarma(0);
+});
+
+test("마지막 장터는 보물과 신물만 내놓는다", () => {
+  const game = new Game();
+  game.start("무림초출");
+  game.player.turn = 119;
+  for (const key of Object.keys(DB.market)) {
+    if (!DB.market[key].markets.includes(5)) continue;
+    const skill = DB.market[key].effects.find((e) => e.type === "skill");
+    if (skill) assert.ok(["상승", "일절"].includes(DB.skills[skill.skill].grade), key);
+    else assert.ok(["보물", "신물"].includes(DB.market[key].grade), `${key} ${DB.market[key].grade}`);
+  }
+  const specials = Object.values(DB.market).filter((i) => i.markets.includes(5) && i.always);
+  assert.ok(specials.length >= 8, "특별한 물건이 넉넉하다");
+  assert.ok(specials.filter((i) => i.karma_price).every((i) => i.karma_price <= 3), "카르마 값이 싸다");
+});
+
+test("사건에서 축나는 몸은 경지와 기량이 높을수록 적다", () => {
+  const game = new Game();
+  game.start("무림초출");
+  const p = game.player;
+  const lost = () => {
+    p.hp = p.maxHp();
+    p.turn = 40;
+    const before = p.hp;
+    applyEffects(p, { hp_pct: -30 });
+    return (before - p.hp) / p.maxHp();
+  };
+  const low = lost();
+  Object.assign(p, { realm: "현경", external: 900, internal: 900, martial: 900, mind: 900 });
+  const high = lost();
+  assert.ok(low > 0.2, `${low}`);
+  assert.ok(high < 0.06, `${high}`);
+  assert.ok(high > 0, "그래도 조금은 축난다");
 });
 
 test("카르마는 도달한 장과 경지, 처음 이룬 일만큼 늘어난다", () => {
@@ -2114,16 +2219,16 @@ test("카르마는 도달한 장과 경지, 처음 이룬 일만큼 늘어난다
 });
 
 test("수상한 누군가에게 카르마로 거래한다", () => {
-  withKarma(4);
+  withKarma(1);
   const game = new Game();
   game.start("무림초출");
   const market = openMarket(119, game.player);
   assert.ok(market.stock.some((s) => s.key === "생사단"));
-  assert.equal(blockReason(game.player, "운명의패"), "카르마 부족");
+  assert.equal(blockReason(game.player, "역천부"), "카르마 부족");
   const before = game.player.external;
   assert.ok(buy(game.player, market, "생사단")[0]);
   assert.equal(game.player.external, before + 30);
-  assert.equal(loadMeta().current_karma, 1);
+  assert.equal(loadMeta().current_karma, 0);
   withKarma(0);
 });
 
@@ -2254,10 +2359,11 @@ test("저장했다 이어 해도 연계가 유지된다", () => {
 
 test("무기 계열마다 무공 수가 같고 등급이 고르다", () => {
   const styles = ["검법", "도법", "창법", "봉법", "권법", "장법", "암기"];
-  const attacks = Object.values(DB.skills).filter((s) => s.type === "공격무공");
+  // 문파의 최고 무공(reserved)은 아직 얻을 수 없으므로 세지 않는다
+  const attacks = Object.values(DB.skills).filter((s) => s.type === "공격무공" && !s.reserved);
   for (const style of styles) {
     const list = attacks.filter((s) => s.category === style);
-    assert.equal(list.length, 15, style);
+    assert.equal(list.length, 18, style);
     for (const [grade, min] of [["기본", 2], ["명품", 3], ["상승", 3], ["일절", 1], ["신공", 2]]) {
       assert.ok(list.filter((s) => s.grade === grade).length >= min, `${style} ${grade}`);
     }
@@ -2524,7 +2630,7 @@ test("성취 100을 넘겨 더 쌓아야 승급하고, 승급은 일절까지다
 });
 
 test("신공은 공격, 심법, 보법에 있고 출신이나 카르마 인연으로만 얻는다", () => {
-  const tops = Object.keys(DB.skills).filter((k) => DB.skills[k].grade === "신공");
+  const tops = Object.keys(DB.skills).filter((k) => DB.skills[k].grade === "신공" && !DB.skills[k].reserved);
   const origins = DB.origins.order.filter((o) => o !== "무림초출");
   for (const type of ["공격무공", "심공", "경공"]) {
     for (const o of origins) {
@@ -2843,6 +2949,7 @@ test("이어지는 일의 비무에서 지면 그 일이 어그러지고 이기�
 test("상승 이상의 무공에만 묘리가 드러나고 모든 무공에 묘리가 있다", () => {
   for (const [k, s] of Object.entries(DB.skills)) assert.ok(s.gimmick?.name && s.gimmick?.text, k);
   const low = new Skill("매화검법");
+  low.grade = "명품";
   assert.equal(low.activeGimmick(), null);
   low.grade = "상승";
   assert.equal(low.activeGimmick().hits, 3);
@@ -3150,8 +3257,40 @@ test("사도나 마도를 걷는 무인에게는 무림맹주도 적으로 나�
   assert.ok(!seen(() => {}).has("무림맹주"));
 });
 
+test("문파의 최고 무공은 신공이고 아직 얻을 수 없으며, 문파의 고등급 무공은 그 소속의 사건에서만 나온다", () => {
+  const reserved = Object.keys(DB.skills).filter((k) => DB.skills[k].reserved);
+  assert.ok(reserved.length >= 15);
+  for (const k of reserved) {
+    assert.equal(DB.skills[k].grade, "신공", k);
+    assert.ok(DB.skills[k].school, k);
+    assert.ok(!Object.values(DB.market).some((i) => i.effects.some((e) => e.skill === k)), `${k} 장터`);
+    assert.ok(!Object.values(DB.enemies).some((e) => e.drop?.skill === k), `${k} 드롭`);
+  }
+  const problems = [];
+  const scan = (node, sect, where) => {
+    if (Array.isArray(node)) return node.forEach((n) => scan(n, sect, where));
+    if (!node || typeof node !== "object") return undefined;
+    const here = node.requires?.sect ?? sect;
+    const skill = DB.skills[node.skill];
+    if (skill && !node.requires && node.skill) {
+      if (skill.reserved) problems.push(`${where}: ${node.skill}`);
+      const high = ["상승", "일절", "신공"].includes(skill.grade);
+      if (high && skill.school && here !== skill.school && !allowedOutside.includes(node.skill)) problems.push(`${where}: ${node.skill} (${here})`);
+    }
+    return Object.entries(node).forEach(([key, v]) => { if (key !== "requires") scan(v, here, where); });
+  };
+  // 이 무공들은 소속 밖의 사건에도 그 소속이 얽혀 있다. 혈마의 유적, 개방의 신물을 지키는 사건이다
+  const allowedOutside = ["혈마심공", "타구봉법"];
+  for (const [k, e] of Object.entries(DB.events)) scan(e, e.requires?.sect ?? null, k);
+  assert.deepEqual(problems, []);
+  for (const [k, s] of Object.entries(DB.skills)) {
+    if (s.school && ["상승", "일절", "신공"].includes(s.grade)) assert.ok(!Object.values(DB.enemies).some((e) => e.drop?.skill === k), `${k} 드롭`);
+    if (s.school && ["상승", "일절", "신공"].includes(s.grade)) assert.ok(!Object.values(DB.market).some((i) => i.effects.some((e) => e.skill === k)), `${k} 장터`);
+  }
+});
+
 test("무공의 품계가 위상에 맞는다", () => {
-  for (const [k, g] of [["타구봉법", "일절"], ["백보신권", "일절"], ["만천화우", "일절"], ["역근공", "일절"], ["달마심공", "일절"], ["태극검", "일절"], ["파산권", "명품"]]) assert.equal(DB.skills[k].grade, g, k);
+  for (const [k, g] of [["타구봉법", "일절"], ["백보신권", "신공"], ["만천화우", "신공"], ["역근공", "일절"], ["달마심공", "신공"], ["태극검", "신공"], ["이십사수매화검법", "신공"], ["매화검법", "일절"], ["파산권", "명품"]]) assert.equal(DB.skills[k].grade, g, k);
   // 문파의 비전은 장터에 나오지 않는다
   for (const k of ["매화검법", "역근공", "태극검", "타구봉법"]) assert.ok(!Object.values(DB.market).some((i) => i.effects.some((e) => e.skill === k)), k);
   assert.equal(DB.events.제안_개방.choices[0].outcomes[0].effects.skill, "오호곤법", "개방에 들어가자마자 방주의 봉법을 주지 않는다");

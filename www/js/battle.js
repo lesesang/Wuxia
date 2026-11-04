@@ -108,13 +108,15 @@ export class Enemy {
  * 윗길과 아랫길이다. 사문의 시험처럼 정해진 인물은 ranks가 없어 그대로 나온다.
  */
 /** 떨어질 비급. 적이 품은 무공이 있으면 그것을, 없으면 그 경지의 품계에서 고른다. 주무공 계열일수록 잘 나온다. */
+const HIGH_SCHOOL_GRADES = ["상승", "일절", "신공"]; // 문파의 높은 무공은 소속의 사건에서만 나온다
+
 export function dropSkill(player, hint, grades, faction = null) {
   if (hint && rng.random() < DROP_HINT_RATE && grades.includes(DB.skills[hint].grade)) return hint;
   const main = player.bestSkill()?.category;
   const pool = Object.keys(DB.skills).filter((k) => {
     const s = DB.skills[k];
     // 문파의 무공은 그 문파 사람만 지니고 있다
-    return grades.includes(s.grade) && !s.origin && !s.legend && (!s.school || s.school === faction);
+    return grades.includes(s.grade) && !s.origin && !s.legend && !s.reserved && (!s.school || (s.school === faction && !HIGH_SCHOOL_GRADES.includes(s.grade)));
   });
   if (!pool.length) return null;
   const counts = {};
@@ -270,7 +272,7 @@ export class Battle {
     return p.mind / 4000 + (sumEffect(p.traits, "crit", "percent") + sectBonus(p, "crit") + alignValue(p.alignment, "사도", "crit")) / 100;
   }
 
-  /** 무공의 묘리에 병기의 묘리를 더한다 */
+  /** 무공의 묘리에 병기의 숨은 힘을 더한다 */
   strikeGimmick(skill) {
     const own = skill?.activeGimmick() || {};
     const gear = this.weaponG;

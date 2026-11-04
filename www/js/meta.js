@@ -20,7 +20,7 @@ const defaults = () => ({
   unlocked_origins: ["무림초출"], unlocked_traits: [],
   global_codex: [], known_skills: [], known_items: [],
   endings_seen: [], runs: [], total_runs: 0,
-  upgrades: {}, content: [], content_off: [], legacy_open: false, legacies: [], milestones: [],
+  upgrades: {}, content: [], content_off: [], legacy_open: false, legacy_level: 0, legacies: [], milestones: [],
   known_events: [], achievements: [], origin_wins: [], total_wins: 0, best_turn: 0,
   provisions: [], upgrade_use: {},
 });
@@ -222,18 +222,41 @@ export function openLegacy() {
   return true;
 }
 
-/** 유산을 보관한다. 자리가 차면 가장 오래된 것이 사라진다. */
-export function storeLegacy(entry) {
-  const data = loadMeta();
-  data.legacies = [...data.legacies, entry].slice(-DB.karma.legacy.shelf);
-  saveMeta(data);
+/** 강화 단계에 따른 유산의 힘. 1단계와 3단계에 이어받을 수와 보관 수가 하나씩 는다 */
+export function legacyPowers(data = loadMeta()) {
+  const level = data.legacy_level || 0;
+  const more = (level >= 1 ? 1 : 0) + (level >= 3 ? 1 : 0);
+  return { level, take: 1 + more, shelf: DB.karma.legacy.shelf + more, keepGear: level >= 2, keepGrade: level >= 4, divine: level >= 5 };
 }
 
-export function takeLegacy(index) {
+/** 유산을 한 단계 강화한다. 다음 단계의 항목이 없거나 카르마가 모자라면 false */
+export function upgradeLegacy() {
   const data = loadMeta();
-  const [entry] = data.legacies.splice(index, 1);
+  const next = DB.karma.legacy.upgrades[data.legacy_level || 0];
+  if (!data.legacy_open || !next || data.current_karma < next.cost) return false;
+  data.current_karma -= next.cost;
+  data.legacy_level = (data.legacy_level || 0) + 1;
   saveMeta(data);
-  return entry || null;
+  return true;
+}
+
+/** 유산을 보관한다. 자리가 차면 지울 것을 골라야 한다. 지울 것을 고르지 않았으면 false */
+export function storeLegacy(entry, dropIndex = null) {
+  const data = loadMeta();
+  if (data.legacies.length >= legacyPowers(data).shelf) {
+    if (dropIndex === null || !data.legacies[dropIndex]) return false;
+    data.legacies.splice(dropIndex, 1);
+  }
+  data.legacies.push(entry);
+  saveMeta(data);
+  return true;
+}
+
+/** 보관한 유산 하나를 지운다. 이어받아도 사라지지 않으므로 지울 때만 없어진다 */
+export function dropLegacy(index) {
+  const data = loadMeta();
+  data.legacies.splice(index, 1);
+  saveMeta(data);
 }
 
 export const unlockOrigin = (key, cost) => unlock("unlocked_origins", key, cost);

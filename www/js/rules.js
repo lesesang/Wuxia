@@ -23,6 +23,13 @@ const ALIGN_TABLE = {
 };
 
 /** 장이 뒤로 갈수록 기량이 더디게 오른다 */
+/** 사건에서 몸이 축나는 정도. 경지와 기량이 높을수록 작다. 현경의 고수가 독버섯으로 죽어 가지는 않는다 */
+const REALM_HARDINESS = { 절정: 0.8, 초절정: 0.6, 화경: 0.4, 현경: 0.25, 생사경: 0.15 };
+export function eventToll(player) {
+  const mean = (player.external + player.internal + player.martial + player.mind) / 4;
+  return (REALM_HARDINESS[player.realm] ?? 1) * (1 - mean / 2000);
+}
+
 export const growthScale = (turn) => DB.balance.growth_by_chapter[getChapter(turn) - 1];
 /** 양을 성장 배율대로 줄인다. 소수점 아래는 그 확률로 1이 더 오른다. */
 export function scaledGrowth(amount, turn) {
