@@ -6,10 +6,10 @@ import { listAssets } from "../tools/build_asset_list.js";
 import { Battle, dropSkill, Enemy, statureEnemy, useConsumable } from "../www/js/battle.js";
 import { GRADE_ORDER, Player, Skill } from "../www/js/character.js";
 import { DB } from "../www/js/data.js";
-import { applyEffects, grantStartGear, grantStartGifts, canStartChain, checkRequires, enemyIntro, eventView, LAST_CHAIN_TURN, pickRandomEvent, resolveChoice, storyEventForTurn, validateChains, validateEvents } from "../www/js/events.js";
+import { applyEffects, dueOriginEvent, pendingOriginEvents, grantStartGear, grantStartGifts, canStartChain, checkRequires, enemyIntro, eventView, LAST_CHAIN_TURN, pickRandomEvent, resolveChoice, storyEventForTurn, validateChains, validateEvents } from "../www/js/events.js";
 import { buildEpilogue, Game } from "../www/js/game.js";
-import { josa } from "../www/js/josa.js";
-import { blockReason, buy, equipmentBonus, openMarket, priceOf } from "../www/js/market.js";
+import { halpun, josa } from "../www/js/josa.js";
+import { blockReason, buy, equipmentBonus, ITEM_GRADES, openMarket, priceOf, sell } from "../www/js/market.js";
 import {
   activeContent, setUpgradeUse, upgradeLevel, addKarma, buyContent, buyProvision, refundProvision, upgradeTraits, buyUpgrade, exportRecords, importRecords, extraSlots, loadCheckpoint, legacyAvailable, loadEventLog, loadMeta, nextReward, recordEventPick, openLegacy, saveMeta, takeLegacy, toggleContent, unlockOrigin,
 } from "../www/js/meta.js";
@@ -349,7 +349,7 @@ test("성향 혜택", () => {
   assert.equal(priceOf(p, "호골주"), Math.trunc(DB.market.호골주.price * 0.92));
   p = new Player();
   p.alignment.사도 = 100;
-  assert.equal(p.gainSilver(100), 125);
+  assert.equal(p.gainSilver(100), 137);
   p = new Player();
   p.alignment.마도 = 100;
   assert.ok(new Battle(p, new Enemy("천마")).attackScale() > new Battle(new Player(), new Enemy("천마")).attackScale());
@@ -527,9 +527,9 @@ test("진열은 겹치지 않고 아는 비급은 빠지며 더 좋은 장비가
 
 test("성향 전용 물건은 그 길을 걷는 사람에게만", () => {
   const p = new Player();
-  for (let i = 0; i < 30; i++) assert.ok(!openMarket(36, p).stock.some((s) => s.key === "혈영도법비급"));
+  for (let i = 0; i < 30; i++) assert.ok(!openMarket(60, p).stock.some((s) => s.key === "혈영도법비급"));
   p.alignment.마도 = 100;
-  assert.ok(openMarket(36, p).stock.some((s) => s.key === "혈영도법비급"));
+  assert.ok(Array.from({ length: 30 }, () => openMarket(60, p)).some((m) => m.stock.some((s) => s.key === "혈영도법비급")));
 });
 
 test("은자가 없거나 진열에 없으면 살 수 없다", () => {
@@ -543,11 +543,12 @@ test("은자가 없거나 진열에 없으면 살 수 없다", () => {
   assert.ok(!buy(p, market, "금창약")[0]);
 });
 
-test("지금보다 나쁜 장비는 효과 없음", () => {
+test("이미 지닌 장비는 효과 없음, 낮은 장비도 살 수는 있다", () => {
   const p = new Player();
   p.silver = 999;
   p.weapon = "운철보검";
-  assert.equal(blockReason(p, "철검"), "효과 없음");
+  assert.equal(blockReason(p, "운철보검"), "효과 없음");
+  assert.equal(blockReason(p, "철검"), null);
 });
 
 test("비기를 터득한 주무공은 자동으로 바뀌지 않는다", () => {
@@ -727,8 +728,11 @@ test("사문이 있으면 어긋나는 세력 선택지가 보이지 않는다",
   monk.sect = "소림";
   assert.ok(labels(monk).includes("무림맹") && !labels(monk).includes("사도련") && !labels(monk).includes("붉은"));
   const poison = new Player();
-  poison.sect = "당가";
+  poison.sect = "하오문";
   assert.ok(!labels(poison).includes("무림맹") && labels(poison).includes("사도련"));
+  const tang = new Player();
+  tang.sect = "당가";
+  assert.ok(labels(tang).includes("무림맹"), "당가는 정파다");
   const cult = new Player();
   cult.sect = "마교";
   assert.ok(!labels(cult).includes("무림맹") && !labels(cult).includes("사도련"));
@@ -1538,7 +1542,7 @@ test("성향은 단계마다 혜택이 커지고 한 길에 집중하면 더 잘
   const damage = (p) => { rng.random = () => 0.5; return new Battle(p, enemy).incoming(1); };
   assert.ok(damage(high) < damage(new Player()));
   const rich = new Player(); rich.alignment.사도 = 960;
-  assert.equal(rich.gainSilver(100), 150);
+  assert.equal(rich.gainSilver(100), 165);
   const dark = new Player(); dark.alignment.마도 = 960;
   assert.ok(new Battle(dark, enemy).attackScale() > new Battle(new Player(), enemy).attackScale() * 1.2);
   const even = new Player(); even.alignment.정도 = 100; even.alignment.사도 = 90;
@@ -2253,7 +2257,7 @@ test("무기 계열마다 무공 수가 같고 등급이 고르다", () => {
   const attacks = Object.values(DB.skills).filter((s) => s.type === "공격무공");
   for (const style of styles) {
     const list = attacks.filter((s) => s.category === style);
-    assert.equal(list.length, 13, style);
+    assert.equal(list.length, 15, style);
     for (const [grade, min] of [["기본", 2], ["명품", 3], ["상승", 3], ["일절", 1], ["신공", 2]]) {
       assert.ok(list.filter((s) => s.grade === grade).length >= min, `${style} ${grade}`);
     }
@@ -2765,7 +2769,12 @@ test("소속은 세력마다 입문, 제안, 적대를 갖추고 사파와 마�
     assert.ok(DB.events[`${key}_적대`], key);
   }
   const by = (side) => Object.values(DB.sects).filter((s) => s.alignment === side).length;
-  assert.ok(by("사도") >= 6 && by("마도") >= 3);
+  assert.ok(by("사도") >= 5 && by("마도") >= 3);
+  for (const key of ["소림", "무당", "화산", "아미", "곤륜", "종남", "점창", "청성", "공동", "개방", "당가", "모용", "제갈"]) {
+    assert.equal(DB.sects[key].alignment, "정도", key);
+    assert.ok(DB.events.문을_두드리다.choices.some((c) => c.outcomes[0].effects.sect_offer === key), key);
+    assert.ok(DB.realms.breakthrough.현경.sect[key], key);
+  }
   // 피 연못에서 살아 나온 무인은 혈교에 들지 않는다
   const q = new Player("혈지생환");
   q.alignment.마도 = 300;
@@ -3142,7 +3151,7 @@ test("사도나 마도를 걷는 무인에게는 무림맹주도 적으로 나�
 });
 
 test("무공의 품계가 위상에 맞는다", () => {
-  for (const [k, g] of [["타구봉법", "일절"], ["백보신권", "일절"], ["만천화우", "일절"], ["역근공", "일절"], ["달마심공", "일절"], ["태극검", "상승"], ["파산권", "명품"]]) assert.equal(DB.skills[k].grade, g, k);
+  for (const [k, g] of [["타구봉법", "일절"], ["백보신권", "일절"], ["만천화우", "일절"], ["역근공", "일절"], ["달마심공", "일절"], ["태극검", "일절"], ["파산권", "명품"]]) assert.equal(DB.skills[k].grade, g, k);
   // 문파의 비전은 장터에 나오지 않는다
   for (const k of ["매화검법", "역근공", "태극검", "타구봉법"]) assert.ok(!Object.values(DB.market).some((i) => i.effects.some((e) => e.skill === k)), k);
   assert.equal(DB.events.제안_개방.choices[0].outcomes[0].effects.skill, "오호곤법", "개방에 들어가자마자 방주의 봉법을 주지 않는다");
@@ -3203,4 +3212,138 @@ test("장식 부호를 쓰지 않는다", () => {
     else if (o && typeof o === "object") Object.values(o).forEach((v) => walk(v, where));
   };
   for (const name of ["events", "enemies", "companions", "endings", "karma", "traits", "fortunes", "flavor", "realms", "skills", "market"]) walk(DB[name], name);
+});
+
+test("비율은 할과 푼으로 적는다", () => {
+  assert.equal(halpun(30), "3할");
+  assert.equal(halpun(8), "8푼");
+  assert.equal(halpun(25), "2할 5푼");
+  assert.equal(halpun(-5), "-5푼");
+  const walk = (o, where) => {
+    if (typeof o === "string") assert.ok(!/\d\s*%/.test(o), `${where}: ${o}`);
+    else if (Array.isArray(o)) o.forEach((v) => walk(v, where));
+    else if (o && typeof o === "object") Object.values(o).forEach((v) => walk(v, where));
+  };
+  for (const name of ["events", "enemies", "companions", "endings", "karma", "traits", "fortunes", "flavor", "realms", "skills", "market", "sects"]) walk(DB[name], name);
+  
+});
+
+test("도구 하나는 합을 쓰지 않고 둘째는 합을 쓴다", () => {
+  const p = new Player();
+  p.addItem("금창약", 3);
+  const b = new Battle(p, new Enemy("낭인", 10));
+  b.runRound("소비품", null, "금창약");
+  assert.equal(b.roundNum, 0, "첫 도구는 합이 지나가지 않는다");
+  assert.equal(p.inventory.금창약, 2);
+  b.runRound("소비품", null, "금창약");
+  assert.equal(b.roundNum, 1, "같은 합에 둘째를 쓰면 합이 지나간다");
+  b.runRound("소비품", null, "금창약");
+  assert.equal(b.roundNum, 1, "새 합의 첫 도구는 다시 합을 쓰지 않는다");
+});
+
+test("병장기는 바꿔 들고 되팔 수 있으며 진열은 주무공 병기를 앞세운다", () => {
+  const p = new Player("무림초출");
+  p.learnSkill(new Skill("기초검법"));
+  p.mainSkill = "기초검법";
+  p.weapon = "철검";
+  p.silver = 1000;
+  const market = { stock: [{ key: "강철검", left: 1 }] };
+  assert.ok(buy(p, market, "강철검")[0]);
+  assert.equal(p.weapon, "강철검");
+  assert.ok(p.gear.includes("철검"), "들던 것은 행낭에 챙긴다");
+  const before = p.silver;
+  assert.ok(sell(p, "철검")[0]);
+  assert.ok(p.silver > before && !p.gear.includes("철검"));
+  const restored = Player.fromDict(JSON.parse(JSON.stringify(p.toDict())));
+  assert.deepEqual(restored.gear, p.gear);
+  // 지닌 병기가 가장 좋아도 다른 병기와 보법이 진열된다
+  p.weapon = "운철보검";
+  p.learnSkill(new Skill("초상비"));
+  for (let i = 0; i < 20; i++) {
+    const keys = openMarket(60, p).stock.map((s) => s.key);
+    assert.ok(keys.some((k) => DB.market[k].effects.some((e) => e.slot === "weapon" && e.style === "검법")), "주무공 병기");
+    assert.ok(keys.some((k) => DB.market[k].effects.some((e) => e.type === "skill" && DB.skills[e.skill].type === "경공")), "보법");
+    assert.ok(keys.some((k) => DB.market[k].effects.some((e) => e.slot === "armor")), "호신구");
+  }
+});
+
+test("물건에 품계가 있고 높은 품계의 병장기에는 묘리가 있다", () => {
+  for (const [k, item] of Object.entries(DB.market)) {
+    if (item.category === "비급") continue;
+    assert.ok(ITEM_GRADES.includes(item.grade), k);
+    if (item.effects.some((e) => e.type === "equip") && ["명품", "보물", "신물"].includes(item.grade)) assert.ok(item.gimmick?.text, k);
+  }
+  const p = new Player();
+  p.learnSkill(new Skill("기초검법"));
+  p.mainSkill = "기초검법";
+  p.equipGear("태아검");
+  assert.ok(new Battle(p, new Enemy("낭인", 10)).weaponG.pierce === 40);
+  p.mainSkill = null;
+  p.skills = [new Skill("육합권")];
+  assert.equal(new Battle(p, new Enemy("낭인", 10)).weaponG, null, "주무공과 맞지 않으면 묘리가 쉰다");
+});
+
+test("일절의 끝에 이른 무공은 사건으로 신공에 오른다", () => {
+  const p = new Player();
+  const s = new Skill("태허검결");
+  p.learnSkill(s);
+  p.mainSkill = "태허검결";
+  assert.ok(!checkRequires(p, DB.events.깨달음_공격.requires));
+  s.mastery = 100;
+  assert.ok(checkRequires(p, DB.events.깨달음_공격.requires));
+  applyEffects(p, { ascend: "공격무공" });
+  assert.equal(p.getSkill("태허검결").grade, "신공");
+  const again = Player.fromDict(JSON.parse(JSON.stringify(p.toDict())));
+  assert.equal(again.getSkill("태허검결").grade, "신공", "저장해도 그대로다");
+});
+
+test("출신의 이야기는 결전 전에 모두 찾아오고 조건을 못 채우면 나오지 않는다", () => {
+  const p = new Player("표국표사");
+  p.content = ["표기재건"];
+  p.turn = 118;
+  p.realm = "현경";
+  const keys = pendingOriginEvents(p);
+  assert.ok(keys.includes("표기_열셋"), "켜 둔 인연");
+  assert.ok(!keys.includes("표기_창"), "앞 편을 못 만나면 뒷 편은 나오지 않는다");
+  assert.ok(dueOriginEvent(p), "마지막 달에는 반드시 연다");
+  p.turn = 50;
+  assert.equal(dueOriginEvent(p), null);
+  p.seenEvents = [];
+  p.content = [];
+  p.turn = 118;
+  assert.ok(!pendingOriginEvents(p).includes("표기_열셋"), "켜지 않은 인연");
+});
+
+test("생사경 결말에서는 네 기량이 1000으로 나온다", () => {
+  const game = newGame();
+  const p = game.player;
+  for (const stat of ["external", "internal", "martial", "mind"]) p[stat] = 999;
+  p.battles = 100;
+  game.finishGame(true, "생사경");
+  assert.deepEqual([p.external, p.internal, p.martial, p.mind], [1000, 1000, 1000, 1000]);
+});
+
+test("심법과 보법의 성취가 함께 오른다", () => {
+  const game = newGame();
+  const p = game.player;
+  p.learnSkill(new Skill("초상비"));
+  const steps = p.bestOfType("경공");
+  const mind = p.bestOfType("심공");
+  const [a, b] = [steps.mastery, mind.mastery];
+  game.pendingNext = false;
+  game.event = null;
+  game.action("수련");
+  assert.ok(steps.mastery > a);
+  game.pendingNext = false;
+  game.battle = null;
+  game.action("명상");
+  assert.ok(mind.mastery >= b + 3);
+});
+
+test("절정 이상의 적은 이름이나 부대의 이름을 갖고 약한 세가 패거리는 없다", () => {
+  for (const [k, e] of Object.entries(DB.enemies)) {
+    if (DB.realms.enemy_order.indexOf(e.realm) >= DB.realms.enemy_order.indexOf("절정")) assert.ok(!/^(절정의|소림 나한승|세가의|동창의|살막의)/.test(e.name), k);
+    if (e.realm === "이류") assert.ok(!/오대세가|구파/.test(e.name), k);
+  }
+  assert.equal(DB.enemies.왕지네.name.startsWith("묵은"), false);
 });

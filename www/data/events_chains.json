@@ -24,7 +24,7 @@
             ]
           },
           {
-            "label": "거절한다",
+            "label": "거절하고 돌려보낸다",
             "outcomes": [
               {
                 "text": "여인은 고개를 숙이고 다음 탁자로 갔다.",
@@ -44,7 +44,7 @@
         "text": "무관 뒤를 캐자 문하생들이 나를 둘러쌌다. 맨 앞의 소년은 칼 쥐는 법도 서툴다. \"스승님을 건드리지 마십시오.\"",
         "choices": [
           {
-            "label": "물러서지 않고 맞선다",
+            "label": "문하생들과 맞선다",
             "outcomes": [
               {
                 "text": "소년은 다치지 않게 했다. 그들 입에서 그날 밤 이야기가 조금 나왔다.",
@@ -141,7 +141,7 @@
         "text": "달 없는 밤, 무관 안마당에서 무관주를 만났다. \"그래, 은자 스무 냥에 왔느냐. 나는 그보다 많이 줄 수 있다.\"",
         "choices": [
           {
-            "label": "은자로 끝낼 일이 아니다",
+            "label": "무관주와 싸워 끝낸다",
             "outcomes": [
               {
                 "text": "무관주가 쓰러졌다. 소년들이 울면서 절을 했다. 여인은 다음 날 고을을 떠났다.",
@@ -154,21 +154,31 @@
                   "alignment": {
                     "정도": 20
                   },
-                  "foe": "무관주"
+                  "foe": "무관주",
+                  "style_gear": {
+                    "grade": "양품"
+                  },
+                  "stats": {
+                    "martial": 7,
+                    "mind": 7
+                  },
+                  "silver": 120,
+                  "full_growth": true
                 }
               }
             ]
           },
           {
-            "label": "값을 올려 본다",
+            "label": "은자를 더 받고 무관주를 살려 준다",
             "outcomes": [
               {
                 "text": "백 냥을 받고 그를 살려 주었다. 며칠 뒤 그가 쫓겨났다는 말만 들었다.",
                 "effects": {
-                  "silver": 100,
+                  "silver": 300,
                   "alignment": {
                     "사도": 40
-                  }
+                  },
+                  "full_growth": true
                 }
               }
             ]
@@ -181,7 +191,7 @@
             },
             "choices": [
               {
-                "label": "소년들 앞에서 본보기를 보인다",
+                "label": "소년들 앞에서 무관주를 본보기로 벤다",
                 "outcomes": [
                   {
                     "text": "다시는 아무도 그 무관 이름을 입에 올리지 않았다.",
@@ -191,12 +201,15 @@
                         "마도": 40
                       },
                       "stats": {
-                        "external": 4
+                        "external": 8,
+                        "martial": 8
                       },
                       "flags": [
                         "복수의끝"
                       ],
-                      "foe": "무관주"
+                      "foe": "무관주",
+                      "silver": 120,
+                      "full_growth": true
                     }
                   }
                 ]
@@ -355,7 +368,16 @@
                   "flags": [
                     "역병을막다"
                   ],
-                  "hp_pct": -10
+                  "hp_pct": -10,
+                  "grade_item": {
+                    "grade": "명품",
+                    "category": "소비품"
+                  },
+                  "stats": {
+                    "mind": 9,
+                    "internal": 9
+                  },
+                  "full_growth": true
                 }
               }
             ]
@@ -366,11 +388,12 @@
               {
                 "text": "곡식 일부를 풀게 하고 은자도 받았다. 모두가 조금씩 불만이었다.",
                 "effects": {
-                  "silver": 120,
+                  "silver": 320,
                   "alignment": {
                     "사도": 20
                   },
-                  "fame": 2
+                  "fame": 2,
+                  "full_growth": true
                 }
               }
             ]
@@ -546,7 +569,11 @@
                     "제자_완성"
                   ],
                   "fame": 3,
-                  "mastery": 25
+                  "mastery": 60,
+                  "stats": {
+                    "martial": 9
+                  },
+                  "full_growth": true
                 }
               }
             ]
@@ -561,8 +588,13 @@
                     "제자_완성"
                   ],
                   "stats": {
-                    "mind": 6
-                  }
+                    "mind": 14
+                  },
+                  "grade_item": {
+                    "grade": "명품",
+                    "category": "도구"
+                  },
+                  "full_growth": true
                 }
               }
             ]
@@ -768,8 +800,12 @@
                   "alignment": {
                     "정도": 20
                   },
-                  "silver": 100,
-                  "foe": "장강 총채주"
+                  "silver": 420,
+                  "foe": "장강 총채주",
+                  "style_gear": {
+                    "grade": "명품"
+                  },
+                  "full_growth": true
                 }
               }
             ]
@@ -781,11 +817,12 @@
                 "text": "통행세는 한 번으로 줄었다. 그 한 번은 내게 왔다.",
                 "effects": {
                   "battle": "수적두목",
-                  "silver": 300,
+                  "silver": 800,
                   "alignment": {
                     "사도": 60
                   },
-                  "foe": "장강 총채주"
+                  "foe": "장강 총채주",
+                  "full_growth": true
                 }
               }
             ]
@@ -903,14 +940,18 @@
         "text": "마침내 찾았다. 나와 체격이 비슷한 낭인이 내 별호로 술을 먹는다. 나를 보더니 놀라지도 않는다. \"이 이름 덕에 맞아 죽을 뻔한 게 몇 번인 줄 아시오. 그래도 그 덕에 산적도 몇 번 쫓았소. 나쁜 짓도 몇 번 했고.\"",
         "choices": [
           {
-            "label": "한판 붙어 이름을 되찾는다",
+            "label": "가짜와 한판 붙어 이름을 되찾는다",
             "outcomes": [
               {
                 "text": "그가 쓰러지며 웃었다. \"이제 대협은 하나요.\" 이름값이 맞는 느낌이었다.",
                 "effects": {
                   "battle": "낭인",
-                  "fame": 5,
-                  "foe": "내 별호를 쓰는 낭인"
+                  "fame": 8,
+                  "foe": "내 별호를 쓰는 낭인",
+                  "style_gear": {
+                    "grade": "명품"
+                  },
+                  "full_growth": true
                 }
               }
             ]
@@ -924,10 +965,11 @@
                   "alignment": {
                     "정도": 40
                   },
-                  "fame": 2,
+                  "fame": 4,
                   "stats": {
-                    "mind": 5
-                  }
+                    "mind": 14
+                  },
+                  "full_growth": true
                 }
               }
             ]
@@ -945,7 +987,9 @@
                   {
                     "text": "둘이 머리를 맞대고 전설을 만들었다. 이야기는 한 달 뒤 천 리 밖에서 돌아왔다.",
                     "effects": {
-                      "fame": 8
+                      "fame": 14,
+                      "silver": 200,
+                      "full_growth": true
                     }
                   }
                 ]
@@ -1107,8 +1151,10 @@
                     "max_grade": "상승"
                   },
                   "stats": {
-                    "mind": 4
-                  }
+                    "mind": 9,
+                    "martial": 9
+                  },
+                  "full_growth": true
                 }
               }
             ]
@@ -1172,7 +1218,7 @@
         "text": "그믐밤 남문이 정말 열렸다. 호법이 손수 빗장을 풀고 있다. 복면인들이 뒤따른다. 이대로 두면 낙양이 불탄다.",
         "choices": [
           {
-            "label": "막아선다",
+            "label": "동창을 막아선다",
             "outcomes": [
               {
                 "text": "복면인들을 베는 사이 호법은 달아났다. 낙양은 무사했다.",
@@ -1231,11 +1277,15 @@
                 "text": "아이를 꺼냈다. 호법은 그날 천마봉 산길 지도를 내밀고 자결했다.",
                 "effects": {
                   "battle": "혈마대귀",
-                  "boss_weaken": 10,
+                  "boss_weaken": 15,
                   "alignment": {
                     "정도": 40
                   },
-                  "foe": "호법을 쥔 귀졸"
+                  "foe": "호법을 쥔 귀졸",
+                  "style_gear": {
+                    "grade": "보물"
+                  },
+                  "full_growth": true
                 }
               }
             ]
@@ -1246,10 +1296,12 @@
               {
                 "text": "지도를 받았다. 아이는 끝내 나오지 못했다. 내 탓은 아니라고 생각하기로 했다.",
                 "effects": {
-                  "boss_weaken": 10,
+                  "boss_weaken": 12,
                   "alignment": {
                     "마도": 40
-                  }
+                  },
+                  "silver": 300,
+                  "full_growth": true
                 }
               }
             ]
@@ -1261,8 +1313,13 @@
                 "text": "그의 칼은 일부러 느렸다.",
                 "effects": {
                   "battle": "무림맹추격대",
-                  "fame": 3,
-                  "foe": "내통한 호법"
+                  "fame": 6,
+                  "foe": "내통한 호법",
+                  "grade_item": {
+                    "grade": "보물",
+                    "category": "소비품"
+                  },
+                  "full_growth": true
                 }
               }
             ]
@@ -1307,7 +1364,7 @@
             ]
           },
           {
-            "label": "거절한다",
+            "label": "거절하고 돌려보낸다",
             "outcomes": [
               {
                 "text": "공자는 다음 탁자로 갔다.",
@@ -1428,7 +1485,7 @@
                 "text": "호법이 쓰러졌다. 공자가 맹주가 되어 깊이 절했다. 맹이 천마봉으로 군을 보내기로 했다.",
                 "effects": {
                   "battle": "무림맹추격대",
-                  "boss_weaken": 8,
+                  "boss_weaken": 12,
                   "fame": 5,
                   "flags": [
                     "맹주의아들"
@@ -1436,7 +1493,11 @@
                   "alignment": {
                     "정도": 40
                   },
-                  "foe": "배신한 호법"
+                  "foe": "배신한 호법",
+                  "style_gear": {
+                    "grade": "보물"
+                  },
+                  "full_growth": true
                 }
               }
             ]
@@ -1447,13 +1508,18 @@
               {
                 "text": "공자가 해냈다. 손이 오래 떨렸다. 어른이 되는 일은 늘 그렇다.",
                 "effects": {
-                  "boss_weaken": 5,
+                  "boss_weaken": 8,
                   "flags": [
                     "맹주의아들"
                   ],
                   "stats": {
-                    "mind": 5
-                  }
+                    "mind": 14
+                  },
+                  "grade_item": {
+                    "grade": "보물",
+                    "category": "소비품"
+                  },
+                  "full_growth": true
                 }
               }
             ]
@@ -1532,9 +1598,10 @@
                 "text": "노인은 소리 없이 웃었다. \"그럼 오래 기다리지.\" 그의 격려가 오래 남았다.",
                 "effects": {
                   "stats": {
-                    "mind": 5
+                    "mind": 14
                   },
-                  "boss_weaken": 3
+                  "boss_weaken": 6,
+                  "full_growth": true
                 }
               }
             ]
@@ -1688,11 +1755,15 @@
                 "text": "꽃잎 하나가 칼날에 갈라졌다. 장로가 웃었다. 세 곳의 수가 내 안에서 맞물렸다.",
                 "effects": {
                   "battle": "종남검수",
-                  "mastery": 30,
+                  "mastery": 60,
                   "fame": 6,
                   "style_weapon": 3,
                   "spar": true,
-                  "foe": "화산 장로"
+                  "foe": "화산 장로",
+                  "stats": {
+                    "martial": 10
+                  },
+                  "full_growth": true
                 }
               }
             ]
@@ -1704,8 +1775,9 @@
                 "text": "이런 비무도 있다.",
                 "effects": {
                   "stats": {
-                    "mind": 6
-                  }
+                    "mind": 14
+                  },
+                  "full_growth": true
                 }
               }
             ]
@@ -1813,12 +1885,18 @@
                 "text": "향주가 쓰러지고 혼사는 깨졌다. 여인이 무림맹 쪽으로 은자를 돌렸다.",
                 "effects": {
                   "battle": "사도련향주",
-                  "boss_weaken": 7,
+                  "boss_weaken": 10,
                   "fame": 6,
                   "alignment": {
                     "정도": 40
                   },
-                  "foe": "뒷돈 받은 향주"
+                  "foe": "뒷돈 받은 향주",
+                  "style_gear": {
+                    "grade": "명품",
+                    "slot": "armor"
+                  },
+                  "silver": 300,
+                  "full_growth": true
                 }
               }
             ]
@@ -1829,10 +1907,11 @@
               {
                 "text": "양쪽이 값을 올리다 지쳤다. 내 주머니만 무거워졌다.",
                 "effects": {
-                  "silver": 300,
+                  "silver": 900,
                   "alignment": {
                     "사도": 40
-                  }
+                  },
+                  "full_growth": true
                 }
               }
             ]
@@ -1978,9 +2057,16 @@
                 "effects": {
                   "battle": "흑풍채두목",
                   "fame": 3,
-                  "silver": 30,
+                  "silver": 160,
                   "hp_pct": 20,
-                  "foe": "주루 뒷배 두목"
+                  "foe": "주루 뒷배 두목",
+                  "style_gear": {
+                    "grade": "양품"
+                  },
+                  "stats": {
+                    "external": 7
+                  },
+                  "full_growth": true
                 }
               }
             ]
@@ -1992,10 +2078,15 @@
                 "text": "주루 주인이 항아리를 놓치고 달아났다. 며느리 동생의 빚도 그 자리에서 지워졌다.",
                 "effects": {
                   "fame": 4,
-                  "silver": 40,
+                  "silver": 200,
                   "alignment": {
                     "정도": 40
-                  }
+                  },
+                  "grade_item": {
+                    "grade": "양품",
+                    "category": "소비품"
+                  },
+                  "full_growth": true
                 }
               }
             ],
@@ -2009,10 +2100,11 @@
               {
                 "text": "큰돈이었다. 다음 해부터 그 고을 술맛은 다 똑같아졌다.",
                 "effects": {
-                  "silver": 80,
+                  "silver": 260,
                   "alignment": {
                     "사도": 40
-                  }
+                  },
+                  "full_growth": true
                 }
               }
             ]
@@ -2032,7 +2124,12 @@
                     "text": "열두 항아리를 다 맞혔다. 아무도 내 판정에 토를 달지 못했다. 공짜 술을 평생 약속받았다.",
                     "effects": {
                       "fame": 5,
-                      "hp_pct": 30
+                      "hp_pct": 30,
+                      "stats": {
+                        "mind": 10
+                      },
+                      "silver": 160,
+                      "full_growth": true
                     }
                   }
                 ]
@@ -2266,10 +2363,15 @@
                     "정도": 40
                   },
                   "stats": {
-                    "external": 3,
-                    "mind": 3
+                    "external": 10,
+                    "mind": 10
                   },
-                  "hp_pct": -10
+                  "hp_pct": -10,
+                  "style_gear": {
+                    "grade": "명품",
+                    "slot": "armor"
+                  },
+                  "full_growth": true
                 }
               }
             ]
@@ -2282,10 +2384,15 @@
                 "effects": {
                   "fame": 4,
                   "stats": {
-                    "external": 4,
-                    "internal": 3
+                    "external": 12,
+                    "internal": 10
                   },
-                  "hp_pct": -25
+                  "hp_pct": -25,
+                  "style_gear": {
+                    "grade": "명품",
+                    "slot": "armor"
+                  },
+                  "full_growth": true
                 }
               }
             ]
@@ -2296,11 +2403,12 @@
               {
                 "text": "물은 농가 쪽으로 갔다. 돈은 많았고 말하는 사람은 줄었다.",
                 "effects": {
-                  "silver": 120,
+                  "silver": 420,
                   "alignment": {
                     "사도": 20,
                     "마도": 40
-                  }
+                  },
+                  "full_growth": true
                 }
               }
             ]
@@ -2324,8 +2432,13 @@
                         "정도": 40
                       },
                       "stats": {
-                        "mind": 4
-                      }
+                        "mind": 10
+                      },
+                      "grade_item": {
+                        "grade": "명품",
+                        "category": "소비품"
+                      },
+                      "full_growth": true
                     }
                   }
                 ]

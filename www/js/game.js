@@ -4,9 +4,9 @@ import { GRADE_ORDER, Player, Skill, STAT_NAMES } from "./character.js";
 import { DB } from "./data.js";
 import { grantStartGear, grantStartSkills,
   advanceChain, applyEffects, failChain, checkRequires, dueChainEvent, enemyIntro, LAST_CHAIN_TURN, pickFortune, pickRandomEvent, resolveChoice,
-  reactiveLine, startChain, storyEventForTurn,
+  reactiveLine, startChain, storyEventForTurn, dueOriginEvent, pendingOriginEvents,
 } from "./events.js";
-import { bonusFor, buy, equipmentBonus, openMarket } from "./market.js";
+import { bonusFor, buy, equipmentBonus, openMarket, sell } from "./market.js";
 import {
   activeContent, addKarma, claimAchievements, clearCheckpoint, extraSlots, rewardTraits, loadCheckpoint, loadMeta, recordRun, saveCheckpoint,
   storeLegacy, takeLegacy, takeProvisions, updateGlobalCodex, updateKnown, upgradeTraits,
@@ -14,9 +14,9 @@ import {
 import { pick, pickWeighted, randInt, rng } from "./rng.js";
 import {
   actionLine, ALIGNMENT_CAP, alignTier, applyGrowth, breakthroughBlock, byname, CHAPTER_STARTS, checkBreakthrough, checkGoodEnding, checkSaengsa,
-  fameRank, FOCUS_DRIFT, focusedSide, getChapter, getChapterInfo, getMonth, getYear, isMarketTurn, monthLine, auraText, isNamed, perkTrait, realmFit, returnedLine, standIn, realmIndex, sumEffect, talkLine, traitSlots,
+  scaledGrowth, fameRank, FOCUS_DRIFT, focusedSide, getChapter, getChapterInfo, getMonth, getYear, isMarketTurn, monthLine, auraText, isNamed, perkTrait, realmFit, returnedLine, standIn, realmIndex, sumEffect, talkLine, traitSlots,
 } from "./rules.js";
-import { josa } from "./josa.js";
+import { halpun, josa } from "./josa.js";
 
 const NATURAL_REGEN = 5;
 const EXPLORE_BATTLE = 0.35; // 나머지는 사건과 기연
@@ -24,6 +24,7 @@ const EXPLORE_EVENT = 0.45;
 const SPARRING_CHANCE = 0.65;
 const TRAIN_BONUS_BASE = 0.05;
 const TRAIN_MASTERY_RATE = 3;
+const ART_TRAIN_RATE = 2;
 const INSIGHT_CHANCE = 0.3;
 const GAUNTLET_REST = 20;
 const LOG_LIMIT = 40;
@@ -46,6 +47,7 @@ function breakthroughLines(p, next) {
 }
 
 const MONTH_TALK_RATE = 0.3;
+const SAENGSA_STAT = 1000;
 
 export class Game {
   constructor() { this.reset(); }
@@ -112,7 +114,8 @@ export class Game {
       const key = inheritedGear(entry.key);
       name = DB.market[key].name;
       const { slot } = DB.market[key].effects.find((e) => e.type === "equip");
-      if (bonusFor(p, key) > equipmentBonus(p, slot)) p[slot] = key;
+      if (bonusFor(p, key) > equipmentBonus(p, slot)) p.equipGear(key);
+      else if (!p.ownsGear(key)) p.gear.push(key);
     }
     p.note(`전대 ${entry.from}의 유산 ${name}${josa(name, "을/를")} 이어받았다.`);
     return [`전대 ${entry.from}${josa(entry.from, "이/가")} 남긴 ${name}${josa(name, "을/를")} 이어받았다. 세월에 조금 무뎌졌지만 아직 쓸 만하다.${entry.kind === "skill" ? " 신상의 무공 칸에서 골라 쓸 수 있다." : ""}`];
@@ -164,7 +167,13 @@ export class Game {
     }
     const chainKey = dueChainEvent(p);
     // 연계 한 편은 그달을 쓴다. 다만 마지막 달에 몰리면 달을 쓰지 않는다.
-    if (chainKey) this.event = { key: chainKey, forced: urgent };
+    if (chainKey) {
+      this.event = { key: chainKey, forced: urgent };
+      return;
+    }
+    // 출신의 이야기는 결전 전에 반드시 찾아온다
+    const originKey = dueOriginEvent(p);
+    if (originKey) this.event = { key: originKey, forced: true };
   }
 
   settleGifts() {
@@ -215,13 +224,16 @@ export class Game {
       }
       const skill = p.bestSkill();
       if (skill) this.addLog(skill.gainMastery(p.masteryGainAmount() * TRAIN_MASTERY_RATE));
+      // 수련하는 동안 걸음도 함께 닦인다
+      const steps = p.bestOfType("경공");
+      if (steps) this.addLog(steps.gainMastery(p.masteryGainAmount() * ART_TRAIN_RATE));
     } else if (name === "명상") {
       const internal = this.grow("internal");
       const mind = this.grow("mind");
       const [, qi] = p.healPercent(0, 15);
       this.addLog([actionLine("명상"), `내공+${internal}, 심경+${mind}, 내력+${qi}`]);
       const skill = p.bestOfType("심공");
-      if (skill) this.addLog(skill.gainMastery(p.masteryGainAmount()));
+      if (skill) this.addLog(skill.gainMastery(p.masteryGainAmount() * TRAIN_MASTERY_RATE));
       // 고요한 중에 깨달음이 오면 주무공도 함께 깊어진다
       if (rng.random() < INSIGHT_CHANCE && p.bestSkill()) {
         this.addLog(["문득 초식의 군더더기가 보였다.", ...p.bestSkill().gainMastery(p.masteryGainAmount() * TRAIN_MASTERY_RATE)]);
@@ -245,7 +257,7 @@ export class Game {
     const p = this.player;
     let amount = randInt(8, 12);
     if (rng.random() < TRAIN_BONUS_BASE + p.mind / 5000) amount += randInt(7, 11); // 심경이 높으면 두 배 오를 때가 많아진다
-    return p.gainStat(stat, applyGrowth(amount, p.traits, stat));
+    return p.gainStat(stat, applyGrowth(scaledGrowth(amount, p.turn), p.traits, stat));
   }
 
   explore() {
@@ -317,7 +329,7 @@ export class Game {
       const percent = Math.min(weaken, 60);
       enemy.maxHp = Math.trunc(enemy.maxHp * (100 - percent) / 100);
       enemy.hp = enemy.maxHp;
-      this.addLog([`천마의 기세가 꺾인 채 싸움이 시작된다. (체력 ${percent}% 감소)`]);
+      this.addLog([`천마의 기세가 꺾인 채 싸움이 시작된다. (체력 ${halpun(percent)} 감소)`]);
     }
     p.recordEnemyEncounter("천마");
     this.battle = new Battle(p, enemy, true);
@@ -464,7 +476,8 @@ export class Game {
 
   /** 천마봉 앞에서 끝나지 않은 연계가 남아 있으면 달을 넘기지 않는다. */
   chainsMustFinish() {
-    return this.player.turn >= LAST_CHAIN_TURN && this.player.chains.length > 0;
+    const p = this.player;
+    return p.turn >= LAST_CHAIN_TURN && (p.chains.length > 0 || pendingOriginEvents(p).length > 0);
   }
 
   continueGauntlet() {
@@ -613,7 +626,7 @@ export class Game {
     // 심경이 충분히 높지 않으면 돌파가 거칠어 내상을 입는다
     if (rng.random() < Math.max(0, 600 - p.mind) * 0.001) {
       p.healPercent(-25, -25);
-      lines.push("심경이 흔들려 기가 역류했다. 간신히 돌파했지만 내상을 입었다. (체력과 내력 -25%)");
+      lines.push("심경이 흔들려 기가 역류했다. 간신히 돌파했지만 내상을 입었다. (체력과 내력 -2할 5푼)");
     } else {
       p.healPercent(50, 50);
       lines.push("막혀 있던 혈맥이 뚫리며 온몸에 기운이 찬다. (체력과 내력 회복)");
@@ -626,6 +639,19 @@ export class Game {
     const [success, message] = buy(this.player, this.market, key);
     this.market.message = message;
     if (success) updateKnown([], [key]);
+  }
+
+  marketSell(key) {
+    if (!this.market) return;
+    const [, message] = sell(this.player, key);
+    this.market.message = message;
+  }
+
+  /** 지닌 병장기로 바꿔 든다. 싸우는 중에는 못 바꾼다. */
+  equipGear(key) {
+    if (!this.active || this.battle || !this.player.gear.includes(key)) return;
+    this.player.equipGear(key);
+    if (this.market) this.market.message = `${DB.market[key].name}${josa(DB.market[key].name, "을/를")} 들었다.`;
   }
 
   marketLeave() {
@@ -656,7 +682,11 @@ export class Game {
       if (before < reward.at && before + gain.total >= reward.at) gain.lines.push(`누적 보상 ${reward.name}${josa(reward.name, "을/를")} 받았다.`);
     }
     // 생사경은 천마를 넘어선 그 순간에만 이르는 경지다
-    if (key === "생사경") p.realm = "생사경";
+    if (key === "생사경") {
+      p.realm = "생사경";
+      // 마지막 장면의 연출이다. 네 기량이 모두 끝을 넘어선다
+      for (const stat of Object.keys(STAT_NAMES)) p[stat] = SAENGSA_STAT;
+    }
     p.alive = false;
     this.ending = {
       key, title: endings.titles[key], seal: endings.seals[key], karma: gain.total, karmaLines: gain.lines,

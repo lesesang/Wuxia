@@ -1,6 +1,6 @@
 // 성향, 챕터, 경지, 특성, 문파, 명성처럼 상태를 갖지 않는 규칙들
 import { DB } from "./data.js";
-import { josa } from "./josa.js";
+import { halpun, josa } from "./josa.js";
 import { pick, rng } from "./rng.js";
 
 // ---------- 성향 ----------
@@ -21,6 +21,15 @@ const ALIGN_TABLE = {
   사도: { names: ["사파의 첫걸음", "사파 고수", "사파 거물", "사파 거두", "사파 제왕"], silver: [25, 30, 35, 40, 50], crit: [2, 4, 6, 8, 10] },
   마도: { names: ["마도의 첫걸음", "마인", "대마인", "마두", "천하 마존"], damage: [15, 20, 25, 30, 35], healCut: [3, 5, 6, 8, 10] },
 };
+
+/** 장이 뒤로 갈수록 기량이 더디게 오른다 */
+export const growthScale = (turn) => DB.balance.growth_by_chapter[getChapter(turn) - 1];
+/** 양을 성장 배율대로 줄인다. 소수점 아래는 그 확률로 1이 더 오른다. */
+export function scaledGrowth(amount, turn) {
+  const exact = amount * growthScale(turn);
+  const whole = Math.floor(exact);
+  return whole + (rng.random() < exact - whole ? 1 : 0);
+}
 
 export const newAlignment = () => ({ 정도: 0, 사도: 0, 마도: 0 });
 
@@ -59,9 +68,9 @@ export function benefitText(alignment) {
   if (!tier) return "아직 어느 길에도 서지 않았다";
   const at = ALIGN_STEPS[tier.step + 1];
   const next = at ? ` 다음 단계는 ${at}.` : "";
-  if (tier.side === "정도") return `${tier.name}: 장터 가격 ${tier.discount}% 할인${tier.guard ? `, 받는 피해 ${tier.guard}% 감소` : ""}.${next}`;
-  if (tier.side === "사도") return `${tier.name}: 얻는 은자 ${tier.silver}% 증가${tier.crit ? `, 회심의 일격 확률 ${tier.crit}% 증가` : ""}.${next}`;
-  return `${tier.name}: 주는 피해 ${tier.damage}% 증가, 회복 효율 ${tier.healCut}% 감소.${next}`;
+  if (tier.side === "정도") return `${tier.name}: 장터 가격 ${halpun(tier.discount)} 할인${tier.guard ? `, 받는 피해 ${halpun(tier.guard)} 감소` : ""}.${next}`;
+  if (tier.side === "사도") return `${tier.name}: 얻는 은자 ${halpun(tier.silver)} 증가${tier.crit ? `, 회심의 일격 확률 ${halpun(tier.crit)} 증가` : ""}.${next}`;
+  return `${tier.name}: 주는 피해 ${halpun(tier.damage)} 증가, 회복 효율 ${halpun(tier.healCut)} 감소.${next}`;
 }
 
 // ---------- 챕터와 시장 ----------
@@ -127,8 +136,8 @@ export function realmFit(playerRealm, enemyRealm) {
 }
 /** 특전의 글에 주무공 계열의 기운 이름을 넣는다. 검이면 검기와 검강, 권이면 권기와 권강이다 */
 export function auraText(text, category = "검법") {
-  const [qi, gang] = DB.realms.aura[category] || DB.realms.aura.검법;
-  return text.replaceAll("〈기〉", qi).replaceAll("〈강〉", gang);
+  const [qi, gang, cut] = DB.realms.aura[category] || DB.realms.aura.검법;
+  return text.replaceAll("〈기상인〉", cut).replaceAll("〈기〉", qi).replaceAll("〈강〉", gang);
 }
 
 /** 그 경지까지 얻은 특전 */
