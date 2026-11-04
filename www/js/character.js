@@ -381,6 +381,15 @@ export class Player {
   }
 
   /** 지니고 있는 병장기인가 */
+  /** 든 병장기를 내려놓아 행낭에 챙긴다. */
+  unequipGear(slot) {
+    const key = this[slot];
+    if (!key) return false;
+    if (!this.gear.includes(key)) this.gear.push(key);
+    this[slot] = null;
+    return true;
+  }
+
   ownsGear(key) { return this.weapon === key || this.armor === key || this.gear.includes(key); }
 
   addItem(key, count = 1) { this.inventory[key] = (this.inventory[key] || 0) + count; }

@@ -259,7 +259,8 @@ export function talkKeys(player) {
   if (player.fame >= 100) keys.push("천하");
   else if (player.fame >= 40) keys.push("유명");
   else if (player.fame <= 9) keys.push("무명");
-  if (tier) keys.push(tier.step >= DEEP_STEP ? `${tier.side}_깊음` : tier.side);
+  // 이름이 나기 전에는 내 성향을 아는 사람이 없다
+  if (tier && player.fame >= 10) keys.push(tier.step >= DEEP_STEP ? `${tier.side}_깊음` : tier.side);
   return keys;
 }
 

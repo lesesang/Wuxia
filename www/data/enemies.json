@@ -54,7 +54,7 @@
         "requires": {
           "min_fame": 60
         },
-        "text": "\"이름값이 저 정도면 몸값은 더 나가겠지. 형제들, 오늘은 배 터지게 먹자!\""
+        "text": "\"저, 저 이름은... 형제들, 물러서면 두목이 먼저 벤다! 다 같이 덤벼!\""
       },
       {
         "requires": {
@@ -152,7 +152,7 @@
         "requires": {
           "min_fame": 60
         },
-        "text": "\"이름 한번 비싸더군. 머리만 가져가면 되겠지.\""
+        "text": "\"그 이름 앞에 서라고 은자를 받았소. 미친 값이었지. 그래도 받은 건 받은 거요.\""
       },
       {
         "requires": {
@@ -290,7 +290,7 @@
         "requires": {
           "min_fame": 60
         },
-        "text": "\"그 이름 들었다. 네 목 하나면 칠십이 채가 나를 두목으로 부르겠지.\""
+        "text": "\"그 이름이 왜 이런 고개에. 물러서면 내 부하들이 나를 벤다. 덤벼 보자.\""
       },
       {
         "requires": {
@@ -356,7 +356,7 @@
         "requires": {
           "min_fame": 60
         },
-        "text": "\"대단한 이름이구먼. 채주가 그 머리에 쌀 열 섬을 걸었소.\""
+        "text": "\"채주가 그 머리에 쌀 열 섬을 걸었소. 나도 안 될 줄은 아오.\""
       },
       {
         "requires": {
@@ -452,7 +452,7 @@
         "requires": {
           "min_fame": 60
         },
-        "text": "\"천하가 다 아는 이름이면 숨을 곳이 없겠구려. 내 일이 쉬워졌소.\""
+        "text": "\"베러 온 게 아니오. 그 이름에 덤볐다는 소문을 사러 왔소.\""
       },
       {
         "requires": {
@@ -563,7 +563,7 @@
     "tier": "일반",
     "realm": "절정",
     "hp": 1055,
-    "attack": 72,
+    "attack": 73,
     "exp_reward": 1,
     "silver": [
       20,
@@ -637,8 +637,8 @@
     "name": "백사독수 여창",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 1595,
-    "attack": 82,
+    "hp": 1600,
+    "attack": 83,
     "exp_reward": 2,
     "silver": [
       35,
@@ -721,7 +721,7 @@
     "tier": "난적",
     "realm": "초절정",
     "hp": 1815,
-    "attack": 95,
+    "attack": 96,
     "exp_reward": 2,
     "silver": [
       38,
@@ -799,8 +799,8 @@
     "name": "적발마두 염철",
     "tier": "강적",
     "realm": "초절정",
-    "hp": 2165,
-    "attack": 90,
+    "hp": 2170,
+    "attack": 91,
     "exp_reward": 3,
     "silver": [
       63,
@@ -894,8 +894,8 @@
     "name": "음풍마군 고진",
     "tier": "난적",
     "realm": "화경",
-    "hp": 3700,
-    "attack": 134,
+    "hp": 3775,
+    "attack": 138,
     "exp_reward": 2,
     "silver": [
       49,
@@ -998,8 +998,8 @@
     "name": "혈귀장 연팔",
     "tier": "일반",
     "realm": "초절정",
-    "hp": 2205,
-    "attack": 112,
+    "hp": 2245,
+    "attack": 115,
     "exp_reward": 1,
     "silver": [
       28,
@@ -1074,8 +1074,8 @@
     "name": "제오마장 파산마왕 호달",
     "tier": "강적",
     "realm": "현경",
-    "hp": 6060,
-    "attack": 154,
+    "hp": 6175,
+    "attack": 158,
     "exp_reward": 3,
     "silver": [
       91,
@@ -1202,7 +1202,7 @@
     "tier": "강적",
     "realm": "화경",
     "hp": 1590,
-    "attack": 64,
+    "attack": 65,
     "exp_reward": 3,
     "silver": [
       42,
@@ -1247,8 +1247,8 @@
     "name": "무명노인",
     "tier": "강적",
     "realm": "현경",
-    "hp": 3875,
-    "attack": 109,
+    "hp": 3955,
+    "attack": 112,
     "exp_reward": 3,
     "silver": [
       0,
@@ -1277,8 +1277,8 @@
     "name": "파풍검 진관",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 1435,
-    "attack": 77,
+    "hp": 1440,
+    "attack": 78,
     "exp_reward": 2,
     "silver": [
       28,
@@ -1320,7 +1320,11 @@
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 60,
+          "not_dominant": [
+            "사도",
+            "마도"
+          ]
         },
         "text": "\"대협이라 불리는 자라도 명은 명이오. 칼을 받으시오.\""
       }
@@ -1338,8 +1342,8 @@
     "name": "천마",
     "tier": "보스",
     "realm": "생사경",
-    "hp": 72000,
-    "attack": 405,
+    "hp": 73000,
+    "attack": 407,
     "exp_reward": 5,
     "silver": [
       0,
@@ -3114,7 +3118,7 @@
         "requires": {
           "min_fame": 60
         },
-        "text": "\"그 이름에 칼자국 하나 내면 내 값이 곱절이 된다.\""
+        "text": "\"이기지는 못해도 옷에 칼자국 하나는 낸다. 그것만으로 내 값이 곱절이야.\""
       },
       {
         "requires": {
@@ -3303,7 +3307,7 @@
     "tier": "일반",
     "realm": "절정",
     "hp": 880,
-    "attack": 60,
+    "attack": 61,
     "exp_reward": 1,
     "silver": [
       21,
@@ -3386,7 +3390,7 @@
     "tier": "난적",
     "realm": "절정",
     "hp": 1395,
-    "attack": 80,
+    "attack": 82,
     "exp_reward": 2,
     "silver": [
       35,
@@ -3461,8 +3465,8 @@
     "name": "제칠마장 귀곡자",
     "tier": "강적",
     "realm": "현경",
-    "hp": 5235,
-    "attack": 148,
+    "hp": 5335,
+    "attack": 152,
     "exp_reward": 3,
     "silver": [
       84,
@@ -3537,8 +3541,8 @@
     "name": "천년 혈망",
     "tier": "강적",
     "realm": "현경",
-    "hp": 4120,
-    "attack": 115,
+    "hp": 4200,
+    "attack": 117,
     "exp_reward": 3,
     "silver": [
       0,
@@ -3589,8 +3593,8 @@
     "name": "제삼마장 혈수라",
     "tier": "강적",
     "realm": "현경",
-    "hp": 9865,
-    "attack": 176,
+    "hp": 10025,
+    "attack": 181,
     "exp_reward": 3,
     "silver": [
       105,
@@ -3662,8 +3666,8 @@
     "name": "제일마장 무영",
     "tier": "강적",
     "realm": "현경",
-    "hp": 8235,
-    "attack": 187,
+    "hp": 8370,
+    "attack": 193,
     "exp_reward": 3,
     "silver": [
       112,
@@ -3740,8 +3744,8 @@
     "name": "석면귀 오문",
     "tier": "난적",
     "realm": "화경",
-    "hp": 6910,
-    "attack": 189,
+    "hp": 7025,
+    "attack": 195,
     "exp_reward": 2,
     "silver": [
       56,
@@ -3826,7 +3830,7 @@
     "tier": "난적",
     "realm": "초절정",
     "hp": 1425,
-    "attack": 79,
+    "attack": 80,
     "exp_reward": 2,
     "silver": [
       42,
@@ -3950,8 +3954,8 @@
     "name": "운양 진인",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 1160,
-    "attack": 67,
+    "hp": 1165,
+    "attack": 68,
     "exp_reward": 2,
     "silver": [
       0,
@@ -4000,7 +4004,7 @@
     "tier": "난적",
     "realm": "초절정",
     "hp": 1205,
-    "attack": 68,
+    "attack": 69,
     "exp_reward": 2,
     "silver": [
       0,
@@ -4130,8 +4134,8 @@
     "name": "묵형판관 사갈",
     "tier": "강적",
     "realm": "화경",
-    "hp": 3005,
-    "attack": 101,
+    "hp": 3040,
+    "attack": 103,
     "exp_reward": 3,
     "silver": [
       35,
@@ -4259,8 +4263,8 @@
     "name": "권마의 그림자",
     "tier": "강적",
     "realm": "화경",
-    "hp": 3190,
-    "attack": 105,
+    "hp": 3230,
+    "attack": 107,
     "exp_reward": 3,
     "silver": [
       0,
@@ -4302,8 +4306,8 @@
     "name": "청풍검 주문양",
     "tier": "일반",
     "realm": "절정",
-    "hp": 1450,
-    "attack": 87,
+    "hp": 1465,
+    "attack": 90,
     "exp_reward": 2,
     "silver": [
       0,
@@ -4351,8 +4355,8 @@
     "name": "철권왕 마대호",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 2180,
-    "attack": 105,
+    "hp": 2200,
+    "attack": 108,
     "exp_reward": 2,
     "silver": [
       0,
@@ -4405,8 +4409,8 @@
     "name": "혈의공자",
     "tier": "강적",
     "realm": "초절정",
-    "hp": 2660,
-    "attack": 101,
+    "hp": 2690,
+    "attack": 103,
     "exp_reward": 3,
     "silver": [
       0,
@@ -4491,7 +4495,7 @@
     "tier": "난적",
     "realm": "초절정",
     "hp": 1385,
-    "attack": 77,
+    "attack": 78,
     "exp_reward": 3,
     "silver": [
       30,
@@ -4532,8 +4536,8 @@
     "name": "생사의 문지기",
     "tier": "강적",
     "realm": "현경",
-    "hp": 10800,
-    "attack": 208,
+    "hp": 10965,
+    "attack": 214,
     "exp_reward": 5,
     "silver": [
       80,
@@ -4820,8 +4824,8 @@
     "name": "혈불 무진",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 2045,
-    "attack": 100,
+    "hp": 2065,
+    "attack": 103,
     "exp_reward": 3,
     "silver": [
       50,
@@ -4907,8 +4911,8 @@
     "name": "음수 곽진",
     "tier": "일반",
     "realm": "절정",
-    "hp": 1450,
-    "attack": 87,
+    "hp": 1465,
+    "attack": 90,
     "exp_reward": 1,
     "silver": [
       40,
@@ -4969,8 +4973,8 @@
     "name": "만독왕 아루타",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 2350,
-    "attack": 109,
+    "hp": 2375,
+    "attack": 112,
     "exp_reward": 3,
     "silver": [
       50,
@@ -5033,8 +5037,8 @@
     "name": "설령수 하란",
     "tier": "강적",
     "realm": "화경",
-    "hp": 7205,
-    "attack": 164,
+    "hp": 7325,
+    "attack": 170,
     "exp_reward": 5,
     "silver": [
       90,
@@ -5112,8 +5116,8 @@
     "name": "도흔 오광",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 5010,
-    "attack": 166,
+    "hp": 5095,
+    "attack": 172,
     "exp_reward": 3,
     "silver": [
       100,
@@ -5375,8 +5379,8 @@
     "name": "오대세가 철검대",
     "tier": "일반",
     "realm": "절정",
-    "hp": 1780,
-    "attack": 104,
+    "hp": 1800,
+    "attack": 106,
     "exp_reward": 1,
     "silver": [
       7,
@@ -5483,7 +5487,7 @@
         "requires": {
           "min_fame": 60
         },
-        "text": "\"이름값으로 탁발이나 합시다. 안 주면 뺏지.\""
+        "text": "\"소문을 들었소. 시주 대신 한 수만 받읍시다. 안 주면 소승이 먼저 드리지요.\""
       }
     ]
   },
@@ -5555,8 +5559,8 @@
     "name": "백의검 하운성",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 1595,
-    "attack": 88,
+    "hp": 1600,
+    "attack": 90,
     "exp_reward": 2,
     "silver": [
       28,
@@ -5633,8 +5637,8 @@
     "name": "혜공",
     "tier": "일반",
     "realm": "절정",
-    "hp": 1645,
-    "attack": 97,
+    "hp": 1665,
+    "attack": 100,
     "exp_reward": 1,
     "silver": [
       20,
@@ -5693,8 +5697,8 @@
     "name": "태산검 배원철",
     "tier": "강적",
     "realm": "화경",
-    "hp": 5515,
-    "attack": 153,
+    "hp": 5625,
+    "attack": 157,
     "exp_reward": 3,
     "silver": [
       63,
@@ -5765,8 +5769,8 @@
     "name": "쌍벽검 문천기",
     "tier": "난적",
     "realm": "화경",
-    "hp": 6910,
-    "attack": 189,
+    "hp": 7025,
+    "attack": 195,
     "exp_reward": 2,
     "silver": [
       56,
@@ -5883,7 +5887,11 @@
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 60,
+          "not_dominant": [
+            "사도",
+            "마도"
+          ]
         },
         "text": "\"이름 높은 정파 하나당 머리 값이 금 열 냥이다.\""
       }
@@ -5894,8 +5902,8 @@
     "name": "독비도객 갈충",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 1595,
-    "attack": 88,
+    "hp": 1600,
+    "attack": 90,
     "exp_reward": 2,
     "silver": [
       28,
@@ -5936,7 +5944,11 @@
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 60,
+          "not_dominant": [
+            "사도",
+            "마도"
+          ]
         },
         "text": "\"대협이라 부르더군. 내 형은 그 말을 듣고 죽었다.\""
       }
@@ -5949,8 +5961,8 @@
     "name": "무음귀 사무",
     "tier": "일반",
     "realm": "초절정",
-    "hp": 2205,
-    "attack": 112,
+    "hp": 2245,
+    "attack": 115,
     "exp_reward": 1,
     "silver": [
       28,
@@ -6007,8 +6019,8 @@
     "name": "구혈마견 아독",
     "tier": "강적",
     "realm": "화경",
-    "hp": 10300,
-    "attack": 216,
+    "hp": 10470,
+    "attack": 222,
     "exp_reward": 3,
     "silver": [
       63,
@@ -6126,7 +6138,7 @@
         "requires": {
           "min_fame": 60
         },
-        "text": "\"이름값 덕에 내 벌이가 곱절이오.\""
+        "text": "\"값이 너무 비싸서 다들 내뺐소. 남은 건 나뿐이오.\""
       }
     ]
   },
@@ -6134,8 +6146,8 @@
     "name": "철조 조무성",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 1595,
-    "attack": 88,
+    "hp": 1600,
+    "attack": 90,
     "exp_reward": 2,
     "silver": [
       28,
@@ -6188,8 +6200,8 @@
     "name": "철쇄수 왕백",
     "tier": "일반",
     "realm": "초절정",
-    "hp": 2205,
-    "attack": 112,
+    "hp": 2245,
+    "attack": 115,
     "exp_reward": 1,
     "silver": [
       40,
@@ -6226,8 +6238,8 @@
     "name": "철면판관 서도진",
     "tier": "강적",
     "realm": "화경",
-    "hp": 10300,
-    "attack": 216,
+    "hp": 10470,
+    "attack": 222,
     "exp_reward": 3,
     "silver": [
       63,
@@ -6337,7 +6349,7 @@
         "requires": {
           "min_fame": 60
         },
-        "text": "\"이름이 너무 커졌어. 내가 덜어 주지.\""
+        "text": "\"그 이름에 덤비다 죽어도 내 이름은 남겠지.\""
       }
     ]
   },
@@ -6345,8 +6357,8 @@
     "name": "일도무적 백장풍",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 2490,
-    "attack": 120,
+    "hp": 2515,
+    "attack": 123,
     "exp_reward": 2,
     "silver": [
       28,
@@ -6398,8 +6410,8 @@
     "name": "부동검 남천우",
     "tier": "강적",
     "realm": "화경",
-    "hp": 10300,
-    "attack": 216,
+    "hp": 10470,
+    "attack": 222,
     "exp_reward": 3,
     "silver": [
       63,
@@ -6508,8 +6520,8 @@
     "name": "강호시랑 두칠",
     "tier": "일반",
     "realm": "절정",
-    "hp": 3085,
-    "attack": 133,
+    "hp": 3140,
+    "attack": 137,
     "exp_reward": 1,
     "silver": [
       28,
@@ -6630,7 +6642,7 @@
     "tier": "난적",
     "realm": "초절정",
     "hp": 1380,
-    "attack": 79,
+    "attack": 80,
     "exp_reward": 3,
     "silver": [
       50,
@@ -6949,7 +6961,7 @@
     "tier": "일반",
     "realm": "절정",
     "hp": 825,
-    "attack": 72,
+    "attack": 73,
     "exp_reward": 1,
     "silver": [
       0,
@@ -6990,8 +7002,8 @@
     "name": "금안신조",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 1305,
-    "attack": 83,
+    "hp": 1310,
+    "attack": 84,
     "exp_reward": 3,
     "silver": [
       0,
@@ -7044,7 +7056,7 @@
         "requires": {
           "min_fame": 60
         },
-        "text": "금빛 눈이 내 이름을 아는 듯 깊게 숨을 들이켰다."
+        "text": "금빛 눈이 내 기세를 재듯 깊게 숨을 들이켰다."
       }
     ],
     "stand_in": "설표"
@@ -7054,7 +7066,7 @@
     "tier": "난적",
     "realm": "초절정",
     "hp": 1235,
-    "attack": 75,
+    "attack": 76,
     "exp_reward": 3,
     "silver": [
       0,
@@ -7123,8 +7135,8 @@
     "name": "백액호",
     "tier": "난적",
     "realm": "화경",
-    "hp": 3885,
-    "attack": 141,
+    "hp": 3960,
+    "attack": 145,
     "exp_reward": 3,
     "silver": [
       0,
@@ -7188,8 +7200,8 @@
     "name": "철갑 현귀",
     "tier": "강적",
     "realm": "화경",
-    "hp": 5655,
-    "attack": 116,
+    "hp": 5765,
+    "attack": 119,
     "exp_reward": 3,
     "silver": [
       0,
@@ -7240,8 +7252,8 @@
     "name": "천년 이무기",
     "tier": "강적",
     "realm": "현경",
-    "hp": 10405,
-    "attack": 190,
+    "hp": 10575,
+    "attack": 196,
     "exp_reward": 3,
     "silver": [
       0,
@@ -7303,8 +7315,8 @@
     "name": "사도련 흑수대",
     "tier": "일반",
     "realm": "절정",
-    "hp": 2205,
-    "attack": 112,
+    "hp": 2245,
+    "attack": 115,
     "exp_reward": 2,
     "silver": [
       40,
@@ -7398,7 +7410,7 @@
         "requires": {
           "min_fame": 60
         },
-        "text": "\"저 사람 머리만 건지면 배가 한 척이다!\""
+        "text": "\"저, 저 사람이요? 형님, 배를 돌립시다!\""
       }
     ]
   },
@@ -7406,8 +7418,8 @@
     "name": "천마신교 호교대",
     "tier": "일반",
     "realm": "절정",
-    "hp": 2205,
-    "attack": 112,
+    "hp": 2245,
+    "attack": 115,
     "exp_reward": 2,
     "silver": [
       40,
@@ -7464,8 +7476,8 @@
     "name": "혈마대 귀졸 무리",
     "tier": "일반",
     "realm": "절정",
-    "hp": 2205,
-    "attack": 112,
+    "hp": 2245,
+    "attack": 115,
     "exp_reward": 2,
     "silver": [
       40,
@@ -7510,8 +7522,8 @@
     "name": "낭인패 흑랑단",
     "tier": "일반",
     "realm": "절정",
-    "hp": 2205,
-    "attack": 112,
+    "hp": 2245,
+    "attack": 115,
     "exp_reward": 2,
     "silver": [
       40,
@@ -7566,8 +7578,8 @@
     "name": "무림맹 순찰조",
     "tier": "일반",
     "realm": "절정",
-    "hp": 2205,
-    "attack": 112,
+    "hp": 2245,
+    "attack": 115,
     "exp_reward": 2,
     "silver": [
       40,
@@ -7671,8 +7683,8 @@
     "title": "무림맹주",
     "tier": "강적",
     "realm": "현경",
-    "hp": 10405,
-    "attack": 199,
+    "hp": 10575,
+    "attack": 206,
     "exp_reward": 4,
     "silver": [
       120,

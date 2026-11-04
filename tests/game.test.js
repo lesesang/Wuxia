@@ -916,7 +916,7 @@ test("상황별 반응: 출신, 무공, 명성, 능력치, 시작 특성이 고�
 test("적의 대사가 명성과 경지에 따라 달라진다", () => {
   const p = new Player();
   p.fame = 150;
-  assert.ok(enemyIntro(p, "산적").includes("이름값"));
+  assert.ok(enemyIntro(p, "산적").includes("이름은"));
   p.fame = 0;
   assert.ok(/초행길|아무도 없는/.test(enemyIntro(p, "산적")));
 });
@@ -2262,6 +2262,70 @@ test("유산 강화: 이어받을 수와 보관 수가 늘고, 단계와 품계�
   n.chooseEvent(0);
   assert.equal(n.player.weapon, "운철보검");
   withKarma(0);
+});
+
+test("장터의 값은 같은 효과면 같은 기준을 따른다", () => {
+  const skillOf = (i) => i.effects.find((e) => e.type === "skill")?.skill;
+  const books = {};
+  for (const i of Object.values(DB.market)) {
+    const key = skillOf(i);
+    if (!key) continue;
+    const id = `${DB.skills[key].type === "공격무공" ? "공격" : "심법과 보법"} ${DB.skills[key].grade}`;
+    (books[id] ||= new Set()).add(i.price);
+  }
+  for (const [id, prices] of Object.entries(books)) assert.equal(prices.size, 1, id);
+  // 기량을 올리는 약은 오르는 양에 맞는 값이다
+  for (const [k, i] of Object.entries(DB.market)) {
+    const stats = i.effects.filter((e) => e.type === "stat").reduce((t, e) => t + e.amount, 0);
+    if (!stats || i.karma_price || k === "혈마단") continue;
+    const heal = i.effects.filter((e) => e.type === "heal").reduce((t, e) => t + Math.max(0, e.percent), 0);
+    assert.ok(Math.abs(i.price - stats * 3.2 - heal * (["보물", "신물"].includes(i.grade) ? 1.7 : 0.7)) <= 5, k);
+  }
+  // 천마를 깎는 밀서는 깎는 양에 비례한다
+  const per = (k) => DB.market[k].price / DB.market[k].effects[0].percent;
+  assert.equal(per("천마약점기록"), per("천마봉지도"));
+  // 위력과 방어가 높을수록 값이 비싸다
+  for (const slot of ["weapon", "armor"]) {
+    const list = Object.values(DB.market).filter((i) => i.markets.length && i.price && i.effects.some((e) => e.slot === slot))
+      .map((i) => [i.effects[0].bonus, i.price]).sort((a, b) => a[0] - b[0]);
+    list.forEach(([, price], n) => { if (n) assert.ok(price >= list[n - 1][1], slot); });
+  }
+});
+
+test("병장기를 내려놓으면 행낭에 남고 다시 들 수 있다", () => {
+  const game = newGame();
+  const p = game.player;
+  p.equipGear("강철검");
+  game.pendingNext = true;
+  game.unequipGear("weapon");
+  assert.equal(p.weapon, null);
+  assert.ok(p.gear.includes("강철검"));
+  game.equipGear("강철검");
+  assert.equal(p.weapon, "강철검");
+  assert.ok(!p.gear.includes("강철검"));
+});
+
+test("이기면 쓰지 않은 무공도 성취가 쌓이고, 심법과 보법이 더 많이 쌓인다", () => {
+  const p = new Player("무림초출");
+  p.skills = ["기초검법", "토납법", "초상비"].map((k) => Skill.fromDict({ key: k, grade: DB.skills[k].grade, mastery: 0 }));
+  p.mainSkill = "기초검법";
+  const b = new Battle(p, new Enemy("산적"));
+  b.enemy.hp = 0;
+  b.finish(true);
+  const [attack, mind, step] = p.skills.map((s) => s.mastery);
+  assert.equal(attack, 1);
+  assert.ok(mind >= 5 && step >= 5, `${mind} ${step}`);
+});
+
+test("명성이 높아도 마도와 사도의 무인을 대협으로 떠받들지 않고, 낮으면 소문을 말하지 않는다", () => {
+  const p = new Player("무림초출");
+  p.fame = 120;
+  p.alignment = { 정도: 0, 사도: 0, 마도: 500 };
+  assert.ok(!eventView(p, "표국호위").text.includes("대협"));
+  p.alignment = { 정도: 500, 사도: 0, 마도: 0 };
+  assert.ok(eventView(p, "표국호위").text.includes("대협"));
+  p.fame = 3;
+  for (let i = 0; i < 40; i++) assert.ok(!["협객을 대하듯", "소문을 들은"].some((w) => (talkLine(p, "event") || "").includes(w)));
 });
 
 test("마지막 장터는 보물과 신물만 내놓는다", () => {

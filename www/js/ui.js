@@ -108,7 +108,7 @@ function codexRows(tab, meta) {
       total: Object.keys(DB.market).length, filterLabel: "종류", filters: cats, empty: "장터에서 사거나 쓴 물건이 이곳에 기록됩니다.",
       rows: meta.known_items.filter((k) => DB.market[k]).map((k) => {
         const i = DB.market[k];
-        return { key: k, name: i.name, meta: `${categoryName(i.category)}, ${i.grade ?? "비급"}`, desc: i.gimmick ? `${i.desc} 숨은 힘 ${i.gimmick.name}: ${i.gimmick.text}` : i.desc, cats: [categoryName(i.category)] };
+        return { key: k, name: i.name, meta: `${categoryName(i.category)}, ${i.grade ?? "비급"}`, desc: i.gimmick ? `${i.desc} 영기 ${i.gimmick.name}: ${i.gimmick.text}` : i.desc, cats: [categoryName(i.category)] };
       }),
     };
   }
@@ -245,7 +245,7 @@ ${section("생사경", [
     "성취가 100을 넘어 더 쌓이면 다음 품계로 승급합니다. 승급하면 성취가 줄어들고 위력은 오릅니다.",
     "<b>같은 무공을 또 얻으면</b> 성취가 오릅니다. <b>같은 갈래의 더 깊은 무공</b>을 얻으면 따로 쌓이지 않고 쓰던 무공이 그것으로 이어지며 성취와 오른 품계는 그대로 갑니다."])}
 ${section("위력의 기준", ["무공에 적힌 <b>위력 N배</b>는 기본 공격력에 곱하는 값입니다. 기본 공격력은 네 기량(무리가 가장 크고, 다음이 외공, 내공, 심경 순)에 병기의 위력을 더한 값입니다. 맨손 공격이 1배입니다.", "거기에 경지, 자질, 소속, 성향의 보정이 곱해지고, 품계가 오르면 2할 5푼, 성취 1마다 0.003배가 더해집니다. 성취가 100이면 0.3배가 늘어납니다.", "비기의 위력은 그 무공의 위력에 비기 배수를 한 번 더 곱합니다. 비기는 내공이 위력에 더 크게 들어갑니다."])}
-${section("성취 쌓기", ["주무공은 수련과 싸움에서 오르고, 싸움에서는 합마다 쓰는 만큼 조금씩 쌓입니다. 심법은 운기와 요양, 전투 중 운기, 승리에서 오릅니다. 보법은 수련과 탐색, 경공 사용, 승리에서 오릅니다."])}
+${section("성취 쌓기", ["주무공은 수련과 싸움에서 오르고, 싸움에서는 합마다 쓰는 만큼 조금씩 쌓입니다. 심법은 운기와 요양, 전투 중 운기, 승리에서 오릅니다. 보법은 수련과 탐색, 경공 사용, 승리에서 오릅니다. 싸움에 이기면 쓰지 않은 무공도 쌓이고, 심법과 보법이 더 많이 쌓입니다."])}
 ${section("일절 너머", ["일절 무공의 성취가 100에 이르면 드물게 큰 깨달음이 찾아옵니다. 받아들이면 그 무공이 신공의 경지에 오르고, 그 대가로 몸이 크게 상합니다. 공격 무공, 심법, 보법 모두 그렇습니다."])}`,
     전투: `${section("전투", [
     "무공은 내력을 씁니다. 내력이 없으면 맨손으로 싸웁니다.",
@@ -273,7 +273,7 @@ ${section("영물과 내단", ["산과 물에는 짐승과 오래 묵은 영물�
 ${section("오대세가와 구파일방", ["<b>구파일방</b>: 소림, 무당, 화산, 아미, 곤륜, 종남, 점창, 청성, 공동의 아홉 문파와 개방입니다.", "<b>오대세가</b>: 남궁, 하북팽가, 사천당가, 모용, 제갈입니다. 남궁과 팽가는 천마신교의 손에 멸문해 이제 들어갈 수 없습니다. 그 마지막 사람은 출신으로 고를 수 있습니다.", "<b>사파</b>: 사도련, 녹림맹, 살막, 흑사방, 하오문. <b>마도</b>: 천마신교, 혈교, 귀문교입니다.", "사천당가는 독과 암기를 다루지만 해독과 의술에 밝은 정파의 명문입니다."])}
 ${section("출신의 이야기", ["출신마다 전용 이야기가 있습니다. 조건을 채운 이야기는 탐색에서 더 자주 찾아오고, 끝까지 만나지 못했으면 결전 전 마지막 해에 찾아옵니다. 카르마로 켠 출신 인연도 같습니다. 조건을 끝내 채우지 못한 이야기는 나오지 않습니다.", "이어지는 인연은 여러 달을 쓰는 대신 끝을 맺으면 보상이 큽니다."])}`,
     장터: `${section("장터", ["매년 말 장터가 열리고 달을 쓰지 않습니다. 병기와 호신구는 해마다 진열되고, 주무공에 맞는 병기가 먼저 나옵니다. 심법과 보법 비급도 칸을 따로 둡니다.", "주무공과 맞는 무공, 병기, 도구가 더 자주 나옵니다. 기틀 <b>외길 안목</b>을 올리면 장터와 적의 품에서 더 잘 나옵니다.", "병기 값 옆의 품계를 보세요. 비급은 그 무공의 품계, 나머지는 범품, 양품, 명품, 보물, 신물로 나뉩니다."])}
-    ${section("병장기와 물건의 품계", ["<b>범품, 양품</b>: 위력이나 방어만 오르는 물건입니다. <b>명품, 보물, 신물</b> 병장기에는 저마다의 <b>숨은 힘</b>이 있습니다. 방어를 무시하는 칼, 맞으면 적이 굳는 곤, 공격을 저절로 피하게 하는 옷처럼 다릅니다. 병기의 숨은 힘은 주무공 계열과 맞아야 깨어납니다.", "보물과 신물은 드뭅니다. 큰 사건과 이어지는 인연, 카르마로 산 인연에서 얻거나 수상한 누군가에게서 삽니다.", "새로 얻은 병장기가 더 나으면 바로 듭니다. 지금 것이 더 나으면 행낭에 챙기고, 신상의 행낭 칸이나 장터에서 언제든 바꿔 들 수 있습니다.", "약과 도구, 쓰지 않는 병장기는 장터에서 값의 4할에 되팔 수 있습니다. 들고 있는 병장기는 먼저 내려놓아야 합니다."])}
+    ${section("병장기와 물건의 품계", ["<b>범품, 양품</b>: 위력이나 방어만 오르는 물건입니다. <b>명품, 보물, 신물</b> 병장기에는 저마다의 <b>영기</b>이 있습니다. 방어를 무시하는 칼, 맞으면 적이 굳는 곤, 공격을 저절로 피하게 하는 옷처럼 다릅니다. 병기의 영기는 주무공 계열과 맞아야 깨어납니다.", "보물과 신물은 드뭅니다. 큰 사건과 이어지는 인연, 카르마로 산 인연에서 얻거나 수상한 누군가에게서 삽니다.", "새로 얻은 병장기가 더 나으면 바로 듭니다. 지금 것이 더 나으면 행낭에 챙기고, 신상의 행낭 칸이나 장터에서 언제든 바꿔 들거나 내려놓을 수 있습니다.", "약과 도구, 쓰지 않는 병장기는 장터에서 값의 4할에 되팔 수 있습니다. 들고 있는 병장기는 먼저 내려놓아야 합니다."])}
     ${section("수상한 누군가", ["결전 직전 마지막 달에는 장터 대신 수상한 누군가가 보따리를 풉니다. 보물과 신물, 상승 이상의 비급만 다루고 값은 3할쯤 비쌉니다.", "<b>특별한 물건</b>은 언제나 나옵니다. 천마의 체력을 미리 깎는 물건, 쓰러질 때 끌어모을 힘을 더 주는 물건, 주무공에 맞는 신물을 내어 주는 증표처럼 카르마로 거래하는 것도 있습니다. 카르마가 조금 남았다면 이때 쓰면 좋습니다."])}
     ${section("도구와 약 쓰기", ["전투 중 약이나 도구 <b>하나는 합을 쓰지 않습니다</b>. 같은 합에 하나를 더 쓰면 그때는 합이 지나가고 적이 움직입니다.", "수련 도구는 언제든, 전투 도구는 전투 중에 씁니다. 계열이 정해진 도구는 맞으면 제 효과를 내고 맞지 않으면 절반입니다.", "같은 계열 무공의 성취는 신상의 무공 칸에서 주무공으로 옮길 수 있습니다. 품계가 같으면 절반, 낮으면 3할이 옮겨 갑니다."])}`,
     카르마: `${section("카르마를 얻는 길", [
@@ -603,19 +603,25 @@ function companionList(p) {
   return rows.length ? `<div class="modal-section"><h4>결전에 달려올 사람</h4>${rows.map((c) => `<div class="skill-row">${esc(c.name)}<div class="skill-meta">${esc(c.help_text)}</div></div>`).join("")}</div>` : "";
 }
 
-/** 병장기의 숨은 힘 한 줄 */
+/** 병장기의 영기 한 줄 */
+/** 든 병장기를 내려놓는 단추 */
+function unequipButton(p, slot) {
+  if (!p[slot] || game.battle || !p.alive) return "";
+  return `<button class="mini-btn" data-act="unequip-gear" data-key="${slot}">내려놓기</button>`;
+}
+
 function gimmickLine(p, slot) {
   const g = DB.market[p[slot]]?.gimmick;
   if (!g) return "";
   const on = gearGimmick(p, slot);
-  return `<p class="skill-meta">숨은 힘 ${esc(g.name)}${on ? "" : " (주무공과 맞지 않아 잠들어 있다)"}: ${esc(g.text)}</p>`;
+  return `<p class="skill-meta">영기 ${esc(g.name)}${on ? "" : " (주무공과 맞지 않아 잠들어 있다)"}: ${esc(g.text)}</p>`;
 }
 
 /** 챙겨 둔 병장기. 싸우지 않을 때 바꿔 든다 */
 function spareGear(p) {
   if (!p.gear.length) return "";
   return `<div class="modal-section"><h4>챙겨 둔 병장기</h4>${p.gear.filter((k) => DB.market[k]).map((key) => `<div class="skill-row"><div class="skill-head">
-    <span>${esc(DB.market[key].name)} <span class="skill-meta">${esc(itemGrade(key))}</span><br><span class="skill-meta">${esc(DB.market[key].desc)}${DB.market[key].gimmick ? ` 숨은 힘 ${esc(DB.market[key].gimmick.name)}: ${esc(DB.market[key].gimmick.text)}` : ""}</span></span>
+    <span>${esc(DB.market[key].name)} <span class="skill-meta">${esc(itemGrade(key))}</span><br><span class="skill-meta">${esc(DB.market[key].desc)}${DB.market[key].gimmick ? ` 영기 ${esc(DB.market[key].gimmick.name)}: ${esc(DB.market[key].gimmick.text)}` : ""}</span></span>
     ${!game.battle && p.alive ? `<button class="mini-btn" data-act="equip-gear" data-key="${esc(key)}">들기</button>` : ""}</div></div>`).join("")}</div>`;
 }
 
@@ -679,9 +685,9 @@ function statusModal() {
     bag: `<div class="modal-section">
         ${row("은자", p.silver)}
         ${row("병기", weapon ? `${weapon}, ${itemGrade(p.weapon)} (위력 +${equipmentBonus(p, "weapon")})` : "없음")}
-        ${gimmickLine(p, "weapon")}
+        ${gimmickLine(p, "weapon")}${unequipButton(p, "weapon")}
         ${row("호신구", armor ? `${armor}, ${itemGrade(p.armor)} (받는 피해 -${equipmentBonus(p, "armor")})` : "없음")}
-        ${gimmickLine(p, "armor")}
+        ${gimmickLine(p, "armor")}${unequipButton(p, "armor")}
       </div>${spareGear(p)}<div class="modal-section"><h4>상비약과 도구</h4>${bag}</div>`,
   };
   const tabs = [["stats", "기량"], ["skills", "무공"], ["bag", "행낭"], ["history", "기록"]];
@@ -840,6 +846,9 @@ function topbar() {
       <span class="silver">은자 <b>${p.silver}</b></span>
       ${p.injury ? `<span class="injury">내상 <b>${p.injury}</b></span>` : ""}
     </div>
+    <div class="topbar-stats topbar-align">
+      <span class="align-jeong">정도 <b>${Math.round(p.alignment.정도 || 0)}</b></span><span class="align-sa">사도 <b>${Math.round(p.alignment.사도 || 0)}</b></span><span class="align-ma">마도 <b>${Math.round(p.alignment.마도 || 0)}</b></span>
+    </div>
     ${p.alive ? goalStrip() + chainStrip(p) : ""}</div></div>`;
 }
 
@@ -905,12 +914,15 @@ const categoryName = (c) => CATEGORY_NAMES[c] || c;
 /** 내 짐. 들고 있지 않은 병장기는 바꿔 들 수 있고, 약과 도구와 함께 되팔 수 있다. */
 function sellSection(player) {
   const views = sellableView(player);
-  if (!views.length) return "";
+  if (!views.length && !player.weapon && !player.armor) return "";
   const rows = views.map((v) => `<div class="market-item"><div class="item-info">
       <div class="item-name">${esc(v.name)}<span class="item-category">${esc(categoryName(v.category))}, ${esc(v.grade)}${v.count > 1 ? `, ${v.count}개` : ""}</span></div>
       <div class="item-desc">${esc(v.desc)}</div></div>
       <div class="item-actions">${v.kind === "gear" ? `<button class="buy-btn" data-act="equip-gear" data-key="${esc(v.key)}">들기</button>` : ""}<button class="buy-btn" data-act="sell" data-key="${esc(v.key)}">팔기 ${v.price}</button></div></div>`).join("");
-  return `<h4 class="market-group">내 짐 팔기</h4>${rows}`;
+  const worn = ["weapon", "armor"].filter((slot) => player[slot]).map((slot) => `<div class="market-item"><div class="item-info">
+      <div class="item-name">${esc(DB.market[player[slot]].name)}<span class="item-category">들고 있음</span></div></div>
+      <div class="item-actions">${unequipButton(player, slot)}</div></div>`).join("");
+  return `<h4 class="market-group">내 짐 팔기</h4>${worn}${rows}`;
 }
 
 function renderMarket() {
@@ -924,7 +936,7 @@ function renderMarket() {
     const note = item.sold ? "" : compareNote(player, item.key);
     return `<div class="market-item${item.sold ? " sold" : ""}"><div class="item-info">
       <div class="item-name">${esc(item.name)}<span class="item-category">${esc(categoryName(item.category))}, ${esc(item.grade)}${item.stackable && !item.sold ? `, ${item.left}개 남음` : ""}</span></div>
-      <div class="item-desc">${esc(item.desc)}</div>${DB.market[item.key].gimmick ? `<div class="item-note">숨은 힘 ${esc(DB.market[item.key].gimmick.name)}: ${esc(DB.market[item.key].gimmick.text)}</div>` : ""}${note ? `<div class="item-note">${esc(note)}</div>` : ""}</div>
+      <div class="item-desc">${esc(item.desc)}</div>${DB.market[item.key].gimmick ? `<div class="item-note">영기 ${esc(DB.market[item.key].gimmick.name)}: ${esc(DB.market[item.key].gimmick.text)}</div>` : ""}${note ? `<div class="item-note">${esc(note)}</div>` : ""}</div>
       <button class="buy-btn${item.blocked === "은자 부족" ? " poor" : ""}" data-act="buy" data-key="${esc(item.key)}" ${item.sold || item.blocked ? "disabled" : ""}>${label}</button></div>`;
   };
   const known = GROUPS.flatMap(([, cats]) => cats);
@@ -1212,6 +1224,7 @@ const actions = {
   buy: (el) => { game.marketBuy(el.dataset.key); render(); },
   sell: (el) => { game.marketSell(el.dataset.key); render(); },
   "equip-gear": (el) => { game.equipGear(el.dataset.key); render(); },
+  "unequip-gear": (el) => { game.unequipGear(el.dataset.key); render(); },
   "help-page": (el) => { ui.helpPage = el.dataset.key; render(); },
   "leave-market": () => { game.marketLeave(); render(); },
   "finish-arts": () => { game.finishArtsPick(); render(); },

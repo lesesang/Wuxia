@@ -18,7 +18,8 @@ const DROP_MAIN_RATE = 3;    // 주무공과 같은 계열의 비급은 더 잘 
 const DROP_OTHER_RATE = 0.6;
 const DROP_HINT_RATE = 0.6;      // 적이 품은 무공이 있으면 먼저 그것이 나온다
 const DROP_MEDICINE_RATE = 0.05; // 약이 나올 확률
-const WIN_ART_MASTERY = 2; // 이기면 쓰던 심법과 경공도 조금 깊어진다
+const WIN_ART_MASTERY = 4; // 이기면 쓰던 심법과 경공도 깊어진다
+const WIN_MAIN_MASTERY = 1; // 이기면 쓰던 공격 무공도 아주 조금 깊어진다
 const ART_USE_RATE = 2; // 심법과 경공은 자주 쓰지 않으므로 한 번에 더 쌓인다
 const REVIVE_RATE = 0.5;
 const MIN_THROUGH_GUARD = 0.3; // 호신강기를 뚫고 들어오는 최소 비율
@@ -292,7 +293,7 @@ export class Battle {
     return Math.min(MAX_CRIT, p.mind / 4000 + (sumEffect(p.traits, "crit", "percent") + sectBonus(p, "crit") + alignValue(p.alignment, "사도", "crit")) / 100);
   }
 
-  /** 무공의 묘리에 병기의 숨은 힘을 더한다 */
+  /** 무공의 묘리에 병기의 영기를 더한다 */
   strikeGimmick(skill) {
     const own = skill?.activeGimmick() || {};
     const gear = this.weaponG;
@@ -1006,6 +1007,8 @@ export class Battle {
         this.player.note(`강호에서 ${rank}${josa(rank, "으로")} 불리기 시작했다.`);
       }
       this.applyStatGrowth();
+      const fought = this.player.bestSkill();
+      if (fought) this.log.push(...fought.gainMastery(WIN_MAIN_MASTERY));
       for (const art of [this.player.bestOfType("심공"), this.player.bestOfType("경공")]) {
         if (art) this.log.push(...art.gainMastery(WIN_ART_MASTERY + this.player.masteryGainAmount()));
       }
