@@ -4,7 +4,7 @@ import { DB } from "./data.js";
 import { bonusFor, equipmentBonus, ITEM_GRADES, styleWeight, weightsByStyle } from "./market.js";
 import { legacyPowers, loadMeta, recordEventPick, updateKnown } from "./meta.js";
 import { pick, pickWeighted, rng } from "./rng.js";
-import { ALIGNMENTS, applyGrowth, eventToll, scaledGrowth, fameRankChanged, getChapter, realmIndex, sumEffect, talkLine } from "./rules.js";
+import { ALIGNMENTS, applyGrowth, eventToll, scaledGrowth, fameRankChanged, getChapter, realmIndex, sumEffect } from "./rules.js";
 import { josa } from "./josa.js";
 
 export const EVENT_STAT_SCALE = 3; // 사건과 기연의 기량 상승 배율. 데이터에 적힌 값의 세 배가 오른다
@@ -300,22 +300,12 @@ function takeFoundLegacy(player) {
   return [`${name}${josa(name, "을/를")} 거두었다${worn ? ". 세월에 조금 바랬지만 아직 쓸 만하다" : ""}`];
 }
 
-const NO_TALK_TEXT = /눈먼|맹인|장님|쓰러져|쓰러진|피투성이|숨을 거|유골|백골|쪽지|편지|서찰|전서구|아이|소년|소녀|중얼/;
-const FAME_TEXT = /대협|별호|내 이름|이름이 들|이름 없|이름도 없/;
-const TALK_RATE = 45; // 사람과 말을 섞는 사건 가운데 말투 줄이 붙는 비율
-
-/** 사건 앞에 붙는 한 줄. 사람들은 내 성향과 이름을 알고 대한다. 같은 달의 같은 사건에는 같은 줄이 붙는다. */
+/** 사건 끝에 붙는 한 줄. 그 사건에 맞게 쓴 반응만 쓴다. 같은 달의 같은 사건에는 같은 줄이 붙는다. */
 function eventTalk(player, key) {
   const event = DB.events[key];
   const seed = [...`${key}${player.turn}`].reduce((total, c) => (total * 31 + c.codePointAt(0)) % 100003, 7);
   const own = (event.reacts || []).filter((r) => checkRequires(player, r.requires));
-  if (own.length) return own[seed % own.length].text;
-  const text = eventText(player, key);
-  if (event.kind === "story" || event.prelude || event.chain || key.startsWith("제안_") || !text?.includes("\"")) return null;
-  // 말을 나눌 수 없는 상대이거나, 본문이 이미 내 이름을 다룬 사건에는 붙이지 않는다
-  if (NO_TALK_TEXT.test(text) || FAME_TEXT.test(text)) return null;
-  if ((event.variants || []).some((v) => v.text === text && (v.requires?.min_fame || v.requires?.max_fame !== undefined))) return null;
-  return seed % 100 < TALK_RATE ? talkLine(player, "event", seed) : null;
+  return own.length ? own[seed % own.length].text : null;
 }
 
 export function eventView(player, key) {

@@ -34,7 +34,8 @@
       },
       {
         "requires": {
-          "dominant": "정도"
+          "dominant": "정도",
+          "min_fame": 10
         },
         "text": "\"협객 나리가 혼자 납셨네. 지난달에도 네놈 같은 놈 목을 장터에 팔았다.\""
       },
@@ -132,7 +133,8 @@
       },
       {
         "requires": {
-          "dominant": "정도"
+          "dominant": "정도",
+          "min_fame": 10
         },
         "text": "\"협객이라. 칼값은 협객 쪽이 제일 후하더군. 목에 걸린 현상금이 있으니.\""
       },
@@ -270,7 +272,8 @@
     "intros": [
       {
         "requires": {
-          "dominant": "정도"
+          "dominant": "정도",
+          "min_fame": 20
         },
         "text": "\"대협 납셨군. 네놈 머리를 꽂아 두면 올해 통행세는 절로 걷히겠다.\""
       },
@@ -330,7 +333,8 @@
       },
       {
         "requires": {
-          "dominant": "정도"
+          "dominant": "정도",
+          "min_fame": 10
         },
         "text": "\"협객이면 산 아래서 놀 일이지. 산에선 칼이 곧 관아다.\""
       },
@@ -517,7 +521,8 @@
       },
       {
         "requires": {
-          "dominant": "정도"
+          "dominant": "정도",
+          "min_fame": 10
         },
         "text": "\"협객 놀음은 칼을 맞아 봐야 끝나더군.\""
       },
@@ -680,7 +685,8 @@
       },
       {
         "requires": {
-          "dominant": "정도"
+          "dominant": "정도",
+          "min_fame": 10
         },
         "text": "\"의원 흉내 내는 협객들이 제일 먼저 죽더군. 맨손으로 상처를 잡아 주다가.\""
       },
@@ -760,7 +766,8 @@
       },
       {
         "requires": {
-          "dominant": "정도"
+          "dominant": "정도",
+          "min_fame": 10
         },
         "text": "\"협객이라도 관도에서는 명부에 이름을 쓰시오. 안 쓰면 비석에 쓰게 될 것이오.\""
       },
@@ -1140,7 +1147,8 @@
       },
       {
         "requires": {
-          "dominant": "마도"
+          "dominant": "마도",
+          "min_fame": 10
         },
         "text": "\"대마두 소리를 듣는다지. 진짜 마도를 보여 주마.\""
       },
@@ -2958,7 +2966,8 @@
       },
       {
         "requires": {
-          "dominant": "정도"
+          "dominant": "정도",
+          "min_fame": 10
         },
         "text": "\"협객 양반, 부적 한 장 사시오. 안 사면 저잣거리에 그대가 사람 잡았다고 소문을 내지.\""
       },
@@ -3098,7 +3107,8 @@
       },
       {
         "requires": {
-          "dominant": "정도"
+          "dominant": "정도",
+          "min_fame": 10
         },
         "text": "\"협객의 목이라. 벽에 걸면 보기 좋겠어.\""
       },
@@ -3260,7 +3270,8 @@
       },
       {
         "requires": {
-          "dominant": "정도"
+          "dominant": "정도",
+          "min_fame": 20
         },
         "text": "\"대협도 물에 빠지면 똑같이 허우적거리더라.\""
       },
@@ -3428,7 +3439,8 @@
       },
       {
         "requires": {
-          "dominant": "정도"
+          "dominant": "정도",
+          "min_fame": 20
         },
         "text": "\"대협 시체는 하류까지 잘 떠내려가더군.\""
       },
@@ -3500,7 +3512,8 @@
       },
       {
         "requires": {
-          "dominant": "정도"
+          "dominant": "정도",
+          "min_fame": 10
         },
         "text": "\"협객의 시체는 꼭두각시로 쓰기 제일 좋다. 사람들이 믿고 다가오거든.\""
       },
@@ -3712,7 +3725,8 @@
       },
       {
         "requires": {
-          "dominant": "사도"
+          "dominant": "사도",
+          "min_fame": 10
         },
         "text": "\"값을 치른 소문이 내 이름도 샀더군.\" 목소리는 등 뒤에서 들렸다."
       },
@@ -4696,7 +4710,8 @@
       },
       {
         "requires": {
-          "dominant": "정도"
+          "dominant": "정도",
+          "min_fame": 20
         },
         "text": "\"대협 값이면 쌀 세 수레는 되겠소. 산채 아이들이 올겨울 배부르겠어.\""
       },
@@ -5143,7 +5158,8 @@
     "intros": [
       {
         "requires": {
-          "dominant": "정도"
+          "dominant": "정도",
+          "min_fame": 10
         },
         "text": "\"협사 나리, 값은 얼마요? 없다고요? 그게 가장 비싼 값이지.\""
       },
@@ -5333,7 +5349,8 @@
       },
       {
         "requires": {
-          "dominant": "정도"
+          "dominant": "정도",
+          "min_fame": 10
         },
         "text": "\"협객 목이 요즘 값이 좋습니다.\""
       },
@@ -5467,7 +5484,8 @@
     "intros": [
       {
         "requires": {
-          "dominant": "정도"
+          "dominant": "정도",
+          "min_fame": 10
         },
         "text": "\"협객이면 공양도 후하겠지. 전대부터 내놓으시오.\""
       },
@@ -5817,7 +5835,8 @@
       },
       {
         "requires": {
-          "dominant": "마도"
+          "dominant": "마도",
+          "min_fame": 10
         },
         "text": "\"대마두 소리를 듣는 네놈이다. 천마보다 네가 먼저다.\""
       }
@@ -5881,7 +5900,8 @@
       },
       {
         "requires": {
-          "dominant": "정도"
+          "dominant": "정도",
+          "min_fame": 10
         },
         "text": "\"협객들 묘비는 우리가 대신 세워 주지.\""
       },
@@ -6335,13 +6355,15 @@
     "intros": [
       {
         "requires": {
-          "dominant": "정도"
+          "dominant": "정도",
+          "min_fame": 20
         },
         "text": "\"대협이라 불리는 놈을 꺾어야 내 이름이 서오.\""
       },
       {
         "requires": {
-          "dominant": "마도"
+          "dominant": "마도",
+          "min_fame": 10
         },
         "text": "\"마두를 잡았다는 이름이 필요해서.\""
       },
@@ -6446,7 +6468,8 @@
     "intros": [
       {
         "requires": {
-          "dominant": "정도"
+          "dominant": "정도",
+          "min_fame": 10
         },
         "text": "\"협객이라는 말은 들었네. 명부에 협객 자리는 없네.\""
       },
@@ -6458,7 +6481,8 @@
       },
       {
         "requires": {
-          "dominant": "마도"
+          "dominant": "마도",
+          "min_fame": 10
         },
         "text": "\"마두가 명부에 오르면 천하가 곤란하지. 여기서 끝내세.\""
       }
@@ -6603,13 +6627,15 @@
       },
       {
         "requires": {
-          "dominant": "정도"
+          "dominant": "정도",
+          "min_fame": 10
         },
         "text": "\"장부 태우고 다니는 협객이 네놈이냐. 이자가 꽤 붙었다.\""
       },
       {
         "requires": {
-          "dominant": "사도"
+          "dominant": "사도",
+          "min_fame": 10
         },
         "text": "\"같은 저잣거리 밥을 먹으면 몫을 알아야지.\""
       },
@@ -7048,7 +7074,8 @@
       },
       {
         "requires": {
-          "dominant": "마도"
+          "dominant": "마도",
+          "min_fame": 10
         },
         "text": "금빛 눈이 나를 알아보자 날카롭게 운다. 하늘이 먼저 싫어하는 기운이다."
       },
@@ -7345,7 +7372,8 @@
     "intros": [
       {
         "requires": {
-          "dominant": "정도"
+          "dominant": "정도",
+          "min_fame": 10
         },
         "text": "\"협객 하나당 은자가 곱절이오.\""
       },
@@ -7402,7 +7430,8 @@
     "intros": [
       {
         "requires": {
-          "dominant": "정도"
+          "dominant": "정도",
+          "min_fame": 20
         },
         "text": "\"대협이라도 물에 빠지면 똑같소. 가라앉는 건 금방이오.\""
       },
@@ -7550,7 +7579,8 @@
     "intros": [
       {
         "requires": {
-          "dominant": "정도"
+          "dominant": "정도",
+          "min_fame": 20
         },
         "text": "\"대협이 혼자 다니면 어쩌나. 호위비 받읍시다.\""
       },
@@ -7666,7 +7696,8 @@
       },
       {
         "requires": {
-          "dominant": "정도"
+          "dominant": "정도",
+          "min_fame": 20
         },
         "text": "\"대협 소리 들으면서 칼이 무뎌졌는지 봅시다.\""
       },
