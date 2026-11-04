@@ -894,7 +894,7 @@
     "name": "음풍마군 고진",
     "tier": "난적",
     "realm": "화경",
-    "hp": 3430,
+    "hp": 3845,
     "attack": 144,
     "exp_reward": 2,
     "silver": [
@@ -906,7 +906,7 @@
       5
     ],
     "weight": 5,
-    "armor": 7,
+    "armor": 19,
     "desc": "천마의 복귀를 맹신하는 늙은 마두. 십이마장 바로 아래이며 정파의 문주들과 맞먹는다.",
     "specials": [
       {
@@ -920,7 +920,7 @@
     ],
     "intro": "\"본좌를 보았으니 눈은 놓고 가거라.\"",
     "level": 73,
-    "hp_style": 1.0,
+    "hp_style": 1.12,
     "attack_style": 1.0,
     "intros": [
       {
@@ -1074,7 +1074,7 @@
     "name": "제오마장 파산마왕 호달",
     "tier": "강적",
     "realm": "현경",
-    "hp": 5245,
+    "hp": 6295,
     "attack": 166,
     "exp_reward": 3,
     "silver": [
@@ -1086,7 +1086,7 @@
       5
     ],
     "weight": 3,
-    "armor": 15,
+    "armor": 40,
     "evasion": 0.05,
     "desc": "천마의 열두 손발. 천마 아래 강호에서 맹주와 견주는 자들이다.",
     "specials": [
@@ -1105,7 +1105,7 @@
     ],
     "intro": "\"천마봉으로 가는 길은 열두 개의 무덤을 지나야 한다.\"",
     "level": 73,
-    "hp_style": 1.25,
+    "hp_style": 1.5,
     "attack_style": 1.2,
     "intros": [
       {
@@ -1201,7 +1201,7 @@
     "name": "혈마의 잔영",
     "tier": "강적",
     "realm": "화경",
-    "hp": 1450,
+    "hp": 1625,
     "attack": 68,
     "exp_reward": 3,
     "silver": [
@@ -1221,7 +1221,7 @@
     ],
     "intro": "\"먹어라. 아니면 먹혀라.\"",
     "level": 49,
-    "hp_style": 0.8,
+    "hp_style": 0.896,
     "attack_style": 0.85,
     "intros": [
       {
@@ -1240,13 +1240,14 @@
         "text": "\"깨끗한 손으로 왔구나. 언제까지 깨끗한지 보자.\""
       }
     ],
-    "named": true
+    "named": true,
+    "armor": 12
   },
   "무명노인": {
     "name": "무명노인",
     "tier": "강적",
     "realm": "현경",
-    "hp": 3355,
+    "hp": 4025,
     "attack": 118,
     "exp_reward": 3,
     "silver": [
@@ -1259,7 +1260,7 @@
     "desc": "제자를 시험하러 나온 노인. 죽일 생각은 없어 보인다.",
     "intro": "\"장작 패던 대로만 해 보게.\"",
     "level": 73,
-    "hp_style": 0.8,
+    "hp_style": 0.96,
     "attack_style": 0.85,
     "intros": [
       {
@@ -1269,7 +1270,8 @@
         "text": "\"장작보다 먼저 비질을 배운 놈이군. 그 빗자루 든 놈은 아직 살아 있나?\""
       }
     ],
-    "named": true
+    "named": true,
+    "armor": 25
   },
   "무림맹추격대": {
     "name": "파풍검 진관",
@@ -3459,7 +3461,7 @@
     "name": "제칠마장 귀곡자",
     "tier": "강적",
     "realm": "현경",
-    "hp": 4530,
+    "hp": 5435,
     "attack": 159,
     "exp_reward": 3,
     "silver": [
@@ -3471,7 +3473,7 @@
       5
     ],
     "weight": 3,
-    "armor": 10,
+    "armor": 35,
     "desc": "살아 있는 자를 인형으로 부린다는 십이마장의 하나. 맹주와 견주는 자다.",
     "intro": "\"네 사지에 실을 매달아 주마. 꼭두각시도 말은 잘 듣지.\"",
     "specials": [
@@ -3483,7 +3485,7 @@
       }
     ],
     "level": 73,
-    "hp_style": 1.08,
+    "hp_style": 1.296,
     "attack_style": 1.15,
     "intros": [
       {
@@ -3535,7 +3537,7 @@
     "name": "천년 혈망",
     "tier": "강적",
     "realm": "현경",
-    "hp": 3565,
+    "hp": 4280,
     "attack": 123,
     "exp_reward": 3,
     "silver": [
@@ -3544,7 +3546,7 @@
     ],
     "chapters": [],
     "weight": 0,
-    "armor": 8,
+    "armor": 33,
     "desc": "늪의 왕. 내단을 품은 영물.",
     "intro": "늪이 통째로 일어섰다!",
     "specials": [
@@ -3559,7 +3561,7 @@
       }
     ],
     "level": 73,
-    "hp_style": 0.85,
+    "hp_style": 1.02,
     "attack_style": 0.89,
     "intros": [
       {
@@ -3587,7 +3589,7 @@
     "name": "제삼마장 혈수라",
     "tier": "강적",
     "realm": "현경",
-    "hp": 8560,
+    "hp": 10275,
     "attack": 191,
     "exp_reward": 3,
     "silver": [
@@ -3598,7 +3600,7 @@
       5
     ],
     "weight": 3,
-    "armor": 12,
+    "armor": 37,
     "desc": "베인 만큼 강해진다는 광인. 십이마장의 셋째다.",
     "intro": "\"더! 더 베어 봐!\"",
     "specials": [
@@ -3617,7 +3619,7 @@
       }
     ],
     "level": 97,
-    "hp_style": 1.09,
+    "hp_style": 1.308,
     "attack_style": 0.97,
     "intros": [
       {
@@ -3660,7 +3662,7 @@
     "name": "제일마장 무영",
     "tier": "강적",
     "realm": "현경",
-    "hp": 7145,
+    "hp": 8575,
     "attack": 203,
     "exp_reward": 3,
     "silver": [
@@ -3671,7 +3673,7 @@
       5
     ],
     "weight": 2,
-    "armor": 8,
+    "armor": 33,
     "evasion": 0.15,
     "desc": "이름도 그림자도 남기지 않는 마장.",
     "intro": "목소리는 등 뒤에서 들렸다.",
@@ -3683,7 +3685,7 @@
       }
     ],
     "level": 97,
-    "hp_style": 0.91,
+    "hp_style": 1.092,
     "attack_style": 1.03,
     "intros": [
       {
@@ -3738,7 +3740,7 @@
     "name": "석면귀 오문",
     "tier": "난적",
     "realm": "화경",
-    "hp": 6425,
+    "hp": 7195,
     "attack": 206,
     "exp_reward": 2,
     "silver": [
@@ -3749,7 +3751,7 @@
       5
     ],
     "weight": 5,
-    "armor": 10,
+    "armor": 22,
     "desc": "천마봉을 지키는 검은 갑주.",
     "intro": "\"하늘 아래 오직 천마!\"",
     "specials": [
@@ -3760,7 +3762,7 @@
       }
     ],
     "level": 97,
-    "hp_style": 1.0,
+    "hp_style": 1.12,
     "attack_style": 1.0,
     "intros": [
       {
@@ -4128,7 +4130,7 @@
     "name": "묵형판관 사갈",
     "tier": "강적",
     "realm": "화경",
-    "hp": 2770,
+    "hp": 3100,
     "attack": 107,
     "exp_reward": 3,
     "silver": [
@@ -4137,7 +4139,7 @@
     ],
     "chapters": [],
     "weight": 0,
-    "armor": 6,
+    "armor": 18,
     "desc": "피 연못을 걷는 자.",
     "intro": "\"먹이인지 사냥꾼인지 보자.\"",
     "specials": [
@@ -4149,7 +4151,7 @@
       }
     ],
     "level": 61,
-    "hp_style": 0.97,
+    "hp_style": 1.086,
     "attack_style": 0.98,
     "intros": [
       {
@@ -4257,7 +4259,7 @@
     "name": "권마의 그림자",
     "tier": "강적",
     "realm": "화경",
-    "hp": 2940,
+    "hp": 3295,
     "attack": 112,
     "exp_reward": 3,
     "silver": [
@@ -4277,7 +4279,7 @@
       }
     ],
     "level": 61,
-    "hp_style": 1.03,
+    "hp_style": 1.154,
     "attack_style": 1.02,
     "intros": [
       {
@@ -4293,7 +4295,8 @@
         "text": "\"주먹을 쓰는구나. 그럼 내 것이 어떤 것인지 알겠지.\""
       }
     ],
-    "named": true
+    "named": true,
+    "armor": 12
   },
   "비무청성": {
     "name": "청풍검 주문양",
@@ -4529,7 +4532,7 @@
     "name": "생사의 문지기",
     "tier": "강적",
     "realm": "현경",
-    "hp": 9350,
+    "hp": 11220,
     "attack": 229,
     "exp_reward": 5,
     "silver": [
@@ -4539,7 +4542,7 @@
     "chapters": [],
     "weight": 0,
     "level": 105,
-    "hp_style": 1.0,
+    "hp_style": 1.2,
     "attack_style": 1.0,
     "desc": "문을 넘지 못하고 문이 되어 버린 옛 고수.",
     "intro": "\"나도 너처럼 왔다. 지금은 문이 되었지.\"",
@@ -4565,7 +4568,8 @@
         "text": "\"상한 몸으로 왔구나. 그래서 더 잘 보인다. 삶과 죽음 사이가.\""
       }
     ],
-    "named": true
+    "named": true,
+    "armor": 25
   },
   "세가공자": {
     "name": "토호 자제 패거리",
@@ -5029,7 +5033,7 @@
     "name": "설령수 하란",
     "tier": "강적",
     "realm": "화경",
-    "hp": 6710,
+    "hp": 7515,
     "attack": 178,
     "exp_reward": 5,
     "silver": [
@@ -5042,7 +5046,7 @@
     ],
     "weight": 2,
     "level": 90,
-    "hp_style": 1.0,
+    "hp_style": 1.12,
     "attack_style": 1.0,
     "desc": "천 리 빙원을 건너온 북해빙궁의 고수.",
     "intro": "\"중원의 불길은 곧 꺼질 것이다.\"",
@@ -5101,7 +5105,8 @@
     "drop": {
       "skill": "현빙장"
     },
-    "stand_in": "떠돌이패"
+    "stand_in": "떠돌이패",
+    "armor": 12
   },
   "사도련향주": {
     "name": "도흔 오광",
@@ -5688,7 +5693,7 @@
     "name": "태산검 배원철",
     "tier": "강적",
     "realm": "화경",
-    "hp": 5120,
+    "hp": 5730,
     "attack": 165,
     "exp_reward": 3,
     "silver": [
@@ -5700,7 +5705,7 @@
       5
     ],
     "weight": 3,
-    "armor": 7,
+    "armor": 19,
     "desc": "강호가 받드는 어른. 은퇴했다 칼을 다시 들었다.",
     "specials": [
       {
@@ -5717,7 +5722,7 @@
     ],
     "intro": "\"늙은이가 칼을 든 까닭을 알겠지. 네가 만든 일이다.\"",
     "level": 73,
-    "hp_style": 1.22,
+    "hp_style": 1.366,
     "attack_style": 1.19,
     "ranks": [
       4,
@@ -5760,7 +5765,7 @@
     "name": "쌍벽검 문천기",
     "tier": "난적",
     "realm": "화경",
-    "hp": 6425,
+    "hp": 7195,
     "attack": 206,
     "exp_reward": 2,
     "silver": [
@@ -5771,7 +5776,7 @@
       5
     ],
     "weight": 5,
-    "armor": 10,
+    "armor": 22,
     "desc": "맹주가 직접 보낸 정파 제일의 칼.",
     "intro": "\"맹주의 명이다. 천마를 치러 가는 길에 너부터 벤다.\"",
     "specials": [
@@ -5788,7 +5793,7 @@
       }
     ],
     "level": 97,
-    "hp_style": 1.0,
+    "hp_style": 1.12,
     "attack_style": 1.0,
     "ranks": [
       5,
@@ -6002,7 +6007,7 @@
     "name": "구혈마견 아독",
     "tier": "강적",
     "realm": "화경",
-    "hp": 9580,
+    "hp": 10730,
     "attack": 235,
     "exp_reward": 3,
     "silver": [
@@ -6013,7 +6018,7 @@
       5
     ],
     "weight": 3,
-    "armor": 7,
+    "armor": 19,
     "desc": "천마가 직접 풀어 놓은 추적자.",
     "specials": [
       {
@@ -6030,7 +6035,7 @@
     ],
     "intro": "\"정도의 희망이라 들었다. 맛이 궁금하구나.\"",
     "level": 97,
-    "hp_style": 1.22,
+    "hp_style": 1.366,
     "attack_style": 1.19,
     "ranks": [
       5,
@@ -6221,7 +6226,7 @@
     "name": "철면판관 서도진",
     "tier": "강적",
     "realm": "화경",
-    "hp": 9580,
+    "hp": 10730,
     "attack": 235,
     "exp_reward": 3,
     "silver": [
@@ -6232,7 +6237,7 @@
       5
     ],
     "weight": 3,
-    "armor": 7,
+    "armor": 19,
     "desc": "강호의 법을 지키는 맹의 칼. 값으로 움직이지 않는다.",
     "specials": [
       {
@@ -6249,7 +6254,7 @@
     ],
     "intro": "\"은자로 안 되는 일이 있다는 것을 오늘 배울 것이다.\"",
     "level": 97,
-    "hp_style": 1.22,
+    "hp_style": 1.366,
     "attack_style": 1.19,
     "ranks": [
       5,
@@ -6393,7 +6398,7 @@
     "name": "부동검 남천우",
     "tier": "강적",
     "realm": "화경",
-    "hp": 9580,
+    "hp": 10730,
     "attack": 235,
     "exp_reward": 3,
     "silver": [
@@ -6405,7 +6410,7 @@
       5
     ],
     "weight": 3,
-    "armor": 7,
+    "armor": 19,
     "desc": "명부에 이름이 오른 고수. 내 이름이 불편한 모양이다.",
     "specials": [
       {
@@ -6416,7 +6421,7 @@
     ],
     "intro": "\"명부의 자리는 열 개뿐이라네.\"",
     "level": 97,
-    "hp_style": 1.22,
+    "hp_style": 1.366,
     "attack_style": 1.19,
     "ranks": [
       4,
@@ -7118,7 +7123,7 @@
     "name": "백액호",
     "tier": "난적",
     "realm": "화경",
-    "hp": 3605,
+    "hp": 4035,
     "attack": 151,
     "exp_reward": 3,
     "silver": [
@@ -7131,7 +7136,7 @@
     ],
     "weight": 3,
     "level": 73,
-    "hp_style": 1.05,
+    "hp_style": 1.176,
     "attack_style": 1.05,
     "desc": "이마에 왕 자가 새겨졌다는 산의 왕. 마을 사람들은 산군이라 부른다.",
     "intro": "이마에 흰 줄이 선 호랑이가 바위 위에 앉아 있었다. 산이 숨을 죽였다.",
@@ -7176,13 +7181,14 @@
       }
     ],
     "stand_in": "설표",
-    "returned": "이마의 흰 줄 위로 칼자국이 난 호랑이가 바위에 앉아 있다. 나를 기억하는 눈이다."
+    "returned": "이마의 흰 줄 위로 칼자국이 난 호랑이가 바위에 앉아 있다. 나를 기억하는 눈이다.",
+    "armor": 12
   },
   "철갑현귀": {
     "name": "철갑 현귀",
     "tier": "강적",
     "realm": "화경",
-    "hp": 5245,
+    "hp": 5875,
     "attack": 124,
     "exp_reward": 3,
     "silver": [
@@ -7195,7 +7201,7 @@
     ],
     "weight": 2,
     "level": 73,
-    "hp_style": 1.25,
+    "hp_style": 1.4,
     "attack_style": 0.9,
     "desc": "등에 비문을 짊어진 천년 거북. 칼이 박히지 않는다.",
     "intro": "호수 바닥이 일어섰다. 등껍질에 옛 글자가 빽빽하다.",
@@ -7213,7 +7219,7 @@
         "injury": 1
       }
     ],
-    "armor": 12,
+    "armor": 24,
     "above": "이무기",
     "below": "금안조",
     "loot": {
@@ -7234,7 +7240,7 @@
     "name": "천년 이무기",
     "tier": "강적",
     "realm": "현경",
-    "hp": 9030,
+    "hp": 10840,
     "attack": 207,
     "exp_reward": 3,
     "silver": [
@@ -7246,7 +7252,7 @@
     ],
     "weight": 2,
     "level": 97,
-    "hp_style": 1.15,
+    "hp_style": 1.38,
     "attack_style": 1.05,
     "desc": "천 년을 못 속에 머문 이무기. 내단 하나로 사람의 일생이 바뀐다.",
     "intro": "못이 끓어오르며 비늘 덮인 머리가 솟았다. 승천을 앞둔 이무기다.",
@@ -7264,7 +7270,7 @@
         "injury": 1
       }
     ],
-    "armor": 8,
+    "armor": 33,
     "below": "금안조",
     "loot": {
       "item": "천년내단",
@@ -7665,7 +7671,7 @@
     "title": "무림맹주",
     "tier": "강적",
     "realm": "현경",
-    "hp": 9030,
+    "hp": 10840,
     "attack": 217,
     "exp_reward": 4,
     "silver": [
@@ -7677,9 +7683,9 @@
     ],
     "weight": 4,
     "level": 97,
-    "hp_style": 1.15,
+    "hp_style": 1.38,
     "attack_style": 1.1,
-    "armor": 6,
+    "armor": 31,
     "side": "정도",
     "desc": "구파일방과 오대세가를 하나로 묶은 사람. 천마 앞에 선 정파의 마지막 기둥이다.",
     "intro": "\"천마를 치러 가는 길에 그대가 서 있구려. 맹주의 칼은 사람을 가리지 않소.\"",

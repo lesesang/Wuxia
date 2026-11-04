@@ -636,12 +636,41 @@ test("저장은 달 시작 지점으로 복구된다", () => {
   game.pendingNext = true;
   game.advanceTurn();
   assert.equal(loadCheckpoint().player.turn, 2);
+  // 일을 마치기 전에 끊기면 그달의 처음이다
+  const early = new Game();
+  assert.ok(early.continueFromSave());
+  assert.equal(early.player.turn, 2);
+  assert.equal(early.player.silver, 77);
+  assert.equal(early.pendingNext, false);
+  // 그달의 일을 마친 뒤에 끊기면 그 결과 화면이다
   game.action("수련");
   const fresh = new Game();
   assert.ok(fresh.continueFromSave());
   assert.equal(fresh.player.turn, 2);
-  assert.equal(fresh.player.silver, 77);
-  assert.equal(fresh.pendingNext, false);
+  assert.equal(fresh.player.external, game.player.external, "한 일은 사라지지 않는다");
+  assert.ok(fresh.pendingNext);
+  assert.deepEqual(fresh.log, game.log);
+  fresh.advanceTurn();
+  assert.equal(fresh.player.turn, 3);
+  assert.equal(loadCheckpoint().player.turn, 3);
+});
+
+test("장터에서 끊겨도 진열과 산 것이 남는다", () => {
+  const game = newGame();
+  toTurnEnd(game, 12);
+  game.player.silver = 500;
+  game.advanceTurn();
+  assert.ok(game.market);
+  const stock = game.market.stock.map((s) => s.key);
+  const key = stock.find((k) => !blockReason(game.player, k));
+  game.marketBuy(key);
+  const fresh = new Game();
+  assert.ok(fresh.continueFromSave());
+  assert.ok(fresh.market);
+  assert.deepEqual(fresh.market.stock.map((s) => s.key), stock);
+  assert.equal(fresh.player.silver, game.player.silver);
+  fresh.marketLeave();
+  assert.equal(fresh.player.turn, 13);
 });
 
 test("120달에서 복구하면 천마봉 선택부터", () => {
