@@ -14,7 +14,7 @@ import {
 import { pickWeighted, randInt, rng } from "./rng.js";
 import {
   actionLine, ALIGNMENT_CAP, alignTier, applyGrowth, breakthroughBlock, byname, CHAPTER_STARTS, checkBreakthrough, checkGoodEnding, checkSaengsa,
-  fameRank, FOCUS_DRIFT, focusedSide, getChapter, getChapterInfo, getMonth, getYear, isMarketTurn, monthLine, perkTrait, realmFit, realmIndex, sumEffect, talkLine, traitSlots,
+  fameRank, FOCUS_DRIFT, focusedSide, getChapter, getChapterInfo, getMonth, getYear, isMarketTurn, monthLine, isNamed, perkTrait, realmFit, returnedLine, standIn, realmIndex, sumEffect, talkLine, traitSlots,
 } from "./rules.js";
 import { josa } from "./josa.js";
 
@@ -243,7 +243,7 @@ export class Game {
   grow(stat) {
     const p = this.player;
     let amount = randInt(8, 12);
-    if (rng.random() < TRAIN_BONUS_BASE + p.mind / 5000) amount += randInt(8, 12); // 심경이 높으면 두 배 오를 때가 많아진다
+    if (rng.random() < TRAIN_BONUS_BASE + p.mind / 5000) amount += randInt(7, 11); // 심경이 높으면 두 배 오를 때가 많아진다
     return p.gainStat(stat, applyGrowth(amount, p.traits, stat));
   }
 
@@ -278,19 +278,23 @@ export class Game {
     // 지금 시점(장)이 나올 수 있는 적을 정하고, 그중에서 내 경지와 가까운 적을 더 자주 만난다
     const weightOf = (k) => (mine && DB.enemies[k].side === mine ? SAME_SIDE_WEIGHT : 1) * DB.enemies[k].weight * realmFit(p.realm, DB.enemies[k].realm);
     // 정도를 걷는 무인을 정파가 까닭 없이 치지 않고, 제 소속은 제 사람을 치지 않는다
-    const fitting = pool.filter((k) => !(mine === "정도" && DB.enemies[k].side === "정도") && DB.enemies[k].faction !== p.sect);
+    const fitting = pool.filter((k) => !(mine === "정도" && DB.enemies[k].side === "정도") && DB.enemies[k].faction !== p.sect
+      && !(isNamed(k) && p.slain.includes(k))); // 쓰러뜨린 이름 있는 적은 다시 만나지 않는다
     const list = fitting.length ? fitting : pool;
     return pickWeighted(list, list.map(weightOf));
   }
 
   startBattle(key, spar = false) {
     // 지금 장에 어울리지 않는 적이면 같은 갈래에서 위상이 맞는 적으로 나온다
-    const fitting = statureEnemy(key, getChapter(this.player.turn));
+    // 이미 쓰러뜨린 이름 있는 적의 자리에는 대신할 적이 나온다. 그래도 없으면 그가 돌아온다. 비무 상대는 산 사람이다
+    const stature = statureEnemy(key, getChapter(this.player.turn));
+    const fitting = spar ? stature : standIn(this.player, stature);
     const enemy = new Enemy(fitting, this.player.turn);
     this.player.recordEnemyEncounter(fitting);
     this.battle = new Battle(this.player, enemy);
     this.battle.spar = spar;
-    const intro = enemyIntro(this.player, fitting);
+    const back = !spar && isNamed(fitting) && this.player.slain.includes(fitting);
+    const intro = back ? returnedLine(fitting) : enemyIntro(this.player, fitting);
     const called = enemy.title ? `${enemy.title} ${enemy.name}` : enemy.name;
     this.addLog([spar ? `🤝 ${called}${josa(called, "과/와")} 비무를 겨룬다. (${enemy.realm}, 져도 목숨은 잃지 않는다)` : `⚔️ ${called}${josa(called, "과/와")} 마주쳤다! (${enemy.realm})`, ...(intro ? [intro] : []), ...this.battle.log]);
     this.battle.log = [];
@@ -309,7 +313,7 @@ export class Game {
     p.recordEnemyEncounter("천마");
     this.battle = new Battle(p, enemy, true);
     const intro = enemyIntro(p, "천마");
-    this.addLog(["⚡ 강호행의 마지막 결전이 시작된다.", ...(intro ? [intro] : []), ...this.battle.log]);
+    this.addLog(["⚡ 강호행의 마지막 결전이 시작된다. 천마는 생사경의 경지에 있다.", ...(intro ? [intro] : []), ...this.battle.log]);
     this.battle.log = [];
   }
 
@@ -391,7 +395,7 @@ export class Game {
       this.gauntlet = null;
     }
 
-    if (result.victory && ["강적", "보스"].includes(battle.enemy.tier)) player.note(`${battle.enemy.name}${josa(battle.enemy.name, "을/를")} 쓰러뜨렸다.`);
+    if (result.victory && !battle.spar && (["강적", "보스"].includes(battle.enemy.tier) || isNamed(battle.enemy.key))) player.note(`${battle.enemy.name}${josa(battle.enemy.name, "을/를")} 쓰러뜨렸다.`);
     if (!result.victory && !result.fled) player.note(battle.spar ? `${battle.enemy.name}에게 비무에서 졌다.` : `${battle.enemy.name}에게 쓰러졌다.`);
     if (result.fled) this.addLog(["가까스로 전장을 벗어났다."]);
 

@@ -161,6 +161,7 @@ export function validateChains() {
 
 export const ALONE_FLAG = "홀로_간다";
 const ALONE_GATE_RATE = 0.15;
+const BOUGHT_EVENT_WEIGHT = 5;
 
 export function pickRandomEvent(player) {
   const chapter = getChapter(player.turn);
@@ -174,7 +175,9 @@ export function pickRandomEvent(player) {
   // 인연이 이어지는 이벤트를 먼저 만날 가능성을 높인다
   const alone = player.hasFlag(ALONE_FLAG);
   return pickWeighted(options, options.map((k) => {
-    const base = DB.randomEvents[k].requires || DB.randomEvents[k].chain ? 3 : 1;
+    const event = DB.randomEvents[k];
+    // 카르마로 산 인연은 일반 인연보다 조금 더 자주 찾아온다
+    const base = event.requires?.unlocked ? BOUGHT_EVENT_WEIGHT : event.requires || event.chain ? 3 : 1;
     // 홀로 가기로 한 무인에게는 문파의 손길이 드물게 닿는다
     return alone && DB.randomEvents[k].sect_gate ? base * ALONE_GATE_RATE : base;
   }));

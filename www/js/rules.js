@@ -1,5 +1,6 @@
 // 성향, 챕터, 경지, 특성, 문파, 명성처럼 상태를 갖지 않는 규칙들
 import { DB } from "./data.js";
+import { josa } from "./josa.js";
 import { pick, rng } from "./rng.js";
 
 // ---------- 성향 ----------
@@ -129,6 +130,30 @@ export function realmPerks(realm) {
   const reached = realmIndex(realm);
   return DB.realms.order.filter((name, i) => i <= reached && DB.realms.perks[name]).map((name) => ({ realm: name, ...DB.realms.perks[name] }));
 }
+/** 이름 있는 적인가. 이름 없는 적은 몇 번이고 나와도 이상하지 않다 */
+export const isNamed = (key) => { const e = DB.enemies[key]; return e?.named ?? !!e?.title; };
+
+/** 이미 쓰러뜨린 이름 있는 적의 자리에 나올 적. 대신할 적이 없으면 그 적이 돌아온다 */
+export function standIn(player, key) {
+  let current = key;
+  for (let i = 0; i < 8; i++) {
+    if (!isNamed(current) || !player.slain.includes(current)) return current;
+    const next = DB.enemies[current].stand_in;
+    if (!next) return current;
+    current = next;
+  }
+  return current;
+}
+
+/** 쓰러졌던 적이 돌아올 때의 말 */
+export function returnedLine(key) {
+  const e = DB.enemies[key];
+  if (e.returned) return e.returned;
+  const list = DB.flavor.returned[e.beast ? "짐승" : e.side] || DB.flavor.returned.기본;
+  const name = e.name;
+  return pick(list).replaceAll("〈이름〉", name).replaceAll("{이/가}", josa(name, "이/가"));
+}
+
 export const perkTrait = (realm) => `경지_${realm}`;
 
 export function nextRealm(realm) {

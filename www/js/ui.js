@@ -241,6 +241,8 @@ function helpModal() {
     "<b>같은 무공을 또 얻으면</b> 성취가 오릅니다. <b>같은 갈래의 더 깊은 무공</b>을 얻으면 따로 쌓이지 않고 쓰던 무공이 그것으로 이어지며 성취와 오른 품계는 그대로 갑니다."])}
     ${section("적과 강호의 수준", [
     "적의 경지는 이류, 일류, 절정, 초절정, 화경, 현경 순입니다. 산적은 산적이고, 이름난 고수는 그만한 경지입니다.",
+    "<b>힘의 기준</b>: 생사경은 천마뿐입니다. 현경은 무림맹주와 천마의 최고 간부(십이마장), 화경은 각 세력의 수장과 천마신교 장로, 초절정은 각 세력의 주력과 큰 세력의 수장, 절정은 손꼽히는 후기지수와 작은 세력의 수장입니다.",
+    "이름 없는 산적이나 자객은 몇 번이고 나오지만, 이름 있는 자는 쓰러뜨리면 다시 나오지 않습니다. 그 자리에는 다른 자가 나서고, 아주 드물게는 죽음에서 돌아옵니다.",
     "지금이 몇 장인지에 따라 만날 수 있는 적이 정해지고, 그중에서 내 경지와 가까운 적을 더 자주 만납니다. 성향과 명성에 따라 찾아오는 적도 달라집니다.",
     "<b>일반, 난적, 강적</b> 순으로 강합니다. 절정부터 이름 있는 자가 나오기 시작하고, 초절정부터는 대개 소속과 별호를 가진 인물입니다.",
     "적은 경지에 맞는 비급과 약을 지니고 있습니다. 위로 갈수록 좋은 품계가 나오고 주무공과 같은 계열이 더 잘 나옵니다. 짐승과 영물은 비급 대신 쓸개나 내단을 남깁니다. 내단은 행낭에서 삼키면 기량이 오릅니다."])}
@@ -474,7 +476,7 @@ function contentSetup(meta) {
   const rows = meta.content.filter((key) => !DB.karma.content[key].origin || DB.karma.content[key].origin === ui.origin)
     .sort((a, b) => Number(!!DB.karma.content[a].origin) - Number(!!DB.karma.content[b].origin)).map((key) => `<div class="pick-row"><div class="pick-main"><div class="pick-name">${esc(DB.karma.content[key].name)}</div><p class="pick-desc">${esc(DB.karma.content[key].desc)}</p></div>
     <label class="content-toggle"><input type="checkbox" class="toggle" data-content="${esc(key)}" ${meta.content_off.includes(key) ? "" : "checked"}> 등장</label></div>`).join("");
-  return rows ? `<p class="section-note">이번에 만나고 싶지 않은 인연은 꺼 둘 수 있습니다.</p>${rows}` : emptyNote("아직 해금한 인연이 없습니다. 카르마 상점에서 살 수 있습니다.");
+  return rows ? `<p class="section-note">이번 강호행에 만날 인연을 고릅니다. 시작할 때마다 켜고 끌 수 있습니다. 켜 둔 인연은 일반 사건보다 조금 더 자주 찾아옵니다.</p>${rows}` : emptyNote("아직 해금한 인연이 없습니다. 카르마 상점에서 살 수 있습니다.");
 }
 
 /** 산 기틀 중 이번 강호행에 쓸 단계를 고른다. */
