@@ -60,7 +60,7 @@ function skillDetail(s) {
   if (s.type === "공격무공") {
     lines.push(`위력 ${s.base_multiplier}배, 내력 ${s.qi_cost}`);
     if (s.forms?.length) lines.push(`초식: ${s.forms.join(", ")}`);
-    if (s.secret_technique) lines.push(`비기 「${s.secret_technique.name}」: ${s.secret_technique.unlock_grade} 품계, 성취 ${s.secret_technique.unlock_mastery}, 위력 ${s.secret_technique.multiplier}배, 내력 ${s.secret_technique.qi_cost}`);
+    if (s.secret_technique) lines.push(`비기 ${s.secret_technique.name}: ${s.secret_technique.unlock_grade} 품계, 성취 ${s.secret_technique.unlock_mastery}, 위력 ${s.secret_technique.multiplier}배, 내력 ${s.secret_technique.qi_cost}`);
   } else if (s.type === "심공") {
     const e = s.effect;
     lines.push(`체력 ${e.heal_hp_pct}%, 내력 ${e.heal_qi_pct}% 회복${e.atk_buff_pct ? `, ${e.buff_rounds}합 동안 위력 +${e.atk_buff_pct}%` : ""}`);
@@ -68,7 +68,7 @@ function skillDetail(s) {
     const e = s.effect;
     lines.push(`회피 ${e.evade}%, 다음 공격 +${e.counter_pct}%, 도주 +${e.flee_bonus}%, 내력 ${s.qi_cost}`);
   }
-  if (s.gimmick) lines.push(`묘리 「${s.gimmick.name}」(상승 품계부터): ${s.gimmick.text}`);
+  if (s.gimmick) lines.push(`묘리 ${s.gimmick.name}(상승 품계부터): ${s.gimmick.text}`);
   if (s.origin) lines.push(`${DB.origins.origins[s.origin].name} 전용`);
   return lines;
 }
@@ -121,7 +121,7 @@ function codexRows(tab, meta) {
         const kind = eventKind(e);
         const log = loadEventLog()[k];
         const picks = log ? Object.keys(log.picks).length : 0;
-        const label = e.chain ? `${kind}, 「${DB.chains[e.chain.id].title}」 ${e.chain.index + 1}/${e.chain.total}편` : kind;
+        const label = e.chain ? `${kind}, ${DB.chains[e.chain.id].title} ${e.chain.index + 1}/${e.chain.total}편` : kind;
         return { key: k, name: e.title, meta: `${label}${picks ? `, 고른 선택 ${picks}가지` : ""}`, desc: e.text.split(/(?<=[.?!"])\s/)[0], read: true, cats: [kind], search: `${e.text} ${log ? JSON.stringify(log) : ""}` };
       }),
     };
@@ -176,9 +176,9 @@ function codexReader(key) {
   const left = [...allChoices].filter((l) => !log?.picks[l]).length;
   return `<button class="mini-btn" data-act="codex-back">← 목록으로</button>
     <h4 class="codex-title">${esc(e.title)}</h4>
-    <p class="codex-meta">${esc(eventKind(e))}${e.chain ? `, 「${esc(DB.chains[e.chain.id].title)}」 ${e.chain.index + 1}/${e.chain.total}편` : ""}</p>
+    <p class="codex-meta">${esc(eventKind(e))}${e.chain ? `, ${esc(DB.chains[e.chain.id].title)} ${e.chain.index + 1}/${e.chain.total}편` : ""}</p>
     ${texts.map((t) => `<p class="codex-body-text">${esc(t)}</p>`).join("")}
-    ${picks.length ? picks.map(([label, results]) => `<div class="codex-pick"><div class="codex-pick-label">▸ ${esc(label)}</div>${results.map((r) => `<p>${esc(r)}</p>`).join("")}</div>`).join("") : `<p class="codex-empty">이 사건의 선택은 아직 기록되지 않았습니다. 다시 겪으면 이곳에 남습니다.</p>`}
+    ${picks.length ? picks.map(([label, results]) => `<div class="codex-pick"><div class="codex-pick-label">${esc(label)}</div>${results.map((r) => `<p>${esc(r)}</p>`).join("")}</div>`).join("") : `<p class="codex-empty">이 사건의 선택은 아직 기록되지 않았습니다. 다시 겪으면 이곳에 남습니다.</p>`}
     ${left ? `<p class="codex-meta">아직 고르지 않은 선택 ${left}가지가 더 있습니다.</p>` : `<p class="codex-meta">이 사건의 선택을 모두 보았습니다.</p>`}`;
 }
 
@@ -444,7 +444,7 @@ function rewardPanel(meta) {
   }).join("");
   return `<p class="section-note">카르마를 써도 줄지 않는 누적 카르마가 쌓이면 저절로 받습니다. 사거나 장착할 필요가 없습니다.</p>
     <div class="reward-progress"><div class="reward-track"><span style="width:${percent(Math.min(meta.total_karma, last), last)}%"></span></div>
-      <p>누적 카르마 <b>${meta.total_karma}</b>${next ? `, 다음 「${esc(next.name)}」까지 ${next.at - meta.total_karma}` : ", 보상은 모두 받았습니다. 카르마는 계속 쌓이고 상점에서 쓸 수 있습니다"}</p></div>
+      <p>누적 카르마 <b>${meta.total_karma}</b>${next ? `, 다음 ${esc(next.name)}까지 ${next.at - meta.total_karma}` : ", 보상은 모두 받았습니다. 카르마는 계속 쌓이고 상점에서 쓸 수 있습니다"}</p></div>
     ${rows}`;
 }
 
@@ -497,7 +497,7 @@ function legacySetup(meta) {
   if (!meta.legacy_open) return emptyNote("전설의 유산은 카르마 상점에서 열 수 있습니다.");
   const { shelf } = DB.karma.legacy;
   const rows = meta.legacies.map((l, i) => `<div class="pick-row"><label class="pick-label"><input type="radio" name="legacy" value="${i}" ${ui.legacy === i ? "checked" : ""}>
-    <span class="pick-main"><span class="pick-name">${esc(l.label)}</span><span class="pick-desc block">전대 「${esc(l.from)}」, ${esc(l.origin)}</span></span></label></div>`).join("");
+    <span class="pick-main"><span class="pick-name">${esc(l.label)}</span><span class="pick-desc block">전대 ${esc(l.from)}, ${esc(l.origin)}</span></span></label></div>`).join("");
   return `<p class="section-note">강호행이 끝날 때 하나를 남깁니다. ${shelf}개까지 보관하고, 이어받으면 사라집니다. 무공은 한 품계 낮아지고 병장기는 낮은 단계로 돌아옵니다.</p>
     ${rows ? `<div class="pick-row"><label class="pick-label"><input type="radio" name="legacy" value="" ${ui.legacy === null ? "checked" : ""}><span class="pick-main"><span class="pick-name">이어받지 않는다</span></span></label></div>${rows}` : emptyNote("아직 남겨 둔 유산이 없습니다.")}`;
 }
@@ -536,7 +536,7 @@ function renderSetup() {
     <div class="home-wrap">
       ${ui.setupTab === "upgrade" ? upgradeSetup(meta) : ui.setupTab === "content" ? contentSetup(meta) : ui.setupTab === "legacy" ? legacySetup(meta) : ui.setupTab === "origin" ? origins : `<p class="section-note">${next ? `자질을 ${slots}개 장착할 수 있습니다. 누적 카르마 ${next}이 되면 하나 더 열립니다. 누적 보상은 상점에서 볼 수 있습니다.` : "자질 칸이 모두 열렸습니다."}</p>${filterRow()}${traits}`}
     </div>
-    <div class="setup-bar"><div class="setup-summary">${esc(originName)}${ui.traits.size ? `, 자질 ${ui.traits.size}개` : ""}${chosenLegacy(meta) ? `, 유산 「${esc(chosenLegacy(meta).label)}」` : ""}${meta.provisions.length ? `, 채비 ${meta.provisions.length}개` : ""}</div>
+    <div class="setup-bar"><div class="setup-summary">${esc(originName)}${ui.traits.size ? `, 자질 ${ui.traits.size}개` : ""}${chosenLegacy(meta) ? `, 유산 ${esc(chosenLegacy(meta).label)}` : ""}${meta.provisions.length ? `, 채비 ${meta.provisions.length}개` : ""}</div>
       <button class="start-btn" data-act="${hasSave ? "confirm-start" : "start"}">강호로 나선다</button></div>
     ${modalShell("confirm-start-modal", "새 강호행을 시작할까요?", `
       <p class="modal-text">저장된 진행이 사라집니다. 카르마와 강호록은 남습니다.</p>
@@ -587,14 +587,14 @@ function statusModal() {
     const moved = !game.battle && p.alive ? s.masteryFor(main) : 0;
     const transfer = moved ? `<button class="mini-btn transfer-btn" data-act="transfer-mastery" data-key="${esc(s.key)}">주무공에 성취 +${moved} 옮기기</button>` : "";
     const secret = s.secretName
-      ? `<div class="skill-meta">비기 「${esc(s.secretName)}」: ${s.secretUnlocked ? "터득함" : `${esc(s.secretUnlockGrade)} 품계, 성취 ${s.secretUnlockMastery}에 터득`}</div>` : "";
+      ? `<div class="skill-meta">비기 ${esc(s.secretName)}: ${s.secretUnlocked ? "터득함" : `${esc(s.secretUnlockGrade)} 품계, 성취 ${s.secretUnlockMastery}에 터득`}</div>` : "";
     return `<div class="skill-row"><div class="skill-head"><span>${esc(s.name)} <span class="skill-meta">${esc(s.type === "심공" ? "심법" : s.type)}, ${esc(s.grade)}</span></span>${button}</div>
       <div class="mastery"><span class="stat-track"><span style="width:${s.mastery}%"></span></span><span class="skill-meta">성취 ${s.mastery}${s.mastery >= 100 ? (s.canEvolve() ? ", 다음 성취에 승급" : ", 더 오르지 않음") : ""}</span></div>
-      ${secret}${s.gimmick ? `<div class="skill-meta">묘리 「${esc(s.gimmick.name)}」${s.activeGimmick() ? "" : " (상승 품계에 깨침)"}: ${esc(s.gimmick.text)}</div>` : ""}<div class="skill-meta">${esc(s.desc)}</div>${transfer}</div>`;
+      ${secret}${s.gimmick ? `<div class="skill-meta">묘리 ${esc(s.gimmick.name)}${s.activeGimmick() ? "" : " (상승 품계에 깨침)"}: ${esc(s.gimmick.text)}</div>` : ""}<div class="skill-meta">${esc(s.desc)}</div>${transfer}</div>`;
   }).join("") || `<p class="codex-empty">아직 익힌 무공이 없습니다.</p>`;
 
   const bag = inventory.map(([key, count]) => `<div class="skill-row"><div class="skill-head">
-    <span>${esc(DB.market[key].name)} ×${count}<br><span class="skill-meta">${esc(DB.market[key].desc)}</span></span>
+    <span>${esc(DB.market[key].name)} ${count}개<br><span class="skill-meta">${esc(DB.market[key].desc)}</span></span>
     ${!game.battle && p.alive && !DB.market[key].battle_only ? `<button class="mini-btn" data-act="use-item" data-key="${esc(key)}">사용</button>` : ""}</div></div>`).join("")
     || `<p class="codex-empty">장터에서 산 상비약과 도구가 이곳에 들어옵니다.</p>`;
 
@@ -707,7 +707,7 @@ function renderBattle() {
         <div class="enemy-tier">${esc(b.enemy.realm)}, ${esc(TIER_NAMES[b.enemy.tier] || b.enemy.tier)}${b.enemy.armor ? `, 방어 ${b.enemy.armor}` : ""}</div></div>
     </div>
     ${tags.length ? `<div class="battle-tags">${tags.map(([kind, label]) => `<span class="tag ${kind}">${esc(label)}</span>`).join("")}</div>` : ""}
-    ${warning ? `<p class="battle-warning">다음 합은 「${esc(warning)}」${movement ? " — 경공으로 흘려낼 수 있다" : ""}</p>` : ""}
+    ${warning ? `<p class="battle-warning">다음 합은 ${esc(warning)}${movement ? ". 경공으로 흘려낼 수 있다" : ""}</p>` : ""}
     ${b.standPending ? standBox(p, b) : ""}
     <div class="battle-log" aria-live="polite">${b.roundNum === 0 ? `<p class="enemy-desc">${esc(b.enemy.desc)}</p>` : ""}${game.log.slice(-12).map((l) => `<p>${esc(l)}</p>`).join("")}</div>
     ${interlude ?? `<div class="battle-panel">
@@ -718,7 +718,7 @@ function renderBattle() {
         <button class="bt-btn${warning && movement ? " suggest" : ""}" data-act="battle" data-action="경공" ${movement && p.qi >= movement.qiCost ? "" : "disabled"}>${movement ? esc(movement.name) : "경공"}<small>${movement ? `내력 ${movement.qiCost}, 회피 ${movement.effectValue("evade")}%` : "익힌 경공 없음"}</small></button>
         ${b.isFinal ? "" : `<button class="bt-btn flee" data-act="battle" data-action="도주">도주<small>실패하면 공격받음</small></button>`}
       </div>
-      ${items.length ? `<div class="battle-items">${items.map(([key, count]) => `<button class="item-btn${lowHp && DB.market[key].effects.some((e) => e.type === "heal") ? " suggest" : ""}" data-act="battle" data-action="소비품" data-key="${esc(key)}">${esc(DB.market[key].name)} ×${count}</button>`).join("")}</div>` : ""}
+      ${items.length ? `<div class="battle-items">${items.map(([key, count]) => `<button class="item-btn${lowHp && DB.market[key].effects.some((e) => e.type === "heal") ? " suggest" : ""}" data-act="battle" data-action="소비품" data-key="${esc(key)}">${esc(DB.market[key].name)} ${count}개</button>`).join("")}</div>` : ""}
     </div>`}${gameModals()}`;
   const log = document.querySelector(".battle-log");
   if (log) log.scrollTop = log.scrollHeight;
@@ -790,7 +790,7 @@ function topbar() {
 function legacyPanel() {
   const { ending } = game;
   if (!loadMeta().legacy_open) return "";
-  if (ending.legacyLeft) return `<p class="legacy-note">「${esc(ending.legacyLeft)}」${josa(esc(ending.legacyLeft), "을/를")} 다음 강호행에 남겼습니다.</p>`;
+  if (ending.legacyLeft) return `<p class="legacy-note">${esc(ending.legacyLeft)}${josa(esc(ending.legacyLeft), "을/를")} 다음 강호행에 남겼습니다.</p>`;
   const options = game.legacyOptions();
   if (!options.length) return `<p class="legacy-note">남길 만한 것이 없습니다.</p>`;
   return `<div class="legacy-panel"><h4>전설의 유산: 하나를 남긴다</h4>
@@ -893,7 +893,7 @@ function renderEvent() {
       <div class="event-body"><p class="event-text" data-type>${esc(view.text)}</p>
         ${view.choices.map((c) => `<button class="choice-btn${c.tag ? " special" : ""}" data-act="choose" data-index="${c.index}" ${c.locked ? "disabled" : ""}>${c.tag ? `<span class="choice-tag">${esc(c.tag)}</span>` : ""}${esc(c.label)}${c.locked ? `<small>${esc(c.locked)}</small>` : ""}</button>`).join("")}
       </div></div></div></div>
-    <div class="action-area"><div class="action-inner"><p class="hint flush">${DB.events[game.event.key].chain ? `이어지는 인연 「${esc(view.chain)}」입니다. 한 편마다 그달을 씁니다. 시작하면 손을 떼거나 죽지 않는 한 천마봉 전에 끝납니다.` : DB.events[game.event.key].prelude ? "십 년 전, 사부의 문하에 든 날의 일입니다. 달이 지나지 않습니다. 고른 병기와 심법을 십 년 갈고닦은 채로 산을 내려갑니다." : p.turn >= p.maxTurn ? "이 선택 뒤에는 돌아갈 수 없다." : "선택지의 결과는 고르기 전까지 알 수 없다."}</p></div></div>`;
+    <div class="action-area"><div class="action-inner"><p class="hint flush">${DB.events[game.event.key].chain ? `이어지는 인연 ${esc(view.chain)}입니다. 한 편마다 그달을 씁니다. 시작하면 손을 떼거나 죽지 않는 한 천마봉 전에 끝납니다.` : DB.events[game.event.key].prelude ? "십 년 전, 사부의 문하에 든 날의 일입니다. 달이 지나지 않습니다. 고른 병기와 심법을 십 년 갈고닦은 채로 산을 내려갑니다." : p.turn >= p.maxTurn ? "이 선택 뒤에는 돌아갈 수 없다." : "선택지의 결과는 고르기 전까지 알 수 없다."}</p></div></div>`;
 }
 
 const MAJOR_LINE = /(경지 돌파|승급했다|터득되었다|묘리를 깨쳤다|제패했다|새 무공|마주쳤다|비무를 겨룬다|마지막 결전|기세를 끌어올린다|경지의 특전|불리기 시작했다|기가 역류한다)/;
@@ -911,7 +911,7 @@ function logLine(line, isLast) {
     return `<p class="chips">${chips}</p>`;
   }
   const major = MAJOR_LINE.test(line);
-  const title = /^「.*」$/.test(line);
+  const title = /^.*$/.test(line);
   return `<p class="log-line${major ? " major" : ""}${title ? " log-title" : ""}${isLast && !major ? " latest" : ""}" data-type>${esc(line)}</p>`;
 }
 

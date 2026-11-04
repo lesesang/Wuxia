@@ -308,7 +308,7 @@ test("초식 이름이 전투 문장에 나온다", () => {
   const battle = new Battle(p, new Enemy("천마"));
   battle.hits = () => true;
   battle.useSkill(p.bestSkill());
-  assert.ok(battle.log.some((l) => /제\d초 「/.test(l)));
+  assert.ok(battle.log.some((l) => /제\d초 /.test(l)));
 });
 
 // ---------- 이벤트와 성향 ----------
@@ -1680,7 +1680,7 @@ test("장터와 무작위 비급은 주무공 계열을 계열별로 같은 비�
 test("조사는 받침에 맞게 붙는다", () => {
   assert.equal(josa("천마", "을/를"), "를");
   assert.equal(josa("낭인", "을/를"), "을");
-  assert.equal(josa("「백보신권」", "이/가"), "이");
+  assert.equal(josa("백보신권", "이/가"), "이");
   assert.equal(josa("칼", "으로"), "로");
   assert.equal(josa("봉", "으로"), "으로");
 });
@@ -2851,7 +2851,7 @@ test("상승 이상의 무공에만 묘리가 드러나고 모든 무공에 묘�
   p.qi = 999;
   battle.roundNum = 1;
   battle.useSkill(low);
-  assert.equal(battle.log.filter((l) => l.includes("타,")).length, 3);
+  assert.equal(battle.log.filter((l) => /제\d타/.test(l)).length, 3);
   assert.ok(battle.enemy.hp < hp);
   // 흡수, 호신, 저절로 피하기
   const blood = new Skill("혈영도법");
@@ -3193,4 +3193,14 @@ test("화면 글에 이모티콘을 쓰지 않는다", () => {
 test("결전에 오는 사람은 고수다", () => {
   for (const [k, c] of Object.entries(DB.companions)) assert.ok(!/점소이|소매치기|군졸/.test(c.name), k);
   assert.ok(DB.companions.왕백로.help_text.includes("천하십대고수"));
+});
+
+test("장식 부호를 쓰지 않는다", () => {
+  const deco = /[「」『』·—…]/;
+  const walk = (o, where) => {
+    if (typeof o === "string") assert.ok(!deco.test(o), `${where}: ${o}`);
+    else if (Array.isArray(o)) o.forEach((v) => walk(v, where));
+    else if (o && typeof o === "object") Object.values(o).forEach((v) => walk(v, where));
+  };
+  for (const name of ["events", "enemies", "companions", "endings", "karma", "traits", "fortunes", "flavor", "realms", "skills", "market"]) walk(DB[name], name);
 });

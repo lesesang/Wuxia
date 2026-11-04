@@ -178,17 +178,17 @@ export function buy(player, market, key) {
     spendKarma(item.karma_price);
     entry.left -= 1;
     for (const effect of item.effects) applyEffect(player, key, effect);
-    return [true, `「${item.name}」${josa(item.name, "을/를")} 거래했다. (카르마 -${item.karma_price})`];
+    return [true, `${item.name}${josa(item.name, "을/를")} 거래했다. (카르마 -${item.karma_price})`];
   }
   const price = priceOf(player, key);
   player.silver -= price;
   entry.left -= 1;
   if (item.consumable) {
     player.addItem(key);
-    return [true, `「${item.name}」${josa(item.name, "을/를")} 샀다. (은자 -${price}) 행낭에 넣었다.`];
+    return [true, `${item.name}${josa(item.name, "을/를")} 샀다. (은자 -${price}) 행낭에 넣었다.`];
   }
   for (const effect of item.effects) applyEffect(player, key, effect);
-  return [true, `「${item.name}」${josa(item.name, "을/를")} 샀다. (은자 -${price})`];
+  return [true, `${item.name}${josa(item.name, "을/를")} 샀다. (은자 -${price})`];
 }
 
 export function stockView(player, market) {

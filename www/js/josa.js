@@ -4,7 +4,7 @@ const DIGIT_FINALS = { 0: true, 1: true, 2: false, 3: true, 4: false, 5: false, 
 const RIEUL = 8;
 
 function finalOf(word) {
-  const last = String(word).trim().replace(/[」』"')\]]+$/, "").slice(-1);
+  const last = String(word).trim().replace(/[』"')\]]+$/, "").slice(-1);
   const code = last.charCodeAt(0) - 0xac00;
   if (code >= 0 && code <= 11171) return code % 28;
   return DIGIT_FINALS[last] ? 1 : 0;

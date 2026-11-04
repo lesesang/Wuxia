@@ -93,7 +93,7 @@ export class Game {
     updateKnown(this.player.skills.map((s) => s.key));
     const intro = getChapterInfo(1);
     const provisionLines = provisions.length ? [`챙겨 온 채비: ${provisions.map((k) => DB.karma.provisions[k].name).join(", ")}`] : [];
-    this.enterTurn([`${intro.title} (1년차) — ${intro.desc}`, ...provisionLines, ...giftLines, ...legacyLines]);
+    this.enterTurn([`${intro.title}, 1년차. ${intro.desc}`, ...provisionLines, ...giftLines, ...legacyLines]);
     return true;
   }
 
@@ -114,8 +114,8 @@ export class Game {
       const { slot } = DB.market[key].effects.find((e) => e.type === "equip");
       if (bonusFor(p, key) > equipmentBonus(p, slot)) p[slot] = key;
     }
-    p.note(`전대 「${entry.from}」의 유산 「${name}」${josa(name, "을/를")} 이어받았다.`);
-    return [`전대 「${entry.from}」${josa(entry.from, "이/가")} 남긴 「${name}」${josa(name, "을/를")} 이어받았다. 세월에 조금 무뎌졌지만 아직 쓸 만하다.${entry.kind === "skill" ? " 신상의 무공 칸에서 골라 쓸 수 있다." : ""}`];
+    p.note(`전대 ${entry.from}의 유산 ${name}${josa(name, "을/를")} 이어받았다.`);
+    return [`전대 ${entry.from}${josa(entry.from, "이/가")} 남긴 ${name}${josa(name, "을/를")} 이어받았다. 세월에 조금 무뎌졌지만 아직 쓸 만하다.${entry.kind === "skill" ? " 신상의 무공 칸에서 골라 쓸 수 있다." : ""}`];
   }
 
   /** 이번 강호행에서 유산으로 남길 수 있는 것들 */
@@ -268,7 +268,7 @@ export class Game {
     const fortune = pickFortune(p);
     const summary = applyEffects(p, fortune.effects);
     const silver = p.gainSilver(randInt(6, 12) * getChapter(p.turn));
-    this.addLog([`기연! ${fortune.text}`, [...summary, `은자+${silver}`].join(", ")]);
+    this.addLog([`기연. ${fortune.text}`, [...summary, `은자+${silver}`].join(", ")]);
   }
 
   pickEnemy() {
@@ -305,7 +305,7 @@ export class Game {
     const back = !spar && !foe && isNamed(fitting) && this.player.slain.includes(fitting);
     const intro = foe ? null : back ? returnedLine(fitting) : enemyIntro(this.player, fitting);
     const called = enemy.title ? `${enemy.title} ${enemy.name}` : enemy.name;
-    this.addLog([spar ? `${called}${josa(called, "과/와")} 비무를 겨룬다. (${enemy.realm}, 져도 목숨은 잃지 않는다)` : `${called}${josa(called, "과/와")} 마주쳤다! (${enemy.realm})`, ...(intro ? [intro] : []), ...this.battle.log]);
+    this.addLog([spar ? `${called}${josa(called, "과/와")} 비무를 겨룬다. (${enemy.realm}, 져도 목숨은 잃지 않는다)` : `${called}${josa(called, "과/와")} 마주쳤다. (${enemy.realm})`, ...(intro ? [intro] : []), ...this.battle.log]);
     this.battle.log = [];
   }
 
@@ -340,7 +340,7 @@ export class Game {
     if (!result) return;
 
     // lead가 붙은 문장은 싸움에 들어가는 말이고, 나머지는 싸움이 끝난 뒤의 이야기다
-    const lines = [`「${DB.events[state.key].title}」`, ...(!result.deferred || result.lead ? [result.text] : [])];
+    const lines = [`${DB.events[state.key].title}`, ...(!result.deferred || result.lead ? [result.text] : [])];
     if (result.deferred) this.afterBattle = { key: state.key, text: result.lead ? null : result.text, effects: result.effects, forced: state.forced };
     if (DB.events[state.key].kind === "story") this.player.note(`${DB.events[state.key].title}: ${result.label}`);
     if (result.summary.length) lines.push(result.summary.join(", "));
@@ -450,7 +450,7 @@ export class Game {
       if (result.victory) advanceChain(player, after.chainId);
       else {
         failChain(player, after.chainId);
-        this.addLog([`「${DB.chains[after.chainId].title}」 일은 여기서 어그러졌다.`]);
+        this.addLog([`${DB.chains[after.chainId].title} 일은 여기서 어그러졌다.`]);
       }
     }
     if (result.victory) {
@@ -479,7 +479,7 @@ export class Game {
     }
     const summary = applyEffects(player, gauntlet.reward);
     player.note(`${gauntlet.name}${josa(gauntlet.name, "을/를")} 제패했다.`);
-    this.addLog([`${gauntlet.name}${josa(gauntlet.name, "을/를")} 제패했다! 강호가 그 이름을 외친다.`, summary.join(", ")]);
+    this.addLog([`${gauntlet.name}${josa(gauntlet.name, "을/를")} 제패했다. 강호가 그 이름을 외친다.`, summary.join(", ")]);
     this.gauntlet = null;
     return false;
   }
@@ -504,7 +504,7 @@ export class Game {
     const amount = from?.masteryFor(main);
     if (!amount) return;
     from.mastery = 0;
-    this.addLog([`「${from.name}」의 이치를 「${main.name}」에 녹였다. (성취 +${amount})`, ...main.gainMastery(amount)]);
+    this.addLog([`${from.name}의 이치를 ${main.name}에 녹였다. (성취 +${amount})`, ...main.gainMastery(amount)]);
   }
 
   setMainSkill(key) {
@@ -535,7 +535,7 @@ export class Game {
     lines.push(...this.alignmentMonth());
     if (CHAPTER_STARTS.includes(p.turn)) {
       const info = getChapterInfo(p.turn);
-      lines.push(`${info.title} (${getYear(p.turn)}년차) — ${info.desc}`, ...this.chapterGrowth());
+      lines.push(`${info.title}, ${getYear(p.turn)}년차. ${info.desc}`, ...this.chapterGrowth());
     }
     if (getMonth(p.turn) === 1) lines.push(...this.yearRest());
     const hint = breakthroughBlock(p);
@@ -563,8 +563,8 @@ export class Game {
     }
     p.alignMark = mark;
     if (tier.step === 0) return [];
-    p.note(`강호가 「${tier.name}」${josa(tier.name, "이라고/라고")} 부르기 시작했다.`);
-    return [`강호가 「${tier.name}」${josa(tier.name, "이라고/라고")} 부르기 시작했다.`];
+    p.note(`강호가 ${tier.name}${josa(tier.name, "이라고/라고")} 부르기 시작했다.`);
+    return [`강호가 ${tier.name}${josa(tier.name, "이라고/라고")} 부르기 시작했다.`];
   }
 
   /** 새 장이 열릴 때의 성장 */
@@ -594,29 +594,29 @@ export class Game {
     const fresh = added.filter((key) => !known.includes(key));
     updateGlobalCodex(fresh);
     updateKnown(this.player.skills.map((s) => s.key));
-    return fresh.map((key) => `강호록에 「${DB.enemies[key]?.name ?? key}」${josa(DB.enemies[key]?.name ?? key, "이/가")} 기록되었다.`);
+    return fresh.map((key) => `강호록에 ${DB.enemies[key]?.name ?? key}${josa(DB.enemies[key]?.name ?? key, "이/가")} 기록되었다.`);
   }
 
   checkRealm() {
     const p = this.player;
     const next = checkBreakthrough(p);
     if (!next) return [];
-    const lines = [`경지 돌파! ${p.realm} → ${next}`, ...breakthroughLines(p, next)];
+    const lines = [`경지 돌파. ${p.realm} → ${next}`, ...breakthroughLines(p, next)];
     p.realm = next;
     p.note(`${next}의 경지에 올랐다.`);
     const perk = DB.realms.perks[next];
     if (perk) {
       if (!p.traits.includes(perkTrait(next))) p.traits.push(perkTrait(next));
       const category = p.bestSkill()?.category;
-      lines.push(`경지의 특전 「${auraText(perk.name, category)}」: ${auraText(perk.desc, category)}`);
+      lines.push(`경지의 특전 ${auraText(perk.name, category)}: ${auraText(perk.desc, category)}`);
     }
     // 심경이 충분히 높지 않으면 돌파가 거칠어 내상을 입는다
     if (rng.random() < Math.max(0, 600 - p.mind) * 0.001) {
       p.healPercent(-25, -25);
-      lines.push("심경이 흔들려 기가 역류했다. 간신히 돌파했지만 내상을 입었다. (체력·내력 -25%)");
+      lines.push("심경이 흔들려 기가 역류했다. 간신히 돌파했지만 내상을 입었다. (체력과 내력 -25%)");
     } else {
       p.healPercent(50, 50);
-      lines.push("막혀 있던 혈맥이 뚫리며 온몸에 기운이 찬다. (체력·내력 회복)");
+      lines.push("막혀 있던 혈맥이 뚫리며 온몸에 기운이 찬다. (체력과 내력 회복)");
     }
     return lines;
   }
@@ -647,13 +647,13 @@ export class Game {
     const gain = karmaGain(p, key, victory);
     const fresh = claimAchievements(p, key, victory && key !== "귀순");
     for (const item of fresh) {
-      gain.lines.push(`공적 「${item.name}」${item.karma ? ` +${item.karma}` : ""}`);
+      gain.lines.push(`공적 ${item.name}${item.karma ? ` +${item.karma}` : ""}`);
       gain.total += item.karma;
     }
     const before = loadMeta().total_karma;
     addKarma(gain.total);
     for (const reward of DB.karma.rewards) {
-      if (before < reward.at && before + gain.total >= reward.at) gain.lines.push(`누적 보상 「${reward.name}」${josa(reward.name, "을/를")} 받았다.`);
+      if (before < reward.at && before + gain.total >= reward.at) gain.lines.push(`누적 보상 ${reward.name}${josa(reward.name, "을/를")} 받았다.`);
     }
     // 생사경은 천마를 넘어선 그 순간에만 이르는 경지다
     if (key === "생사경") p.realm = "생사경";
