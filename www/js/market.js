@@ -2,7 +2,7 @@
 import { Skill, STAT_CAP } from "./character.js";
 import { DB } from "./data.js";
 import { loadMeta, spendKarma } from "./meta.js";
-import { pickWeighted } from "./rng.js";
+import { pick, pickWeighted } from "./rng.js";
 import { alignValue, getChapter, hasEffect, marketName, sumEffect, talkLine } from "./rules.js";
 import { josa } from "./josa.js";
 
@@ -105,6 +105,9 @@ function gearForSale(pool, player) {
   return picks;
 }
 
+/** 수상한 누군가는 누가 오든 같은 얼굴이다 */
+const pickLastMarketLine = () => pick(DB.flavor.talk.last_market);
+
 export function openMarket(turn, player) {
   const number = marketNumber(turn);
   const top = player.dominantAlignment();
@@ -129,7 +132,7 @@ export function openMarket(turn, player) {
     name: marketName(turn),
     special: number === 5,
     stock: stock.map((key) => ({ key, left: DB.market[key].stock_qty || 1 })),
-    message: talkLine(player, "market"),
+    message: number === 5 ? pickLastMarketLine() : talkLine(player, "market"),
   };
 }
 
@@ -273,7 +276,7 @@ export function sell(player, key) {
   return [true, `${name}${josa(name, "을/를")} 팔았다. (은자 +${price})`];
 }
 
-/** 이 병장기가 지금 숨은 힘을 내는가. 병기는 주무공과 맞아야 한다. */
+/** 이 병장기가 지금 영기가 살아 있는가. 병기는 주무공과 맞아야 한다. */
 export function gearGimmick(player, slot) {
   const item = DB.market[player[slot]];
   if (!item?.gimmick) return null;

@@ -25,7 +25,7 @@
   "회기단": {
     "name": "회기단",
     "category": "소비품",
-    "price": 15,
+    "price": 20,
     "markets": [
       1,
       2,
@@ -48,7 +48,7 @@
   "호골주": {
     "name": "호골주",
     "category": "영약",
-    "price": 110,
+    "price": 130,
     "markets": [
       1,
       2,
@@ -67,7 +67,7 @@
   "소환단": {
     "name": "소환단",
     "category": "영약",
-    "price": 110,
+    "price": 130,
     "markets": [
       1,
       2,
@@ -86,7 +86,7 @@
   "무학잡록": {
     "name": "무학잡록",
     "category": "영약",
-    "price": 110,
+    "price": 130,
     "markets": [
       1,
       2,
@@ -105,7 +105,7 @@
   "청심환": {
     "name": "청심환",
     "category": "영약",
-    "price": 110,
+    "price": 130,
     "markets": [
       1,
       2,
@@ -124,7 +124,7 @@
   "공청석유": {
     "name": "공청석유",
     "category": "영약",
-    "price": 460,
+    "price": 385,
     "markets": [
       3,
       4,
@@ -143,7 +143,7 @@
   "대환단": {
     "name": "대환단",
     "category": "영약",
-    "price": 610,
+    "price": 770,
     "markets": [
       4,
       5
@@ -294,7 +294,7 @@
         "bonus": 10
       }
     ],
-    "grade": "범품"
+    "grade": "양품"
   },
   "금사보의": {
     "name": "금사 보의",
@@ -345,7 +345,7 @@
   "천마약점기록": {
     "name": "천마의 약점 기록",
     "category": "밀서",
-    "price": 300,
+    "price": 500,
     "markets": [
       5
     ],
@@ -362,7 +362,7 @@
   "혈마단": {
     "name": "혈마단",
     "category": "금단",
-    "price": 250,
+    "price": 500,
     "markets": [
       5
     ],
@@ -390,7 +390,7 @@
   "초상비비급": {
     "name": "경신보 비급",
     "category": "비급",
-    "price": 80,
+    "price": 60,
     "markets": [
       1,
       2
@@ -406,7 +406,7 @@
   "육합권보": {
     "name": "육합권보",
     "category": "비급",
-    "price": 60,
+    "price": 50,
     "markets": [
       1,
       2
@@ -422,7 +422,7 @@
   "유운신법비급": {
     "name": "유운신법 비급",
     "category": "비급",
-    "price": 300,
+    "price": 320,
     "markets": [
       3,
       4,
@@ -458,7 +458,7 @@
   "독룡장비급": {
     "name": "독룡장 비급",
     "category": "비급",
-    "price": 220,
+    "price": 190,
     "markets": [
       2,
       3,
@@ -521,7 +521,7 @@
   "해독단": {
     "name": "해독단",
     "category": "소비품",
-    "price": 18,
+    "price": 20,
     "markets": [
       1,
       2,
@@ -569,7 +569,7 @@
   "천년하수오": {
     "name": "천년 하수오",
     "category": "영약",
-    "price": 340,
+    "price": 385,
     "markets": [
       2,
       3,
@@ -598,12 +598,12 @@
         "amount": 30
       }
     ],
-    "grade": "명품"
+    "grade": "보물"
   },
   "설산영지": {
     "name": "설산 영지",
     "category": "영약",
-    "price": 285,
+    "price": 255,
     "markets": [
       2,
       3,
@@ -622,7 +622,7 @@
   "호왕골": {
     "name": "호왕의 뼈",
     "category": "영약",
-    "price": 295,
+    "price": 255,
     "markets": [
       2,
       3,
@@ -641,7 +641,7 @@
   "심득잡기": {
     "name": "고수의 심득",
     "category": "영약",
-    "price": 295,
+    "price": 255,
     "markets": [
       2,
       3,
@@ -714,7 +714,7 @@
   "백호도법비급": {
     "name": "백호도법 비급",
     "category": "비급",
-    "price": 55,
+    "price": 50,
     "markets": [
       1,
       2
@@ -906,7 +906,7 @@
   "패왕창법비급": {
     "name": "패왕창법 비급",
     "category": "비급",
-    "price": 450,
+    "price": 430,
     "markets": [
       3,
       4,
@@ -1979,7 +1979,7 @@
   "맹호권비급": {
     "name": "맹호권 비급",
     "category": "비급",
-    "price": 200,
+    "price": 190,
     "markets": [
       2,
       3,
@@ -2013,7 +2013,7 @@
   "파산권비급": {
     "name": "파산권 비급",
     "category": "비급",
-    "price": 210,
+    "price": 190,
     "markets": [
       2,
       3,
@@ -2096,7 +2096,7 @@
   "철련자술비급": {
     "name": "철련자술 비급",
     "category": "비급",
-    "price": 200,
+    "price": 190,
     "markets": [
       2,
       3,
@@ -2933,7 +2933,7 @@
   "웅담": {
     "name": "곰 쓸개",
     "category": "영약",
-    "price": 120,
+    "price": 95,
     "markets": [
       1,
       2
@@ -2954,7 +2954,7 @@
   "사담": {
     "name": "뱀 쓸개",
     "category": "영약",
-    "price": 120,
+    "price": 95,
     "markets": [
       1,
       2
@@ -2975,7 +2975,7 @@
   "호골": {
     "name": "호랑이 뼈",
     "category": "영약",
-    "price": 215,
+    "price": 160,
     "markets": [],
     "desc": "고아 마시면 외공과 무리가 25씩 오른다.",
     "effects": [
@@ -2998,7 +2998,7 @@
   "금안": {
     "name": "금안조의 눈",
     "category": "영약",
-    "price": 350,
+    "price": 190,
     "markets": [],
     "desc": "빛을 읽는다는 새의 눈. 삼키면 무리가 60 오른다.",
     "effects": [
@@ -3016,7 +3016,7 @@
   "호주": {
     "name": "은호의 구슬",
     "category": "영약",
-    "price": 350,
+    "price": 190,
     "markets": [],
     "desc": "여우가 입에 물고 있던 구슬. 머금으면 심경이 60 오른다.",
     "effects": [
@@ -3034,7 +3034,7 @@
   "영물내단": {
     "name": "영물의 내단",
     "category": "영약",
-    "price": 485,
+    "price": 360,
     "markets": [
       3,
       4,
@@ -3066,7 +3066,7 @@
   "천년내단": {
     "name": "천년 내단",
     "category": "영약",
-    "price": 900,
+    "price": 850,
     "markets": [
       5
     ],
@@ -3111,7 +3111,7 @@
   "유성검법비급": {
     "name": "유성검법 비급",
     "category": "비급",
-    "price": 200,
+    "price": 190,
     "markets": [
       2,
       3,
@@ -3144,7 +3144,7 @@
   "호체공비급": {
     "name": "호체공 비급",
     "category": "비급",
-    "price": 200,
+    "price": 180,
     "markets": [
       2,
       3,
@@ -3161,7 +3161,7 @@
   "구전현공비급": {
     "name": "구전현공 비급",
     "category": "비급",
-    "price": 300,
+    "price": 320,
     "markets": [
       3,
       4,
@@ -3178,7 +3178,7 @@
   "답설무흔비급": {
     "name": "답설무흔 비급",
     "category": "비급",
-    "price": 360,
+    "price": 320,
     "markets": [
       3,
       4,
@@ -3399,7 +3399,7 @@
   "흑룡피갑": {
     "name": "흑룡피갑",
     "category": "방어구",
-    "price": 340,
+    "price": 380,
     "markets": [
       3,
       4
@@ -3515,7 +3515,7 @@
   "회천단": {
     "name": "회천단",
     "category": "소비품",
-    "price": 420,
+    "price": 240,
     "markets": [
       4,
       5
@@ -3544,7 +3544,7 @@
   "칠보영단": {
     "name": "칠보영단",
     "category": "소비품",
-    "price": 600,
+    "price": 660,
     "markets": [
       5
     ],
@@ -3684,7 +3684,7 @@
   "명사수련첩": {
     "name": "명사의 수련첩",
     "category": "도구",
-    "price": 180,
+    "price": 170,
     "markets": [
       2,
       3,
@@ -3704,7 +3704,7 @@
   "천금연마석": {
     "name": "천금연마석",
     "category": "도구",
-    "price": 420,
+    "price": 340,
     "markets": [
       4,
       5
@@ -3723,7 +3723,7 @@
   "표운보비급": {
     "name": "표운보 비급",
     "category": "비급",
-    "price": 200,
+    "price": 180,
     "markets": [
       2,
       3,
@@ -3740,7 +3740,7 @@
   "연환도법비급": {
     "name": "연환도법 비급",
     "category": "비급",
-    "price": 200,
+    "price": 190,
     "markets": [
       2,
       3,
@@ -3774,7 +3774,7 @@
   "천축곤법비급": {
     "name": "천축곤법 비급",
     "category": "비급",
-    "price": 200,
+    "price": 190,
     "markets": [
       2,
       3,
@@ -3808,58 +3808,58 @@
   "금골환": {
     "name": "금골환",
     "grade": "보물",
-    "price": 460,
+    "price": 385,
     "markets": [
       5
     ],
     "category": "영약",
-    "desc": "뼈마디에 금빛이 돈다는 환약. 외공이 90 오른다.",
+    "desc": "뼈마디에 금빛이 돈다는 환약. 외공이 120 오른다.",
     "effects": [
       {
         "type": "stat",
         "stat": "external",
-        "amount": 90
+        "amount": 120
       }
     ]
   },
   "천기비록": {
     "name": "천기 비록",
     "grade": "보물",
-    "price": 460,
+    "price": 385,
     "markets": [
       5
     ],
     "category": "영약",
-    "desc": "수많은 고수의 수를 적은 책. 무리가 90 오른다.",
+    "desc": "수많은 고수의 수를 적은 책. 무리가 120 오른다.",
     "effects": [
       {
         "type": "stat",
         "stat": "martial",
-        "amount": 90
+        "amount": 120
       }
     ]
   },
   "설련고": {
     "name": "설련고",
     "grade": "보물",
-    "price": 460,
+    "price": 385,
     "markets": [
       5
     ],
     "category": "영약",
-    "desc": "설산의 연꽃을 달여 굳힌 약. 심경이 90 오른다.",
+    "desc": "설산의 연꽃을 달여 굳힌 약. 심경이 120 오른다.",
     "effects": [
       {
         "type": "stat",
         "stat": "mind",
-        "amount": 90
+        "amount": 120
       }
     ]
   },
   "천뢰탄": {
     "name": "천뢰탄",
     "grade": "보물",
-    "price": 320,
+    "price": 235,
     "markets": [
       5
     ],
@@ -3879,7 +3879,7 @@
   "파공분": {
     "name": "파공분",
     "grade": "보물",
-    "price": 280,
+    "price": 190,
     "markets": [
       5
     ],
@@ -3897,7 +3897,7 @@
   "천심비향": {
     "name": "천심비향",
     "grade": "보물",
-    "price": 340,
+    "price": 250,
     "markets": [
       5
     ],
@@ -3918,7 +3918,7 @@
   "불괴호신단": {
     "name": "불괴호신단",
     "grade": "보물",
-    "price": 300,
+    "price": 235,
     "markets": [
       5
     ],
@@ -3935,7 +3935,7 @@
   "천마봉지도": {
     "name": "천마봉의 지도",
     "grade": "보물",
-    "price": 350,
+    "price": 250,
     "markets": [
       5
     ],
@@ -4014,27 +4014,27 @@
     ],
     "always": true,
     "category": "금단",
-    "desc": "펼칠 때마다 글자가 바뀌는 책. 네 기량이 40씩 오른다. 카르마로 거래한다.",
+    "desc": "펼칠 때마다 글자가 바뀌는 책. 네 기량이 60씩 오른다. 카르마로 거래한다.",
     "effects": [
       {
         "type": "stat",
         "stat": "external",
-        "amount": 40
+        "amount": 60
       },
       {
         "type": "stat",
         "stat": "internal",
-        "amount": 40
+        "amount": 60
       },
       {
         "type": "stat",
         "stat": "martial",
-        "amount": 40
+        "amount": 60
       },
       {
         "type": "stat",
         "stat": "mind",
-        "amount": 40
+        "amount": 60
       }
     ]
   },
@@ -4060,7 +4060,7 @@
     "name": "수호 금패",
     "grade": "신물",
     "price": 0,
-    "karma_price": 2,
+    "karma_price": 3,
     "markets": [
       5
     ],

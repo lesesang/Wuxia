@@ -19,8 +19,8 @@ import {
 import { halpun, josa } from "./josa.js";
 
 const FINAL_UNLEASH_FROM = 880; // 평균 기량이 이보다 높으면 천마가 숨긴 힘을 꺼낸다
-const FINAL_UNLEASH_HP = 0.75;
-const FINAL_UNLEASH_ATTACK = 0.35;
+const FINAL_UNLEASH_HP = 0.6;
+const FINAL_UNLEASH_ATTACK = 0.3;
 const NATURAL_REGEN = 5;
 const MAX_TURN_REGEN = 30;
 const EXPLORE_BATTLE = 0.35; // 나머지는 사건과 기연
@@ -705,6 +705,13 @@ export class Game {
     if (!this.active || this.battle || !this.player.gear.includes(key)) return;
     this.player.equipGear(key);
     if (this.market) this.market.message = `${DB.market[key].name}${josa(DB.market[key].name, "을/를")} 들었다.`;
+    if (this.pendingNext) this.saveMonthEnd();
+  }
+
+  /** 든 병장기를 내려놓는다. 싸우는 중에는 못 한다. */
+  unequipGear(slot) {
+    if (!this.active || this.battle || !this.player.unequipGear(slot)) return;
+    if (this.market) this.market.message = "병장기를 내려놓았다.";
     if (this.pendingNext) this.saveMonthEnd();
   }
 

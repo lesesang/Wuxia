@@ -28,6 +28,7 @@ export function unmetReason(player, requires) {
   if (r.sect && player.sect !== r.sect) return "다른 문파의 일이다";
   if (r.no_sect && player.sect) return "이미 사문이 있다";
   if (r.not_sect?.includes(player.sect)) return "사문과 맞지 않는 일이다";
+  if (r.not_dominant?.includes(player.dominantAlignment())) return "내 길과 맞지 않는다";
   if (r.has_sect && !player.sect) return "사문이 없다";
   // sect_side: 사문이 없거나, 사문의 성향이 이 값일 때만 그 세력에 설 수 있다
   if (r.sect_side && player.sect && DB.sects[player.sect]?.alignment !== r.sect_side) return "사문이 허락하지 않는다";
@@ -299,6 +300,8 @@ function takeFoundLegacy(player) {
   return [`${name}${josa(name, "을/를")} 거두었다${worn ? ". 세월에 조금 바랬지만 아직 쓸 만하다" : ""}`];
 }
 
+const NO_TALK_TEXT = /눈먼|맹인|장님|쓰러져|쓰러진|피투성이|숨을 거|유골|백골|쪽지|편지|서찰|전서구|아이|소년|소녀|중얼/;
+const FAME_TEXT = /대협|별호|내 이름|이름이 들|이름 없|이름도 없/;
 const TALK_RATE = 45; // 사람과 말을 섞는 사건 가운데 말투 줄이 붙는 비율
 
 /** 사건 앞에 붙는 한 줄. 사람들은 내 성향과 이름을 알고 대한다. 같은 달의 같은 사건에는 같은 줄이 붙는다. */
@@ -307,7 +310,11 @@ function eventTalk(player, key) {
   const seed = [...`${key}${player.turn}`].reduce((total, c) => (total * 31 + c.codePointAt(0)) % 100003, 7);
   const own = (event.reacts || []).filter((r) => checkRequires(player, r.requires));
   if (own.length) return own[seed % own.length].text;
-  if (event.kind === "story" || event.prelude || event.chain || key.startsWith("제안_") || !eventText(player, key)?.includes("\"")) return null;
+  const text = eventText(player, key);
+  if (event.kind === "story" || event.prelude || event.chain || key.startsWith("제안_") || !text?.includes("\"")) return null;
+  // 말을 나눌 수 없는 상대이거나, 본문이 이미 내 이름을 다룬 사건에는 붙이지 않는다
+  if (NO_TALK_TEXT.test(text) || FAME_TEXT.test(text)) return null;
+  if ((event.variants || []).some((v) => v.text === text && (v.requires?.min_fame || v.requires?.max_fame !== undefined))) return null;
   return seed % 100 < TALK_RATE ? talkLine(player, "event", seed) : null;
 }
 
@@ -333,7 +340,7 @@ export function reactiveLine(player, list, fallback = null) {
 }
 
 // 출신, 자질, 무공처럼 그 사람만의 사정에 닿는 대사가 먼저고, 성향과 명성 대사는 맞는 것 가운데 하나가 나온다
-const COMMON_TALK = ["dominant", "alignment_min", "min_fame", "max_fame", "no_dominant"];
+const COMMON_TALK = ["dominant", "alignment_min", "min_fame", "max_fame", "no_dominant", "not_dominant"];
 const isCommonTalk = (item) => Object.keys(item.requires || {}).every((k) => COMMON_TALK.includes(k));
 
 export function enemyIntro(player, enemyKey) {

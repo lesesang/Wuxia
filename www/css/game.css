@@ -52,6 +52,7 @@ body.play { height: 100vh; height: 100dvh; display: flex; flex-direction: column
 .topbar-stats b { color: var(--paper); font-weight: 400; }
 .topbar-stats .silver b { color: var(--gold); }
 .topbar-stats .injury, .topbar-stats .injury b { color: var(--ma); }
+.topbar-align { margin-top: .05rem; }
 
 .stage { flex: 1; overflow-y: auto; padding: 1.5rem 1.25rem; display: flex; }
 .stage-inner { margin: auto; width: 100%; max-width: 560px; }
