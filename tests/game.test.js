@@ -1339,7 +1339,8 @@ test("성향과 명성에 따라 찾아오는 적이 달라진다", () => {
 test("성향과 명성에 따라 사건이 달라진다", () => {
   const p = new Player();
   p.alignment.마도 = 200;
-  assert.ok(eventView(p, "쫓기는소녀").text.includes("그쪽이 낫다"));
+  p.fame = 10;
+  assert.ok(eventView(p, "쫓기는소녀").text.includes("뒤가 더 무서운지"));
   assert.ok(checkRequires(p, DB.events.마도_토벌령.requires));
   assert.ok(!checkRequires(p, DB.events.정도_은인.requires));
   const events = Object.values(DB.events);
@@ -1757,6 +1758,7 @@ test("성향이 맞서면 도움 대신 적대하는 사건이 온다", () => {
   assert.ok(!checkRequires(dark, DB.events.소림_입문.requires));
   const bright = new Player();
   bright.alignment.정도 = 300;
+  bright.fame = 10;
   assert.ok(checkRequires(bright, DB.events.사도련_적대.requires));
   assert.ok(!checkRequires(bright, DB.events.사도련_입문.requires));
 });
@@ -3771,4 +3773,22 @@ test("사도와 마도 선택지가 정도에 크게 뒤지지 않는다", () =>
   walk(DB.chains);
   assert.ok(count.사도 >= count.정도 * 0.85, JSON.stringify(count));
   assert.ok(count.마도 >= count.정도 * 0.85, JSON.stringify(count));
+});
+
+test("사문이 있으면 2장 술자리의 본문과 선택지가 그 세력에 맞는다", () => {
+  const game = newGame();
+  const p = game.player;
+  p.fame = 20;
+  p.sect = "소림";
+  const view = eventView(p, "2장_세력");
+  assert.ok(view.text.includes("무림맹"));
+  assert.ok(!view.text.includes("세 사람"));
+  const labels = view.choices.map((c) => c.label);
+  assert.ok(labels.includes("무림맹의 잔을 받는다"));
+  assert.ok(labels.includes("잔을 사양하고 술값을 낸다"));
+  assert.ok(!labels.some((l) => l.includes("셋 다") || l.includes("사도련") || l.includes("붉은 옷")));
+  p.sect = null;
+  const free = eventView(p, "2장_세력").choices.map((c) => c.label);
+  assert.ok(free.includes("셋 다 거절하고 술값을 낸다"));
+  assert.ok(!free.includes("잔을 사양하고 술값을 낸다"));
 });
