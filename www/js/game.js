@@ -331,14 +331,14 @@ export class Game {
     return pickWeighted(list, list.map(weightOf));
   }
 
-  /** foe를 주면 그 사건만의 상대다. 수치는 기존 적을 따르고 이름과 대사는 사건을 따른다 */
-  startBattle(key, spar = false, foe = null) {
+  /** foe를 주면 그 사건만의 상대다. 수치는 기존 적을 따르고 이름과 대사는 사건을 따른다. foeLine은 그 사건의 첫 대사다 */
+  startBattle(key, spar = false, foe = null, foeLine = null) {
     // 지금 장에 어울리지 않는 적이면 같은 갈래에서 위상이 맞는 적으로 나온다
     // 이미 쓰러뜨린 이름 있는 적의 자리에는 대신할 적이 나온다. 그래도 없으면 그가 돌아온다. 비무 상대는 산 사람이다
     const stature = statureEnemy(key, getChapter(this.player.turn));
     const fitting = spar || foe ? stature : standIn(this.player, stature);
     const enemy = new Enemy(fitting, this.player.turn);
-    this.player.recordEnemyEncounter(fitting);
+    if (!foe) this.player.recordEnemyEncounter(fitting); // 사건만의 상대를 다른 이름의 적으로 도감에 적지 않는다
     this.battle = new Battle(this.player, enemy);
     this.battle.spar = spar;
     this.battle.askStand = true;
@@ -349,7 +349,7 @@ export class Game {
       this.battle.oneOff = true;
     }
     const back = !spar && !foe && isNamed(fitting) && this.player.slain.includes(fitting);
-    const intro = foe ? null : back ? returnedLine(fitting) : enemyIntro(this.player, fitting);
+    const intro = foeLine && fitting === stature ? foeLine : foe ? null : back ? returnedLine(fitting) : enemyIntro(this.player, fitting);
     const called = enemy.title ? `${enemy.title} ${enemy.name}` : enemy.name;
     this.addLog([spar ? `${called}${josa(called, "과/와")} 비무를 겨룬다. (${enemy.realm}, 져도 목숨은 잃지 않는다)` : `${called}${josa(called, "과/와")} 마주쳤다. (${enemy.realm})`, ...(intro ? [intro] : []), ...this.battle.log]);
     this.battle.log = [];
@@ -422,7 +422,7 @@ export class Game {
     if (effects.final_battle) {
       this.startFinalBattle();
     } else if (effects.battle) {
-      this.startBattle(effects.battle, !!effects.spar, effects.foe);
+      this.startBattle(effects.battle, !!effects.spar, effects.foe, effects.foe_line);
     } else if (effects.gauntlet) {
       const { enemies, reward, name, spar } = effects.gauntlet;
       this.gauntlet = { name, enemies: enemies.slice(1), reward, round: 1, total: enemies.length, spar: !!spar };
