@@ -3,7 +3,7 @@ import { DB } from "./data.js";
 import { RENAMED_ORIGINS } from "./meta.js";
 import { randInt } from "./rng.js";
 import {
-  ALIGNMENT_CAP, ALIGNMENT_SCALE, alignValue, dominant, FOCUS_GAIN, hasEffect, newAlignment, ORIGIN_SECTS, sectBonus,
+  ALIGN_CLASH, ALIGNMENT_CAP, ALIGNMENT_SCALE, alignValue, dominant, FOCUS_GAIN, hasEffect, newAlignment, ORIGIN_SECTS, sectBonus,
   startSkills, sumEffect,
 } from "./rules.js";
 import { josa } from "./josa.js";
@@ -249,10 +249,17 @@ export class Player {
     const extra = amount > 0 ? this.traits.flatMap((k) => DB.traits[k]?.effects || [])
       .filter((e) => e.type === "alignment_gain" && e.side === name).reduce((sum, e) => sum + e.amount, 0) : 0;
     // 앞선 길은 더 쉽게 오른다
-    const focus = amount > 0 && dominant(this.alignment) === name ? FOCUS_GAIN : 1;
+    const focus = amount > 0 && dominant(this.alignment) === name ? FOCUS_GAIN[name] : 1;
     const before = this.alignment[name] || 0;
     this.alignment[name] = Math.max(0, Math.min(ALIGNMENT_CAP, Math.round(before + amount * focus + extra)));
-    return this.alignment[name] - before;
+    const change = this.alignment[name] - before;
+    // 한 길로 기울면 부딪치는 길은 물러난다
+    if (change > 0) {
+      for (const [other, rate] of Object.entries(ALIGN_CLASH[name] || {})) {
+        this.alignment[other] = Math.max(0, Math.round((this.alignment[other] || 0) - change * rate));
+      }
+    }
+    return change;
   }
   hasFlag(flag) { return this.flags.includes(flag); }
   addFlag(flag) { if (!this.hasFlag(flag)) this.flags.push(flag); }

@@ -1496,7 +1496,7 @@ test("성향 자질은 희귀 이상이고 오를 때 더 오른다", () => {
   const p = new Player("무림초출", ["호연지기"]);
   assert.equal(p.alignment.정도, 100);
   p.adjustAlignment("정도", 40);
-  assert.equal(p.alignment.정도, 200);
+  assert.equal(p.alignment.정도, 164);
   p.adjustAlignment("정도", 5000);
   assert.equal(p.alignment.정도, 999);
   const killer = new Player("무림초출", ["천살성"]);
@@ -1541,6 +1541,10 @@ test("성향은 단계마다 혜택이 커지고 한 길에 집중하면 더 잘
   const high = new Player(); high.alignment.정도 = 960;
   assert.ok(priceOf(high, "호골주") < priceOf(low, "호골주"));
   assert.equal(alignTier(high.alignment).name, "강호의 등불");
+  const clash = new Player(); clash.alignment.마도 = 200; clash.alignment.정도 = 10;
+  clash.adjustAlignment("정도", 100);
+  assert.equal(clash.alignment.마도, 140);
+  assert.ok(applyEffects(clash, { alignment: { 정도: 20 } }).some((l) => l.startsWith("마도-")));
   const enemy = new Enemy("낭인");
   const damage = (p) => { rng.random = () => 0.5; return new Battle(p, enemy).incoming(1); };
   assert.ok(damage(high) < damage(new Player()));
@@ -1552,11 +1556,11 @@ test("성향은 단계마다 혜택이 커지고 한 길에 집중하면 더 잘
   assert.equal(focusedSide(even.alignment), null);
   assert.equal(even.adjustAlignment("사도", 20), 20);
   const keen = new Player(); keen.alignment.정도 = 100;
-  assert.equal(keen.adjustAlignment("정도", 20), 40);
+  assert.equal(keen.adjustAlignment("정도", 20), 22);
   const game = newGame();
   game.player.alignment = { 정도: 300, 사도: 0, 마도: 0 };
   game.alignmentMonth();
-  assert.equal(game.player.alignment.정도, 303);
+  assert.equal(game.player.alignment.정도, 301);
   assert.ok(game.player.chronicle.some((c) => c.text.includes("협객")));
 });
 
@@ -1565,6 +1569,21 @@ test("출신의 기본 무공은 오래 갈고닦은 성취를 지닌다", () =>
     if (DB.origins.origins[key].choose_start) continue;
     const p = new Player(key);
     for (const s of DB.origins.origins[key].skills) assert.equal(p.getSkill(s).mastery, 40, s);
+  }
+});
+
+test("별호는 성향과 출신, 계열, 명성을 따르고 어색한 뒷글자가 없다", () => {
+  const p = new Player("남궁세가");
+  assert.equal(byname(p), "이름 없는 무인");
+  p.fame = 50;
+  assert.ok(byname(p).startsWith("창궁"));
+  p.alignment.마도 = 900;
+  assert.ok(byname(p).endsWith("마검"));
+  p.fame = 200;
+  assert.ok(byname(p).endsWith("검마"));
+  for (const side of Object.values(DB.flavor.bynames.suffix)) {
+    for (const list of Object.values(side)) assert.equal(list.length, 3);
+    assert.ok(!Object.values(side).flat().includes("장마"));
   }
 });
 
