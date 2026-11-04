@@ -116,6 +116,20 @@ export const sectBonus = (player, field) => DB.sects[player.sect]?.bonus?.[field
 // ---------- 경지 ----------
 export const realmBonus = (realm) => DB.realms.combat_bonus[realm] || 0;
 export const realmIndex = (realm) => DB.realms.order.indexOf(realm);
+/** 적까지 포함한 경지의 높이. 삼류와 이류는 적에게만 있다 */
+export const enemyRealmIndex = (realm) => DB.realms.enemy_order.indexOf(realm);
+/** 지금 시점에 나올 수 있는 적 가운데 이 경지 차이의 적을 만날 비중 */
+export function realmFit(playerRealm, enemyRealm) {
+  const table = DB.realms.encounter_fit;
+  const gap = enemyRealmIndex(enemyRealm) - enemyRealmIndex(playerRealm);
+  return table[String(Math.max(-3, Math.min(3, gap)))];
+}
+/** 그 경지까지 얻은 특전 */
+export function realmPerks(realm) {
+  const reached = realmIndex(realm);
+  return DB.realms.order.filter((name, i) => i <= reached && DB.realms.perks[name]).map((name) => ({ realm: name, ...DB.realms.perks[name] }));
+}
+export const perkTrait = (realm) => `경지_${realm}`;
 
 export function nextRealm(realm) {
   if (realm === "현경" || realm === "생사경") return null;

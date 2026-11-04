@@ -3,7 +3,7 @@ import { MAX_INJURY, Skill, STAT_NAMES, STAT_SCALE } from "./character.js";
 import { DB } from "./data.js";
 import { checkRequires, reactiveLine } from "./events.js";
 import { equipmentBonus } from "./market.js";
-import { pick, randInt, rng, uniform } from "./rng.js";
+import { pick, pickWeighted, randInt, rng, uniform } from "./rng.js";
 import { applyGrowth, battleBuffs, fameRankChanged, hasEffect, alignValue, dominant, KILL_ALIGN, realmBonus, sectBonus, sumEffect } from "./rules.js";
 import { josa } from "./josa.js";
 
@@ -16,6 +16,8 @@ const MAX_MIND_GUARD = 0.15;
 const FLEE_BASE = 0.5;
 const DROP_MAIN_RATE = 2;    // 주무공과 같은 계열의 비급은 더 잘 떨어진다
 const DROP_OTHER_RATE = 0.7;
+const DROP_HINT_RATE = 0.6;      // 적이 품은 무공이 있으면 먼저 그것이 나온다
+const DROP_MEDICINE_RATE = 0.05; // 약이 나올 확률
 const REVIVE_RATE = 0.5;
 const MAX_KILL_POWER = 40; // 쓰러뜨린 적만큼 강해지는 자질의 끝
 const MAX_DAMAGE_REDUCE = 60; // 자질과 기틀을 겹쳐도 받는 피해를 이 이상 줄이지 못한다
@@ -38,6 +40,7 @@ export class Enemy {
     if (!data) throw new Error(`알 수 없는 적: ${key}`);
     this.key = key;
     this.name = data.name;
+    this.title = data.title || null;
     this.tier = data.tier;
     this.realm = data.realm;
     this.maxHp = data.hp;
@@ -98,6 +101,20 @@ export class Enemy {
  * 장에 맞는 적을 찾는다. 적의 ranks는 어울리는 장의 범위이고, above와 below는 같은 갈래의
  * 윗길과 아랫길이다. 사문의 시험처럼 정해진 인물은 ranks가 없어 그대로 나온다.
  */
+/** 떨어질 비급. 적이 품은 무공이 있으면 그것을, 없으면 그 경지의 품계에서 고른다. 주무공 계열일수록 잘 나온다. */
+export function dropSkill(player, hint, grades) {
+  if (hint && rng.random() < DROP_HINT_RATE && grades.includes(DB.skills[hint].grade)) return hint;
+  const main = player.bestSkill()?.category;
+  const pool = Object.keys(DB.skills).filter((k) => {
+    const s = DB.skills[k];
+    return grades.includes(s.grade) && !s.origin && !s.legend && !s.no_drop;
+  });
+  if (!pool.length) return null;
+  const counts = {};
+  for (const k of pool) counts[DB.skills[k].category] = (counts[DB.skills[k].category] || 0) + 1;
+  return pickWeighted(pool, pool.map((k) => (DB.skills[k].category === main ? DROP_MAIN_RATE : DROP_OTHER_RATE) / counts[DB.skills[k].category]));
+}
+
 export function statureEnemy(key, chapter) {
   let current = key;
   for (let i = 0; i < 8; i++) {
@@ -624,14 +641,23 @@ export class Battle {
     if (amount > 0) this.log.push(`은자 +${this.player.gainSilver(amount)}`);
   }
 
+  /** 적의 경지에 맞는 비급과 약이 떨어진다. 산적이 명품 비급을 품고 다니지는 않는다. */
   rollDrop() {
-    const { drop } = this.enemy;
-    const fits = this.player.bestSkill()?.category === DB.skills[drop?.skill]?.category;
-    if (drop && rng.random() < drop.chance * (fits ? DROP_MAIN_RATE : DROP_OTHER_RATE) && !this.player.hasSkill(drop.skill)) {
-      const skill = new Skill(drop.skill);
-      const notes = this.player.learnSkill(skill);
-      this.log.push(`📕 품에서 비급이 떨어졌다. 새 무공 「${skill.name}」${josa(skill.name, "을/를")} 익혔다!`, ...notes);
+    const table = DB.balance.drops[this.enemy.realm];
+    if (!table || this.enemy.tier === "보스") return;
+    const tierRate = DB.balance.drop_tier_rate[this.enemy.tier] ?? 1;
+    if (table.medicine?.length && rng.random() < DROP_MEDICINE_RATE * tierRate) {
+      const item = pick(table.medicine);
+      this.player.addItem(item);
+      this.log.push(`🧪 품에서 ${DB.market[item].name}${josa(DB.market[item].name, "이/가")} 나왔다. 행낭에 넣었다.`);
     }
+    if (rng.random() >= table.book * tierRate) return;
+    const key = dropSkill(this.player, this.enemy.drop?.skill, table.grades);
+    if (!key) return;
+    const known = this.player.hasSkill(key);
+    const skill = new Skill(key);
+    const notes = this.player.learnSkill(skill);
+    this.log.push(known ? `📕 품에서 비급이 떨어졌다. 「${skill.name}」, 아는 무공이다.` : `📕 품에서 비급이 떨어졌다. 새 무공 「${skill.name}」${josa(skill.name, "을/를")} 얻었다!`, ...notes);
   }
 
   /** 승리 시 4개 능력치 중 랜덤 2개가 적 등급 범위만큼 오른다. */
