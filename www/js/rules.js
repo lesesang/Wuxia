@@ -17,7 +17,7 @@ export const ALIGN_CLASH = { 정도: { 마도: 0.6, 사도: 0.3 }, 마도: { 정
 export const KILL_ALIGN = { 사도: 2, 마도: 5 }; // 싸워 이길수록 깊어지는 길
 export const ALIGN_STEPS = [60, 200, 400, 600, 850];
 const ALIGN_TABLE = {
-  정도: { names: ["협행의 첫걸음", "협객", "대협", "협의 명숙", "강호의 등불"], discount: [8, 10, 12, 14, 16], guard: [0, 1, 2, 3, 4] },
+  정도: { names: ["협행의 첫걸음", "협객", "〈대협〉", "협의 명숙", "강호의 등불"], discount: [8, 10, 12, 14, 16], guard: [0, 1, 2, 3, 4] },
   사도: { names: ["사파의 첫걸음", "사파 고수", "사파 거물", "사파 거두", "사파 제왕"], silver: [25, 30, 35, 40, 50], crit: [2, 4, 6, 8, 10] },
   마도: { names: ["마도의 첫걸음", "마인", "대마인", "마두", "천하 마존"], damage: [15, 20, 25, 30, 35], healCut: [3, 5, 6, 8, 10] },
 };
@@ -29,6 +29,35 @@ export function eventToll(player) {
   const mean = (player.external + player.internal + player.martial + player.mind) / 4;
   return (REALM_HARDINESS[player.realm] ?? 1) * (1 - mean / 2000);
 }
+
+/** 호칭 자리표시. 앞은 남성, 뒤는 여성. 〈낱말〉 또는 〈낱말:을/를〉처럼 조사를 붙여 쓴다 */
+const PERSON_WORDS = {
+  대협: ["대협", "여협"], 소협: ["소협", "소저"], 공자: ["공자", "소저"], 도련님: ["도련님", "아가씨"], 형장: ["형장", "소저"],
+  형님: ["형님", "누님"], 큰형님: ["큰형님", "큰누님"], 형제: ["형제", "누이"], 사제: ["사제", "사매"], 사형: ["사형", "사저"], 아들: ["아들", "딸"],
+  형: ["형", "오라버니"], 형들: ["형들", "오라버니들"], 큰형: ["큰형", "큰오라버니"], 둘째형: ["둘째 형", "둘째 오라버니"], 넷째형: ["넷째 형", "넷째 오라버니"],
+  네형: ["네 형", "네 오라버니"], 형수: ["형수", "올케"], 큰형수: ["큰형수", "큰올케"], 삼촌: ["삼촌", "고모"], 다섯형제: ["다섯 형제", "다섯 남매"],
+  그: ["그", "그녀"], 사내: ["사내", "여인"], 놈: ["놈", "계집"], 네놈: ["네놈", "네년"], 첫째형: ["첫째 형", "첫째 오라버니"], 남매: ["형제", "남매"], 의형제: ["의형제", "의남매"], 의형제들: ["형제들", "의남매들"], 협객나리: ["협객 나리", "여협 나리"],
+  손주사위: ["손녀사위", "손주며느리"], 저놈: ["저놈", "저년"], 이놈: ["이놈", "이년"], 미친놈: ["미친놈", "미친년"],
+};
+
+/** 자리표시를 이 무인의 성별과 이름으로 바꾼다. 무인이 없으면 남성의 말과 빈 이름으로 둔다 */
+export function personalize(text, person = null) {
+  if (!text || !text.includes("〈")) return text;
+  const female = person?.gender === "여" ? 1 : 0;
+  const names = { 성: person?.surname ?? "", 이름: person?.given || "무명", 성명: fullName(person) };
+  return text.replace(/〈([^〉:]+)(?::([^〉]+))?〉/g, (whole, word, pair) => {
+    let out;
+    if (word === "성대협") out = names.성 ? `${names.성} ${PERSON_WORDS.대협[female]}` : PERSON_WORDS.대협[female];
+    else if (word === "성소협") out = names.성 ? `${names.성} ${PERSON_WORDS.소협[female]}` : PERSON_WORDS.소협[female];
+    else if (names[word] !== undefined) out = names[word];
+    else if (PERSON_WORDS[word]) out = PERSON_WORDS[word][female];
+    else return whole;
+    return pair ? `${out}${josa(out, pair)}` : out;
+  });
+}
+
+/** 두 글자 성은 띄어 적는다. 지난 저장에는 이름이 없어 무명으로 부른다 */
+export const fullName = (person) => (person?.given ? `${person.surname || ""}${person.surname?.length > 1 ? " " : ""}${person.given}` : "무명");
 
 export const growthScale = (turn) => DB.balance.growth_by_chapter[getChapter(turn) - 1];
 /** 양을 성장 배율대로 줄인다. 소수점 아래는 그 확률로 1이 더 오른다. */
@@ -291,6 +320,10 @@ export const fameRankChanged = (before, after) =>
  */
 export function byname(player) {
   if (player.fame < 10) return "이름 없는 무인";
+  return personalize(bynameOf(player), player.person);
+}
+
+function bynameOf(player) {
   const names = DB.flavor.bynames;
   const tier = alignTier(player.alignment);
   const side = tier?.side ?? "중립";

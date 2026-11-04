@@ -27,6 +27,7 @@ export function unmetReason(player, requires) {
   if (r.no_skill && player.hasSkill(r.no_skill)) return "이미 익혔다";
   if (r.sect && player.sect !== r.sect) return "다른 문파의 일이다";
   if (r.no_sect && player.sect) return "이미 사문이 있다";
+  if (r.gender && player.person?.gender !== r.gender) return "해당하지 않는다";
   if (r.not_sect?.includes(player.sect)) return "사문과 맞지 않는 일이다";
   if (r.not_dominant?.includes(player.dominantAlignment())) return "내 길과 맞지 않는다";
   if (r.has_sect && !player.sect) return "사문이 없다";

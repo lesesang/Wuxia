@@ -15,6 +15,7 @@ import { pick, pickWeighted, randInt, rng } from "./rng.js";
 import {
   actionLine, ALIGNMENT_CAP, alignTier, applyGrowth, breakthroughBlock, byname, CHAPTER_STARTS, checkBreakthrough, checkGoodEnding, checkSaengsa,
   scaledGrowth, fameRank, FOCUS_DRIFT, focusedSide, getChapter, getChapterInfo, getMonth, getYear, isMarketTurn, monthLine, auraText, isNamed, perkTrait, realmFit, returnedLine, standIn, realmIndex, sumEffect, talkLine, traitSlots,
+  personalize,
 } from "./rules.js";
 import { halpun, josa } from "./josa.js";
 
@@ -87,7 +88,7 @@ export class Game {
   // ---------- 시작과 복구 ----------
 
   /** 새 강호행 시작. 잠긴 출신이면 false */
-  start(originKey = "무림초출", selectedTraits = [], legacyPicks = []) {
+  start(originKey = "무림초출", selectedTraits = [], legacyPicks = [], person = {}) {
     const meta = loadMeta();
     if (!meta.unlocked_origins.includes(originKey) || !DB.origins.origins[originKey]) return false;
     const traits = [...new Set(selectedTraits)]
@@ -98,6 +99,7 @@ export class Game {
     const provisions = takeProvisions();
     this.player = new Player(originKey, [...traits, ...upgradeTraits(meta, originKey), ...rewardTraits(meta), ...provisions.map((k) => `채비_${k}`)]);
     this.player.content = activeContent(meta);
+    this.player.person = settlePerson(originKey, person);
     const giftLines = DB.origins.origins[originKey].choose_start ? [] : grantStartSkills(this.player);
     // 고른 유산은 바로 받지 않는다. 첫 해 안에 그 흔적을 찾아낸다
     if (meta.legacy_open) this.player.pendingLegacy = legacyPicks.map((i) => meta.legacies[i])
@@ -620,8 +622,9 @@ export class Game {
     }
     p.alignMark = mark;
     if (tier.step === 0) return [];
-    p.note(`강호가 ${tier.name}${josa(tier.name, "이라고/라고")} 부르기 시작했다.`);
-    return [`강호가 ${tier.name}${josa(tier.name, "이라고/라고")} 부르기 시작했다.`];
+    const called = personalize(tier.name, p.person);
+    p.note(`강호가 ${called}${josa(called, "이라고/라고")} 부르기 시작했다.`);
+    return [`강호가 ${called}${josa(called, "이라고/라고")} 부르기 시작했다.`];
   }
 
   /** 새 장이 열릴 때의 성장 */
@@ -785,6 +788,15 @@ function karmaGain(player, key, victory) {
   if (key === "생사경") return { total, lines };
   add("경지", realmIndex(player.realm));
   return { total, lines };
+}
+
+/** 성별과 이름을 정한다. 가문의 성씨는 고정이고 비워 둔 칸은 저절로 정한다 */
+export function settlePerson(originKey, person = {}) {
+  const gender = person.gender === "여" ? "여" : "남";
+  const names = DB.flavor.names;
+  const clean = (text, limit) => String(text ?? "").replace(/[<>&"'`\s]/g, "").slice(0, limit);
+  const surname = DB.origins.origins[originKey]?.surname || clean(person.surname, 4) || pick(names.surnames);
+  return { gender, surname, given: clean(person.given, 6) || pick(gender === "여" ? names.female : names.male) };
 }
 
 export function buildEpilogue(player, ending) {
