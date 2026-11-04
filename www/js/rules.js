@@ -152,8 +152,16 @@ export function realmPerks(realm, category = "검법") {
   const reached = realmIndex(realm);
   return DB.realms.order.filter((name, i) => i <= reached && DB.realms.perks[name]).map((name) => {
     const perk = DB.realms.perks[name];
-    return { realm: name, ...perk, name: auraText(perk.name, category), desc: auraText(perk.desc, category) };
+    const grown = Object.entries(perk.growth || {}).filter(([next]) => realmIndex(next) <= reached);
+    return { realm: name, ...perk, name: auraText(perk.name, category), desc: auraText(perk.desc, category), grown: grown.map(([next, g]) => ({ realm: next, desc: auraText(g.desc, category) })) };
   });
+}
+
+/** 그 경지까지 깊어진 특전의 숨은 특성 */
+export function perkGrowthTraits(realm) {
+  const reached = realmIndex(realm);
+  return Object.entries(DB.realms.perks).flatMap(([name, perk]) => Object.keys(perk.growth || {})
+    .filter((next) => realmIndex(next) <= reached).map((next) => `${perkTrait(name)}_${next}`));
 }
 
 /** 결전에 달려올 인연. 조건을 채운 사람 가운데 앞에서부터 정해진 수만 온다 */

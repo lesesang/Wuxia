@@ -18,14 +18,19 @@ import {
 } from "./rules.js";
 import { halpun, josa } from "./josa.js";
 
+const FINAL_UNLEASH_FROM = 880; // 평균 기량이 이보다 높으면 천마가 숨긴 힘을 꺼낸다
+const FINAL_UNLEASH_HP = 0.75;
+const FINAL_UNLEASH_ATTACK = 0.35;
 const NATURAL_REGEN = 5;
 const MAX_TURN_REGEN = 30;
 const EXPLORE_BATTLE = 0.35; // 나머지는 사건과 기연
 const EXPLORE_EVENT = 0.45;
 const SPARRING_CHANCE = 0.65;
 const TRAIN_BONUS_BASE = 0.05;
-const TRAIN_MASTERY_RATE = 3;
-const ART_TRAIN_RATE = 2;
+const TRAIN_MASTERY_RATE = 2; // 수련이 주무공에
+const MIND_MASTERY_RATE = 4; // 운기가 심법에
+const INSIGHT_MASTERY_RATE = 1.5;
+const ART_TRAIN_RATE = 3; // 수련이 경공에
 const INSIGHT_CHANCE = 0.3;
 const GAUNTLET_REST = 20;
 const LOG_LIMIT = 40;
@@ -244,10 +249,10 @@ export class Game {
       const [, qi] = p.healPercent(0, 15);
       this.addLog([actionLine("명상"), `내공+${internal}, 심경+${mind}, 내력+${qi}`]);
       const skill = p.bestOfType("심공");
-      if (skill) this.addLog(skill.gainMastery(p.masteryGainAmount() * TRAIN_MASTERY_RATE));
+      if (skill) this.addLog(skill.gainMastery(p.masteryGainAmount() * MIND_MASTERY_RATE));
       // 고요한 중에 깨달음이 오면 주무공도 함께 깊어진다
       if (rng.random() < INSIGHT_CHANCE && p.bestSkill()) {
-        this.addLog(["문득 초식의 군더더기가 보였다.", ...p.bestSkill().gainMastery(p.masteryGainAmount() * TRAIN_MASTERY_RATE)]);
+        this.addLog(["문득 초식의 군더더기가 보였다.", ...p.bestSkill().gainMastery(Math.round(p.masteryGainAmount() * INSIGHT_MASTERY_RATE))]);
       }
     } else if (name === "휴식") {
       const rate = 1 + sumEffect(p.traits, "heal_rate", "percent") / 100;
@@ -258,6 +263,9 @@ export class Game {
         result += `, 내상 ${p.injury ? `${p.injury}단계로 호전` : "완치"}`;
       }
       this.addLog([actionLine("휴식"), result]);
+      // 몸을 돌보는 동안 숨도 고르게 된다
+      const mind = p.bestOfType("심공");
+      if (mind) this.addLog(mind.gainMastery(p.masteryGainAmount()));
     } else {
       this.explore();
     }
@@ -282,6 +290,9 @@ export class Game {
   }
 
   explore() {
+    // 돌아다니는 동안 걸음이 닦인다
+    const steps = this.player.bestOfType("경공");
+    if (steps) this.addLog(steps.gainMastery(this.player.masteryGainAmount()));
     const roll = rng.random();
     const bonus = sumEffect(this.player.traits, "fortune_rate", "percent") / 100;
     if (roll < bonus) return this.fortune();
@@ -345,6 +356,14 @@ export class Game {
   startFinalBattle() {
     const p = this.player;
     const enemy = new Enemy("천마");
+    // 천마는 상대의 기량을 보고 숨겨 둔 힘을 꺼낸다
+    const mean = (p.external + p.internal + p.martial + p.mind) / 4;
+    const unleashed = Math.max(0, (mean - FINAL_UNLEASH_FROM) / 100);
+    if (unleashed) {
+      enemy.maxHp = Math.trunc(enemy.maxHp * (1 + unleashed * FINAL_UNLEASH_HP));
+      enemy.hp = enemy.maxHp;
+      enemy.attack = Math.trunc(enemy.attack * (1 + unleashed * FINAL_UNLEASH_ATTACK));
+    }
     const weaken = p.bossWeaken;
     if (weaken) {
       const percent = Math.min(weaken, 60);
@@ -352,6 +371,7 @@ export class Game {
       enemy.hp = enemy.maxHp;
       this.addLog([`천마의 기세가 꺾인 채 싸움이 시작된다. (체력 ${halpun(percent)} 감소)`]);
     }
+    if (unleashed > 0.3) this.addLog(["천마가 눈을 가늘게 뜬다. 내 기량을 보고 앉은 채 숨겨 두었던 힘을 끌어올린다."]);
     p.recordEnemyEncounter("천마");
     this.battle = new Battle(p, enemy, true);
     this.battle.askStand = true;
@@ -646,6 +666,13 @@ export class Game {
       if (!p.traits.includes(perkTrait(next))) p.traits.push(perkTrait(next));
       const category = p.bestSkill()?.category;
       lines.push(`경지의 특전 ${auraText(perk.name, category)}: ${auraText(perk.desc, category)}`);
+      // 지난 경지의 특전도 함께 깊어진다
+      for (const [name, older] of Object.entries(DB.realms.perks)) {
+        const growth = older.growth?.[next];
+        if (!growth) continue;
+        p.traits.push(`${perkTrait(name)}_${next}`);
+        lines.push(`${name}의 특전이 깊어졌다. ${auraText(growth.desc, category)}`);
+      }
     }
     // 심경이 충분히 높지 않으면 돌파가 거칠어 내상을 입는다
     if (rng.random() < Math.max(0, 600 - p.mind) * 0.001) {

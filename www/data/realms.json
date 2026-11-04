@@ -78,7 +78,48 @@
           "type": "qi_cost_cut",
           "percent": 10
         }
-      ]
+      ],
+      "growth": {
+        "초절정": {
+          "desc": "〈기〉가 더 짙어졌다. 주는 피해 +4푼, 무공의 내력 소모 -5푼.",
+          "effects": [
+            {
+              "type": "damage_bonus",
+              "percent": 4
+            },
+            {
+              "type": "qi_cost_cut",
+              "percent": 5
+            }
+          ]
+        },
+        "화경": {
+          "desc": "〈기〉가 더 짙어졌다. 주는 피해 +4푼, 무공의 내력 소모 -5푼.",
+          "effects": [
+            {
+              "type": "damage_bonus",
+              "percent": 4
+            },
+            {
+              "type": "qi_cost_cut",
+              "percent": 5
+            }
+          ]
+        },
+        "현경": {
+          "desc": "〈기〉가 더 짙어졌다. 주는 피해 +4푼, 무공의 내력 소모 -5푼.",
+          "effects": [
+            {
+              "type": "damage_bonus",
+              "percent": 4
+            },
+            {
+              "type": "qi_cost_cut",
+              "percent": 5
+            }
+          ]
+        }
+      }
     },
     "초절정": {
       "name": "〈강〉과 호신강기",
@@ -100,7 +141,51 @@
           "type": "flat_guard",
           "amount": 10
         }
-      ]
+      ],
+      "growth": {
+        "화경": {
+          "desc": "〈강〉이 더 단단해졌다. 주는 피해 +3푼, 회심 확률 +2푼, 회심 위력 +1할, 호신강기가 피해 5를 더 막는다.",
+          "effects": [
+            {
+              "type": "damage_bonus",
+              "percent": 3
+            },
+            {
+              "type": "crit",
+              "percent": 2
+            },
+            {
+              "type": "crit_power",
+              "percent": 10
+            },
+            {
+              "type": "flat_guard",
+              "amount": 5
+            }
+          ]
+        },
+        "현경": {
+          "desc": "〈강〉이 더 단단해졌다. 주는 피해 +3푼, 회심 확률 +2푼, 회심 위력 +1할, 호신강기가 피해 5를 더 막는다.",
+          "effects": [
+            {
+              "type": "damage_bonus",
+              "percent": 3
+            },
+            {
+              "type": "crit",
+              "percent": 2
+            },
+            {
+              "type": "crit_power",
+              "percent": 10
+            },
+            {
+              "type": "flat_guard",
+              "amount": 5
+            }
+          ]
+        }
+      }
     },
     "화경": {
       "name": "환골탈태와 반박귀진",
@@ -130,7 +215,35 @@
           "type": "battle_start_ward",
           "percent": 10
         }
-      ]
+      ],
+      "growth": {
+        "현경": {
+          "desc": "기운이 더 깊이 잠겼다. 〈강〉이 적의 방어를 7할 5푼까지 꿰뚫고, 호신강기가 피해 5를 더 막고, 받는 피해 -2푼, 달마다 체력과 내력이 1푼 더 차며, 처음 두르는 호신 기운이 5푼 는다.",
+          "effects": [
+            {
+              "type": "pierce_all",
+              "percent": 25
+            },
+            {
+              "type": "flat_guard",
+              "amount": 5
+            },
+            {
+              "type": "damage_reduce",
+              "percent": 2
+            },
+            {
+              "type": "turn_regen",
+              "hp_pct": 1,
+              "qi_pct": 1
+            },
+            {
+              "type": "battle_start_ward",
+              "percent": 5
+            }
+          ]
+        }
+      }
     },
     "현경": {
       "name": "삼화취정과 천인합일",

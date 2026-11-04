@@ -33,6 +33,10 @@ export async function loadData(read) {
   // 경지 특전도 숨은 특성으로 적용한다
   for (const [realm, perk] of Object.entries(DB.realms.perks)) {
     DB.traits[`경지_${realm}`] = { name: perk.name, desc: perk.desc, hidden: true, effects: perk.effects };
+    // 더 높은 경지에 오르면 지난 경지의 특전도 깊어진다
+    for (const [next, growth] of Object.entries(perk.growth || {})) {
+      DB.traits[`경지_${realm}_${next}`] = { name: perk.name, desc: growth.desc, hidden: true, effects: growth.effects };
+    }
   }
   // 기틀과 누적 보상은 숨은 특성으로 등록해 특성과 같은 방식으로 적용한다
   for (const [key, upgrade] of Object.entries(DB.karma.upgrades)) {

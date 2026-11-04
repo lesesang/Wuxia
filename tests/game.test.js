@@ -3158,6 +3158,52 @@ test("시장에 내지 않는 내단은 장터에 나오지 않는다", () => {
   }
 });
 
+test("천마는 상대의 기량을 보고 힘을 더 꺼내지만 낮은 기량에는 그대로다", () => {
+  const fight = (stat) => {
+    const game = newGame();
+    Object.assign(game.player, { external: stat, internal: stat, martial: stat, mind: stat, bossWeaken: 0 });
+    game.startFinalBattle();
+    return game.battle.enemy;
+  };
+  const low = fight(800);
+  assert.equal(low.maxHp, DB.enemies.천마.hp);
+  assert.equal(low.attack, DB.enemies.천마.attack);
+  const high = fight(990);
+  assert.ok(high.maxHp > low.maxHp && high.attack > low.attack);
+});
+
+test("경지가 오르면 지난 경지의 특전도 깊어지고 저장해도 남는다", () => {
+  const p = new Player("무림초출");
+  const damage = () => sumEffect(p.traits, "damage_bonus", "percent");
+  p.traits.push("경지_절정");
+  const before = damage();
+  p.realm = "초절정";
+  const saved = Player.fromDict(p.toDict());
+  assert.ok(saved.traits.includes("경지_절정_초절정"), "예전 저장도 받는다");
+  assert.ok(sumEffect(saved.traits, "damage_bonus", "percent") > before);
+  const game = newGame();
+  const g = game.player;
+  Object.assign(g, { external: 700, internal: 700, martial: 700, mind: 700, battles: 500, turn: 60, realm: "절정" });
+  const lines = game.checkRealm();
+  assert.ok(lines.some((l) => l.includes("특전이 깊어졌다")), lines.join("/"));
+  assert.equal(new Set(g.traits).size, g.traits.length, "같은 특전을 두 번 받지 않는다");
+  for (const r of ["절정", "초절정", "화경"]) {
+    for (const [next, growth] of Object.entries(DB.realms.perks[r].growth)) {
+      assert.ok(DB.realms.order.indexOf(next) > DB.realms.order.indexOf(r), r);
+      assert.ok(growth.desc && growth.effects.length, r);
+    }
+  }
+});
+
+test("성취는 공격 무공이 합마다 조금씩, 심법과 경공은 쓸 때 더 많이 쌓인다", () => {
+  const p = new Player("무림초출");
+  p.martial = 100;
+  let attack = 0;
+  let art = 0;
+  for (let i = 0; i < 500; i++) { attack += p.attackMasteryGain(); art += p.masteryGainAmount() * 2; }
+  assert.ok(attack < art / 2.5, `${attack} ${art}`);
+});
+
 test("경지마다 특전이 뚜렷하고 호신강기는 맞을 때마다 피해를 막는다", () => {
   for (const realm of ["절정", "초절정", "화경", "현경"]) assert.ok(DB.realms.perks[realm].effects.length >= 2, realm);
   const hit = (traits) => {

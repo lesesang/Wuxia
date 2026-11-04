@@ -229,7 +229,7 @@ ${section("매달 하는 일", [
     "<b>요양</b>: 체력과 내력을 채우고 내상을 치료합니다. 싸우기 전에 몸을 챙기세요."])}
 ${section("저장", ["달이 시작할 때와 그달의 일을 마쳤을 때 저절로 저장됩니다. 일을 마치기 전에 끄면 그달의 처음부터, 마친 뒤에 끄면 그 결과 화면이나 장터부터 이어 합니다."])}
 ${section("할과 푼", ["비율은 할과 푼으로 적습니다. 1할은 열에 하나, 1푼은 백에 하나입니다. 3할 5푼이면 백에 서른다섯입니다."])}`,
-    경지: `${section("경지", ["일류, 절정, 초절정, 화경, 현경 순으로 오릅니다. 기량과 <b>실전 경험</b>이 함께 차야 돌파합니다. 화면 위쪽 띠의 평균, 최저, 실전 경험이 남은 조건입니다.", "경지가 오르면 주는 피해가 크게 늘고 받는 피해가 줄어듭니다. 심경이 낮으면 돌파할 때 기가 역류해 다칠 수 있습니다.", ...Object.entries(DB.realms.perks).map(([realm, perk]) => `<b>${esc(realm)}의 특전, ${esc(perk.name)}</b>: ${esc(perk.desc)}`)])}
+    경지: `${section("경지", ["일류, 절정, 초절정, 화경, 현경 순으로 오릅니다. 기량과 <b>실전 경험</b>이 함께 차야 돌파합니다. 화면 위쪽 띠의 평균, 최저, 실전 경험이 남은 조건입니다.", "경지가 오르면 주는 피해가 크게 늘고 받는 피해가 줄어듭니다. 심경이 낮으면 돌파할 때 기가 역류해 다칠 수 있습니다.", ...Object.entries(DB.realms.perks).map(([realm, perk]) => `<b>${esc(realm)}의 특전, ${esc(perk.name)}</b>: ${esc(perk.desc)}`), "더 높은 경지에 오르면 지난 경지의 특전도 깊어집니다. 신상의 경지 칸에서 볼 수 있습니다."])}
 ${section("생사경", [
     "현경 너머의 숨은 경지이자 가장 높은 결말입니다. 돌파로는 오르지 못하고, 천마를 쓰러뜨린 바로 그 순간에만 판가름 납니다.",
     "네 기량이 끝에 가깝고 실전이 충분히 쌓인 무인이, 체력과 내력을 넉넉히 남긴 채 천마를 넘어서면 이릅니다. 카르마는 모두 25를 받습니다."])}`,
@@ -245,7 +245,7 @@ ${section("생사경", [
     "성취가 100을 넘어 더 쌓이면 다음 품계로 승급합니다. 승급하면 성취가 줄어들고 위력은 오릅니다.",
     "<b>같은 무공을 또 얻으면</b> 성취가 오릅니다. <b>같은 갈래의 더 깊은 무공</b>을 얻으면 따로 쌓이지 않고 쓰던 무공이 그것으로 이어지며 성취와 오른 품계는 그대로 갑니다."])}
 ${section("위력의 기준", ["무공에 적힌 <b>위력 N배</b>는 기본 공격력에 곱하는 값입니다. 기본 공격력은 네 기량(무리가 가장 크고, 다음이 외공, 내공, 심경 순)에 병기의 위력을 더한 값입니다. 맨손 공격이 1배입니다.", "거기에 경지, 자질, 소속, 성향의 보정이 곱해지고, 품계가 오르면 2할 5푼, 성취 1마다 0.003배가 더해집니다. 성취가 100이면 0.3배가 늘어납니다.", "비기의 위력은 그 무공의 위력에 비기 배수를 한 번 더 곱합니다. 비기는 내공이 위력에 더 크게 들어갑니다."])}
-${section("성취 쌓기", ["주무공은 수련과 싸움에서, 심법은 운기와 심법 운기, 승리에서, 보법은 수련과 경공 사용, 승리에서 성취가 오릅니다."])}
+${section("성취 쌓기", ["주무공은 수련과 싸움에서 오르고, 싸움에서는 합마다 쓰는 만큼 조금씩 쌓입니다. 심법은 운기와 요양, 전투 중 운기, 승리에서 오릅니다. 보법은 수련과 탐색, 경공 사용, 승리에서 오릅니다."])}
 ${section("일절 너머", ["일절 무공의 성취가 100에 이르면 드물게 큰 깨달음이 찾아옵니다. 받아들이면 그 무공이 신공의 경지에 오르고, 그 대가로 몸이 크게 상합니다. 공격 무공, 심법, 보법 모두 그렇습니다."])}`,
     전투: `${section("전투", [
     "무공은 내력을 씁니다. 내력이 없으면 맨손으로 싸웁니다.",
@@ -672,7 +672,7 @@ function statusModal() {
         ${ALIGNMENTS.map((name) => `<div class="align-row"><span>${name}</span><div class="align-track"><div class="a-${name}" style="width:${Math.min(p.alignment[name] / 10, 100)}%"></div></div><span>${p.alignment[name]}</span></div>`).join("")}
         <p class="skill-meta">${esc(benefitText(p.alignment))}</p>
       </div>
-      ${companionList(p)}${realmPerks(p.realm, main?.category).length ? `<div class="modal-section"><h4>경지의 특전</h4>${realmPerks(p.realm, main?.category).map((k) => `<div class="skill-row">${esc(k.realm)}, ${esc(k.name)}<div class="skill-meta">${esc(k.desc)}</div></div>`).join("")}</div>` : ""}
+      ${companionList(p)}${realmPerks(p.realm, main?.category).length ? `<div class="modal-section"><h4>경지의 특전</h4>${realmPerks(p.realm, main?.category).map((k) => `<div class="skill-row">${esc(k.realm)}, ${esc(k.name)}<div class="skill-meta">${esc(k.desc)}</div>${k.grown.map((g) => `<div class="skill-meta">${esc(g.realm)}에 올라: ${esc(g.desc)}</div>`).join("")}</div>`).join("")}</div>` : ""}
       ${traits.length ? `<div class="modal-section"><h4>자질</h4>${traits.map((t) => `<div class="skill-row">${esc(t.name)}<div class="skill-meta">${esc(t.desc)}</div></div>`).join("")}</div>` : ""}`,
     skills: skills,
     history: chronicleList(p) || `<p class="codex-empty">아직 남길 만한 일이 없습니다.</p>`,
