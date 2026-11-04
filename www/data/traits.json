@@ -1359,13 +1359,18 @@
   },
   "불굴": {
     "name": "불사지체",
-    "desc": "전투마다 한 번, 치명상을 입어도 체력 25%로 다시 일어선다.",
+    "desc": "전투에서 합마다 체력을 3%, 달마다 체력을 15% 더 회복한다. 베여도 베여도 살이 차오른다.",
     "rarity": "전설",
     "cost": 16,
     "effects": [
       {
-        "type": "last_stand",
-        "hp_pct": 25
+        "type": "round_regen",
+        "hp_pct": 3
+      },
+      {
+        "type": "turn_regen",
+        "hp_pct": 15,
+        "qi_pct": 0
       }
     ]
   },

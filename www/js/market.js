@@ -16,7 +16,7 @@ const LAST_MARKET_TURN = 119;
 const marketNumber = (turn) => (turn === LAST_MARKET_TURN ? 5 : Math.min(4, getChapter(turn)));
 
 const MISMATCH_RATE = 0.75; // 주무공과 맞지 않는 병기는 위력이 이만큼만 나온다
-const MAIN_STYLE_WEIGHT = 3; // 주무공 계열 품목이 장터에 나올 비중
+const MAIN_STYLE_WEIGHT = 4; // 주무공 계열 품목이 장터에 나올 비중. 계열마다 품목 수가 달라도 같은 값이 되게 나눈다
 const KNOWN_STYLE_WEIGHT = 1.5; // 익힌 다른 무공 계열 품목의 비중
 
 /** 이 플레이어가 그 장비에서 실제로 얻는 수치 */
@@ -63,11 +63,21 @@ function shelfOf(key) {
   return DB.skills[effect.skill]?.type === "공격무공" ? "공격 비급" : "내공과 경공";
 }
 
+/** 계열마다 품목 수가 달라도 계열이 뽑힐 확률이 같도록 품목 수로 나눈다. */
+export function weightsByStyle(list, weightOf) {
+  const counts = {};
+  for (const k of list) {
+    const style = itemStyle(k);
+    if (style) counts[style] = (counts[style] || 0) + 1;
+  }
+  return list.map((k) => weightOf(k) / (counts[itemStyle(k)] || 1));
+}
+
 function weightedSample(list, weightOf, count) {
   const pool = [...list];
   const picked = [];
   while (pool.length && picked.length < count) {
-    const key = pickWeighted(pool, pool.map(weightOf));
+    const key = pickWeighted(pool, weightsByStyle(pool, weightOf));
     picked.push(key);
     pool.splice(pool.indexOf(key), 1);
   }
@@ -80,7 +90,13 @@ function gearForSale(pool, player) {
   for (const slot of ["weapon", "armor"]) {
     const better = pool.filter((k) => DB.market[k].effects.some(
       (e) => e.type === "equip" && e.slot === slot && bonusFor(player, k) > equipmentBonus(player, slot)));
-    if (better.length) picks.push(...weightedSample(better, (k) => styleWeight(player, k), slot === "weapon" ? 2 : 1));
+    if (!better.length) continue;
+    // 병기는 주무공에 맞는 것을 먼저 하나 꼭 올린다
+    const main = player.bestSkill()?.category;
+    const fitting = slot === "weapon" ? better.filter((k) => itemStyle(k) === main) : [];
+    const first = fitting.length ? weightedSample(fitting, () => 1, 1) : [];
+    const rest = better.filter((k) => !first.includes(k));
+    picks.push(...first, ...weightedSample(rest, (k) => styleWeight(player, k), (slot === "weapon" ? 2 : 1) - first.length));
   }
   return picks;
 }

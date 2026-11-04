@@ -4,7 +4,7 @@
     "tier": "일반",
     "realm": "일류",
     "hp": 155,
-    "attack": 20,
+    "attack": 23,
     "exp_reward": 1,
     "silver": [
       6,
@@ -73,7 +73,7 @@
     "tier": "일반",
     "realm": "일류",
     "hp": 225,
-    "attack": 27,
+    "attack": 30,
     "exp_reward": 1,
     "silver": [
       7,
@@ -137,7 +137,7 @@
     "tier": "일반",
     "realm": "일류",
     "hp": 180,
-    "attack": 23,
+    "attack": 26,
     "exp_reward": 1,
     "silver": [
       0,
@@ -171,7 +171,7 @@
     "tier": "난적",
     "realm": "일류",
     "hp": 305,
-    "attack": 28,
+    "attack": 32,
     "exp_reward": 2,
     "silver": [
       21,
@@ -210,7 +210,7 @@
     "tier": "일반",
     "realm": "절정",
     "hp": 430,
-    "attack": 31,
+    "attack": 36,
     "exp_reward": 1,
     "silver": [
       13,
@@ -258,7 +258,7 @@
     "tier": "일반",
     "realm": "절정",
     "hp": 350,
-    "attack": 40,
+    "attack": 46,
     "exp_reward": 1,
     "silver": [
       15,
@@ -319,7 +319,7 @@
     "tier": "난적",
     "realm": "절정",
     "hp": 675,
-    "attack": 48,
+    "attack": 54,
     "exp_reward": 2,
     "silver": [
       28,
@@ -379,7 +379,7 @@
     "tier": "일반",
     "realm": "초절정",
     "hp": 975,
-    "attack": 59,
+    "attack": 67,
     "exp_reward": 1,
     "silver": [
       20,
@@ -428,7 +428,7 @@
     "tier": "난적",
     "realm": "초절정",
     "hp": 1475,
-    "attack": 67,
+    "attack": 76,
     "exp_reward": 2,
     "silver": [
       35,
@@ -486,7 +486,7 @@
     "tier": "난적",
     "realm": "초절정",
     "hp": 1675,
-    "attack": 78,
+    "attack": 88,
     "exp_reward": 2,
     "silver": [
       38,
@@ -540,7 +540,7 @@
     "tier": "강적",
     "realm": "화경",
     "hp": 2000,
-    "attack": 74,
+    "attack": 84,
     "exp_reward": 3,
     "silver": [
       63,
@@ -608,7 +608,7 @@
     "tier": "난적",
     "realm": "화경",
     "hp": 2870,
-    "attack": 103,
+    "attack": 117,
     "exp_reward": 2,
     "silver": [
       49,
@@ -698,7 +698,7 @@
     "tier": "일반",
     "realm": "화경",
     "hp": 1910,
-    "attack": 86,
+    "attack": 98,
     "exp_reward": 1,
     "silver": [
       28,
@@ -747,7 +747,7 @@
     "tier": "강적",
     "realm": "현경",
     "hp": 4380,
-    "attack": 118,
+    "attack": 135,
     "exp_reward": 3,
     "silver": [
       91,
@@ -817,7 +817,7 @@
     "tier": "난적",
     "realm": "일류",
     "hp": 420,
-    "attack": 35,
+    "attack": 40,
     "exp_reward": 2,
     "silver": [
       0,
@@ -852,7 +852,7 @@
     "tier": "강적",
     "realm": "화경",
     "hp": 1310,
-    "attack": 53,
+    "attack": 60,
     "exp_reward": 3,
     "silver": [
       42,
@@ -896,7 +896,7 @@
     "tier": "강적",
     "realm": "현경",
     "hp": 2805,
-    "attack": 84,
+    "attack": 95,
     "exp_reward": 3,
     "silver": [
       0,
@@ -924,7 +924,7 @@
     "tier": "난적",
     "realm": "초절정",
     "hp": 1325,
-    "attack": 63,
+    "attack": 71,
     "exp_reward": 2,
     "silver": [
       28,
@@ -982,8 +982,8 @@
     "name": "천마",
     "tier": "보스",
     "realm": "현경",
-    "hp": 18000,
-    "attack": 160,
+    "hp": 21000,
+    "attack": 185,
     "exp_reward": 5,
     "silver": [
       0,
@@ -2434,7 +2434,7 @@
     "tier": "일반",
     "realm": "일류",
     "hp": 200,
-    "attack": 23,
+    "attack": 26,
     "exp_reward": 1,
     "silver": [
       8,
@@ -2481,7 +2481,7 @@
     "tier": "난적",
     "realm": "일류",
     "hp": 265,
-    "attack": 27,
+    "attack": 30,
     "exp_reward": 2,
     "silver": [
       24,
@@ -2535,7 +2535,7 @@
     "tier": "일반",
     "realm": "절정",
     "hp": 430,
-    "attack": 38,
+    "attack": 43,
     "exp_reward": 1,
     "silver": [
       15,
@@ -2584,7 +2584,7 @@
     "tier": "일반",
     "realm": "절정",
     "hp": 415,
-    "attack": 32,
+    "attack": 37,
     "exp_reward": 1,
     "silver": [
       21,
@@ -2635,7 +2635,7 @@
     "tier": "난적",
     "realm": "절정",
     "hp": 550,
-    "attack": 38,
+    "attack": 43,
     "exp_reward": 2,
     "silver": [
       35,
@@ -2690,7 +2690,7 @@
     "tier": "일반",
     "realm": "초절정",
     "hp": 815,
-    "attack": 49,
+    "attack": 56,
     "exp_reward": 1,
     "silver": [
       21,
@@ -2748,7 +2748,7 @@
     "tier": "난적",
     "realm": "초절정",
     "hp": 1285,
-    "attack": 66,
+    "attack": 75,
     "exp_reward": 2,
     "silver": [
       35,
@@ -2798,7 +2798,7 @@
     "tier": "강적",
     "realm": "현경",
     "hp": 3785,
-    "attack": 114,
+    "attack": 129,
     "exp_reward": 3,
     "silver": [
       84,
@@ -2847,7 +2847,7 @@
     "tier": "강적",
     "realm": "현경",
     "hp": 2980,
-    "attack": 88,
+    "attack": 100,
     "exp_reward": 3,
     "silver": [
       0,
@@ -2892,7 +2892,7 @@
     "tier": "강적",
     "realm": "현경",
     "hp": 6290,
-    "attack": 118,
+    "attack": 135,
     "exp_reward": 3,
     "silver": [
       105,
@@ -2943,7 +2943,7 @@
     "tier": "강적",
     "realm": "현경",
     "hp": 5250,
-    "attack": 126,
+    "attack": 143,
     "exp_reward": 3,
     "silver": [
       112,
@@ -2993,7 +2993,7 @@
     "tier": "난적",
     "realm": "현경",
     "hp": 4720,
-    "attack": 127,
+    "attack": 145,
     "exp_reward": 2,
     "silver": [
       56,
@@ -3068,7 +3068,7 @@
     "tier": "난적",
     "realm": "초절정",
     "hp": 1315,
-    "attack": 65,
+    "attack": 74,
     "exp_reward": 2,
     "silver": [
       42,
@@ -3103,7 +3103,7 @@
     "tier": "난적",
     "realm": "절정",
     "hp": 935,
-    "attack": 46,
+    "attack": 52,
     "exp_reward": 2,
     "silver": [
       0,
@@ -3144,7 +3144,7 @@
     "tier": "난적",
     "realm": "절정",
     "hp": 830,
-    "attack": 43,
+    "attack": 49,
     "exp_reward": 2,
     "silver": [
       0,
@@ -3186,7 +3186,7 @@
     "tier": "난적",
     "realm": "초절정",
     "hp": 1070,
-    "attack": 55,
+    "attack": 62,
     "exp_reward": 2,
     "silver": [
       0,
@@ -3233,7 +3233,7 @@
     "tier": "난적",
     "realm": "초절정",
     "hp": 1115,
-    "attack": 56,
+    "attack": 63,
     "exp_reward": 2,
     "silver": [
       0,
@@ -3267,7 +3267,7 @@
     "tier": "난적",
     "realm": "절정",
     "hp": 755,
-    "attack": 46,
+    "attack": 52,
     "exp_reward": 2,
     "silver": [
       0,
@@ -3319,7 +3319,7 @@
     "tier": "난적",
     "realm": "절정",
     "hp": 775,
-    "attack": 50,
+    "attack": 57,
     "exp_reward": 2,
     "silver": [
       28,
@@ -3358,7 +3358,7 @@
     "tier": "강적",
     "realm": "화경",
     "hp": 2425,
-    "attack": 80,
+    "attack": 91,
     "exp_reward": 3,
     "silver": [
       35,
@@ -3412,7 +3412,7 @@
     "tier": "난적",
     "realm": "절정",
     "hp": 970,
-    "attack": 58,
+    "attack": 66,
     "exp_reward": 2,
     "silver": [
       14,
@@ -3438,7 +3438,7 @@
     "tier": "난적",
     "realm": "절정",
     "hp": 1080,
-    "attack": 61,
+    "attack": 69,
     "exp_reward": 2,
     "silver": [
       42,
@@ -3480,7 +3480,7 @@
     "tier": "강적",
     "realm": "화경",
     "hp": 2580,
-    "attack": 84,
+    "attack": 95,
     "exp_reward": 3,
     "silver": [
       0,
@@ -3521,7 +3521,7 @@
     "tier": "일반",
     "realm": "초절정",
     "hp": 1320,
-    "attack": 70,
+    "attack": 80,
     "exp_reward": 2,
     "silver": [
       0,
@@ -3556,7 +3556,7 @@
     "tier": "난적",
     "realm": "초절정",
     "hp": 1980,
-    "attack": 84,
+    "attack": 95,
     "exp_reward": 2,
     "silver": [
       0,
@@ -3597,7 +3597,7 @@
     "tier": "강적",
     "realm": "화경",
     "hp": 2420,
-    "attack": 80,
+    "attack": 91,
     "exp_reward": 3,
     "silver": [
       0,
@@ -3669,7 +3669,7 @@
     "tier": "난적",
     "realm": "절정",
     "hp": 1280,
-    "attack": 63,
+    "attack": 72,
     "exp_reward": 3,
     "silver": [
       30,
@@ -3709,7 +3709,7 @@
     "tier": "강적",
     "realm": "현경",
     "hp": 6520,
-    "attack": 133,
+    "attack": 151,
     "exp_reward": 5,
     "silver": [
       80,
@@ -3750,7 +3750,7 @@
     "tier": "일반",
     "realm": "일류",
     "hp": 225,
-    "attack": 26,
+    "attack": 29,
     "exp_reward": 1,
     "silver": [
       15,
@@ -3811,7 +3811,7 @@
     "tier": "난적",
     "realm": "절정",
     "hp": 720,
-    "attack": 46,
+    "attack": 52,
     "exp_reward": 3,
     "silver": [
       35,
@@ -3865,7 +3865,7 @@
     "tier": "난적",
     "realm": "절정",
     "hp": 765,
-    "attack": 47,
+    "attack": 53,
     "exp_reward": 3,
     "silver": [
       30,
@@ -3919,7 +3919,7 @@
     "tier": "난적",
     "realm": "초절정",
     "hp": 1865,
-    "attack": 80,
+    "attack": 91,
     "exp_reward": 3,
     "silver": [
       50,
@@ -3979,7 +3979,7 @@
     "tier": "일반",
     "realm": "초절정",
     "hp": 1320,
-    "attack": 70,
+    "attack": 80,
     "exp_reward": 1,
     "silver": [
       40,
@@ -4014,7 +4014,7 @@
     "tier": "난적",
     "realm": "초절정",
     "hp": 2115,
-    "attack": 87,
+    "attack": 99,
     "exp_reward": 3,
     "silver": [
       50,
@@ -4065,7 +4065,7 @@
     "tier": "강적",
     "realm": "현경",
     "hp": 5115,
-    "attack": 115,
+    "attack": 131,
     "exp_reward": 5,
     "silver": [
       90,
@@ -4118,7 +4118,7 @@
     "tier": "난적",
     "realm": "화경",
     "hp": 4030,
-    "attack": 118,
+    "attack": 134,
     "exp_reward": 3,
     "silver": [
       100,
@@ -4179,7 +4179,7 @@
     "tier": "일반",
     "realm": "일류",
     "hp": 225,
-    "attack": 26,
+    "attack": 29,
     "exp_reward": 1,
     "silver": [
       15,
@@ -4211,7 +4211,7 @@
     "tier": "일반",
     "realm": "일류",
     "hp": 225,
-    "attack": 27,
+    "attack": 30,
     "exp_reward": 1,
     "silver": [
       7,
@@ -4243,7 +4243,7 @@
     "tier": "일반",
     "realm": "절정",
     "hp": 350,
-    "attack": 40,
+    "attack": 46,
     "exp_reward": 1,
     "silver": [
       15,
@@ -4306,7 +4306,7 @@
     "tier": "일반",
     "realm": "초절정",
     "hp": 1610,
-    "attack": 83,
+    "attack": 94,
     "exp_reward": 1,
     "silver": [
       7,
@@ -4352,7 +4352,7 @@
     "tier": "일반",
     "realm": "절정",
     "hp": 480,
-    "attack": 41,
+    "attack": 47,
     "exp_reward": 1,
     "silver": [
       7,
@@ -4384,7 +4384,7 @@
     "tier": "일반",
     "realm": "절정",
     "hp": 350,
-    "attack": 40,
+    "attack": 46,
     "exp_reward": 1,
     "silver": [
       15,
@@ -4436,7 +4436,7 @@
     "tier": "난적",
     "realm": "절정",
     "hp": 1475,
-    "attack": 73,
+    "attack": 82,
     "exp_reward": 2,
     "silver": [
       28,
@@ -4502,7 +4502,7 @@
     "tier": "일반",
     "realm": "초절정",
     "hp": 1490,
-    "attack": 78,
+    "attack": 88,
     "exp_reward": 1,
     "silver": [
       20,
@@ -4547,7 +4547,7 @@
     "tier": "강적",
     "realm": "화경",
     "hp": 4275,
-    "attack": 117,
+    "attack": 133,
     "exp_reward": 3,
     "silver": [
       63,
@@ -4605,7 +4605,7 @@
     "tier": "난적",
     "realm": "현경",
     "hp": 4720,
-    "attack": 127,
+    "attack": 145,
     "exp_reward": 2,
     "silver": [
       56,
@@ -4648,7 +4648,7 @@
     "tier": "일반",
     "realm": "절정",
     "hp": 350,
-    "attack": 40,
+    "attack": 46,
     "exp_reward": 1,
     "silver": [
       15,
@@ -4698,7 +4698,7 @@
     "tier": "난적",
     "realm": "절정",
     "hp": 1475,
-    "attack": 73,
+    "attack": 82,
     "exp_reward": 2,
     "silver": [
       28,
@@ -4744,7 +4744,7 @@
     "tier": "일반",
     "realm": "화경",
     "hp": 1910,
-    "attack": 86,
+    "attack": 98,
     "exp_reward": 1,
     "silver": [
       28,
@@ -4785,7 +4785,7 @@
     "tier": "강적",
     "realm": "화경",
     "hp": 7040,
-    "attack": 145,
+    "attack": 165,
     "exp_reward": 3,
     "silver": [
       63,
@@ -4828,7 +4828,7 @@
     "tier": "일반",
     "realm": "절정",
     "hp": 350,
-    "attack": 40,
+    "attack": 46,
     "exp_reward": 1,
     "silver": [
       15,
@@ -4877,7 +4877,7 @@
     "tier": "난적",
     "realm": "절정",
     "hp": 1475,
-    "attack": 73,
+    "attack": 82,
     "exp_reward": 2,
     "silver": [
       28,
@@ -4915,7 +4915,7 @@
     "tier": "일반",
     "realm": "초절정",
     "hp": 1910,
-    "attack": 86,
+    "attack": 98,
     "exp_reward": 1,
     "silver": [
       40,
@@ -4951,7 +4951,7 @@
     "tier": "강적",
     "realm": "화경",
     "hp": 7040,
-    "attack": 145,
+    "attack": 165,
     "exp_reward": 3,
     "silver": [
       63,
@@ -4993,7 +4993,7 @@
     "tier": "일반",
     "realm": "절정",
     "hp": 350,
-    "attack": 40,
+    "attack": 46,
     "exp_reward": 1,
     "silver": [
       15,
@@ -5034,7 +5034,7 @@
     "tier": "난적",
     "realm": "절정",
     "hp": 2250,
-    "attack": 96,
+    "attack": 109,
     "exp_reward": 2,
     "silver": [
       28,
@@ -5071,7 +5071,7 @@
     "tier": "강적",
     "realm": "화경",
     "hp": 7040,
-    "attack": 145,
+    "attack": 165,
     "exp_reward": 3,
     "silver": [
       63,
@@ -5108,7 +5108,7 @@
     "tier": "일반",
     "realm": "일류",
     "hp": 480,
-    "attack": 41,
+    "attack": 47,
     "exp_reward": 1,
     "silver": [
       7,
@@ -5144,7 +5144,7 @@
     "tier": "일반",
     "realm": "화경",
     "hp": 2535,
-    "attack": 96,
+    "attack": 109,
     "exp_reward": 1,
     "silver": [
       28,

@@ -88,5 +88,25 @@
     "bonus": {
       "silver": 20
     }
+  },
+  "사도련": {
+    "name": "사도련",
+    "alignment": "사도",
+    "desc": "사파 방회들이 이익으로 뭉친 강호의 뒷세력.",
+    "bonus_text": "주는 피해 4% 증가, 얻는 은자 10% 증가",
+    "bonus": {
+      "damage": 4,
+      "silver": 10
+    }
+  },
+  "녹림맹": {
+    "name": "녹림맹",
+    "alignment": "사도",
+    "desc": "산채 칠십이 곳이 맺은 산사람들의 맹약.",
+    "bonus_text": "받는 피해 3% 감소, 얻는 은자 10% 증가",
+    "bonus": {
+      "damage_reduce": 3,
+      "silver": 10
+    }
   }
 }
