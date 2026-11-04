@@ -3544,6 +3544,28 @@ test("사건의 전투는 그 사건만의 이름으로 나오고 이름 있는 
   assert.ok(named / total > 0.7, `${named}/${total}`);
 });
 
+test("사건 인물이 무작위로 나오는 적의 이름과 대사를 그대로 쓰지 않는다", () => {
+  const bad = [];
+  const walk = (key, o) => {
+    if (Array.isArray(o)) o.forEach((v) => walk(key, v));
+    else if (o && typeof o === "object") {
+      if (typeof o.battle === "string" && DB.enemies[o.battle].weight > 0 && !o.foe && !o.foe_line && o.battle !== "무림맹주") bad.push(`${key}: ${o.battle}`);
+      Object.values(o).forEach((v) => walk(key, v));
+    }
+  };
+  for (const [key, e] of Object.entries(DB.events)) walk(key, e);
+  assert.deepEqual(bad, []);
+  const game = newGame();
+  game.startBattle("혈교혈승", false, "혈교 탁발승 적염주 혈념", "보시를 마저 받겠습니다.");
+  assert.equal(game.battle.enemy.name, "혈교 탁발승 적염주 혈념");
+  assert.ok(game.log.some((l) => l.includes("보시를 마저 받겠습니다.")));
+  assert.ok(!game.log.some((l) => l.includes("혈불") || l.includes("이건 거짓말이오")));
+  const p = new Player();
+  assert.ok(checkRequires(p, DB.events.산군의제사.requires));
+  p.slain.push("백액호");
+  assert.ok(!checkRequires(p, DB.events.산군의제사.requires));
+});
+
 test("화면 글에 이모티콘을 쓰지 않는다", () => {
   const emoji = /[\u{1F000}-\u{1FAFF}\u{2600}-\u{2712}\u{2714}\u{2716}-\u{27BF}]/u;
   const walk = (o, where) => {
