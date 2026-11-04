@@ -1304,6 +1304,28 @@ test("사건에 반응한다고 적힌 자질은 실제로 반응하는 사건�
   }
 });
 
+test("자질은 등급별로 모여 있고 등급마다 값의 범위가 겹치지 않는다", () => {
+  const traits = Object.values(DB.traits).filter((t) => !t.hidden);
+  const order = traits.map((t) => t.rarity).filter((r, i, all) => r !== all[i - 1]);
+  assert.deepEqual(order, ["일반", "희귀", "전설"]);
+  const range = (r) => traits.filter((t) => t.rarity === r).map((t) => t.cost);
+  assert.ok(Math.max(...range("일반")) < Math.min(...range("희귀")));
+  assert.ok(Math.max(...range("희귀")) < Math.min(...range("전설")));
+});
+
+test("한 기량 자질은 네 기량이 값도 반응 사건 수도 같다", () => {
+  const text = readdirSync("www/data").filter((f) => f.startsWith("events_")).map((f) => readFileSync(`www/data/${f}`, "utf8")).join("");
+  const keys = ["강건한_육체", "선천진기", "타고난안목", "총명"];
+  assert.equal(new Set(keys.map((k) => DB.traits[k].cost)).size, 1);
+  assert.equal(new Set(keys.map((k) => text.split(`"trait": "${k}"`).length)).size, 1);
+});
+
+test("공통 자질의 설명은 출신을 단정하지 않는다", () => {
+  for (const t of Object.values(DB.traits)) {
+    if (!t.hidden && !t.origin) assert.doesNotMatch(t.desc, /어릴|집안|태어|자제|가문/, t.name);
+  }
+});
+
 test("조사는 받침에 맞게 붙는다", () => {
   assert.equal(josa("천마", "을/를"), "를");
   assert.equal(josa("낭인", "을/를"), "을");
@@ -1661,7 +1683,7 @@ test("강화는 상태 창과 고르는 화면에 특성으로 보이지 않는�
 });
 
 test("인연은 사야 나오고 꺼 두면 나오지 않는다", () => {
-  withKarma(8);
+  withKarma(12);
   const plain = new Game();
   plain.start("무림초출");
   assert.ok(!checkRequires(plain.player, DB.events.유적_석문.requires));

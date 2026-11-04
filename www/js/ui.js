@@ -269,7 +269,7 @@ function renderTitle() {
   const hasSave = loadCheckpoint() !== null;
   const save = hasSave ? loadCheckpoint().player : null;
   app().innerHTML = `<div class="title-wrap">
-    <h1 class="title-name">강호<br>십년</h1>
+    <h1 class="title-name">강호행</h1>
     <p class="hero-line">십 년 뒤 겨울, 천마봉에서 누군가 기다린다.<br>그때까지 어떤 무인이 될지는 당신이 정한다.</p>
     <div class="title-actions">
       ${hasSave ? `<button class="start-btn" data-act="continue">이어하기<small>${esc(save.origin)}, ${esc(save.realm)}, ${Math.min(save.turn, MAX_TURN)}달째</small></button>` : ""}
@@ -301,6 +301,16 @@ function originDetail(key) {
 }
 
 const traitName = (t) => `${esc(t.name)}<span class="rarity rarity-${esc(t.rarity)}">${esc(t.rarity)}</span>`;
+
+const RARITY_ORDER = ["일반", "희귀", "전설"];
+
+/** 자질을 등급별 칸으로 묶어 그린다. 칸 안의 순서는 traits.json의 순서를 따른다. */
+function byRarity(keys, row) {
+  return RARITY_ORDER.map((rarity) => {
+    const rows = keys.filter((key) => DB.traits[key].rarity === rarity);
+    return rows.length ? `<h4 class="shop-group">${rarity}</h4>${rows.map(row).join("")}` : "";
+  }).join("");
+}
 
 function filterRow() {
   return `<div class="filter-row">${["전체", "능력", "물건과 무공", "사건 반응", "출신 전용"].map((r) => `<button class="filter-btn${ui.traitFilter === r ? " on" : ""}" data-act="trait-filter" data-key="${r}">${r}</button>`).join("")}</div>`;
@@ -334,8 +344,8 @@ const emptyNote = (text) => `<p class="codex-empty">${text}</p>`;
 function shopPanels(meta) {
   const origins = DB.origins.order.filter((k) => !meta.unlocked_origins.includes(k))
     .map((k) => shopRow(esc(DB.origins.origins[k].name), originDetail(k), "unlock-origin", k, DB.origins.origins[k].cost, meta)).join("");
-  const traits = visibleTraits().filter((k) => !meta.unlocked_traits.includes(k))
-    .map((k) => shopRow(traitName(DB.traits[k]), `<p class="pick-desc">${esc(DB.traits[k].desc)}</p>${originOnly(DB.traits[k].origin)}`, "unlock-trait", k, DB.traits[k].cost, meta)).join("");
+  const traits = byRarity(visibleTraits().filter((k) => !meta.unlocked_traits.includes(k)),
+    (k) => shopRow(traitName(DB.traits[k]), `<p class="pick-desc">${esc(DB.traits[k].desc)}</p>${originOnly(DB.traits[k].origin)}`, "unlock-trait", k, DB.traits[k].cost, meta));
   const groups = [...new Set(Object.values(DB.karma.upgrades).map((u) => u.group))];
   const upgradeRow = ([key, u]) => {
     const level = upgradeLevel(key, meta);
@@ -438,10 +448,9 @@ function renderSetup() {
   const origins = DB.origins.order.filter((key) => meta.unlocked_origins.includes(key)).map((key) => `<div class="pick-row"><label class="pick-label"><input type="radio" name="origin" value="${esc(key)}" ${ui.origin === key ? "checked" : ""}>
       <span class="pick-main"><span class="pick-name">${esc(DB.origins.origins[key].name)}${meta.origin_wins.includes(key) ? ` <span class="rarity">천마 격파</span>` : ""}</span>${originDetail(key)}</span></label></div>`).join("");
 
-  const ownedTraits = visibleTraits(ui.origin).filter((key) => meta.unlocked_traits.includes(key))
-    .sort((a, b) => Number(ui.traits.has(b)) - Number(ui.traits.has(a)))
-    .map((key) => `<div class="pick-row"><label class="pick-label"><input type="checkbox" name="trait" value="${esc(key)}" ${ui.traits.has(key) ? "checked" : ""} ${!ui.traits.has(key) && ui.traits.size >= slots ? "disabled" : ""}>
-        <span class="pick-main"><span class="pick-name">${traitName(DB.traits[key])}</span><span class="pick-desc block">${esc(DB.traits[key].desc)}</span></span></label></div>`).join("");
+  const ownedTraits = byRarity(visibleTraits(ui.origin).filter((key) => meta.unlocked_traits.includes(key)),
+    (key) => `<div class="pick-row"><label class="pick-label"><input type="checkbox" name="trait" value="${esc(key)}" ${ui.traits.has(key) ? "checked" : ""} ${!ui.traits.has(key) && ui.traits.size >= slots ? "disabled" : ""}>
+        <span class="pick-main"><span class="pick-name">${traitName(DB.traits[key])}</span><span class="pick-desc block">${esc(DB.traits[key].desc)}</span></span></label></div>`);
   const traits = ownedTraits || emptyNote("이 갈래에 해금한 자질이 없습니다. 카르마 상점에서 살 수 있습니다.");
 
   const originName = DB.origins.origins[ui.origin].name;
@@ -914,7 +923,7 @@ function downloadRecords() {
   const blob = new Blob([exportRecords()], { type: "application/json" });
   const link = document.createElement("a");
   link.href = URL.createObjectURL(blob);
-  link.download = "강호십년-기록.json";
+  link.download = "강호행-기록.json";
   link.click();
   URL.revokeObjectURL(link.href);
   ui.notice = "기록을 내려받았습니다.";
