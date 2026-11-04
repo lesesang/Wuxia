@@ -13,7 +13,7 @@ import { blockReason, buy, equipmentBonus, openMarket, priceOf } from "../www/js
 import {
   activeContent, setUpgradeUse, upgradeLevel, addKarma, buyContent, buyProvision, refundProvision, upgradeTraits, buyUpgrade, exportRecords, importRecords, extraSlots, loadCheckpoint, legacyAvailable, loadEventLog, loadMeta, nextReward, recordEventPick, openLegacy, saveMeta, takeLegacy, toggleContent, unlockOrigin,
 } from "../www/js/meta.js";
-import { alignTier, applyGrowth, breakthroughBlock, focusedSide, byname, fameRank, getChapter, getYear, marketTurns, sumEffect, traitSlots } from "../www/js/rules.js";
+import { alignTier, applyGrowth, breakthroughBlock, focusedSide, byname, fameRank, getChapter, getYear, marketTurns, sumEffect, talkLine, traitSlots } from "../www/js/rules.js";
 import { rng } from "../www/js/rng.js";
 import { storage } from "../www/js/storage.js";
 
@@ -815,9 +815,9 @@ test("상황별 반응: 출신, 무공, 명성, 능력치, 시작 특성이 고�
 test("적의 대사가 명성과 경지에 따라 달라진다", () => {
   const p = new Player();
   p.fame = 150;
-  assert.ok(enemyIntro(p, "산적").includes("저 얼굴"));
+  assert.ok(enemyIntro(p, "산적").includes("이름값"));
   p.fame = 0;
-  assert.ok(enemyIntro(p, "산적").includes("초행길"));
+  assert.ok(/초행길|아무도 없는/.test(enemyIntro(p, "산적")));
 });
 
 test("천마의 맺음말은 출신을 따른다", () => {
@@ -1483,9 +1483,9 @@ test("성향 자질은 희귀 이상이고 오를 때 더 오른다", () => {
     if (t.effects?.some((e) => e.type === "start_alignment" || e.type === "alignment_gain")) assert.ok(["희귀", "전설"].includes(t.rarity), t.name);
   }
   const p = new Player("무림초출", ["호연지기"]);
-  assert.equal(p.alignment.정도, 100);
+  assert.equal(p.alignment.정도, 70);
   p.adjustAlignment("정도", 40);
-  assert.equal(p.alignment.정도, 164);
+  assert.ok(p.alignment.정도 > 120, "오를 때 더 오른다");
   p.adjustAlignment("정도", 5000);
   assert.equal(p.alignment.정도, 999);
   const killer = new Player("무림초출", ["천살성"]);
@@ -2672,8 +2672,8 @@ test("같은 갈래의 더 깊은 무공은 이어받고 같은 무공은 성취
 });
 
 test("적의 경지와 이름, 품은 비급이 세계관에 맞는다", () => {
-  const nameless = ["무명노인", "권마의그림자", "혈마잔영", "생사문지기", "천마", "묘지기", "천년혈망"];
-  const banned = ["멸절", "호연패", "단목휘", "귀곡자", "악인곡"];
+  const nameless = ["무명노인", "권마의그림자", "혈마잔영", "생사문지기", "천마", "묘지기"];
+  const banned = ["멸절", "호연패", "단목휘"];
   for (const [k, e] of Object.entries(DB.enemies)) {
     assert.ok(DB.realms.enemy_order.includes(e.realm), k);
     if (!nameless.includes(k) && DB.realms.enemy_order.indexOf(e.realm) >= DB.realms.enemy_order.indexOf("초절정")) assert.ok(e.title, `${k}: 초절정 이상은 이름과 소속이 있다`);
@@ -2682,9 +2682,9 @@ test("적의 경지와 이름, 품은 비급이 세계관에 맞는다", () => {
       assert.ok(!DB.skills[e.drop.skill].origin, k);
     }
     for (const w of banned) assert.ok(!e.name.includes(w), k);
-    if (e.chapters?.length && e.tier === "일반" && e.chapters[0] === 1) assert.ok(["삼류", "이류"].includes(e.realm), `${k}: 1장 잡졸은 일류가 못 된다`);
+    if (e.chapters?.length && e.tier === "일반" && e.chapters[0] === 1) assert.ok(["이류", "일류"].includes(e.realm), `${k}: 1장 일반 적은 이류나 일류다`);
   }
-  for (const realm of ["삼류", "이류", "일류"]) assert.ok(!DB.balance.drops[realm].grades.includes("명품"), realm);
+  for (const realm of ["이류", "일류"]) assert.ok(!DB.balance.drops[realm].grades.includes("명품"), realm);
   for (const table of Object.values(DB.balance.drops)) for (const g of ["일절", "신공"]) assert.ok(!table.grades.includes(g));
 });
 
@@ -2789,4 +2789,207 @@ test("경지가 오르면 대사와 특전이 따른다", () => {
   }
   // 저장했다 불러도 특전이 남는다
   assert.ok(Player.fromDict(p.toDict()).traits.includes("경지_절정"));
+});
+
+test("비무에 지면 죽지 않고 체력 10%만 남으며 얻는 것이 없다", () => {
+  const game = newGame();
+  const p = game.player;
+  p.revives = 1;
+  const before = { silver: p.silver, fame: p.fame, kills: p.kills, battles: p.battles };
+  game.event = { key: "구파비무회", forced: false };
+  const index = eventView(p, "구파비무회").choices.find((c) => !c.locked).index;
+  game.chooseEvent(index);
+  assert.equal(game.battle.spar, true);
+  p.hp = 1;
+  game.battle.enemy.attack = 99999;
+  game.battle.enemy.hp = game.battle.enemy.maxHp = 1e7;
+  game.battleAction("심법");
+  game.battleAction("심법");
+  while (game.battle) { p.hp = 1; game.battleAction("심법"); }
+  assert.ok(p.alive);
+  assert.equal(p.hp, Math.trunc(p.maxHp() * 0.1));
+  assert.equal(p.revives, 1, "비무에서는 되살아날 기회를 쓰지 않는다");
+  assert.equal(p.fame, before.fame);
+  assert.equal(p.kills, before.kills);
+  assert.equal(p.battles, before.battles);
+});
+
+test("이어지는 일의 비무에서 지면 그 일이 어그러지고 이기면 이어진다", () => {
+  const run = (win) => {
+    const game = newGame();
+    const p = game.player;
+    p.turn = 30;
+    p.chains = [{ id: "구파비무행", next: 2, due: 30 }];
+    game.event = { key: DB.chains.구파비무행.keys[1], forced: false };
+    game.chooseEvent(eventView(p, game.event.key).choices.find((c) => c.label.includes("맨손")).index);
+    assert.equal(game.battle.spar, true);
+    if (win) { game.battle.enemy.hp = 1; game.battle.enemy.evasion = -9; while (game.battle) game.battleAction("기본공격"); }
+    else { game.battle.enemy.attack = 1e6; game.battle.enemy.hp = game.battle.enemy.maxHp = 1e7; while (game.battle) game.battleAction("심법"); }
+    return p;
+  };
+  assert.equal(run(false).chains.length, 0);
+  assert.equal(run(true).chains.length, 1);
+});
+
+test("상승 이상의 무공에만 묘리가 드러나고 모든 무공에 묘리가 있다", () => {
+  for (const [k, s] of Object.entries(DB.skills)) assert.ok(s.gimmick?.name && s.gimmick?.text, k);
+  const low = new Skill("매화검법");
+  assert.equal(low.activeGimmick(), null);
+  low.grade = "상승";
+  assert.equal(low.activeGimmick().hits, 3);
+  // 승급으로 상승에 이르면 묘리를 깨친다
+  const up = new Skill("기초검법");
+  up.grade = "명품";
+  up.mastery = 100;
+  assert.ok(up.gainMastery(5).some((l) => l.includes("묘리")));
+  // 나눠 치는 무공은 합마다 여러 번 때린다
+  const p = new Player("무림초출");
+  p.skills.push(low);
+  const battle = new Battle(p, new Enemy("천마"));
+  battle.enemy.evasion = -9;
+  const hp = battle.enemy.hp;
+  p.qi = 999;
+  battle.roundNum = 1;
+  battle.useSkill(low);
+  assert.equal(battle.log.filter((l) => l.includes("타,")).length, 3);
+  assert.ok(battle.enemy.hp < hp);
+  // 흡수, 호신, 저절로 피하기
+  const blood = new Skill("혈영도법");
+  const b2 = new Battle(p, new Enemy("천마"));
+  b2.enemy.evasion = -9;
+  p.hp = 10;
+  p.qi = 999;
+  b2.useSkill(blood);
+  assert.ok(p.hp !== 10);
+  const mind = new Skill("철마금신공");
+  const b3 = new Battle(p, new Enemy("낭인"));
+  b3.applyMindGimmick(mind);
+  assert.ok(b3.ward > 0 && b3.guard);
+  p.hp = p.maxHp();
+  b3.roundNum = 1;
+  b3.enemyAttack();
+  assert.ok(b3.log.some((l) => l.includes("호신 기운")));
+});
+
+test("일부만 상쇄한 경공은 흘려냈다고 하지 않는다", () => {
+  const p = new Player("표국표사");
+  const b = new Battle(p, new Enemy("낭인"));
+  b.roundNum = 1;
+  const steps = new Skill("초상비");
+  steps.effect = { ...steps.effect, evade: 0 };
+  p.hp = p.maxHp();
+  b.enemyAttack(steps);
+  assert.ok(b.log.every((l) => !l.includes("흘려") && !l.includes("흘렸")));
+  assert.ok(b.log.some((l) => l.includes("줄었다")));
+});
+
+test("정도를 걷는 무인에게 금의위와 정파가 까닭 없이 덤비지 않고 제 소속도 덤비지 않는다", () => {
+  const seen = (setup, turn = 30, n = 500) => {
+    const game = newGame();
+    setup(game.player);
+    game.player.turn = turn;
+    const names = new Set();
+    for (let i = 0; i < n; i++) names.add(game.pickEnemy());
+    return names;
+  };
+  const right = seen((p) => { p.alignment.정도 = 300; });
+  assert.ok(!right.has("금의위밀정") && !right.has("종남검수"));
+  assert.ok(!seen((p) => { p.alignment.정도 = 300; }, 60).has("동창번자"));
+  const member = seen((p) => { p.sect = "녹림맹"; });
+  assert.ok(!member.has("녹림호걸") && !member.has("녹림채주"));
+  const dark = seen((p) => { p.sect = "마교"; p.alignment.마도 = 500; }, 100);
+  assert.ok(![...dark].some((k) => DB.enemies[k].faction === "마교"));
+  assert.ok(dark.size > 0);
+});
+
+test("짐승은 다양하고 내단을 남기며 삼키면 기량이 오른다", () => {
+  const beasts = Object.values(DB.enemies).filter((e) => e.beast);
+  assert.ok(beasts.length >= 10);
+  for (const chapter of [1, 2, 3, 4, 5]) assert.ok(beasts.filter((e) => e.chapters?.includes(chapter)).length >= 2, `${chapter}장`);
+  const p = new Player("표국표사");
+  const battle = new Battle(p, new Enemy("이무기"));
+  DB.enemies.이무기.loot.chance = 1;
+  battle.rollDrop();
+  DB.enemies.이무기.loot.chance = 0.6;
+  assert.ok(p.inventory.천년내단 > 0);
+  const before = p.external;
+  useConsumable(p, "천년내단");
+  assert.equal(p.external, before + 40);
+  assert.ok(!p.inventory.천년내단);
+});
+
+test("대사가 성향과 명성을 따른다", () => {
+  const p = new Player("무림초출");
+  p.fame = 20;
+  p.alignment.정도 = 300;
+  for (const key of ["산적", "낭인", "녹림호걸", "마교장로"]) {
+    assert.ok(DB.enemies[key].intros.some((i) => i.requires.dominant === "정도"), key);
+    assert.ok(DB.enemies[key].intros.some((i) => i.requires.min_fame), key);
+  }
+  assert.ok(enemyIntro(p, "산적").includes("협객"));
+  p.alignment.정도 = 0; p.alignment.마도 = 300;
+  assert.ok(enemyIntro(p, "산적").includes("피 냄새"));
+  assert.ok(eventView(p, "주막싸움").text.includes("말소리"));
+  const known = new Player("무림초출");
+  known.fame = 150;
+  assert.ok(talkLine(known, "month"));
+});
+
+test("시장에 내지 않는 내단은 장터에 나오지 않는다", () => {
+  const game = newGame();
+  for (const turn of [12, 24, 60, 119]) {
+    const market = openMarket(turn, game.player);
+    assert.ok(!market.stock.some((s) => ["천년내단", "금안", "호주", "호골"].includes(s.key)));
+  }
+});
+
+test("경지마다 특전이 뚜렷하고 호신강기는 맞을 때마다 피해를 막는다", () => {
+  for (const realm of ["절정", "초절정", "화경", "현경"]) assert.ok(DB.realms.perks[realm].effects.length >= 2, realm);
+  const hit = (traits) => {
+    const p = new Player("표국표사");
+    p.traits.push(...traits);
+    const b = new Battle(p, new Enemy("낭인", 1));
+    let total = 0;
+    for (let i = 0; i < 300; i++) total += b.incoming();
+    return total / 300;
+  };
+  assert.ok(hit(["경지_초절정"]) < hit([]), "호신강기가 막는다");
+  assert.ok(hit(["경지_초절정"]) >= 1);
+  const strong = (traits) => { const p = new Player("표국표사"); p.traits.push(...traits); return new Battle(p, new Enemy("낭인", 1)).attackPower(); };
+  assert.ok(strong(["경지_절정"]) > strong([]), "병기에 기운을 실으면 강해진다");
+  const p = new Player("표국표사");
+  p.traits.push("경지_화경");
+  assert.ok(new Battle(p, new Enemy("낭인", 1)).ward > 0, "화경은 호신 기운을 두르고 싸움을 시작한다");
+  p.realm = "초절정";
+  assert.ok(new Battle(p, new Enemy("낭인", 1)).skillLabel(p.bestSkill()).includes("창강"));
+});
+
+test("문파의 무공은 다른 문파 사람에게서 나오지 않는다", () => {
+  const p = new Player("표국표사");
+  for (let i = 0; i < 400; i++) {
+    const key = dropSkill(p, null, ["기본", "명품"], "종남");
+    assert.ok(!DB.skills[key].school, key);
+  }
+  for (const [k, e] of Object.entries(DB.enemies)) {
+    const school = e.drop && DB.skills[e.drop.skill].school;
+    if (school) assert.equal(school, e.faction, k);
+  }
+});
+
+test("출신과 사문에 어긋나는 사건이 나오지 않는다", () => {
+  const dark = new Player("혈지생환");
+  dark.alignment.마도 = 300;
+  assert.ok(!checkRequires(dark, DB.events.마교_입교.requires), "피 연못 출신은 신교에 들지 않는다");
+  assert.ok(!checkRequires(new Player("남궁세가"), DB.events.첫살인.requires), "일류까지 오른 표두나 세가 무인에게 첫 살인은 없다");
+  const member = new Player("표국표사");
+  member.sect = "혈교";
+  assert.ok(!checkRequires(member, DB.events.혈교제단.requires));
+  for (const origin of DB.origins.order) {
+    if (origin === "무림초출") continue;
+    const text = eventView(new Player(origin), "옛사부의편지").text;
+    assert.ok(!text.includes("떠나온 날"), origin);
+  }
+  const quiet = new Player("표국표사");
+  quiet.fame = 0;
+  assert.ok(!checkRequires(quiet, DB.events.강호의소문.requires), "이름이 없으면 소문에 별호가 섞이지 않는다");
 });

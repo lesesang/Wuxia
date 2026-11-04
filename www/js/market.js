@@ -3,7 +3,7 @@ import { Skill, STAT_CAP } from "./character.js";
 import { DB } from "./data.js";
 import { loadMeta, spendKarma } from "./meta.js";
 import { pickWeighted } from "./rng.js";
-import { alignValue, getChapter, hasEffect, marketName, sumEffect } from "./rules.js";
+import { alignValue, getChapter, hasEffect, marketName, sumEffect, talkLine } from "./rules.js";
 import { josa } from "./josa.js";
 
 const STOCK_SIZE = 10;
@@ -124,7 +124,7 @@ export function openMarket(turn, player) {
     name: marketName(turn),
     special: number === 5,
     stock: stock.map((key) => ({ key, left: DB.market[key].stock_qty || 1 })),
-    message: null,
+    message: talkLine(player, "market"),
   };
 }
 

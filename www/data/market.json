@@ -2746,5 +2746,174 @@
         "style": "암기"
       }
     ]
+  },
+  "웅담": {
+    "name": "곰 쓸개",
+    "category": "영약",
+    "price": 90,
+    "markets": [
+      1,
+      2
+    ],
+    "desc": "달여 먹으면 외공이 30 오른다.",
+    "effects": [
+      {
+        "type": "stat",
+        "stat": "external",
+        "amount": 30
+      }
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "drop_only": false
+  },
+  "사담": {
+    "name": "뱀 쓸개",
+    "category": "영약",
+    "price": 90,
+    "markets": [
+      1,
+      2
+    ],
+    "desc": "말려 삼키면 내공이 30 오른다.",
+    "effects": [
+      {
+        "type": "stat",
+        "stat": "internal",
+        "amount": 30
+      }
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "drop_only": false
+  },
+  "호골": {
+    "name": "호랑이 뼈",
+    "category": "영약",
+    "price": 160,
+    "markets": [],
+    "desc": "고아 마시면 외공과 무리가 25씩 오른다.",
+    "effects": [
+      {
+        "type": "stat",
+        "stat": "external",
+        "amount": 25
+      },
+      {
+        "type": "stat",
+        "stat": "martial",
+        "amount": 25
+      }
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "drop_only": true
+  },
+  "금안": {
+    "name": "금안조의 눈",
+    "category": "영약",
+    "price": 260,
+    "markets": [],
+    "desc": "빛을 읽는 눈. 삼키면 무리가 60 오른다.",
+    "effects": [
+      {
+        "type": "stat",
+        "stat": "martial",
+        "amount": 60
+      }
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "drop_only": true
+  },
+  "호주": {
+    "name": "은호의 구슬",
+    "category": "영약",
+    "price": 260,
+    "markets": [],
+    "desc": "여우가 입에 물고 있던 구슬. 머금으면 심경이 60 오른다.",
+    "effects": [
+      {
+        "type": "stat",
+        "stat": "mind",
+        "amount": 60
+      }
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "drop_only": true
+  },
+  "영물내단": {
+    "name": "영물의 내단",
+    "category": "영약",
+    "price": 360,
+    "markets": [
+      3,
+      4,
+      5
+    ],
+    "desc": "오래 묵은 영물의 내단. 삼키면 내공이 70 오르고 체력과 내력이 차오른다.",
+    "effects": [
+      {
+        "type": "stat",
+        "stat": "internal",
+        "amount": 70
+      },
+      {
+        "type": "heal",
+        "stat": "hp",
+        "percent": 40
+      },
+      {
+        "type": "heal",
+        "stat": "qi",
+        "percent": 40
+      }
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "drop_only": false
+  },
+  "천년내단": {
+    "name": "천년 내단",
+    "category": "영약",
+    "price": 900,
+    "markets": [],
+    "desc": "천 년의 기운이 뭉친 구슬. 삼키면 네 기량이 40씩 오르고 체력과 내력이 가득 찬다.",
+    "effects": [
+      {
+        "type": "stat",
+        "stat": "external",
+        "amount": 40
+      },
+      {
+        "type": "stat",
+        "stat": "internal",
+        "amount": 40
+      },
+      {
+        "type": "stat",
+        "stat": "martial",
+        "amount": 40
+      },
+      {
+        "type": "stat",
+        "stat": "mind",
+        "amount": 40
+      },
+      {
+        "type": "heal",
+        "stat": "hp",
+        "percent": 100
+      },
+      {
+        "type": "heal",
+        "stat": "qi",
+        "percent": 100
+      }
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "drop_only": true
   }
 }

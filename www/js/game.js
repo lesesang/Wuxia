@@ -3,7 +3,7 @@ import { Battle, enemyPool, Enemy, statureEnemy, useConsumable } from "./battle.
 import { GRADE_ORDER, Player, Skill, STAT_NAMES } from "./character.js";
 import { DB } from "./data.js";
 import { grantStartGear, grantStartSkills,
-  advanceChain, applyEffects, checkRequires, dueChainEvent, enemyIntro, LAST_CHAIN_TURN, pickFortune, pickRandomEvent, resolveChoice,
+  advanceChain, applyEffects, failChain, checkRequires, dueChainEvent, enemyIntro, LAST_CHAIN_TURN, pickFortune, pickRandomEvent, resolveChoice,
   reactiveLine, startChain, storyEventForTurn,
 } from "./events.js";
 import { bonusFor, buy, equipmentBonus, openMarket } from "./market.js";
@@ -14,7 +14,7 @@ import {
 import { pickWeighted, randInt, rng } from "./rng.js";
 import {
   actionLine, ALIGNMENT_CAP, alignTier, applyGrowth, breakthroughBlock, byname, CHAPTER_STARTS, checkBreakthrough, checkGoodEnding, checkSaengsa,
-  fameRank, FOCUS_DRIFT, focusedSide, getChapter, getChapterInfo, getMonth, getYear, isMarketTurn, monthLine, perkTrait, realmFit, realmIndex, sumEffect, traitSlots,
+  fameRank, FOCUS_DRIFT, focusedSide, getChapter, getChapterInfo, getMonth, getYear, isMarketTurn, monthLine, perkTrait, realmFit, realmIndex, sumEffect, talkLine, traitSlots,
 } from "./rules.js";
 import { josa } from "./josa.js";
 
@@ -43,6 +43,8 @@ function breakthroughLines(p, next) {
   }
   return lines;
 }
+
+const MONTH_TALK_RATE = 0.3;
 
 export class Game {
   constructor() { this.reset(); }
@@ -275,18 +277,22 @@ export class Game {
     const mine = p.dominantAlignment() || DB.sects[p.sect]?.alignment;
     // 지금 시점(장)이 나올 수 있는 적을 정하고, 그중에서 내 경지와 가까운 적을 더 자주 만난다
     const weightOf = (k) => (mine && DB.enemies[k].side === mine ? SAME_SIDE_WEIGHT : 1) * DB.enemies[k].weight * realmFit(p.realm, DB.enemies[k].realm);
-    return pickWeighted(pool, pool.map(weightOf));
+    // 정도를 걷는 무인을 정파가 까닭 없이 치지 않고, 제 소속은 제 사람을 치지 않는다
+    const fitting = pool.filter((k) => !(mine === "정도" && DB.enemies[k].side === "정도") && DB.enemies[k].faction !== p.sect);
+    const list = fitting.length ? fitting : pool;
+    return pickWeighted(list, list.map(weightOf));
   }
 
-  startBattle(key) {
+  startBattle(key, spar = false) {
     // 지금 장에 어울리지 않는 적이면 같은 갈래에서 위상이 맞는 적으로 나온다
     const fitting = statureEnemy(key, getChapter(this.player.turn));
     const enemy = new Enemy(fitting, this.player.turn);
     this.player.recordEnemyEncounter(fitting);
     this.battle = new Battle(this.player, enemy);
+    this.battle.spar = spar;
     const intro = enemyIntro(this.player, fitting);
     const called = enemy.title ? `${enemy.title} ${enemy.name}` : enemy.name;
-    this.addLog([`⚔️ ${called}${josa(called, "과/와")} 마주쳤다! (${enemy.realm})`, ...(intro ? [intro] : []), ...this.battle.log]);
+    this.addLog([spar ? `🤝 ${called}${josa(called, "과/와")} 비무를 겨룬다. (${enemy.realm}, 져도 목숨은 잃지 않는다)` : `⚔️ ${called}${josa(called, "과/와")} 마주쳤다! (${enemy.realm})`, ...(intro ? [intro] : []), ...this.battle.log]);
     this.battle.log = [];
   }
 
@@ -327,6 +333,8 @@ export class Game {
     const { chain } = DB.events[state.key];
     if (chain) {
       if (effects.chain_start) startChain(this.player, chain.id);
+      // 비무가 걸린 편은 승패가 난 뒤에 넘어간다
+      else if (chain.index > 0 && effects.spar && effects.battle) this.afterBattle.chainId = chain.id;
       else if (chain.index > 0) advanceChain(this.player, chain.id, !!effects.chain_abandon);
     }
     if (effects.ending) {
@@ -341,11 +349,11 @@ export class Game {
     if (effects.final_battle) {
       this.startFinalBattle();
     } else if (effects.battle) {
-      this.startBattle(effects.battle);
+      this.startBattle(effects.battle, !!effects.spar);
     } else if (effects.gauntlet) {
-      const { enemies, reward, name } = effects.gauntlet;
-      this.gauntlet = { name, enemies: enemies.slice(1), reward, round: 1, total: enemies.length };
-      this.startBattle(enemies[0]);
+      const { enemies, reward, name, spar } = effects.gauntlet;
+      this.gauntlet = { name, enemies: enemies.slice(1), reward, round: 1, total: enemies.length, spar: !!spar };
+      this.startBattle(enemies[0], !!spar);
     }
     if (this.battle) return;
     // 달을 쓰지 않는 사건 뒤에는 그달의 다음 사건으로 바로 이어진다
@@ -384,7 +392,7 @@ export class Game {
     }
 
     if (result.victory && ["강적", "보스"].includes(battle.enemy.tier)) player.note(`${battle.enemy.name}${josa(battle.enemy.name, "을/를")} 쓰러뜨렸다.`);
-    if (!result.victory && !result.fled) player.note(`${battle.enemy.name}에게 쓰러졌다.`);
+    if (!result.victory && !result.fled) player.note(battle.spar ? `${battle.enemy.name}에게 비무에서 졌다.` : `${battle.enemy.name}에게 쓰러졌다.`);
     if (result.fled) this.addLog(["가까스로 전장을 벗어났다."]);
 
     if (this.offerAfterBattle && player.hp > 0) {
@@ -401,6 +409,13 @@ export class Game {
     this.afterBattle = null;
     if (!after) return;
     const { player } = this;
+    if (after.chainId) {
+      if (result.victory) advanceChain(player, after.chainId);
+      else {
+        failChain(player, after.chainId);
+        this.addLog([`「${DB.chains[after.chainId].title}」 일은 여기서 어그러졌다.`]);
+      }
+    }
     if (result.victory) {
       const summary = applyEffects(player, after.effects);
       this.addLog([...(after.text ? [after.text] : []), ...(summary.length ? [summary.join(", ")] : [])]);
@@ -422,7 +437,7 @@ export class Game {
       gauntlet.round += 1;
       player.healPercent(GAUNTLET_REST, GAUNTLET_REST);
       this.addLog([`잠시 숨을 고른다. (${gauntlet.name} ${gauntlet.round}/${gauntlet.total}전)`]);
-      this.startBattle(next);
+      this.startBattle(next, gauntlet.spar);
       return true;
     }
     const summary = applyEffects(player, gauntlet.reward);
@@ -437,6 +452,7 @@ export class Game {
     if (!this.active || this.battle || !this.player.alive) return;
     if (DB.market[key] && this.player.inventory[key] > 0) {
       const name = DB.market[key].name;
+      updateKnown([], [key]);
       const notes = useConsumable(this.player, key);
       this.addLog([`${name}${josa(name, "을/를")} 썼다.`, ...notes]);
     }
@@ -489,6 +505,10 @@ export class Game {
     if (hint) lines.push(hint);
     if (p.injury) lines.push(`가슴 안쪽이 욱신거린다. (내상 ${p.injury}단계, 요양으로 낫는다)`);
     lines.push(monthLine(getMonth(p.turn)));
+    if (rng.random() < MONTH_TALK_RATE) {
+      const talk = talkLine(p, "month");
+      if (talk) lines.push(talk);
+    }
     this.pendingNext = false;
     this.enterTurn(lines);
   }

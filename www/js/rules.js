@@ -116,7 +116,7 @@ export const sectBonus = (player, field) => DB.sects[player.sect]?.bonus?.[field
 // ---------- 경지 ----------
 export const realmBonus = (realm) => DB.realms.combat_bonus[realm] || 0;
 export const realmIndex = (realm) => DB.realms.order.indexOf(realm);
-/** 적까지 포함한 경지의 높이. 삼류와 이류는 적에게만 있다 */
+/** 적까지 포함한 경지의 높이. 이류는 적에게만 있다 */
 export const enemyRealmIndex = (realm) => DB.realms.enemy_order.indexOf(realm);
 /** 지금 시점에 나올 수 있는 적 가운데 이 경지 차이의 적을 만날 비중 */
 export function realmFit(playerRealm, enemyRealm) {
@@ -186,6 +186,28 @@ export function checkGoodEnding(player) {
 }
 
 // ---------- 분위기 문장, 명성, 별호 ----------
+const DEEP_STEP = 2; // 이 단계부터 그 길이 깊어진 무인으로 대접받는다
+
+/** 성향과 명성에 맞는 말투 표의 칸들. 깊을수록, 이름이 높을수록 앞에 온다 */
+export function talkKeys(player) {
+  const keys = [];
+  const tier = alignTier(player.alignment);
+  if (player.fame >= 100) keys.push("천하");
+  else if (player.fame >= 40) keys.push("유명");
+  else if (player.fame <= 9) keys.push("무명");
+  if (tier) keys.push(tier.step >= DEEP_STEP ? `${tier.side}_깊음` : tier.side);
+  return keys;
+}
+
+/** 말투 표에서 지금 무인에게 맞는 한 줄. seed를 주면 같은 값에는 같은 줄이 나온다 */
+export function talkLine(player, table, seed = null) {
+  const lists = talkKeys(player).map((k) => DB.flavor.talk[table]?.[k] || (k.endsWith("_깊음") ? DB.flavor.talk[table]?.[k.replace("_깊음", "")] : null)).filter(Boolean);
+  if (!lists.length) return null;
+  if (seed === null) return pick(pick(lists));
+  const list = lists[seed % lists.length];
+  return list[(seed >> 3) % list.length];
+}
+
 export const monthLine = (month) => pick(DB.flavor.months[String(month)]);
 export const actionLine = (action) => pick(DB.flavor.actions[action]);
 
