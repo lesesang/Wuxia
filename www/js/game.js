@@ -286,8 +286,8 @@ export class Game {
 
   grow(stat) {
     const p = this.player;
-    let amount = randInt(8, 12);
-    if (rng.random() < TRAIN_BONUS_BASE + p.mind / 5000) amount += randInt(7, 11); // 심경이 높으면 두 배 오를 때가 많아진다
+    let amount = randInt(10, 14);
+    if (rng.random() < TRAIN_BONUS_BASE + p.mind / 5000) amount += randInt(8, 13); // 심경이 높으면 두 배 오를 때가 많아진다
     return p.gainStat(stat, applyGrowth(scaledGrowth(amount, p.turn), p.traits, stat));
   }
 
@@ -758,7 +758,7 @@ export class Game {
     };
     recordRun({
       ending: key, origin: p.origin, realm: p.realm, turn: Math.min(p.turn, p.maxTurn),
-      kills: p.kills, title: byname(p), fame: fameRank(p.fame),
+      kills: p.kills, title: byname(p), fame: fameRank(p),
     });
     this.pendingNext = false;
     this.battle = null;

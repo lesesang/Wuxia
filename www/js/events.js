@@ -579,7 +579,7 @@ export function applyEffects(player, effects) {
     const before = player.fame;
     player.fame = Math.max(0, player.fame + effects.fame);
     if (player.fame !== before) summary.push(`명성${signed(player.fame - before)}`);
-    const rank = fameRankChanged(before, player.fame);
+    const rank = fameRankChanged(player, before, player.fame);
     if (rank) {
       summary.push(`강호에서 ${rank}${josa(rank, "으로")} 불리기 시작했다`);
       player.note(`강호에서 ${rank}${josa(rank, "으로")} 불리기 시작했다.`);

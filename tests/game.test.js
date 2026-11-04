@@ -537,11 +537,29 @@ test("도망치면 대회가 끝난다", () => {
 test("별호와 명성", () => {
   const p = new Player();
   assert.equal(byname(p), "이름 없는 무인");
-  assert.equal(fameRank(0), "무명소졸");
+  assert.equal(fameRank(p), "무명소졸");
   p.fame = 40;
   p.alignment.정도 = 100;
   assert.ok(byname(p).endsWith("검협"));
-  assert.equal(fameRank(60), "일방의 고수");
+  assert.equal(fameRank(p), "신진 협객");
+});
+
+test("명성의 이름은 성향과 경지를 따르고 천하제일인은 천마를 넘어선 사람뿐이다", () => {
+  const p = new Player();
+  p.fame = 500;
+  assert.equal(fameRank(p), "이름난 무인", "일류가 아무리 이름나도 일방의 명인은 아니다");
+  p.realm = "화경";
+  assert.equal(fameRank(p), "당대의 고인");
+  p.alignment.정도 = 300;
+  assert.equal(fameRank(p), "만인의 대협");
+  p.alignment.정도 = 0;
+  p.alignment.마도 = 300;
+  assert.equal(fameRank(p), "천하공적");
+  p.realm = "현경";
+  assert.notEqual(fameRank(p), "천하제일인");
+  p.slain.push("천마");
+  assert.equal(fameRank(p), "천하제일인");
+  for (const rank of DB.flavor.fame_ranks) assert.ok(rank.names.기본);
 });
 
 test("전투 경험만 모자라면 알려 준다", () => {

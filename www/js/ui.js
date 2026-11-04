@@ -692,7 +692,7 @@ function statusModal() {
       </div>
       <div class="modal-section">
         ${row("출신", p.origin)}${row("사문", sect ? `${sect.name} (${sect.bonus_text})` : "없음")}
-        ${row("명성", `${p.fame} (${fameRank(p.fame)})`)}
+        ${row("명성", `${p.fame} (${fameRank(p)})`)}
         ${p.injury ? row("내상", `${p.injury}단계, 주는 피해 -${halpun(p.injury * INJURY_PENALTY)}, 요양으로 치료`) : ""}
         ${row("실전 경험", `${p.battles} (${p.kills}명 처치)`)}
         ${row("끌어모을 마지막 힘", `${p.revives}번`)}
@@ -917,7 +917,7 @@ function renderEnding() {
       <div class="run-facts">
         <div><b>${esc(p.realm)}</b>경지</div><div><b>${esc(byname(p))}</b>별호</div>
         <div><b>${Math.min(p.turn, p.maxTurn)}달</b>진행</div><div><b>${p.kills}명</b>처치</div>
-        <div><b>${esc(fameRank(p.fame))}</b>명성</div>
+        <div><b>${esc(fameRank(p))}</b>명성</div>
       </div></div></div>
     <div class="action-area"><div class="action-inner"><button class="next-btn" data-act="restart">다시 강호로</button></div></div>`;
 }
