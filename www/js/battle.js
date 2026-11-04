@@ -14,6 +14,9 @@ const SECRET_INTERNAL_RATE = 1.0;
 const MIND_GUARD_RATE = 6000; // 심경이 이 값일 때 받는 피해가 모두 사라지는 비율
 const MAX_MIND_GUARD = 0.15;
 const FLEE_BASE = 0.5;
+const DROP_MAIN_RATE = 2;    // 주무공과 같은 계열의 비급은 더 잘 떨어진다
+const DROP_OTHER_RATE = 0.7;
+const REVIVE_RATE = 0.5;
 const MAX_KILL_POWER = 40; // 쓰러뜨린 적만큼 강해지는 자질의 끝
 const MAX_DAMAGE_REDUCE = 60; // 자질과 기틀을 겹쳐도 받는 피해를 이 이상 줄이지 못한다
 export const INJURY_PENALTY = 7;
@@ -142,7 +145,6 @@ export class Battle {
     this.counterPct = 0;
     this.sealed = 0;
     this.enemyPoison = null;
-    this.standUsed = false;
     this.interlude = null;   // 결전의 막간. 고르기 전에는 합이 진행되지 않는다
     this.guard = null;
     this.alliesSeen = [];
@@ -421,7 +423,7 @@ export class Battle {
     }
     this.player.hp = Math.max(0, this.player.hp - damage);
     this.log.push(`${this.enemy.name}의 ${name}! ${damage}의 피해를 입었다.`);
-    this.checkLastStand();
+    this.checkRevive();
     if (special) this.applySpecialEffects(special);
     return damage;
   }
@@ -456,13 +458,15 @@ export class Battle {
     }
   }
 
-  checkLastStand() {
-    if (this.player.hp <= 0 && !this.standUsed && hasEffect(this.player.traits, "last_stand")) {
-      this.standUsed = true;
-      const rise = sumEffect(this.player.traits, "last_stand", "hp_pct");
-      this.player.hp = Math.max(1, Math.trunc(this.player.maxHp() * rise / 100));
-      this.log.push("🔥 쓰러지지 않았다! 불굴의 의지로 다시 일어선다.");
-    }
+  /** 쓰러지는 순간 남은 기회가 있으면 되살아난다. 체력은 최대의 절반, 내력은 최대의 절반만큼 차오른다. */
+  checkRevive() {
+    const p = this.player;
+    if (p.hp > 0 || p.revives <= 0) return;
+    p.revives -= 1;
+    p.hp = Math.max(1, Math.trunc(p.maxHp() * REVIVE_RATE));
+    p.qi = Math.min(p.maxQi(), p.qi + Math.trunc(p.maxQi() * REVIVE_RATE));
+    p.note(`${this.enemy.name}에게 쓰러졌다가 다시 일어섰다.`);
+    this.log.push(`🕯️ 숨이 끊어지려는 순간 단전의 마지막 불씨가 되살아났다! (체력 ${p.hp}, 내력 ${p.qi}, 남은 기회 ${p.revives})`);
   }
 
   nextSpecialWarning() { return this.enemy.specialForRound(this.roundNum + 1)?.name ?? null; }
@@ -471,7 +475,7 @@ export class Battle {
     if (this.poison) {
       this.player.hp = Math.max(0, this.player.hp - this.poison.damage);
       this.log.push(`독이 살을 태운다. (${this.poison.damage} 피해)`);
-      this.checkLastStand();
+      this.checkRevive();
       this.poison.rounds -= 1;
       if (this.poison.rounds <= 0) this.poison = null;
     }
@@ -481,6 +485,8 @@ export class Battle {
       this.enemyPoison.rounds -= 1;
       if (this.enemyPoison.rounds <= 0) this.enemyPoison = null;
     }
+    const regen = sumEffect(this.player.traits, "round_regen", "hp_pct");
+    if (regen && this.player.hp > 0) this.player.healPercent(regen, 0);
     if (this.sealed) this.sealed -= 1;
     if (this.atkBuff) {
       this.atkBuff.rounds -= 1;
@@ -620,7 +626,8 @@ export class Battle {
 
   rollDrop() {
     const { drop } = this.enemy;
-    if (drop && rng.random() < drop.chance && !this.player.hasSkill(drop.skill)) {
+    const fits = this.player.bestSkill()?.category === DB.skills[drop?.skill]?.category;
+    if (drop && rng.random() < drop.chance * (fits ? DROP_MAIN_RATE : DROP_OTHER_RATE) && !this.player.hasSkill(drop.skill)) {
       const skill = new Skill(drop.skill);
       const notes = this.player.learnSkill(skill);
       this.log.push(`📕 품에서 비급이 떨어졌다. 새 무공 「${skill.name}」${josa(skill.name, "을/를")} 익혔다!`, ...notes);

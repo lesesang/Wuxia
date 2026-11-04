@@ -44,6 +44,7 @@ export class Game {
     this.ending = null;
     this.pendingNext = false;
     this.afterBattle = null;    // 이기면 적용할 사건의 결과
+    this.offerAfterBattle = null; // 이기면 이어지는 소속 제안
     this.pickingArts = false;   // 첫 달 전에 쓸 무공을 고르는 중
     this.giftsDone = false;
   }
@@ -304,7 +305,7 @@ export class Game {
 
     // lead가 붙은 문장은 싸움에 들어가는 말이고, 나머지는 싸움이 끝난 뒤의 이야기다
     const lines = [`「${DB.events[state.key].title}」`, ...(!result.deferred || result.lead ? [result.text] : [])];
-    if (result.deferred) this.afterBattle = { key: state.key, text: result.lead ? null : result.text, effects: result.effects };
+    if (result.deferred) this.afterBattle = { key: state.key, text: result.lead ? null : result.text, effects: result.effects, forced: state.forced };
     if (DB.events[state.key].kind === "story") this.player.note(`${DB.events[state.key].title}: ${result.label}`);
     if (result.summary.length) lines.push(result.summary.join(", "));
     this.setLog(state.forced ? [...this.log, ...lines] : lines);
@@ -318,6 +319,11 @@ export class Game {
     }
     if (effects.ending) {
       this.finishGame(true, effects.ending);
+      return;
+    }
+    // 도운 뒤에 받는 소속 제안. 받아야 소속이 된다
+    if (effects.sect_offer && !effects.battle && this.player.sect === null) {
+      this.event = { key: `제안_${effects.sect_offer}`, forced: state.forced };
       return;
     }
     if (effects.final_battle) {
@@ -369,7 +375,10 @@ export class Game {
     if (!result.victory && !result.fled) player.note(`${battle.enemy.name}에게 쓰러졌다.`);
     if (result.fled) this.addLog(["가까스로 전장을 벗어났다."]);
 
-    if (battle.isFinal || player.hp <= 0) this.finishGame(result.victory);
+    if (this.offerAfterBattle && player.hp > 0) {
+      this.event = { key: this.offerAfterBattle, forced: false };
+      this.offerAfterBattle = null;
+    } else if (battle.isFinal || player.hp <= 0) this.finishGame(result.victory);
     else if (this.chainsMustFinish()) this.openStoryEvent();
     else this.pendingNext = true;
   }
@@ -383,6 +392,7 @@ export class Game {
     if (result.victory) {
       const summary = applyEffects(player, after.effects);
       this.addLog([...(after.text ? [after.text] : []), ...(summary.length ? [summary.join(", ")] : [])]);
+      if (after.effects.sect_offer && player.sect === null) this.offerAfterBattle = `제안_${after.effects.sect_offer}`;
     } else if (result.fled && !DB.events[after.key].chain && !DB.events[after.key].turn) {
       player.seenEvents = player.seenEvents.filter((k) => k !== after.key);
     }

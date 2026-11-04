@@ -74,7 +74,7 @@ test("출신별 서장과 챕터 줄거리가 있다", () => {
 
 test("챕터마다 사건, 적이 충분하다", () => {
   for (let chapter = 1; chapter <= 5; chapter++) {
-    assert.ok(Object.values(DB.randomEvents).filter((e) => e.chapters.includes(chapter)).length >= 5);
+    assert.ok(Object.values(DB.randomEvents).filter((e) => (e.chapters || []).includes(chapter)).length >= 5);
     assert.ok(Object.values(DB.enemies).some((e) => (e.chapters || []).includes(chapter)));
   }
 });
@@ -257,17 +257,6 @@ test("최종전에서는 도망칠 수 없다", () => {
   game.battleAction("도주");
   assert.equal(game.battle.roundNum, 0);
   assert.equal(game.ending, null);
-});
-
-test("특성 불굴은 전투마다 한 번", () => {
-  const p = new Player("무림초출", ["불굴"]);
-  const battle = new Battle(p, new Enemy("천마"));
-  battle.roundNum = 1;
-  p.hp = 1;
-  battle.enemyAttack();
-  assert.equal(p.hp, Math.trunc(p.maxHp() * 0.25));
-  battle.enemyAttack();
-  assert.equal(p.hp, 0);
 });
 
 test("금강불괴는 내상을 막는다", () => {
@@ -1241,7 +1230,7 @@ test("성향과 명성에 따라 찾아오는 적이 달라진다", () => {
   assert.ok(nameless.has("무명사냥꾼"), "이름이 없으면 얕보인다");
   for (const dominant of ["마도", "정도", "사도"]) {
     for (const chapter of [2, 3, 4, 5]) {
-      assert.ok(Object.values(DB.enemies).some((e) => e.requires?.dominant === dominant && e.chapters.includes(chapter)), `${dominant} ${chapter}장`);
+      assert.ok(Object.values(DB.enemies).some((e) => e.requires?.dominant === dominant && (e.chapters || []).includes(chapter)), `${dominant} ${chapter}장`);
     }
   }
 });
@@ -1584,6 +1573,107 @@ test("별호는 성향과 출신, 계열, 명성을 따르고 어색한 뒷글�
   for (const side of Object.values(DB.flavor.bynames.suffix)) {
     for (const list of Object.values(side)) assert.equal(list.length, 3);
     assert.ok(!Object.values(side).flat().includes("장마"));
+  }
+});
+
+test("쓰러지면 강호행마다 한 번 되살아나고 기틀로 한 번 더 얻는다", () => {
+  const p = new Player();
+  p.qi = 10;
+  const battle = new Battle(p, new Enemy("낭인"));
+  p.hp = 0;
+  battle.checkRevive();
+  assert.equal(p.hp, Math.trunc(p.maxHp() * 0.5));
+  assert.equal(p.qi, 10 + Math.trunc(p.maxQi() * 0.5));
+  assert.equal(p.revives, 0);
+  p.hp = 0;
+  battle.checkRevive();
+  assert.equal(p.hp, 0);
+  p.qi = p.maxQi();
+  const q = new Player("무림초출", ["환생_구사일생_1"]);
+  assert.equal(q.revives, 2);
+  q.qi = q.maxQi();
+  const b2 = new Battle(q, new Enemy("낭인"));
+  q.hp = 0;
+  b2.checkRevive();
+  assert.equal(q.qi, q.maxQi());
+  assert.equal(Player.fromDict(q.toDict()).revives, 1);
+});
+
+test("불사지체는 합마다 체력을 되찾는다", () => {
+  const p = new Player("무림초출", ["불굴"]);
+  const battle = new Battle(p, new Enemy("낭인"));
+  p.hp = 50;
+  battle.tickEffects();
+  assert.ok(p.hp > 50);
+});
+
+test("돕고 난 뒤의 제안을 받아야 소속이 된다", () => {
+  for (const event of Object.keys(DB.events).filter((k) => k.endsWith("_입문") || k === "마교_입교")) {
+    assert.ok(!JSON.stringify(DB.events[event]).includes("join_sect"), event);
+    assert.ok(JSON.stringify(DB.events[event]).includes("sect_offer"), event);
+  }
+  const game = newGame();
+  game.event = null;
+  game.pendingNext = false;
+  game.player.sect = null;
+  game.event = { key: "무당_입문", forced: false };
+  const index = eventView(game.player, "무당_입문").choices.find((c) => c.label === "제자를 업고 달린다").index;
+  game.chooseEvent(index);
+  assert.equal(game.player.sect, null);
+  assert.equal(game.event.key, "제안_무당");
+  game.chooseEvent(1);
+  assert.equal(game.player.sect, null);
+  assert.ok(game.pendingNext);
+  const other = newGame();
+  other.event = { key: "제안_녹림맹", forced: false };
+  other.pendingNext = false;
+  other.player.sect = null;
+  other.chooseEvent(0);
+  assert.equal(other.player.sect, "녹림맹");
+  assert.ok(DB.sects.사도련 && DB.sects.녹림맹);
+});
+
+test("싸움으로 도운 뒤에도 제안이 온다", () => {
+  const game = newGame();
+  game.pendingNext = false;
+  game.player.sect = null;
+  game.event = { key: "아미_입문", forced: false };
+  const index = eventView(game.player, "아미_입문").choices.find((c) => c.label === "함께 산채를 친다").index;
+  game.chooseEvent(index);
+  assert.ok(game.battle);
+  game.battle.enemy.hp = 1;
+  game.player.hp = game.player.maxHp();
+  rng.random = () => 0.5;
+  game.battleAction("기본공격");
+  assert.equal(game.event?.key, "제안_아미");
+  assert.equal(game.player.sect, null);
+});
+
+test("성향이 맞서면 도움 대신 적대하는 사건이 온다", () => {
+  const dark = new Player();
+  dark.alignment.마도 = 300;
+  assert.ok(checkRequires(dark, DB.events.소림_적대.requires));
+  assert.ok(!checkRequires(dark, DB.events.소림_입문.requires));
+  const bright = new Player();
+  bright.alignment.정도 = 300;
+  assert.ok(checkRequires(bright, DB.events.사도련_적대.requires));
+  assert.ok(!checkRequires(bright, DB.events.사도련_입문.requires));
+});
+
+test("장터와 무작위 비급은 주무공 계열을 계열별로 같은 비중으로 더 자주 준다", () => {
+  for (const [origin, main] of [["남궁세가", "검법"], ["권마계승", "권법"], ["표국표사", "창법"]]) {
+    let hits = 0;
+    let total = 0;
+    for (let i = 0; i < 300; i++) {
+      const p = new Player(origin);
+      const before = p.skills.length;
+      applyEffects(p, { random_skill: { max_grade: "상승" } });
+      if (p.skills.length > before) { total += 1; if (p.skills[p.skills.length - 1].category === main) hits += 1; }
+    }
+    assert.ok(hits / total > 0.28, `${origin} ${hits}/${total}`);
+    const weapon = new Player(origin);
+    const stock = openMarket(48, weapon).stock.map((s) => s.key);
+    assert.ok(stock.some((k) => DB.market[k].effects.some((e) => e.slot === "weapon" && e.style === main)), `${origin} 맞는 병기`);
   }
 });
 

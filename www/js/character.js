@@ -199,6 +199,7 @@ export class Player {
     this.turn = 1;
     this.maxTurn = MAX_TURN;
     this.alive = true;
+    this.revives = 1 + sumEffect(traitKeys, "extra_revive", "amount");
   }
 
   maxHp() { return 100 + Math.trunc(this.external * 0.35 + this.internal * 0.15); }
@@ -339,7 +340,7 @@ export class Player {
       inventory: this.inventory, boss_weaken: this.bossWeaken, alignment: this.alignment,
       flags: this.flags, seen_events: this.seenEvents, kills: this.kills,
       fame: this.fame, sect: this.sect, injury: this.injury,
-      align_mark: this.alignMark, turn: this.turn, max_turn: this.maxTurn, alive: this.alive, chronicle: this.chronicle, content: this.content, chains: this.chains, chains_done: this.chainsDone,
+      align_mark: this.alignMark, revives: this.revives, turn: this.turn, max_turn: this.maxTurn, alive: this.alive, chronicle: this.chronicle, content: this.content, chains: this.chains, chains_done: this.chainsDone,
     };
   }
 
@@ -390,6 +391,7 @@ export class Player {
     p.seenEvents = [...(d.seen_events || [])];
     p.kills = d.kills ?? 0;
     p.alignMark = d.align_mark ?? null;
+    p.revives = d.revives ?? 1 + sumEffect(d.traits || [], "extra_revive", "amount");
     p.fame = d.fame ?? 0;
     p.sect = d.sect !== undefined ? d.sect : (ORIGIN_SECTS[p.originKey] || null);
     p.injury = d.injury ?? 0;

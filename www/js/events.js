@@ -1,7 +1,7 @@
 // 이벤트. 정해진 달의 줄거리와 탐색 중 사건을 JSON으로 관리한다. 형식은 docs/콘텐츠-가이드.md 참고.
 import { GRADE_ORDER, HOME_ART_MASTERY, Skill, STAT_NAMES, STAT_SCALE } from "./character.js";
 import { DB } from "./data.js";
-import { bonusFor, equipmentBonus, styleWeight } from "./market.js";
+import { bonusFor, equipmentBonus, styleWeight, weightsByStyle } from "./market.js";
 import { recordEventPick, updateKnown } from "./meta.js";
 import { pick, pickWeighted, rng } from "./rng.js";
 import { ALIGNMENTS, applyGrowth, fameRankChanged, getChapter, realmIndex, sumEffect } from "./rules.js";
@@ -230,7 +230,7 @@ function randomBookSkill(player, maxGrade) {
       && GRADE_ORDER.indexOf(skill.grade) <= limit && !player.hasSkill(effect.skill);
   });
   if (!keys.length) return null;
-  const key = pickWeighted(keys, keys.map((k) => styleWeight(player, k)));
+  const key = pickWeighted(keys, weightsByStyle(keys, (k) => styleWeight(player, k)));
   return new Skill(DB.market[key].effects.find((e) => e.type === "skill").skill);
 }
 
@@ -511,6 +511,7 @@ export function validateEvents() {
     if (effects.item && !DB.market[effects.item]) errors.push(`${where}: 없는 품목 ${effects.item}`);
     if (effects.equip && !DB.market[effects.equip]) errors.push(`${where}: 없는 품목 ${effects.equip}`);
     if (effects.join_sect && !DB.sects[effects.join_sect]) errors.push(`${where}: 없는 문파 ${effects.join_sect}`);
+    if (effects.sect_offer && !DB.events[`제안_${effects.sect_offer}`]) errors.push(`${where}: 제안 사건이 없다 ${effects.sect_offer}`);
     for (const stat of Object.keys(effects.stats || {})) {
       if (!STAT_NAMES[stat]) errors.push(`${where}: 없는 기량 ${stat}`);
     }
