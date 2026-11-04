@@ -136,6 +136,17 @@ export class Game {
     this.openStoryEvent();
   }
 
+  /** 그달의 일을 마쳤다. 다시 열어도 달의 처음으로 돌아가지 않게 저장한다. */
+  finishMonth() {
+    this.pendingNext = true;
+    this.saveMonthEnd();
+  }
+
+  /** 그달의 일을 마친 뒤의 저장. 결과 화면과 열린 장터로 돌아온다. */
+  saveMonthEnd() {
+    if (this.player?.alive && !this.ending) saveCheckpoint(this.player.toDict(), this.log, { pending: true, market: this.market });
+  }
+
   /** 그달의 줄거리와 연계 인카운터를 연다. 천마봉 전에는 남은 연계를 먼저 끝낸다. */
   openStoryEvent() {
     const p = this.player;
@@ -190,6 +201,13 @@ export class Game {
     this.reset();
     this.player = Player.fromDict(checkpoint.player);
     this.setLog(checkpoint.log || []);
+    if (checkpoint.pending) {
+      // 그달의 일을 마친 뒤였으면 그 자리로 돌아온다
+      this.giftsDone = true;
+      this.pendingNext = true;
+      this.market = checkpoint.market || null;
+      return true;
+    }
     this.openStoryEvent();
     return true;
   }
@@ -245,7 +263,7 @@ export class Game {
     }
     if (!this.battle && !this.event) {
       if (this.legacyFound()) this.event = { key: `유산_${name}`, forced: false };
-      else this.pendingNext = true;
+      else this.finishMonth();
     }
   }
 
@@ -392,7 +410,7 @@ export class Game {
     // 달을 쓰지 않는 사건 뒤에는 그달의 다음 사건으로 바로 이어진다
     if (state.forced) this.openStoryEvent();
     else if (this.chainsMustFinish()) this.openStoryEvent();
-    else this.pendingNext = true;
+    else this.finishMonth();
   }
 
   // ---------- 전투 ----------
@@ -452,7 +470,7 @@ export class Game {
       this.offerAfterBattle = null;
     } else if (battle.isFinal || player.hp <= 0) this.finishGame(result.victory);
     else if (this.chainsMustFinish()) this.openStoryEvent();
-    else this.pendingNext = true;
+    else this.finishMonth();
   }
 
   /** 싸움이 걸린 사건의 결과를 정리한다. 달아나면 나중에 다시 만날 수 있다. */
@@ -508,6 +526,7 @@ export class Game {
       updateKnown([], [key]);
       const notes = useConsumable(this.player, key);
       this.addLog([`${name}${josa(name, "을/를")} 썼다.`, ...notes]);
+      if (this.pendingNext) this.saveMonthEnd();
     }
   }
 
@@ -536,6 +555,7 @@ export class Game {
     if (!this.active || !this.pendingNext || this.market) return;
     if (isMarketTurn(this.player.turn)) {
       this.market = openMarket(this.player.turn, this.player);
+      this.saveMonthEnd();
       return;
     }
     this.startNextTurn();
@@ -643,12 +663,14 @@ export class Game {
     const [success, message] = buy(this.player, this.market, key);
     this.market.message = message;
     if (success) updateKnown([], [key]);
+    this.saveMonthEnd();
   }
 
   marketSell(key) {
     if (!this.market) return;
     const [, message] = sell(this.player, key);
     this.market.message = message;
+    this.saveMonthEnd();
   }
 
   /** 지닌 병장기로 바꿔 든다. 싸우는 중에는 못 바꾼다. */
@@ -656,6 +678,7 @@ export class Game {
     if (!this.active || this.battle || !this.player.gear.includes(key)) return;
     this.player.equipGear(key);
     if (this.market) this.market.message = `${DB.market[key].name}${josa(DB.market[key].name, "을/를")} 들었다.`;
+    if (this.pendingNext) this.saveMonthEnd();
   }
 
   marketLeave() {
