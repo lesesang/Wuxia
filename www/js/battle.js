@@ -649,7 +649,7 @@ export class Battle {
     const g = evadeSkill?.activeGimmick();
     if (evadeSkill) {
       // 잇달아 펼치면 걸음을 읽힌다
-      const read = (this.stepStreak - 1) * STEP_STREAK_PENALTY;
+      const read = Math.max(0, this.stepStreak - 1) * STEP_STREAK_PENALTY;
       const base = Math.min(MAX_EVADE, evadeSkill.effectValue("evade") + sectBonus(this.player, "evade"));
       const chance = Math.max(Math.min(base, MIN_STREAK_EVADE), base - read);
       if (read > 0) this.log.push(`${this.enemy.name}${josa(this.enemy.name, "이/가")} 걸음을 읽기 시작했다.`);
