@@ -1247,7 +1247,7 @@
               {
                 "text": "그의 칼은 일부러 느렸다.",
                 "effects": {
-                  "battle": "금의위밀정",
+                  "battle": "무림맹추격대",
                   "fame": 3
                 }
               }
@@ -1502,7 +1502,8 @@
                   "style_skill": {
                     "grade": "일절"
                   },
-                  "fame": 4
+                  "fame": 4,
+                  "spar": true
                 }
               }
             ]
@@ -1578,7 +1579,8 @@
                   "stats": {
                     "external": 3,
                     "mind": 2
-                  }
+                  },
+                  "spar": true
                 }
               }
             ]
@@ -1670,7 +1672,8 @@
                   "battle": "종남검수",
                   "mastery": 30,
                   "fame": 6,
-                  "style_weapon": 3
+                  "style_weapon": 3,
+                  "spar": true
                 }
               }
             ]

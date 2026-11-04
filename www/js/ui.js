@@ -11,8 +11,7 @@ import {
 } from "./meta.js";
 import {
   ALIGNMENTS, benefitText, byname, fameRank, getChapterInfo, getMonth, getYear, marketTurns, nextSlotThreshold,
-  ORIGIN_SECTS, realmProgress, traitSlots,
-} from "./rules.js";
+  ORIGIN_SECTS, realmProgress, traitSlots, realmPerks } from "./rules.js";
 import { MAX_TURN } from "./character.js";
 import { storage } from "./storage.js";
 import { josa } from "./josa.js";
@@ -69,6 +68,7 @@ function skillDetail(s) {
     const e = s.effect;
     lines.push(`회피 ${e.evade}%, 다음 공격 +${e.counter_pct}%, 도주 +${e.flee_bonus}%, 내력 ${s.qi_cost}`);
   }
+  if (s.gimmick) lines.push(`묘리 「${s.gimmick.name}」(상승 품계부터): ${s.gimmick.text}`);
   if (s.origin) lines.push(`${DB.origins.origins[s.origin].name} 전용`);
   return lines;
 }
@@ -105,7 +105,7 @@ function codexRows(tab, meta) {
   if (tab === "items") {
     const cats = [...new Set(Object.values(DB.market).map((i) => categoryName(i.category)))];
     return {
-      total: Object.keys(DB.market).length, filterLabel: "종류", filters: cats, empty: "장터에서 물건을 사면 이곳에 기록됩니다.",
+      total: Object.keys(DB.market).length, filterLabel: "종류", filters: cats, empty: "장터에서 사거나 쓴 물건이 이곳에 기록됩니다.",
       rows: meta.known_items.filter((k) => DB.market[k]).map((k) => {
         const i = DB.market[k];
         return { key: k, name: i.name, meta: categoryName(i.category), desc: i.desc, cats: [categoryName(i.category)] };
@@ -235,14 +235,17 @@ function helpModal() {
     "<b>일절</b>: 한 문파나 한 시대의 끝을 이룬 무공. 소속의 비전이나 큰 인연에서만 얻고, 승급으로 오를 수 있는 끝입니다.",
     "<b>신공</b>: 전설의 무공. 승급이나 장터, 일반 사건이나 유산으로는 얻을 수 없고 출신의 이야기와 카르마로 연 인연에서만 나옵니다.",
     "품계가 높을수록 위력이 크고 내력을 많이 쓰며, 일부 무공은 성취가 차면 <b>비기</b>가 열립니다.",
+    "<b>묘리</b>: 상승 품계부터 무공마다 고유한 묘리가 드러납니다. 승급으로 상승에 이른 무공도 같습니다. 나눠 쳐서 번번이 회심을 가리는 공격, 준 피해를 빨아들이는 공격, 적을 굳히는 공격, 호신 기운을 두르는 심법, 저절로 피하거나 되받아치는 경공처럼 무공마다 다릅니다. 신상의 무공 칸에서 볼 수 있습니다.",
     "무공은 공격, 심법, 경공 셋으로 나뉘고 칸마다 쓸 무공 하나를 고릅니다. 새로 얻었다고 저절로 바뀌지 않으니 신상의 무공 칸에서 고르세요.",
     "성취가 100을 넘어 더 쌓이면 다음 품계로 승급합니다. 승급하면 성취가 줄어들고 위력은 오릅니다.",
     "<b>같은 무공을 또 얻으면</b> 성취가 오릅니다. <b>같은 갈래의 더 깊은 무공</b>을 얻으면 따로 쌓이지 않고 쓰던 무공이 그것으로 이어지며 성취와 오른 품계는 그대로 갑니다."])}
     ${section("적과 강호의 수준", [
-    "적의 경지는 삼류, 이류, 일류, 절정, 초절정, 화경, 현경 순입니다. 산적은 산적이고, 이름난 고수는 그만한 경지입니다.",
+    "적의 경지는 이류, 일류, 절정, 초절정, 화경, 현경 순입니다. 산적은 산적이고, 이름난 고수는 그만한 경지입니다.",
     "지금이 몇 장인지에 따라 만날 수 있는 적이 정해지고, 그중에서 내 경지와 가까운 적을 더 자주 만납니다. 성향과 명성에 따라 찾아오는 적도 달라집니다.",
     "<b>일반, 난적, 강적</b> 순으로 강합니다. 절정부터 이름 있는 자가 나오기 시작하고, 초절정부터는 대개 소속과 별호를 가진 인물입니다.",
-    "적은 경지에 맞는 비급과 약을 지니고 있습니다. 삼류는 약 정도이고, 위로 갈수록 좋은 품계가 나옵니다. 주무공과 같은 계열이 더 잘 나옵니다."])}
+    "적은 경지에 맞는 비급과 약을 지니고 있습니다. 위로 갈수록 좋은 품계가 나오고 주무공과 같은 계열이 더 잘 나옵니다. 짐승과 영물은 비급 대신 쓸개나 내단을 남깁니다. 내단은 행낭에서 삼키면 기량이 오릅니다."])}
+    ${section("비무", ["비무에서는 져도 죽지 않습니다. 체력이 1할만 남고 얻는 것이 없으며, 그 비무가 이어지는 일의 한 편이었다면 그 일은 어그러집니다. 기권해도 같습니다. 이겨도 사람을 죽인 것은 아니어서 처치 수와 성향은 오르지 않습니다."])}
+    ${section("영물과 내단", ["산과 물에는 짐승과 오래 묵은 영물이 삽니다. 이들은 쓸개, 뼈, 구슬, 내단을 남깁니다. 행낭에서 쓰면 기량이 오릅니다. 천년 내단은 이무기나 늪의 왕 같은 큰 영물에게서나 얻습니다."])}
     ${section("소속", [
     "문파나 세력을 돕고 나면 제안이 오고, 받아들여야 소속이 됩니다. 소속마다 고유한 혜택과 이야기, 비전 무공이 있습니다. 한번 들어가면 다른 소속을 받을 수 없습니다.",
     "소속 없이 3년 차 늦봄에서 여름에 이르면 성향에 맞는 문을 직접 두드릴 수 있습니다. 어디에도 가지 않고 홀로 가면 그 뒤로 문파의 손길이 드물게 닿습니다.",
@@ -579,7 +582,7 @@ function statusModal() {
       ? `<div class="skill-meta">비기 「${esc(s.secretName)}」: ${s.secretUnlocked ? "터득함" : `${esc(s.secretUnlockGrade)} 품계, 성취 ${s.secretUnlockMastery}에 터득`}</div>` : "";
     return `<div class="skill-row"><div class="skill-head"><span>${esc(s.name)} <span class="skill-meta">${esc(s.type === "심공" ? "심법" : s.type)}, ${esc(s.grade)}</span></span>${button}</div>
       <div class="mastery"><span class="stat-track"><span style="width:${s.mastery}%"></span></span><span class="skill-meta">성취 ${s.mastery}${s.mastery >= 100 ? (s.canEvolve() ? ", 다음 성취에 승급" : ", 더 오르지 않음") : ""}</span></div>
-      ${secret}<div class="skill-meta">${esc(s.desc)}</div>${transfer}</div>`;
+      ${secret}${s.gimmick ? `<div class="skill-meta">묘리 「${esc(s.gimmick.name)}」${s.activeGimmick() ? "" : " (상승 품계에 깨침)"}: ${esc(s.gimmick.text)}</div>` : ""}<div class="skill-meta">${esc(s.desc)}</div>${transfer}</div>`;
   }).join("") || `<p class="codex-empty">아직 익힌 무공이 없습니다.</p>`;
 
   const bag = inventory.map(([key, count]) => `<div class="skill-row"><div class="skill-head">
@@ -607,6 +610,7 @@ function statusModal() {
         ${ALIGNMENTS.map((name) => `<div class="align-row"><span>${name}</span><div class="align-track"><div class="a-${name}" style="width:${Math.min(p.alignment[name] / 10, 100)}%"></div></div><span>${p.alignment[name]}</span></div>`).join("")}
         <p class="skill-meta">${esc(benefitText(p.alignment))}</p>
       </div>
+      ${realmPerks(p.realm).length ? `<div class="modal-section"><h4>경지의 특전</h4>${realmPerks(p.realm).map((k) => `<div class="skill-row">${esc(k.realm)}, ${esc(k.name)}<div class="skill-meta">${esc(k.desc)}</div></div>`).join("")}</div>` : ""}
       ${traits.length ? `<div class="modal-section"><h4>자질</h4>${traits.map((t) => `<div class="skill-row">${esc(t.name)}<div class="skill-meta">${esc(t.desc)}</div></div>`).join("")}</div>` : ""}`,
     skills: skills,
     history: chronicleList(p) || `<p class="codex-empty">아직 남길 만한 일이 없습니다.</p>`,

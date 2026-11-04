@@ -4,7 +4,7 @@ import { DB } from "./data.js";
 import { bonusFor, equipmentBonus, styleWeight, weightsByStyle } from "./market.js";
 import { recordEventPick, updateKnown } from "./meta.js";
 import { pick, pickWeighted, rng } from "./rng.js";
-import { ALIGNMENTS, applyGrowth, fameRankChanged, getChapter, realmIndex, sumEffect } from "./rules.js";
+import { ALIGNMENTS, applyGrowth, fameRankChanged, getChapter, realmIndex, sumEffect, talkLine } from "./rules.js";
 import { josa } from "./josa.js";
 
 export const EVENT_STAT_SCALE = 3; // 사건과 기연의 기량 상승 배율. 데이터에 적힌 값의 세 배가 오른다
@@ -16,6 +16,7 @@ export function unmetReason(player, requires) {
   if (r.origin && player.originKey !== r.origin) return "출신이 다르다";
   if (r.not_origin?.includes(player.originKey)) return "그곳과는 씻지 못할 원한이 있다";
   if (r.no_dominant && player.dominantAlignment()) return "이미 한 길에 들어섰다";
+  if (r.not_dominant?.includes(player.dominantAlignment())) return "그 길에는 어울리지 않는다";
   if (r.flag && !player.hasFlag(r.flag)) return "아직 인연이 닿지 않았다";
   if (r.not_flag && player.hasFlag(r.not_flag)) return "이미 지나간 일이다";
   if (r.any_flag && !r.any_flag.some((f) => player.hasFlag(f))) return "아직 인연이 닿지 않았다";
@@ -25,6 +26,7 @@ export function unmetReason(player, requires) {
   if (r.no_skill && player.hasSkill(r.no_skill)) return "이미 익혔다";
   if (r.sect && player.sect !== r.sect) return "다른 문파의 일이다";
   if (r.no_sect && player.sect) return "이미 사문이 있다";
+  if (r.not_sect?.includes(player.sect)) return "사문과 맞지 않는 일이다";
   if (r.has_sect && !player.sect) return "사문이 없다";
   // sect_side: 사문이 없거나, 사문의 성향이 이 값일 때만 그 세력에 설 수 있다
   if (r.sect_side && player.sect && DB.sects[player.sect]?.alignment !== r.sect_side) return "사문이 허락하지 않는다";
@@ -108,6 +110,13 @@ export function startChain(player, id) {
 }
 
 /** 고른 결과에 따라 연계를 다음 편으로 넘기거나 끝낸다. */
+/** 비무에서 져서 이어지던 일이 어그러졌다. */
+export function failChain(player, id) {
+  if (!player.chains.some((c) => c.id === id)) return;
+  player.chains = player.chains.filter((c) => c.id !== id);
+  player.note(`「${DB.chains[id].title}」 일은 비무에 져서 끝내 어그러졌다.`);
+}
+
 export function advanceChain(player, id, abandoned = false) {
   const chain = player.chains.find((c) => c.id === id);
   if (!chain) return;
@@ -196,6 +205,18 @@ function eventText(player, key) {
   return variant ? variant.text : event.text;
 }
 
+const TALK_RATE = 45; // 사람과 말을 섞는 사건 가운데 말투 줄이 붙는 비율
+
+/** 사건 앞에 붙는 한 줄. 사람들은 내 성향과 이름을 알고 대한다. 같은 달의 같은 사건에는 같은 줄이 붙는다. */
+function eventTalk(player, key) {
+  const event = DB.events[key];
+  const seed = [...`${key}${player.turn}`].reduce((total, c) => (total * 31 + c.codePointAt(0)) % 100003, 7);
+  const own = (event.reacts || []).filter((r) => checkRequires(player, r.requires));
+  if (own.length) return own[seed % own.length].text;
+  if (event.kind === "story" || event.prelude || event.chain || key.startsWith("제안_") || !eventText(player, key)?.includes("\"")) return null;
+  return seed % 100 < TALK_RATE ? talkLine(player, "event", seed) : null;
+}
+
 export function eventView(player, key) {
   const event = DB.events[key];
   const choices = [];
@@ -206,7 +227,8 @@ export function eventView(player, key) {
     choices.push({ index, label: choice.label, locked, tag: choice.tag || null });
   });
   const title = event.chain ? `${event.title} (${event.chain.index + 1}/${event.chain.total})` : event.title;
-  return { key, title, text: eventText(player, key), choices, chain: event.chain ? DB.chains[event.chain.id].title : null };
+  const talk = eventTalk(player, key);
+  return { key, title, text: talk ? `${talk} ${eventText(player, key)}` : eventText(player, key), choices, chain: event.chain ? DB.chains[event.chain.id].title : null };
 }
 
 /** 적이 플레이어를 보고 하는 말. 상황에 맞는 대사가 있으면 그것을 쓴다. */
@@ -216,10 +238,16 @@ export function reactiveLine(player, list, fallback = null) {
   return special ? special.text : fallback;
 }
 
+// 출신, 자질, 무공처럼 그 사람만의 사정에 닿는 대사가 먼저고, 성향과 명성 대사는 맞는 것 가운데 하나가 나온다
+const COMMON_TALK = ["dominant", "alignment_min", "min_fame", "max_fame", "no_dominant"];
+const isCommonTalk = (item) => Object.keys(item.requires || {}).every((k) => COMMON_TALK.includes(k));
+
 export function enemyIntro(player, enemyKey) {
   const data = DB.enemies[enemyKey];
-  const special = (data.intros || []).find((i) => checkRequires(player, i.requires));
-  return special ? special.text : (data.intro || null);
+  const fit = (data.intros || []).filter((i) => checkRequires(player, i.requires));
+  const own = fit.find((i) => !isCommonTalk(i));
+  if (own) return own.text;
+  return fit.length ? pick(fit).text : (data.intro || null);
 }
 
 /** 선택을 처리하고 {text, summary, effects, deferred, lead}를 돌려준다. 고를 수 없으면 null */

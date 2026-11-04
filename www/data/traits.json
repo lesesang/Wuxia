@@ -75,7 +75,7 @@
     "name": "천둥벌거숭이",
     "desc": "시작 외공이 180 높지만 심경이 60 낮다. 겁이 없어 남다른 길이 열린다.",
     "rarity": "일반",
-    "cost": 3,
+    "cost": 4,
     "effects": [
       {
         "type": "start_stat",
@@ -149,29 +149,29 @@
   },
   "기선제압": {
     "name": "선수필승",
-    "desc": "전투의 첫 합에서 주는 피해가 90% 늘어난다.",
+    "desc": "전투의 첫 합에서 주는 피해가 50% 늘어난다.",
     "rarity": "일반",
-    "cost": 4,
+    "cost": 5,
     "effects": [
       {
         "type": "first_strike",
-        "percent": 90
+        "percent": 50
       }
     ]
   },
   "매의눈": {
     "name": "매의 눈",
-    "desc": "공격이 빗나갈 확률이 15% 줄고 회심의 일격 확률이 10% 오른다.",
+    "desc": "공격이 빗나갈 확률이 10% 줄고 회심의 일격 확률이 8% 오른다.",
     "rarity": "일반",
-    "cost": 4,
+    "cost": 5,
     "effects": [
       {
         "type": "hit_bonus",
-        "percent": 15
+        "percent": 10
       },
       {
         "type": "crit",
-        "percent": 10
+        "percent": 8
       }
     ]
   },
@@ -209,7 +209,7 @@
     "name": "몽중수련",
     "desc": "요양으로 되찾는 체력과 내력이 100% 늘어나고 매달 내력을 5% 더 회복한다.",
     "rarity": "일반",
-    "cost": 4,
+    "cost": 3,
     "effects": [
       {
         "type": "heal_rate",
@@ -254,7 +254,7 @@
     "name": "심마불침",
     "desc": "혈도를 짚여 무공이 봉쇄당하지 않고 심법 회복이 40% 늘어난다.",
     "rarity": "일반",
-    "cost": 5,
+    "cost": 4,
     "effects": [
       {
         "type": "seal_immune"
@@ -267,13 +267,13 @@
   },
   "일취월장": {
     "name": "일취월장",
-    "desc": "무공 성취를 두 배로 얻는다.",
+    "desc": "무공 성취를 50% 더 빠르게 얻는다.",
     "rarity": "일반",
     "cost": 5,
     "effects": [
       {
         "type": "mastery_rate",
-        "percent": 100
+        "percent": 50
       }
     ]
   },
@@ -293,7 +293,7 @@
     "name": "복성",
     "desc": "탐색에서 기연을 만날 확률이 25% 오르고 얻는 은자가 25% 늘어난다.",
     "rarity": "일반",
-    "cost": 5,
+    "cost": 4,
     "effects": [
       {
         "type": "fortune_rate",
@@ -362,9 +362,9 @@
   },
   "장사꾼기질": {
     "name": "장사꾼 기질",
-    "desc": "은자 100을 더 들고 시작하고 장터 가격이 20% 싸다.",
+    "desc": "은자 100을 더 들고 시작하고 장터 가격이 25% 싸다.",
     "rarity": "일반",
-    "cost": 5,
+    "cost": 4,
     "effects": [
       {
         "type": "start_silver",
@@ -372,19 +372,19 @@
       },
       {
         "type": "market_discount",
-        "percent": 20
+        "percent": 25
       }
     ]
   },
   "명문의자제": {
     "name": "세가의 은인",
-    "desc": "은자 250과 명성 10으로 시작한다. 어느 세가에 베푼 은혜가 있어 세가와 얽힌 사건에서 말이 통한다.",
+    "desc": "은자 350과 명성 10으로 시작한다. 어느 세가에 베푼 은혜가 있어 세가와 얽힌 사건에서 말이 통한다.",
     "rarity": "일반",
     "cost": 4,
     "effects": [
       {
         "type": "start_silver",
-        "amount": 250
+        "amount": 350
       },
       {
         "type": "start_fame",
@@ -429,13 +429,13 @@
   },
   "산사람": {
     "name": "산중수련",
-    "desc": "기연을 만날 확률이 15% 오르고 매달 체력과 내력을 4%씩 더 회복한다. 산에서 오래 지내 본 터라 산과 짐승, 약초가 얽힌 사건에서 길을 안다.",
+    "desc": "기연을 만날 확률이 20% 오르고 매달 체력과 내력을 4%씩 더 회복한다. 산에서 오래 지내 본 터라 산과 짐승, 약초가 얽힌 사건에서 길을 안다.",
     "rarity": "일반",
-    "cost": 4,
+    "cost": 3,
     "effects": [
       {
         "type": "fortune_rate",
-        "percent": 15
+        "percent": 20
       },
       {
         "type": "turn_regen",
@@ -447,13 +447,13 @@
   },
   "금전운": {
     "name": "재물복",
-    "desc": "얻는 은자가 45% 늘어난다.",
+    "desc": "얻는 은자가 60% 늘어난다.",
     "rarity": "일반",
-    "cost": 5,
+    "cost": 4,
     "effects": [
       {
         "type": "silver_rate",
-        "percent": 45
+        "percent": 60
       }
     ]
   },
@@ -508,7 +508,7 @@
     "name": "물려받은 갑의",
     "desc": "은인에게 물려받은 철사 갑의를 입고 시작한다.",
     "rarity": "일반",
-    "cost": 4,
+    "cost": 3,
     "effects": [
       {
         "type": "start_armor",
@@ -564,17 +564,22 @@
   },
   "이기어검": {
     "name": "마르지 않는 내력",
-    "desc": "공격무공의 내력 소모가 30% 줄고 심법 회복이 15% 늘어난다. 긴 싸움에서 내력이 마르지 않는다.",
+    "desc": "공격무공의 내력 소모가 35% 줄고 심법 회복이 15% 늘며 매달 내력을 5% 더 회복한다. 긴 싸움에서 내력이 마르지 않는다.",
     "rarity": "일반",
     "cost": 4,
     "effects": [
       {
         "type": "qi_cost_cut",
-        "percent": 30
+        "percent": 35
       },
       {
         "type": "mindset_power",
         "percent": 15
+      },
+      {
+        "type": "turn_regen",
+        "hp_pct": 0,
+        "qi_pct": 5
       }
     ]
   },
@@ -804,7 +809,7 @@
   },
   "금강불괴": {
     "name": "금강불괴",
-    "desc": "내상을 입지 않고 받는 피해가 5% 줄어든다.",
+    "desc": "내상을 입지 않고 받는 피해가 8% 줄어든다.",
     "rarity": "희귀",
     "cost": 7,
     "effects": [
@@ -813,7 +818,7 @@
       },
       {
         "type": "damage_reduce",
-        "percent": 5
+        "percent": 8
       }
     ]
   },
@@ -831,13 +836,13 @@
   },
   "일격필살": {
     "name": "일격필살",
-    "desc": "비기의 피해가 35% 늘어난다.",
+    "desc": "비기의 피해가 14% 늘어난다.",
     "rarity": "희귀",
-    "cost": 8,
+    "cost": 9,
     "effects": [
       {
         "type": "secret_power",
-        "percent": 35
+        "percent": 14
       }
     ]
   },
@@ -865,7 +870,7 @@
       },
       {
         "type": "inflict_poison",
-        "power": 8
+        "power": 14
       }
     ]
   },
@@ -960,7 +965,7 @@
   },
   "창궁의혈통": {
     "name": "창궁의 혈통",
-    "desc": "주무공 성취 40과 명성 3으로 시작한다. 오대세가와 맹의 일에 남궁의 이름이 통한다.",
+    "desc": "주무공 성취 40과 명성 3으로 시작하고 회심의 일격 확률이 5% 오른다. 오대세가와 맹의 일에 남궁의 이름이 통한다.",
     "rarity": "희귀",
     "cost": 7,
     "effects": [
@@ -971,6 +976,10 @@
       {
         "type": "start_fame",
         "amount": 3
+      },
+      {
+        "type": "crit",
+        "percent": 5
       }
     ],
     "origin": "남궁세가",
@@ -993,7 +1002,7 @@
   },
   "표로의다리": {
     "name": "표로의 다리",
-    "desc": "은자 60을 더 들고 시작하고 달아날 확률이 20% 오른다. 길과 표물이 얽힌 사건에서 앞장선다.",
+    "desc": "은자 60을 더 들고 시작하고 달아날 확률이 20% 오르고 매달 체력과 내력을 4%씩 더 회복한다. 길과 표물이 얽힌 사건에서 앞장선다.",
     "rarity": "희귀",
     "cost": 7,
     "effects": [
@@ -1004,6 +1013,11 @@
       {
         "type": "flee_rate",
         "percent": 20
+      },
+      {
+        "type": "turn_regen",
+        "hp_pct": 4,
+        "qi_pct": 4
       }
     ],
     "origin": "표국표사",
@@ -1011,13 +1025,18 @@
   },
   "거지의귀": {
     "name": "거지의 귀",
-    "desc": "기연을 만날 확률이 10% 오른다. 소문과 끼니가 얽힌 사건에서 먼저 듣는다.",
+    "desc": "기연을 만날 확률이 20% 오르고 매달 체력과 내력을 3%씩 더 회복한다. 소문과 끼니가 얽힌 사건에서 먼저 듣는다.",
     "rarity": "희귀",
     "cost": 7,
     "effects": [
       {
         "type": "fortune_rate",
-        "percent": 10
+        "percent": 20
+      },
+      {
+        "type": "turn_regen",
+        "hp_pct": 3,
+        "qi_pct": 3
       }
     ],
     "origin": "개방제자",
@@ -1025,13 +1044,13 @@
   },
   "권마의혈맥": {
     "name": "권마의 혈맥",
-    "desc": "비기의 피해가 20% 늘어난다. 권사와 원한이 얽힌 사건에서 권마의 이름이 먼저 간다.",
+    "desc": "비기의 피해가 12% 늘어난다. 권사와 원한이 얽힌 사건에서 권마의 이름이 먼저 간다.",
     "rarity": "희귀",
     "cost": 7,
     "effects": [
       {
         "type": "secret_power",
-        "percent": 20
+        "percent": 12
       }
     ],
     "origin": "권마계승",
@@ -1227,13 +1246,13 @@
   },
   "사부의잔소리": {
     "name": "사부의 잔소리",
-    "desc": "무공 성취를 40% 더 빠르게 얻고 심법 회복이 15% 늘어난다. 십 년 들은 잔소리가 위기마다 귀에 울린다.",
+    "desc": "무공 성취를 60% 더 빠르게 얻고 심법 회복이 15% 늘어난다. 십 년 들은 잔소리가 위기마다 귀에 울린다.",
     "rarity": "희귀",
     "cost": 7,
     "effects": [
       {
         "type": "mastery_rate",
-        "percent": 40
+        "percent": 60
       },
       {
         "type": "mindset_power",
@@ -1245,41 +1264,41 @@
   },
   "호연지기": {
     "name": "호연지기",
-    "desc": "정도 100으로 시작하고 정도가 오를 때 20 더 오른다. 받는 피해가 3% 줄어든다.",
+    "desc": "정도 70으로 시작하고 정도가 오를 때 15 더 오른다. 받는 피해가 5% 줄어든다.",
     "rarity": "희귀",
     "cost": 9,
     "effects": [
       {
         "type": "start_alignment",
         "side": "정도",
-        "amount": 100
+        "amount": 70
       },
       {
         "type": "alignment_gain",
         "side": "정도",
-        "amount": 20
+        "amount": 15
       },
       {
         "type": "damage_reduce",
-        "percent": 3
+        "percent": 5
       }
     ]
   },
   "권모술수": {
     "name": "권모술수",
-    "desc": "사도 100으로 시작하고 사도가 오를 때 20 더 오른다. 얻는 은자가 10% 늘어난다.",
+    "desc": "사도 70으로 시작하고 사도가 오를 때 15 더 오른다. 얻는 은자가 10% 늘어난다.",
     "rarity": "희귀",
     "cost": 9,
     "effects": [
       {
         "type": "start_alignment",
         "side": "사도",
-        "amount": 100
+        "amount": 70
       },
       {
         "type": "alignment_gain",
         "side": "사도",
-        "amount": 20
+        "amount": 15
       },
       {
         "type": "silver_rate",
@@ -1289,58 +1308,58 @@
   },
   "마성": {
     "name": "마성",
-    "desc": "마도 100으로 시작하고 마도가 오를 때 20 더 오른다. 주는 피해가 6% 늘어난다.",
+    "desc": "마도 70으로 시작하고 마도가 오를 때 15 더 오른다. 주는 피해가 3% 늘어난다.",
     "rarity": "희귀",
     "cost": 9,
     "effects": [
       {
         "type": "start_alignment",
         "side": "마도",
-        "amount": 100
+        "amount": 70
       },
       {
         "type": "alignment_gain",
         "side": "마도",
-        "amount": 20
+        "amount": 15
       },
       {
         "type": "damage_bonus",
-        "percent": 6
+        "percent": 3
       }
     ]
   },
   "전투광": {
     "name": "싸움귀신",
-    "desc": "전투가 시작되면 네 기량이 전투 중에만 70 오른다. 전투가 끝나면 체력과 내력을 각각 25% 회복한다.",
+    "desc": "전투가 시작되면 네 기량이 전투 중에만 90 오른다. 전투가 끝나면 체력과 내력을 각각 25% 회복한다.",
     "rarity": "전설",
-    "cost": 16,
+    "cost": 18,
     "effects": [
       {
         "type": "battle_buff",
         "trigger": "on_battle_start",
         "stat": "external",
-        "amount": 70,
+        "amount": 90,
         "temporary": true
       },
       {
         "type": "battle_buff",
         "trigger": "on_battle_start",
         "stat": "internal",
-        "amount": 70,
+        "amount": 90,
         "temporary": true
       },
       {
         "type": "battle_buff",
         "trigger": "on_battle_start",
         "stat": "martial",
-        "amount": 70,
+        "amount": 90,
         "temporary": true
       },
       {
         "type": "battle_buff",
         "trigger": "on_battle_start",
         "stat": "mind",
-        "amount": 70,
+        "amount": 90,
         "temporary": true
       },
       {
@@ -1359,13 +1378,13 @@
   },
   "불굴": {
     "name": "불사지체",
-    "desc": "전투에서 합마다 체력을 3%, 달마다 체력을 15% 더 회복한다. 베여도 베여도 살이 차오른다.",
+    "desc": "전투에서 합마다 체력을 2%, 달마다 체력을 15% 더 회복한다. 베여도 베여도 살이 차오른다.",
     "rarity": "전설",
-    "cost": 16,
+    "cost": 18,
     "effects": [
       {
         "type": "round_regen",
-        "hp_pct": 3
+        "hp_pct": 2
       },
       {
         "type": "turn_regen",
@@ -1424,9 +1443,9 @@
   },
   "천살성": {
     "name": "천살성",
-    "desc": "마도 60으로 시작한다. 쓰러뜨린 적 하나마다 주는 피해가 1.2% 늘고(최대 40%) 전투가 끝나면 체력을 10% 되찾는다. 살성을 타고나 사람들이 먼저 알아본다.",
+    "desc": "마도 60으로 시작한다. 쓰러뜨린 적 하나마다 주는 피해가 1% 늘고(최대 40%) 전투가 끝나면 체력을 10% 되찾는다. 살성을 타고나 사람들이 먼저 알아본다.",
     "rarity": "전설",
-    "cost": 18,
+    "cost": 20,
     "effects": [
       {
         "type": "start_alignment",
@@ -1435,7 +1454,7 @@
       },
       {
         "type": "kill_power",
-        "percent": 1.2
+        "percent": 1.0
       },
       {
         "type": "battle_buff",
@@ -1448,53 +1467,57 @@
   },
   "천무지체": {
     "name": "천무지체",
-    "desc": "모든 기량이 40 높게 시작하고 성장이 각각 12% 늘며 무공 성취를 30% 더 빠르게 얻는다. 백 년에 하나 난다는 무인의 몸이다.",
+    "desc": "모든 기량이 60 높게 시작하고 성장이 각각 10% 늘며, 무공 성취를 60% 더 빠르게 얻고 승급해도 성취가 50에서 다시 시작한다. 백 년에 하나 난다는 무공의 그릇이다.",
     "rarity": "전설",
     "cost": 22,
     "effects": [
       {
         "type": "start_stat",
         "stat": "external",
-        "amount": 40
+        "amount": 60
       },
       {
         "type": "start_stat",
         "stat": "internal",
-        "amount": 40
+        "amount": 60
       },
       {
         "type": "start_stat",
         "stat": "martial",
-        "amount": 40
+        "amount": 60
       },
       {
         "type": "start_stat",
         "stat": "mind",
-        "amount": 40
+        "amount": 60
       },
       {
         "type": "growth_rate",
         "stat": "external",
-        "percent": 12
+        "percent": 10
       },
       {
         "type": "growth_rate",
         "stat": "internal",
-        "percent": 12
+        "percent": 10
       },
       {
         "type": "growth_rate",
         "stat": "martial",
-        "percent": 12
+        "percent": 10
       },
       {
         "type": "growth_rate",
         "stat": "mind",
-        "percent": 12
+        "percent": 10
       },
       {
         "type": "mastery_rate",
-        "percent": 30
+        "percent": 60
+      },
+      {
+        "type": "evolve_mastery",
+        "amount": 50
       }
     ],
     "reacts": true

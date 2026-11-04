@@ -9,6 +9,7 @@ import {
 import { josa } from "./josa.js";
 
 export const GRADE_ORDER = ["기본", "명품", "상승", "일절", "신공"];
+export const GIMMICK_GRADE = "상승"; // 이 품계부터 무공의 묘리가 드러난다
 const SAME_GRADE_TRANSFER = 0.5;  // 같은 품계 무공의 성취를 옮기는 비율
 const LOWER_GRADE_TRANSFER = 0.3; // 낮은 품계 무공의 성취를 옮기는 비율
 const MAX_MASTERY = 100;
@@ -45,6 +46,7 @@ export class Skill {
     this.forms = data.forms || [];
     this.risky = !!data.risky;
     this.inflict = data.inflict || null;
+    this.gimmick = data.gimmick || null;
     this.mastery = 0;
 
     const secret = data.secret_technique || {};
@@ -63,11 +65,17 @@ export class Skill {
     if (this.mastery + amount > MAX_MASTERY && this.canEvolve()) {
       this.evolve();
       messages.push(`🌟 ${this.name}${josa(this.name, "이/가")} ${this.grade} 품계로 승급했다!`);
+      if (this.grade === GIMMICK_GRADE && this.gimmick) messages.push(`✨ 묘리를 깨쳤다. 「${this.gimmick.name}」: ${this.gimmick.text}`);
     } else {
       this.mastery = Math.min(MAX_MASTERY, this.mastery + amount);
     }
     if (this.checkSecretUnlock()) messages.push(`✨ 비기 「${this.secretName}」${josa(this.secretName, "이/가")} 터득되었다!`);
     return messages;
+  }
+
+  /** 상승 품계 이상에서만 드러나는 그 무공만의 묘리 */
+  activeGimmick() {
+    return GRADE_ORDER.indexOf(this.grade) >= GRADE_ORDER.indexOf(GIMMICK_GRADE) ? this.gimmick : null;
   }
 
   /** 승급으로는 최고 품계(신공)에 오르지 못한다. 일절이 승급의 끝이다. */
@@ -202,7 +210,7 @@ export class Player {
     this.revives = 1 + sumEffect(traitKeys, "extra_revive", "amount");
   }
 
-  maxHp() { return 100 + Math.trunc(this.external * 0.35 + this.internal * 0.15); }
+  maxHp() { return 100 + Math.trunc(this.external * 0.28 + this.internal * 0.17); }
   maxQi() { return 100 + Math.trunc(this.internal / 2); }
   dominantAlignment() { return dominant(this.alignment); }
 
@@ -212,6 +220,16 @@ export class Player {
     const after = Math.max(before, Math.min(STAT_CAP, before + amount));
     this[stat] = after;
     return after - before;
+  }
+
+  /** 정한 양만큼 회복한다. 마도의 회복 감소를 받는다. [체력 변화, 내력 변화] */
+  healAmount(hp = 0, qi = 0) {
+    const penalty = 1 - alignValue(this.alignment, "마도", "healCut") / 100;
+    const hpBefore = this.hp;
+    const qiBefore = this.qi;
+    this.hp = Math.min(this.maxHp(), this.hp + Math.trunc(hp * penalty));
+    this.qi = Math.min(this.maxQi(), this.qi + Math.trunc(qi * penalty));
+    return [this.hp - hpBefore, this.qi - qiBefore];
   }
 
   /** 체력·기력을 최대치 비율로 바꾼다. 체력은 1 아래로 내려가지 않는다. [체력 변화, 기력 변화] */
