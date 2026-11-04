@@ -4,7 +4,7 @@ import { DB } from "./data.js";
 import { checkRequires, reactiveLine } from "./events.js";
 import { equipmentBonus } from "./market.js";
 import { pick, pickWeighted, randInt, rng, uniform } from "./rng.js";
-import { applyGrowth, battleBuffs, fameRankChanged, hasEffect, alignValue, dominant, KILL_ALIGN, realmBonus, realmIndex, sectBonus, sumEffect, talkLine } from "./rules.js";
+import { applyGrowth, isNamed, battleBuffs, fameRankChanged, hasEffect, alignValue, dominant, KILL_ALIGN, realmBonus, realmIndex, sectBonus, sumEffect, talkLine } from "./rules.js";
 import { josa } from "./josa.js";
 
 const BASE_HIT = 0.88;
@@ -26,7 +26,7 @@ const MAX_KILL_POWER = 40; // 쓰러뜨린 적만큼 강해지는 자질의 끝
 const MAX_DAMAGE_REDUCE = 60; // 자질과 기틀을 겹쳐도 받는 피해를 이 이상 줄이지 못한다
 export const INJURY_PENALTY = 7;
 const FAME_BY_TIER = { 일반: 1, 난적: 2, 강적: 4, 보스: 10 };
-const STAT_GROWTH_RANGE = { 일반: [10, 20], 난적: [10, 30], 강적: [20, 40], 보스: [50, 100] };
+const STAT_GROWTH_RANGE = { 일반: [9, 18], 난적: [10, 27], 강적: [18, 37], 보스: [50, 100] };
 
 /** 표(12달 간격)에서 해당 달의 값을 읽는다. */
 function curveAt(curve, turn) {
@@ -826,6 +826,7 @@ export class Battle {
       // 비무는 사람을 죽이는 싸움이 아니다
       if (!this.spar) {
         this.player.kills += 1;
+        if (isNamed(this.enemy.key) && !this.player.slain.includes(this.enemy.key)) this.player.slain.push(this.enemy.key);
         const side = dominant(this.player.alignment);
         if (KILL_ALIGN[side]) this.player.adjustAlignment(side, KILL_ALIGN[side] / 2); // 앞선 길은 두 배로 오른다
       }

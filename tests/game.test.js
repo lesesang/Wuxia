@@ -2993,3 +2993,72 @@ test("출신과 사문에 어긋나는 사건이 나오지 않는다", () => {
   quiet.fame = 0;
   assert.ok(!checkRequires(quiet, DB.events.강호의소문.requires), "이름이 없으면 소문에 별호가 섞이지 않는다");
 });
+
+test("힘의 기준대로 경지가 나뉜다", () => {
+  assert.equal(DB.enemies.천마.realm, "생사경");
+  assert.ok(!Object.entries(DB.enemies).some(([k, e]) => k !== "천마" && e.realm === "생사경"), "생사경은 천마뿐이다");
+  for (const k of ["십이마장", "십이마장귀곡", "혈수라", "무영"]) assert.equal(DB.enemies[k].realm, "현경", k);
+  assert.equal(DB.enemies.마교장로.realm, "화경");
+  for (const k of ["화산장로", "아미사태", "독문고수"]) assert.equal(DB.enemies[k].realm, "초절정", k);
+  for (const k of ["비무청성", "녹림채주"]) assert.equal(DB.enemies[k].realm, "절정", k);
+});
+
+test("쓰러뜨린 이름 있는 적은 다시 나오지 않고 대신할 자가 나오거나 돌아온 대사를 한다", () => {
+  const game = newGame();
+  const p = game.player;
+  p.turn = 30;
+  const key = "녹림채주";
+  game.startBattle(key);
+  game.battle.enemy.hp = 1;
+  game.battle.enemy.evasion = -9;
+  while (game.battle) game.battleAction("기본공격");
+  assert.ok(p.slain.includes(key));
+  assert.ok(Player.fromDict(p.toDict()).slain.includes(key), "저장해도 남는다");
+  // 뽑기에서 빠진다
+  for (let i = 0; i < 300; i++) assert.notEqual(game.pickEnemy(), key);
+  // 사건에서 불러도 대신할 자가 나온다
+  game.pendingNext = false;
+  game.startBattle(key);
+  assert.equal(game.battle.enemy.key, DB.enemies[key].stand_in);
+  game.battle = null;
+  // 대신할 자가 없으면 돌아온다
+  p.slain.push("당가배신자");
+  game.startBattle("당가배신자");
+  assert.equal(game.battle.enemy.key, "당가배신자");
+  assert.ok(game.log.some((l) => /분명 내 손에|쓰러뜨린 줄|묻어 주지|쓰러졌던|살아 돌아온/.test(l)), "돌아온 대사");
+  game.battle = null;
+  // 이름 없는 적은 몇 번이고 나온다
+  p.turn = 5;
+  game.startBattle("산적");
+  assert.equal(game.battle.enemy.key, "산적");
+  // 4, 5장에도 이름 없는 적이 있어 나올 적이 마르지 않는다
+  for (const chapter of [1, 2, 3, 4, 5]) {
+    assert.ok(Object.entries(DB.enemies).some(([k, e]) => e.chapters?.includes(chapter) && !e.title && !e.requires), `${chapter}장`);
+  }
+  // 비무에 이겨도 그 사람은 살아 있다
+  const g2 = newGame();
+  g2.player.turn = 30;
+  g2.startBattle("호적수", true);
+  g2.battle.enemy.hp = 1;
+  g2.battle.enemy.evasion = -9;
+  while (g2.battle) g2.battleAction("기본공격");
+  assert.ok(!g2.player.slain.includes("호적수"));
+});
+
+test("산 인연은 일반 인연보다 자주 찾아오고 새 인연은 이야기가 이어진다", () => {
+  const p = new Player("표국표사");
+  p.turn = 20;
+  p.content = ["설서인"];
+  let bought = 0; let plain = 0;
+  for (let i = 0; i < 3000; i++) {
+    const k = pickRandomEvent(p);
+    if (k === "설서_첫자리") bought += 1;
+    if (k === "술도가") plain += 1;
+  }
+  assert.ok(bought > plain, "인연이 더 자주 온다");
+  for (const key of ["새끼영물", "호적수", "길의원", "칠보지도", "끊어진문파", "설서인"]) {
+    assert.ok(DB.karma.content[key].cost > 0);
+    assert.ok(Object.values(DB.events).filter((e) => e.requires?.unlocked === key).length >= 2, key);
+  }
+  assert.ok(DB.enemies.천마.phases.every((ph) => ph.interlude.allies.some((a) => a.key === "호적수")));
+});
