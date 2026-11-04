@@ -64,12 +64,12 @@ export class Skill {
     // 성취가 100에 이른 뒤 더 쌓이면 승급한다. 정확히 100이면 다음 성취를 기다린다.
     if (this.mastery + amount > MAX_MASTERY && this.canEvolve()) {
       this.evolve();
-      messages.push(`🌟 ${this.name}${josa(this.name, "이/가")} ${this.grade} 품계로 승급했다!`);
-      if (this.grade === GIMMICK_GRADE && this.gimmick) messages.push(`✨ 묘리를 깨쳤다. 「${this.gimmick.name}」: ${this.gimmick.text}`);
+      messages.push(`${this.name}${josa(this.name, "이/가")} ${this.grade} 품계로 승급했다!`);
+      if (this.grade === GIMMICK_GRADE && this.gimmick) messages.push(`묘리를 깨쳤다. 「${this.gimmick.name}」: ${this.gimmick.text}`);
     } else {
       this.mastery = Math.min(MAX_MASTERY, this.mastery + amount);
     }
-    if (this.checkSecretUnlock()) messages.push(`✨ 비기 「${this.secretName}」${josa(this.secretName, "이/가")} 터득되었다!`);
+    if (this.checkSecretUnlock()) messages.push(`비기 「${this.secretName}」${josa(this.secretName, "이/가")} 터득되었다!`);
     return messages;
   }
 

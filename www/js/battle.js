@@ -174,6 +174,7 @@ export class Battle {
     this.guard = null;
     this.alliesSeen = [];
     this.spar = false;       // 비무. 져도 죽지 않고 보상이 없다
+    this.oneOff = false;     // 사건만의 상대. 이름 있는 적으로 치지 않는다
     this.guardedLast = 0;
     this.chainStacks = 0;    // 끊이지 않고 이어 맞힌 수
     this.forceCrit = false;  // 다음 공격은 회심
@@ -264,7 +265,7 @@ export class Battle {
   strike(power, label, skill = null) {
     const g = skill?.activeGimmick() || {};
     if (!this.hits(g.accuracy || 0)) {
-      this.log.push(`${label} — 그러나 ${this.enemy.name}${josa(this.enemy.name, "이/가")} 몸을 틀어 피했다.`);
+      this.log.push(`${label} 그러나 ${this.enemy.name}${josa(this.enemy.name, "이/가")} 몸을 틀어 피했다.`);
       this.counterPct = 0;
       this.chainStacks = 0;
       return 0;
@@ -384,7 +385,8 @@ export class Battle {
     // 나눠 치는 무공은 한 번마다 명중과 회심을 따로 가린다
     for (let i = 0; i < count && this.enemy.isAlive(); i++) {
       const power = Math.max(1, Math.trunc(this.attackPower(skill) * (g?.hit_rate || 1)));
-      damage += this.strike(power, count > 1 ? `${label} 제${i + 1}타,` : label, skill);
+      // 나눠 칠 때 초식 이름은 첫 타에만 쓴다
+      damage += this.strike(power, count > 1 ? `${i === 0 ? `${label} ` : ""}제${i + 1}타,` : label, skill);
     }
     this.applyRecoil(g);
     this.log.push(...skill.gainMastery(this.player.masteryGainAmount()));
@@ -428,7 +430,7 @@ export class Battle {
     if (!skill.risky) return;
     if (rng.random() < Math.max(0, 700 - this.player.mind) * 0.0015) {
       this.player.addInjury(1);
-      this.log.push(`🩸 기가 역류한다! 주화입마의 기운에 내상을 입었다. (내상 ${this.player.injury}단계)`);
+      this.log.push(`기가 역류한다! 주화입마의 기운에 내상을 입었다. (내상 ${this.player.injury}단계)`);
     }
   }
 
@@ -703,7 +705,7 @@ export class Battle {
     p.hp = Math.max(1, Math.trunc(p.maxHp() * REVIVE_RATE));
     p.qi = Math.min(p.maxQi(), p.qi + Math.trunc(p.maxQi() * REVIVE_RATE));
     p.note(`${this.enemy.name} 앞에서 쓰러지려다 마지막 힘을 끌어모아 버텼다.`);
-    this.log.push(`🕯️ 꺼져 가던 단전의 불씨를 어떻게든 끌어모았다. 몸이 다시 움직인다! (체력 ${p.hp}, 내력 ${p.qi}, 남은 기회 ${p.revives})`);
+    this.log.push(`꺼져 가던 단전의 불씨를 어떻게든 끌어모았다. 몸이 다시 움직인다! (체력 ${p.hp}, 내력 ${p.qi}, 남은 기회 ${p.revives})`);
   }
 
   nextSpecialWarning() { return this.enemy.specialForRound(this.roundNum + 1)?.name ?? null; }
@@ -861,7 +863,7 @@ export class Battle {
     if (!this.enemy.isAlive()) return this.finish(true);
 
     const phase = this.enemy.advancePhase();
-    if (phase) this.log.push(`⚠️ ${reactiveLine(this.player, phase.texts, phase.text)}`);
+    if (phase) this.log.push(`${reactiveLine(this.player, phase.texts, phase.text)}`);
     // 막간이 열리는 합에는 적도 기세를 고른다
     if (phase && this.openInterlude(phase)) return null;
 
@@ -873,7 +875,7 @@ export class Battle {
     if (!this.enemy.isAlive()) return this.finish(true);
 
     const warning = this.nextSpecialWarning();
-    if (warning) this.log.push(`⚠️ ${this.enemy.name}${josa(this.enemy.name, "이/가")} 「${warning}」의 기세를 끌어올린다!`);
+    if (warning) this.log.push(`${this.enemy.name}${josa(this.enemy.name, "이/가")} 「${warning}」의 기세를 끌어올린다!`);
     return null;
   }
 
@@ -887,7 +889,7 @@ export class Battle {
       // 비무는 사람을 죽이는 싸움이 아니다
       if (!this.spar) {
         this.player.kills += 1;
-        if (isNamed(this.enemy.key) && !this.player.slain.includes(this.enemy.key)) this.player.slain.push(this.enemy.key);
+        if (!this.oneOff && isNamed(this.enemy.key) && !this.player.slain.includes(this.enemy.key)) this.player.slain.push(this.enemy.key);
         const flag = DB.enemies[this.enemy.key].kill_flag;
         if (flag) this.player.addFlag(flag);
         const side = dominant(this.player.alignment);
@@ -935,7 +937,7 @@ export class Battle {
       if (loot && rng.random() < loot.chance) {
         this.player.addItem(loot.item);
         const name = DB.market[loot.item].name;
-        this.log.push(`🐾 ${name}${josa(name, "을/를")} 거두었다. 행낭에 넣었다.`);
+        this.log.push(`${name}${josa(name, "을/를")} 거두었다. 행낭에 넣었다.`);
       }
       return;
     }
@@ -945,7 +947,7 @@ export class Battle {
     if (table.medicine?.length && rng.random() < DROP_MEDICINE_RATE * tierRate) {
       const item = pick(table.medicine);
       this.player.addItem(item);
-      this.log.push(`🧪 품에서 ${DB.market[item].name}${josa(DB.market[item].name, "이/가")} 나왔다. 행낭에 넣었다.`);
+      this.log.push(`품에서 ${DB.market[item].name}${josa(DB.market[item].name, "이/가")} 나왔다. 행낭에 넣었다.`);
     }
     if (rng.random() >= table.book * tierRate) return;
     const key = dropSkill(this.player, this.enemy.drop?.skill, table.grades, DB.enemies[this.enemy.key].faction);
@@ -953,7 +955,7 @@ export class Battle {
     const known = this.player.hasSkill(key);
     const skill = new Skill(key);
     const notes = this.player.learnSkill(skill);
-    this.log.push(known ? `📕 품에서 비급이 떨어졌다. 「${skill.name}」, 아는 무공이다.` : `📕 품에서 비급이 떨어졌다. 새 무공 「${skill.name}」${josa(skill.name, "을/를")} 얻었다!`, ...notes);
+    this.log.push(known ? `품에서 비급이 떨어졌다. 「${skill.name}」, 아는 무공이다.` : `품에서 비급이 떨어졌다. 새 무공 「${skill.name}」${josa(skill.name, "을/를")} 얻었다!`, ...notes);
   }
 
   /** 승리 시 4개 능력치 중 랜덤 2개가 적 등급 범위만큼 오른다. */

@@ -254,7 +254,7 @@ function helpModal() {
     "성향이 맞지 않는 세력은 도움을 청하기는커녕 칼을 뽑기도 합니다."])}
     ${section("전투", [
     "무공은 내력을 씁니다. 내력이 없으면 맨손으로 싸웁니다.",
-    "적의 필살기는 한 합 전에 ⚠️로 예고됩니다. <b>경공</b>으로 흘려내면 다음 공격이 강해집니다.",
+    "적의 필살기는 한 합 전에 미리 예고됩니다. <b>경공</b>으로 흘려내면 다음 공격이 강해집니다.",
     "<b>심법</b>은 숨을 고르며 회복하고 점혈을 풉니다. 위험하면 <b>도주</b>도 방법입니다.",
     "내상은 전투가 끝나도 남고 주는 피해를 줄입니다.",
     "강호행마다 한 번, 쓰러지는 순간 마지막 힘을 끌어모을 수 있습니다. 화면 가운데 창에서 고르며, 끌어모으면 체력과 내력이 최대의 절반만큼 차오릅니다."])}
@@ -313,12 +313,12 @@ function renderTitle() {
       ${hasSave ? `<button class="start-btn" data-act="continue">이어하기<small>${esc(save.origin)}, ${esc(save.realm)}, ${Math.min(save.turn, MAX_TURN)}달째</small></button>` : ""}
       <button class="${hasSave ? "continue-btn" : "start-btn"}" data-act="setup">새 강호행</button>
     </div>
-    <p class="karma-display">💠 카르마 ${meta.current_karma} (누적 ${meta.total_karma})${nextReward(meta) ? `, 다음 누적 보상까지 ${nextReward(meta).at - meta.total_karma}` : ""}</p>
+    <p class="karma-display">카르마 ${meta.current_karma} (누적 ${meta.total_karma})${nextReward(meta) ? `<small class="block">다음 누적 보상까지 ${nextReward(meta).at - meta.total_karma}</small>` : ""}</p>
     <div class="title-links">
-      <button class="link-btn" data-act="shop">💠 카르마 상점${affordableCount(meta) ? ` (살 수 있는 것 ${affordableCount(meta)})` : ""}</button>
-      <button class="link-btn" data-act="open" data-modal="help-modal">❓ 입문서</button>
-      <button class="link-btn" data-act="open" data-modal="codex-modal">📖 강호록</button>
-      <button class="link-btn" data-act="open" data-modal="settings-modal">⚙️ 설정</button>
+      <button class="link-btn" data-act="shop">카르마 상점${affordableCount(meta) ? ` (살 수 있는 것 ${affordableCount(meta)})` : ""}</button>
+      <button class="link-btn" data-act="open" data-modal="help-modal">입문서</button>
+      <button class="link-btn" data-act="open" data-modal="codex-modal">강호록</button>
+      <button class="link-btn" data-act="open" data-modal="settings-modal">설정</button>
     </div>
   </div>
   ${helpModal()}${codexModal()}${settingsModal()}`;
@@ -382,7 +382,7 @@ const originOnly = (key) => (key ? `<span class="pick-stats block">${esc(DB.orig
 
 function shopRow(name, desc, act, key, cost, meta, label = "해금") {
   return `<div class="pick-row locked"><div class="pick-main"><div class="pick-name">${name}</div>${desc}</div>
-    <button class="unlock-btn" data-act="${act}" data-key="${esc(key)}" ${meta.current_karma < cost ? "disabled" : ""}>💠 ${cost}<br>${label}</button></div>`;
+    <button class="unlock-btn" data-act="${act}" data-key="${esc(key)}" ${meta.current_karma < cost ? "disabled" : ""}>카르마 ${cost}<br>${label}</button></div>`;
 }
 
 const emptyNote = (text) => `<p class="codex-empty">${text}</p>`;
@@ -420,7 +420,7 @@ function shopPanels(meta) {
     const desc = `<p class="pick-desc">${esc(p.desc)}</p>`;
     if (!meta.provisions.includes(key)) return shopRow(esc(p.name), desc, "buy-provision", key, p.cost, meta, "챙기기");
     return `<div class="pick-row"><div class="pick-main"><div class="pick-name">${esc(p.name)} <span class="rarity">챙겨 둠</span></div>${desc}</div>
-      <button class="unlock-btn" data-act="refund-provision" data-key="${esc(key)}">💠 ${p.cost}<br>물리기</button></div>`;
+      <button class="unlock-btn" data-act="refund-provision" data-key="${esc(key)}">카르마 ${p.cost}<br>물리기</button></div>`;
   };
   const provisions = provisionGroups.map((g) => `<h4 class="shop-group">${esc(g)}</h4>${Object.entries(DB.karma.provisions).filter(([, p]) => p.group === g).map(provisionRow).join("")}`).join("");
   return {
@@ -465,7 +465,7 @@ function renderShop() {
   app().innerHTML = `<div class="setup-head">
       <button class="back-btn" data-act="shop-back" aria-label="뒤로">←</button>
       <h2>카르마 상점</h2>
-      <span class="setup-karma">💠 ${meta.current_karma}</span>
+      <span class="setup-karma">카르마 ${meta.current_karma}</span>
     </div>
     <div class="setup-tabs">${tabs.map(([key, label]) => `<button class="tab-btn${ui.shopTab === key ? " active" : ""}" data-act="shop-tab" data-tab="${key}">${label}</button>`).join("")}</div>
     <div class="home-wrap">${shopPanels(meta)[ui.shopTab]}</div>`;
@@ -524,7 +524,7 @@ function renderSetup() {
   app().innerHTML = `<div class="setup-head">
       <button class="back-btn" data-act="title" aria-label="뒤로">←</button>
       <h2>어떤 무인으로 시작할까</h2>
-      <button class="shop-link" data-act="shop">💠 ${meta.current_karma} 상점</button>
+      <button class="shop-link" data-act="shop">카르마 ${meta.current_karma}, 상점</button>
     </div>
     <div class="setup-tabs">
       <button class="tab-btn${ui.setupTab === "origin" ? " active" : ""}" data-act="setup-tab" data-tab="origin">출신</button>
@@ -548,11 +548,11 @@ function renderSetup() {
 function sidebar() {
   const bag = Object.values(game.player.inventory).reduce((a, b) => a + b, 0);
   return `<div class="sidebar">
-    <button data-act="open-status" data-tab="stats">🧍<span class="sb-label">신상</span></button>
-    <button data-act="open-status" data-tab="skills">🥋<span class="sb-label">무공</span></button>
-    <button data-act="open-status" data-tab="bag">🎒<span class="sb-label">행낭${bag ? ` ${bag}` : ""}</span></button>
-    <button data-act="open" data-modal="codex-modal">📖<span class="sb-label">강호록</span></button>
-    <button data-act="open" data-modal="settings-modal">⚙️<span class="sb-label">설정</span></button>
+    <button data-act="open-status" data-tab="stats"><span class="sb-label">신상</span></button>
+    <button data-act="open-status" data-tab="skills"><span class="sb-label">무공</span></button>
+    <button data-act="open-status" data-tab="bag"><span class="sb-label">행낭${bag ? ` ${bag}` : ""}</span></button>
+    <button data-act="open" data-modal="codex-modal"><span class="sb-label">강호록</span></button>
+    <button data-act="open" data-modal="settings-modal"><span class="sb-label">설정</span></button>
   </div>`;
 }
 
@@ -650,7 +650,7 @@ function standBox(p, b) {
       <h3>${esc(b.enemy.name)} 앞에서 쓰러진다</h3>
       <p>${esc(line)}</p>
       <p class="stand-note">끌어모으면 체력과 내력이 최대의 절반만큼 차오릅니다. 남은 기회 ${p.revives}번.</p>
-      <button class="next-btn" data-act="stand" data-gather="1">🕯️ 마지막 힘을 끌어모은다</button>
+      <button class="next-btn" data-act="stand" data-gather="1">마지막 힘을 끌어모은다</button>
       <button class="danger-btn" data-act="stand" data-gather="">여기서 눈을 감는다</button>
     </div></div>`;
 }
@@ -692,7 +692,7 @@ function renderBattle() {
     </div>` : null;
   app().innerHTML = `<div class="battle-top">
       <h1 class="battle-title">${actName}<small>${esc(state.join(", "))}</small></h1>
-      <button class="round-menu" data-act="open-status" data-tab="stats" aria-label="신상 보기">🧍</button>
+      <button class="round-menu" data-act="open-status" data-tab="stats" aria-label="신상 보기">신상</button>
     </div>
     <div class="vs-row">
       <div class="combatant" data-side="player"><div class="name">${esc(p.origin)}</div>
@@ -707,16 +707,16 @@ function renderBattle() {
         <div class="enemy-tier">${esc(b.enemy.realm)}, ${esc(TIER_NAMES[b.enemy.tier] || b.enemy.tier)}${b.enemy.armor ? `, 방어 ${b.enemy.armor}` : ""}</div></div>
     </div>
     ${tags.length ? `<div class="battle-tags">${tags.map(([kind, label]) => `<span class="tag ${kind}">${esc(label)}</span>`).join("")}</div>` : ""}
-    ${warning ? `<p class="battle-warning">⚠️ 다음은 「${esc(warning)}」${movement ? " — 경공으로 흘려낼 수 있다" : ""}</p>` : ""}
+    ${warning ? `<p class="battle-warning">다음 합은 「${esc(warning)}」${movement ? " — 경공으로 흘려낼 수 있다" : ""}</p>` : ""}
     ${b.standPending ? standBox(p, b) : ""}
     <div class="battle-log" aria-live="polite">${b.roundNum === 0 ? `<p class="enemy-desc">${esc(b.enemy.desc)}</p>` : ""}${game.log.slice(-12).map((l) => `<p>${esc(l)}</p>`).join("")}</div>
     ${interlude ?? `<div class="battle-panel">
-      <button class="bt-btn main" data-act="battle" data-action="기본공격">⚔️ ${skill ? esc(skill.name) : "맨손 공격"}<small>${esc(attackNote)}</small></button>
+      <button class="bt-btn main" data-act="battle" data-action="기본공격">${skill ? esc(skill.name) : "맨손 공격"}<small>${esc(attackNote)}</small></button>
       <div class="battle-actions">
-        <button class="bt-btn" data-act="battle" data-action="비기" ${secretReady ? "" : "disabled"}>✨ ${skill?.secretUnlocked ? esc(skill.secretName) : "비기"}<small>${esc(secretNote)}</small></button>
-        <button class="bt-btn${b.sealed ? " suggest" : ""}" data-act="battle" data-action="심법" ${mindset ? "" : "disabled"}>🧘 ${mindset ? esc(mindset.name) : "심법"}<small>${mindset ? "회복, 점혈 해제" : "익힌 심법 없음"}</small></button>
-        <button class="bt-btn${warning && movement ? " suggest" : ""}" data-act="battle" data-action="경공" ${movement && p.qi >= movement.qiCost ? "" : "disabled"}>💨 ${movement ? esc(movement.name) : "경공"}<small>${movement ? `내력 ${movement.qiCost}, 회피 ${movement.effectValue("evade")}%` : "익힌 경공 없음"}</small></button>
-        ${b.isFinal ? "" : `<button class="bt-btn flee" data-act="battle" data-action="도주">🏃 도주<small>실패하면 공격받음</small></button>`}
+        <button class="bt-btn" data-act="battle" data-action="비기" ${secretReady ? "" : "disabled"}>${skill?.secretUnlocked ? esc(skill.secretName) : "비기"}<small>${esc(secretNote)}</small></button>
+        <button class="bt-btn${b.sealed ? " suggest" : ""}" data-act="battle" data-action="심법" ${mindset ? "" : "disabled"}>${mindset ? esc(mindset.name) : "심법"}<small>${mindset ? "회복, 점혈 해제" : "익힌 심법 없음"}</small></button>
+        <button class="bt-btn${warning && movement ? " suggest" : ""}" data-act="battle" data-action="경공" ${movement && p.qi >= movement.qiCost ? "" : "disabled"}>${movement ? esc(movement.name) : "경공"}<small>${movement ? `내력 ${movement.qiCost}, 회피 ${movement.effectValue("evade")}%` : "익힌 경공 없음"}</small></button>
+        ${b.isFinal ? "" : `<button class="bt-btn flee" data-act="battle" data-action="도주">도주<small>실패하면 공격받음</small></button>`}
       </div>
       ${items.length ? `<div class="battle-items">${items.map(([key, count]) => `<button class="item-btn${lowHp && DB.market[key].effects.some((e) => e.type === "heal") ? " suggest" : ""}" data-act="battle" data-action="소비품" data-key="${esc(key)}">${esc(DB.market[key].name)} ×${count}</button>`).join("")}</div>` : ""}
     </div>`}${gameModals()}`;
@@ -752,7 +752,7 @@ function chainStrip(p) {
   if (!p.chains.length) return "";
   return `<div class="chain-strip">${p.chains.map((c) => {
     const months = Math.max(0, c.due - p.turn);
-    return `🔗 ${esc(DB.chains[c.id].title)} ${c.next + 1 > DB.chains[c.id].keys.length ? "" : `${c.next + 1}/${DB.chains[c.id].keys.length}편`} ${months ? `${months}달 뒤` : "이번 달"}`;
+    return `${esc(DB.chains[c.id].title)} ${c.next + 1 > DB.chains[c.id].keys.length ? "" : `${c.next + 1}/${DB.chains[c.id].keys.length}편`} ${months ? `${months}달 뒤` : "이번 달"}`;
   }).join("<br>")}</div>`;
 }
 
@@ -790,10 +790,10 @@ function topbar() {
 function legacyPanel() {
   const { ending } = game;
   if (!loadMeta().legacy_open) return "";
-  if (ending.legacyLeft) return `<p class="legacy-note">🏺 「${esc(ending.legacyLeft)}」${josa(esc(ending.legacyLeft), "을/를")} 다음 강호행에 남겼습니다.</p>`;
+  if (ending.legacyLeft) return `<p class="legacy-note">「${esc(ending.legacyLeft)}」${josa(esc(ending.legacyLeft), "을/를")} 다음 강호행에 남겼습니다.</p>`;
   const options = game.legacyOptions();
   if (!options.length) return `<p class="legacy-note">남길 만한 것이 없습니다.</p>`;
-  return `<div class="legacy-panel"><h4>🏺 전설의 유산: 하나를 남긴다</h4>
+  return `<div class="legacy-panel"><h4>전설의 유산: 하나를 남긴다</h4>
     ${options.map((o, i) => `<button class="choice-btn" data-act="leave-legacy" data-key="${i}">${esc(o.label)}</button>`).join("")}</div>`;
 }
 
@@ -808,7 +808,7 @@ function renderEnding() {
       ${ending.epilogue.map((l) => `<p class="epilogue">${esc(l)}</p>`).join("")}
       ${p.chronicle.length ? `<details class="chronicle"><summary>이번 강호행 돌아보기</summary>${chronicleList(p)}</details>` : ""}
       ${legacyPanel()}
-      <p class="karma-gain">💠 카르마 +${ending.karma} (보유 ${meta.current_karma}, 누적 ${meta.total_karma})</p>
+      <p class="karma-gain">카르마 +${ending.karma} (보유 ${meta.current_karma}, 누적 ${meta.total_karma})</p>
       <p class="karma-lines">${(ending.karmaLines || []).map(esc).join(", ")}</p>
       <p class="ending-hint">카르마로 출신과 자질, 기틀, 인연, 유산을 얻어 다시 도전할 수 있습니다. 첫 화면의 상점에서 살 수 있습니다.</p>
       <div class="run-facts">
@@ -843,7 +843,7 @@ function renderMarket() {
   const views = stockView(player, market);
   const fits = (item) => (compareNote(player, item.key).includes("맞음") || compareNote(player, item.key).includes("같은 계열") || (DB.market[item.key].effects[0]?.style === main) ? 0 : 1);
   const row = (item) => {
-    const label = item.sold ? "품절" : item.blocked === "효과 없음" ? "필요 없음" : item.karma ? `💠 ${item.karma}` : `은자 ${item.price}`;
+    const label = item.sold ? "품절" : item.blocked === "효과 없음" ? "필요 없음" : item.karma ? `카르마 ${item.karma}` : `은자 ${item.price}`;
     const note = item.sold ? "" : compareNote(player, item.key);
     return `<div class="market-item${item.sold ? " sold" : ""}"><div class="item-info">
       <div class="item-name">${esc(item.name)}<span class="item-category">${esc(categoryName(item.category))}${item.stackable && !item.sold ? `, ${item.left}개 남음` : ""}</span></div>
@@ -858,11 +858,11 @@ function renderMarket() {
   const rest = views.filter((v) => !known.includes(v.category));
   const stock = sections.join("") + (rest.length ? `<h4 class="market-group">특별한 물건</h4>${rest.map(row).join("")}` : "");
   return `<div class="stage market-stage${market.special ? " market-special" : ""}"><div class="market-inner">
-      <h2 class="market-title">${market.special ? "🌑" : "🏪"} ${esc(market.name)}</h2>
+      <h2 class="market-title">${esc(market.name)}</h2>
       <p class="market-sub">${market.special ? "결전을 앞둔 밤, 누군가 말없이 보따리를 풀어 놓는다." : "달을 쓰지 않습니다. 다음 장터는 일 년 뒤입니다."}</p>
       ${market.message ? `<p class="market-message">${esc(market.message)}</p>` : ""}
       ${stock}</div></div>
-    <div class="action-area"><div class="action-inner"><button class="next-btn" data-act="leave-market">${market.special ? "⚔️ 떠나서 결전으로" : `▶️ 장터를 떠난다 (은자 ${player.silver})`}</button></div></div>`;
+    <div class="action-area"><div class="action-inner"><button class="next-btn" data-act="leave-market">${market.special ? "떠나서 결전으로" : `장터를 떠난다 (은자 ${player.silver})`}</button></div></div>`;
 }
 
 /** 첫 달 전에 쓸 무공을 고르는 화면. 시간이 지나지 않는다. */
@@ -882,7 +882,7 @@ function renderArtsPick() {
       <h2 class="event-title">쓸 무공을 정한다</h2>
       <div class="event-body"><p class="event-text">무공을 여럿 지니고 길을 나선다. 무엇을 앞세울지 먼저 정한다. 병기와 도구, 성취는 주무공에 맞춰 받는다.</p>
       ${groups}</div></div></div></div>
-    <div class="action-area"><div class="action-inner"><button class="next-btn" data-act="finish-arts">▶️ 이대로 나선다</button><p class="hint flush">달이 지나지 않는 번외 시간입니다. 나중에도 신상에서 바꿀 수 있습니다.</p></div></div>`;
+    <div class="action-area"><div class="action-inner"><button class="next-btn" data-act="finish-arts">이대로 나선다</button><p class="hint flush">달이 지나지 않는 번외 시간입니다. 나중에도 신상에서 바꿀 수 있습니다.</p></div></div>`;
 }
 
 function renderEvent() {
@@ -896,7 +896,7 @@ function renderEvent() {
     <div class="action-area"><div class="action-inner"><p class="hint flush">${DB.events[game.event.key].chain ? `이어지는 인연 「${esc(view.chain)}」입니다. 한 편마다 그달을 씁니다. 시작하면 손을 떼거나 죽지 않는 한 천마봉 전에 끝납니다.` : DB.events[game.event.key].prelude ? "십 년 전, 사부의 문하에 든 날의 일입니다. 달이 지나지 않습니다. 고른 병기와 심법을 십 년 갈고닦은 채로 산을 내려갑니다." : p.turn >= p.maxTurn ? "이 선택 뒤에는 돌아갈 수 없다." : "선택지의 결과는 고르기 전까지 알 수 없다."}</p></div></div>`;
 }
 
-const MAJOR_LINE = /^(🌟|✨|🏆|📕|📖|⚠️|🩸|⚔️|⚡|🗡️)/;
+const MAJOR_LINE = /(경지 돌파|승급했다|터득되었다|묘리를 깨쳤다|제패했다|새 무공|마주쳤다|비무를 겨룬다|마지막 결전|기세를 끌어올린다|경지의 특전|불리기 시작했다|기가 역류한다)/;
 const RESULT_PART = /[+-]\d|단계|완치|입문|획득|장착|새 무공|받았지만|불리기/;
 
 /** "외공+2, 은자+10" 같은 결과 줄은 표로, 나머지는 문장으로 보여 준다. */
@@ -931,10 +931,10 @@ function renderTurn() {
   const action = (value, label, note, extra = "") => `<button class="act-btn${extra}" data-act="action" data-action="${value}">${label}<small>${note}</small></button>`;
   const market = nextMarket ? (nextMarket === p.turn ? "이번 달 말에 장터가 열립니다." : `다음 장터까지 ${nextMarket - p.turn}개월`) : "";
   const controls = game.pendingNext
-    ? `<button class="next-btn" data-act="next">${nextMarket === p.turn ? "🏪 장터로" : "▶️ 다음 달로"}</button>`
+    ? `<button class="next-btn" data-act="next">${nextMarket === p.turn ? "장터로" : "다음 달로"}</button>`
     : `${advice ? `<p class="advice">${advice}</p>` : ""}<div class="actions">
-        ${action("탐색", "🗺️ 탐색", "전투, 사건, 기연")}${action("수련", "⚔️ 수련", "외공, 무리, 성취")}
-        ${action("명상", "🧘 운기", "내공, 심경, 내력")}${action("휴식", "💤 요양", "체력, 내력, 내상", needRest ? " suggest" : "")}
+        ${action("탐색", "탐색", "전투, 사건, 기연")}${action("수련", "수련", "외공, 무리, 성취")}
+        ${action("명상", "운기", "내공, 심경, 내력")}${action("휴식", "요양", "체력, 내력, 내상", needRest ? " suggest" : "")}
       </div>
       ${market ? `<p class="hint">${market}</p>` : ""}`;
   return `<div class="stage" aria-live="polite"><div class="stage-inner">${body}</div></div>
