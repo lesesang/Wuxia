@@ -3,7 +3,7 @@
     "name": "강건한 육체",
     "desc": "시작 외공이 120 높고 외공 성장이 15% 늘어난다.",
     "rarity": "일반",
-    "cost": 5,
+    "cost": 6,
     "effects": [
       {
         "type": "start_stat",
@@ -21,7 +21,7 @@
     "name": "선천진기",
     "desc": "시작 내공이 120 높고 내공 성장이 15% 늘어난다.",
     "rarity": "일반",
-    "cost": 5,
+    "cost": 6,
     "effects": [
       {
         "type": "start_stat",
@@ -35,11 +35,1044 @@
       }
     ]
   },
+  "타고난안목": {
+    "name": "타고난 안목",
+    "desc": "시작 무리가 120 높고 무리 성장이 15% 늘어난다.",
+    "rarity": "일반",
+    "cost": 6,
+    "effects": [
+      {
+        "type": "start_stat",
+        "stat": "martial",
+        "amount": 120
+      },
+      {
+        "type": "growth_rate",
+        "stat": "martial",
+        "percent": 15
+      }
+    ]
+  },
+  "총명": {
+    "name": "총명",
+    "desc": "시작 심경이 120 높고 심경 성장이 15% 늘어난다.",
+    "rarity": "일반",
+    "cost": 6,
+    "effects": [
+      {
+        "type": "start_stat",
+        "stat": "mind",
+        "amount": 120
+      },
+      {
+        "type": "growth_rate",
+        "stat": "mind",
+        "percent": 15
+      }
+    ]
+  },
+  "천둥벌거숭이": {
+    "name": "천둥벌거숭이",
+    "desc": "시작 외공이 160 높지만 심경이 80 낮다. 겁이 없어 남다른 길이 열린다.",
+    "rarity": "일반",
+    "cost": 3,
+    "effects": [
+      {
+        "type": "start_stat",
+        "stat": "external",
+        "amount": 160
+      },
+      {
+        "type": "start_stat",
+        "stat": "mind",
+        "amount": -80
+      }
+    ],
+    "reacts": true
+  },
+  "병약한몸": {
+    "name": "병치레",
+    "desc": "시작 내공이 160 높지만 외공이 80 낮다. 크게 앓고 일어난 몸이라 앓는 사람의 사정을 안다.",
+    "rarity": "일반",
+    "cost": 3,
+    "effects": [
+      {
+        "type": "start_stat",
+        "stat": "internal",
+        "amount": 160
+      },
+      {
+        "type": "start_stat",
+        "stat": "external",
+        "amount": -80
+      }
+    ],
+    "reacts": true
+  },
+  "잔재주꾼": {
+    "name": "잔재주꾼",
+    "desc": "시작 무리가 160 높지만 내공이 80 낮다. 남의 초식을 흉내 내는 데 능해 비무와 구경거리에서 남다른 길이 열린다.",
+    "rarity": "일반",
+    "cost": 3,
+    "effects": [
+      {
+        "type": "start_stat",
+        "stat": "martial",
+        "amount": 160
+      },
+      {
+        "type": "start_stat",
+        "stat": "internal",
+        "amount": -80
+      }
+    ],
+    "reacts": true
+  },
+  "저잣거리아이": {
+    "name": "저잣거리 물",
+    "desc": "시작 심경이 160 높지만 무리가 80 낮다. 저잣거리 밑바닥을 굴러 본 터라 밑바닥 사람들과 말이 통한다.",
+    "rarity": "일반",
+    "cost": 3,
+    "effects": [
+      {
+        "type": "start_stat",
+        "stat": "mind",
+        "amount": 160
+      },
+      {
+        "type": "start_stat",
+        "stat": "martial",
+        "amount": -80
+      }
+    ],
+    "reacts": true
+  },
+  "기선제압": {
+    "name": "기선제압",
+    "desc": "전투의 첫 합에서 주는 피해가 120% 늘어난다.",
+    "rarity": "일반",
+    "cost": 4,
+    "effects": [
+      {
+        "type": "first_strike",
+        "percent": 120
+      }
+    ]
+  },
+  "매의눈": {
+    "name": "매의 눈",
+    "desc": "공격이 빗나갈 확률이 15% 줄고 회심의 일격 확률이 10% 오른다.",
+    "rarity": "일반",
+    "cost": 4,
+    "effects": [
+      {
+        "type": "hit_bonus",
+        "percent": 15
+      },
+      {
+        "type": "crit",
+        "percent": 10
+      }
+    ]
+  },
+  "승부사": {
+    "name": "승부사",
+    "desc": "회심의 일격 피해가 60% 늘고 확률이 5% 오른다.",
+    "rarity": "일반",
+    "cost": 5,
+    "effects": [
+      {
+        "type": "crit_power",
+        "percent": 60
+      },
+      {
+        "type": "crit",
+        "percent": 5
+      }
+    ]
+  },
+  "대식가": {
+    "name": "대식가",
+    "desc": "매달 체력을 8% 더 회복한다. 먹을 것이 얽힌 사건에서 남다른 일이 생긴다.",
+    "rarity": "일반",
+    "cost": 3,
+    "effects": [
+      {
+        "type": "turn_regen",
+        "hp_pct": 8,
+        "qi_pct": 0
+      }
+    ],
+    "reacts": true
+  },
+  "잠이보약": {
+    "name": "잠이 보약",
+    "desc": "요양으로 되찾는 체력과 내력이 100% 늘어나고 매달 내력을 5% 더 회복한다.",
+    "rarity": "일반",
+    "cost": 4,
+    "effects": [
+      {
+        "type": "heal_rate",
+        "percent": 100
+      },
+      {
+        "type": "turn_regen",
+        "hp_pct": 0,
+        "qi_pct": 5
+      }
+    ]
+  },
+  "주당": {
+    "name": "주당",
+    "desc": "매달 체력과 내력을 5%씩 더 회복한다. 술자리에서 남다른 일이 생긴다.",
+    "rarity": "일반",
+    "cost": 4,
+    "effects": [
+      {
+        "type": "turn_regen",
+        "hp_pct": 5,
+        "qi_pct": 5
+      }
+    ],
+    "reacts": true
+  },
+  "낙천가": {
+    "name": "낙천가",
+    "desc": "매달 체력과 내력을 7%씩 더 회복한다. 나쁜 일도 그냥 넘긴다.",
+    "rarity": "일반",
+    "cost": 5,
+    "effects": [
+      {
+        "type": "turn_regen",
+        "hp_pct": 7,
+        "qi_pct": 7
+      }
+    ],
+    "reacts": true
+  },
+  "맑은정신": {
+    "name": "맑은 정신",
+    "desc": "혈도를 짚여 무공이 봉쇄당하지 않고 심법 회복이 40% 늘어난다.",
+    "rarity": "일반",
+    "cost": 5,
+    "effects": [
+      {
+        "type": "seal_immune"
+      },
+      {
+        "type": "mindset_power",
+        "percent": 40
+      }
+    ]
+  },
+  "일취월장": {
+    "name": "일취월장",
+    "desc": "무공 성취를 70% 더 빠르게 얻는다.",
+    "rarity": "일반",
+    "cost": 5,
+    "effects": [
+      {
+        "type": "mastery_rate",
+        "percent": 70
+      }
+    ]
+  },
+  "유람객": {
+    "name": "유람객",
+    "desc": "사건과 기연에서 오르는 기량이 100% 늘어난다.",
+    "rarity": "일반",
+    "cost": 5,
+    "effects": [
+      {
+        "type": "event_growth",
+        "percent": 100
+      }
+    ]
+  },
+  "복성": {
+    "name": "복성",
+    "desc": "탐색에서 기연을 만날 확률이 25% 오른다.",
+    "rarity": "일반",
+    "cost": 5,
+    "effects": [
+      {
+        "type": "fortune_rate",
+        "percent": 25
+      }
+    ]
+  },
+  "입담꾼": {
+    "name": "입담꾼",
+    "desc": "명성 12로 시작하고 은자 30을 더 든다. 말로 풀리는 일이 많다.",
+    "rarity": "일반",
+    "cost": 3,
+    "effects": [
+      {
+        "type": "start_fame",
+        "amount": 12
+      },
+      {
+        "type": "start_silver",
+        "amount": 30
+      }
+    ],
+    "reacts": true
+  },
+  "소식통": {
+    "name": "소식통",
+    "desc": "은자 60을 더 들고 시작하고 얻는 은자가 15% 늘어난다. 객잔과 소문이 얽힌 사건에서 먼저 안다.",
+    "rarity": "일반",
+    "cost": 3,
+    "effects": [
+      {
+        "type": "start_silver",
+        "amount": 60
+      },
+      {
+        "type": "silver_rate",
+        "percent": 15
+      }
+    ],
+    "reacts": true
+  },
+  "의협심": {
+    "name": "의협심",
+    "desc": "명성 8로 시작하고 받는 피해가 4% 줄어든다. 약한 사람이 얽힌 사건에서 다른 길이 열린다.",
+    "rarity": "일반",
+    "cost": 3,
+    "effects": [
+      {
+        "type": "start_fame",
+        "amount": 8
+      },
+      {
+        "type": "damage_reduce",
+        "percent": 4
+      }
+    ],
+    "reacts": true
+  },
+  "장사꾼기질": {
+    "name": "장사꾼 기질",
+    "desc": "은자 100을 더 들고 시작하고 장터 가격이 20% 싸다.",
+    "rarity": "일반",
+    "cost": 4,
+    "effects": [
+      {
+        "type": "start_silver",
+        "amount": 100
+      },
+      {
+        "type": "market_discount",
+        "percent": 20
+      }
+    ]
+  },
+  "명문의자제": {
+    "name": "세가의 은인",
+    "desc": "은자 250과 명성 10으로 시작한다. 어느 세가에 베푼 은혜가 있어 세가와 얽힌 사건에서 말이 통한다.",
+    "rarity": "일반",
+    "cost": 4,
+    "effects": [
+      {
+        "type": "start_silver",
+        "amount": 250
+      },
+      {
+        "type": "start_fame",
+        "amount": 10
+      }
+    ],
+    "reacts": true
+  },
+  "눈썰미": {
+    "name": "눈썰미",
+    "desc": "장터에 물건이 3개 더 진열되고 가격이 10% 싸다. 사건에서 남이 못 보는 것을 본다.",
+    "rarity": "일반",
+    "cost": 4,
+    "effects": [
+      {
+        "type": "extra_stock",
+        "amount": 3
+      },
+      {
+        "type": "market_discount",
+        "percent": 10
+      }
+    ],
+    "reacts": true
+  },
+  "글읽는무인": {
+    "name": "글 읽는 무인",
+    "desc": "심법 회복이 20% 늘고 무공 성취를 20% 더 빠르게 얻는다. 글과 진법, 설법이 얽힌 사건에서 알아듣는다.",
+    "rarity": "일반",
+    "cost": 4,
+    "effects": [
+      {
+        "type": "mindset_power",
+        "percent": 20
+      },
+      {
+        "type": "mastery_rate",
+        "percent": 20
+      }
+    ],
+    "reacts": true
+  },
+  "산사람": {
+    "name": "산에 밝은 눈",
+    "desc": "기연을 만날 확률이 15% 오르고 매달 체력과 내력을 3%씩 더 회복한다. 산에서 오래 지내 본 터라 산과 짐승, 약초가 얽힌 사건에서 길을 안다.",
+    "rarity": "일반",
+    "cost": 4,
+    "effects": [
+      {
+        "type": "fortune_rate",
+        "percent": 15
+      },
+      {
+        "type": "turn_regen",
+        "hp_pct": 3,
+        "qi_pct": 3
+      }
+    ],
+    "reacts": true
+  },
+  "금전운": {
+    "name": "금전운",
+    "desc": "얻는 은자가 60% 늘어난다.",
+    "rarity": "일반",
+    "cost": 5,
+    "effects": [
+      {
+        "type": "silver_rate",
+        "percent": 60
+      }
+    ]
+  },
+  "약초꾼": {
+    "name": "약손",
+    "desc": "금창약 5개와 회기단 3개를 들고 시작하고 상비약 회복이 50% 늘어난다. 약초와 병을 아는 손이라 사건에서 남다른 길이 열린다.",
+    "rarity": "일반",
+    "cost": 5,
+    "effects": [
+      {
+        "type": "start_item",
+        "item": "금창약",
+        "amount": 5
+      },
+      {
+        "type": "start_item",
+        "item": "회기단",
+        "amount": 3
+      },
+      {
+        "type": "consumable_rate",
+        "percent": 50
+      }
+    ],
+    "reacts": true
+  },
+  "수련도구": {
+    "name": "수련 도구 한 짐",
+    "desc": "주무공 계열 수련 도구 4개를 들고 시작한다.",
+    "rarity": "일반",
+    "cost": 4,
+    "effects": [
+      {
+        "type": "start_style_tool",
+        "amount": 4
+      }
+    ]
+  },
+  "비장의도구": {
+    "name": "비장의 도구",
+    "desc": "주무공 계열 전투 도구 4개를 들고 시작한다.",
+    "rarity": "일반",
+    "cost": 4,
+    "effects": [
+      {
+        "type": "start_battle_tool",
+        "amount": 4
+      }
+    ]
+  },
+  "가보의호구": {
+    "name": "물려받은 갑의",
+    "desc": "은인에게 물려받은 철사갑의를 입고 시작한다.",
+    "rarity": "일반",
+    "cost": 4,
+    "effects": [
+      {
+        "type": "start_equip",
+        "item": "철사갑의"
+      }
+    ]
+  },
+  "구명의은혜": {
+    "name": "구명 보따리",
+    "desc": "구명단 2개와 해독단 2개를 들고 시작한다.",
+    "rarity": "일반",
+    "cost": 5,
+    "effects": [
+      {
+        "type": "start_item",
+        "item": "구명단",
+        "amount": 2
+      },
+      {
+        "type": "start_item",
+        "item": "해독단",
+        "amount": 2
+      }
+    ]
+  },
+  "현기의호흡": {
+    "name": "현기의 호흡",
+    "desc": "심법 「곤륜현기공」을 익힌 채로 시작하고 심법 회복이 20% 늘어난다.",
+    "rarity": "일반",
+    "cost": 6,
+    "effects": [
+      {
+        "type": "start_skill",
+        "skill": "곤륜현기공"
+      },
+      {
+        "type": "mindset_power",
+        "percent": 20
+      }
+    ]
+  },
+  "천생근골": {
+    "name": "천생근골",
+    "desc": "시작 외공과 무리가 60 높고 성장이 각각 12% 늘어난다.",
+    "rarity": "희귀",
+    "cost": 9,
+    "effects": [
+      {
+        "type": "start_stat",
+        "stat": "external",
+        "amount": 60
+      },
+      {
+        "type": "start_stat",
+        "stat": "martial",
+        "amount": 60
+      },
+      {
+        "type": "growth_rate",
+        "stat": "external",
+        "percent": 12
+      },
+      {
+        "type": "growth_rate",
+        "stat": "martial",
+        "percent": 12
+      }
+    ]
+  },
+  "오성": {
+    "name": "오성",
+    "desc": "시작 내공과 심경이 60 높고 성장이 각각 12% 늘어난다.",
+    "rarity": "희귀",
+    "cost": 9,
+    "effects": [
+      {
+        "type": "start_stat",
+        "stat": "internal",
+        "amount": 60
+      },
+      {
+        "type": "start_stat",
+        "stat": "mind",
+        "amount": 60
+      },
+      {
+        "type": "growth_rate",
+        "stat": "internal",
+        "percent": 12
+      },
+      {
+        "type": "growth_rate",
+        "stat": "mind",
+        "percent": 12
+      }
+    ]
+  },
+  "혼원지체": {
+    "name": "혼원지체",
+    "desc": "시작 외공과 내공이 60 높고 성장이 각각 12% 늘어난다.",
+    "rarity": "희귀",
+    "cost": 9,
+    "effects": [
+      {
+        "type": "start_stat",
+        "stat": "external",
+        "amount": 60
+      },
+      {
+        "type": "start_stat",
+        "stat": "internal",
+        "amount": 60
+      },
+      {
+        "type": "growth_rate",
+        "stat": "external",
+        "percent": 12
+      },
+      {
+        "type": "growth_rate",
+        "stat": "internal",
+        "percent": 12
+      }
+    ]
+  },
+  "철심석장": {
+    "name": "철심석장",
+    "desc": "시작 외공과 심경이 60 높고 성장이 각각 12% 늘어난다.",
+    "rarity": "희귀",
+    "cost": 9,
+    "effects": [
+      {
+        "type": "start_stat",
+        "stat": "external",
+        "amount": 60
+      },
+      {
+        "type": "start_stat",
+        "stat": "mind",
+        "amount": 60
+      },
+      {
+        "type": "growth_rate",
+        "stat": "external",
+        "percent": 12
+      },
+      {
+        "type": "growth_rate",
+        "stat": "mind",
+        "percent": 12
+      }
+    ]
+  },
+  "통현지재": {
+    "name": "통현지재",
+    "desc": "시작 내공과 무리가 60 높고 성장이 각각 12% 늘어난다.",
+    "rarity": "희귀",
+    "cost": 9,
+    "effects": [
+      {
+        "type": "start_stat",
+        "stat": "internal",
+        "amount": 60
+      },
+      {
+        "type": "start_stat",
+        "stat": "martial",
+        "amount": 60
+      },
+      {
+        "type": "growth_rate",
+        "stat": "internal",
+        "percent": 12
+      },
+      {
+        "type": "growth_rate",
+        "stat": "martial",
+        "percent": 12
+      }
+    ]
+  },
+  "혜근": {
+    "name": "혜근",
+    "desc": "시작 무리와 심경이 60 높고 성장이 각각 12% 늘어난다.",
+    "rarity": "희귀",
+    "cost": 9,
+    "effects": [
+      {
+        "type": "start_stat",
+        "stat": "martial",
+        "amount": 60
+      },
+      {
+        "type": "start_stat",
+        "stat": "mind",
+        "amount": 60
+      },
+      {
+        "type": "growth_rate",
+        "stat": "martial",
+        "percent": 12
+      },
+      {
+        "type": "growth_rate",
+        "stat": "mind",
+        "percent": 12
+      }
+    ]
+  },
+  "대기만성": {
+    "name": "대기만성",
+    "desc": "시작 기량이 모두 40 낮지만 새 장이 열릴 때마다 모든 기량이 40 오른다.",
+    "rarity": "희귀",
+    "cost": 10,
+    "effects": [
+      {
+        "type": "start_stat",
+        "stat": "external",
+        "amount": -40
+      },
+      {
+        "type": "start_stat",
+        "stat": "internal",
+        "amount": -40
+      },
+      {
+        "type": "start_stat",
+        "stat": "martial",
+        "amount": -40
+      },
+      {
+        "type": "start_stat",
+        "stat": "mind",
+        "amount": -40
+      },
+      {
+        "type": "chapter_growth",
+        "amount": 40
+      }
+    ]
+  },
+  "외길": {
+    "name": "외길",
+    "desc": "주무공과 계열이 맞는 병기의 위력이 40% 늘어난다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "main_weapon_bonus",
+        "percent": 40
+      }
+    ]
+  },
+  "금강불괴": {
+    "name": "금강불괴",
+    "desc": "내상을 입지 않는다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "no_injury"
+      }
+    ]
+  },
+  "절세미공": {
+    "name": "디딤돌",
+    "desc": "승급할 때 성취가 30이 아니라 60에서 다시 시작한다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "evolve_mastery",
+        "amount": 60
+      }
+    ]
+  },
+  "심유일점": {
+    "name": "심유일점",
+    "desc": "회심의 일격 확률이 20% 오른다.",
+    "rarity": "희귀",
+    "cost": 8,
+    "effects": [
+      {
+        "type": "crit",
+        "percent": 20
+      }
+    ]
+  },
+  "일격필살": {
+    "name": "일격필살",
+    "desc": "비기의 피해가 50% 늘어난다.",
+    "rarity": "희귀",
+    "cost": 8,
+    "effects": [
+      {
+        "type": "secret_power",
+        "percent": 50
+      }
+    ]
+  },
+  "배수진": {
+    "name": "배수진",
+    "desc": "체력이 40% 이하일 때 주는 피해가 50% 늘어난다.",
+    "rarity": "희귀",
+    "cost": 8,
+    "effects": [
+      {
+        "type": "low_hp_power",
+        "below": 40,
+        "percent": 50
+      }
+    ]
+  },
+  "이기어검": {
+    "name": "여력",
+    "desc": "공격무공의 내력 소모가 20% 줄어든다. 긴 싸움에서 내력이 마르지 않는다.",
+    "rarity": "희귀",
+    "cost": 8,
+    "effects": [
+      {
+        "type": "qi_cost_cut",
+        "percent": 20
+      }
+    ]
+  },
+  "독인": {
+    "name": "독인",
+    "desc": "독에 당하지 않고 공격이 적을 중독시킨다.",
+    "rarity": "희귀",
+    "cost": 8,
+    "effects": [
+      {
+        "type": "poison_immune"
+      },
+      {
+        "type": "inflict_poison",
+        "power": 8
+      }
+    ]
+  },
+  "전장의아이": {
+    "name": "전장의 기억",
+    "desc": "전투에서 이기면 실전 경험을 1 더 얻고 체력을 10% 회복한다. 전장을 겪어 본 눈이 군과 싸움터의 일을 먼저 읽는다.",
+    "rarity": "희귀",
+    "cost": 8,
+    "effects": [
+      {
+        "type": "battle_exp",
+        "amount": 1
+      },
+      {
+        "type": "battle_buff",
+        "trigger": "on_battle_end",
+        "stat": "hp",
+        "percent": 10
+      }
+    ],
+    "reacts": true
+  },
+  "백전노장": {
+    "name": "이른 실전",
+    "desc": "일찍부터 싸움판을 겪어 실전 경험 8을 쌓은 채로 시작한다. 경지 돌파가 빨라진다.",
+    "rarity": "희귀",
+    "cost": 8,
+    "effects": [
+      {
+        "type": "start_battles",
+        "amount": 8
+      }
+    ]
+  },
+  "병기광": {
+    "name": "병기광",
+    "desc": "주무공 계열의 좋은 병기를 들고 시작한다. 어떤 병기든 제 힘을 내고 병기 위력이 15% 늘어난다.",
+    "rarity": "희귀",
+    "cost": 9,
+    "effects": [
+      {
+        "type": "no_mismatch"
+      },
+      {
+        "type": "start_style_weapon",
+        "tier": 1
+      },
+      {
+        "type": "main_weapon_bonus",
+        "percent": 15
+      }
+    ]
+  },
+  "가전비급": {
+    "name": "뜻밖의 비급",
+    "desc": "우연히 손에 넣은 주무공 계열의 명품 공격무공 하나를 더 익히고 시작한다.",
+    "rarity": "희귀",
+    "cost": 9,
+    "effects": [
+      {
+        "type": "start_style_skill",
+        "grade": "명품"
+      }
+    ]
+  },
+  "구름걸음": {
+    "name": "구름 걸음",
+    "desc": "경공 「유운신법」을 익힌 채로 시작하고 달아날 확률이 30% 오른다.",
+    "rarity": "희귀",
+    "cost": 9,
+    "effects": [
+      {
+        "type": "start_skill",
+        "skill": "유운신법"
+      },
+      {
+        "type": "flee_rate",
+        "percent": 30
+      }
+    ]
+  },
+  "철옹성": {
+    "name": "철옹성",
+    "desc": "받는 피해가 12% 줄고 매달 체력을 5% 더 회복한다.",
+    "rarity": "희귀",
+    "cost": 10,
+    "effects": [
+      {
+        "type": "damage_reduce",
+        "percent": 12
+      },
+      {
+        "type": "turn_regen",
+        "hp_pct": 5,
+        "qi_pct": 0
+      }
+    ]
+  },
+  "창궁의혈통": {
+    "name": "창궁의 혈통",
+    "desc": "주무공 성취 30과 명성 3으로 시작한다. 오대세가와 맹의 일에 남궁의 이름이 통한다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "start_mastery",
+        "amount": 30
+      },
+      {
+        "type": "start_fame",
+        "amount": 3
+      }
+    ],
+    "origin": "남궁세가",
+    "reacts": true
+  },
+  "네형의칼": {
+    "name": "네 형의 칼",
+    "desc": "체력이 40% 이하일 때 주는 피해가 35% 늘어난다. 형제와 불이 얽힌 사건에서 물러서지 않는다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "low_hp_power",
+        "below": 40,
+        "percent": 35
+      }
+    ],
+    "origin": "하북팽가",
+    "reacts": true
+  },
+  "표로의다리": {
+    "name": "표로의 다리",
+    "desc": "은자 60을 더 들고 시작하고 달아날 확률이 20% 오른다. 길과 표물이 얽힌 사건에서 앞장선다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "start_silver",
+        "amount": 60
+      },
+      {
+        "type": "flee_rate",
+        "percent": 20
+      }
+    ],
+    "origin": "표국표사",
+    "reacts": true
+  },
+  "거지의귀": {
+    "name": "거지의 귀",
+    "desc": "기연을 만날 확률이 10% 오른다. 소문과 끼니가 얽힌 사건에서 먼저 듣는다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "fortune_rate",
+        "percent": 10
+      }
+    ],
+    "origin": "개방제자",
+    "reacts": true
+  },
+  "권마의혈맥": {
+    "name": "권마의 혈맥",
+    "desc": "비기의 피해가 30% 늘어난다. 권사와 원한이 얽힌 사건에서 권마의 이름이 먼저 간다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "secret_power",
+        "percent": 30
+      }
+    ],
+    "origin": "권마계승",
+    "reacts": true
+  },
+  "식은연못": {
+    "name": "식은 연못",
+    "desc": "독에 당하지 않고 회복이 20% 늘어난다. 마교와 혈교가 얽힌 사건에서 연못의 기억이 깨어난다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "poison_immune"
+      },
+      {
+        "type": "heal_rate",
+        "percent": 20
+      }
+    ],
+    "origin": "혈지생환",
+    "reacts": true
+  },
+  "외상장부": {
+    "name": "외상 장부",
+    "desc": "장터 가격이 15% 싸고 얻는 은자가 15% 늘어난다. 거래와 비밀이 얽힌 사건에서 값을 먼저 안다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "market_discount",
+        "percent": 15
+      },
+      {
+        "type": "silver_rate",
+        "percent": 15
+      }
+    ],
+    "origin": "하오문",
+    "reacts": true
+  },
+  "사부의보따리": {
+    "name": "사부의 보따리",
+    "desc": "수련 도구 2개와 주무공 계열 명품 무공 하나를 들고 시작한다. 고수와 노인이 얽힌 사건에서 사부의 이름이 나온다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "start_style_tool",
+        "amount": 2
+      },
+      {
+        "type": "start_style_skill",
+        "grade": "명품"
+      }
+    ],
+    "origin": "무림초출",
+    "reacts": true
+  },
   "전투광": {
     "name": "전투광",
     "desc": "전투가 시작되면 네 기량이 전투 중에만 40 오른다. 전투가 끝나면 체력과 내력을 각각 25% 회복한다.",
-    "rarity": "희귀",
-    "cost": 8,
+    "rarity": "전설",
+    "cost": 16,
     "effects": [
       {
         "type": "battle_buff",
@@ -83,228 +1116,14 @@
       }
     ]
   },
-  "천생근골": {
-    "name": "천생근골",
-    "desc": "시작 외공과 무리가 60 높고 성장이 각각 12% 늘어난다.",
-    "rarity": "희귀",
-    "cost": 8,
+  "불굴": {
+    "name": "불굴",
+    "desc": "전투마다 한 번, 치명상을 입어도 체력 1로 버틴다.",
+    "rarity": "전설",
+    "cost": 16,
     "effects": [
       {
-        "type": "start_stat",
-        "stat": "external",
-        "amount": 60
-      },
-      {
-        "type": "start_stat",
-        "stat": "martial",
-        "amount": 60
-      },
-      {
-        "type": "growth_rate",
-        "stat": "external",
-        "percent": 12
-      },
-      {
-        "type": "growth_rate",
-        "stat": "martial",
-        "percent": 12
-      }
-    ]
-  },
-  "오성": {
-    "name": "오성",
-    "desc": "시작 내공과 심경이 60 높고 성장이 각각 12% 늘어난다.",
-    "rarity": "희귀",
-    "cost": 8,
-    "effects": [
-      {
-        "type": "start_stat",
-        "stat": "internal",
-        "amount": 60
-      },
-      {
-        "type": "start_stat",
-        "stat": "mind",
-        "amount": 60
-      },
-      {
-        "type": "growth_rate",
-        "stat": "internal",
-        "percent": 12
-      },
-      {
-        "type": "growth_rate",
-        "stat": "mind",
-        "percent": 12
-      }
-    ]
-  },
-  "혼원지체": {
-    "name": "혼원지체",
-    "desc": "시작 외공과 내공이 60 높고 성장이 각각 12% 늘어난다.",
-    "rarity": "희귀",
-    "cost": 8,
-    "effects": [
-      {
-        "type": "start_stat",
-        "stat": "external",
-        "amount": 60
-      },
-      {
-        "type": "start_stat",
-        "stat": "internal",
-        "amount": 60
-      },
-      {
-        "type": "growth_rate",
-        "stat": "external",
-        "percent": 12
-      },
-      {
-        "type": "growth_rate",
-        "stat": "internal",
-        "percent": 12
-      }
-    ]
-  },
-  "철심석장": {
-    "name": "철심석장",
-    "desc": "시작 외공과 심경이 60 높고 성장이 각각 12% 늘어난다.",
-    "rarity": "희귀",
-    "cost": 8,
-    "effects": [
-      {
-        "type": "start_stat",
-        "stat": "external",
-        "amount": 60
-      },
-      {
-        "type": "start_stat",
-        "stat": "mind",
-        "amount": 60
-      },
-      {
-        "type": "growth_rate",
-        "stat": "external",
-        "percent": 12
-      },
-      {
-        "type": "growth_rate",
-        "stat": "mind",
-        "percent": 12
-      }
-    ]
-  },
-  "통현지재": {
-    "name": "통현지재",
-    "desc": "시작 내공과 무리가 60 높고 성장이 각각 12% 늘어난다.",
-    "rarity": "희귀",
-    "cost": 8,
-    "effects": [
-      {
-        "type": "start_stat",
-        "stat": "internal",
-        "amount": 60
-      },
-      {
-        "type": "start_stat",
-        "stat": "martial",
-        "amount": 60
-      },
-      {
-        "type": "growth_rate",
-        "stat": "internal",
-        "percent": 12
-      },
-      {
-        "type": "growth_rate",
-        "stat": "martial",
-        "percent": 12
-      }
-    ]
-  },
-  "혜근": {
-    "name": "혜근",
-    "desc": "시작 무리와 심경이 60 높고 성장이 각각 12% 늘어난다.",
-    "rarity": "희귀",
-    "cost": 8,
-    "effects": [
-      {
-        "type": "start_stat",
-        "stat": "martial",
-        "amount": 60
-      },
-      {
-        "type": "start_stat",
-        "stat": "mind",
-        "amount": 60
-      },
-      {
-        "type": "growth_rate",
-        "stat": "martial",
-        "percent": 12
-      },
-      {
-        "type": "growth_rate",
-        "stat": "mind",
-        "percent": 12
-      }
-    ]
-  },
-  "장사꾼기질": {
-    "name": "장사꾼 기질",
-    "desc": "은자 100을 더 들고 시작하고 장터 가격이 20% 싸다.",
-    "rarity": "일반",
-    "cost": 4,
-    "effects": [
-      {
-        "type": "start_silver",
-        "amount": 100
-      },
-      {
-        "type": "market_discount",
-        "percent": 20
-      }
-    ]
-  },
-  "금전운": {
-    "name": "금전운",
-    "desc": "얻는 은자가 60% 늘어난다.",
-    "rarity": "일반",
-    "cost": 5,
-    "effects": [
-      {
-        "type": "silver_rate",
-        "percent": 60
-      }
-    ]
-  },
-  "철옹성": {
-    "name": "철옹성",
-    "desc": "받는 피해가 12% 줄고 매달 체력을 5% 더 회복한다.",
-    "rarity": "희귀",
-    "cost": 7,
-    "effects": [
-      {
-        "type": "damage_reduce",
-        "percent": 12
-      },
-      {
-        "type": "turn_regen",
-        "hp_pct": 5,
-        "qi_pct": 0
-      }
-    ]
-  },
-  "심유일점": {
-    "name": "심유일점",
-    "desc": "회심의 일격 확률이 20% 오른다.",
-    "rarity": "희귀",
-    "cost": 7,
-    "effects": [
-      {
-        "type": "crit",
-        "percent": 20
+        "type": "last_stand"
       }
     ]
   },
@@ -312,7 +1131,7 @@
     "name": "천하제일기재",
     "desc": "모든 기량이 100 높게 시작하고 성장이 각각 5% 늘어난다.",
     "rarity": "전설",
-    "cost": 15,
+    "cost": 25,
     "effects": [
       {
         "type": "start_stat",
@@ -355,824 +1174,5 @@
         "percent": 5
       }
     ]
-  },
-  "불굴": {
-    "name": "불굴",
-    "desc": "전투마다 한 번, 치명상을 입어도 체력 1로 버틴다.",
-    "rarity": "희귀",
-    "cost": 9,
-    "effects": [
-      {
-        "type": "last_stand"
-      }
-    ]
-  },
-  "복성": {
-    "name": "복성",
-    "desc": "탐색에서 기연을 만날 확률이 25% 오른다.",
-    "rarity": "일반",
-    "cost": 5,
-    "effects": [
-      {
-        "type": "fortune_rate",
-        "percent": 25
-      }
-    ]
-  },
-  "명문의자제": {
-    "name": "명문의 자제",
-    "desc": "은자 250을 들고 시작하고 명성 10으로 시작한다. 세가와 얽힌 사건에서 말이 통한다.",
-    "rarity": "일반",
-    "cost": 4,
-    "effects": [
-      {
-        "type": "start_silver",
-        "amount": 250
-      },
-      {
-        "type": "start_fame",
-        "amount": 10
-      }
-    ],
-    "reacts": true
-  },
-  "금강불괴": {
-    "name": "금강불괴",
-    "desc": "내상을 입지 않는다.",
-    "rarity": "희귀",
-    "cost": 7,
-    "effects": [
-      {
-        "type": "no_injury"
-      }
-    ]
-  },
-  "병기광": {
-    "name": "병기광",
-    "desc": "주무공 계열의 좋은 병기를 들고 시작한다. 어떤 병기든 제 힘을 내고 병기 위력이 15% 늘어난다.",
-    "rarity": "희귀",
-    "cost": 7,
-    "effects": [
-      {
-        "type": "no_mismatch"
-      },
-      {
-        "type": "start_style_weapon",
-        "tier": 1
-      },
-      {
-        "type": "main_weapon_bonus",
-        "percent": 15
-      }
-    ]
-  },
-  "외길": {
-    "name": "외길",
-    "desc": "주무공과 계열이 맞는 병기의 위력이 40% 늘어난다.",
-    "rarity": "희귀",
-    "cost": 6,
-    "effects": [
-      {
-        "type": "main_weapon_bonus",
-        "percent": 40
-      }
-    ]
-  },
-  "배수진": {
-    "name": "배수진",
-    "desc": "체력이 40% 이하일 때 주는 피해가 50% 늘어난다.",
-    "rarity": "희귀",
-    "cost": 7,
-    "effects": [
-      {
-        "type": "low_hp_power",
-        "below": 40,
-        "percent": 50
-      }
-    ]
-  },
-  "기선제압": {
-    "name": "기선제압",
-    "desc": "전투의 첫 합에서 주는 피해가 120% 늘어난다.",
-    "rarity": "일반",
-    "cost": 4,
-    "effects": [
-      {
-        "type": "first_strike",
-        "percent": 120
-      }
-    ]
-  },
-  "독인": {
-    "name": "독인",
-    "desc": "독에 당하지 않고 공격이 적을 중독시킨다.",
-    "rarity": "희귀",
-    "cost": 6,
-    "effects": [
-      {
-        "type": "poison_immune"
-      },
-      {
-        "type": "inflict_poison",
-        "power": 8
-      }
-    ]
-  },
-  "맑은정신": {
-    "name": "맑은 정신",
-    "desc": "혈도를 짚여 무공이 봉쇄당하지 않고 심법 회복이 40% 늘어난다.",
-    "rarity": "일반",
-    "cost": 5,
-    "effects": [
-      {
-        "type": "seal_immune"
-      },
-      {
-        "type": "mindset_power",
-        "percent": 40
-      }
-    ]
-  },
-  "약초꾼": {
-    "name": "약초꾼",
-    "desc": "금창약 5개와 회기단 3개를 들고 시작하고 상비약 회복이 50% 늘어난다.",
-    "rarity": "일반",
-    "cost": 5,
-    "effects": [
-      {
-        "type": "start_item",
-        "item": "금창약",
-        "amount": 5
-      },
-      {
-        "type": "start_item",
-        "item": "회기단",
-        "amount": 3
-      },
-      {
-        "type": "consumable_rate",
-        "percent": 50
-      }
-    ],
-    "reacts": true
-  },
-  "눈썰미": {
-    "name": "눈썰미",
-    "desc": "장터에 물건이 3개 더 진열되고 가격이 10% 싸다. 사건에서 남이 못 보는 것을 본다.",
-    "rarity": "일반",
-    "cost": 4,
-    "effects": [
-      {
-        "type": "extra_stock",
-        "amount": 3
-      },
-      {
-        "type": "market_discount",
-        "percent": 10
-      }
-    ],
-    "reacts": true
-  },
-  "전장의아이": {
-    "name": "전장의 아이",
-    "desc": "전투에서 이기면 실전 경험을 1 더 얻고 체력을 10% 회복한다.",
-    "rarity": "희귀",
-    "cost": 6,
-    "effects": [
-      {
-        "type": "battle_exp",
-        "amount": 1
-      },
-      {
-        "type": "battle_buff",
-        "trigger": "on_battle_end",
-        "stat": "hp",
-        "percent": 10
-      }
-    ],
-    "reacts": true
-  },
-  "유람객": {
-    "name": "유람객",
-    "desc": "사건과 기연에서 오르는 기량이 100% 늘어난다.",
-    "rarity": "일반",
-    "cost": 5,
-    "effects": [
-      {
-        "type": "event_growth",
-        "percent": 100
-      }
-    ]
-  },
-  "대기만성": {
-    "name": "대기만성",
-    "desc": "시작 기량이 모두 40 낮지만 새 장이 열릴 때마다 모든 기량이 40 오른다.",
-    "rarity": "희귀",
-    "cost": 8,
-    "effects": [
-      {
-        "type": "start_stat",
-        "stat": "external",
-        "amount": -40
-      },
-      {
-        "type": "start_stat",
-        "stat": "internal",
-        "amount": -40
-      },
-      {
-        "type": "start_stat",
-        "stat": "martial",
-        "amount": -40
-      },
-      {
-        "type": "start_stat",
-        "stat": "mind",
-        "amount": -40
-      },
-      {
-        "type": "chapter_growth",
-        "amount": 40
-      }
-    ]
-  },
-  "병약한몸": {
-    "name": "병약한 몸",
-    "desc": "시작 내공이 160 높지만 외공이 80 낮다. 약으로 자란 몸이라 앓는 사람의 사정을 안다.",
-    "rarity": "일반",
-    "cost": 3,
-    "effects": [
-      {
-        "type": "start_stat",
-        "stat": "internal",
-        "amount": 160
-      },
-      {
-        "type": "start_stat",
-        "stat": "external",
-        "amount": -80
-      }
-    ],
-    "reacts": true
-  },
-  "일취월장": {
-    "name": "일취월장",
-    "desc": "무공 성취를 70% 더 빠르게 얻는다.",
-    "rarity": "일반",
-    "cost": 5,
-    "effects": [
-      {
-        "type": "mastery_rate",
-        "percent": 70
-      }
-    ]
-  },
-  "가보의호구": {
-    "name": "가보의 갑의",
-    "desc": "집안에 전해진 철사갑의를 입고 시작한다.",
-    "rarity": "일반",
-    "cost": 4,
-    "effects": [
-      {
-        "type": "start_equip",
-        "item": "철사갑의"
-      }
-    ]
-  },
-  "낙천가": {
-    "name": "낙천가",
-    "desc": "매달 체력과 내력을 7%씩 더 회복한다. 나쁜 일도 그냥 넘긴다.",
-    "rarity": "일반",
-    "cost": 5,
-    "effects": [
-      {
-        "type": "turn_regen",
-        "hp_pct": 7,
-        "qi_pct": 7
-      }
-    ],
-    "reacts": true
-  },
-  "잠이보약": {
-    "name": "잠이 보약",
-    "desc": "요양으로 되찾는 체력과 내력이 100% 늘어나고 매달 내력을 5% 더 회복한다.",
-    "rarity": "일반",
-    "cost": 3,
-    "effects": [
-      {
-        "type": "heal_rate",
-        "percent": 100
-      },
-      {
-        "type": "turn_regen",
-        "hp_pct": 0,
-        "qi_pct": 5
-      }
-    ]
-  },
-  "일격필살": {
-    "name": "일격필살",
-    "desc": "비기의 피해가 50% 늘어난다.",
-    "rarity": "희귀",
-    "cost": 6,
-    "effects": [
-      {
-        "type": "secret_power",
-        "percent": 50
-      }
-    ]
-  },
-  "승부사": {
-    "name": "승부사",
-    "desc": "회심의 일격 피해가 60% 늘고 확률이 5% 오른다.",
-    "rarity": "일반",
-    "cost": 5,
-    "effects": [
-      {
-        "type": "crit_power",
-        "percent": 60
-      },
-      {
-        "type": "crit",
-        "percent": 5
-      }
-    ]
-  },
-  "매의눈": {
-    "name": "매의 눈",
-    "desc": "공격이 빗나갈 확률이 15% 줄고 회심의 일격 확률이 10% 오른다.",
-    "rarity": "일반",
-    "cost": 3,
-    "effects": [
-      {
-        "type": "hit_bonus",
-        "percent": 15
-      },
-      {
-        "type": "crit",
-        "percent": 10
-      }
-    ]
-  },
-  "주당": {
-    "name": "주당",
-    "desc": "매달 체력과 내력을 5%씩 더 회복한다. 술자리에서 남다른 일이 생긴다.",
-    "rarity": "일반",
-    "cost": 3,
-    "effects": [
-      {
-        "type": "turn_regen",
-        "hp_pct": 5,
-        "qi_pct": 5
-      }
-    ],
-    "reacts": true
-  },
-  "입담꾼": {
-    "name": "입담꾼",
-    "desc": "명성 12로 시작하고 은자 30을 더 든다. 말로 풀리는 일이 많다.",
-    "rarity": "일반",
-    "cost": 3,
-    "effects": [
-      {
-        "type": "start_fame",
-        "amount": 12
-      },
-      {
-        "type": "start_silver",
-        "amount": 30
-      }
-    ],
-    "reacts": true
-  },
-  "저잣거리아이": {
-    "name": "저잣거리 아이",
-    "desc": "시작 심경이 160 높지만 무리가 80 낮다. 밑바닥 사람들과 말이 통한다.",
-    "rarity": "일반",
-    "cost": 3,
-    "effects": [
-      {
-        "type": "start_stat",
-        "stat": "mind",
-        "amount": 160
-      },
-      {
-        "type": "start_stat",
-        "stat": "martial",
-        "amount": -80
-      }
-    ],
-    "reacts": true
-  },
-  "천둥벌거숭이": {
-    "name": "천둥벌거숭이",
-    "desc": "시작 외공이 160 높지만 심경이 80 낮다. 겁이 없어 남다른 길이 열린다.",
-    "rarity": "일반",
-    "cost": 3,
-    "effects": [
-      {
-        "type": "start_stat",
-        "stat": "external",
-        "amount": 160
-      },
-      {
-        "type": "start_stat",
-        "stat": "mind",
-        "amount": -80
-      }
-    ],
-    "reacts": true
-  },
-  "타고난안목": {
-    "name": "타고난 안목",
-    "desc": "시작 무리가 120 높고 무리 성장이 15% 늘어난다.",
-    "rarity": "일반",
-    "cost": 5,
-    "effects": [
-      {
-        "type": "start_stat",
-        "stat": "martial",
-        "amount": 120
-      },
-      {
-        "type": "growth_rate",
-        "stat": "martial",
-        "percent": 15
-      }
-    ]
-  },
-  "총명": {
-    "name": "총명",
-    "desc": "시작 심경이 120 높고 심경 성장이 15% 늘어난다.",
-    "rarity": "일반",
-    "cost": 5,
-    "effects": [
-      {
-        "type": "start_stat",
-        "stat": "mind",
-        "amount": 120
-      },
-      {
-        "type": "growth_rate",
-        "stat": "mind",
-        "percent": 15
-      }
-    ]
-  },
-  "수련도구": {
-    "name": "수련 도구 한 짐",
-    "desc": "주무공 계열 수련 도구 4개를 들고 시작한다.",
-    "rarity": "일반",
-    "cost": 4,
-    "effects": [
-      {
-        "type": "start_style_tool",
-        "amount": 4
-      }
-    ]
-  },
-  "비장의도구": {
-    "name": "비장의 도구",
-    "desc": "주무공 계열 전투 도구 4개를 들고 시작한다.",
-    "rarity": "일반",
-    "cost": 4,
-    "effects": [
-      {
-        "type": "start_battle_tool",
-        "amount": 4
-      }
-    ]
-  },
-  "가전비급": {
-    "name": "가전 비급",
-    "desc": "주무공 계열의 명품 공격무공 하나를 더 익히고 시작한다.",
-    "rarity": "희귀",
-    "cost": 7,
-    "effects": [
-      {
-        "type": "start_style_skill",
-        "grade": "명품"
-      }
-    ]
-  },
-  "구름걸음": {
-    "name": "구름 걸음",
-    "desc": "경공 「유운신법」을 익힌 채로 시작하고 달아날 확률이 30% 오른다.",
-    "rarity": "희귀",
-    "cost": 8,
-    "effects": [
-      {
-        "type": "start_skill",
-        "skill": "유운신법"
-      },
-      {
-        "type": "flee_rate",
-        "percent": 30
-      }
-    ]
-  },
-  "현기의호흡": {
-    "name": "현기의 호흡",
-    "desc": "심법 「곤륜현기공」을 익힌 채로 시작하고 심법 회복이 20% 늘어난다.",
-    "rarity": "일반",
-    "cost": 6,
-    "effects": [
-      {
-        "type": "start_skill",
-        "skill": "곤륜현기공"
-      },
-      {
-        "type": "mindset_power",
-        "percent": 20
-      }
-    ]
-  },
-  "구명의은혜": {
-    "name": "구명 보따리",
-    "desc": "구명단 2개와 해독단 2개를 들고 시작한다.",
-    "rarity": "일반",
-    "cost": 5,
-    "effects": [
-      {
-        "type": "start_item",
-        "item": "구명단",
-        "amount": 2
-      },
-      {
-        "type": "start_item",
-        "item": "해독단",
-        "amount": 2
-      }
-    ]
-  },
-  "의협심": {
-    "name": "의협심",
-    "desc": "명성 8로 시작하고 받는 피해가 4% 줄어든다. 약한 사람이 얽힌 사건에서 다른 길이 열린다.",
-    "rarity": "일반",
-    "cost": 3,
-    "effects": [
-      {
-        "type": "start_fame",
-        "amount": 8
-      },
-      {
-        "type": "damage_reduce",
-        "percent": 4
-      }
-    ],
-    "reacts": true
-  },
-  "소식통": {
-    "name": "소식통",
-    "desc": "은자 60을 더 들고 시작하고 얻는 은자가 15% 늘어난다. 객잔과 소문이 얽힌 사건에서 먼저 안다.",
-    "rarity": "일반",
-    "cost": 3,
-    "effects": [
-      {
-        "type": "start_silver",
-        "amount": 60
-      },
-      {
-        "type": "silver_rate",
-        "percent": 15
-      }
-    ],
-    "reacts": true
-  },
-  "글읽는무인": {
-    "name": "글 읽는 무인",
-    "desc": "심법 회복이 20% 늘고 무공 성취를 20% 더 빠르게 얻는다. 글과 진법, 설법이 얽힌 사건에서 알아듣는다.",
-    "rarity": "일반",
-    "cost": 3,
-    "effects": [
-      {
-        "type": "mindset_power",
-        "percent": 20
-      },
-      {
-        "type": "mastery_rate",
-        "percent": 20
-      }
-    ],
-    "reacts": true
-  },
-  "대식가": {
-    "name": "대식가",
-    "desc": "매달 체력을 8% 더 회복한다. 먹을 것이 얽힌 사건에서 남다른 일이 생긴다.",
-    "rarity": "일반",
-    "cost": 3,
-    "effects": [
-      {
-        "type": "turn_regen",
-        "hp_pct": 8,
-        "qi_pct": 0
-      }
-    ],
-    "reacts": true
-  },
-  "산사람": {
-    "name": "산사람",
-    "desc": "기연을 만날 확률이 15% 오르고 매달 체력과 내력을 3%씩 더 회복한다. 산과 짐승, 약초가 얽힌 사건에서 길을 안다.",
-    "rarity": "일반",
-    "cost": 4,
-    "effects": [
-      {
-        "type": "fortune_rate",
-        "percent": 15
-      },
-      {
-        "type": "turn_regen",
-        "hp_pct": 3,
-        "qi_pct": 3
-      }
-    ],
-    "reacts": true
-  },
-  "창궁의혈통": {
-    "name": "창궁의 혈통",
-    "desc": "주무공 성취 30과 명성 3으로 시작한다. 오대세가와 맹의 일에 남궁의 이름이 통한다.",
-    "rarity": "희귀",
-    "cost": 6,
-    "effects": [
-      {
-        "type": "start_mastery",
-        "amount": 30
-      },
-      {
-        "type": "start_fame",
-        "amount": 3
-      }
-    ],
-    "origin": "남궁세가",
-    "reacts": true
-  },
-  "네형의칼": {
-    "name": "네 형의 칼",
-    "desc": "체력이 40% 이하일 때 주는 피해가 35% 늘어난다. 형제와 불이 얽힌 사건에서 물러서지 않는다.",
-    "rarity": "희귀",
-    "cost": 6,
-    "effects": [
-      {
-        "type": "low_hp_power",
-        "below": 40,
-        "percent": 35
-      }
-    ],
-    "origin": "하북팽가",
-    "reacts": true
-  },
-  "표로의다리": {
-    "name": "표로의 다리",
-    "desc": "은자 60을 더 들고 시작하고 달아날 확률이 20% 오른다. 길과 표물이 얽힌 사건에서 앞장선다.",
-    "rarity": "희귀",
-    "cost": 6,
-    "effects": [
-      {
-        "type": "start_silver",
-        "amount": 60
-      },
-      {
-        "type": "flee_rate",
-        "percent": 20
-      }
-    ],
-    "origin": "표국표사",
-    "reacts": true
-  },
-  "거지의귀": {
-    "name": "거지의 귀",
-    "desc": "기연을 만날 확률이 10% 오른다. 소문과 끼니가 얽힌 사건에서 먼저 듣는다.",
-    "rarity": "희귀",
-    "cost": 6,
-    "effects": [
-      {
-        "type": "fortune_rate",
-        "percent": 10
-      }
-    ],
-    "origin": "개방제자",
-    "reacts": true
-  },
-  "권마의혈맥": {
-    "name": "권마의 혈맥",
-    "desc": "비기의 피해가 30% 늘어난다. 권사와 원한이 얽힌 사건에서 권마의 이름이 먼저 간다.",
-    "rarity": "희귀",
-    "cost": 6,
-    "effects": [
-      {
-        "type": "secret_power",
-        "percent": 30
-      }
-    ],
-    "origin": "권마계승",
-    "reacts": true
-  },
-  "식은연못": {
-    "name": "식은 연못",
-    "desc": "독에 당하지 않고 회복이 20% 늘어난다. 마교와 혈교가 얽힌 사건에서 연못의 기억이 깨어난다.",
-    "rarity": "희귀",
-    "cost": 6,
-    "effects": [
-      {
-        "type": "poison_immune"
-      },
-      {
-        "type": "heal_rate",
-        "percent": 20
-      }
-    ],
-    "origin": "혈지생환",
-    "reacts": true
-  },
-  "외상장부": {
-    "name": "외상 장부",
-    "desc": "장터 가격이 15% 싸고 얻는 은자가 15% 늘어난다. 거래와 비밀이 얽힌 사건에서 값을 먼저 안다.",
-    "rarity": "희귀",
-    "cost": 6,
-    "effects": [
-      {
-        "type": "market_discount",
-        "percent": 15
-      },
-      {
-        "type": "silver_rate",
-        "percent": 15
-      }
-    ],
-    "origin": "하오문",
-    "reacts": true
-  },
-  "사부의보따리": {
-    "name": "사부의 보따리",
-    "desc": "수련 도구 2개와 주무공 계열 명품 무공 하나를 들고 시작한다. 고수와 노인이 얽힌 사건에서 사부의 이름이 나온다.",
-    "rarity": "희귀",
-    "cost": 6,
-    "effects": [
-      {
-        "type": "start_style_tool",
-        "amount": 2
-      },
-      {
-        "type": "start_style_skill",
-        "grade": "명품"
-      }
-    ],
-    "origin": "무림초출",
-    "reacts": true
-  },
-  "이기어검": {
-    "name": "여력",
-    "desc": "공격무공의 내력 소모가 20% 줄어든다. 긴 싸움에서 내력이 마르지 않는다.",
-    "rarity": "희귀",
-    "cost": 7,
-    "effects": [
-      {
-        "type": "qi_cost_cut",
-        "percent": 20
-      }
-    ]
-  },
-  "백전노장": {
-    "name": "백전노장",
-    "desc": "실전 경험 8을 쌓은 채로 시작한다. 경지 돌파가 빨라진다.",
-    "rarity": "희귀",
-    "cost": 7,
-    "effects": [
-      {
-        "type": "start_battles",
-        "amount": 8
-      }
-    ]
-  },
-  "절세미공": {
-    "name": "디딤돌",
-    "desc": "승급할 때 성취가 30이 아니라 60에서 다시 시작한다.",
-    "rarity": "희귀",
-    "cost": 7,
-    "effects": [
-      {
-        "type": "evolve_mastery",
-        "amount": 60
-      }
-    ]
-  },
-  "잔재주꾼": {
-    "name": "잔재주꾼",
-    "desc": "시작 무리가 160 높지만 내공이 80 낮다. 남의 초식을 흉내 내는 데 능해 비무와 구경거리에서 남다른 길이 열린다.",
-    "rarity": "일반",
-    "cost": 3,
-    "effects": [
-      {
-        "type": "start_stat",
-        "stat": "martial",
-        "amount": 160
-      },
-      {
-        "type": "start_stat",
-        "stat": "internal",
-        "amount": -80
-      }
-    ],
-    "reacts": true
   }
 }
