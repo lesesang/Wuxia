@@ -536,8 +536,8 @@ function statusModal() {
 
   const panels = {
     stats: `<div class="modal-section">
-        ${statRow("외공", p.external, "체력, 위력")}${statRow("내공", p.internal, "내력, 비기 위력")}
-        ${statRow("무리", p.martial, "위력, 명중, 성취")}${statRow("심경", p.mind, "회심의 일격, 수련, 돌파")}
+        ${statRow("외공", p.external, "체력, 위력")}${statRow("내공", p.internal, "내력, 체력, 비기 위력")}
+        ${statRow("무리", p.martial, "위력, 명중, 성취")}${statRow("심경", p.mind, "회심의 일격, 받는 피해, 수련, 돌파")}
       </div>
       <div class="modal-section">
         ${row("출신", p.origin)}${row("사문", sect ? `${sect.name} (${sect.bonus_text})` : "없음")}

@@ -4,7 +4,7 @@
     "tier": "일반",
     "realm": "일류",
     "hp": 155,
-    "attack": 16,
+    "attack": 19,
     "exp_reward": 1,
     "silver": [
       6,
@@ -57,7 +57,7 @@
     "tier": "일반",
     "realm": "일류",
     "hp": 225,
-    "attack": 21,
+    "attack": 25,
     "exp_reward": 1,
     "silver": [
       7,
@@ -121,7 +121,7 @@
     "tier": "일반",
     "realm": "일류",
     "hp": 180,
-    "attack": 18,
+    "attack": 21,
     "exp_reward": 1,
     "silver": [
       0,
@@ -155,7 +155,7 @@
     "tier": "난적",
     "realm": "일류",
     "hp": 305,
-    "attack": 23,
+    "attack": 27,
     "exp_reward": 2,
     "silver": [
       21,
@@ -193,8 +193,8 @@
     "name": "녹림 호걸",
     "tier": "일반",
     "realm": "절정",
-    "hp": 435,
-    "attack": 25,
+    "hp": 430,
+    "attack": 30,
     "exp_reward": 1,
     "silver": [
       13,
@@ -234,7 +234,7 @@
     "tier": "일반",
     "realm": "절정",
     "hp": 350,
-    "attack": 32,
+    "attack": 38,
     "exp_reward": 1,
     "silver": [
       15,
@@ -295,7 +295,7 @@
     "tier": "난적",
     "realm": "절정",
     "hp": 675,
-    "attack": 38,
+    "attack": 45,
     "exp_reward": 2,
     "silver": [
       28,
@@ -354,8 +354,8 @@
     "name": "혈교 수련자",
     "tier": "일반",
     "realm": "초절정",
-    "hp": 1050,
-    "attack": 51,
+    "hp": 975,
+    "attack": 56,
     "exp_reward": 1,
     "silver": [
       20,
@@ -403,8 +403,8 @@
     "name": "독문의 고수",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 1590,
-    "attack": 58,
+    "hp": 1475,
+    "attack": 64,
     "exp_reward": 2,
     "silver": [
       35,
@@ -461,8 +461,8 @@
     "name": "철혈대 대원",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 1810,
-    "attack": 67,
+    "hp": 1675,
+    "attack": 74,
     "exp_reward": 2,
     "silver": [
       38,
@@ -515,8 +515,8 @@
     "name": "화경의 마인",
     "tier": "강적",
     "realm": "화경",
-    "hp": 2155,
-    "attack": 64,
+    "hp": 2000,
+    "attack": 70,
     "exp_reward": 3,
     "silver": [
       63,
@@ -583,8 +583,8 @@
     "name": "마교 장로",
     "tier": "난적",
     "realm": "화경",
-    "hp": 2985,
-    "attack": 87,
+    "hp": 2870,
+    "attack": 98,
     "exp_reward": 2,
     "silver": [
       49,
@@ -673,8 +673,8 @@
     "name": "혈마대의 귀졸",
     "tier": "일반",
     "realm": "화경",
-    "hp": 1990,
-    "attack": 72,
+    "hp": 1910,
+    "attack": 82,
     "exp_reward": 1,
     "silver": [
       28,
@@ -722,8 +722,8 @@
     "name": "십이마장",
     "tier": "강적",
     "realm": "현경",
-    "hp": 4560,
-    "attack": 100,
+    "hp": 4380,
+    "attack": 113,
     "exp_reward": 3,
     "silver": [
       91,
@@ -793,7 +793,7 @@
     "tier": "난적",
     "realm": "일류",
     "hp": 420,
-    "attack": 28,
+    "attack": 33,
     "exp_reward": 2,
     "silver": [
       0,
@@ -827,8 +827,8 @@
     "name": "혈마의 잔영",
     "tier": "강적",
     "realm": "화경",
-    "hp": 1415,
-    "attack": 45,
+    "hp": 1310,
+    "attack": 50,
     "exp_reward": 3,
     "silver": [
       42,
@@ -871,8 +871,8 @@
     "name": "무명노인",
     "tier": "강적",
     "realm": "현경",
-    "hp": 2915,
-    "attack": 71,
+    "hp": 2805,
+    "attack": 80,
     "exp_reward": 3,
     "silver": [
       0,
@@ -899,8 +899,8 @@
     "name": "무림맹 추격대",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 1430,
-    "attack": 54,
+    "hp": 1325,
+    "attack": 60,
     "exp_reward": 2,
     "silver": [
       28,
@@ -958,8 +958,8 @@
     "name": "천마",
     "tier": "보스",
     "realm": "현경",
-    "hp": 16500,
-    "attack": 132,
+    "hp": 17800,
+    "attack": 155,
     "exp_reward": 5,
     "silver": [
       0,
@@ -2374,7 +2374,7 @@
     "tier": "일반",
     "realm": "일류",
     "hp": 200,
-    "attack": 18,
+    "attack": 21,
     "exp_reward": 1,
     "silver": [
       8,
@@ -2421,7 +2421,7 @@
     "tier": "난적",
     "realm": "일류",
     "hp": 265,
-    "attack": 21,
+    "attack": 25,
     "exp_reward": 2,
     "silver": [
       24,
@@ -2474,8 +2474,8 @@
     "name": "귀도객",
     "tier": "일반",
     "realm": "절정",
-    "hp": 435,
-    "attack": 30,
+    "hp": 430,
+    "attack": 36,
     "exp_reward": 1,
     "silver": [
       15,
@@ -2523,8 +2523,8 @@
     "name": "금의위 밀정",
     "tier": "일반",
     "realm": "절정",
-    "hp": 420,
-    "attack": 26,
+    "hp": 415,
+    "attack": 31,
     "exp_reward": 1,
     "silver": [
       21,
@@ -2574,8 +2574,8 @@
     "name": "장강 수적 두목",
     "tier": "난적",
     "realm": "절정",
-    "hp": 555,
-    "attack": 30,
+    "hp": 550,
+    "attack": 36,
     "exp_reward": 2,
     "silver": [
       35,
@@ -2629,8 +2629,8 @@
     "name": "독고객",
     "tier": "일반",
     "realm": "초절정",
-    "hp": 875,
-    "attack": 42,
+    "hp": 815,
+    "attack": 47,
     "exp_reward": 1,
     "silver": [
       21,
@@ -2687,8 +2687,8 @@
     "name": "장강수로채 정예",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 1390,
-    "attack": 57,
+    "hp": 1285,
+    "attack": 63,
     "exp_reward": 2,
     "silver": [
       35,
@@ -2737,8 +2737,8 @@
     "name": "제칠마장 귀곡자",
     "tier": "강적",
     "realm": "현경",
-    "hp": 3940,
-    "attack": 96,
+    "hp": 3785,
+    "attack": 108,
     "exp_reward": 3,
     "silver": [
       84,
@@ -2786,8 +2786,8 @@
     "name": "천년 혈망",
     "tier": "강적",
     "realm": "현경",
-    "hp": 3100,
-    "attack": 74,
+    "hp": 2980,
+    "attack": 84,
     "exp_reward": 3,
     "silver": [
       0,
@@ -2832,7 +2832,7 @@
     "tier": "강적",
     "realm": "현경",
     "hp": 6290,
-    "attack": 95,
+    "attack": 113,
     "exp_reward": 3,
     "silver": [
       105,
@@ -2883,7 +2883,7 @@
     "tier": "강적",
     "realm": "현경",
     "hp": 5250,
-    "attack": 101,
+    "attack": 120,
     "exp_reward": 3,
     "silver": [
       112,
@@ -2933,7 +2933,7 @@
     "tier": "난적",
     "realm": "현경",
     "hp": 4720,
-    "attack": 102,
+    "attack": 121,
     "exp_reward": 2,
     "silver": [
       56,
@@ -2991,8 +2991,8 @@
     "name": "혈수인",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 1415,
-    "attack": 56,
+    "hp": 1315,
+    "attack": 62,
     "exp_reward": 2,
     "silver": [
       42,
@@ -3026,8 +3026,8 @@
     "name": "십팔동인",
     "tier": "난적",
     "realm": "절정",
-    "hp": 975,
-    "attack": 37,
+    "hp": 935,
+    "attack": 43,
     "exp_reward": 2,
     "silver": [
       0,
@@ -3067,8 +3067,8 @@
     "name": "무당 진인",
     "tier": "난적",
     "realm": "절정",
-    "hp": 865,
-    "attack": 35,
+    "hp": 830,
+    "attack": 41,
     "exp_reward": 2,
     "silver": [
       0,
@@ -3109,8 +3109,8 @@
     "name": "화산 장로",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 1155,
-    "attack": 47,
+    "hp": 1070,
+    "attack": 52,
     "exp_reward": 2,
     "silver": [
       0,
@@ -3156,8 +3156,8 @@
     "name": "멸절 사태",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 1200,
-    "attack": 48,
+    "hp": 1115,
+    "attack": 53,
     "exp_reward": 2,
     "silver": [
       0,
@@ -3190,8 +3190,8 @@
     "name": "개방 십걸",
     "tier": "난적",
     "realm": "절정",
-    "hp": 790,
-    "attack": 37,
+    "hp": 755,
+    "attack": 43,
     "exp_reward": 2,
     "silver": [
       0,
@@ -3242,8 +3242,8 @@
     "name": "당가의 배신자",
     "tier": "난적",
     "realm": "절정",
-    "hp": 805,
-    "attack": 40,
+    "hp": 775,
+    "attack": 48,
     "exp_reward": 2,
     "silver": [
       28,
@@ -3281,8 +3281,8 @@
     "name": "혈지의 심판자",
     "tier": "강적",
     "realm": "화경",
-    "hp": 2635,
-    "attack": 71,
+    "hp": 2425,
+    "attack": 76,
     "exp_reward": 3,
     "silver": [
       35,
@@ -3335,8 +3335,8 @@
     "name": "곤륜의 사숙",
     "tier": "난적",
     "realm": "절정",
-    "hp": 1010,
-    "attack": 47,
+    "hp": 970,
+    "attack": 55,
     "exp_reward": 2,
     "silver": [
       14,
@@ -3361,8 +3361,8 @@
     "name": "하오문주",
     "tier": "난적",
     "realm": "절정",
-    "hp": 1125,
-    "attack": 49,
+    "hp": 1080,
+    "attack": 58,
     "exp_reward": 2,
     "silver": [
       42,
@@ -3403,8 +3403,8 @@
     "name": "권마의 그림자",
     "tier": "강적",
     "realm": "화경",
-    "hp": 2800,
-    "attack": 74,
+    "hp": 2580,
+    "attack": 80,
     "exp_reward": 3,
     "silver": [
       0,
@@ -3444,8 +3444,8 @@
     "name": "청성파 후기지수",
     "tier": "일반",
     "realm": "초절정",
-    "hp": 1440,
-    "attack": 62,
+    "hp": 1320,
+    "attack": 67,
     "exp_reward": 2,
     "silver": [
       0,
@@ -3479,8 +3479,8 @@
     "name": "철권왕 호연패",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 2160,
-    "attack": 74,
+    "hp": 1980,
+    "attack": 80,
     "exp_reward": 2,
     "silver": [
       0,
@@ -3520,8 +3520,8 @@
     "name": "혈의공자",
     "tier": "강적",
     "realm": "화경",
-    "hp": 2640,
-    "attack": 71,
+    "hp": 2420,
+    "attack": 77,
     "exp_reward": 3,
     "silver": [
       0,
@@ -3592,8 +3592,8 @@
     "name": "협객의 묘지기",
     "tier": "난적",
     "realm": "절정",
-    "hp": 1380,
-    "attack": 54,
+    "hp": 1280,
+    "attack": 60,
     "exp_reward": 3,
     "silver": [
       30,
@@ -3633,7 +3633,7 @@
     "tier": "강적",
     "realm": "현경",
     "hp": 6520,
-    "attack": 106,
+    "attack": 126,
     "exp_reward": 5,
     "silver": [
       80,
@@ -3674,7 +3674,7 @@
     "tier": "일반",
     "realm": "일류",
     "hp": 225,
-    "attack": 20,
+    "attack": 24,
     "exp_reward": 1,
     "silver": [
       15,
@@ -3734,8 +3734,8 @@
     "name": "녹림 채주",
     "tier": "난적",
     "realm": "절정",
-    "hp": 740,
-    "attack": 37,
+    "hp": 720,
+    "attack": 44,
     "exp_reward": 3,
     "silver": [
       35,
@@ -3788,8 +3788,8 @@
     "name": "종남파 검수",
     "tier": "난적",
     "realm": "절정",
-    "hp": 790,
-    "attack": 38,
+    "hp": 765,
+    "attack": 45,
     "exp_reward": 3,
     "silver": [
       30,
@@ -3842,8 +3842,8 @@
     "name": "혈교의 혈승",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 2030,
-    "attack": 71,
+    "hp": 1865,
+    "attack": 77,
     "exp_reward": 3,
     "silver": [
       50,
@@ -3902,8 +3902,8 @@
     "name": "동창의 번자",
     "tier": "일반",
     "realm": "초절정",
-    "hp": 1440,
-    "attack": 62,
+    "hp": 1320,
+    "attack": 67,
     "exp_reward": 1,
     "silver": [
       40,
@@ -3937,8 +3937,8 @@
     "name": "남만 야수궁 술사",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 2285,
-    "attack": 76,
+    "hp": 2115,
+    "attack": 83,
     "exp_reward": 3,
     "silver": [
       50,
@@ -3989,7 +3989,7 @@
     "tier": "강적",
     "realm": "현경",
     "hp": 5115,
-    "attack": 92,
+    "attack": 109,
     "exp_reward": 5,
     "silver": [
       90,
@@ -4042,7 +4042,7 @@
     "tier": "난적",
     "realm": "화경",
     "hp": 4030,
-    "attack": 94,
+    "attack": 112,
     "exp_reward": 3,
     "silver": [
       100,
@@ -4103,7 +4103,7 @@
     "tier": "일반",
     "realm": "일류",
     "hp": 225,
-    "attack": 20,
+    "attack": 24,
     "exp_reward": 1,
     "silver": [
       15,
@@ -4135,7 +4135,7 @@
     "tier": "일반",
     "realm": "일류",
     "hp": 225,
-    "attack": 21,
+    "attack": 25,
     "exp_reward": 1,
     "silver": [
       7,
@@ -4167,7 +4167,7 @@
     "tier": "일반",
     "realm": "절정",
     "hp": 350,
-    "attack": 32,
+    "attack": 38,
     "exp_reward": 1,
     "silver": [
       15,
@@ -4193,6 +4193,12 @@
     "hp_style": 0.86,
     "attack_style": 1.13,
     "intros": [
+      {
+        "requires": {
+          "flag": "살막_의뢰인"
+        },
+        "text": "\"의뢰인 이름까지 샀다더군. 값이 올랐소.\""
+      },
       {
         "requires": {
           "origin": "하오문"
@@ -4223,8 +4229,8 @@
     "name": "세가의 무사",
     "tier": "일반",
     "realm": "초절정",
-    "hp": 1750,
-    "attack": 73,
+    "hp": 1610,
+    "attack": 79,
     "exp_reward": 1,
     "silver": [
       7,
@@ -4269,8 +4275,8 @@
     "name": "철봉 탁발승",
     "tier": "일반",
     "realm": "절정",
-    "hp": 485,
-    "attack": 33,
+    "hp": 480,
+    "attack": 39,
     "exp_reward": 1,
     "silver": [
       7,
@@ -4302,7 +4308,7 @@
     "tier": "일반",
     "realm": "절정",
     "hp": 350,
-    "attack": 32,
+    "attack": 38,
     "exp_reward": 1,
     "silver": [
       15,
@@ -4353,8 +4359,8 @@
     "name": "구파의 협객",
     "tier": "난적",
     "realm": "절정",
-    "hp": 1590,
-    "attack": 62,
+    "hp": 1475,
+    "attack": 69,
     "exp_reward": 2,
     "silver": [
       28,
@@ -4411,8 +4417,8 @@
     "name": "소림 나한승",
     "tier": "일반",
     "realm": "초절정",
-    "hp": 1615,
-    "attack": 68,
+    "hp": 1490,
+    "attack": 74,
     "exp_reward": 1,
     "silver": [
       20,
@@ -4456,8 +4462,8 @@
     "name": "정파의 명숙",
     "tier": "강적",
     "realm": "화경",
-    "hp": 4450,
-    "attack": 99,
+    "hp": 4275,
+    "attack": 112,
     "exp_reward": 3,
     "silver": [
       63,
@@ -4498,6 +4504,12 @@
     "intros": [
       {
         "requires": {
+          "flag": "명숙의장부"
+        },
+        "text": "\"내 장부를 베껴 간 게 네놈이냐. 값은 목으로 치르게.\""
+      },
+      {
+        "requires": {
           "flag": "찬탈"
         },
         "text": "\"천마의 자리를 노린다지. 그 자리는 비어야 한다.\""
@@ -4509,7 +4521,7 @@
     "tier": "난적",
     "realm": "현경",
     "hp": 4720,
-    "attack": 102,
+    "attack": 121,
     "exp_reward": 2,
     "silver": [
       56,
@@ -4552,7 +4564,7 @@
     "tier": "일반",
     "realm": "절정",
     "hp": 350,
-    "attack": 32,
+    "attack": 38,
     "exp_reward": 1,
     "silver": [
       15,
@@ -4601,8 +4613,8 @@
     "name": "사파의 복수귀",
     "tier": "난적",
     "realm": "절정",
-    "hp": 1590,
-    "attack": 62,
+    "hp": 1475,
+    "attack": 69,
     "exp_reward": 2,
     "silver": [
       28,
@@ -4647,8 +4659,8 @@
     "name": "마교 암살귀",
     "tier": "일반",
     "realm": "화경",
-    "hp": 1990,
-    "attack": 72,
+    "hp": 1910,
+    "attack": 82,
     "exp_reward": 1,
     "silver": [
       28,
@@ -4689,7 +4701,7 @@
     "tier": "강적",
     "realm": "화경",
     "hp": 7040,
-    "attack": 116,
+    "attack": 138,
     "exp_reward": 3,
     "silver": [
       63,
@@ -4732,7 +4744,7 @@
     "tier": "일반",
     "realm": "절정",
     "hp": 350,
-    "attack": 32,
+    "attack": 38,
     "exp_reward": 1,
     "silver": [
       15,
@@ -4780,8 +4792,8 @@
     "name": "포도대장",
     "tier": "난적",
     "realm": "절정",
-    "hp": 1590,
-    "attack": 62,
+    "hp": 1475,
+    "attack": 69,
     "exp_reward": 2,
     "silver": [
       28,
@@ -4818,8 +4830,8 @@
     "name": "동창 추포대",
     "tier": "일반",
     "realm": "초절정",
-    "hp": 1990,
-    "attack": 72,
+    "hp": 1910,
+    "attack": 82,
     "exp_reward": 1,
     "silver": [
       40,
@@ -4855,7 +4867,7 @@
     "tier": "강적",
     "realm": "화경",
     "hp": 7040,
-    "attack": 116,
+    "attack": 138,
     "exp_reward": 3,
     "silver": [
       63,
@@ -4897,7 +4909,7 @@
     "tier": "일반",
     "realm": "절정",
     "hp": 350,
-    "attack": 32,
+    "attack": 38,
     "exp_reward": 1,
     "silver": [
       15,
@@ -4937,8 +4949,8 @@
     "name": "천하의 도전자",
     "tier": "난적",
     "realm": "절정",
-    "hp": 2445,
-    "attack": 84,
+    "hp": 2250,
+    "attack": 91,
     "exp_reward": 2,
     "silver": [
       28,
@@ -4975,7 +4987,7 @@
     "tier": "강적",
     "realm": "화경",
     "hp": 7040,
-    "attack": 116,
+    "attack": 138,
     "exp_reward": 3,
     "silver": [
       63,
@@ -5011,8 +5023,8 @@
     "name": "무명 사냥꾼",
     "tier": "일반",
     "realm": "일류",
-    "hp": 485,
-    "attack": 33,
+    "hp": 480,
+    "attack": 39,
     "exp_reward": 1,
     "silver": [
       7,
@@ -5048,7 +5060,7 @@
     "tier": "일반",
     "realm": "화경",
     "hp": 2535,
-    "attack": 77,
+    "attack": 91,
     "exp_reward": 1,
     "silver": [
       28,

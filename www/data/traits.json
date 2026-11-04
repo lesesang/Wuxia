@@ -73,89 +73,89 @@
   },
   "천둥벌거숭이": {
     "name": "천둥벌거숭이",
-    "desc": "시작 외공이 160 높지만 심경이 80 낮다. 겁이 없어 남다른 길이 열린다.",
+    "desc": "시작 외공이 180 높지만 심경이 60 낮다. 겁이 없어 남다른 길이 열린다.",
     "rarity": "일반",
     "cost": 3,
     "effects": [
       {
         "type": "start_stat",
         "stat": "external",
-        "amount": 160
+        "amount": 180
       },
       {
         "type": "start_stat",
         "stat": "mind",
-        "amount": -80
+        "amount": -60
       }
     ],
     "reacts": true
   },
   "병약한몸": {
     "name": "병치레",
-    "desc": "시작 내공이 160 높지만 외공이 80 낮다. 크게 앓고 일어난 몸이라 앓는 사람의 사정을 안다.",
+    "desc": "시작 내공이 180 높지만 외공이 60 낮다. 크게 앓고 일어난 몸이라 앓는 사람의 사정을 안다.",
     "rarity": "일반",
     "cost": 3,
     "effects": [
       {
         "type": "start_stat",
         "stat": "internal",
-        "amount": 160
+        "amount": 180
       },
       {
         "type": "start_stat",
         "stat": "external",
-        "amount": -80
+        "amount": -60
       }
     ],
     "reacts": true
   },
   "잔재주꾼": {
     "name": "잔재주꾼",
-    "desc": "시작 무리가 160 높지만 내공이 80 낮다. 남의 초식을 흉내 내는 데 능해 비무와 구경거리에서 남다른 길이 열린다.",
+    "desc": "시작 무리가 180 높지만 내공이 60 낮다. 남의 초식을 흉내 내는 데 능해 비무와 구경거리에서 남다른 길이 열린다.",
     "rarity": "일반",
     "cost": 3,
     "effects": [
       {
         "type": "start_stat",
         "stat": "martial",
-        "amount": 160
+        "amount": 180
       },
       {
         "type": "start_stat",
         "stat": "internal",
-        "amount": -80
+        "amount": -60
       }
     ],
     "reacts": true
   },
   "저잣거리아이": {
     "name": "저잣거리 물",
-    "desc": "시작 심경이 160 높지만 무리가 80 낮다. 저잣거리 밑바닥을 굴러 본 터라 밑바닥 사람들과 말이 통한다.",
+    "desc": "시작 심경이 180 높지만 무리가 60 낮다. 저잣거리 밑바닥을 굴러 본 터라 밑바닥 사람들과 말이 통한다.",
     "rarity": "일반",
     "cost": 3,
     "effects": [
       {
         "type": "start_stat",
         "stat": "mind",
-        "amount": 160
+        "amount": 180
       },
       {
         "type": "start_stat",
         "stat": "martial",
-        "amount": -80
+        "amount": -60
       }
     ],
     "reacts": true
   },
   "기선제압": {
     "name": "기선제압",
-    "desc": "전투의 첫 합에서 주는 피해가 120% 늘어난다.",
+    "desc": "전투의 첫 합에서 주는 피해가 90% 늘어난다.",
     "rarity": "일반",
     "cost": 4,
     "effects": [
       {
         "type": "first_strike",
-        "percent": 120
+        "percent": 90
       }
     ]
   },
@@ -226,7 +226,7 @@
     "name": "주당",
     "desc": "매달 체력과 내력을 5%씩 더 회복한다. 술자리에서 남다른 일이 생긴다.",
     "rarity": "일반",
-    "cost": 4,
+    "cost": 3,
     "effects": [
       {
         "type": "turn_regen",
@@ -267,13 +267,13 @@
   },
   "일취월장": {
     "name": "일취월장",
-    "desc": "무공 성취를 70% 더 빠르게 얻는다.",
+    "desc": "무공 성취를 두 배로 얻는다.",
     "rarity": "일반",
     "cost": 5,
     "effects": [
       {
         "type": "mastery_rate",
-        "percent": 70
+        "percent": 100
       }
     ]
   },
@@ -291,19 +291,23 @@
   },
   "복성": {
     "name": "복성",
-    "desc": "탐색에서 기연을 만날 확률이 25% 오른다.",
+    "desc": "탐색에서 기연을 만날 확률이 25% 오르고 얻는 은자가 25% 늘어난다.",
     "rarity": "일반",
     "cost": 5,
     "effects": [
       {
         "type": "fortune_rate",
         "percent": 25
+      },
+      {
+        "type": "silver_rate",
+        "percent": 25
       }
     ]
   },
   "입담꾼": {
     "name": "입담꾼",
-    "desc": "명성 12로 시작하고 은자 30을 더 든다. 말로 풀리는 일이 많다.",
+    "desc": "명성 12와 은자 60을 더 들고 시작하고 얻는 은자가 10% 늘어난다. 말로 풀리는 일이 많다.",
     "rarity": "일반",
     "cost": 3,
     "effects": [
@@ -313,7 +317,11 @@
       },
       {
         "type": "start_silver",
-        "amount": 30
+        "amount": 60
+      },
+      {
+        "type": "silver_rate",
+        "percent": 10
       }
     ],
     "reacts": true
@@ -356,7 +364,7 @@
     "name": "장사꾼 기질",
     "desc": "은자 100을 더 들고 시작하고 장터 가격이 20% 싸다.",
     "rarity": "일반",
-    "cost": 4,
+    "cost": 5,
     "effects": [
       {
         "type": "start_silver",
@@ -389,7 +397,7 @@
     "name": "눈썰미",
     "desc": "장터에 물건이 3개 더 진열되고 가격이 10% 싸다. 사건에서 남이 못 보는 것을 본다.",
     "rarity": "일반",
-    "cost": 4,
+    "cost": 3,
     "effects": [
       {
         "type": "extra_stock",
@@ -421,7 +429,7 @@
   },
   "산사람": {
     "name": "산에 밝은 눈",
-    "desc": "기연을 만날 확률이 15% 오르고 매달 체력과 내력을 3%씩 더 회복한다. 산에서 오래 지내 본 터라 산과 짐승, 약초가 얽힌 사건에서 길을 안다.",
+    "desc": "기연을 만날 확률이 15% 오르고 매달 체력과 내력을 4%씩 더 회복한다. 산에서 오래 지내 본 터라 산과 짐승, 약초가 얽힌 사건에서 길을 안다.",
     "rarity": "일반",
     "cost": 4,
     "effects": [
@@ -431,68 +439,68 @@
       },
       {
         "type": "turn_regen",
-        "hp_pct": 3,
-        "qi_pct": 3
+        "hp_pct": 4,
+        "qi_pct": 4
       }
     ],
     "reacts": true
   },
   "금전운": {
     "name": "금전운",
-    "desc": "얻는 은자가 60% 늘어난다.",
+    "desc": "얻는 은자가 45% 늘어난다.",
     "rarity": "일반",
     "cost": 5,
     "effects": [
       {
         "type": "silver_rate",
-        "percent": 60
+        "percent": 45
       }
     ]
   },
   "약초꾼": {
     "name": "약손",
-    "desc": "금창약 5개와 회기단 3개를 들고 시작하고 상비약 회복이 50% 늘어난다. 약초와 병을 아는 손이라 사건에서 남다른 길이 열린다.",
+    "desc": "금창약 3개와 회기단 2개를 들고 시작하고 상비약 회복이 30% 늘어난다. 약초와 병을 아는 손이라 사건에서 남다른 길이 열린다.",
     "rarity": "일반",
     "cost": 5,
     "effects": [
       {
         "type": "start_item",
         "item": "금창약",
-        "amount": 5
+        "amount": 3
       },
       {
         "type": "start_item",
         "item": "회기단",
-        "amount": 3
+        "amount": 2
       },
       {
         "type": "consumable_rate",
-        "percent": 50
+        "percent": 30
       }
     ],
     "reacts": true
   },
   "수련도구": {
     "name": "수련 도구 한 짐",
-    "desc": "주무공 계열 수련 도구 4개를 들고 시작한다.",
+    "desc": "주무공 계열 수련 도구 5개를 들고 시작한다.",
     "rarity": "일반",
-    "cost": 4,
+    "cost": 3,
     "effects": [
       {
         "type": "start_style_tool",
-        "amount": 4
+        "amount": 5
       }
     ]
   },
   "비장의도구": {
     "name": "비장의 도구",
-    "desc": "주무공 계열 전투 도구 4개를 들고 시작한다.",
+    "desc": "주무공 계열 전투 도구 5개를 들고 시작한다.",
     "rarity": "일반",
-    "cost": 4,
+    "cost": 3,
     "effects": [
       {
         "type": "start_battle_tool",
-        "amount": 4
+        "amount": 5
       }
     ]
   },
@@ -512,7 +520,7 @@
     "name": "구명 보따리",
     "desc": "구명단 2개와 해독단 2개를 들고 시작한다.",
     "rarity": "일반",
-    "cost": 5,
+    "cost": 4,
     "effects": [
       {
         "type": "start_item",
@@ -530,7 +538,7 @@
     "name": "현기의 호흡",
     "desc": "심법 「곤륜현기공」을 익힌 채로 시작하고 심법 회복이 20% 늘어난다.",
     "rarity": "일반",
-    "cost": 6,
+    "cost": 4,
     "effects": [
       {
         "type": "start_skill",
@@ -539,6 +547,46 @@
       {
         "type": "mindset_power",
         "percent": 20
+      }
+    ]
+  },
+  "절세미공": {
+    "name": "디딤돌",
+    "desc": "승급할 때 성취가 30이 아니라 60에서 다시 시작한다.",
+    "rarity": "일반",
+    "cost": 4,
+    "effects": [
+      {
+        "type": "evolve_mastery",
+        "amount": 60
+      }
+    ]
+  },
+  "이기어검": {
+    "name": "여력",
+    "desc": "공격무공의 내력 소모가 30% 줄고 심법 회복이 15% 늘어난다. 긴 싸움에서 내력이 마르지 않는다.",
+    "rarity": "일반",
+    "cost": 4,
+    "effects": [
+      {
+        "type": "qi_cost_cut",
+        "percent": 30
+      },
+      {
+        "type": "mindset_power",
+        "percent": 15
+      }
+    ]
+  },
+  "백전노장": {
+    "name": "이른 실전",
+    "desc": "일찍부터 싸움판을 겪어 실전 경험 12를 쌓은 채로 시작한다. 경지 돌파가 빨라진다.",
+    "rarity": "일반",
+    "cost": 4,
+    "effects": [
+      {
+        "type": "start_battles",
+        "amount": 12
       }
     ]
   },
@@ -744,36 +792,28 @@
   },
   "외길": {
     "name": "외길",
-    "desc": "주무공과 계열이 맞는 병기의 위력이 40% 늘어난다.",
+    "desc": "주무공과 계열이 맞는 병기의 위력이 60% 늘어난다.",
     "rarity": "희귀",
     "cost": 7,
     "effects": [
       {
         "type": "main_weapon_bonus",
-        "percent": 40
+        "percent": 60
       }
     ]
   },
   "금강불괴": {
     "name": "금강불괴",
-    "desc": "내상을 입지 않는다.",
+    "desc": "내상을 입지 않고 받는 피해가 5% 줄어든다.",
     "rarity": "희귀",
     "cost": 7,
     "effects": [
       {
         "type": "no_injury"
-      }
-    ]
-  },
-  "절세미공": {
-    "name": "디딤돌",
-    "desc": "승급할 때 성취가 30이 아니라 60에서 다시 시작한다.",
-    "rarity": "희귀",
-    "cost": 7,
-    "effects": [
+      },
       {
-        "type": "evolve_mastery",
-        "amount": 60
+        "type": "damage_reduce",
+        "percent": 5
       }
     ]
   },
@@ -791,38 +831,26 @@
   },
   "일격필살": {
     "name": "일격필살",
-    "desc": "비기의 피해가 50% 늘어난다.",
+    "desc": "비기의 피해가 35% 늘어난다.",
     "rarity": "희귀",
     "cost": 8,
     "effects": [
       {
         "type": "secret_power",
-        "percent": 50
+        "percent": 35
       }
     ]
   },
   "배수진": {
     "name": "배수진",
-    "desc": "체력이 40% 이하일 때 주는 피해가 50% 늘어난다.",
+    "desc": "체력이 50% 이하일 때 주는 피해가 60% 늘어난다.",
     "rarity": "희귀",
-    "cost": 8,
+    "cost": 7,
     "effects": [
       {
         "type": "low_hp_power",
-        "below": 40,
-        "percent": 50
-      }
-    ]
-  },
-  "이기어검": {
-    "name": "여력",
-    "desc": "공격무공의 내력 소모가 20% 줄어든다. 긴 싸움에서 내력이 마르지 않는다.",
-    "rarity": "희귀",
-    "cost": 8,
-    "effects": [
-      {
-        "type": "qi_cost_cut",
-        "percent": 20
+        "below": 50,
+        "percent": 60
       }
     ]
   },
@@ -830,7 +858,7 @@
     "name": "독인",
     "desc": "독에 당하지 않고 공격이 적을 중독시킨다.",
     "rarity": "희귀",
-    "cost": 8,
+    "cost": 7,
     "effects": [
       {
         "type": "poison_immune"
@@ -843,9 +871,9 @@
   },
   "전장의아이": {
     "name": "전장의 기억",
-    "desc": "전투에서 이기면 실전 경험을 1 더 얻고 체력을 10% 회복한다. 전장을 겪어 본 눈이 군과 싸움터의 일을 먼저 읽는다.",
+    "desc": "전투에서 이기면 실전 경험을 1 더 얻고 체력을 15%, 내력을 10% 회복한다. 전장을 겪어 본 눈이 군과 싸움터의 일을 먼저 읽는다.",
     "rarity": "희귀",
-    "cost": 8,
+    "cost": 7,
     "effects": [
       {
         "type": "battle_exp",
@@ -855,28 +883,22 @@
         "type": "battle_buff",
         "trigger": "on_battle_end",
         "stat": "hp",
+        "percent": 15
+      },
+      {
+        "type": "battle_buff",
+        "trigger": "on_battle_end",
+        "stat": "qi",
         "percent": 10
       }
     ],
     "reacts": true
   },
-  "백전노장": {
-    "name": "이른 실전",
-    "desc": "일찍부터 싸움판을 겪어 실전 경험 8을 쌓은 채로 시작한다. 경지 돌파가 빨라진다.",
-    "rarity": "희귀",
-    "cost": 8,
-    "effects": [
-      {
-        "type": "start_battles",
-        "amount": 8
-      }
-    ]
-  },
   "병기광": {
     "name": "병기광",
-    "desc": "주무공 계열의 좋은 병기를 들고 시작한다. 어떤 병기든 제 힘을 내고 병기 위력이 15% 늘어난다.",
+    "desc": "주무공 계열의 좋은 병기를 들고 시작한다. 어떤 병기든 제 힘을 내고 병기 위력이 25% 늘어난다.",
     "rarity": "희귀",
-    "cost": 9,
+    "cost": 8,
     "effects": [
       {
         "type": "no_mismatch"
@@ -887,7 +909,7 @@
       },
       {
         "type": "main_weapon_bonus",
-        "percent": 15
+        "percent": 25
       }
     ]
   },
@@ -895,7 +917,7 @@
     "name": "뜻밖의 비급",
     "desc": "우연히 손에 넣은 주무공 계열의 명품 공격무공 하나를 더 익히고 시작한다.",
     "rarity": "희귀",
-    "cost": 9,
+    "cost": 8,
     "effects": [
       {
         "type": "start_style_skill",
@@ -905,13 +927,13 @@
   },
   "구름걸음": {
     "name": "구름 걸음",
-    "desc": "경공 「유운신법」을 익힌 채로 시작하고 달아날 확률이 30% 오른다.",
+    "desc": "경공 「표운보」를 익힌 채로 시작하고 달아날 확률이 30% 오른다.",
     "rarity": "희귀",
-    "cost": 9,
+    "cost": 8,
     "effects": [
       {
         "type": "start_skill",
-        "skill": "유운신법"
+        "skill": "표운보"
       },
       {
         "type": "flee_rate",
@@ -921,13 +943,13 @@
   },
   "철옹성": {
     "name": "철옹성",
-    "desc": "받는 피해가 12% 줄고 매달 체력을 5% 더 회복한다.",
+    "desc": "받는 피해가 10% 줄고 매달 체력을 5% 더 회복한다.",
     "rarity": "희귀",
     "cost": 10,
     "effects": [
       {
         "type": "damage_reduce",
-        "percent": 12
+        "percent": 10
       },
       {
         "type": "turn_regen",
@@ -938,13 +960,13 @@
   },
   "창궁의혈통": {
     "name": "창궁의 혈통",
-    "desc": "주무공 성취 30과 명성 3으로 시작한다. 오대세가와 맹의 일에 남궁의 이름이 통한다.",
+    "desc": "주무공 성취 40과 명성 3으로 시작한다. 오대세가와 맹의 일에 남궁의 이름이 통한다.",
     "rarity": "희귀",
     "cost": 7,
     "effects": [
       {
         "type": "start_mastery",
-        "amount": 30
+        "amount": 40
       },
       {
         "type": "start_fame",
@@ -1003,13 +1025,13 @@
   },
   "권마의혈맥": {
     "name": "권마의 혈맥",
-    "desc": "비기의 피해가 30% 늘어난다. 권사와 원한이 얽힌 사건에서 권마의 이름이 먼저 간다.",
+    "desc": "비기의 피해가 20% 늘어난다. 권사와 원한이 얽힌 사건에서 권마의 이름이 먼저 간다.",
     "rarity": "희귀",
     "cost": 7,
     "effects": [
       {
         "type": "secret_power",
-        "percent": 30
+        "percent": 20
       }
     ],
     "origin": "권마계승",
@@ -1034,17 +1056,17 @@
   },
   "외상장부": {
     "name": "외상 장부",
-    "desc": "장터 가격이 15% 싸고 얻는 은자가 15% 늘어난다. 거래와 비밀이 얽힌 사건에서 값을 먼저 안다.",
+    "desc": "장터 가격이 10% 싸고 얻는 은자가 10% 늘어난다. 거래와 비밀이 얽힌 사건에서 값을 먼저 안다.",
     "rarity": "희귀",
     "cost": 7,
     "effects": [
       {
         "type": "market_discount",
-        "percent": 15
+        "percent": 10
       },
       {
         "type": "silver_rate",
-        "percent": 15
+        "percent": 10
       }
     ],
     "origin": "하오문",
@@ -1052,7 +1074,7 @@
   },
   "사부의보따리": {
     "name": "사부의 보따리",
-    "desc": "수련 도구 2개와 주무공 계열 명품 무공 하나를 들고 시작한다. 고수와 노인이 얽힌 사건에서 사부의 이름이 나온다.",
+    "desc": "은자 40과 수련 도구 2개, 주무공 계열 명품 무공 하나를 들고 시작한다. 고수와 노인이 얽힌 사건에서 사부의 이름이 나온다.",
     "rarity": "희귀",
     "cost": 7,
     "effects": [
@@ -1063,6 +1085,10 @@
       {
         "type": "start_style_skill",
         "grade": "명품"
+      },
+      {
+        "type": "start_silver",
+        "amount": 40
       }
     ],
     "origin": "무림초출",
@@ -1088,17 +1114,17 @@
   },
   "호랑이맷집": {
     "name": "호랑이 맷집",
-    "desc": "받는 피해가 8% 줄고 매달 체력을 4% 더 회복한다. 팽가 사람은 맞으면서 가르치고 맞으면서 배운다.",
+    "desc": "받는 피해가 5% 줄고 매달 체력을 3% 더 회복한다. 팽가 사람은 맞으면서 가르치고 맞으면서 배운다.",
     "rarity": "희귀",
     "cost": 7,
     "effects": [
       {
         "type": "damage_reduce",
-        "percent": 8
+        "percent": 5
       },
       {
         "type": "turn_regen",
-        "hp_pct": 4,
+        "hp_pct": 3,
         "qi_pct": 0
       }
     ],
@@ -1217,7 +1243,7 @@
   },
   "전투광": {
     "name": "전투광",
-    "desc": "전투가 시작되면 네 기량이 전투 중에만 40 오른다. 전투가 끝나면 체력과 내력을 각각 25% 회복한다.",
+    "desc": "전투가 시작되면 네 기량이 전투 중에만 70 오른다. 전투가 끝나면 체력과 내력을 각각 25% 회복한다.",
     "rarity": "전설",
     "cost": 16,
     "effects": [
@@ -1225,28 +1251,28 @@
         "type": "battle_buff",
         "trigger": "on_battle_start",
         "stat": "external",
-        "amount": 40,
+        "amount": 70,
         "temporary": true
       },
       {
         "type": "battle_buff",
         "trigger": "on_battle_start",
         "stat": "internal",
-        "amount": 40,
+        "amount": 70,
         "temporary": true
       },
       {
         "type": "battle_buff",
         "trigger": "on_battle_start",
         "stat": "martial",
-        "amount": 40,
+        "amount": 70,
         "temporary": true
       },
       {
         "type": "battle_buff",
         "trigger": "on_battle_start",
         "stat": "mind",
-        "amount": 40,
+        "amount": 70,
         "temporary": true
       },
       {
@@ -1265,60 +1291,61 @@
   },
   "불굴": {
     "name": "불굴",
-    "desc": "전투마다 한 번, 치명상을 입어도 체력 1로 버틴다.",
+    "desc": "전투마다 한 번, 치명상을 입어도 체력 25%로 다시 일어선다.",
     "rarity": "전설",
     "cost": 16,
     "effects": [
       {
-        "type": "last_stand"
+        "type": "last_stand",
+        "hp_pct": 25
       }
     ]
   },
   "천하제일기재": {
     "name": "천하제일기재",
-    "desc": "모든 기량이 100 높게 시작하고 성장이 각각 5% 늘어난다.",
+    "desc": "모든 기량이 120 높게 시작하고 성장이 각각 8% 늘어난다.",
     "rarity": "전설",
     "cost": 25,
     "effects": [
       {
         "type": "start_stat",
         "stat": "external",
-        "amount": 100
+        "amount": 120
       },
       {
         "type": "start_stat",
         "stat": "internal",
-        "amount": 100
+        "amount": 120
       },
       {
         "type": "start_stat",
         "stat": "martial",
-        "amount": 100
+        "amount": 120
       },
       {
         "type": "start_stat",
         "stat": "mind",
-        "amount": 100
+        "amount": 120
       },
       {
         "type": "growth_rate",
         "stat": "external",
-        "percent": 5
+        "percent": 8
       },
       {
         "type": "growth_rate",
         "stat": "internal",
-        "percent": 5
+        "percent": 8
       },
       {
         "type": "growth_rate",
         "stat": "martial",
-        "percent": 5
+        "percent": 8
       },
       {
         "type": "growth_rate",
         "stat": "mind",
-        "percent": 5
+        "percent": 8
       }
     ]
   }

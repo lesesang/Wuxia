@@ -960,7 +960,8 @@
               "final_battle": true,
               "flags": [
                 "찬탈"
-              ]
+              ],
+              "boss_weaken": 15
             }
           }
         ],
