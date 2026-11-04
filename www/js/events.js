@@ -2,9 +2,9 @@
 import { GRADE_ORDER, HOME_ART_MASTERY, Skill, STAT_NAMES, STAT_SCALE } from "./character.js";
 import { DB } from "./data.js";
 import { bonusFor, equipmentBonus, ITEM_GRADES, styleWeight, weightsByStyle } from "./market.js";
-import { recordEventPick, updateKnown } from "./meta.js";
+import { legacyPowers, loadMeta, recordEventPick, updateKnown } from "./meta.js";
 import { pick, pickWeighted, rng } from "./rng.js";
-import { ALIGNMENTS, applyGrowth, scaledGrowth, fameRankChanged, getChapter, realmIndex, sumEffect, talkLine } from "./rules.js";
+import { ALIGNMENTS, applyGrowth, eventToll, scaledGrowth, fameRankChanged, getChapter, realmIndex, sumEffect, talkLine } from "./rules.js";
 import { josa } from "./josa.js";
 
 export const EVENT_STAT_SCALE = 3; // 사건과 기연의 기량 상승 배율. 데이터에 적힌 값의 세 배가 오른다
@@ -199,6 +199,7 @@ export function pickRandomEvent(player) {
   const chapter = getChapter(player.turn);
   const options = Object.keys(DB.randomEvents).filter((key) => {
     const event = DB.randomEvents[key];
+    if (event.legacy_find) return false; // 유산의 흔적은 정해진 자리에서만 나온다
     if (event.chain && !canStartChain(player, event.chain.id)) return false;
     return (event.chapters || []).includes(chapter) && !player.seenEvents.includes(key)
       && checkRequires(player, event.requires);
@@ -236,8 +237,66 @@ function eventChoices(player, key) {
 /** 조건이 맞는 첫 반응의 본문. 없으면 기본 본문. */
 function eventText(player, key) {
   const event = DB.events[key];
+  if (event.legacy_find && player.pendingLegacy.length) return legacyScene(player, event);
   const variant = (event.variants || []).find((v) => v.text && checkRequires(player, v.requires));
   return variant ? variant.text : event.text;
+}
+
+/** 유산의 흔적을 찾는 장면. 같은 달에는 같은 장면이 나온다 */
+function legacyScene(player, event) {
+  const entry = player.pendingLegacy[0];
+  const seed = [...`${entry.key}${player.turn}`].reduce((total, c) => (total * 31 + c.codePointAt(0)) % 100003, 7);
+  const finds = DB.karma.legacy.finds;
+  const list = finds[entry.kind];
+  const name = entry.kind === "skill" ? DB.skills[entry.key].name : DB.market[entry.key].name;
+  const fit = entry.origin === player.origin ? finds.same_origin : null;
+  return [event.scenes[seed % event.scenes.length].replaceAll("〈별호〉", entry.from), list[seed % list.length].replaceAll("〈유산〉", name), fit].filter(Boolean).join(" ");
+}
+
+/** 유산 무공은 한 품계 낮아지고 상승을 넘지 않는다. 강화하면 그대로 온다 */
+function inheritedGrade(grade, powers) {
+  if (powers.keepGrade) return grade;
+  const index = Math.max(0, GRADE_ORDER.indexOf(grade) - 1);
+  return GRADE_ORDER[Math.min(index, GRADE_ORDER.indexOf("상승"))];
+}
+
+/** 유산 병장기는 같은 종류의 낮은 단계로 돌아온다. 강화하면 그대로 온다 */
+function inheritedGear(key, powers) {
+  if (powers.keepGear) return key;
+  const effect = DB.market[key].effects.find((e) => e.type === "equip");
+  const same = Object.keys(DB.market).filter((k) => {
+    const e = DB.market[k].effects.find((x) => x.type === "equip");
+    return e && DB.market[k].markets.length && e.slot === effect.slot && e.style === effect.style;
+  }).sort((a, b) => DB.market[a].price - DB.market[b].price);
+  const at = same.indexOf(key);
+  const tier = DB.karma.legacy.gear_tier - 1;
+  return same[at < 0 ? Math.min(tier, same.length - 1) : Math.min(at, tier)];
+}
+
+/** 찾아낸 유산 하나를 거둔다 */
+function takeFoundLegacy(player) {
+  const entry = player.pendingLegacy.shift();
+  if (!entry) return [];
+  const powers = legacyPowers(loadMeta());
+  let name;
+  let worn = false;
+  if (entry.kind === "skill") {
+    const grade = inheritedGrade(entry.grade, powers);
+    const skill = Skill.fromDict({ key: entry.key, grade, mastery: 0 });
+    worn = grade !== entry.grade;
+    name = skill.name;
+    // 이미 익혔으면 유산은 성취가 된다
+    player.learnSkill(skill);
+  } else {
+    const key = inheritedGear(entry.key, powers);
+    worn = key !== entry.key;
+    name = DB.market[key].name;
+    const { slot } = DB.market[key].effects.find((e) => e.type === "equip");
+    if (bonusFor(player, key) > equipmentBonus(player, slot)) player.equipGear(key);
+    else if (!player.ownsGear(key)) player.gear.push(key);
+  }
+  player.note(`${entry.from}${josa(entry.from, "이/가")} 남긴 ${name}${josa(name, "을/를")} 이어받았다.`);
+  return [`${name}${josa(name, "을/를")} 거두었다${worn ? ". 세월에 조금 바랬지만 아직 쓸 만하다" : ""}`];
 }
 
 const TALK_RATE = 45; // 사람과 말을 섞는 사건 가운데 말투 줄이 붙는 비율
@@ -296,7 +355,7 @@ export function resolveChoice(player, key, index) {
   const deferred = !!effects.battle;
   const summary = deferred ? [] : applyEffects(player, effects);
   // again이 붙은 선택은 그 일을 뒤로 미룬다. 나중에 다시 찾아온다
-  if (!effects.again && !player.seenEvents.includes(key)) player.seenEvents.push(key);
+  if (!effects.again && !DB.events[key].legacy_find && !player.seenEvents.includes(key)) player.seenEvents.push(key);
   if (!DB.events[key].prelude) updateKnown([], [], [key]);
   return { text: outcome.text, label: choice.label, summary, effects, deferred, lead: !!outcome.lead };
 }
@@ -419,7 +478,7 @@ export function grantStartSkills(player) {
   for (const grade of grades) {
     const keys = Object.keys(DB.skills).filter((k) => {
       const s = DB.skills[k];
-      return s.type === "공격무공" && s.category === style && s.grade === grade && !s.origin && !player.hasSkill(k);
+      return s.type === "공격무공" && s.category === style && s.grade === grade && !s.origin && !s.school && !player.hasSkill(k);
     });
     if (keys.length) {
       const skill = new Skill(pick(keys));
@@ -483,7 +542,10 @@ export function applyEffects(player, effects) {
   player.clampVitals();
 
   if ("hp_pct" in effects || "qi_pct" in effects) {
-    const [hp, qi] = player.healPercent(effects.hp_pct || 0, effects.qi_pct || 0);
+    // 잃는 쪽은 경지와 기량만큼 덜 축난다
+    const toll = eventToll(player);
+    const scaled = (value = 0) => (value < 0 ? Math.min(-1, Math.ceil(value * toll)) : value);
+    const [hp, qi] = player.healPercent(scaled(effects.hp_pct), scaled(effects.qi_pct));
     if (hp) summary.push(`체력${signed(hp)}`);
     if (qi) summary.push(`내력${signed(qi)}`);
   }
@@ -581,7 +643,7 @@ export function applyEffects(player, effects) {
     const wanted = effects.style_skill.grade;
     const list = Object.keys(DB.skills).filter((k) => {
       const s = DB.skills[k];
-      if (s.category !== main || s.grade !== wanted || player.hasSkill(k)) return false;
+      if (s.category !== main || s.grade !== wanted || s.reserved || player.hasSkill(k)) return false;
       // 출신 전용 신공은 그 출신의 이야기에서만 나온다
       return wanted === "신공" ? !s.origin : s.legend;
     });
@@ -603,6 +665,7 @@ export function applyEffects(player, effects) {
     }
   }
 
+  if (effects.take_legacy) summary.push(...takeFoundLegacy(player));
   if (effects.style_gear) summary.push(...gradeGearReward(player, effects.style_gear));
   if (effects.grade_item) summary.push(...gradeItemReward(player, effects.grade_item));
   if (effects.last_strength) {

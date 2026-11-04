@@ -24,8 +24,12 @@ const START_ARMORS = ["가죽호구", "철사갑의", "금사보의"]; // 겹쳐
 const SPARE_ARMOR_SILVER = 40; // 넘치는 갑의는 은자로 돌아온다
 const CHRONICLE_LIMIT = 40;
 export const STAT_CAP = 999;
+// 이름을 고친 물건. 예전 저장의 물건을 새 이름으로 읽는다
+const RENAMED_ITEMS = { 귀두도: "귀면도", 참마도: "항마대도", 적련수갑: "적련장갑", 빙화천수갑: "빙화장갑" };
+const renamedItem = (key) => RENAMED_ITEMS[key] || key;
+
 const STAT_SOFT_CAP = 850;  // 기량이 이 값을 넘으면 더디게 오른다
-const STAT_SOFT_RATE = 0.5;
+const STAT_SOFT_RATE = 0.4;
 export const STAT_SCALE = 10; // 기량 10이 예전 기량 1에 해당한다. 공식은 이 값으로 나누어 쓴다
 export const MAX_INJURY = 3;
 export const MAX_TURN = 120;
@@ -189,6 +193,7 @@ export class Player {
     this.weapon = data.weapon || null;
     this.armor = null;
     this.gear = []; // 갈아 쓸 수 있게 챙겨 둔 병장기
+    this.pendingLegacy = []; // 이어받기로 했지만 아직 흔적을 찾지 못한 유산
     this.inventory = { ...(data.items || {}) };
     for (const key of traitKeys) {
       for (const effect of DB.traits[key]?.effects || []) {
@@ -409,7 +414,7 @@ export class Player {
       hp: this.hp, qi: this.qi, battles: this.battles,
       encountered_enemies: this.encounteredEnemies, pending_encounters: this.pendingEncounters,
       skills: this.skills.map((s) => s.toDict()), main_skill: this.mainSkill, chosen_arts: this.chosenArts,
-      traits: this.traits, slain: this.slain, silver: this.silver, weapon: this.weapon, armor: this.armor, gear: this.gear,
+      traits: this.traits, slain: this.slain, silver: this.silver, weapon: this.weapon, armor: this.armor, gear: this.gear, pending_legacy: this.pendingLegacy,
       inventory: this.inventory, boss_weaken: this.bossWeaken, alignment: this.alignment,
       flags: this.flags, seen_events: this.seenEvents, kills: this.kills,
       fame: this.fame, sect: this.sect, injury: this.injury,
@@ -457,9 +462,10 @@ export class Player {
     p.slain = d.slain || [];
     p.skills.forEach((s) => p.applyEvolveTrait(s));
     p.silver = d.silver ?? 0;
-    p.weapon = DB.market[d.weapon] ? d.weapon : null;
+    p.weapon = DB.market[renamedItem(d.weapon)] ? renamedItem(d.weapon) : null;
     p.armor = DB.market[d.armor] ? d.armor : null;
-    p.gear = (d.gear || []).filter((k) => DB.market[k]);
+    p.gear = (d.gear || []).map(renamedItem).filter((k) => DB.market[k]);
+    p.pendingLegacy = d.pending_legacy ?? [];
     p.inventory = Object.fromEntries(Object.entries(d.inventory || {}).filter(([k]) => DB.market[k]));
     p.bossWeaken = d.boss_weaken ?? 0;
     p.alignment = { ...newAlignment(), ...(d.alignment || {}) };

@@ -131,5 +131,8 @@ for (const [name, options] of ROWS) {
   const wins = results.filter((r) => ["배드", "기본", "생사경"].includes(r.ending)).length;
   const reached = results.filter((r) => r.player.turn >= 120).length;
   const avg = results.reduce((t, r) => t + (r.player.external + r.player.internal + r.player.martial + r.player.mind) / 4, 0) / count;
-  console.log(`${name}: 격파 ${Math.round(wins * 100 / count)}%, 120달 도달 ${Math.round(reached * 100 / count)}%, 평균 능력치 ${avg.toFixed(0)}`, JSON.stringify(tally));
+  const stats = (p) => [p.external, p.internal, p.martial, p.mind];
+  const maxed = results.filter((r) => stats(r.player).every((v) => v >= 999)).length;
+  const floor = results.reduce((t, r) => t + Math.min(...stats(r.player)), 0) / count;
+  console.log(`${name}: 격파 ${Math.round(wins * 100 / count)}%, 120달 도달 ${Math.round(reached * 100 / count)}%, 평균 능력치 ${avg.toFixed(0)}, 가장 낮은 기량 ${floor.toFixed(0)}, 넷 다 999 ${Math.round(maxed * 100 / count)}%, 은자 ${Math.round(results.reduce((t, r) => t + r.player.silver, 0) / count)}`, JSON.stringify(tally));
 }

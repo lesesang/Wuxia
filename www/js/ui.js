@@ -6,7 +6,7 @@ import { eventView } from "./events.js";
 import { Game } from "./game.js";
 import { bonusFor, equipmentBonus, gearGimmick, itemGrade, itemName, sellableView, stockView } from "./market.js";
 import {
-  buyContent, buyProvision, buyUpgrade, exportRecords, extraSlots, importRecords, legacyAvailable, loadCheckpoint, loadEventLog, loadMeta, nextReward, openLegacy, refundProvision, setUpgradeUse, upgradeUse,
+  buyContent, buyProvision, buyUpgrade, exportRecords, extraSlots, importRecords, legacyAvailable, legacyPowers, dropLegacy, upgradeLegacy, loadCheckpoint, loadEventLog, loadMeta, nextReward, openLegacy, refundProvision, setUpgradeUse, upgradeUse,
   toggleContent, unlockOrigin, unlockTrait, upgradeLevel,
 } from "./meta.js";
 import {
@@ -19,7 +19,7 @@ import { halpun, josa } from "./josa.js";
 const game = new Game();
 const ui = {
   screen: "title", setupTab: "origin", origin: "무림초출", traits: new Set(),
-  modals: [], popsToIgnore: 0, traitFilter: "전체", codexQuery: "", codexFilter: "전체", codexRead: null, legacy: null, shopTab: "origin", shopFrom: "title", modal: null, tab: "enemies", statusTab: "stats", notice: null, lastTyped: "", bars: null,
+  modals: [], popsToIgnore: 0, traitFilter: "전체", codexQuery: "", codexFilter: "전체", codexRead: null, legacy: new Set(), legacyDrop: null, shopTab: "origin", shopFrom: "title", modal: null, tab: "enemies", statusTab: "stats", notice: null, lastTyped: "", bars: null,
 };
 let installPrompt = null;
 const app = () => document.getElementById("app");
@@ -95,7 +95,7 @@ function codexRows(tab, meta) {
   if (tab === "skills") {
     const cats = [...new Set(Object.values(DB.skills).map((s) => s.category))];
     return {
-      total: Object.keys(DB.skills).length, filterLabel: "갈래", filters: [...cats, ...GRADE_LIST], empty: "무공을 익히면 이곳에 기록됩니다.",
+      total: Object.values(DB.skills).filter((s) => !s.reserved).length, filterLabel: "갈래", filters: [...cats, ...GRADE_LIST], empty: "무공을 익히면 이곳에 기록됩니다.",
       rows: meta.known_skills.filter((k) => DB.skills[k]).map((k) => {
         const s = DB.skills[k];
         return { key: k, name: s.name, meta: `${s.category}, ${s.grade} 품계`, desc: s.desc, more: skillDetail(s), cats: [s.category, s.grade] };
@@ -108,7 +108,7 @@ function codexRows(tab, meta) {
       total: Object.keys(DB.market).length, filterLabel: "종류", filters: cats, empty: "장터에서 사거나 쓴 물건이 이곳에 기록됩니다.",
       rows: meta.known_items.filter((k) => DB.market[k]).map((k) => {
         const i = DB.market[k];
-        return { key: k, name: i.name, meta: `${categoryName(i.category)}, ${i.grade ?? "비급"}`, desc: i.gimmick ? `${i.desc} 묘리 ${i.gimmick.name}: ${i.gimmick.text}` : i.desc, cats: [categoryName(i.category)] };
+        return { key: k, name: i.name, meta: `${categoryName(i.category)}, ${i.grade ?? "비급"}`, desc: i.gimmick ? `${i.desc} 숨은 힘 ${i.gimmick.name}: ${i.gimmick.text}` : i.desc, cats: [categoryName(i.category)] };
       }),
     };
   }
@@ -189,7 +189,7 @@ function codexBody() {
   const data = codexRows(ui.tab, meta);
   const tabCount = (key) => {
     if (key === "enemies") return `${meta.global_codex.filter((k) => DB.enemies[k]).length}/${Object.keys(DB.enemies).length}`;
-    if (key === "skills") return `${meta.known_skills.filter((k) => DB.skills[k]).length}/${Object.keys(DB.skills).length}`;
+    if (key === "skills") return `${meta.known_skills.filter((k) => DB.skills[k]).length}/${Object.values(DB.skills).filter((s) => !s.reserved).length}`;
     if (key === "items") return `${meta.known_items.filter((k) => DB.market[k]).length}/${Object.keys(DB.market).length}`;
     if (key === "events") return `${meta.known_events.filter((k) => DB.events[k]).length}/${Object.keys(DB.events).length}`;
     if (key === "achievements") return `${meta.achievements.length}`;
@@ -237,8 +237,8 @@ ${section("생사경", [
     "<b>기본</b>: 강호 어디서나 배우는 무공. 낮아 보여도 성취를 쌓으면 승급합니다.",
     "<b>명품</b>: 이름난 문파와 고수의 무공. 절정 이상의 적이 가끔 지니고 있고 장터에도 나옵니다.",
     "<b>상승</b>: 고수만이 쓰는 무공. 화경 이상의 적에게서나, 뒤쪽 장터에서 얻습니다.",
-    "<b>일절</b>: 한 문파나 한 시대의 끝을 이룬 무공. 소속의 비전이나 큰 인연에서만 얻고, 승급으로 오를 수 있는 끝입니다.",
-    "<b>신공</b>: 전설의 무공. 승급이나 장터, 일반 사건이나 유산으로는 얻을 수 없고 출신의 이야기와 카르마로 연 인연에서만 나옵니다. 일절의 끝에서 큰 깨달음으로 오르기도 합니다.",
+    "<b>일절</b>: 한 문파의 깊은 비전이나 한 시대의 끝을 이룬 무공. 소속의 비전이나 큰 인연에서만 얻고, 수상한 누군가가 값비싸게 내놓기도 합니다. 승급으로 오를 수 있는 끝입니다.",
+    "<b>신공</b>: 전설의 무공. 승급이나 장터, 일반 사건으로는 얻을 수 없고 출신의 이야기와 카르마로 연 인연에서만 나옵니다. 일절의 끝에서 큰 깨달음으로 오르기도 합니다. 문파와 세가마다 전해 오는 최고의 무공도 이 반열이지만, 아직 세상에 나오지 않았습니다.",
     "품계가 높을수록 위력이 크고 내력을 많이 쓰며, 일부 무공은 성취가 차면 <b>비기</b>가 열립니다.",
     "<b>묘리</b>: 상승 품계부터 무공마다 고유한 묘리가 드러납니다. 승급으로 상승에 이른 무공도 같습니다. 나눠 쳐서 번번이 회심을 가리는 공격, 준 피해를 빨아들이는 공격, 적을 굳히는 공격, 호신 기운을 두르는 심법, 저절로 피하거나 되받아치는 경공처럼 무공마다 다릅니다. 신상의 무공 칸에서 볼 수 있습니다.",
     "무공은 공격, 심법, 경공 셋으로 나뉘고 칸마다 쓸 무공 하나를 고릅니다. 새로 얻었다고 저절로 바뀌지 않으니 신상의 무공 칸에서 고르세요.",
@@ -251,7 +251,7 @@ ${section("일절 너머", ["일절 무공의 성취가 100에 이르면 드물�
     "무공은 내력을 씁니다. 내력이 없으면 맨손으로 싸웁니다.",
     "적의 필살기는 한 합 전에 미리 예고됩니다. <b>경공</b>으로 흘려내면 다음 공격이 강해집니다.",
     "<b>심법</b>은 숨을 고르며 회복하고 점혈을 풉니다. 위험하면 <b>도주</b>도 방법입니다.",
-    "내상은 전투가 끝나도 남고 주는 피해를 줄입니다.",
+    "내상은 전투가 끝나도 남고 주는 피해를 줄입니다. 사건에서 체력이나 내력이 축날 때는 경지와 기량이 높을수록 덜 축납니다.",
     "강호행마다 한 번, 쓰러지는 순간 마지막 힘을 끌어모을 수 있습니다. 화면 가운데 창에서 고르며, 끌어모으면 체력과 내력이 최대의 절반만큼 차오릅니다."])}
 ${section("비무", ["비무에서는 져도 죽지 않습니다. 체력이 1할만 남고 얻는 것이 없으며, 그 비무가 이어지는 일의 한 편이었다면 그 일은 어그러집니다. 기권해도 같습니다. 이겨도 사람을 죽인 것은 아니어서 처치 수와 성향은 오르지 않습니다."])}
 ${section("결전에 달려오는 사람", [`강호에서 자주 마주치는 사람들과 인연을 끝까지 맺으면 천마와의 결전에 달려옵니다. 몇 합마다 대신 공격하거나, 회복시켜 주거나, 천마의 기세를 꺾거나, 함께 있는 것만으로 위력과 방어를 올려 줍니다. 한 번에 ${MAX_COMPANIONS}명까지 옵니다. 대부분 카르마로 인연을 사야 만날 수 있고, 내 성향과 출신에 따라 대하는 태도가 다릅니다.`])}
@@ -266,11 +266,13 @@ ${section("영물과 내단", ["산과 물에는 짐승과 오래 묵은 영물�
     세력: `${section("소속", [
     "문파나 세력을 돕고 나면 제안이 오고, 받아들여야 소속이 됩니다. 소속마다 고유한 혜택과 이야기, 비전 무공이 있습니다. 한번 들어가면 다른 소속을 받을 수 없습니다.",
     "소속 없이 3년 차 늦봄에서 여름에 이르면 성향에 맞는 문을 직접 두드릴 수 있습니다. 어디에도 가지 않고 홀로 가면 그 뒤로 문파의 손길이 드물게 닿습니다.",
-    "성향이 맞지 않는 세력은 도움을 청하기는커녕 칼을 뽑기도 합니다."])}
+    "성향이 맞지 않는 세력은 도움을 청하기는커녕 칼을 뽑기도 합니다.",
+    "소속이 생기면 그 문파의 일이 찾아옵니다. 문파의 상승과 일절 무공은 장터에 나오지 않고, 그런 소속의 일을 맡아 인정받아야 전해 줍니다."])}
 ${section("오대세가와 구파일방", ["<b>구파일방</b>: 소림, 무당, 화산, 아미, 곤륜, 종남, 점창, 청성, 공동의 아홉 문파와 개방입니다.", "<b>오대세가</b>: 남궁, 하북팽가, 사천당가, 모용, 제갈입니다. 남궁과 팽가는 천마신교의 손에 멸문해 이제 들어갈 수 없습니다. 그 마지막 사람은 출신으로 고를 수 있습니다.", "<b>사파</b>: 사도련, 녹림맹, 살막, 흑사방, 하오문. <b>마도</b>: 천마신교, 혈교, 귀문교입니다.", "사천당가는 독과 암기를 다루지만 해독과 의술에 밝은 정파의 명문입니다."])}
 ${section("출신의 이야기", ["출신마다 전용 이야기가 있습니다. 조건을 채운 이야기는 탐색에서 더 자주 찾아오고, 끝까지 만나지 못했으면 결전 전 마지막 해에 찾아옵니다. 카르마로 켠 출신 인연도 같습니다. 조건을 끝내 채우지 못한 이야기는 나오지 않습니다.", "이어지는 인연은 여러 달을 쓰는 대신 끝을 맺으면 보상이 큽니다."])}`,
     장터: `${section("장터", ["매년 말 장터가 열리고 달을 쓰지 않습니다. 병기와 호신구는 해마다 진열되고, 주무공에 맞는 병기가 먼저 나옵니다. 심법과 보법 비급도 칸을 따로 둡니다.", "주무공과 맞는 무공, 병기, 도구가 더 자주 나옵니다. 기틀 <b>외길 안목</b>을 올리면 장터와 적의 품에서 더 잘 나옵니다.", "병기 값 옆의 품계를 보세요. 비급은 그 무공의 품계, 나머지는 범품, 양품, 명품, 보물, 신물로 나뉩니다."])}
-    ${section("병장기와 물건의 품계", ["<b>범품, 양품</b>: 위력이나 방어만 오르는 물건입니다. <b>명품, 보물, 신물</b> 병장기에는 저마다의 <b>묘리</b>가 있습니다. 방어를 무시하는 칼, 맞으면 적이 굳는 곤, 공격을 저절로 피하게 하는 옷처럼 다릅니다. 병기의 묘리는 주무공 계열과 맞아야 나타납니다.", "보물과 신물 대부분은 장터에 없습니다. 큰 사건과 이어지는 인연, 카르마로 산 인연에서 얻습니다.", "새로 얻은 병장기가 더 나으면 바로 듭니다. 지금 것이 더 나으면 행낭에 챙기고, 신상의 행낭 칸이나 장터에서 언제든 바꿔 들 수 있습니다.", "약과 도구, 쓰지 않는 병장기는 장터에서 값의 4할에 되팔 수 있습니다. 들고 있는 병장기는 먼저 내려놓아야 합니다."])}
+    ${section("병장기와 물건의 품계", ["<b>범품, 양품</b>: 위력이나 방어만 오르는 물건입니다. <b>명품, 보물, 신물</b> 병장기에는 저마다의 <b>숨은 힘</b>이 있습니다. 방어를 무시하는 칼, 맞으면 적이 굳는 곤, 공격을 저절로 피하게 하는 옷처럼 다릅니다. 병기의 숨은 힘은 주무공 계열과 맞아야 깨어납니다.", "보물과 신물은 드뭅니다. 큰 사건과 이어지는 인연, 카르마로 산 인연에서 얻거나 수상한 누군가에게서 삽니다.", "새로 얻은 병장기가 더 나으면 바로 듭니다. 지금 것이 더 나으면 행낭에 챙기고, 신상의 행낭 칸이나 장터에서 언제든 바꿔 들 수 있습니다.", "약과 도구, 쓰지 않는 병장기는 장터에서 값의 4할에 되팔 수 있습니다. 들고 있는 병장기는 먼저 내려놓아야 합니다."])}
+    ${section("수상한 누군가", ["결전 직전 마지막 달에는 장터 대신 수상한 누군가가 보따리를 풉니다. 보물과 신물, 상승 이상의 비급만 다루고 값은 3할쯤 비쌉니다.", "<b>특별한 물건</b>은 언제나 나옵니다. 천마의 체력을 미리 깎는 물건, 쓰러질 때 끌어모을 힘을 더 주는 물건, 주무공에 맞는 신물을 내어 주는 증표처럼 카르마로 거래하는 것도 있습니다. 카르마가 조금 남았다면 이때 쓰면 좋습니다."])}
     ${section("도구와 약 쓰기", ["전투 중 약이나 도구 <b>하나는 합을 쓰지 않습니다</b>. 같은 합에 하나를 더 쓰면 그때는 합이 지나가고 적이 움직입니다.", "수련 도구는 언제든, 전투 도구는 전투 중에 씁니다. 계열이 정해진 도구는 맞으면 제 효과를 내고 맞지 않으면 절반입니다.", "같은 계열 무공의 성취는 신상의 무공 칸에서 주무공으로 옮길 수 있습니다. 품계가 같으면 절반, 낮으면 3할이 옮겨 갑니다."])}`,
     카르마: `${section("카르마를 얻는 길", [
     "<b>도달한 장</b>: 천마까지 가지 못하고 끝나면 1장 +1부터 5장 +5까지 받습니다. 천마에게 져도 +5입니다.",
@@ -278,6 +280,7 @@ ${section("출신의 이야기", ["출신마다 전용 이야기가 있습니다
     "<b>경지</b>: 어느 쪽이든 오른 경지에 따라 더 받습니다. 절정 +1, 초절정 +2, 화경 +3, 현경 +4",
     "<b>공적</b>: 처음 이룰 때 한 번 더 받습니다. 강호록의 공적 칸에서 볼 수 있습니다.",
     "카르마는 써도 누적은 줄지 않고, 누적 보상을 다 받은 뒤에도 계속 쌓입니다."])}
+${section("전설의 유산", ["천마를 한 번 쓰러뜨리면 상점에서 열 수 있습니다. 강호행을 마칠 때 무공이나 병장기 하나를 남겨 둡니다. 처음에는 세 개까지 보관하고, 가득 차면 하나를 골라 지워야 새로 남길 수 있습니다.", "새 강호행을 시작할 때 고른 유산은 바로 받지 않습니다. 첫 해 안에 수련, 운기, 요양, 탐색을 하다가 별호만 남은 어느 고수의 무덤이나 자취에서 찾아 이어받습니다. 이어받아도 보관함에서 사라지지 않습니다.", "처음에는 무공의 품계가 한 단계 낮아지고(상승까지만), 병장기는 낮은 단계로 돌아옵니다.", ...DB.karma.legacy.upgrades.map((u, i) => `<b>${i + 1}단계 ${esc(u.name)}</b>: ${esc(u.desc)}`)])}
 ${section("겹쳐 받을 때", ["자질, 기틀, 채비, 누적 보상에서 받는 시작 병기와 갑의는 겹칠수록 한 단계씩 좋아지고, 끝을 넘으면 은자로 돌아옵니다. 같은 비급과 무공이 겹치면 성취가 됩니다."])}`,
   };
   const page = pages[ui.helpPage] ? ui.helpPage : "처음";
@@ -423,10 +426,7 @@ function shopPanels(meta) {
   const contentOwn = byOrigin(contentLeft.filter(([, c]) => c.origin), ([, c]) => c.origin);
   const content = contentLeft.filter(([, c]) => !c.origin).map(contentRow).join("")
     + (contentOwn.length ? `<h4 class="shop-group">출신 전용</h4>${contentOwn.map(contentRow).join("")}` : "");
-  const { cost } = DB.karma.legacy;
-  const legacy = meta.legacy_open ? emptyNote("이미 열었습니다. 강호행을 시작할 때 유산을 고를 수 있습니다.")
-    : !legacyAvailable(meta) ? emptyNote("천마를 한 번 쓰러뜨리면 살 수 있습니다.")
-      : shopRow("전설의 유산", `<p class="pick-desc">강호행이 끝날 때 무공이나 병장기 하나를 남기고, 다음 강호행에서 이어받습니다.</p>`, "open-legacy", "", cost, meta);
+  const legacy = legacyShop(meta);
   const provisionGroups = [...new Set(Object.values(DB.karma.provisions).map((p) => p.group))];
   const provisionRow = ([key, p]) => {
     const desc = `<p class="pick-desc">${esc(p.desc)}</p>`;
@@ -444,6 +444,25 @@ function shopPanels(meta) {
     legacy,
     reward: rewardPanel(meta),
   };
+}
+
+/** 상점의 유산 칸: 여는 값, 강화 단계, 보관한 유산 */
+function legacyShop(meta) {
+  const { cost, upgrades } = DB.karma.legacy;
+  const note = `<p class="section-note">강호행을 마칠 때 무공이나 병장기 하나를 남겨 둡니다. 다음 강호행의 첫 해 안에 아무도 모르는 고수의 무덤이나 자취에서 그것을 찾아 이어받습니다. 이어받아도 사라지지 않습니다.</p>`;
+  if (!meta.legacy_open) {
+    return note + (legacyAvailable(meta) ? shopRow("전설의 유산", `<p class="pick-desc">유산을 남기고 이어받을 수 있게 됩니다.</p>`, "open-legacy", "", cost, meta) : emptyNote("천마를 한 번 쓰러뜨리면 살 수 있습니다."));
+  }
+  const level = meta.legacy_level || 0;
+  const steps = upgrades.map((u, i) => {
+    if (i < level) return `<div class="pick-row"><div class="pick-main"><div class="pick-name">${i + 1}단계 ${esc(u.name)} <span class="rarity">이룸</span></div><p class="pick-desc">${esc(u.desc)}</p></div></div>`;
+    if (i === level) return shopRow(`${i + 1}단계 ${esc(u.name)}`, `<p class="pick-desc">${esc(u.desc)}</p>`, "upgrade-legacy", "", u.cost, meta);
+    return `<div class="pick-row"><div class="pick-main"><div class="pick-name">${i + 1}단계 ${esc(u.name)} <span class="rarity">아직 닫힘</span></div><p class="pick-desc">${esc(u.desc)}</p></div></div>`;
+  }).join("");
+  const stored = meta.legacies.map((l, i) => `<div class="pick-row"><div class="pick-main"><div class="pick-name">${esc(l.label)}</div><p class="pick-desc">${esc(l.from)}, ${esc(l.origin)}</p></div>
+    <button class="unlock-btn" data-act="drop-legacy" data-key="${i}">지운다</button></div>`).join("");
+  const powers = legacyPowers(meta);
+  return `${note}<h4 class="shop-group">강화</h4>${steps}<h4 class="shop-group">보관한 유산 (${meta.legacies.length}/${powers.shelf})</h4>${stored || emptyNote("아직 남겨 둔 유산이 없습니다.")}`;
 }
 
 /** 누적 카르마 보상과 카르마를 얻는 길을 한눈에 보여 준다. */
@@ -483,7 +502,7 @@ function renderShop() {
     <div class="home-wrap">${shopPanels(meta)[ui.shopTab]}</div>`;
 }
 
-function chosenLegacy(meta) { return ui.legacy === null ? null : meta.legacies[ui.legacy] || null; }
+function chosenLegacy(meta) { return [...ui.legacy].map((i) => meta.legacies[i]).filter(Boolean); }
 
 function contentSetup(meta) {
   const rows = meta.content.filter((key) => !DB.karma.content[key].origin || DB.karma.content[key].origin === ui.origin)
@@ -507,11 +526,16 @@ function upgradeSetup(meta) {
 
 function legacySetup(meta) {
   if (!meta.legacy_open) return emptyNote("전설의 유산은 카르마 상점에서 열 수 있습니다.");
-  const { shelf } = DB.karma.legacy;
-  const rows = meta.legacies.map((l, i) => `<div class="pick-row"><label class="pick-label"><input type="radio" name="legacy" value="${i}" ${ui.legacy === i ? "checked" : ""}>
-    <span class="pick-main"><span class="pick-name">${esc(l.label)}</span><span class="pick-desc block">전대 ${esc(l.from)}, ${esc(l.origin)}</span></span></label></div>`).join("");
-  return `<p class="section-note">강호행이 끝날 때 하나를 남깁니다. ${shelf}개까지 보관하고, 이어받으면 사라집니다. 무공은 한 품계 낮아지고 병장기는 낮은 단계로 돌아옵니다.</p>
-    ${rows ? `<div class="pick-row"><label class="pick-label"><input type="radio" name="legacy" value="" ${ui.legacy === null ? "checked" : ""}><span class="pick-main"><span class="pick-name">이어받지 않는다</span></span></label></div>${rows}` : emptyNote("아직 남겨 둔 유산이 없습니다.")}`;
+  const powers = legacyPowers(meta);
+  const full = ui.legacy.size >= powers.take;
+  const rows = meta.legacies.map((l, i) => {
+    const on = ui.legacy.has(i);
+    return `<div class="pick-row"><label class="pick-label"><input type="checkbox" name="legacy" value="${i}" ${on ? "checked" : ""} ${!on && full ? "disabled" : ""}>
+    <span class="pick-main"><span class="pick-name">${esc(l.label)}</span><span class="pick-desc block">${esc(l.from)}, ${esc(l.origin)}</span></span></label></div>`;
+  }).join("");
+  const worn = [powers.keepGrade ? "" : "무공은 한 품계 낮아지고", powers.keepGear ? "" : "병장기는 낮은 단계로 돌아옵니다."].filter(Boolean).join(" ");
+  return `<p class="section-note">${powers.take}개까지 고를 수 있습니다. 고른 유산은 시작할 때 받지 않고, 첫 해 안에 수련, 운기, 요양, 탐색 중에 그 자취를 찾아 이어받습니다. 이어받아도 보관함에서 사라지지 않습니다.${worn ? ` ${worn.endsWith("낮아지고") ? `${worn.slice(0, -1)}집니다.` : worn}` : ""}</p>
+    ${rows || emptyNote("아직 남겨 둔 유산이 없습니다.")}`;
 }
 
 function renderSetup() {
@@ -548,7 +572,7 @@ function renderSetup() {
     <div class="home-wrap">
       ${ui.setupTab === "upgrade" ? upgradeSetup(meta) : ui.setupTab === "content" ? contentSetup(meta) : ui.setupTab === "legacy" ? legacySetup(meta) : ui.setupTab === "origin" ? origins : `<p class="section-note">${next ? `자질을 ${slots}개 장착할 수 있습니다. 누적 카르마 ${next}이 되면 하나 더 열립니다. 누적 보상은 상점에서 볼 수 있습니다.` : "자질 칸이 모두 열렸습니다."}</p>${filterRow()}${traits}`}
     </div>
-    <div class="setup-bar"><div class="setup-summary">${esc(originName)}${ui.traits.size ? `, 자질 ${ui.traits.size}개` : ""}${chosenLegacy(meta) ? `, 유산 ${esc(chosenLegacy(meta).label)}` : ""}${meta.provisions.length ? `, 채비 ${meta.provisions.length}개` : ""}</div>
+    <div class="setup-bar"><div class="setup-summary">${esc(originName)}${ui.traits.size ? `, 자질 ${ui.traits.size}개` : ""}${chosenLegacy(meta).length ? `, 유산 ${chosenLegacy(meta).length}개` : ""}${meta.provisions.length ? `, 채비 ${meta.provisions.length}개` : ""}</div>
       <button class="start-btn" data-act="${hasSave ? "confirm-start" : "start"}">강호로 나선다</button></div>
     ${modalShell("confirm-start-modal", "새 강호행을 시작할까요?", `
       <p class="modal-text">저장된 진행이 사라집니다. 카르마와 강호록은 남습니다.</p>
@@ -577,19 +601,19 @@ function companionList(p) {
   return rows.length ? `<div class="modal-section"><h4>결전에 달려올 사람</h4>${rows.map((c) => `<div class="skill-row">${esc(c.name)}<div class="skill-meta">${esc(c.help_text)}</div></div>`).join("")}</div>` : "";
 }
 
-/** 병장기의 묘리 한 줄 */
+/** 병장기의 숨은 힘 한 줄 */
 function gimmickLine(p, slot) {
   const g = DB.market[p[slot]]?.gimmick;
   if (!g) return "";
   const on = gearGimmick(p, slot);
-  return `<p class="skill-meta">묘리 ${esc(g.name)}${on ? "" : " (주무공과 맞지 않아 쉬는 중)"}: ${esc(g.text)}</p>`;
+  return `<p class="skill-meta">숨은 힘 ${esc(g.name)}${on ? "" : " (주무공과 맞지 않아 잠들어 있다)"}: ${esc(g.text)}</p>`;
 }
 
 /** 챙겨 둔 병장기. 싸우지 않을 때 바꿔 든다 */
 function spareGear(p) {
   if (!p.gear.length) return "";
   return `<div class="modal-section"><h4>챙겨 둔 병장기</h4>${p.gear.filter((k) => DB.market[k]).map((key) => `<div class="skill-row"><div class="skill-head">
-    <span>${esc(DB.market[key].name)} <span class="skill-meta">${esc(itemGrade(key))}</span><br><span class="skill-meta">${esc(DB.market[key].desc)}${DB.market[key].gimmick ? ` 묘리 ${esc(DB.market[key].gimmick.name)}: ${esc(DB.market[key].gimmick.text)}` : ""}</span></span>
+    <span>${esc(DB.market[key].name)} <span class="skill-meta">${esc(itemGrade(key))}</span><br><span class="skill-meta">${esc(DB.market[key].desc)}${DB.market[key].gimmick ? ` 숨은 힘 ${esc(DB.market[key].gimmick.name)}: ${esc(DB.market[key].gimmick.text)}` : ""}</span></span>
     ${!game.battle && p.alive ? `<button class="mini-btn" data-act="equip-gear" data-key="${esc(key)}">들기</button>` : ""}</div></div>`).join("")}</div>`;
 }
 
@@ -819,11 +843,20 @@ function topbar() {
 
 function legacyPanel() {
   const { ending } = game;
-  if (!loadMeta().legacy_open) return "";
-  if (ending.legacyLeft) return `<p class="legacy-note">${esc(ending.legacyLeft)}${josa(esc(ending.legacyLeft), "을/를")} 다음 강호행에 남겼습니다.</p>`;
+  const meta = loadMeta();
+  if (!meta.legacy_open) return "";
+  if (ending.legacyLeft) return `<p class="legacy-note">${esc(ending.legacyLeft)}${josa(esc(ending.legacyLeft), "을/를")} 남겼습니다. 다음 강호행에서 이어받을 수 있습니다.</p>`;
   const options = game.legacyOptions();
   if (!options.length) return `<p class="legacy-note">남길 만한 것이 없습니다.</p>`;
-  return `<div class="legacy-panel"><h4>전설의 유산: 하나를 남긴다</h4>
+  const { shelf } = legacyPowers(meta);
+  const full = meta.legacies.length >= shelf;
+  // 보관이 가득 찼으면 무엇을 지울지 먼저 고른다
+  if (full && ui.legacyDrop === null) {
+    return `<div class="legacy-panel"><h4>전설의 유산: 보관함이 가득 찼습니다</h4><p class="section-note">새로 남기려면 하나를 지워야 합니다. 지운 유산은 돌아오지 않습니다.</p>
+      ${meta.legacies.map((l, i) => `<button class="choice-btn" data-act="legacy-drop-pick" data-key="${i}">${esc(l.label)} 지우기<small> ${esc(l.from)}</small></button>`).join("")}</div>`;
+  }
+  const dropped = full ? `<p class="section-note">${esc(meta.legacies[ui.legacyDrop]?.label ?? "")}${josa(esc(meta.legacies[ui.legacyDrop]?.label ?? ""), "을/를")} 지우고 남깁니다. <button class="link-btn" data-act="legacy-drop-pick" data-key="">다시 고르기</button></p>` : "";
+  return `<div class="legacy-panel"><h4>전설의 유산: 하나를 남긴다</h4>${dropped}
     ${options.map((o, i) => `<button class="choice-btn" data-act="leave-legacy" data-key="${i}">${esc(o.label)}</button>`).join("")}</div>`;
 }
 
@@ -889,7 +922,7 @@ function renderMarket() {
     const note = item.sold ? "" : compareNote(player, item.key);
     return `<div class="market-item${item.sold ? " sold" : ""}"><div class="item-info">
       <div class="item-name">${esc(item.name)}<span class="item-category">${esc(categoryName(item.category))}, ${esc(item.grade)}${item.stackable && !item.sold ? `, ${item.left}개 남음` : ""}</span></div>
-      <div class="item-desc">${esc(item.desc)}</div>${DB.market[item.key].gimmick ? `<div class="item-note">묘리 ${esc(DB.market[item.key].gimmick.name)}: ${esc(DB.market[item.key].gimmick.text)}</div>` : ""}${note ? `<div class="item-note">${esc(note)}</div>` : ""}</div>
+      <div class="item-desc">${esc(item.desc)}</div>${DB.market[item.key].gimmick ? `<div class="item-note">숨은 힘 ${esc(DB.market[item.key].gimmick.name)}: ${esc(DB.market[item.key].gimmick.text)}</div>` : ""}${note ? `<div class="item-note">${esc(note)}</div>` : ""}</div>
       <button class="buy-btn${item.blocked === "은자 부족" ? " poor" : ""}" data-act="buy" data-key="${esc(item.key)}" ${item.sold || item.blocked ? "disabled" : ""}>${label}</button></div>`;
   };
   const known = GROUPS.flatMap(([, cats]) => cats);
@@ -898,7 +931,8 @@ function renderMarket() {
     return list.length ? `<h4 class="market-group">${title}</h4>${list.map(row).join("")}` : "";
   });
   const rest = views.filter((v) => !known.includes(v.category));
-  const stock = sections.join("") + (rest.length ? `<h4 class="market-group">특별한 물건</h4>${rest.map(row).join("")}` : "");
+  const specials = rest.length ? `<h4 class="market-group">특별한 물건</h4>${rest.map(row).join("")}` : "";
+  const stock = specials + sections.join("");
   return `<div class="stage market-stage${market.special ? " market-special" : ""}"><div class="market-inner">
       <h2 class="market-title">${esc(market.name)}</h2>
       <p class="market-sub">${market.special ? "결전을 앞둔 밤, 누군가 말없이 보따리를 풀어 놓는다." : "달을 쓰지 않습니다. 다음 장터는 일 년 뒤입니다."}</p>
@@ -1147,8 +1181,8 @@ const actions = {
   title: () => { ui.screen = "title"; render(); },
   start: () => {
     closeModalQuietly();
-    game.start(ui.origin, [...ui.traits], ui.legacy);
-    ui.legacy = null;
+    game.start(ui.origin, [...ui.traits], [...ui.legacy]);
+    ui.legacy = new Set();
     ui.screen = "title";
     render();
     // 처음 하는 사람에게는 입문서를 먼저 보여 준다
@@ -1162,7 +1196,10 @@ const actions = {
   "buy-provision": (el) => { buyProvision(el.dataset.key); render(); },
   "refund-provision": (el) => { refundProvision(el.dataset.key); render(); },
   "open-legacy": () => { openLegacy(); render(); },
-  "leave-legacy": (el) => { game.leaveLegacy(Number(el.dataset.key)); render(); },
+  "upgrade-legacy": () => { upgradeLegacy(); render(); },
+  "drop-legacy": (el) => { dropLegacy(Number(el.dataset.key)); ui.legacy = new Set(); render(); },
+  "legacy-drop-pick": (el) => { ui.legacyDrop = el.dataset.key === "" ? null : Number(el.dataset.key); render(); },
+  "leave-legacy": (el) => { if (game.leaveLegacy(Number(el.dataset.key), ui.legacyDrop)) ui.legacyDrop = null; render(); },
   "unlock-origin": (el) => { unlockOrigin(el.dataset.key, DB.origins.origins[el.dataset.key].cost); render(); },
   "unlock-trait": (el) => { unlockTrait(el.dataset.key, DB.traits[el.dataset.key].cost); render(); },
   action: (el) => { game.action(el.dataset.action); render(); },
@@ -1237,7 +1274,9 @@ export function installInput() {
     } else if (target.id === "set-speed") {
       storage.set("wuxia-speed", target.value);
     } else if (target.name === "legacy") {
-      ui.legacy = target.value === "" ? null : Number(target.value);
+      const index = Number(target.value);
+      if (target.checked) ui.legacy.add(index);
+      else ui.legacy.delete(index);
       render();
     } else if (target.dataset.content) {
       toggleContent(target.dataset.content);
