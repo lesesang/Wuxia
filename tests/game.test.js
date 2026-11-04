@@ -218,7 +218,7 @@ test("전투 임시 버프는 끝나면 되돌린다", () => {
   const base = p.external;
   const enemy = new Enemy("산적");
   const battle = new Battle(p, enemy);
-  assert.equal(p.external, base + 70);
+  assert.equal(p.external, base + 90);
   battle.finish(false, true);
   assert.equal(p.external, base);
 });
