@@ -269,7 +269,8 @@
     "reacts": [
       {
         "requires": {
-          "dominant": "정도"
+          "dominant": "정도",
+          "min_fame": 10
         },
         "text": "주인이 내 얼굴을 알아보고 작게 숨을 내쉰다."
       },
@@ -517,7 +518,8 @@
     "reacts": [
       {
         "requires": {
-          "dominant": "정도"
+          "dominant": "정도",
+          "min_fame": 10
         },
         "text": "행수가 협객 소문을 들은 듯 반색한다."
       },
@@ -1412,7 +1414,8 @@
     "reacts": [
       {
         "requires": {
-          "dominant": "정도"
+          "dominant": "정도",
+          "min_fame": 10
         },
         "text": "소녀가 내 얼굴을 보고 안심한 듯 숨을 고른다."
       },
@@ -2297,7 +2300,8 @@
       },
       {
         "requires": {
-          "dominant": "정도"
+          "dominant": "정도",
+          "min_fame": 10
         },
         "text": "낯선 아이가 쪽지를 건넨다. '달 없는 밤, 옛 나루터. 사도련 물건 있음.' 맹의 협사에게 올 쪽지가 아니다. 누가 나를 끌어들이려는 걸까, 아니면 내 쪽 사람을 시험하는 걸까."
       }
@@ -2663,7 +2667,8 @@
     "reacts": [
       {
         "requires": {
-          "dominant": "정도"
+          "dominant": "정도",
+          "min_fame": 10
         },
         "text": "사람들이 나를 알아보고 쌀을 나눠 주던 협객이라 수군댄다."
       },

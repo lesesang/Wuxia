@@ -2324,8 +2324,14 @@ test("명성이 높아도 마도와 사도의 무인을 대협으로 떠받들�
   assert.ok(!eventView(p, "표국호위").text.includes("대협"));
   p.alignment = { 정도: 500, 사도: 0, 마도: 0 };
   assert.ok(eventView(p, "표국호위").text.includes("대협"));
+  // 이름이 나기 전에는 나를 알아보는 반응이 나오지 않는다
   p.fame = 3;
-  for (let i = 0; i < 40; i++) assert.ok(!["협객을 대하듯", "소문을 들은"].some((w) => (talkLine(p, "event") || "").includes(w)));
+  assert.ok(!eventView(p, "화적떼").text.includes("알아보고"));
+  assert.ok(!eventView(p, "주막싸움").text.includes("알아보고"));
+  // 사건마다 맞지 않는 일반 말투 줄은 붙지 않는다
+  assert.equal(DB.flavor.talk.event, undefined);
+  p.fame = 40;
+  assert.ok(!eventView(p, "도객의술내기").text.includes("상대가"));
 });
 
 test("마지막 장터는 보물과 신물만 내놓는다", () => {
