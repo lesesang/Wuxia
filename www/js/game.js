@@ -2,11 +2,11 @@
 import { Battle, enemyPool, Enemy, statureEnemy, useConsumable } from "./battle.js";
 import { GRADE_ORDER, Player, Skill, STAT_NAMES } from "./character.js";
 import { DB } from "./data.js";
-import { grantStartGifts,
+import { grantStartGear, grantStartSkills,
   advanceChain, applyEffects, checkRequires, dueChainEvent, enemyIntro, LAST_CHAIN_TURN, pickFortune, pickRandomEvent, resolveChoice,
   reactiveLine, startChain, storyEventForTurn,
 } from "./events.js";
-import { buy, openMarket } from "./market.js";
+import { bonusFor, buy, equipmentBonus, openMarket } from "./market.js";
 import {
   activeContent, addKarma, claimAchievements, clearCheckpoint, extraSlots, rewardTraits, loadCheckpoint, loadMeta, recordRun, saveCheckpoint,
   storeLegacy, takeLegacy, takeProvisions, updateGlobalCodex, updateKnown, upgradeTraits,
@@ -44,12 +44,14 @@ export class Game {
     this.ending = null;
     this.pendingNext = false;
     this.afterBattle = null;    // 이기면 적용할 사건의 결과
+    this.pickingArts = false;   // 첫 달 전에 쓸 무공을 고르는 중
+    this.giftsDone = false;
   }
 
   get active() { return this.player !== null; }
 
   get busy() {
-    return !!(this.battle || this.market || this.event || this.pendingNext || !this.player?.alive);
+    return !!(this.battle || this.market || this.event || this.pendingNext || this.pickingArts || !this.player?.alive);
   }
 
   setLog(lines) { this.log = lines.slice(-LOG_LIMIT); }
@@ -69,7 +71,7 @@ export class Game {
     const provisions = takeProvisions();
     this.player = new Player(originKey, [...traits, ...upgradeTraits(meta, originKey), ...rewardTraits(meta), ...provisions.map((k) => `채비_${k}`)]);
     this.player.content = activeContent(meta);
-    const giftLines = DB.origins.origins[originKey].choose_start ? [] : grantStartGifts(this.player);
+    const giftLines = DB.origins.origins[originKey].choose_start ? [] : grantStartSkills(this.player);
     const legacyLines = legacyIndex !== null && meta.legacy_open ? this.inheritLegacy(legacyIndex) : [];
     updateKnown(this.player.skills.map((s) => s.key));
     const intro = getChapterInfo(1);
@@ -91,7 +93,8 @@ export class Game {
     } else {
       const key = inheritedGear(entry.key);
       name = DB.market[key].name;
-      p[DB.market[key].effects.find((e) => e.type === "equip").slot] = key;
+      const { slot } = DB.market[key].effects.find((e) => e.type === "equip");
+      if (bonusFor(p, key) > equipmentBonus(p, slot)) p[slot] = key;
     }
     p.note(`전대 「${entry.from}」의 유산 「${name}」${josa(name, "을/를")} 이어받았다.`);
     return [`🏺 전대 「${entry.from}」${josa(entry.from, "이/가")} 남긴 「${name}」${josa(name, "을/를")} 이어받았다. 세월에 조금 무뎌졌지만 아직 쓸 만하다.${entry.kind === "skill" ? " 신상의 무공 칸에서 골라 쓸 수 있다." : ""}`];
@@ -129,6 +132,14 @@ export class Game {
     const p = this.player;
     const urgent = p.turn >= LAST_CHAIN_TURN && p.chains.length > 0;
     const story = urgent ? null : storyEventForTurn(p);
+    if (p.turn === 1 && !this.giftsDone && !(story && DB.events[story].prelude)) {
+      // 번외 선택이 끝나면 쓸 무공을 먼저 정하고, 그에 맞는 행장을 받는다
+      if (hasArtChoices(p)) {
+        this.pickingArts = true;
+        return;
+      }
+      this.settleGifts();
+    }
     if (story) {
       this.event = { key: story, forced: true };
       return;
@@ -136,6 +147,20 @@ export class Game {
     const chainKey = dueChainEvent(p);
     // 연계 한 편은 그달을 쓴다. 다만 마지막 달에 몰리면 달을 쓰지 않는다.
     if (chainKey) this.event = { key: chainKey, forced: urgent };
+  }
+
+  settleGifts() {
+    this.giftsDone = true;
+    const lines = grantStartGear(this.player);
+    if (lines.length) this.addLog([lines.join(", ")]);
+  }
+
+  /** 쓸 무공을 다 골랐다. */
+  finishArtsPick() {
+    if (!this.pickingArts) return;
+    this.pickingArts = false;
+    this.settleGifts();
+    this.openStoryEvent();
   }
 
   /** 저장된 달 시작 지점에서 이어 한다. 없으면 false */
@@ -157,6 +182,7 @@ export class Game {
   // ---------- 행동 ----------
 
   action(name) {
+    if (this.pickingArts) this.finishArtsPick();
     if (!this.active || this.busy || !VALID_ACTIONS.includes(name)) return;
     this.setLog([]);
     const p = this.player;
@@ -543,6 +569,11 @@ export class Game {
     this.market = null;
     clearCheckpoint();
   }
+}
+
+/** 같은 갈래의 무공을 둘 이상 들고 있는가 */
+function hasArtChoices(player) {
+  return ["공격무공", "심공", "경공"].some((type) => player.skillsOfType(type).length > 1);
 }
 
 /** 천마까지 가지 못하면 도달한 장의 값을, 천마까지 갔으면 그 결과의 값을 받고 경지를 더한다. 생사경은 경지이자 결말이라 값 하나로 끝난다. */

@@ -263,7 +263,7 @@ function takeStartWeapon(player, style) {
   const skill = new Skill(key);
   const summary = [`📕 무공 「${skill.name}」`, ...player.learnSkill(skill)];
   player.mainSkill = key;
-  return [...summary, ...equipReward(player, STARTER_WEAPONS[style]), ...grantStartGifts(player)];
+  return [...summary, ...equipReward(player, STARTER_WEAPONS[style]), ...grantStartSkills(player)];
 }
 
 /** 강호초출의 첫 심법을 정한다. */
@@ -294,19 +294,46 @@ function styleTool(style, kind) {
   return Object.keys(DB.market).find((k) => DB.market[k].effects.some((e) => e.type === kind && e.style === style));
 }
 
-/**
- * 주무공 계열을 따라가는 시작 선물을 준다. 자질, 기틀, 누적 보상에서 온다.
- * 강호초출은 첫 병기를 고른 뒤에 받는다.
- */
-export function grantStartGifts(player) {
+const giftEffects = (player) => player.traits.flatMap((k) => DB.traits[k]?.effects || []);
+const MAX_START_WEAPON_TIER = 3;
+const SPARE_WEAPON_SILVER = 60;   // 넘치는 병기는 은자로 돌아온다
+const SPARE_BOOK_MASTERY = 30;    // 겹친 비급은 주무공 성취가 된다
+
+/** 시작 선물 중 무공. 주무공을 고르기 전에 받는다. 겹쳐도 품계마다 한 권이다. */
+export function grantStartSkills(player) {
   const lines = [];
-  const effects = player.traits.flatMap((k) => DB.traits[k]?.effects || []);
+  const style = player.bestSkill()?.category;
+  if (!style) return lines;
+  const grades = [...new Set(giftEffects(player).filter((e) => e.type === "start_style_skill").map((e) => e.grade))];
+  for (const grade of grades) {
+    const keys = Object.keys(DB.skills).filter((k) => {
+      const s = DB.skills[k];
+      return s.type === "공격무공" && s.category === style && s.grade === grade && !s.origin && !player.hasSkill(k);
+    });
+    if (keys.length) {
+      const skill = new Skill(pick(keys));
+      player.learnSkill(skill);
+      lines.push(`📕 새 무공 「${skill.name}」`);
+    }
+  }
+  return lines;
+}
+
+/** 시작 선물 중 병기와 도구, 성취. 주무공이 정해진 뒤 그 계열에 맞춰 받는다. */
+export function grantStartGear(player) {
+  const lines = [];
+  const effects = giftEffects(player);
   const main = player.bestSkill();
   const style = main?.category;
   if (!style) return lines;
   const total = (type, field) => effects.filter((e) => e.type === type).reduce((sum, e) => sum + (e[field] || 0), 0);
-  const tier = Math.min(2, total("start_style_weapon", "tier"));
-  if (tier) lines.push(...styleWeaponReward(player, tier));
+  const weaponTier = total("start_style_weapon", "tier");
+  if (weaponTier) lines.push(...styleWeaponReward(player, Math.min(MAX_START_WEAPON_TIER, weaponTier)));
+  const spare = Math.max(0, weaponTier - MAX_START_WEAPON_TIER);
+  if (spare) {
+    player.silver += spare * SPARE_WEAPON_SILVER;
+    lines.push(`은자+${spare * SPARE_WEAPON_SILVER}`);
+  }
   for (const [type, kind] of [["start_style_tool", "mastery"], ["start_battle_tool", "atk_buff"]]) {
     const amount = total(type, "amount");
     const tool = amount && styleTool(style, kind);
@@ -316,21 +343,13 @@ export function grantStartGifts(player) {
       lines.push(`「${DB.market[tool].name}」 ${amount}개 획득`);
     }
   }
-  for (const effect of effects.filter((e) => e.type === "start_style_skill")) {
-    const keys = Object.keys(DB.skills).filter((k) => {
-      const s = DB.skills[k];
-      return s.type === "공격무공" && s.category === style && s.grade === effect.grade && !s.origin && !player.hasSkill(k);
-    });
-    if (keys.length) {
-      const skill = new Skill(pick(keys));
-      player.learnSkill(skill);
-      lines.push(`📕 새 무공 「${skill.name}」`);
-    }
-  }
-  const mastery = total("start_mastery", "amount");
+  const books = effects.filter((e) => e.type === "start_style_skill").length;
+  const mastery = total("start_mastery", "amount") + Math.max(0, books - 1) * SPARE_BOOK_MASTERY;
   if (mastery) lines.push(...main.gainMastery(mastery));
   return lines;
 }
+
+export const grantStartGifts = (player) => [...grantStartSkills(player), ...grantStartGear(player)];
 
 const signed = (n) => (n >= 0 ? `+${n}` : `${n}`);
 
