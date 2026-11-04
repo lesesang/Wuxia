@@ -64,12 +64,12 @@ export class Skill {
     // 성취가 100에 이른 뒤 더 쌓이면 승급한다. 정확히 100이면 다음 성취를 기다린다.
     if (this.mastery + amount > MAX_MASTERY && this.canEvolve()) {
       this.evolve();
-      messages.push(`${this.name}${josa(this.name, "이/가")} ${this.grade} 품계로 승급했다!`);
-      if (this.grade === GIMMICK_GRADE && this.gimmick) messages.push(`묘리를 깨쳤다. 「${this.gimmick.name}」: ${this.gimmick.text}`);
+      messages.push(`${this.name}${josa(this.name, "이/가")} ${this.grade} 품계로 승급했다`);
+      if (this.grade === GIMMICK_GRADE && this.gimmick) messages.push(`묘리를 깨쳤다. ${this.gimmick.name}: ${this.gimmick.text}`);
     } else {
       this.mastery = Math.min(MAX_MASTERY, this.mastery + amount);
     }
-    if (this.checkSecretUnlock()) messages.push(`비기 「${this.secretName}」${josa(this.secretName, "이/가")} 터득되었다!`);
+    if (this.checkSecretUnlock()) messages.push(`비기 ${this.secretName}${josa(this.secretName, "이/가")} 터득되었다`);
     return messages;
   }
 
@@ -299,7 +299,7 @@ export class Player {
   learnSkill(skill) {
     const owned = this.getSkill(skill.key);
     if (owned) {
-      const lead = owned.key === skill.key ? `이미 아는 무공이다. 「${owned.name}」의 이해가 깊어졌다.` : `「${skill.name}」${josa(skill.name, "은/는")} 이미 「${owned.name}」에 녹아 있다. 이해가 깊어졌다.`;
+      const lead = owned.key === skill.key ? `이미 아는 무공이다. ${owned.name}의 이해가 깊어졌다.` : `${skill.name}${josa(skill.name, "은/는")} 이미 ${owned.name}에 녹아 있다. 이해가 깊어졌다.`;
       return [`${lead} (성취 +${DUPLICATE_SKILL_MASTERY})`, ...owned.gainMastery(DUPLICATE_SKILL_MASTERY)];
     }
     const root = this.skills.find((s) => DB.skills[skill.key].lineage && DB.skills[s.key].lineage === DB.skills[skill.key].lineage);
@@ -313,7 +313,7 @@ export class Player {
       else this.chosenArts[skill.type] = skill.key;
       return [];
     }
-    return [`「${skill.name}」${josa(skill.name, "은/는")} 신상의 무공 칸에서 골라 쓸 수 있다.`];
+    return [`${skill.name}${josa(skill.name, "은/는")} 신상의 무공 칸에서 골라 쓸 수 있다.`];
   }
 
   /** 같은 갈래의 더 깊은 무공을 얻으면 따로 쌓지 않고 이어받는다. 성취와 오른 품계는 그대로 간다. */
@@ -324,7 +324,7 @@ export class Player {
     if (this.mainSkill === root.key) this.mainSkill = skill.key;
     for (const [type, key] of Object.entries(this.chosenArts)) if (key === root.key) this.chosenArts[type] = skill.key;
     this.applyEvolveTrait(skill);
-    return [`「${root.name}」${josa(root.name, "이/가")} 「${skill.name}」${josa(skill.name, "으로")} 이어졌다. 쌓은 성취는 그대로다.`];
+    return [`${root.name}${josa(root.name, "이/가")} ${skill.name}${josa(skill.name, "으로")} 이어졌다. 쌓은 성취는 그대로다.`];
   }
 
   /** 승급 뒤 성취를 높여 주는 자질을 무공에 적어 둔다. */

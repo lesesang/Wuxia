@@ -107,7 +107,7 @@ function nextDue(player, id, next) {
 
 export function startChain(player, id) {
   player.chains.push({ id, next: 1, due: nextDue(player, id, 1) });
-  player.note(`「${DB.chains[id].title}」 일에 발을 들였다.`);
+  player.note(`${DB.chains[id].title} 일에 발을 들였다.`);
 }
 
 /** 고른 결과에 따라 연계를 다음 편으로 넘기거나 끝낸다. */
@@ -115,7 +115,7 @@ export function startChain(player, id) {
 export function failChain(player, id) {
   if (!player.chains.some((c) => c.id === id)) return;
   player.chains = player.chains.filter((c) => c.id !== id);
-  player.note(`「${DB.chains[id].title}」 일은 비무에 져서 끝내 어그러졌다.`);
+  player.note(`${DB.chains[id].title} 일은 비무에 져서 끝내 어그러졌다.`);
 }
 
 export function advanceChain(player, id, abandoned = false) {
@@ -125,7 +125,7 @@ export function advanceChain(player, id, abandoned = false) {
   if (abandoned || finished) {
     player.chains = player.chains.filter((c) => c.id !== id);
     if (!abandoned) player.chainsDone += 1;
-    player.note(abandoned ? `「${DB.chains[id].title}」 일에서 손을 뗐다.` : `「${DB.chains[id].title}」 일을 끝맺었다.`);
+    player.note(abandoned ? `${DB.chains[id].title} 일에서 손을 뗐다.` : `${DB.chains[id].title} 일을 끝맺었다.`);
     return;
   }
   chain.due = nextDue(player, id, chain.next);
@@ -289,9 +289,9 @@ function equipReward(player, key) {
   updateKnown([], [key]);
   if (bonusFor(player, key) > equipmentBonus(player, effect.slot)) {
     player[effect.slot] = key;
-    return [`「${name}」 장착`];
+    return [`${name} 장착`];
   }
-  return [`「${name}」${josa(name, "을/를")} 받았지만 지금 병장기가 더 좋다`];
+  return [`${name}${josa(name, "을/를")} 받았지만 지금 병장기가 더 좋다`];
 }
 
 const STARTER_WEAPONS = {
@@ -312,7 +312,7 @@ function takeStartWeapon(player, style) {
   const skill = new Skill(key);
   // 십 년을 갈고닦은 무공이라 처음부터 성취가 있다
   skill.mastery = HOME_ART_MASTERY;
-  const summary = [`십 년을 갈고닦은 무공 「${skill.name}」`, ...player.learnSkill(skill)];
+  const summary = [`십 년을 갈고닦은 무공 ${skill.name}`, ...player.learnSkill(skill)];
   player.mainSkill = key;
   return [...summary, ...equipReward(player, STARTER_WEAPONS[style]), ...grantStartSkills(player)];
 }
@@ -326,7 +326,7 @@ function takeStartMindset(player, key) {
   skill.mastery = HOME_ART_MASTERY;
   player.learnSkill(skill);
   player.chosenArts.심공 = key;
-  return [`십 년을 쉰 숨 「${skill.name}」`];
+  return [`십 년을 쉰 숨 ${skill.name}`];
 }
 
 const REWARD_BONUSES = [10, 26, 50, 80]; // 보상 병기의 네 단계
@@ -365,7 +365,7 @@ export function grantStartSkills(player) {
     if (keys.length) {
       const skill = new Skill(pick(keys));
       player.learnSkill(skill);
-      lines.push(`새 무공 「${skill.name}」`);
+      lines.push(`새 무공 ${skill.name}`);
     }
   }
   return lines;
@@ -392,7 +392,7 @@ export function grantStartGear(player) {
     if (tool) {
       player.addItem(tool, amount);
       updateKnown([], [tool]);
-      lines.push(`「${DB.market[tool].name}」 ${amount}개 획득`);
+      lines.push(`${DB.market[tool].name} ${amount}개 획득`);
     }
   }
   const books = effects.filter((e) => e.type === "start_style_skill").length;
@@ -460,8 +460,8 @@ export function applyEffects(player, effects) {
     if (player.fame !== before) summary.push(`명성${signed(player.fame - before)}`);
     const rank = fameRankChanged(before, player.fame);
     if (rank) {
-      summary.push(`강호에서 「${rank}」${josa(rank, "으로")} 불리기 시작했다`);
-      player.note(`강호에서 「${rank}」${josa(rank, "으로")} 불리기 시작했다.`);
+      summary.push(`강호에서 ${rank}${josa(rank, "으로")} 불리기 시작했다`);
+      player.note(`강호에서 ${rank}${josa(rank, "으로")} 불리기 시작했다.`);
     }
   }
 
@@ -473,12 +473,12 @@ export function applyEffects(player, effects) {
 
   if (effects.join_sect && !player.sect) {
     player.sect = effects.join_sect;
-    summary.push(`「${DB.sects[player.sect].name}」 입문`);
+    summary.push(`${DB.sects[player.sect].name} 입문`);
     player.note(`${DB.sects[player.sect].name}에 들어갔다.`);
   }
 
   if (effects.leave_sect && player.sect) {
-    summary.push(`「${DB.sects[player.sect].name}」${josa(DB.sects[player.sect].name, "을/를")} 떠남`);
+    summary.push(`${DB.sects[player.sect].name}${josa(DB.sects[player.sect].name, "을/를")} 떠남`);
     player.note(`${DB.sects[player.sect].name}${josa(DB.sects[player.sect].name, "을/를")} 떠났다.`);
     player.sect = null;
   }
@@ -486,7 +486,7 @@ export function applyEffects(player, effects) {
   if (effects.consume_item && player.inventory[effects.consume_item] > 0) {
     player.inventory[effects.consume_item] -= 1;
     if (player.inventory[effects.consume_item] <= 0) delete player.inventory[effects.consume_item];
-    summary.push(`「${DB.market[effects.consume_item].name}」 사용`);
+    summary.push(`${DB.market[effects.consume_item].name} 사용`);
   }
 
   if (effects.mastery) {
@@ -501,7 +501,7 @@ export function applyEffects(player, effects) {
     const skill = new Skill(effects.skill);
     const known = player.hasSkill(skill.key);
     const messages = player.learnSkill(skill);
-    if (!known) summary.push(`새 무공 「${skill.name}」`);
+    if (!known) summary.push(`새 무공 ${skill.name}`);
     summary.push(...messages);
   }
 
@@ -510,7 +510,7 @@ export function applyEffects(player, effects) {
   if (effects.random_skill) {
     const skill = randomBookSkill(player, effects.random_skill.max_grade);
     if (skill) {
-      summary.push(`새 무공 「${skill.name}」`, ...player.learnSkill(skill));
+      summary.push(`새 무공 ${skill.name}`, ...player.learnSkill(skill));
     } else {
       summary.push(`무리+${player.gainStat("martial", 2)}`);
     }
@@ -527,8 +527,8 @@ export function applyEffects(player, effects) {
     });
     if (list.length) {
       const skill = new Skill(list[Math.floor(rng.random() * list.length)]);
-      summary.push(`새 무공 「${skill.name}」`, ...player.learnSkill(skill));
-      player.note(`${wanted} 「${skill.name}」${josa(skill.name, "을/를")} 얻었다.`);
+      summary.push(`새 무공 ${skill.name}`, ...player.learnSkill(skill));
+      player.note(`${wanted} ${skill.name}${josa(skill.name, "을/를")} 얻었다.`);
     } else {
       summary.push(`무리+${player.gainStat("martial", 4)}`);
     }
@@ -541,7 +541,7 @@ export function applyEffects(player, effects) {
 
   if (effects.item) {
     player.addItem(effects.item);
-    summary.push(`「${DB.market[effects.item].name}」 획득`);
+    summary.push(`${DB.market[effects.item].name} 획득`);
   }
 
   return summary;
