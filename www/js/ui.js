@@ -6,7 +6,7 @@ import { eventView } from "./events.js";
 import { Game } from "./game.js";
 import { bonusFor, equipmentBonus, itemName, stockView } from "./market.js";
 import {
-  buyContent, buyProvision, buyUpgrade, exportRecords, extraSlots, importRecords, legacyAvailable, loadCheckpoint, loadEventLog, loadMeta, nextReward, openLegacy, refundProvision,
+  buyContent, buyProvision, buyUpgrade, exportRecords, extraSlots, importRecords, legacyAvailable, loadCheckpoint, loadEventLog, loadMeta, nextReward, openLegacy, refundProvision, setUpgradeUse, upgradeUse,
   toggleContent, unlockOrigin, unlockTrait, upgradeLevel,
 } from "./meta.js";
 import {
@@ -452,6 +452,19 @@ function contentSetup(meta) {
   return rows ? `<p class="section-note">이번에 만나고 싶지 않은 인연은 꺼 둘 수 있습니다.</p>${rows}` : emptyNote("아직 해금한 인연이 없습니다. 카르마 상점에서 살 수 있습니다.");
 }
 
+/** 산 기틀 중 이번 강호행에 쓸 단계를 고른다. */
+function upgradeSetup(meta) {
+  const rows = Object.entries(DB.karma.upgrades)
+    .filter(([key, u]) => upgradeLevel(key, meta) > 0 && (!u.origin || u.origin === ui.origin))
+    .map(([key, u]) => {
+      const level = upgradeLevel(key, meta);
+      const use = upgradeUse(key, meta);
+      return `<div class="pick-row"><div class="pick-main"><div class="pick-name">${esc(u.name)}</div><p class="pick-desc">${esc(u.desc)}</p></div>
+        <div class="step-box"><button class="mini-btn" data-act="upgrade-use" data-key="${esc(key)}" data-level="${use - 1}" ${use <= 0 ? "disabled" : ""} aria-label="내리기">−</button><span class="step-num">${use}/${level}</span><button class="mini-btn" data-act="upgrade-use" data-key="${esc(key)}" data-level="${use + 1}" ${use >= level ? "disabled" : ""} aria-label="올리기">+</button></div></div>`;
+    }).join("");
+  return rows ? `<p class="section-note">이번에 쓸 단계만 남길 수 있습니다. 내려도 산 단계는 그대로이고 언제든 되돌릴 수 있습니다.</p>${rows}` : emptyNote("아직 올린 기틀이 없습니다. 카르마 상점에서 살 수 있습니다.");
+}
+
 function legacySetup(meta) {
   if (!meta.legacy_open) return emptyNote("전설의 유산은 카르마 상점에서 열 수 있습니다.");
   const { shelf } = DB.karma.legacy;
@@ -468,7 +481,7 @@ function renderSetup() {
   const slots = traitSlots(meta.total_karma) + extraSlots(meta);
   const next = nextSlotThreshold(meta.total_karma);
   const hasSave = loadCheckpoint() !== null;
-  ui.traits = new Set([...ui.traits].filter((t) => meta.unlocked_traits.includes(t) && (!DB.traits[t].origin || DB.traits[t].origin === ui.origin)));
+  ui.traits = new Set([...ui.traits].filter((t) => meta.unlocked_traits.includes(t) && (!DB.traits[t].origin || DB.traits[t].origin === ui.origin)).slice(0, slots));
   if (!meta.unlocked_origins.includes(ui.origin)) ui.origin = "무림초출";
 
   const origins = DB.origins.order.filter((key) => meta.unlocked_origins.includes(key)).map((key) => `<div class="pick-row"><label class="pick-label"><input type="radio" name="origin" value="${esc(key)}" ${ui.origin === key ? "checked" : ""}>
@@ -488,11 +501,12 @@ function renderSetup() {
     <div class="setup-tabs">
       <button class="tab-btn${ui.setupTab === "origin" ? " active" : ""}" data-act="setup-tab" data-tab="origin">출신</button>
       <button class="tab-btn${ui.setupTab === "trait" ? " active" : ""}" data-act="setup-tab" data-tab="trait">자질 ${ui.traits.size}/${slots}</button>
+      <button class="tab-btn${ui.setupTab === "upgrade" ? " active" : ""}" data-act="setup-tab" data-tab="upgrade">기틀</button>
       <button class="tab-btn${ui.setupTab === "content" ? " active" : ""}" data-act="setup-tab" data-tab="content">인연</button>
       <button class="tab-btn${ui.setupTab === "legacy" ? " active" : ""}" data-act="setup-tab" data-tab="legacy">유산</button>
     </div>
     <div class="home-wrap">
-      ${ui.setupTab === "content" ? contentSetup(meta) : ui.setupTab === "legacy" ? legacySetup(meta) : ui.setupTab === "origin" ? origins : `<p class="section-note">${next ? `자질을 ${slots}개 장착할 수 있습니다. 누적 카르마 ${next}이 되면 하나 더 열립니다. 누적 보상은 상점에서 볼 수 있습니다.` : "자질 칸이 모두 열렸습니다."}</p>${filterRow()}${traits}`}
+      ${ui.setupTab === "upgrade" ? upgradeSetup(meta) : ui.setupTab === "content" ? contentSetup(meta) : ui.setupTab === "legacy" ? legacySetup(meta) : ui.setupTab === "origin" ? origins : `<p class="section-note">${next ? `자질을 ${slots}개 장착할 수 있습니다. 누적 카르마 ${next}이 되면 하나 더 열립니다. 누적 보상은 상점에서 볼 수 있습니다.` : "자질 칸이 모두 열렸습니다."}</p>${filterRow()}${traits}`}
     </div>
     <div class="setup-bar"><div class="setup-summary">${esc(originName)}${ui.traits.size ? `, 자질 ${ui.traits.size}개` : ""}${chosenLegacy(meta) ? `, 유산 「${esc(chosenLegacy(meta).label)}」` : ""}${meta.provisions.length ? `, 채비 ${meta.provisions.length}개` : ""}</div>
       <button class="start-btn" data-act="${hasSave ? "confirm-start" : "start"}">강호로 나선다</button></div>
@@ -567,7 +581,7 @@ function statusModal() {
         ${row("최저 기량", `${progress.min} / ${progress.minRequired}`)}
         ${row("실전 경험", `${progress.battles} / ${progress.battlesRequired}`)}</div>` : ""}
       <div class="modal-section"><h4>성향과 별호: ${esc(byname(p))}</h4>
-        ${ALIGNMENTS.map((name) => `<div class="align-row"><span>${name}</span><div class="align-track"><div class="a-${name}" style="width:${Math.min(p.alignment[name] * 5, 100)}%"></div></div><span>${p.alignment[name]}</span></div>`).join("")}
+        ${ALIGNMENTS.map((name) => `<div class="align-row"><span>${name}</span><div class="align-track"><div class="a-${name}" style="width:${Math.min(p.alignment[name] / 10, 100)}%"></div></div><span>${p.alignment[name]}</span></div>`).join("")}
         <p class="skill-meta">${esc(benefitText(p.alignment))}</p>
       </div>
       ${traits.length ? `<div class="modal-section"><h4>자질</h4>${traits.map((t) => `<div class="skill-row">${esc(t.name)}<div class="skill-meta">${esc(t.desc)}</div></div>`).join("")}</div>` : ""}`,
@@ -828,7 +842,7 @@ function renderEvent() {
       <div class="event-body"><p class="event-text" data-type>${esc(view.text)}</p>
         ${view.choices.map((c) => `<button class="choice-btn${c.tag ? " special" : ""}" data-act="choose" data-index="${c.index}" ${c.locked ? "disabled" : ""}>${c.tag ? `<span class="choice-tag">${esc(c.tag)}</span>` : ""}${esc(c.label)}${c.locked ? `<small>${esc(c.locked)}</small>` : ""}</button>`).join("")}
       </div></div></div></div>
-    <div class="action-area"><div class="action-inner"><p class="hint flush">${DB.events[game.event.key].chain ? `이어지는 인연 「${esc(view.chain)}」입니다. 한 편마다 그달을 씁니다. 시작하면 손을 떼거나 죽지 않는 한 천마봉 전에 끝납니다.` : DB.events[game.event.key].prelude ? "달이 지나지 않는 번외 시간입니다. 고른 대로 무공과 심법을 익히고 시작합니다." : p.turn >= p.maxTurn ? "이 선택 뒤에는 돌아갈 수 없다." : "선택지의 결과는 고르기 전까지 알 수 없다."}</p></div></div>`;
+    <div class="action-area"><div class="action-inner"><p class="hint flush">${DB.events[game.event.key].chain ? `이어지는 인연 「${esc(view.chain)}」입니다. 한 편마다 그달을 씁니다. 시작하면 손을 떼거나 죽지 않는 한 천마봉 전에 끝납니다.` : DB.events[game.event.key].prelude ? "십 년 전, 사부의 문하에 든 날의 일입니다. 달이 지나지 않습니다. 고른 병기와 심법을 십 년 갈고닦은 채로 산을 내려갑니다." : p.turn >= p.maxTurn ? "이 선택 뒤에는 돌아갈 수 없다." : "선택지의 결과는 고르기 전까지 알 수 없다."}</p></div></div>`;
 }
 
 const MAJOR_LINE = /^(🌟|✨|🏆|📕|📖|⚠️|🩸|⚔️|⚡|🗡️)/;
@@ -1028,6 +1042,7 @@ const actions = {
   },
   "confirm-start": () => { openModal("confirm-start-modal"); },
   continue: () => { game.continueFromSave(); render(); },
+  "upgrade-use": (el) => { setUpgradeUse(el.dataset.key, Number(el.dataset.level)); render(); },
   "buy-upgrade": (el) => { buyUpgrade(el.dataset.key); render(); },
   "buy-content": (el) => { buyContent(el.dataset.key); render(); },
   "buy-provision": (el) => { buyProvision(el.dataset.key); render(); },

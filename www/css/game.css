@@ -202,6 +202,8 @@ body.home { padding-bottom: calc(4.5rem + var(--safe-bottom)); }
 .pick-main { flex: 1; min-width: 0; }
 .pick-label { display: flex; gap: .8rem; flex: 1; cursor: pointer; }
 .pick-name { font-size: 1.02rem; font-weight: 700; }
+.step-box { display: flex; align-items: center; gap: .4rem; flex-shrink: 0; }
+.step-num { min-width: 2.4rem; text-align: center; font-variant-numeric: tabular-nums; }
 .rarity { font-size: .72rem; margin-left: .4rem; font-weight: 400; color: var(--paper-dim); }
 .rarity-희귀 { color: #8db8d9; } .rarity-전설 { color: var(--gold); }
 .pick-desc { font-size: .84rem; color: var(--paper-dim); margin: 0; line-height: 1.55; }

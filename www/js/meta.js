@@ -12,7 +12,7 @@ export const RENAMED_ORIGINS = { 마교탈주: "혈지생환", 소교주: "혈�
 const REMOVED_ORIGINS = { 곤륜파: 5, 금군교두: 5, 낙방서생: 5, 녹림소채주: 5, 녹림채주: 5, 녹림후계: 5, 당가무사: 5, 당가방계: 5, 당가소주: 5, 대장간자식: 5, 백호대장: 5, 백호무관: 5, 살막살수: 5, 살막탈주: 5, 살문탈주: 5, 세외도객: 5, 소림속가: 5, 소림수제자: 5, 소막주: 5, 악가서자: 5, 악가소장주: 5, 악가전인: 5, 양가서자: 5, 육선문포두: 5, 의원제자: 5, 점소이: 5, 탈영병: 5, 황보막내: 5, 회귀자: 5 };
 
 // 없어진 자질은 산 값을 돌려준다
-const REMOVED_TRAITS = { 무골: 5, 기재: 5, 넓은단전: 5, 맑은마음: 5, 맷집: 7, 경공의재능: 4, 줄행랑: 2, 손에익은병기: 6, 약손: 3 };
+const REMOVED_TRAITS = { 무골: 5, 기재: 5, 넓은단전: 5, 맑은마음: 5, 맷집: 7, 경공의재능: 4, 줄행랑: 2, 손에익은병기: 6, 약손: 3, 구음절맥: 8, 순양지체: 8 };
 const SPLIT_UPGRADES = { 근골: ["강골", "혜안"], 심지: ["원기", "명경"] };
 
 const defaults = () => ({
@@ -22,7 +22,7 @@ const defaults = () => ({
   endings_seen: [], runs: [], total_runs: 0,
   upgrades: {}, content: [], content_off: [], legacy_open: false, legacies: [], milestones: [],
   known_events: [], achievements: [], origin_wins: [], total_wins: 0, best_turn: 0,
-  provisions: [],
+  provisions: [], upgrade_use: {},
 });
 
 export function loadMeta() {
@@ -47,6 +47,7 @@ function refundRemoved(data) {
     data.legacies = data.legacies.filter((l) => (l.kind === "skill" ? DB.skills[l.key] : DB.market[l.key]));
   }
   if (!data.upgrades || typeof data.upgrades !== "object" || Array.isArray(data.upgrades)) data.upgrades = {};
+  if (!data.upgrade_use || typeof data.upgrade_use !== "object" || Array.isArray(data.upgrade_use)) data.upgrade_use = {};
   for (const [key, cost] of Object.entries(REMOVED_TRAITS)) {
     if (data.unlocked_traits.includes(key)) {
       data.unlocked_traits = data.unlocked_traits.filter((k) => k !== key);
@@ -113,6 +114,17 @@ export function spendKarma(cost) {
 
 export function upgradeLevel(key, data = loadMeta()) { return data.upgrades[key] || 0; }
 
+/** 이번 강호행에 쓸 단계. 정하지 않았으면 산 만큼 다 쓴다. */
+export function upgradeUse(key, data = loadMeta()) {
+  return Math.min(upgradeLevel(key, data), data.upgrade_use?.[key] ?? upgradeLevel(key, data));
+}
+
+export function setUpgradeUse(key, level) {
+  const data = loadMeta();
+  data.upgrade_use = { ...data.upgrade_use, [key]: Math.max(0, Math.min(upgradeLevel(key, data), level)) };
+  saveMeta(data);
+}
+
 /** 기틀을 한 단계 올린다. */
 export function buyUpgrade(key) {
   const data = loadMeta();
@@ -121,6 +133,8 @@ export function buyUpgrade(key) {
   if (cost === undefined || data.current_karma < cost) return false;
   data.current_karma -= cost;
   data.upgrades[key] = level + 1;
+  // 새로 올리면 그 단계까지 쓰는 것으로 돌아간다
+  if (data.upgrade_use) delete data.upgrade_use[key];
   saveMeta(data);
   return true;
 }
@@ -129,7 +143,7 @@ export function buyUpgrade(key) {
 export function upgradeTraits(data = loadMeta(), originKey = null) {
   return Object.entries(data.upgrades)
     .filter(([key]) => !DB.karma.upgrades[key]?.origin || !originKey || DB.karma.upgrades[key].origin === originKey)
-    .flatMap(([key, level]) => Array.from({ length: level }, (_, i) => `환생_${key}_${i + 1}`)).filter((k) => DB.traits[k]);
+    .flatMap(([key]) => Array.from({ length: upgradeUse(key, data) }, (_, i) => `환생_${key}_${i + 1}`)).filter((k) => DB.traits[k]);
 }
 
 // ---------- 한 번 쓰는 채비 ----------
@@ -166,7 +180,7 @@ export function takeProvisions() {
   return keys;
 }
 
-export const extraSlots = (data = loadMeta()) => data.upgrades.그릇 || 0;
+export const extraSlots = (data = loadMeta()) => upgradeUse("그릇", data);
 
 /** 누적 카르마로 받은 보상의 숨은 특성 목록 */
 export const rewardTraits = (data = loadMeta()) => DB.karma.rewards

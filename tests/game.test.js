@@ -11,7 +11,7 @@ import { buildEpilogue, Game } from "../www/js/game.js";
 import { josa } from "../www/js/josa.js";
 import { blockReason, buy, equipmentBonus, openMarket, priceOf } from "../www/js/market.js";
 import {
-  activeContent, addKarma, buyContent, buyProvision, refundProvision, upgradeTraits, buyUpgrade, exportRecords, importRecords, extraSlots, loadCheckpoint, legacyAvailable, loadEventLog, loadMeta, nextReward, recordEventPick, openLegacy, saveMeta, takeLegacy, toggleContent, unlockOrigin,
+  activeContent, setUpgradeUse, upgradeLevel, addKarma, buyContent, buyProvision, refundProvision, upgradeTraits, buyUpgrade, exportRecords, importRecords, extraSlots, loadCheckpoint, legacyAvailable, loadEventLog, loadMeta, nextReward, recordEventPick, openLegacy, saveMeta, takeLegacy, toggleContent, unlockOrigin,
 } from "../www/js/meta.js";
 import { applyGrowth, breakthroughBlock, byname, fameRank, getChapter, getYear, marketTurns, traitSlots } from "../www/js/rules.js";
 import { rng } from "../www/js/rng.js";
@@ -334,7 +334,7 @@ test("25달 줄거리는 행동을 쓰지 않고 고를 때까지 막는다", ()
   game.action("수련");
   assert.ok(game.event);
   game.chooseEvent(0);
-  assert.ok(game.player.alignment.정도 >= 3 && game.player.hasFlag("무림맹"));
+  assert.ok(game.player.alignment.정도 >= 60 && game.player.hasFlag("무림맹"));
   assert.equal(game.pendingNext, false);
 });
 
@@ -356,13 +356,13 @@ test("무작위 사건은 생당 한 번", () => {
 
 test("성향 혜택", () => {
   let p = new Player();
-  p.alignment.정도 = 5;
+  p.alignment.정도 = 100;
   assert.equal(priceOf(p, "호골주"), Math.trunc(DB.market.호골주.price * 0.9));
   p = new Player();
-  p.alignment.사도 = 5;
+  p.alignment.사도 = 100;
   assert.equal(p.gainSilver(100), 125);
   p = new Player();
-  p.alignment.마도 = 5;
+  p.alignment.마도 = 100;
   assert.ok(new Battle(p, new Enemy("천마")).attackScale() > new Battle(new Player(), new Enemy("천마")).attackScale());
 });
 
@@ -378,7 +378,7 @@ test("능력치는 1 아래로 내려가지 않고 효과 요약이 나온다", 
 test("마도 10이면 천마봉에서 귀순할 수 있다", () => {
   const game = newGame();
   toTurnEnd(game, 119);
-  game.player.alignment = { 정도: 0, 사도: 0, 마도: 12 };
+  game.player.alignment = { 정도: 0, 사도: 0, 마도: 240 };
   game.advanceTurn();
   game.marketLeave();
   assert.equal(game.event.key, "결전_천마봉");
@@ -482,7 +482,7 @@ test("별호와 명성", () => {
   assert.equal(byname(p), "이름 없는 무인");
   assert.equal(fameRank(0), "무명소졸");
   p.fame = 40;
-  p.alignment.정도 = 5;
+  p.alignment.정도 = 100;
   assert.ok(byname(p).endsWith("검협"));
   assert.equal(fameRank(60), "일방의 고수");
 });
@@ -539,7 +539,7 @@ test("진열은 겹치지 않고 아는 비급은 빠지며 더 좋은 장비가
 test("성향 전용 물건은 그 길을 걷는 사람에게만", () => {
   const p = new Player();
   for (let i = 0; i < 30; i++) assert.ok(!openMarket(36, p).stock.some((s) => s.key === "혈영도법비급"));
-  p.alignment.마도 = 5;
+  p.alignment.마도 = 100;
   assert.ok(openMarket(36, p).stock.some((s) => s.key === "혈영도법비급"));
 });
 
@@ -1225,13 +1225,13 @@ test("성향과 명성에 따라 찾아오는 적이 달라진다", () => {
     for (let i = 0; i < n; i++) names.add(game.pickEnemy());
     return names;
   };
-  const dark = seen((p) => { p.alignment.마도 = 10; });
+  const dark = seen((p) => { p.alignment.마도 = 200; });
   assert.ok(dark.has("구파협객"), "마도를 걸으면 정파 협객이 나온다");
   assert.ok(!dark.has("사파복수귀"));
-  const right = seen((p) => { p.alignment.정도 = 10; });
+  const right = seen((p) => { p.alignment.정도 = 200; });
   assert.ok(right.has("사파복수귀"));
   assert.ok(!right.has("구파협객"), "정도에게는 정파 협객이 덤비지 않는다");
-  const shady = seen((p) => { p.alignment.사도 = 10; });
+  const shady = seen((p) => { p.alignment.사도 = 200; });
   assert.ok(shady.has("포도대장"));
   const plain = seen(() => {});
   assert.ok(!plain.has("구파협객") && !plain.has("포도대장") && !plain.has("사파복수귀"));
@@ -1248,7 +1248,7 @@ test("성향과 명성에 따라 찾아오는 적이 달라진다", () => {
 
 test("성향과 명성에 따라 사건이 달라진다", () => {
   const p = new Player();
-  p.alignment.마도 = 10;
+  p.alignment.마도 = 200;
   assert.ok(eventView(p, "쫓기는소녀").text.includes("그쪽이 낫다"));
   assert.ok(checkRequires(p, DB.events.마도_토벌령.requires));
   assert.ok(!checkRequires(p, DB.events.정도_은인.requires));
@@ -1334,7 +1334,7 @@ test("채비는 다음 강호행 한 번만 쓰이고 값이 싸며 네 기량�
   assert.ok(buyProvision("약꾸러미"));
   assert.ok(buyProvision("노자"));
   assert.ok(refundProvision("노자"));
-  assert.equal(loadMeta().current_karma, 47);
+  assert.equal(loadMeta().current_karma, 48);
   const first = new Game();
   first.start("무림초출");
   const second = new Game();
@@ -1494,14 +1494,46 @@ test("성향 자질은 희귀 이상이고 오를 때 더 오른다", () => {
     if (t.effects?.some((e) => e.type === "start_alignment" || e.type === "alignment_gain")) assert.ok(["희귀", "전설"].includes(t.rarity), t.name);
   }
   const p = new Player("무림초출", ["호연지기"]);
-  assert.equal(p.alignment.정도, 5);
-  p.adjustAlignment("정도", 2);
-  assert.equal(p.alignment.정도, 8);
+  assert.equal(p.alignment.정도, 100);
+  p.adjustAlignment("정도", 40);
+  assert.equal(p.alignment.정도, 160);
+  p.adjustAlignment("정도", 5000);
+  assert.equal(p.alignment.정도, 999);
   const killer = new Player("무림초출", ["천살성"]);
   const b = new Battle(killer, new Enemy("낭인"));
   const base = b.attackScale();
   killer.kills = 1000;
   assert.ok(Math.abs(b.attackScale() / base - 1.4) < 0.01);
+});
+
+test("기틀은 이번에 쓸 단계만 고를 수 있다", () => {
+  withKarma(100);
+  const data = loadMeta();
+  data.upgrades = { 강골: 3, 그릇: 2 };
+  saveMeta(data);
+  const external = () => { const g = new Game(); g.start("무림초출"); return g.player.external; };
+  const full = external();
+  setUpgradeUse("강골", 1);
+  assert.equal(external(), full - 40);
+  setUpgradeUse("강골", 0);
+  assert.equal(external(), full - 60);
+  assert.equal(upgradeLevel("강골"), 3);
+  setUpgradeUse("그릇", 1);
+  assert.equal(extraSlots(), 1);
+  withKarma(0);
+});
+
+test("누적 보상은 자질과 기틀, 채비의 시작 병기와 갑의, 비급을 대신하지 않는다", () => {
+  const types = ["start_style_weapon", "start_armor", "start_style_skill", "start_skill"];
+  for (const r of DB.karma.rewards) assert.ok(!r.effects.some((e) => types.includes(e.type)), r.name);
+});
+
+test("강호초출이 고른 무공과 심법은 십 년 갈고닦은 성취가 있다", () => {
+  const p = new Player("무림초출");
+  applyEffects(p, { start_weapon: "권법", start_mindset: "양생공" });
+  assert.ok(p.bestSkill().mastery >= 40);
+  assert.ok(p.getSkill("양생공").mastery >= 40);
+  assert.match(DB.events.시작_병기고.text, /문하에 든 날/);
 });
 
 test("조사는 받침에 맞게 붙는다", () => {
@@ -1593,7 +1625,7 @@ test("결말 문장은 상황을 따르고 서로 부딪치지 않는다", () =>
   assert.notEqual(text("남궁세가", () => {}, "사망"), text("하오문", () => {}, "사망"));
   assert.ok(text("하오문", (p) => { p.fame = 150; p.turn = 100; }, "사망").includes("잔이 하나씩"));
   assert.ok(text("하오문", (p) => { p.fame = 0; }, "사망").includes("무명"));
-  assert.ok(text("하오문", (p) => { p.alignment.마도 = 10; }, "사망").includes("잔치"));
+  assert.ok(text("하오문", (p) => { p.alignment.마도 = 200; }, "사망").includes("잔치"));
   assert.ok(text("하북팽가", () => {}, "귀순").includes("네 형"));
   // 이벤트 결과를 겪지 않았으면 겪은 것처럼 말하지 않는다
   assert.ok(text("개방제자", () => {}, "기본").includes("범인은 아직"));
@@ -1614,7 +1646,7 @@ test("결말 문장은 상황을 따르고 서로 부딪치지 않는다", () =>
         for (const fame of [0, 20, 40, 70, 150]) {
           const q = new Player(origin);
           q.fame = fame;
-          if (side) q.alignment[side] = 12;
+          if (side) q.alignment[side] = 240;
           q.turn = 120;
           for (const flag of ["찬탈", "단목휘_죽음", "단목휘_동맹", "제자_완성", "가문재건"]) if (fame === 150) q.addFlag(flag);
           const lines = buildEpilogue(q, key);
