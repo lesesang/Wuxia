@@ -108,5 +108,45 @@
       "damage_reduce": 3,
       "silver": 10
     }
+  },
+  "살막": {
+    "name": "살막",
+    "alignment": "사도",
+    "desc": "돈만 맞으면 누구의 이름이든 지운다는 살수들의 막.",
+    "bonus_text": "회심의 일격 확률 6% 증가, 경공 회피 4% 증가",
+    "bonus": {
+      "crit": 6,
+      "evade": 4
+    }
+  },
+  "흑사방": {
+    "name": "흑사방",
+    "alignment": "사도",
+    "desc": "도박판과 밀수 뱃길을 쥔 저잣거리의 방회.",
+    "bonus_text": "얻는 은자 25% 증가, 받는 피해 2% 감소",
+    "bonus": {
+      "silver": 25,
+      "damage_reduce": 2
+    }
+  },
+  "혈교": {
+    "name": "혈교",
+    "alignment": "마도",
+    "desc": "피를 경전으로 삼는, 신교와도 다른 오랜 마도 교단.",
+    "bonus_text": "주는 피해 6% 증가, 심법 회복량 10% 증가",
+    "bonus": {
+      "damage": 6,
+      "heal_bonus": 10
+    }
+  },
+  "귀문교": {
+    "name": "귀문교",
+    "alignment": "마도",
+    "desc": "죽은 자를 부리는 술법으로 산속에 숨은 사교.",
+    "bonus_text": "주는 피해 3% 증가, 공격이 적을 중독시킨다",
+    "bonus": {
+      "damage": 3,
+      "poison": 4
+    }
   }
 }

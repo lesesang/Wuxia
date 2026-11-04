@@ -14,6 +14,8 @@ export function unmetReason(player, requires) {
   if (!requires) return null;
   const r = requires;
   if (r.origin && player.originKey !== r.origin) return "출신이 다르다";
+  if (r.not_origin?.includes(player.originKey)) return "그곳과는 씻지 못할 원한이 있다";
+  if (r.no_dominant && player.dominantAlignment()) return "이미 한 길에 들어섰다";
   if (r.flag && !player.hasFlag(r.flag)) return "아직 인연이 닿지 않았다";
   if (r.not_flag && player.hasFlag(r.not_flag)) return "이미 지나간 일이다";
   if (r.any_flag && !r.any_flag.some((f) => player.hasFlag(f))) return "아직 인연이 닿지 않았다";
@@ -35,7 +37,7 @@ export function unmetReason(player, requires) {
   if (r.unlocked && !player.content.includes(r.unlocked)) return "아직 인연이 닿지 않았다";
   if (r.dominant && player.dominantAlignment() !== r.dominant) return `${r.dominant}의 길이 아니다`;
   if (r.min_turn && player.turn < r.min_turn) return "아직 때가 아니다";
-  if (r.main_skill && player.bestSkill()?.key !== r.main_skill) return "쓰는 무공이 다르다";
+  if (r.main_skill && (!player.bestSkill() || player.getSkill(r.main_skill)?.key !== player.bestSkill().key)) return "쓰는 무공이 다르다";
   if (r.main_grade && player.bestSkill()?.grade !== r.main_grade) return "쓰는 무공의 품계가 다르다";
   if (r.mindset_grade && player.bestOfType("심공")?.grade !== r.mindset_grade) return "쓰는 심법의 품계가 다르다";
   if (r.movement_grade && player.bestOfType("경공")?.grade !== r.movement_grade) return "쓰는 경공의 품계가 다르다";
@@ -67,6 +69,13 @@ export const checkRequires = (player, requires) => unmetReason(player, requires)
 
 export function storyEventForTurn(player) {
   for (const [key, event] of Object.entries(DB.storyEvents)) {
+    if (event.turn_range) {
+      // 여러 달 가운데 어느 달에 찾아온다. 마지막 달에는 반드시 찾아온다
+      const [from, to] = event.turn_range;
+      if (player.turn >= from && player.turn <= to && !player.seenEvents.includes(key) && checkRequires(player, event.requires)
+        && rng.random() < 1 / (to - player.turn + 1)) return key;
+      continue;
+    }
     if (event.turn === player.turn && !player.seenEvents.includes(key) && checkRequires(player, event.requires)) {
       return key;
     }
@@ -141,6 +150,9 @@ export function validateChains() {
   return errors;
 }
 
+export const ALONE_FLAG = "홀로_간다";
+const ALONE_GATE_RATE = 0.15;
+
 export function pickRandomEvent(player) {
   const chapter = getChapter(player.turn);
   const options = Object.keys(DB.randomEvents).filter((key) => {
@@ -151,7 +163,12 @@ export function pickRandomEvent(player) {
   });
   if (!options.length) return null;
   // 인연이 이어지는 이벤트를 먼저 만날 가능성을 높인다
-  return pickWeighted(options, options.map((k) => (DB.randomEvents[k].requires || DB.randomEvents[k].chain ? 3 : 1)));
+  const alone = player.hasFlag(ALONE_FLAG);
+  return pickWeighted(options, options.map((k) => {
+    const base = DB.randomEvents[k].requires || DB.randomEvents[k].chain ? 3 : 1;
+    // 홀로 가기로 한 무인에게는 문파의 손길이 드물게 닿는다
+    return alone && DB.randomEvents[k].sect_gate ? base * ALONE_GATE_RATE : base;
+  }));
 }
 
 export function pickFortune(player) {

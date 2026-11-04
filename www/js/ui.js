@@ -88,7 +88,7 @@ function codexRows(tab, meta) {
       rows: meta.global_codex.filter((k) => DB.enemies[k]).map((k) => {
         const e = DB.enemies[k];
         const tier = TIER_NAMES[e.tier] || e.tier;
-        return { key: k, name: e.name, meta: `${tier}, ${e.realm} 경지`, desc: e.desc, more: enemyDetail(e), cats: [tier] };
+        return { key: k, name: e.title ? `${e.title} ${e.name}` : e.name, meta: `${tier}, ${e.realm} 경지`, desc: e.desc, more: enemyDetail(e), cats: [tier] };
       }),
     };
   }
@@ -227,7 +227,26 @@ function helpModal() {
     "<b>수련</b>: 외공과 무리, 주무공 성취가 오릅니다. 대련으로 실전 경험을 얻기도 합니다.",
     "<b>운기</b>: 내공과 심경이 오르고 내력을 되찾습니다. 초식을 깨치기도 합니다.",
     "<b>요양</b>: 체력과 내력을 채우고 내상을 치료합니다. 싸우기 전에 몸을 챙기세요."])}
-    ${section("경지", ["기량과 <b>실전 경험</b>이 함께 차야 돌파합니다. 위쪽 띠에서 남은 조건을 볼 수 있습니다.", "경지가 오르면 주는 피해가 크게 늘고 받는 피해가 줄어듭니다."])}
+    ${section("경지", ["일류, 절정, 초절정, 화경, 현경 순으로 오릅니다. 기량과 <b>실전 경험</b>이 함께 차야 돌파합니다. 위쪽 띠에서 남은 조건을 볼 수 있습니다.", "경지가 오르면 주는 피해가 크게 늘고 받는 피해가 줄어듭니다. 심경이 낮으면 돌파할 때 기가 역류해 다칠 수 있습니다.", ...Object.entries(DB.realms.perks).map(([realm, perk]) => `<b>${esc(realm)}의 특전, ${esc(perk.name)}</b>: ${esc(perk.desc)}`)])}
+    ${section("무공의 품계", [
+    "<b>기본</b>: 강호 어디서나 배우는 무공. 낮아 보여도 성취를 쌓으면 승급합니다.",
+    "<b>명품</b>: 이름난 문파와 고수의 무공. 절정 이상의 적이 가끔 지니고 있고 장터에도 나옵니다.",
+    "<b>상승</b>: 고수만이 쓰는 무공. 화경 이상의 적에게서나, 뒤쪽 장터에서 얻습니다.",
+    "<b>일절</b>: 한 문파나 한 시대의 끝을 이룬 무공. 소속의 비전이나 큰 인연에서만 얻고, 승급으로 오를 수 있는 끝입니다.",
+    "<b>신공</b>: 전설의 무공. 승급이나 장터, 일반 사건이나 유산으로는 얻을 수 없고 출신의 이야기와 카르마로 연 인연에서만 나옵니다.",
+    "품계가 높을수록 위력이 크고 내력을 많이 쓰며, 일부 무공은 성취가 차면 <b>비기</b>가 열립니다.",
+    "무공은 공격, 심법, 경공 셋으로 나뉘고 칸마다 쓸 무공 하나를 고릅니다. 새로 얻었다고 저절로 바뀌지 않으니 신상의 무공 칸에서 고르세요.",
+    "성취가 100을 넘어 더 쌓이면 다음 품계로 승급합니다. 승급하면 성취가 줄어들고 위력은 오릅니다.",
+    "<b>같은 무공을 또 얻으면</b> 성취가 오릅니다. <b>같은 갈래의 더 깊은 무공</b>을 얻으면 따로 쌓이지 않고 쓰던 무공이 그것으로 이어지며 성취와 오른 품계는 그대로 갑니다."])}
+    ${section("적과 강호의 수준", [
+    "적의 경지는 삼류, 이류, 일류, 절정, 초절정, 화경, 현경 순입니다. 산적은 산적이고, 이름난 고수는 그만한 경지입니다.",
+    "지금이 몇 장인지에 따라 만날 수 있는 적이 정해지고, 그중에서 내 경지와 가까운 적을 더 자주 만납니다. 성향과 명성에 따라 찾아오는 적도 달라집니다.",
+    "<b>일반, 난적, 강적</b> 순으로 강합니다. 절정부터 이름 있는 자가 나오기 시작하고, 초절정부터는 대개 소속과 별호를 가진 인물입니다.",
+    "적은 경지에 맞는 비급과 약을 지니고 있습니다. 삼류는 약 정도이고, 위로 갈수록 좋은 품계가 나옵니다. 주무공과 같은 계열이 더 잘 나옵니다."])}
+    ${section("소속", [
+    "문파나 세력을 돕고 나면 제안이 오고, 받아들여야 소속이 됩니다. 소속마다 고유한 혜택과 이야기, 비전 무공이 있습니다. 한번 들어가면 다른 소속을 받을 수 없습니다.",
+    "소속 없이 3년 차 늦봄에서 여름에 이르면 성향에 맞는 문을 직접 두드릴 수 있습니다. 어디에도 가지 않고 홀로 가면 그 뒤로 문파의 손길이 드물게 닿습니다.",
+    "성향이 맞지 않는 세력은 도움을 청하기는커녕 칼을 뽑기도 합니다."])}
     ${section("전투", [
     "무공은 내력을 씁니다. 내력이 없으면 맨손으로 싸웁니다.",
     "적의 필살기는 한 합 전에 ⚠️로 예고됩니다. <b>경공</b>으로 흘려내면 다음 공격이 강해집니다.",
@@ -655,10 +674,10 @@ function renderBattle() {
         <div class="qibar"><div style="width:${percent(p.qi, p.maxQi())}%"></div></div>
         <div class="hpnum">내력 ${p.qi}/${p.maxQi()}</div></div>
       <div class="vs-mark">대</div>
-      <div class="combatant" data-side="enemy"><div class="name">${esc(b.enemy.name)}</div>
+      <div class="combatant" data-side="enemy">${b.enemy.title ? `<div class="enemy-title">${esc(b.enemy.title)}</div>` : ""}<div class="name">${esc(b.enemy.name)}</div>
         <div class="hpbar-outer"><div class="hpbar-inner enemy" data-bar="enemy" style="width:${percent(b.enemy.hp, b.enemy.maxHp)}%"></div></div>
         <div class="hpnum">체력 <b>${b.enemy.hp}</b>/${b.enemy.maxHp}</div>
-        <div class="enemy-tier">${esc(TIER_NAMES[b.enemy.tier] || b.enemy.tier)}${b.enemy.armor ? `, 방어 ${b.enemy.armor}` : ""}</div></div>
+        <div class="enemy-tier">${esc(b.enemy.realm)}, ${esc(TIER_NAMES[b.enemy.tier] || b.enemy.tier)}${b.enemy.armor ? `, 방어 ${b.enemy.armor}` : ""}</div></div>
     </div>
     ${tags.length ? `<div class="battle-tags">${tags.map(([kind, label]) => `<span class="tag ${kind}">${esc(label)}</span>`).join("")}</div>` : ""}
     ${warning ? `<p class="battle-warning">⚠️ 다음은 「${esc(warning)}」${movement ? " — 경공으로 흘려낼 수 있다" : ""}</p>` : ""}

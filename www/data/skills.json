@@ -60,7 +60,9 @@
       "운무요산",
       "비룡재천",
       "신룡파미"
-    ]
+    ],
+    "lineage": "곤륜검",
+    "lineage_rank": 1
   },
   "창궁검법": {
     "name": "창궁검법",
@@ -83,7 +85,9 @@
       "유성추월",
       "무애검"
     ],
-    "origin": "남궁세가"
+    "origin": "남궁세가",
+    "lineage": "창궁검",
+    "lineage_rank": 1
   },
   "암향비도": {
     "name": "암향비도",
@@ -105,7 +109,9 @@
       "월하무흔",
       "일비충천"
     ],
-    "origin": "하오문"
+    "origin": "하오문",
+    "lineage": "암향비도",
+    "lineage_rank": 1
   },
   "파천권": {
     "name": "파천권",
@@ -128,7 +134,9 @@
       "파천"
     ],
     "risky": true,
-    "origin": "권마계승"
+    "origin": "권마계승",
+    "lineage": "파천권",
+    "lineage_rank": 1
   },
   "매화검법": {
     "name": "매화검법",
@@ -149,7 +157,9 @@
       "매화점점",
       "이십사향",
       "낙화무정"
-    ]
+    ],
+    "lineage": "매화검",
+    "lineage_rank": 1
   },
   "천뢰검법": {
     "name": "천뢰검법",
@@ -363,7 +373,9 @@
       "counter_pct": 80,
       "flee_bonus": 25
     },
-    "origin": "하오문"
+    "origin": "하오문",
+    "lineage": "부운보",
+    "lineage_rank": 1
   },
   "유운신법": {
     "name": "유운신법",
@@ -412,7 +424,9 @@
       "unlock_mastery": 50,
       "multiplier": 2.0,
       "qi_cost": 32
-    }
+    },
+    "lineage": "소림권",
+    "lineage_rank": 1
   },
   "백보신권": {
     "name": "백보신권",
@@ -433,7 +447,9 @@
       "unlock_mastery": 50,
       "multiplier": 2.4,
       "qi_cost": 50
-    }
+    },
+    "lineage": "소림권",
+    "lineage_rank": 2
   },
   "태극검": {
     "name": "태극검",
@@ -476,7 +492,9 @@
       "unlock_mastery": 40,
       "multiplier": 2.7,
       "qi_cost": 65
-    }
+    },
+    "lineage": "매화검",
+    "lineage_rank": 2
   },
   "금정면장": {
     "name": "금정면장",
@@ -518,7 +536,9 @@
       "unlock_mastery": 50,
       "multiplier": 2.3,
       "qi_cost": 40
-    }
+    },
+    "lineage": "걸개봉",
+    "lineage_rank": 2
   },
   "항룡장": {
     "name": "항룡장",
@@ -564,7 +584,9 @@
       "unlock_mastery": 50,
       "multiplier": 1.9,
       "qi_cost": 28
-    }
+    },
+    "lineage": "당가암기",
+    "lineage_rank": 1
   },
   "만천화우": {
     "name": "만천화우",
@@ -588,7 +610,9 @@
       "unlock_mastery": 50,
       "multiplier": 2.5,
       "qi_cost": 55
-    }
+    },
+    "lineage": "당가암기",
+    "lineage_rank": 2
   },
   "천마파천공": {
     "name": "천마파천공",
@@ -631,7 +655,9 @@
       "unlock_mastery": 40,
       "multiplier": 2.7,
       "qi_cost": 62
-    }
+    },
+    "lineage": "곤륜검",
+    "lineage_rank": 2
   },
   "제왕검형": {
     "name": "제왕검형",
@@ -653,7 +679,9 @@
       "multiplier": 3.0,
       "qi_cost": 80
     },
-    "origin": "남궁세가"
+    "origin": "남궁세가",
+    "lineage": "창궁검",
+    "lineage_rank": 2
   },
   "천수나찰": {
     "name": "천수나찰",
@@ -697,7 +725,9 @@
       "multiplier": 3.0,
       "qi_cost": 80
     },
-    "origin": "권마계승"
+    "origin": "권마계승",
+    "lineage": "파천권",
+    "lineage_rank": 2
   },
   "오호단문도": {
     "name": "오호단문도",
@@ -719,7 +749,9 @@
       "multiplier": 2.2,
       "qi_cost": 40
     },
-    "origin": "하북팽가"
+    "origin": "하북팽가",
+    "lineage": "오호도",
+    "lineage_rank": 1
   },
   "달마심공": {
     "name": "달마심공",
@@ -1110,7 +1142,7 @@
     }
   },
   "벽력권": {
-    "name": "벽력권",
+    "name": "뇌음권",
     "type": "공격무공",
     "category": "권법",
     "grade": "상승",
@@ -1123,7 +1155,7 @@
       "벽력일권"
     ],
     "secret_technique": {
-      "name": "벽력권강",
+      "name": "뇌음권강",
       "unlock_grade": "상승",
       "unlock_mastery": 60,
       "multiplier": 2.4,
@@ -1320,13 +1352,13 @@
     }
   },
   "무상도결": {
-    "name": "무상도결",
+    "name": "단애도결",
     "type": "공격무공",
     "category": "도법",
     "grade": "일절",
     "base_multiplier": 1.9,
     "qi_cost": 14,
-    "desc": "형을 버린 끝에 남은 단 하나의 칼.",
+    "desc": "벼랑 끝에서 모든 형을 버린 뒤 남은 단 하나의 칼.",
     "forms": [
       "무상",
       "무형",
@@ -1342,7 +1374,7 @@
     "legend": true
   },
   "오호창법": {
-    "name": "오호창법",
+    "name": "오행창법",
     "type": "공격무공",
     "category": "창법",
     "grade": "기본",
@@ -1510,7 +1542,7 @@
     }
   },
   "무상창결": {
-    "name": "무상창결",
+    "name": "파진창결",
     "type": "공격무공",
     "category": "창법",
     "grade": "일절",
@@ -1532,13 +1564,13 @@
     "legend": true
   },
   "오호곤법": {
-    "name": "오호곤법",
+    "name": "걸개곤법",
     "type": "공격무공",
     "category": "봉법",
     "grade": "기본",
     "base_multiplier": 1.12,
     "qi_cost": 4,
-    "desc": "길거리 무인이면 누구나 아는 다섯 수의 곤법.",
+    "desc": "거리의 거지들이 몸으로 전하는 다섯 수의 곤법.",
     "forms": [
       "타두",
       "소퇴",
@@ -1551,7 +1583,9 @@
       "multiplier": 1.9,
       "qi_cost": 30
     },
-    "origin": "개방제자"
+    "origin": "개방제자",
+    "lineage": "걸개봉",
+    "lineage_rank": 1
   },
   "나한곤법": {
     "name": "나한곤법",
@@ -1680,7 +1714,7 @@
     }
   },
   "무상곤결": {
-    "name": "무상곤결",
+    "name": "부동곤결",
     "type": "공격무공",
     "category": "봉법",
     "grade": "일절",
@@ -1787,7 +1821,7 @@
     "legend": true
   },
   "무상권결": {
-    "name": "무상권결",
+    "name": "허공권결",
     "type": "공격무공",
     "category": "권법",
     "grade": "일절",
@@ -1830,13 +1864,13 @@
     }
   },
   "한빙면장": {
-    "name": "한빙면장",
+    "name": "음풍장",
     "type": "공격무공",
     "category": "장법",
     "grade": "상승",
     "base_multiplier": 1.52,
     "qi_cost": 9,
-    "desc": "솜처럼 부드럽게 닿아 뼛속을 얼린다.",
+    "desc": "음산한 바람처럼 스며들어 뼛속을 시리게 한다.",
     "forms": [
       "면장",
       "한빙",
@@ -1893,7 +1927,7 @@
     }
   },
   "매화침법": {
-    "name": "매화침법",
+    "name": "산화침법",
     "type": "공격무공",
     "category": "암기",
     "grade": "명품",
@@ -1956,7 +1990,7 @@
     }
   },
   "무영신침": {
-    "name": "무영신침",
+    "name": "무형신침",
     "type": "공격무공",
     "category": "암기",
     "grade": "신공",
@@ -2042,7 +2076,9 @@
       "atk_buff_pct": 8,
       "buff_rounds": 2
     },
-    "origin": "남궁세가"
+    "origin": "남궁세가",
+    "lineage": "창궁심법",
+    "lineage_rank": 1
   },
   "오호심법": {
     "name": "오호심법",
@@ -2058,7 +2094,9 @@
       "atk_buff_pct": 15,
       "buff_rounds": 2
     },
-    "origin": "하북팽가"
+    "origin": "하북팽가",
+    "lineage": "오호심법",
+    "lineage_rank": 1
   },
   "철마공": {
     "name": "철마공",
@@ -2074,7 +2112,9 @@
       "atk_buff_pct": 0,
       "buff_rounds": 0
     },
-    "origin": "표국표사"
+    "origin": "표국표사",
+    "lineage": "철마공",
+    "lineage_rank": 1
   },
   "소요공": {
     "name": "소요공",
@@ -2090,7 +2130,9 @@
       "atk_buff_pct": 0,
       "buff_rounds": 0
     },
-    "origin": "개방제자"
+    "origin": "개방제자",
+    "lineage": "소요공",
+    "lineage_rank": 1
   },
   "권마심결": {
     "name": "권마심결",
@@ -2106,7 +2148,9 @@
       "atk_buff_pct": 20,
       "buff_rounds": 2
     },
-    "origin": "권마계승"
+    "origin": "권마계승",
+    "lineage": "권마심결",
+    "lineage_rank": 1
   },
   "적혈공": {
     "name": "적혈공",
@@ -2122,7 +2166,9 @@
       "atk_buff_pct": 12,
       "buff_rounds": 2
     },
-    "origin": "혈지생환"
+    "origin": "혈지생환",
+    "lineage": "적혈공",
+    "lineage_rank": 1
   },
   "암향심법": {
     "name": "암향심법",
@@ -2138,7 +2184,9 @@
       "atk_buff_pct": 0,
       "buff_rounds": 0
     },
-    "origin": "하오문"
+    "origin": "하오문",
+    "lineage": "암향심법",
+    "lineage_rank": 1
   },
   "무극검결": {
     "name": "무극검결",
@@ -2202,7 +2250,9 @@
       "multiplier": 3.0,
       "qi_cost": 80
     },
-    "origin": "하북팽가"
+    "origin": "하북팽가",
+    "lineage": "오호도",
+    "lineage_rank": 2
   },
   "철마신창": {
     "name": "철마신창",
@@ -2246,7 +2296,9 @@
       "multiplier": 3.0,
       "qi_cost": 80
     },
-    "origin": "개방제자"
+    "origin": "개방제자",
+    "lineage": "걸개봉",
+    "lineage_rank": 3
   },
   "적혈신장": {
     "name": "적혈신장",
@@ -2290,7 +2342,9 @@
       "multiplier": 3.0,
       "qi_cost": 80
     },
-    "origin": "하오문"
+    "origin": "하오문",
+    "lineage": "암향비도",
+    "lineage_rank": 2
   },
   "창궁현천공": {
     "name": "창궁현천공",
@@ -2306,7 +2360,9 @@
       "atk_buff_pct": 30,
       "buff_rounds": 3
     },
-    "origin": "남궁세가"
+    "origin": "남궁세가",
+    "lineage": "창궁심법",
+    "lineage_rank": 2
   },
   "오호맹혼공": {
     "name": "오호맹혼공",
@@ -2322,7 +2378,9 @@
       "atk_buff_pct": 50,
       "buff_rounds": 3
     },
-    "origin": "하북팽가"
+    "origin": "하북팽가",
+    "lineage": "오호심법",
+    "lineage_rank": 2
   },
   "철마금신공": {
     "name": "철마금신공",
@@ -2338,7 +2396,9 @@
       "atk_buff_pct": 15,
       "buff_rounds": 3
     },
-    "origin": "표국표사"
+    "origin": "표국표사",
+    "lineage": "철마공",
+    "lineage_rank": 2
   },
   "소요무애공": {
     "name": "소요무애공",
@@ -2354,7 +2414,9 @@
       "atk_buff_pct": 15,
       "buff_rounds": 3
     },
-    "origin": "개방제자"
+    "origin": "개방제자",
+    "lineage": "소요공",
+    "lineage_rank": 2
   },
   "권마혈천결": {
     "name": "권마혈천결",
@@ -2370,7 +2432,9 @@
       "atk_buff_pct": 65,
       "buff_rounds": 3
     },
-    "origin": "권마계승"
+    "origin": "권마계승",
+    "lineage": "권마심결",
+    "lineage_rank": 2
   },
   "혈지환생공": {
     "name": "혈지환생공",
@@ -2386,7 +2450,9 @@
       "atk_buff_pct": 40,
       "buff_rounds": 3
     },
-    "origin": "혈지생환"
+    "origin": "혈지생환",
+    "lineage": "적혈공",
+    "lineage_rank": 2
   },
   "암향귀원공": {
     "name": "암향귀원공",
@@ -2402,7 +2468,9 @@
       "atk_buff_pct": 10,
       "buff_rounds": 3
     },
-    "origin": "하오문"
+    "origin": "하오문",
+    "lineage": "암향심법",
+    "lineage_rank": 2
   },
   "혼원일기공": {
     "name": "혼원일기공",
@@ -2480,7 +2548,7 @@
     "origin": "개방제자"
   },
   "패왕보": {
-    "name": "패왕보",
+    "name": "권왕보",
     "type": "경공",
     "category": "경공",
     "grade": "신공",
@@ -2522,7 +2590,9 @@
       "counter_pct": 130,
       "flee_bonus": 80
     },
-    "origin": "하오문"
+    "origin": "하오문",
+    "lineage": "부운보",
+    "lineage_rank": 2
   },
   "이형환위": {
     "name": "이형환위",

@@ -2,9 +2,9 @@
   "산적": {
     "name": "산적",
     "tier": "일반",
-    "realm": "일류",
-    "hp": 155,
-    "attack": 23,
+    "realm": "삼류",
+    "hp": 170,
+    "attack": 25,
     "exp_reward": 1,
     "silver": [
       6,
@@ -71,9 +71,9 @@
   "낭인": {
     "name": "떠돌이 낭인",
     "tier": "일반",
-    "realm": "일류",
-    "hp": 225,
-    "attack": 30,
+    "realm": "이류",
+    "hp": 245,
+    "attack": 33,
     "exp_reward": 1,
     "silver": [
       7,
@@ -122,22 +122,21 @@
         "text": "\"소매에서 뭐 꺼내는 놈들이 제일 싫더라.\""
       }
     ],
-    "drop": {
-      "skill": "기초도법",
-      "chance": 0.15
-    },
     "ranks": [
       1,
       2
     ],
-    "above": "귀도객"
+    "above": "귀도객",
+    "drop": {
+      "skill": "기초도법"
+    }
   },
   "늑대무리": {
     "name": "굶주린 늑대 무리",
     "tier": "일반",
-    "realm": "일류",
-    "hp": 180,
-    "attack": 26,
+    "realm": "삼류",
+    "hp": 195,
+    "attack": 28,
     "exp_reward": 1,
     "silver": [
       0,
@@ -167,11 +166,11 @@
     "above": "녹림호걸"
   },
   "흑풍채두목": {
-    "name": "흑풍채 두목",
+    "name": "외눈 마삼",
     "tier": "난적",
     "realm": "일류",
-    "hp": 305,
-    "attack": 32,
+    "hp": 330,
+    "attack": 35,
     "exp_reward": 2,
     "silver": [
       21,
@@ -194,23 +193,23 @@
     "level": 1,
     "hp_style": 1.07,
     "attack_style": 1.03,
-    "drop": {
-      "skill": "광풍도법",
-      "chance": 0.1
-    },
     "ranks": [
       1,
       2
     ],
     "above": "녹림채주",
-    "side": "사도"
+    "side": "사도",
+    "title": "흑풍채 두목",
+    "drop": {
+      "skill": "기초도법"
+    }
   },
   "녹림호걸": {
     "name": "녹림 호걸",
     "tier": "일반",
-    "realm": "절정",
-    "hp": 430,
-    "attack": 36,
+    "realm": "일류",
+    "hp": 465,
+    "attack": 39,
     "exp_reward": 1,
     "silver": [
       13,
@@ -225,10 +224,6 @@
     "level": 25,
     "hp_style": 1.06,
     "attack_style": 0.88,
-    "drop": {
-      "skill": "양가창법",
-      "chance": 0.08
-    },
     "intros": [
       {
         "requires": {
@@ -251,14 +246,17 @@
     ],
     "above": "독고객",
     "below": "산적",
-    "side": "사도"
+    "side": "사도",
+    "drop": {
+      "skill": "오호창법"
+    }
   },
   "사파자객": {
     "name": "사파 자객",
     "tier": "일반",
-    "realm": "절정",
-    "hp": 350,
-    "attack": 46,
+    "realm": "일류",
+    "hp": 380,
+    "attack": 50,
     "exp_reward": 1,
     "silver": [
       15,
@@ -312,14 +310,17 @@
     ],
     "above": "살막살수",
     "below": "낭인",
-    "side": "사도"
+    "side": "사도",
+    "drop": {
+      "skill": "유엽비도"
+    }
   },
   "절정고수": {
     "name": "절정의 떠돌이 고수",
     "tier": "난적",
     "realm": "절정",
-    "hp": 675,
-    "attack": 54,
+    "hp": 725,
+    "attack": 60,
     "exp_reward": 2,
     "silver": [
       28,
@@ -339,10 +340,6 @@
         "mult": 1.8
       }
     ],
-    "drop": {
-      "skill": "육합권",
-      "chance": 0.15
-    },
     "intro": "\"이름 석 자 값을 하는지 보자.\"",
     "level": 25,
     "hp_style": 1.1,
@@ -372,14 +369,17 @@
       3
     ],
     "above": "철혈대원",
-    "below": "배신표사"
+    "below": "배신표사",
+    "drop": {
+      "skill": "육합권"
+    }
   },
   "혈교수련자": {
     "name": "혈교 수련자",
     "tier": "일반",
-    "realm": "초절정",
-    "hp": 975,
-    "attack": 67,
+    "realm": "절정",
+    "hp": 1055,
+    "attack": 75,
     "exp_reward": 1,
     "silver": [
       20,
@@ -403,10 +403,6 @@
     "level": 49,
     "hp_style": 1.09,
     "attack_style": 1.09,
-    "drop": {
-      "skill": "열화장",
-      "chance": 0.06
-    },
     "intros": [
       {
         "requires": {
@@ -421,14 +417,17 @@
     ],
     "above": "혈마대귀",
     "below": "녹림호걸",
-    "side": "마도"
+    "side": "마도",
+    "drop": {
+      "skill": "열화장"
+    }
   },
   "독문고수": {
-    "name": "독문의 고수",
+    "name": "백사독수 여창",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 1475,
-    "attack": 76,
+    "hp": 1595,
+    "attack": 86,
     "exp_reward": 2,
     "silver": [
       35,
@@ -451,10 +450,6 @@
         }
       }
     ],
-    "drop": {
-      "skill": "독룡장",
-      "chance": 0.1
-    },
     "intro": "\"숨을 조금만 얕게 쉬시오. 그래야 좀 더 살 테니.\"",
     "level": 49,
     "hp_style": 1.1,
@@ -479,14 +474,18 @@
     ],
     "above": "사도련향주",
     "below": "녹림채주",
-    "side": "사도"
+    "side": "사도",
+    "title": "오독문 장로",
+    "drop": {
+      "skill": "독룡장"
+    }
   },
   "철혈대원": {
-    "name": "철혈대 대원",
+    "name": "철벽 강무",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 1675,
-    "attack": 88,
+    "hp": 1810,
+    "attack": 100,
     "exp_reward": 2,
     "silver": [
       38,
@@ -510,10 +509,6 @@
     "level": 49,
     "hp_style": 1.25,
     "attack_style": 1.2,
-    "drop": {
-      "skill": "벽력곤법",
-      "chance": 0.06
-    },
     "intros": [
       {
         "requires": {
@@ -533,14 +528,18 @@
       4
     ],
     "above": "마교장로",
-    "below": "절정고수"
+    "below": "절정고수",
+    "title": "철혈대 부대주",
+    "drop": {
+      "skill": "팔괘곤법"
+    }
   },
   "화경마인": {
-    "name": "화경의 마인",
+    "name": "적발마 염철",
     "tier": "강적",
     "realm": "화경",
-    "hp": 2000,
-    "attack": 84,
+    "hp": 2160,
+    "attack": 95,
     "exp_reward": 3,
     "silver": [
       63,
@@ -562,10 +561,6 @@
         "qi_drain": 15
       }
     ],
-    "drop": {
-      "skill": "매화검법",
-      "chance": 0.1
-    },
     "intro": "웃음소리에 사람의 것이 남아 있지 않았다.",
     "level": 49,
     "hp_style": 1.22,
@@ -601,14 +596,18 @@
       5
     ],
     "below": "절정고수",
-    "side": "마도"
+    "side": "마도",
+    "title": "혈교 좌호법",
+    "drop": {
+      "skill": "혈영도법"
+    }
   },
   "마교장로": {
-    "name": "마교 장로",
+    "name": "음풍마 고진",
     "tier": "난적",
     "realm": "화경",
-    "hp": 2870,
-    "attack": 117,
+    "hp": 3100,
+    "attack": 134,
     "exp_reward": 2,
     "silver": [
       49,
@@ -682,23 +681,23 @@
         "text": "\"본교의 장로 앞에서 그 신공을 쓴단 말이냐. 어디서 굴러온 구결이냐.\""
       }
     ],
-    "drop": {
-      "skill": "현빙장",
-      "chance": 0.08
-    },
     "ranks": [
       4,
       5
     ],
     "below": "철혈대원",
-    "side": "마도"
+    "side": "마도",
+    "title": "천마신교 장로",
+    "drop": {
+      "skill": "현빙장"
+    }
   },
   "혈마대귀": {
-    "name": "혈마대의 귀졸",
+    "name": "삼귀 연팔",
     "tier": "일반",
-    "realm": "화경",
-    "hp": 1910,
-    "attack": 98,
+    "realm": "초절정",
+    "hp": 2065,
+    "attack": 111,
     "exp_reward": 1,
     "silver": [
       28,
@@ -740,14 +739,15 @@
       5
     ],
     "below": "독고객",
-    "side": "마도"
+    "side": "마도",
+    "title": "혈마대 귀졸장"
   },
   "십이마장": {
-    "name": "십이마장",
+    "name": "제오마장 파산귀 호달",
     "tier": "강적",
     "realm": "현경",
-    "hp": 4380,
-    "attack": 135,
+    "hp": 4735,
+    "attack": 154,
     "exp_reward": 3,
     "silver": [
       91,
@@ -810,14 +810,15 @@
       5
     ],
     "below": "화경마인",
-    "side": "마도"
+    "side": "마도",
+    "title": "천마신교 십이마장"
   },
   "단목휘": {
-    "name": "단목휘",
+    "name": "연무휘",
     "tier": "난적",
     "realm": "일류",
-    "hp": 420,
-    "attack": 40,
+    "hp": 455,
+    "attack": 44,
     "exp_reward": 2,
     "silver": [
       0,
@@ -851,8 +852,8 @@
     "name": "혈마의 잔영",
     "tier": "강적",
     "realm": "화경",
-    "hp": 1310,
-    "attack": 60,
+    "hp": 1415,
+    "attack": 68,
     "exp_reward": 3,
     "silver": [
       42,
@@ -895,8 +896,8 @@
     "name": "무명노인",
     "tier": "강적",
     "realm": "현경",
-    "hp": 2805,
-    "attack": 95,
+    "hp": 3030,
+    "attack": 109,
     "exp_reward": 3,
     "silver": [
       0,
@@ -920,11 +921,11 @@
     ]
   },
   "무림맹추격대": {
-    "name": "무림맹 추격대",
+    "name": "파풍검 진관",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 1325,
-    "attack": 71,
+    "hp": 1435,
+    "attack": 81,
     "exp_reward": 2,
     "silver": [
       28,
@@ -976,14 +977,15 @@
       5
     ],
     "below": "종남검수",
-    "side": "정도"
+    "side": "정도",
+    "title": "무림맹 추격대주"
   },
   "천마": {
     "name": "천마",
     "tier": "보스",
     "realm": "현경",
-    "hp": 21000,
-    "attack": 185,
+    "hp": 24500,
+    "attack": 224,
     "exp_reward": 5,
     "silver": [
       0,
@@ -1079,7 +1081,7 @@
               "requires": {
                 "flag": "단목휘_동맹"
               },
-              "text": "🗡️ 등 뒤에서 익숙한 웃음소리가 들렸다. \"다리 값 받으러 왔소.\" 단목휘의 검이 천마의 옆구리를 깊이 스쳤다!",
+              "text": "🗡️ 등 뒤에서 익숙한 웃음소리가 들렸다. \"다리 값 받으러 왔소.\" 연무휘의 검이 천마의 옆구리를 깊이 스쳤다!",
               "effects": {
                 "boss_hp_pct": 15
               }
@@ -1650,7 +1652,7 @@
               "requires": {
                 "flag": "단목휘_동맹"
               },
-              "text": "🗡️ 등 뒤에서 익숙한 웃음소리가 들렸다. \"다리 값 받으러 왔소.\" 단목휘의 검이 천마의 옆구리를 깊이 스쳤다!",
+              "text": "🗡️ 등 뒤에서 익숙한 웃음소리가 들렸다. \"다리 값 받으러 왔소.\" 연무휘의 검이 천마의 옆구리를 깊이 스쳤다!",
               "effects": {
                 "boss_hp_pct": 15
               }
@@ -2432,9 +2434,9 @@
   "사이비도사": {
     "name": "사이비 도사",
     "tier": "일반",
-    "realm": "일류",
-    "hp": 200,
-    "attack": 26,
+    "realm": "삼류",
+    "hp": 220,
+    "attack": 28,
     "exp_reward": 1,
     "silver": [
       8,
@@ -2457,10 +2459,6 @@
     "level": 1,
     "hp_style": 1.06,
     "attack_style": 0.98,
-    "drop": {
-      "skill": "기초봉법",
-      "chance": 0.12
-    },
     "intros": [
       {
         "requires": {
@@ -2480,8 +2478,8 @@
     "name": "배신한 표사",
     "tier": "난적",
     "realm": "일류",
-    "hp": 265,
-    "attack": 30,
+    "hp": 285,
+    "attack": 33,
     "exp_reward": 2,
     "silver": [
       24,
@@ -2533,9 +2531,9 @@
   "귀도객": {
     "name": "귀도객",
     "tier": "일반",
-    "realm": "절정",
-    "hp": 430,
-    "attack": 43,
+    "realm": "일류",
+    "hp": 465,
+    "attack": 48,
     "exp_reward": 1,
     "silver": [
       15,
@@ -2559,10 +2557,6 @@
     "level": 25,
     "hp_style": 1.06,
     "attack_style": 1.07,
-    "drop": {
-      "skill": "귀면도법",
-      "chance": 0.05
-    },
     "intros": [
       {
         "requires": {
@@ -2577,14 +2571,17 @@
     ],
     "above": "독고객",
     "below": "낭인",
-    "side": "사도"
+    "side": "사도",
+    "drop": {
+      "skill": "기초도법"
+    }
   },
   "금의위밀정": {
     "name": "금의위 밀정",
     "tier": "일반",
-    "realm": "절정",
-    "hp": 415,
-    "attack": 37,
+    "realm": "일류",
+    "hp": 450,
+    "attack": 40,
     "exp_reward": 1,
     "silver": [
       21,
@@ -2631,11 +2628,11 @@
     "below": "낭인"
   },
   "수적두목": {
-    "name": "장강 수적 두목",
+    "name": "물귀신 황칠",
     "tier": "난적",
     "realm": "절정",
-    "hp": 550,
-    "attack": 43,
+    "hp": 595,
+    "attack": 47,
     "exp_reward": 2,
     "silver": [
       35,
@@ -2683,14 +2680,18 @@
     ],
     "above": "장강수적",
     "below": "배신표사",
-    "side": "사도"
+    "side": "사도",
+    "title": "장강수로채 두목",
+    "drop": {
+      "skill": "이화창법"
+    }
   },
   "독고객": {
-    "name": "독고객",
+    "name": "독객",
     "tier": "일반",
-    "realm": "초절정",
-    "hp": 815,
-    "attack": 56,
+    "realm": "절정",
+    "hp": 880,
+    "attack": 63,
     "exp_reward": 1,
     "silver": [
       21,
@@ -2717,10 +2718,6 @@
     "level": 49,
     "hp_style": 0.91,
     "attack_style": 0.91,
-    "drop": {
-      "skill": "낙성비도",
-      "chance": 0.08
-    },
     "intros": [
       {
         "requires": {
@@ -2741,14 +2738,17 @@
     ],
     "above": "혈마대귀",
     "below": "귀도객",
-    "side": "사도"
+    "side": "사도",
+    "drop": {
+      "skill": "낙성비도"
+    }
   },
   "장강수적": {
-    "name": "장강수로채 정예",
+    "name": "쌍노 양팔",
     "tier": "난적",
-    "realm": "초절정",
-    "hp": 1285,
-    "attack": 75,
+    "realm": "절정",
+    "hp": 1390,
+    "attack": 85,
     "exp_reward": 2,
     "silver": [
       35,
@@ -2791,14 +2791,15 @@
     ],
     "above": "사도련향주",
     "below": "수적두목",
-    "side": "사도"
+    "side": "사도",
+    "title": "장강수로채 정예"
   },
   "십이마장귀곡": {
-    "name": "제칠마장 귀곡자",
+    "name": "제칠마장 인형귀 탁문",
     "tier": "강적",
     "realm": "현경",
-    "hp": 3785,
-    "attack": 129,
+    "hp": 4090,
+    "attack": 147,
     "exp_reward": 3,
     "silver": [
       84,
@@ -2820,10 +2821,6 @@
         "seal": 1
       }
     ],
-    "drop": {
-      "skill": "회풍도법",
-      "chance": 0.2
-    },
     "level": 73,
     "hp_style": 1.08,
     "attack_style": 1.15,
@@ -2840,14 +2837,18 @@
       5
     ],
     "below": "화경마인",
-    "side": "마도"
+    "side": "마도",
+    "title": "천마신교 십이마장",
+    "drop": {
+      "skill": "귀면도법"
+    }
   },
   "천년혈망": {
     "name": "천년 혈망",
     "tier": "강적",
     "realm": "현경",
-    "hp": 2980,
-    "attack": 100,
+    "hp": 3220,
+    "attack": 114,
     "exp_reward": 3,
     "silver": [
       0,
@@ -2891,8 +2892,8 @@
     "name": "제삼마장 혈수라",
     "tier": "강적",
     "realm": "현경",
-    "hp": 6290,
-    "attack": 135,
+    "hp": 6795,
+    "attack": 153,
     "exp_reward": 3,
     "silver": [
       105,
@@ -2936,14 +2937,15 @@
       5
     ],
     "below": "십이마장",
-    "side": "마도"
+    "side": "마도",
+    "title": "천마신교 십이마장"
   },
   "무영": {
     "name": "제일마장 무영",
     "tier": "강적",
     "realm": "현경",
-    "hp": 5250,
-    "attack": 143,
+    "hp": 5670,
+    "attack": 163,
     "exp_reward": 3,
     "silver": [
       112,
@@ -2986,14 +2988,15 @@
       5
     ],
     "below": "십이마장",
-    "side": "마도"
+    "side": "마도",
+    "title": "천마신교 십이마장"
   },
   "천마친위대": {
-    "name": "천마 친위대",
+    "name": "석면귀 오문",
     "tier": "난적",
-    "realm": "현경",
-    "hp": 4720,
-    "attack": 145,
+    "realm": "화경",
+    "hp": 5100,
+    "attack": 165,
     "exp_reward": 2,
     "silver": [
       56,
@@ -3016,10 +3019,6 @@
     "level": 97,
     "hp_style": 1.0,
     "attack_style": 1.0,
-    "drop": {
-      "skill": "패왕창법",
-      "chance": 0.06
-    },
     "intros": [
       {
         "requires": {
@@ -3061,14 +3060,18 @@
       5
     ],
     "below": "혈교혈승",
-    "side": "마도"
+    "side": "마도",
+    "title": "천마 친위대주",
+    "drop": {
+      "skill": "패왕창법"
+    }
   },
   "혈수인": {
     "name": "혈수인",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 1315,
-    "attack": 74,
+    "hp": 1420,
+    "attack": 83,
     "exp_reward": 2,
     "silver": [
       42,
@@ -3096,14 +3099,15 @@
         },
         "text": "\"손바닥을 쓰는군. 어느 쪽 손자국이 오래가는지 보자.\""
       }
-    ]
+    ],
+    "title": "혈교의 처형인"
   },
   "십팔동인": {
     "name": "십팔동인",
     "tier": "난적",
     "realm": "절정",
-    "hp": 935,
-    "attack": 52,
+    "hp": 1010,
+    "attack": 58,
     "exp_reward": 2,
     "silver": [
       0,
@@ -3140,11 +3144,11 @@
     ]
   },
   "무당진인": {
-    "name": "무당 진인",
+    "name": "운학 진인",
     "tier": "난적",
     "realm": "절정",
-    "hp": 830,
-    "attack": 49,
+    "hp": 895,
+    "attack": 54,
     "exp_reward": 2,
     "silver": [
       0,
@@ -3179,14 +3183,15 @@
         },
         "text": "\"기운이 탁하구려. 쓸어 내 드리리다.\""
       }
-    ]
+    ],
+    "title": "무당파 장로"
   },
   "화산장로": {
-    "name": "화산 장로",
+    "name": "운양 진인",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 1070,
-    "attack": 62,
+    "hp": 1160,
+    "attack": 71,
     "exp_reward": 2,
     "silver": [
       0,
@@ -3226,14 +3231,15 @@
         },
         "text": "\"그 검로, 화산 것은 아니로구나. 매화 앞에서 부끄럽지 않겠는가.\""
       }
-    ]
+    ],
+    "title": "화산파 장로"
   },
   "아미사태": {
-    "name": "멸절 사태",
+    "name": "정혜 사태",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 1115,
-    "attack": 63,
+    "hp": 1200,
+    "attack": 71,
     "exp_reward": 2,
     "silver": [
       0,
@@ -3260,14 +3266,15 @@
         },
         "text": "\"자비는 그대에게 어울리지 않는 말이오.\""
       }
-    ]
+    ],
+    "title": "아미파 장로"
   },
   "개방십걸": {
-    "name": "개방 십걸",
+    "name": "취걸 왕삼",
     "tier": "난적",
     "realm": "절정",
-    "hp": 755,
-    "attack": 52,
+    "hp": 815,
+    "attack": 58,
     "exp_reward": 2,
     "silver": [
       0,
@@ -3312,14 +3319,15 @@
         },
         "text": "\"그 봉, 어디서 배웠나. 거지 앞에서 봉 들면 밥그릇이 깨지는 법이다.\""
       }
-    ]
+    ],
+    "title": "개방 십걸"
   },
   "당가배신자": {
-    "name": "당가의 배신자",
+    "name": "독수 당현",
     "tier": "난적",
     "realm": "절정",
-    "hp": 775,
-    "attack": 57,
+    "hp": 835,
+    "attack": 63,
     "exp_reward": 2,
     "silver": [
       28,
@@ -3351,14 +3359,15 @@
         },
         "text": "\"그 몸은 사부님이 그리 찾던 몸이구나. 왜 하필 네가.\""
       }
-    ]
+    ],
+    "title": "사천당가의 배신자"
   },
   "마교심판자": {
-    "name": "혈지의 심판자",
+    "name": "묵형 사갈",
     "tier": "강적",
     "realm": "화경",
-    "hp": 2425,
-    "attack": 91,
+    "hp": 2620,
+    "attack": 104,
     "exp_reward": 3,
     "silver": [
       35,
@@ -3405,14 +3414,15 @@
       5
     ],
     "below": "화경마인",
-    "side": "마도"
+    "side": "마도",
+    "title": "혈지의 심판자"
   },
   "곤륜역도": {
-    "name": "곤륜의 사숙",
+    "name": "적운 도장",
     "tier": "난적",
     "realm": "절정",
-    "hp": 970,
-    "attack": 66,
+    "hp": 1050,
+    "attack": 74,
     "exp_reward": 2,
     "silver": [
       14,
@@ -3431,14 +3441,15 @@
     ],
     "level": 37,
     "hp_style": 1.09,
-    "attack_style": 1.15
+    "attack_style": 1.15,
+    "title": "곤륜의 사숙"
   },
   "하오문주": {
-    "name": "하오문주",
+    "name": "천면 소낭",
     "tier": "난적",
-    "realm": "절정",
-    "hp": 1080,
-    "attack": 69,
+    "realm": "초절정",
+    "hp": 1165,
+    "attack": 77,
     "exp_reward": 2,
     "silver": [
       42,
@@ -3473,14 +3484,15 @@
         },
         "text": "\"네가 굴러다니던 다리 이름까지 안다. 놀랍지도 않지?\""
       }
-    ]
+    ],
+    "title": "하오문주"
   },
   "권마의그림자": {
     "name": "권마의 그림자",
     "tier": "강적",
     "realm": "화경",
-    "hp": 2580,
-    "attack": 95,
+    "hp": 2785,
+    "attack": 108,
     "exp_reward": 3,
     "silver": [
       0,
@@ -3517,11 +3529,11 @@
     ]
   },
   "비무청성": {
-    "name": "청성파 후기지수",
+    "name": "청풍검 주문양",
     "tier": "일반",
-    "realm": "초절정",
-    "hp": 1320,
-    "attack": 80,
+    "realm": "절정",
+    "hp": 1425,
+    "attack": 91,
     "exp_reward": 2,
     "silver": [
       0,
@@ -3549,14 +3561,15 @@
         },
         "text": "\"세가 뒷배 하나 믿고 나왔나 보네. 나도 그렇소.\""
       }
-    ]
+    ],
+    "title": "청성파 후기지수"
   },
   "비무철권": {
-    "name": "철권왕 호연패",
+    "name": "철권왕 마대호",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 1980,
-    "attack": 95,
+    "hp": 2140,
+    "attack": 109,
     "exp_reward": 2,
     "silver": [
       0,
@@ -3590,14 +3603,15 @@
         },
         "text": "\"맞아도 안 넘어갈 몸이로군. 재미있겠다.\""
       }
-    ]
+    ],
+    "title": "비무대회 본선 상대"
   },
   "비무결승": {
-    "name": "혈의공자",
+    "name": "혈의공자 석규",
     "tier": "강적",
     "realm": "화경",
-    "hp": 2420,
-    "attack": 91,
+    "hp": 2610,
+    "attack": 104,
     "exp_reward": 3,
     "silver": [
       0,
@@ -3662,14 +3676,15 @@
         },
         "text": "\"그 초식, 전해지지 않는다던 그것인가. 오늘 눈이 호강하겠소.\""
       }
-    ]
+    ],
+    "title": "비무대회 결승 상대"
   },
   "묘지기": {
     "name": "협객의 묘지기",
     "tier": "난적",
-    "realm": "절정",
-    "hp": 1280,
-    "attack": 72,
+    "realm": "초절정",
+    "hp": 1385,
+    "attack": 81,
     "exp_reward": 3,
     "silver": [
       30,
@@ -3708,8 +3723,8 @@
     "name": "생사의 문지기",
     "tier": "강적",
     "realm": "현경",
-    "hp": 6520,
-    "attack": 151,
+    "hp": 7040,
+    "attack": 172,
     "exp_reward": 5,
     "silver": [
       80,
@@ -3748,9 +3763,9 @@
   "세가공자": {
     "name": "오대세가 공자 패거리",
     "tier": "일반",
-    "realm": "일류",
-    "hp": 225,
-    "attack": 29,
+    "realm": "이류",
+    "hp": 245,
+    "attack": 32,
     "exp_reward": 1,
     "silver": [
       15,
@@ -3807,11 +3822,11 @@
     "side": "정도"
   },
   "녹림채주": {
-    "name": "녹림 채주",
+    "name": "개산도 나대붕",
     "tier": "난적",
     "realm": "절정",
-    "hp": 720,
-    "attack": 52,
+    "hp": 780,
+    "attack": 57,
     "exp_reward": 3,
     "silver": [
       35,
@@ -3834,10 +3849,6 @@
         "mult": 1.6
       }
     ],
-    "drop": {
-      "skill": "광풍도법",
-      "chance": 0.08
-    },
     "intros": [
       {
         "requires": {
@@ -3858,14 +3869,18 @@
     ],
     "above": "독문고수",
     "below": "흑풍채두목",
-    "side": "사도"
+    "side": "사도",
+    "title": "녹림 칠십이채 청석채주",
+    "drop": {
+      "skill": "광풍도법"
+    }
   },
   "종남검수": {
-    "name": "종남파 검수",
+    "name": "유성검 소문혁",
     "tier": "난적",
     "realm": "절정",
-    "hp": 765,
-    "attack": 53,
+    "hp": 825,
+    "attack": 59,
     "exp_reward": 3,
     "silver": [
       30,
@@ -3902,24 +3917,24 @@
         "text": "\"검을 쓰나. 어디서 배웠는지 봐 주지.\""
       }
     ],
-    "drop": {
-      "skill": "매화검법",
-      "chance": 0.05
-    },
     "ranks": [
       2,
       3
     ],
     "above": "철혈대원",
     "below": "배신표사",
-    "side": "정도"
+    "side": "정도",
+    "title": "종남파 일대제자",
+    "drop": {
+      "skill": "매화검법"
+    }
   },
   "혈교혈승": {
-    "name": "혈교의 혈승",
+    "name": "혈불 무진",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 1865,
-    "attack": 91,
+    "hp": 2010,
+    "attack": 104,
     "exp_reward": 3,
     "silver": [
       50,
@@ -3963,23 +3978,23 @@
         "text": "\"같은 머리에 다른 피로구나. 어느 부처가 이기나 보자.\""
       }
     ],
-    "drop": {
-      "skill": "열화장",
-      "chance": 0.06
-    },
     "ranks": [
       3,
       5
     ],
     "below": "절정고수",
-    "side": "마도"
+    "side": "마도",
+    "title": "혈교의 혈승",
+    "drop": {
+      "skill": "열화장"
+    }
   },
   "동창번자": {
     "name": "동창의 번자",
     "tier": "일반",
-    "realm": "초절정",
-    "hp": 1320,
-    "attack": 80,
+    "realm": "절정",
+    "hp": 1425,
+    "attack": 91,
     "exp_reward": 1,
     "silver": [
       40,
@@ -4010,11 +4025,11 @@
     "below": "금의위밀정"
   },
   "남만술사": {
-    "name": "남만 야수궁 술사",
+    "name": "독사령 아루",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 2115,
-    "attack": 99,
+    "hp": 2285,
+    "attack": 113,
     "exp_reward": 3,
     "silver": [
       50,
@@ -4049,23 +4064,23 @@
         "text": "술사가 고개를 갸웃한다. 벌레들이 내 쪽으로 오지 않는다."
       }
     ],
-    "drop": {
-      "skill": "낭아표법",
-      "chance": 0.08
-    },
     "ranks": [
       3,
       4
     ],
     "above": "사도련향주",
-    "below": "독문고수"
+    "below": "독문고수",
+    "title": "남만 야수궁 대술사",
+    "drop": {
+      "skill": "낭아표법"
+    }
   },
   "북해고수": {
-    "name": "북해빙궁의 고수",
+    "name": "설령수 하란",
     "tier": "강적",
     "realm": "현경",
-    "hp": 5115,
-    "attack": 131,
+    "hp": 5525,
+    "attack": 149,
     "exp_reward": 5,
     "silver": [
       90,
@@ -4103,22 +4118,22 @@
         "text": "\"손바닥을 쓰는군. 얼려 주마.\""
       }
     ],
-    "drop": {
-      "skill": "현빙장",
-      "chance": 0.08
-    },
     "ranks": [
       4,
       5
     ],
-    "below": "화경마인"
+    "below": "화경마인",
+    "title": "북해빙궁 호법",
+    "drop": {
+      "skill": "현빙장"
+    }
   },
   "사도련향주": {
-    "name": "사도련 향주",
+    "name": "칼자국 오광",
     "tier": "난적",
     "realm": "화경",
-    "hp": 4030,
-    "attack": 134,
+    "hp": 4355,
+    "attack": 153,
     "exp_reward": 3,
     "silver": [
       100,
@@ -4172,14 +4187,15 @@
       5
     ],
     "below": "독문고수",
-    "side": "사도"
+    "side": "사도",
+    "title": "사도련 대향주"
   },
   "점창제자": {
     "name": "점창 제자",
     "tier": "일반",
-    "realm": "일류",
-    "hp": 225,
-    "attack": 29,
+    "realm": "이류",
+    "hp": 245,
+    "attack": 32,
     "exp_reward": 1,
     "silver": [
       15,
@@ -4209,9 +4225,9 @@
   "세가호위": {
     "name": "세가 호위",
     "tier": "일반",
-    "realm": "일류",
-    "hp": 225,
-    "attack": 30,
+    "realm": "이류",
+    "hp": 245,
+    "attack": 33,
     "exp_reward": 1,
     "silver": [
       7,
@@ -4242,8 +4258,8 @@
     "name": "살막의 살수",
     "tier": "일반",
     "realm": "절정",
-    "hp": 350,
-    "attack": 46,
+    "hp": 380,
+    "attack": 50,
     "exp_reward": 1,
     "silver": [
       15,
@@ -4299,14 +4315,17 @@
       5
     ],
     "below": "낭인",
-    "side": "사도"
+    "side": "사도",
+    "drop": {
+      "skill": "낙성비도"
+    }
   },
   "세가무사": {
     "name": "세가의 무사",
     "tier": "일반",
-    "realm": "초절정",
-    "hp": 1610,
-    "attack": 94,
+    "realm": "절정",
+    "hp": 1740,
+    "attack": 107,
     "exp_reward": 1,
     "silver": [
       7,
@@ -4350,9 +4369,9 @@
   "철봉승": {
     "name": "철봉 탁발승",
     "tier": "일반",
-    "realm": "절정",
-    "hp": 480,
-    "attack": 47,
+    "realm": "일류",
+    "hp": 520,
+    "attack": 52,
     "exp_reward": 1,
     "silver": [
       7,
@@ -4382,9 +4401,9 @@
   "젊은협객": {
     "name": "젊은 협객",
     "tier": "일반",
-    "realm": "절정",
-    "hp": 350,
-    "attack": 46,
+    "realm": "일류",
+    "hp": 380,
+    "attack": 50,
     "exp_reward": 1,
     "silver": [
       15,
@@ -4432,11 +4451,11 @@
     ]
   },
   "구파협객": {
-    "name": "구파의 협객",
+    "name": "백의검 하운성",
     "tier": "난적",
-    "realm": "절정",
-    "hp": 1475,
-    "attack": 82,
+    "realm": "초절정",
+    "hp": 1595,
+    "attack": 93,
     "exp_reward": 2,
     "silver": [
       28,
@@ -4495,14 +4514,15 @@
         },
         "text": "\"남궁의 후예가 어찌 마도에 떨어졌소. 가문의 이름이 아깝소.\""
       }
-    ]
+    ],
+    "title": "구파일방의 협객"
   },
   "나한승": {
     "name": "소림 나한승",
     "tier": "일반",
-    "realm": "초절정",
-    "hp": 1490,
-    "attack": 88,
+    "realm": "절정",
+    "hp": 1605,
+    "attack": 101,
     "exp_reward": 1,
     "silver": [
       20,
@@ -4543,11 +4563,11 @@
     ]
   },
   "정파명숙": {
-    "name": "정파의 명숙",
+    "name": "태산검 배원철",
     "tier": "강적",
     "realm": "화경",
-    "hp": 4275,
-    "attack": 133,
+    "hp": 4620,
+    "attack": 152,
     "exp_reward": 3,
     "silver": [
       63,
@@ -4598,14 +4618,15 @@
         },
         "text": "\"천마의 자리를 노린다지. 그 자리는 비어야 한다.\""
       }
-    ]
+    ],
+    "title": "무림맹 장로"
   },
   "맹주호법": {
-    "name": "맹주의 호법",
+    "name": "쌍벽검 문천기",
     "tier": "난적",
-    "realm": "현경",
-    "hp": 4720,
-    "attack": 145,
+    "realm": "화경",
+    "hp": 5100,
+    "attack": 165,
     "exp_reward": 2,
     "silver": [
       56,
@@ -4641,14 +4662,15 @@
     "requires": {
       "dominant": "마도"
     },
-    "side": "정도"
+    "side": "정도",
+    "title": "무림맹주의 호법"
   },
   "마교척살조": {
     "name": "마교 척살조",
     "tier": "일반",
-    "realm": "절정",
-    "hp": 350,
-    "attack": 46,
+    "realm": "일류",
+    "hp": 380,
+    "attack": 50,
     "exp_reward": 1,
     "silver": [
       15,
@@ -4694,11 +4716,11 @@
     ]
   },
   "사파복수귀": {
-    "name": "사파의 복수귀",
+    "name": "단수도 갈충",
     "tier": "난적",
-    "realm": "절정",
-    "hp": 1475,
-    "attack": 82,
+    "realm": "초절정",
+    "hp": 1595,
+    "attack": 93,
     "exp_reward": 2,
     "silver": [
       28,
@@ -4737,14 +4759,15 @@
         },
         "text": "\"대협이라 부르더군. 내 집에서는 다른 이름으로 부른다.\""
       }
-    ]
+    ],
+    "title": "사파의 복수귀"
   },
   "마교암살귀": {
-    "name": "마교 암살귀",
+    "name": "무음귀 사무",
     "tier": "일반",
     "realm": "화경",
-    "hp": 1910,
-    "attack": 98,
+    "hp": 2065,
+    "attack": 111,
     "exp_reward": 1,
     "silver": [
       28,
@@ -4778,14 +4801,15 @@
     "requires": {
       "dominant": "정도"
     },
-    "side": "마도"
+    "side": "마도",
+    "title": "천마신교 암살귀"
   },
   "천마사냥개": {
-    "name": "천마의 사냥개",
+    "name": "구혈 아독",
     "tier": "강적",
-    "realm": "화경",
-    "hp": 7040,
-    "attack": 165,
+    "realm": "현경",
+    "hp": 7605,
+    "attack": 188,
     "exp_reward": 3,
     "silver": [
       63,
@@ -4821,14 +4845,15 @@
     "requires": {
       "dominant": "정도"
     },
-    "side": "마도"
+    "side": "마도",
+    "title": "천마의 사냥개"
   },
   "현상금꾼": {
     "name": "현상금 사냥꾼",
     "tier": "일반",
-    "realm": "절정",
-    "hp": 350,
-    "attack": 46,
+    "realm": "일류",
+    "hp": 380,
+    "attack": 50,
     "exp_reward": 1,
     "silver": [
       15,
@@ -4873,11 +4898,11 @@
     ]
   },
   "포도대장": {
-    "name": "포도대장",
+    "name": "철포 조무성",
     "tier": "난적",
-    "realm": "절정",
-    "hp": 1475,
-    "attack": 82,
+    "realm": "초절정",
+    "hp": 1595,
+    "attack": 93,
     "exp_reward": 2,
     "silver": [
       28,
@@ -4908,14 +4933,15 @@
     ],
     "requires": {
       "dominant": "사도"
-    }
+    },
+    "title": "육선문 포도대장"
   },
   "동창추포대": {
-    "name": "동창 추포대",
+    "name": "철쇄 왕백",
     "tier": "일반",
     "realm": "초절정",
-    "hp": 1910,
-    "attack": 98,
+    "hp": 2065,
+    "attack": 111,
     "exp_reward": 1,
     "silver": [
       40,
@@ -4944,14 +4970,15 @@
     ],
     "requires": {
       "dominant": "사도"
-    }
+    },
+    "title": "동창 추포대장"
   },
   "맹집법사": {
-    "name": "맹의 집법사",
+    "name": "철면판관 서도진",
     "tier": "강적",
-    "realm": "화경",
-    "hp": 7040,
-    "attack": 165,
+    "realm": "현경",
+    "hp": 7605,
+    "attack": 188,
     "exp_reward": 3,
     "silver": [
       63,
@@ -4986,14 +5013,15 @@
     ],
     "requires": {
       "dominant": "사도"
-    }
+    },
+    "title": "무림맹 집법당주"
   },
   "이름사냥꾼": {
     "name": "이름 사냥꾼",
     "tier": "일반",
-    "realm": "절정",
-    "hp": 350,
-    "attack": 46,
+    "realm": "일류",
+    "hp": 380,
+    "attack": 50,
     "exp_reward": 1,
     "silver": [
       15,
@@ -5030,11 +5058,11 @@
     }
   },
   "천하도전자": {
-    "name": "천하의 도전자",
+    "name": "일도 백장풍",
     "tier": "난적",
-    "realm": "절정",
-    "hp": 2250,
-    "attack": 109,
+    "realm": "초절정",
+    "hp": 2430,
+    "attack": 124,
     "exp_reward": 2,
     "silver": [
       28,
@@ -5064,14 +5092,15 @@
     ],
     "requires": {
       "min_fame": 60
-    }
+    },
+    "title": "천하의 도전자"
   },
   "십대고수": {
-    "name": "천하십대고수 한 사람",
+    "name": "부동검 남천우",
     "tier": "강적",
-    "realm": "화경",
-    "hp": 7040,
-    "attack": 165,
+    "realm": "현경",
+    "hp": 7605,
+    "attack": 188,
     "exp_reward": 3,
     "silver": [
       63,
@@ -5101,14 +5130,15 @@
     ],
     "requires": {
       "min_fame": 100
-    }
+    },
+    "title": "천하십대고수"
   },
   "무명사냥꾼": {
     "name": "무명 사냥꾼",
     "tier": "일반",
     "realm": "일류",
-    "hp": 480,
-    "attack": 47,
+    "hp": 520,
+    "attack": 52,
     "exp_reward": 1,
     "silver": [
       7,
@@ -5140,11 +5170,11 @@
     }
   },
   "강호승냥이": {
-    "name": "강호의 승냥이",
+    "name": "외귀 두칠",
     "tier": "일반",
-    "realm": "화경",
-    "hp": 2535,
-    "attack": 109,
+    "realm": "초절정",
+    "hp": 2735,
+    "attack": 124,
     "exp_reward": 1,
     "silver": [
       28,
@@ -5173,6 +5203,112 @@
     ],
     "requires": {
       "max_fame": 29
-    }
+    },
+    "title": "강호의 승냥이"
+  },
+  "흑사방향주": {
+    "name": "쌍도 구칠",
+    "title": "흑사방 향주",
+    "tier": "난적",
+    "realm": "절정",
+    "hp": 780,
+    "attack": 57,
+    "exp_reward": 3,
+    "silver": [
+      35,
+      60
+    ],
+    "chapters": [
+      2,
+      3
+    ],
+    "weight": 2,
+    "level": 30,
+    "hp_style": 1.0,
+    "attack_style": 1.0,
+    "desc": "저잣거리 도박판과 밀수 뱃길을 쥔 흑사방의 향주. 빚은 잊어도 원한은 잊지 않는다.",
+    "intro": "\"빚은 받고, 칼은 공짜로 주지.\"",
+    "specials": [
+      {
+        "name": "쌍도난무",
+        "every": 3,
+        "mult": 1.6
+      }
+    ],
+    "drop": {
+      "skill": "회풍도법"
+    },
+    "intros": [
+      {
+        "requires": {
+          "origin": "하오문"
+        },
+        "text": "\"하오문 장부쟁이로군. 네 장부에 내 이름도 있더냐?\""
+      }
+    ],
+    "ranks": [
+      2,
+      3
+    ],
+    "above": "사도련향주",
+    "below": "배신표사",
+    "side": "사도"
+  },
+  "귀문술사": {
+    "name": "백골 무령",
+    "title": "귀문교 사령승",
+    "tier": "난적",
+    "realm": "초절정",
+    "hp": 1375,
+    "attack": 83,
+    "exp_reward": 3,
+    "silver": [
+      50,
+      80
+    ],
+    "chapters": [
+      3,
+      4
+    ],
+    "weight": 2,
+    "level": 49,
+    "hp_style": 0.95,
+    "attack_style": 1.0,
+    "desc": "무덤에서 뼈를 일으켜 부린다는 귀문교의 사령승.",
+    "intro": "\"죽은 자는 배신하지 않는다네.\"",
+    "specials": [
+      {
+        "name": "백골초혼",
+        "every": 3,
+        "mult": 1.6,
+        "seal": 1
+      }
+    ],
+    "drop": {
+      "skill": "칠탐사창"
+    },
+    "intros": [
+      {
+        "requires": {
+          "alignment_min": {
+            "정도": 400
+          }
+        },
+        "text": "\"맹의 등불이로군. 꺼진 등불은 내 뼈 사이에 잘 어울린다.\""
+      },
+      {
+        "requires": {
+          "origin": "혈지생환"
+        },
+        "text": "\"피 연못의 아이가 살아 있었다니. 네 뼈가 울고 있구나.\""
+      }
+    ],
+    "ranks": [
+      3,
+      4
+    ],
+    "above": "마교장로",
+    "below": "절정고수",
+    "side": "마도"
   }
 }

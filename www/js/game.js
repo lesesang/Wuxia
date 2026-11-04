@@ -14,7 +14,7 @@ import {
 import { pickWeighted, randInt, rng } from "./rng.js";
 import {
   actionLine, ALIGNMENT_CAP, alignTier, applyGrowth, breakthroughBlock, byname, CHAPTER_STARTS, checkBreakthrough, checkGoodEnding, checkSaengsa,
-  fameRank, FOCUS_DRIFT, focusedSide, getChapter, getChapterInfo, getMonth, getYear, isMarketTurn, monthLine, realmIndex, sumEffect, traitSlots,
+  fameRank, FOCUS_DRIFT, focusedSide, getChapter, getChapterInfo, getMonth, getYear, isMarketTurn, monthLine, perkTrait, realmFit, realmIndex, sumEffect, traitSlots,
 } from "./rules.js";
 import { josa } from "./josa.js";
 
@@ -30,6 +30,19 @@ const LOG_LIMIT = 40;
 const VALID_ACTIONS = ["수련", "명상", "탐색", "휴식"];
 const SAME_SIDE_WEIGHT = 0.3;
 const VALID_BATTLE_ACTIONS = ["기본공격", "비기", "심법", "경공", "소비품", "도주"];
+
+/** 돌파의 대사. 경지마다 본문이 있고 출신, 성향, 주무공에 따른 반응이 한 줄씩 붙는다. */
+function breakthroughLines(p, next) {
+  const data = DB.realms.breakthrough?.[next];
+  if (!data) return [];
+  const lines = [...data.text];
+  const side = p.dominantAlignment();
+  const category = p.bestSkill()?.category;
+  for (const line of [data.origin?.[p.originKey], side && data.side?.[side], category && data.category?.[category]]) {
+    if (line) lines.push(line);
+  }
+  return lines;
+}
 
 export class Game {
   constructor() { this.reset(); }
@@ -90,7 +103,8 @@ export class Game {
     if (entry.kind === "skill") {
       const skill = Skill.fromDict({ key: entry.key, grade: inheritedGrade(entry.grade), mastery: 0 });
       name = skill.name;
-      if (!p.hasSkill(skill.key)) p.learnSkill(skill);
+      // 이미 익혔으면 유산은 성취가 된다
+      p.learnSkill(skill);
     } else {
       const key = inheritedGear(entry.key);
       name = DB.market[key].name;
@@ -257,13 +271,10 @@ export class Game {
   pickEnemy() {
     const p = this.player;
     // 성향과 명성에 따라 찾아오는 적이 있다. 같은 편은 덜 덤빈다
-    let pool = enemyPool(getChapter(p.turn)).filter((k) => checkRequires(p, DB.enemies[k].requires));
+    const pool = enemyPool(getChapter(p.turn)).filter((k) => checkRequires(p, DB.enemies[k].requires));
     const mine = p.dominantAlignment() || DB.sects[p.sect]?.alignment;
-    const weightOf = (k) => (mine && DB.enemies[k].side === mine ? DB.enemies[k].weight * SAME_SIDE_WEIGHT : DB.enemies[k].weight);
-    if (realmIndex(this.player.realm) < realmIndex("초절정")) {
-      const easier = pool.filter((k) => DB.enemies[k].tier !== "강적");
-      if (easier.length) pool = easier;
-    }
+    // 지금 시점(장)이 나올 수 있는 적을 정하고, 그중에서 내 경지와 가까운 적을 더 자주 만난다
+    const weightOf = (k) => (mine && DB.enemies[k].side === mine ? SAME_SIDE_WEIGHT : 1) * DB.enemies[k].weight * realmFit(p.realm, DB.enemies[k].realm);
     return pickWeighted(pool, pool.map(weightOf));
   }
 
@@ -274,7 +285,8 @@ export class Game {
     this.player.recordEnemyEncounter(fitting);
     this.battle = new Battle(this.player, enemy);
     const intro = enemyIntro(this.player, fitting);
-    this.addLog([`⚔️ ${enemy.name}${josa(enemy.name, "과/와")} 마주쳤다!`, ...(intro ? [intro] : []), ...this.battle.log]);
+    const called = enemy.title ? `${enemy.title} ${enemy.name}` : enemy.name;
+    this.addLog([`⚔️ ${called}${josa(called, "과/와")} 마주쳤다! (${enemy.realm})`, ...(intro ? [intro] : []), ...this.battle.log]);
     this.battle.log = [];
   }
 
@@ -532,9 +544,14 @@ export class Game {
     const p = this.player;
     const next = checkBreakthrough(p);
     if (!next) return [];
-    const lines = [`🌟 경지 돌파! ${p.realm} → ${next}`];
+    const lines = [`🌟 경지 돌파! ${p.realm} → ${next}`, ...breakthroughLines(p, next)];
     p.realm = next;
     p.note(`${next}의 경지에 올랐다.`);
+    const perk = DB.realms.perks[next];
+    if (perk) {
+      if (!p.traits.includes(perkTrait(next))) p.traits.push(perkTrait(next));
+      lines.push(`✨ 경지의 특전 「${perk.name}」: ${perk.desc}`);
+    }
     // 심경이 충분히 높지 않으면 돌파가 거칠어 내상을 입는다
     if (rng.random() < Math.max(0, 600 - p.mind) * 0.001) {
       p.healPercent(-25, -25);

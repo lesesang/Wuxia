@@ -3,7 +3,7 @@ import { DB } from "./data.js";
 import { RENAMED_ORIGINS } from "./meta.js";
 import { randInt } from "./rng.js";
 import {
-  ALIGN_CLASH, ALIGNMENT_CAP, ALIGNMENT_SCALE, alignValue, dominant, FOCUS_GAIN, hasEffect, newAlignment, ORIGIN_SECTS, sectBonus,
+  ALIGN_CLASH, ALIGNMENT_CAP, ALIGNMENT_SCALE, alignValue, dominant, FOCUS_GAIN, hasEffect, newAlignment, ORIGIN_SECTS, sectBonus, perkTrait, realmPerks,
   startSkills, sumEffect,
 } from "./rules.js";
 import { josa } from "./josa.js";
@@ -265,14 +265,26 @@ export class Player {
   hasFlag(flag) { return this.flags.includes(flag); }
   addFlag(flag) { if (!this.hasFlag(flag)) this.flags.push(flag); }
 
-  hasSkill(key) { return this.skills.some((s) => s.key === key); }
-  getSkill(key) { return this.skills.find((s) => s.key === key) || null; }
+  /** 같은 무공이거나 그 무공을 이어받은 더 깊은 갈래를 익혔으면 그 무공 */
+  getSkill(key) {
+    const same = this.skills.find((s) => s.key === key);
+    if (same) return same;
+    const { lineage, lineage_rank: rank } = DB.skills[key] || {};
+    if (!lineage) return null;
+    return this.skills.find((s) => DB.skills[s.key].lineage === lineage && DB.skills[s.key].lineage_rank >= rank) || null;
+  }
+  hasSkill(key) { return this.getSkill(key) !== null; }
   skillsOfType(type) { return this.skills.filter((s) => s.type === type); }
 
   /** 무공 습득. 이미 익혔으면 숙련도를 올린다. 안내 문구 목록을 돌려준다. */
   learnSkill(skill) {
     const owned = this.getSkill(skill.key);
-    if (owned) return [`이미 아는 무공이다. ${owned.name}의 이해가 깊어졌다.`, ...owned.gainMastery(25)];
+    if (owned) {
+      const lead = owned.key === skill.key ? `이미 아는 무공이다. 「${owned.name}」의 이해가 깊어졌다.` : `「${skill.name}」${josa(skill.name, "은/는")} 이미 「${owned.name}」에 녹아 있다. 이해가 깊어졌다.`;
+      return [`${lead} (성취 +${DUPLICATE_SKILL_MASTERY})`, ...owned.gainMastery(DUPLICATE_SKILL_MASTERY)];
+    }
+    const root = this.skills.find((s) => DB.skills[skill.key].lineage && DB.skills[s.key].lineage === DB.skills[skill.key].lineage);
+    if (root) return this.inheritLineage(root, skill);
     // 새로 얻었거나 품계가 높아도 쓰던 무공을 바꾸지 않는다. 바꾸는 것은 플레이어의 몫이다
     const current = skill.type === "공격무공" ? this.getSkill(this.mainSkill) : this.bestOfType(skill.type);
     this.skills.push(skill);
@@ -283,6 +295,17 @@ export class Player {
       return [];
     }
     return [`「${skill.name}」${josa(skill.name, "은/는")} 신상의 무공 칸에서 골라 쓸 수 있다.`];
+  }
+
+  /** 같은 갈래의 더 깊은 무공을 얻으면 따로 쌓지 않고 이어받는다. 성취와 오른 품계는 그대로 간다. */
+  inheritLineage(root, skill) {
+    skill.mastery = Math.max(skill.mastery, root.mastery);
+    if (GRADE_ORDER.indexOf(root.grade) > GRADE_ORDER.indexOf(skill.grade)) skill.grade = root.grade;
+    this.skills[this.skills.indexOf(root)] = skill;
+    if (this.mainSkill === root.key) this.mainSkill = skill.key;
+    for (const [type, key] of Object.entries(this.chosenArts)) if (key === root.key) this.chosenArts[type] = skill.key;
+    this.applyEvolveTrait(skill);
+    return [`「${root.name}」${josa(root.name, "이/가")} 「${skill.name}」${josa(skill.name, "으로")} 이어졌다. 쌓은 성취는 그대로다.`];
   }
 
   /** 승급 뒤 성취를 높여 주는 자질을 무공에 적어 둔다. */
@@ -356,6 +379,8 @@ export class Player {
     p.chains = (d.chains ?? []).filter((c) => DB.chains[c.id]);
     p.chainsDone = d.chains_done ?? 0;
     p.realm = d.realm;
+    // 특전이 생기기 전의 기록도 그 경지의 특전을 받는다
+    for (const perk of realmPerks(p.realm)) if (!(d.traits || []).includes(perkTrait(perk.realm))) (d.traits ||= []).push(perkTrait(perk.realm));
     p.external = d.external;
     p.internal = d.internal;
     p.martial = d.martial;

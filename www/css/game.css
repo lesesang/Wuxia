@@ -314,6 +314,7 @@ body.in-battle #app { height: 100%; display: flex; flex-direction: column; max-w
 .hpbar-outer.danger { border-color: #ff8b7d; box-shadow: 0 0 6px #ff8b7d; }
 .vs-mark { padding-top: 1.5rem; font-size: .85rem; }
 .enemy-tier { font-size: .72rem; color: #b49f94; margin-top: .25rem; }
+.enemy-title { font-size: .72rem; color: #b49f94; margin-bottom: .1rem; }
 .battle-tags { display: flex; flex-wrap: wrap; justify-content: center; gap: .25rem; flex-shrink: 0; margin-bottom: .25rem; }
 .tag { font-size: .72rem; padding: 0 .45rem; border: 1px solid; }
 .tag.bad { color: #ffb0a6; border-color: #7b3a33; }
@@ -336,7 +337,7 @@ body.in-battle #app { height: 100%; display: flex; flex-direction: column; max-w
 
 .ending-hint { font-size: .85rem; color: var(--paper-dim); margin: 0 0 .8rem; }
 @media (max-height: 640px) {
-  .battle-title small, .enemy-tier { display: none; }
+  .battle-title small { display: none; }
   .bt-btn { min-height: 46px; padding: .35rem .3rem; }
   .bt-btn small { font-size: .64rem; }
 }
