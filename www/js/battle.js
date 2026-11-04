@@ -4,7 +4,7 @@ import { DB } from "./data.js";
 import { checkRequires, reactiveLine } from "./events.js";
 import { equipmentBonus } from "./market.js";
 import { pick, randInt, rng, uniform } from "./rng.js";
-import { applyGrowth, battleBuffs, fameRankChanged, hasEffect, MA_DAMAGE_BONUS, realmBonus, sectBonus, sumEffect } from "./rules.js";
+import { applyGrowth, battleBuffs, fameRankChanged, hasEffect, alignValue, dominant, KILL_ALIGN, realmBonus, sectBonus, sumEffect } from "./rules.js";
 import { josa } from "./josa.js";
 
 const BASE_HIT = 0.88;
@@ -185,7 +185,7 @@ export class Battle {
     scale *= 1 + Math.min(MAX_KILL_POWER, p.kills * sumEffect(p.traits, "kill_power", "percent")) / 100;
     scale *= 1 + sectBonus(p, "damage") / 100;
     scale *= 1 - p.injury * INJURY_PENALTY / 100;
-    if (p.dominantAlignment() === "마도") scale *= 1 + MA_DAMAGE_BONUS / 100;
+    scale *= 1 + alignValue(p.alignment, "마도", "damage") / 100;
     if (this.atkBuff) scale *= 1 + this.atkBuff.percent / 100;
     return scale;
   }
@@ -211,7 +211,7 @@ export class Battle {
 
   critChance() {
     const p = this.player;
-    return p.mind / 4000 + (sumEffect(p.traits, "crit", "percent") + sectBonus(p, "crit")) / 100;
+    return p.mind / 4000 + (sumEffect(p.traits, "crit", "percent") + sectBonus(p, "crit") + alignValue(p.alignment, "사도", "crit")) / 100;
   }
 
   strike(power, label, skill = null) {
@@ -393,6 +393,7 @@ export class Battle {
     base *= 1 - realmBonus(this.player.realm) / 2;
     base *= 1 - Math.min(MAX_MIND_GUARD, this.player.mind / MIND_GUARD_RATE);
     base *= 1 - sectBonus(this.player, "damage_reduce") / 100;
+    base *= 1 - alignValue(this.player.alignment, "정도", "guard") / 100;
     base *= 1 - Math.min(MAX_DAMAGE_REDUCE, sumEffect(this.player.traits, "damage_reduce", "percent")) / 100;
     if (this.guard) base *= 1 - this.guard.percent / 100;
     return Math.max(1, Math.trunc(base * uniform(0.9, 1.1)) - equipmentBonus(this.player, "armor"));
@@ -589,6 +590,8 @@ export class Battle {
     if (victory) {
       this.player.battles += exp;
       this.player.kills += 1;
+      const side = dominant(this.player.alignment);
+      if (KILL_ALIGN[side]) this.player.adjustAlignment(side, KILL_ALIGN[side] / 2); // 앞선 길은 두 배로 오른다
       const outro = reactiveLine(this.player, this.enemy.outros, this.enemy.outro);
       if (outro) this.log.push(outro);
       this.log.push(`${this.enemy.name}${josa(this.enemy.name, "을/를")} 쓰러뜨렸다! 실전 경험 +${exp}`);

@@ -63,7 +63,12 @@ export function play({ origin = "무림초출", traits = [], upgrades = BASE_UPG
         const all = [...(event.variants || []).filter((v) => v.choices).flatMap((v) => v.choices), ...event.choices];
         return !all.find((x) => x.label === c.label)?.outcomes.some((o) => o.effects?.ending);
       });
-      game.chooseEvent((start || lean || choice(plain.length ? plain : open)).index);
+      // 한 길에 집중하는 무인은 다른 길로 기우는 선택을 되도록 피한다
+      const neutral = side ? plain.filter((c) => {
+        const all = [...(event.variants || []).filter((v) => v.choices).flatMap((v) => v.choices), ...event.choices];
+        return !all.find((x) => x.label === c.label)?.outcomes.some((o) => Object.entries(o.effects?.alignment || {}).some(([k, v]) => k !== side && v > 0));
+      }) : [];
+      game.chooseEvent((start || lean || choice(neutral.length ? neutral : plain.length ? plain : open)).index);
     } else if (game.market) {
       const keys = game.market.stock.filter((s) => s.left > 0 && !blockReason(p, s.key) && DB.market[s.key].category !== "도구" && s.key !== "혈마단").map((s) => s.key);
       if (keys.length) game.marketBuy(keys.sort((a, b) => rank(a) - rank(b))[0]);

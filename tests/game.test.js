@@ -13,7 +13,7 @@ import { blockReason, buy, equipmentBonus, openMarket, priceOf } from "../www/js
 import {
   activeContent, setUpgradeUse, upgradeLevel, addKarma, buyContent, buyProvision, refundProvision, upgradeTraits, buyUpgrade, exportRecords, importRecords, extraSlots, loadCheckpoint, legacyAvailable, loadEventLog, loadMeta, nextReward, recordEventPick, openLegacy, saveMeta, takeLegacy, toggleContent, unlockOrigin,
 } from "../www/js/meta.js";
-import { applyGrowth, breakthroughBlock, byname, fameRank, getChapter, getYear, marketTurns, traitSlots } from "../www/js/rules.js";
+import { alignTier, applyGrowth, breakthroughBlock, focusedSide, byname, fameRank, getChapter, getYear, marketTurns, traitSlots } from "../www/js/rules.js";
 import { rng } from "../www/js/rng.js";
 import { storage } from "../www/js/storage.js";
 
@@ -357,7 +357,7 @@ test("무작위 사건은 생당 한 번", () => {
 test("성향 혜택", () => {
   let p = new Player();
   p.alignment.정도 = 100;
-  assert.equal(priceOf(p, "호골주"), Math.trunc(DB.market.호골주.price * 0.9));
+  assert.equal(priceOf(p, "호골주"), Math.trunc(DB.market.호골주.price * 0.92));
   p = new Player();
   p.alignment.사도 = 100;
   assert.equal(p.gainSilver(100), 125);
@@ -378,7 +378,7 @@ test("능력치는 1 아래로 내려가지 않고 효과 요약이 나온다", 
 test("마도 10이면 천마봉에서 귀순할 수 있다", () => {
   const game = newGame();
   toTurnEnd(game, 119);
-  game.player.alignment = { 정도: 0, 사도: 0, 마도: 240 };
+  game.player.alignment = { 정도: 0, 사도: 0, 마도: 500 };
   game.advanceTurn();
   game.marketLeave();
   assert.equal(game.event.key, "결전_천마봉");
@@ -1496,7 +1496,7 @@ test("성향 자질은 희귀 이상이고 오를 때 더 오른다", () => {
   const p = new Player("무림초출", ["호연지기"]);
   assert.equal(p.alignment.정도, 100);
   p.adjustAlignment("정도", 40);
-  assert.equal(p.alignment.정도, 160);
+  assert.equal(p.alignment.정도, 200);
   p.adjustAlignment("정도", 5000);
   assert.equal(p.alignment.정도, 999);
   const killer = new Player("무림초출", ["천살성"]);
@@ -1534,6 +1534,38 @@ test("강호초출이 고른 무공과 심법은 십 년 갈고닦은 성취가 
   assert.ok(p.bestSkill().mastery >= 40);
   assert.ok(p.getSkill("양생공").mastery >= 40);
   assert.match(DB.events.시작_병기고.text, /문하에 든 날/);
+});
+
+test("성향은 단계마다 혜택이 커지고 한 길에 집중하면 더 잘 오른다", () => {
+  const low = new Player(); low.alignment.정도 = 100;
+  const high = new Player(); high.alignment.정도 = 960;
+  assert.ok(priceOf(high, "호골주") < priceOf(low, "호골주"));
+  assert.equal(alignTier(high.alignment).name, "강호의 등불");
+  const enemy = new Enemy("낭인");
+  const damage = (p) => { rng.random = () => 0.5; return new Battle(p, enemy).incoming(1); };
+  assert.ok(damage(high) < damage(new Player()));
+  const rich = new Player(); rich.alignment.사도 = 960;
+  assert.equal(rich.gainSilver(100), 150);
+  const dark = new Player(); dark.alignment.마도 = 960;
+  assert.ok(new Battle(dark, enemy).attackScale() > new Battle(new Player(), enemy).attackScale() * 1.2);
+  const even = new Player(); even.alignment.정도 = 100; even.alignment.사도 = 90;
+  assert.equal(focusedSide(even.alignment), null);
+  assert.equal(even.adjustAlignment("사도", 20), 20);
+  const keen = new Player(); keen.alignment.정도 = 100;
+  assert.equal(keen.adjustAlignment("정도", 20), 40);
+  const game = newGame();
+  game.player.alignment = { 정도: 300, 사도: 0, 마도: 0 };
+  game.alignmentMonth();
+  assert.equal(game.player.alignment.정도, 303);
+  assert.ok(game.player.chronicle.some((c) => c.text.includes("협객")));
+});
+
+test("출신의 기본 무공은 오래 갈고닦은 성취를 지닌다", () => {
+  for (const key of DB.origins.order) {
+    if (DB.origins.origins[key].choose_start) continue;
+    const p = new Player(key);
+    for (const s of DB.origins.origins[key].skills) assert.equal(p.getSkill(s).mastery, 40, s);
+  }
 });
 
 test("조사는 받침에 맞게 붙는다", () => {
@@ -1646,7 +1678,7 @@ test("결말 문장은 상황을 따르고 서로 부딪치지 않는다", () =>
         for (const fame of [0, 20, 40, 70, 150]) {
           const q = new Player(origin);
           q.fame = fame;
-          if (side) q.alignment[side] = 240;
+          if (side) q.alignment[side] = 500;
           q.turn = 120;
           for (const flag of ["찬탈", "단목휘_죽음", "단목휘_동맹", "제자_완성", "가문재건"]) if (fame === 150) q.addFlag(flag);
           const lines = buildEpilogue(q, key);
@@ -1824,7 +1856,7 @@ test("출신마다 전용 자질과 인연이 있고 그 출신만 쓴다", () =
   assert.ok(!game.player.traits.includes("창궁의혈통"), "다른 출신은 장착할 수 없다");
   game.start("남궁세가", ["창궁의혈통"]);
   assert.ok(game.player.traits.includes("창궁의혈통"));
-  assert.equal(game.player.skills.find((s) => s.key === "창궁검법").mastery, 40);
+  assert.equal(game.player.skills.find((s) => s.key === "창궁검법").mastery, 80);
   data.unlocked_traits = [];
   saveMeta(data);
 });
@@ -2147,10 +2179,11 @@ test("수련 도구는 숙련도를 올리고 맞지 않으면 절반이다", ()
   p.addItem("매화숫돌");
   p.addItem("베기짚단");
   const main = p.bestSkill();
+  const start = main.mastery;
   useConsumable(p, "매화숫돌");
-  assert.equal(main.mastery, 25);
+  assert.equal(main.mastery, start + 25);
   useConsumable(p, "베기짚단");
-  assert.equal(main.mastery, 37);
+  assert.equal(main.mastery, start + 37);
 });
 
 test("전투 도구는 전투에서만 쓰고 공격력을 올린다", () => {
