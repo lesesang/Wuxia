@@ -180,7 +180,7 @@ export class Player {
     this.alive = true;
   }
 
-  maxHp() { return 100 + Math.trunc(this.external / 2); }
+  maxHp() { return 100 + Math.trunc(this.external * 0.35 + this.internal * 0.15); }
   maxQi() { return 100 + Math.trunc(this.internal / 2); }
   dominantAlignment() { return dominant(this.alignment); }
 

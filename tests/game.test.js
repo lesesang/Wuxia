@@ -218,7 +218,7 @@ test("전투 임시 버프는 끝나면 되돌린다", () => {
   const base = p.external;
   const enemy = new Enemy("산적");
   const battle = new Battle(p, enemy);
-  assert.equal(p.external, base + 40);
+  assert.equal(p.external, base + 70);
   battle.finish(false, true);
   assert.equal(p.external, base);
 });
@@ -265,7 +265,7 @@ test("특성 불굴은 전투마다 한 번", () => {
   battle.roundNum = 1;
   p.hp = 1;
   battle.enemyAttack();
-  assert.equal(p.hp, 1);
+  assert.equal(p.hp, Math.trunc(p.maxHp() * 0.25));
   battle.enemyAttack();
   assert.equal(p.hp, 0);
 });
@@ -991,9 +991,9 @@ test("새 특성들이 작동한다", () => {
   assert.equal(equipmentBonus(sword, "weapon"), 10);
   const lone = new Player("무림초출", ["외길"]);
   lone.weapon = "철검";
-  assert.equal(equipmentBonus(lone, "weapon"), 14);
+  assert.equal(equipmentBonus(lone, "weapon"), 16);
   const herb = new Player("무림초출", ["약초꾼"]);
-  assert.equal(herb.inventory.금창약, 5);
+  assert.equal(herb.inventory.금창약, 3);
   assert.equal(new Player("무림초출", ["가보의호구"]).armor, "철사갑의");
   assert.equal(new Player("무림초출", ["대기만성"]).external, new Player().external - 40);
   const keen = new Player("무림초출", ["눈썰미"]);
@@ -1173,7 +1173,7 @@ test("기틀은 장착 없이 적용되고 단계마다 비용이 오른다", ()
   assert.equal(loadMeta().current_karma, 24);
   const game = new Game();
   game.start("무림초출");
-  assert.equal(game.player.external, 320);
+  assert.equal(game.player.external, 330);
   assert.ok(buyUpgrade("강골"));
   assert.ok(!buyUpgrade("강골"), "최고 단계를 넘을 수 없다");
   withKarma(0);
@@ -1669,7 +1669,7 @@ test("생사경 결말의 카르마는 25이다", () => {
 
 test("자질의 새 효과가 동작한다", () => {
   const veteran = new Player("무림초출", ["백전노장"]);
-  assert.equal(veteran.battles, 8);
+  assert.equal(veteran.battles, 12);
   const p = new Player("무림초출", ["절세미공"]);
   const skill = p.bestSkill();
   skill.mastery = 100;
@@ -1729,7 +1729,7 @@ test("출신마다 전용 자질과 인연이 있고 그 출신만 쓴다", () =
   assert.ok(!game.player.traits.includes("창궁의혈통"), "다른 출신은 장착할 수 없다");
   game.start("남궁세가", ["창궁의혈통"]);
   assert.ok(game.player.traits.includes("창궁의혈통"));
-  assert.equal(game.player.skills.find((s) => s.key === "창궁검법").mastery, 30);
+  assert.equal(game.player.skills.find((s) => s.key === "창궁검법").mastery, 40);
   data.unlocked_traits = [];
   saveMeta(data);
 });
@@ -1748,12 +1748,12 @@ test("시작 선물은 주무공 계열을 따른다", () => {
   assert.ok(lines.length >= 4);
   assert.ok(equipmentBonus(p, "weapon") >= 10);
   assert.equal(DB.market[p.weapon].effects[0].style, "도법");
-  assert.equal(p.inventory.베기짚단, 4);
-  assert.equal(p.inventory.맹호도유, 4);
+  assert.equal(p.inventory.베기짚단, 5);
+  assert.equal(p.inventory.맹호도유, 5);
   assert.ok(p.skills.some((s) => s.category === "도법" && s.grade === "명품" && s.key !== "오호단문도"));
   const drifter = new Player("무림초출", ["수련도구", "현기의호흡"]);
   applyEffects(drifter, { start_weapon: "창법", start_mindset: "양생공" });
-  assert.equal(drifter.inventory.납창추, 4, "강호초출은 첫 병기를 고른 뒤 받는다");
+  assert.equal(drifter.inventory.납창추, 5, "강호초출은 첫 병기를 고른 뒤 받는다");
   assert.ok(drifter.hasSkill("곤륜현기공"), "자질로 받은 심법은 첫 심법을 골라도 남는다");
 });
 

@@ -25,7 +25,7 @@
     "type": "공격무공",
     "category": "권법",
     "grade": "기본",
-    "base_multiplier": 1.05,
+    "base_multiplier": 1.1,
     "qi_cost": 3,
     "desc": "저잣거리의 무사들이 즐겨 익히는 권법.",
     "secret_technique": {
@@ -67,7 +67,7 @@
     "type": "공격무공",
     "category": "검법",
     "grade": "명품",
-    "base_multiplier": 1.08,
+    "base_multiplier": 1.15,
     "qi_cost": 6,
     "desc": "남궁세가의 가전 검법. 하늘을 뒤덮듯 넓게 펼쳐진다.",
     "secret_technique": {
@@ -112,7 +112,7 @@
     "type": "공격무공",
     "category": "권법",
     "grade": "명품",
-    "base_multiplier": 1.1,
+    "base_multiplier": 1.15,
     "qi_cost": 7,
     "desc": "권마가 남긴 권법. 강하지만 내력을 거칠게 태운다.",
     "secret_technique": {
@@ -135,7 +135,7 @@
     "type": "공격무공",
     "category": "검법",
     "grade": "명품",
-    "base_multiplier": 1.2,
+    "base_multiplier": 1.25,
     "qi_cost": 6,
     "desc": "꽃잎이 흩날리듯 변화무쌍한 정종 검법.",
     "secret_technique": {

@@ -7,8 +7,8 @@ export const ALIGNMENTS = ["정도", "사도", "마도"];
 const DOMINANT_THRESHOLD = 3;
 export const JUNG_DISCOUNT = 10;
 export const SA_SILVER_BONUS = 25;
-export const MA_DAMAGE_BONUS = 10;
-export const MA_HEAL_PENALTY = 20;
+export const MA_DAMAGE_BONUS = 20;
+export const MA_HEAL_PENALTY = 10;
 
 export const newAlignment = () => ({ 정도: 0, 사도: 0, 마도: 0 });
 

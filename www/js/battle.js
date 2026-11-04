@@ -8,8 +8,11 @@ import { applyGrowth, battleBuffs, fameRankChanged, hasEffect, MA_DAMAGE_BONUS, 
 import { josa } from "./josa.js";
 
 const BASE_HIT = 0.88;
+// 위력에 들어가는 네 기량의 비중. 네 기량이 고루 값어치를 하도록 나눈다
+const POWER_RATES = { external: 0.7, martial: 0.95, internal: 0.45, mind: 0.2 };
 const SECRET_INTERNAL_RATE = 1.0;
-const INTERNAL_ATTACK_RATE = 0.3;
+const MIND_GUARD_RATE = 6000; // 심경이 이 값일 때 받는 피해가 모두 사라지는 비율
+const MAX_MIND_GUARD = 0.15;
 const FLEE_BASE = 0.5;
 const MAX_DAMAGE_REDUCE = 60; // 자질과 기틀을 겹쳐도 받는 피해를 이 이상 줄이지 못한다
 export const INJURY_PENALTY = 7;
@@ -187,14 +190,14 @@ export class Battle {
 
   attackPower(skill = null) {
     const p = this.player;
-    let base = (p.external + p.martial + p.internal * INTERNAL_ATTACK_RATE) / STAT_SCALE + equipmentBonus(p, "weapon");
+    let base = (p.external * POWER_RATES.external + p.martial * POWER_RATES.martial + p.internal * POWER_RATES.internal + p.mind * POWER_RATES.mind) / STAT_SCALE + equipmentBonus(p, "weapon");
     if (skill) base *= skill.effectiveMultiplier();
     return Math.max(1, Math.trunc(base * this.attackScale()));
   }
 
   secretPower(skill) {
     const p = this.player;
-    const base = (p.external + p.martial + p.internal * SECRET_INTERNAL_RATE) / STAT_SCALE + equipmentBonus(p, "weapon");
+    const base = (p.external * POWER_RATES.external + p.martial * POWER_RATES.martial + p.internal * SECRET_INTERNAL_RATE + p.mind * POWER_RATES.mind) / STAT_SCALE + equipmentBonus(p, "weapon");
     return Math.max(1, Math.trunc(base * skill.effectiveMultiplier() * skill.secretMultiplier * this.attackScale()
       * (1 + sumEffect(p.traits, "secret_power", "percent") / 100)));
   }
@@ -383,6 +386,7 @@ export class Battle {
   incoming(multiplier = 1) {
     let base = this.enemy.attack * this.enemy.attackMultiplier() * multiplier;
     base *= 1 - realmBonus(this.player.realm) / 2;
+    base *= 1 - Math.min(MAX_MIND_GUARD, this.player.mind / MIND_GUARD_RATE);
     base *= 1 - sectBonus(this.player, "damage_reduce") / 100;
     base *= 1 - Math.min(MAX_DAMAGE_REDUCE, sumEffect(this.player.traits, "damage_reduce", "percent")) / 100;
     if (this.guard) base *= 1 - this.guard.percent / 100;
@@ -449,7 +453,8 @@ export class Battle {
   checkLastStand() {
     if (this.player.hp <= 0 && !this.standUsed && hasEffect(this.player.traits, "last_stand")) {
       this.standUsed = true;
-      this.player.hp = 1;
+      const rise = sumEffect(this.player.traits, "last_stand", "hp_pct");
+      this.player.hp = Math.max(1, Math.trunc(this.player.maxHp() * rise / 100));
       this.log.push("🔥 쓰러지지 않았다! 불굴의 의지로 다시 일어선다.");
     }
   }
