@@ -1,10 +1,10 @@
 // 이벤트. 정해진 달의 줄거리와 탐색 중 사건을 JSON으로 관리한다. 형식은 docs/콘텐츠-가이드.md 참고.
 import { GRADE_ORDER, HOME_ART_MASTERY, Skill, STAT_NAMES, STAT_SCALE } from "./character.js";
 import { DB } from "./data.js";
-import { bonusFor, equipmentBonus, styleWeight, weightsByStyle } from "./market.js";
+import { bonusFor, equipmentBonus, ITEM_GRADES, styleWeight, weightsByStyle } from "./market.js";
 import { recordEventPick, updateKnown } from "./meta.js";
 import { pick, pickWeighted, rng } from "./rng.js";
-import { ALIGNMENTS, applyGrowth, fameRankChanged, getChapter, realmIndex, sumEffect, talkLine } from "./rules.js";
+import { ALIGNMENTS, applyGrowth, scaledGrowth, fameRankChanged, getChapter, realmIndex, sumEffect, talkLine } from "./rules.js";
 import { josa } from "./josa.js";
 
 export const EVENT_STAT_SCALE = 3; // 사건과 기연의 기량 상승 배율. 데이터에 적힌 값의 세 배가 오른다
@@ -35,6 +35,7 @@ export function unmetReason(player, requires) {
   if (r.equip && player.weapon !== r.equip && player.armor !== r.equip) return `${DB.market[r.equip].name} 필요`;
   if (r.any_skill && !r.any_skill.some((k) => player.hasSkill(k))) return "필요한 무공이 없다";
   if (r.injured && !player.injury) return "내상이 없다";
+  if (r.ascend_ready && !ascendTarget(player, r.ascend_ready)) return "아직 그 무공이 끝에 이르지 않았다";
   if (r.main_category && player.bestSkill()?.category !== r.main_category) return `${r.main_category}${josa(r.main_category, "을/를")} 쓰는 무인이 아니다`;
   if (r.trait && !player.traits.includes(r.trait)) return "타고난 바가 다르다";
   if (r.unlocked && !player.content.includes(r.unlocked)) return "아직 인연이 닿지 않았다";
@@ -66,6 +67,12 @@ export function unmetReason(player, requires) {
     if (current < value) return `${name} ${value} 필요 (현재 ${current})`;
   }
   return null;
+}
+
+/** 일절의 끝(성취 100)에 이른 그 갈래의 쓰는 무공 */
+export function ascendTarget(player, type) {
+  const skill = type === "공격무공" ? player.bestSkill() : player.bestOfType(type);
+  return skill && skill.grade === "일절" && skill.mastery >= 100 ? skill : null;
 }
 
 export const checkRequires = (player, requires) => unmetReason(player, requires) === null;
@@ -160,6 +167,30 @@ export function validateChains() {
   return errors;
 }
 
+// ---------- 출신의 이야기 ----------
+
+const ORIGIN_GATHER_FROM = 97; // 이 달부터 남은 이야기를 달을 쓰지 않고 불러낸다
+const ORIGIN_EVENT_WEIGHT = 8;  // 출신의 이야기는 탐색에서 더 자주 찾아온다
+
+/** 아직 만나지 못한 출신 전용 이야기 가운데 지금 조건을 채운 것. 조건을 못 채웠으면 나오지 않는다. */
+export function pendingOriginEvents(player) {
+  return Object.keys(DB.randomEvents).filter((key) => {
+    const event = DB.randomEvents[key];
+    if (event.requires?.origin !== player.originKey || player.seenEvents.includes(key)) return false;
+    if (event.chain && !canStartChain(player, event.chain.id)) return false;
+    return checkRequires(player, event.requires);
+  });
+}
+
+/** 결전 전에 만나야 할 이야기가 남았으면 이번 달에 연다. 끝이 다가올수록 자주, 마지막 달에는 모두 연다. */
+export function dueOriginEvent(player) {
+  if (player.turn < ORIGIN_GATHER_FROM || player.turn > LAST_CHAIN_TURN) return null;
+  const pending = pendingOriginEvents(player);
+  if (!pending.length) return null;
+  const months = LAST_CHAIN_TURN - player.turn + 1;
+  return rng.random() < pending.length / months || months <= 2 ? pending[0] : null;
+}
+
 export const ALONE_FLAG = "홀로_간다";
 const ALONE_GATE_RATE = 0.15;
 const BOUGHT_EVENT_WEIGHT = 5;
@@ -178,7 +209,7 @@ export function pickRandomEvent(player) {
   return pickWeighted(options, options.map((k) => {
     const event = DB.randomEvents[k];
     // 카르마로 산 인연은 일반 인연보다 조금 더 자주 찾아온다
-    const base = event.requires?.unlocked ? BOUGHT_EVENT_WEIGHT : event.requires || event.chain ? 3 : 1;
+    const base = event.weight ?? (event.requires?.origin ? ORIGIN_EVENT_WEIGHT : event.requires?.unlocked ? BOUGHT_EVENT_WEIGHT : event.requires || event.chain ? 3 : 1);
     // 홀로 가기로 한 무인에게는 문파의 손길이 드물게 닿는다
     return alone && DB.randomEvents[k].sect_gate ? base * ALONE_GATE_RATE : base;
   }));
@@ -264,7 +295,8 @@ export function resolveChoice(player, key, index) {
   // 싸움이 걸린 결과는 이긴 뒤에 적용한다. 달아나면 얻는 것도 잃는 것도 없다
   const deferred = !!effects.battle;
   const summary = deferred ? [] : applyEffects(player, effects);
-  if (!player.seenEvents.includes(key)) player.seenEvents.push(key);
+  // again이 붙은 선택은 그 일을 뒤로 미룬다. 나중에 다시 찾아온다
+  if (!effects.again && !player.seenEvents.includes(key)) player.seenEvents.push(key);
   if (!DB.events[key].prelude) updateKnown([], [], [key]);
   return { text: outcome.text, label: choice.label, summary, effects, deferred, lead: !!outcome.lead };
 }
@@ -288,10 +320,11 @@ function equipReward(player, key) {
   const name = DB.market[key].name;
   updateKnown([], [key]);
   if (bonusFor(player, key) > equipmentBonus(player, effect.slot)) {
-    player[effect.slot] = key;
+    player.equipGear(key);
     return [`${name} 장착`];
   }
-  return [`${name}${josa(name, "을/를")} 받았지만 지금 병장기가 더 좋다`];
+  if (!player.ownsGear(key)) player.gear.push(key);
+  return [`${name}${josa(name, "을/를")} 행낭에 챙겼다`];
 }
 
 const STARTER_WEAPONS = {
@@ -341,6 +374,31 @@ function styleWeaponReward(player, tier) {
   return equipReward(player, weapons[Math.min(tier, weapons.length) - 1]);
 }
 
+/** 그 품계의 병장기를 준다. 병기는 주무공 계열에 맞춘다. 이미 지녔으면 은자로 돌아온다. */
+function gradeGearReward(player, { grade, slot = "weapon" }) {
+  const style = player.bestSkill()?.category;
+  const pool = Object.keys(DB.market).filter((k) => {
+    const item = DB.market[k];
+    const e = item.effects.find((x) => x.type === "equip");
+    return e && item.grade === grade && e.slot === slot && (slot !== "weapon" || e.style === style) && !item.origin && !player.ownsGear(k);
+  });
+  if (!pool.length) return [`은자+${player.gainSilver(SPARE_GEAR_SILVER * (ITEM_GRADES.indexOf(grade) + 1))}`];
+  return equipReward(player, pick(pool));
+}
+
+/** 그 품계의 약이나 도구를 준다 */
+function gradeItemReward(player, { grade, category }) {
+  const pool = Object.keys(DB.market).filter((k) => {
+    const item = DB.market[k];
+    return item.grade === grade && item.category === category && item.consumable && !item.origin;
+  });
+  if (!pool.length) return [`은자+${player.gainSilver(SPARE_GEAR_SILVER)}`];
+  const key = pick(pool);
+  player.addItem(key);
+  updateKnown([], [key]);
+  return [`${DB.market[key].name} 획득`];
+}
+
 /** 주무공 계열에 맞는 도구. kind는 mastery(수련) 또는 atk_buff(전투) */
 function styleTool(style, kind) {
   return Object.keys(DB.market).find((k) => DB.market[k].effects.some((e) => e.type === kind && e.style === style));
@@ -349,6 +407,7 @@ function styleTool(style, kind) {
 const giftEffects = (player) => player.traits.flatMap((k) => DB.traits[k]?.effects || []);
 const MAX_START_WEAPON_TIER = 3;
 const SPARE_WEAPON_SILVER = 60;   // 넘치는 병기는 은자로 돌아온다
+const SPARE_GEAR_SILVER = 120;    // 줄 물건이 없으면 은자로 돌아온다
 const SPARE_BOOK_MASTERY = 30;    // 겹친 비급은 주무공 성취가 된다
 
 /** 시작 선물 중 무공. 주무공을 고르기 전에 받는다. 겹쳐도 품계마다 한 권이다. */
@@ -413,7 +472,8 @@ export function applyEffects(player, effects) {
     if (amount >= 0) {
       const rate = EVENT_STAT_SCALE * (100 + sumEffect(player.traits, "event_growth", "percent")) / 100;
       const scaled = Math.max(1, Math.round(amount * rate));
-      summary.push(`${STAT_NAMES[stat]}+${player.gainStat(stat, applyGrowth(scaled, player.traits, stat))}`);
+      const amountNow = effects.full_growth ? scaled : Math.max(1, scaledGrowth(scaled, player.turn));
+      summary.push(`${STAT_NAMES[stat]}+${player.gainStat(stat, applyGrowth(amountNow, player.traits, stat))}`);
     } else {
       const lost = amount * STAT_SCALE;
       player[stat] = Math.max(1, player[stat] + lost);
@@ -532,6 +592,22 @@ export function applyEffects(player, effects) {
     } else {
       summary.push(`무리+${player.gainStat("martial", 4)}`);
     }
+  }
+
+  // 큰 깨달음. 일절의 끝에 이른 무공이 신공의 경지에 오른다
+  if (effects.ascend) {
+    const skill = ascendTarget(player, effects.ascend);
+    if (skill?.ascend()) {
+      summary.push(`${skill.name}${josa(skill.name, "이/가")} 신공의 경지에 올랐다`);
+      player.note(`${skill.name}${josa(skill.name, "이/가")} 신공의 경지에 올랐다.`);
+    }
+  }
+
+  if (effects.style_gear) summary.push(...gradeGearReward(player, effects.style_gear));
+  if (effects.grade_item) summary.push(...gradeItemReward(player, effects.grade_item));
+  if (effects.last_strength) {
+    player.revives += effects.last_strength;
+    summary.push("쓰러질 때 끌어모을 힘이 하나 더 생겼다");
   }
 
   if (effects.start_weapon) summary.push(...takeStartWeapon(player, effects.start_weapon));

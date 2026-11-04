@@ -2,10 +2,10 @@
 import { MAX_INJURY, Skill, STAT_NAMES, STAT_SCALE } from "./character.js";
 import { DB } from "./data.js";
 import { checkRequires, reactiveLine } from "./events.js";
-import { equipmentBonus } from "./market.js";
+import { equipmentBonus, gearGimmick } from "./market.js";
 import { pick, pickWeighted, randInt, rng, uniform } from "./rng.js";
-import { activeCompanions, applyGrowth, isNamed, battleBuffs, fameRankChanged, hasEffect, alignValue, dominant, KILL_ALIGN, realmBonus, realmIndex, sectBonus, sumEffect, talkLine } from "./rules.js";
-import { josa } from "./josa.js";
+import { activeCompanions, applyGrowth, scaledGrowth, isNamed, battleBuffs, fameRankChanged, hasEffect, alignValue, dominant, KILL_ALIGN, realmBonus, realmIndex, sectBonus, sumEffect, talkLine } from "./rules.js";
+import { halpun, josa } from "./josa.js";
 
 const BASE_HIT = 0.88;
 // 위력에 들어가는 네 기량의 비중. 네 기량이 고루 값어치를 하도록 나눈다
@@ -14,10 +14,11 @@ const SECRET_INTERNAL_RATE = 1.0;
 const MIND_GUARD_RATE = 6000; // 심경이 이 값일 때 받는 피해가 모두 사라지는 비율
 const MAX_MIND_GUARD = 0.15;
 const FLEE_BASE = 0.5;
-const DROP_MAIN_RATE = 2;    // 주무공과 같은 계열의 비급은 더 잘 떨어진다
-const DROP_OTHER_RATE = 0.7;
+const DROP_MAIN_RATE = 3;    // 주무공과 같은 계열의 비급은 더 잘 떨어진다
+const DROP_OTHER_RATE = 0.6;
 const DROP_HINT_RATE = 0.6;      // 적이 품은 무공이 있으면 먼저 그것이 나온다
 const DROP_MEDICINE_RATE = 0.05; // 약이 나올 확률
+const WIN_ART_MASTERY = 1; // 이기면 쓰던 심법과 경공도 조금 깊어진다
 const REVIVE_RATE = 0.5;
 const MIN_THROUGH_GUARD = 0.3; // 호신강기를 뚫고 들어오는 최소 비율
 const VICTORY_TALK_RATE = 0.3;
@@ -118,7 +119,8 @@ export function dropSkill(player, hint, grades, faction = null) {
   if (!pool.length) return null;
   const counts = {};
   for (const k of pool) counts[DB.skills[k].category] = (counts[DB.skills[k].category] || 0) + 1;
-  return pickWeighted(pool, pool.map((k) => (DB.skills[k].category === main ? DROP_MAIN_RATE : DROP_OTHER_RATE) / counts[DB.skills[k].category]));
+  const luck = 1 + sumEffect(player.traits, "main_style_luck", "percent") / 100;
+  return pickWeighted(pool, pool.map((k) => (DB.skills[k].category === main ? DROP_MAIN_RATE * luck : DROP_OTHER_RATE) / counts[DB.skills[k].category]));
 }
 
 export function statureEnemy(key, chapter) {
@@ -145,7 +147,10 @@ export function useConsumable(player, key) {
       else player.healPercent(0, effect.percent * rate);
     } else if (effect.type === "mastery") {
       const main = player.bestSkill();
-      if (main) notes.push(...main.gainMastery(main.category === effect.style ? effect.amount : Math.floor(effect.amount / 2)));
+      if (main) notes.push(...main.gainMastery(!effect.style || main.category === effect.style ? effect.amount : Math.floor(effect.amount / 2)));
+    } else if (effect.type === "last_strength") {
+      player.revives += effect.amount ?? 1;
+      notes.push("쓰러질 때 끌어모을 힘이 하나 더 생겼다");
     } else if (effect.type === "cure" && effect.what === "injury") {
       player.addInjury(-(effect.amount ?? 1));
     } else if (effect.type === "stat") {
@@ -188,7 +193,10 @@ export class Battle {
     this.askStand = false;      // 쓰러지는 순간 힘을 끌어모을지 플레이어에게 묻는다
     this.standPending = false;
     this.companions = isFinal ? activeCompanions(player) : [];
-    const ward = sumEffect(player.traits, "battle_start_ward", "percent");
+    this.freeItemUsed = false;  // 한 합에 도구 하나는 합을 쓰지 않는다
+    this.weaponG = gearGimmick(player, "weapon");
+    this.armorG = gearGimmick(player, "armor");
+    const ward = sumEffect(player.traits, "battle_start_ward", "percent") + (this.armorG?.start_ward || 0);
     if (ward) {
       this.ward = Math.trunc(player.maxHp() * ward / 100);
       this.log.push(`(몸 둘레에 호신 기운이 선다. ${this.ward})`);
@@ -262,8 +270,21 @@ export class Battle {
     return p.mind / 4000 + (sumEffect(p.traits, "crit", "percent") + sectBonus(p, "crit") + alignValue(p.alignment, "사도", "crit")) / 100;
   }
 
+  /** 무공의 묘리에 병기의 묘리를 더한다 */
+  strikeGimmick(skill) {
+    const own = skill?.activeGimmick() || {};
+    const gear = this.weaponG;
+    if (!gear) return own;
+    const merged = { ...own };
+    for (const [k, v] of Object.entries(gear)) {
+      if (typeof v === "number") merged[k] = (merged[k] || 0) + v;
+      else if (!merged[k]) merged[k] = v;
+    }
+    return merged;
+  }
+
   strike(power, label, skill = null) {
-    const g = skill?.activeGimmick() || {};
+    const g = this.strikeGimmick(skill);
     if (!this.hits(g.accuracy || 0)) {
       this.log.push(`${label}${josa(label, "을/를")} 펼쳤지만 ${this.enemy.name}${josa(this.enemy.name, "이/가")} 몸을 틀어 피했다.`);
       this.counterPct = 0;
@@ -309,7 +330,7 @@ export class Battle {
     this.enemy.takeDamage(damage);
     const suffix = notes.length ? ` ${notes.join(" ")}` : "";
     this.log.push(`${label}${josa(label, "으로")} ${this.enemy.name}에게 ${damage}의 피해를 입혔다.${suffix}`);
-    this.applyPoisonOnHit(skill);
+    this.applyPoisonOnHit(skill, g);
     this.applyGimmickOnHit(g, damage);
     return damage;
   }
@@ -335,10 +356,10 @@ export class Battle {
     }
   }
 
-  applyPoisonOnHit(skill) {
+  applyPoisonOnHit(skill, g = null) {
     let power = sectBonus(this.player, "poison");
     if (skill?.inflict) power += skill.inflict.poison || 0;
-    power += skill?.activeGimmick()?.poison || 0;
+    power += g ? g.poison || 0 : skill?.activeGimmick()?.poison || 0;
     power += sumEffect(this.player.traits, "inflict_poison", "power");
     if (power) this.enemyPoison = { damage: power + Math.floor(this.player.internal / 50), rounds: 3 };
   }
@@ -455,7 +476,7 @@ export class Battle {
     const rounds = skill.effect.buff_rounds || 0;
     if (percent > 0 && rounds > 0) {
       this.atkBuff = { percent, rounds: rounds + 1 };
-      this.log.push(`기세가 오른다. (${rounds}합 동안 위력 +${percent}%)`);
+      this.log.push(`기세가 오른다. (${rounds}합 동안 위력 +${halpun(percent)})`);
     }
     this.applyMindGimmick(skill);
     this.log.push(...skill.gainMastery(p.masteryGainAmount()));
@@ -481,7 +502,7 @@ export class Battle {
     }
     if (g.guard) {
       this.guard = { percent: g.guard.percent, rounds: g.guard.rounds };
-      notes.push(`${g.guard.rounds}합 동안 받는 피해 -${g.guard.percent}%`);
+      notes.push(`${g.guard.rounds}합 동안 받는 피해 -${halpun(g.guard.percent)}`);
     }
     if (g.regen || g.regen_qi) {
       this.regen = { hp: g.regen?.percent || 0, qi: g.regen_qi?.percent || 0, rounds: Math.max(g.regen?.rounds || 0, g.regen_qi?.rounds || 0) };
@@ -489,15 +510,15 @@ export class Battle {
     }
     if (g.reflect) {
       this.reflect = { percent: g.reflect.percent, rounds: g.reflect.rounds };
-      notes.push(`${g.reflect.rounds}합 동안 받은 힘의 ${g.reflect.percent}%를 되돌린다`);
+      notes.push(`${g.reflect.rounds}합 동안 받은 힘의 ${halpun(g.reflect.percent)}을 되돌린다`);
     }
     if (g.lifesteal_buff) {
       this.lifestealBuff = { percent: g.lifesteal_buff.percent, rounds: g.lifesteal_buff.rounds + 1 };
-      notes.push(`${g.lifesteal_buff.rounds}합 동안 준 피해의 ${g.lifesteal_buff.percent}%를 흡수한다`);
+      notes.push(`${g.lifesteal_buff.rounds}합 동안 준 피해의 ${halpun(g.lifesteal_buff.percent)}을 흡수한다`);
     }
     if (g.next_power) {
       this.counterPct = Math.max(this.counterPct, g.next_power);
-      notes.push(`다음 공격 +${g.next_power}%`);
+      notes.push(`다음 공격 +${halpun(g.next_power)}`);
     }
     if (g.next_crit) {
       this.forceCrit = true;
@@ -522,17 +543,30 @@ export class Battle {
     return skill;
   }
 
-  useItem(key) {
+  useItem(key, free = false) {
     if (!(this.player.inventory[key] > 0) || !DB.market[key]) {
       this.log.push("행낭에 없는 물건이다.");
       return;
     }
     const item = DB.market[key];
     if (item.effects.some((e) => e.type === "cure" && e.what === "poison")) this.poison = null;
+    const extra = free ? 0 : 1; // 합을 쓰지 않으면 이번 합의 몫을 덜 깎인다
     const tool = item.effects.find((e) => e.type === "atk_buff");
     if (tool) {
-      const full = this.player.bestSkill()?.category === tool.style;
-      this.atkBuff = { percent: full ? tool.percent : Math.floor(tool.percent / 2), rounds: tool.rounds + 1 };
+      const full = !tool.style || this.player.bestSkill()?.category === tool.style;
+      this.atkBuff = { percent: full ? tool.percent : Math.floor(tool.percent / 2), rounds: tool.rounds + extra };
+    }
+    for (const e of item.effects) {
+      if (e.type === "ward") this.ward = Math.max(this.ward, Math.trunc(this.player.maxHp() * e.percent / 100));
+      if (e.type === "guard_buff") this.guard = { percent: e.percent, rounds: e.rounds + extra };
+      if (e.type === "enemy_weaken") this.enemyWeaken = { percent: e.percent, rounds: e.rounds + extra };
+      if (e.type === "enemy_stun") this.enemyStun = true;
+      if (e.type === "next_crit") this.forceCrit = true;
+      if (e.type === "burst") {
+        const damage = Math.trunc(this.enemy.maxHp * (this.isFinal ? e.percent / 3 : e.percent) / 100);
+        this.enemy.takeDamage(damage);
+        this.log.push(`${item.name}${josa(item.name, "이/가")} 터졌다. ${this.enemy.name}에게 ${damage}의 피해를 입혔다.`);
+      }
     }
     const notes = useConsumable(this.player, key);
     this.log.push(`${item.name}${josa(item.name, "을/를")} 썼다. (${item.desc})`, ...notes);
@@ -562,6 +596,7 @@ export class Battle {
     base *= 1 - alignValue(this.player.alignment, "정도", "guard") / 100;
     base *= 1 - Math.min(MAX_DAMAGE_REDUCE, sumEffect(this.player.traits, "damage_reduce", "percent")) / 100;
     if (this.guard) base *= 1 - this.guard.percent / 100;
+    if (this.armorG?.guard_pct) base *= 1 - this.armorG.guard_pct / 100;
     for (const c of this.companions) base *= 1 - (c.help.guard || 0) / 100;
     const raw = Math.max(1, Math.trunc(base * uniform(0.9, 1.1)) - equipmentBonus(this.player, "armor"));
     // 호신강기는 맞을 때마다 일정한 양을 막는다. 다만 아무리 약한 공격도 조금은 들어온다
@@ -586,16 +621,16 @@ export class Battle {
       const chance = evadeSkill.effectValue("evade") + sectBonus(this.player, "evade");
       if (randInt(1, 100) <= chance) {
         this.counterPct = evadeSkill.effectValue("counter_pct");
-        this.log.push(`${this.enemy.name}의 ${name}${josa(name, "을/를")} 흘려냈다. (다음 공격 +${this.counterPct}%)`);
+        this.log.push(`${this.enemy.name}의 ${name}${josa(name, "을/를")} 흘려냈다. (다음 공격 +${halpun(this.counterPct)})`);
         this.afterEvade(evadeSkill, g);
         return 0;
       }
     } else {
       // 묘리를 깨친 경공은 때로 몸이 먼저 움직인다
       const steps = this.player.bestOfType("경공");
-      const auto = steps?.activeGimmick()?.auto_evade || 0;
+      const auto = (steps?.activeGimmick()?.auto_evade || 0) + (this.armorG?.auto_evade || 0);
       if (auto && !this.sealed && rng.random() * 100 < auto) {
-        this.log.push(`${steps.name}${josa(steps.name, "이/가")} 저절로 몸을 옮겼다. ${this.enemy.name}의 ${name}${josa(name, "이/가")} 빗나갔다.`);
+        this.log.push(`몸이 저절로 움직였다. ${this.enemy.name}의 ${name}${josa(name, "이/가")} 빗나갔다.`);
         return 0;
       }
     }
@@ -605,7 +640,7 @@ export class Battle {
       // 다 피하지 못해도 몸을 띄운 만큼 덜 맞는다
       const rate = g?.partial ?? 0.5;
       damage = Math.max(1, Math.floor(damage * rate));
-      this.log.push(`다 피하지는 못했지만 몸을 띄운 덕에 위력이 ${Math.round((1 - rate) * 100)}% 줄었다.`);
+      this.log.push(`다 피하지는 못했지만 몸을 띄운 덕에 위력이 ${halpun(Math.round((1 - rate) * 100))} 줄었다.`);
     }
     if (this.ward > 0) {
       const absorbed = Math.min(this.ward, damage);
@@ -615,8 +650,9 @@ export class Battle {
     }
     this.player.hp = Math.max(0, this.player.hp - damage);
     this.log.push(`${this.enemy.name}의 ${name}${josa(name, "에/에")} ${damage}의 피해를 입었다.${special && this.guardedLast ? ` (호신강기가 ${this.guardedLast}을 막았다)` : ""}`);
-    if (this.reflect && damage > 0) {
-      const back = Math.max(1, Math.trunc(damage * this.reflect.percent / 100));
+    const thorns = (this.reflect?.percent || 0) + (this.armorG?.thorns || 0);
+    if (thorns && damage > 0) {
+      const back = Math.max(1, Math.trunc(damage * thorns / 100));
       this.enemy.takeDamage(back);
       this.log.push(`받은 힘이 되돌아갔다. ${this.enemy.name}에게 ${back}의 피해.`);
     }
@@ -647,7 +683,7 @@ export class Battle {
 
   applySpecialEffects(special) {
     const p = this.player;
-    if (special.seal && hasEffect(this.player.traits, "seal_immune")) {
+    if (special.seal && (hasEffect(this.player.traits, "seal_immune") || this.armorG?.seal_immune)) {
       this.log.push("혈도를 노렸지만 기운이 막히지 않았다.");
     } else if (special.seal) {
       this.sealed = special.seal + 1;
@@ -657,7 +693,7 @@ export class Battle {
       p.addInjury(1);
       this.log.push(`장력이 내부를 흔든다. (내상 ${p.injury}단계)`);
     }
-    if (special.poison && hasEffect(this.player.traits, "poison_immune")) {
+    if (special.poison && (hasEffect(this.player.traits, "poison_immune") || this.armorG?.poison_immune)) {
       this.log.push("독이 들었지만 몸이 아무렇지 않다.");
     } else if (special.poison) {
       this.poison = { ...special.poison };
@@ -730,7 +766,7 @@ export class Battle {
       this.burn.rounds -= 1;
       if (this.burn.rounds <= 0) this.burn = null;
     }
-    const regen = sumEffect(this.player.traits, "round_regen", "hp_pct");
+    const regen = sumEffect(this.player.traits, "round_regen", "hp_pct") + (this.armorG?.regen || 0);
     const regenQi = sumEffect(this.player.traits, "round_regen", "qi_pct");
     if ((regen || regenQi) && this.player.hp > 0) this.player.healPercent(regen, regenQi);
     if (this.regen && this.player.hp > 0) {
@@ -778,7 +814,7 @@ export class Battle {
         }
       } else if (help.weaken) {
         this.enemyWeaken = { percent: help.weaken, rounds: help.rounds || 2 };
-        this.log.push(`${line} (${help.rounds || 2}합 동안 ${this.enemy.name}의 위력 -${help.weaken}%)`);
+        this.log.push(`${line} (${help.rounds || 2}합 동안 ${this.enemy.name}의 위력 -${halpun(help.weaken)})`);
       } else if (help.poison) {
         const damage = Math.max(1, Math.trunc(this.attackPower(p.bestSkill()) * help.poison / 100));
         this.burn = { damage, rounds: 3 };
@@ -841,6 +877,13 @@ export class Battle {
 
   /** 한 합 진행. 전투가 끝나면 결과를, 계속되면 null을 돌려준다. */
   runRound(action = "기본공격", skill = null, itemKey = null) {
+    // 도구 하나는 합을 쓰지 않는다. 같은 합에 하나 더 쓰면 그때는 합이 지나간다
+    if (action === "소비품" && !this.freeItemUsed && this.player.inventory[itemKey] > 0) {
+      this.freeItemUsed = true;
+      this.useItem(itemKey, true);
+      return this.enemy.isAlive() ? null : this.finish(true);
+    }
+    this.freeItemUsed = false;
     this.roundNum += 1;
     let evadeSkill = null;
 
@@ -910,6 +953,9 @@ export class Battle {
         this.player.note(`강호에서 ${rank}${josa(rank, "으로")} 불리기 시작했다.`);
       }
       this.applyStatGrowth();
+      for (const art of [this.player.bestOfType("심공"), this.player.bestOfType("경공")]) {
+        if (art) this.log.push(...art.gainMastery(WIN_ART_MASTERY + this.player.masteryGainAmount()));
+      }
       this.gainSilver();
       this.rollDrop();
       this.applyBattleEndBuffs();
@@ -949,6 +995,7 @@ export class Battle {
       this.player.addItem(item);
       this.log.push(`품에서 ${DB.market[item].name}${josa(DB.market[item].name, "이/가")} 나왔다. 행낭에 넣었다.`);
     }
+    this.rollGearDrop(table, tierRate);
     if (rng.random() >= table.book * tierRate) return;
     const key = dropSkill(this.player, this.enemy.drop?.skill, table.grades, DB.enemies[this.enemy.key].faction);
     if (!key) return;
@@ -958,6 +1005,27 @@ export class Battle {
     this.log.push(known ? `품에서 비급이 떨어졌다. ${skill.name}, 아는 무공이다.` : `품에서 비급이 떨어졌다. 새 무공 ${skill.name}${josa(skill.name, "을/를")} 얻었다.`, ...notes);
   }
 
+  /** 적이 지닌 병장기. 경지가 높을수록 좋은 물건이고 주무공에 맞는 병기가 더 잘 나온다. */
+  rollGearDrop(table, tierRate) {
+    const { gear } = table;
+    if (!gear || rng.random() >= gear.chance * tierRate) return;
+    const p = this.player;
+    const main = p.bestSkill()?.category;
+    const pool = Object.keys(DB.market).filter((k) => {
+      const item = DB.market[k];
+      return gear.grades.includes(item.grade) && !item.no_drop && item.effects.some((e) => e.type === "equip") && !p.ownsGear(k);
+    });
+    if (!pool.length) return;
+    const luck = 1 + sumEffect(p.traits, "main_style_luck", "percent") / 100;
+    const key = pickWeighted(pool, pool.map((k) => {
+      const { style } = DB.market[k].effects.find((e) => e.type === "equip");
+      return style === main ? DROP_MAIN_RATE * 4 * luck : style ? DROP_OTHER_RATE : 2;
+    }));
+    const { name } = DB.market[key];
+    p.gear.push(key);
+    this.log.push(`쓰러진 자의 ${name}${josa(name, "을/를")} 챙겼다. (${DB.market[key].grade}, 행낭에 넣었다)`);
+  }
+
   /** 승리 시 4개 능력치 중 랜덤 2개가 적 등급 범위만큼 오른다. */
   applyStatGrowth() {
     const stats = ["external", "internal", "martial", "mind"];
@@ -965,7 +1033,7 @@ export class Battle {
     const second = pick(stats.filter((s) => s !== first));
     const [low, high] = this.enemy.growthRange;
     const gains = [first, second].map((stat) => {
-      const gained = this.player.gainStat(stat, applyGrowth(randInt(low, high), this.player.traits, stat));
+      const gained = this.player.gainStat(stat, applyGrowth(scaledGrowth(randInt(low, high), this.player.turn), this.player.traits, stat));
       return `${STAT_NAMES[stat]}+${gained}`;
     });
     this.log.push(`성장: ${gains.join(", ")}`);

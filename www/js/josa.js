@@ -17,3 +17,13 @@ export function josa(word, pair) {
   if (withFinal === "으로") return final && final !== RIEUL ? "으로" : "로";
   return final ? withFinal : withoutFinal;
 }
+
+/** 비율을 할과 푼으로 적는다. 30은 3할, 8은 8푼, 25는 2할 5푼이다. */
+export function halpun(percent) {
+  const tenths = Math.round(Math.abs(percent) * 10);
+  const hal = Math.floor(tenths / 100);
+  const pun = Math.floor((tenths % 100) / 10);
+  const ri = tenths % 10;
+  const parts = [hal && `${hal}할`, pun && `${pun}푼`, ri && `${ri}리`].filter(Boolean);
+  return `${percent < 0 ? "-" : ""}${parts.join(" ") || "0푼"}`;
+}

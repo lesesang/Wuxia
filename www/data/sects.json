@@ -3,7 +3,7 @@
     "name": "소림사",
     "alignment": "정도",
     "desc": "천하 무공의 뿌리라 불리는 숭산의 고찰.",
-    "bonus_text": "받는 피해 6% 감소",
+    "bonus_text": "받는 피해 6푼 감소",
     "bonus": {
       "damage_reduce": 6
     }
@@ -12,7 +12,7 @@
     "name": "무당파",
     "alignment": "정도",
     "desc": "유로써 강을 제압하는 도가의 명문.",
-    "bonus_text": "심법 회복량 30% 증가",
+    "bonus_text": "심법 회복량 3할 증가",
     "bonus": {
       "heal_bonus": 30
     }
@@ -21,7 +21,7 @@
     "name": "화산파",
     "alignment": "정도",
     "desc": "매화가 지는 화산 절벽의 검문.",
-    "bonus_text": "회심의 일격 확률 8% 증가",
+    "bonus_text": "회심의 일격 확률 8푼 증가",
     "bonus": {
       "crit": 8
     }
@@ -30,7 +30,7 @@
     "name": "아미파",
     "alignment": "정도",
     "desc": "구름 위 금정에 자리한 불문의 무가.",
-    "bonus_text": "경공 회피 10% 증가",
+    "bonus_text": "경공 회피 1할 증가",
     "bonus": {
       "evade": 10
     }
@@ -39,15 +39,15 @@
     "name": "개방",
     "alignment": "정도",
     "desc": "천하의 거지가 모여 만든, 소문이 가장 빠른 방파.",
-    "bonus_text": "얻는 은자 20% 증가",
+    "bonus_text": "얻는 은자 2할 증가",
     "bonus": {
       "silver": 20
     }
   },
   "당가": {
     "name": "사천당가",
-    "alignment": "사도",
-    "desc": "독과 암기로 사천을 지키는 가문.",
+    "alignment": "정도",
+    "desc": "독과 암기, 해독에 밝은 사천의 명문. 오대세가의 하나다.",
     "bonus_text": "공격이 적을 중독시킨다",
     "bonus": {
       "poison": 6
@@ -57,7 +57,7 @@
     "name": "천마신교",
     "alignment": "마도",
     "desc": "천마를 하늘로 섬기는 자들.",
-    "bonus_text": "주는 피해 8% 증가",
+    "bonus_text": "주는 피해 8푼 증가",
     "bonus": {
       "damage": 8
     }
@@ -66,7 +66,7 @@
     "name": "곤륜파",
     "alignment": "정도",
     "desc": "만년설 위의 정통 도문.",
-    "bonus_text": "심법 회복량 20% 증가",
+    "bonus_text": "심법 회복량 2할 증가",
     "bonus": {
       "heal_bonus": 20
     }
@@ -75,7 +75,7 @@
     "name": "남궁세가",
     "alignment": "정도",
     "desc": "창궁의 깃발 아래 모였던, 이제는 잿더미인 검가.",
-    "bonus_text": "주는 피해 5% 증가",
+    "bonus_text": "주는 피해 5푼 증가",
     "bonus": {
       "damage": 5
     }
@@ -84,7 +84,7 @@
     "name": "하오문",
     "alignment": "사도",
     "desc": "강호의 눈과 귀라 불리는 뒷골목의 문파.",
-    "bonus_text": "얻는 은자 20% 증가",
+    "bonus_text": "얻는 은자 2할 증가",
     "bonus": {
       "silver": 20
     }
@@ -93,7 +93,7 @@
     "name": "사도련",
     "alignment": "사도",
     "desc": "사파 방회들이 이익으로 뭉친 강호의 뒷세력.",
-    "bonus_text": "주는 피해 4% 증가, 얻는 은자 10% 증가",
+    "bonus_text": "주는 피해 4푼 증가, 얻는 은자 1할 증가",
     "bonus": {
       "damage": 4,
       "silver": 10
@@ -103,7 +103,7 @@
     "name": "녹림맹",
     "alignment": "사도",
     "desc": "산채 칠십이 곳이 맺은 산사람들의 맹약.",
-    "bonus_text": "받는 피해 3% 감소, 얻는 은자 10% 증가",
+    "bonus_text": "받는 피해 3푼 감소, 얻는 은자 1할 증가",
     "bonus": {
       "damage_reduce": 3,
       "silver": 10
@@ -113,7 +113,7 @@
     "name": "살막",
     "alignment": "사도",
     "desc": "돈만 맞으면 누구의 이름이든 지운다는 살수들의 막.",
-    "bonus_text": "회심의 일격 확률 6% 증가, 경공 회피 4% 증가",
+    "bonus_text": "회심의 일격 확률 6푼 증가, 경공 회피 4푼 증가",
     "bonus": {
       "crit": 6,
       "evade": 4
@@ -123,7 +123,7 @@
     "name": "흑사방",
     "alignment": "사도",
     "desc": "도박판과 밀수 뱃길을 쥔 저잣거리의 방회.",
-    "bonus_text": "얻는 은자 25% 증가, 받는 피해 2% 감소",
+    "bonus_text": "얻는 은자 2할 5푼 증가, 받는 피해 2푼 감소",
     "bonus": {
       "silver": 25,
       "damage_reduce": 2
@@ -133,7 +133,7 @@
     "name": "혈교",
     "alignment": "마도",
     "desc": "피를 경전으로 삼는, 신교와도 다른 오랜 마도 교단.",
-    "bonus_text": "주는 피해 6% 증가, 심법 회복량 10% 증가",
+    "bonus_text": "주는 피해 6푼 증가, 심법 회복량 1할 증가",
     "bonus": {
       "damage": 6,
       "heal_bonus": 10
@@ -143,10 +143,70 @@
     "name": "귀문교",
     "alignment": "마도",
     "desc": "죽은 자를 부리는 술법으로 산속에 숨은 사교.",
-    "bonus_text": "주는 피해 3% 증가, 공격이 적을 중독시킨다",
+    "bonus_text": "주는 피해 3푼 증가, 공격이 적을 중독시킨다",
     "bonus": {
       "damage": 3,
       "poison": 4
     }
+  },
+  "종남": {
+    "name": "종남파",
+    "alignment": "정도",
+    "desc": "곧은 찌르기를 숭상하는 관중의 검문. 구파일방의 하나다.",
+    "bonus": {
+      "damage": 4,
+      "evade": 4
+    },
+    "bonus_text": "주는 피해 4푼 증가, 경공 회피 4푼 증가"
+  },
+  "점창": {
+    "name": "점창파",
+    "alignment": "정도",
+    "desc": "운남 창산의 쾌검 문파. 구파일방의 하나다.",
+    "bonus": {
+      "crit": 5,
+      "evade": 5
+    },
+    "bonus_text": "회심의 일격 확률 5푼 증가, 경공 회피 5푼 증가"
+  },
+  "청성": {
+    "name": "청성파",
+    "alignment": "정도",
+    "desc": "사천 청성산의 도가 문파. 부드러운 장법과 숨을 숭상한다. 구파일방의 하나다.",
+    "bonus": {
+      "heal_bonus": 15,
+      "evade": 5
+    },
+    "bonus_text": "심법 회복량 1할 5푼 증가, 경공 회피 5푼 증가"
+  },
+  "공동": {
+    "name": "공동파",
+    "alignment": "정도",
+    "desc": "변경 공동산의 권법 문파. 거친 땅에서 단련한 주먹으로 이름났다. 구파일방의 하나다.",
+    "bonus": {
+      "damage_reduce": 4,
+      "damage": 3
+    },
+    "bonus_text": "받는 피해 4푼 감소, 주는 피해 3푼 증가"
+  },
+  "모용": {
+    "name": "모용세가",
+    "alignment": "정도",
+    "desc": "고소의 명문. 오는 힘을 돌려주는 창법으로 이름났다. 오대세가의 하나다.",
+    "bonus": {
+      "damage": 5,
+      "silver": 10
+    },
+    "bonus_text": "주는 피해 5푼 증가, 얻는 은자 1할 증가"
+  },
+  "제갈": {
+    "name": "제갈세가",
+    "alignment": "정도",
+    "desc": "융중의 명문. 진법과 기관으로 이름났다. 오대세가의 하나다.",
+    "bonus": {
+      "crit": 4,
+      "silver": 15
+    },
+    "bonus_text": "회심의 일격 확률 4푼 증가, 얻는 은자 1할 5푼 증가"
   }
 }

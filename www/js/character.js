@@ -24,9 +24,12 @@ const START_ARMORS = ["가죽호구", "철사갑의", "금사보의"]; // 겹쳐
 const SPARE_ARMOR_SILVER = 40; // 넘치는 갑의는 은자로 돌아온다
 const CHRONICLE_LIMIT = 40;
 export const STAT_CAP = 999;
+const STAT_SOFT_CAP = 850;  // 기량이 이 값을 넘으면 더디게 오른다
+const STAT_SOFT_RATE = 0.5;
 export const STAT_SCALE = 10; // 기량 10이 예전 기량 1에 해당한다. 공식은 이 값으로 나누어 쓴다
 export const MAX_INJURY = 3;
 export const MAX_TURN = 120;
+const SILVER_EASE = 1.1; // 얻는 은자의 기본 배율
 export const STAT_NAMES = { external: "외공", internal: "내공", martial: "무리", mind: "심경" };
 
 export class Skill {
@@ -71,6 +74,15 @@ export class Skill {
     }
     if (this.checkSecretUnlock()) messages.push(`비기 ${this.secretName}${josa(this.secretName, "이/가")} 터득되었다`);
     return messages;
+  }
+
+  /** 일절의 끝에 이른 무공이 큰 깨달음으로 신공의 경지에 오른다. 사건으로만 일어난다. */
+  ascend() {
+    if (this.grade !== "일절" || this.mastery < MAX_MASTERY) return false;
+    this.grade = "신공";
+    this.mastery = 30;
+    this.ascended = true;
+    return true;
   }
 
   /** 상승 품계 이상에서만 드러나는 그 무공만의 묘리 */
@@ -120,14 +132,15 @@ export class Skill {
   }
 
   toDict() {
-    return { key: this.key, grade: this.grade, mastery: this.mastery, secret_unlocked: this.secretUnlocked };
+    return { key: this.key, grade: this.grade, mastery: this.mastery, secret_unlocked: this.secretUnlocked, ascended: !!this.ascended };
   }
 
   static fromDict(d) {
     const skill = new Skill(d.key);
     skill.grade = d.grade ?? skill.grade;
     // 예전 저장: 옛 신공은 이제 일절이고, 신공 품계는 정해진 무공만 갖는다
-    if (skill.grade === "천상" || (skill.grade === "신공" && DB.skills[d.key].grade !== "신공")) skill.grade = "일절";
+    if (skill.grade === "천상" || (skill.grade === "신공" && DB.skills[d.key].grade !== "신공" && !d.ascended)) skill.grade = "일절";
+    skill.ascended = !!d.ascended;
     skill.mastery = d.mastery ?? 0;
     skill.secretUnlocked = !!d.secret_unlocked;
     return skill;
@@ -175,6 +188,7 @@ export class Player {
     this.silver = START_SILVER + (data.silver || 0) + sumEffect(traitKeys, "start_silver", "amount");
     this.weapon = data.weapon || null;
     this.armor = null;
+    this.gear = []; // 갈아 쓸 수 있게 챙겨 둔 병장기
     this.inventory = { ...(data.items || {}) };
     for (const key of traitKeys) {
       for (const effect of DB.traits[key]?.effects || []) {
@@ -218,7 +232,10 @@ export class Player {
   /** 능력치를 올리고 상한 999를 적용한다. 실제로 오른 양을 돌려준다. */
   gainStat(stat, amount) {
     const before = this[stat];
-    const after = Math.max(before, Math.min(STAT_CAP, before + amount));
+    // 끝에 가까울수록 더디게 오른다. 넘는 몫의 절반만 붙는다
+    const raised = before + amount;
+    const eased = raised > STAT_SOFT_CAP ? Math.max(before, STAT_SOFT_CAP) + Math.ceil((raised - Math.max(before, STAT_SOFT_CAP)) * STAT_SOFT_RATE) : raised;
+    const after = Math.max(before, Math.min(STAT_CAP, eased));
     this[stat] = after;
     return after - before;
   }
@@ -254,7 +271,7 @@ export class Player {
   gainSilver(amount) {
     let percent = sumEffect(this.traits, "silver_rate", "percent") + sectBonus(this, "silver");
     percent += alignValue(this.alignment, "사도", "silver");
-    const gained = Math.trunc(amount * (1 + percent / 100));
+    const gained = Math.trunc(amount * (1 + percent / 100) * SILVER_EASE);
     this.silver += gained;
     return gained;
   }
@@ -346,6 +363,20 @@ export class Player {
     return chosen && chosen.type === type ? chosen : this.skillsOfType(type)[0] ?? null;
   }
 
+  /** 병장기를 든다. 들고 있던 것은 행낭에 챙긴다. */
+  equipGear(key) {
+    const slot = DB.market[key]?.effects.find((e) => e.type === "equip")?.slot;
+    if (!slot) return false;
+    const old = this[slot];
+    this.gear = this.gear.filter((k) => k !== key);
+    if (old && old !== key && !this.gear.includes(old)) this.gear.push(old);
+    this[slot] = key;
+    return true;
+  }
+
+  /** 지니고 있는 병장기인가 */
+  ownsGear(key) { return this.weapon === key || this.armor === key || this.gear.includes(key); }
+
   addItem(key, count = 1) { this.inventory[key] = (this.inventory[key] || 0) + count; }
   masteryGainAmount() {
     const base = randInt(1, 2) + Math.floor(this.martial / 500);
@@ -378,7 +409,7 @@ export class Player {
       hp: this.hp, qi: this.qi, battles: this.battles,
       encountered_enemies: this.encounteredEnemies, pending_encounters: this.pendingEncounters,
       skills: this.skills.map((s) => s.toDict()), main_skill: this.mainSkill, chosen_arts: this.chosenArts,
-      traits: this.traits, slain: this.slain, silver: this.silver, weapon: this.weapon, armor: this.armor,
+      traits: this.traits, slain: this.slain, silver: this.silver, weapon: this.weapon, armor: this.armor, gear: this.gear,
       inventory: this.inventory, boss_weaken: this.bossWeaken, alignment: this.alignment,
       flags: this.flags, seen_events: this.seenEvents, kills: this.kills,
       fame: this.fame, sect: this.sect, injury: this.injury,
@@ -428,6 +459,7 @@ export class Player {
     p.silver = d.silver ?? 0;
     p.weapon = DB.market[d.weapon] ? d.weapon : null;
     p.armor = DB.market[d.armor] ? d.armor : null;
+    p.gear = (d.gear || []).filter((k) => DB.market[k]);
     p.inventory = Object.fromEntries(Object.entries(d.inventory || {}).filter(([k]) => DB.market[k]));
     p.bossWeaken = d.boss_weaken ?? 0;
     p.alignment = { ...newAlignment(), ...(d.alignment || {}) };

@@ -305,7 +305,7 @@
     "name": "녹림 호걸",
     "tier": "일반",
     "realm": "일류",
-    "hp": 475,
+    "hp": 465,
     "attack": 38,
     "exp_reward": 1,
     "silver": [
@@ -382,8 +382,8 @@
     "name": "사파 자객",
     "tier": "일반",
     "realm": "일류",
-    "hp": 385,
-    "attack": 49,
+    "hp": 380,
+    "attack": 48,
     "exp_reward": 1,
     "silver": [
       15,
@@ -474,11 +474,11 @@
     "faction": "살막"
   },
   "절정고수": {
-    "name": "절정의 떠돌이 고수",
+    "name": "낭검 도천익",
     "tier": "난적",
     "realm": "절정",
-    "hp": 740,
-    "attack": 59,
+    "hp": 725,
+    "attack": 57,
     "exp_reward": 2,
     "silver": [
       28,
@@ -490,7 +490,7 @@
     ],
     "weight": 3,
     "armor": 3,
-    "desc": "이름을 팔러 다니는 고수. 실력만은 진짜다.",
+    "desc": "이름을 팔러 다니는 떠돌이 검객. 실력만은 진짜다.",
     "specials": [
       {
         "name": "회선검",
@@ -554,14 +554,16 @@
     "below": "배신표사",
     "drop": {
       "skill": "기초검법"
-    }
+    },
+    "title": "떠돌이 검객",
+    "stand_in": "낭인"
   },
   "혈교수련자": {
-    "name": "혈교 수련자",
+    "name": "적안승 법현",
     "tier": "일반",
     "realm": "절정",
-    "hp": 1130,
-    "attack": 78,
+    "hp": 1055,
+    "attack": 71,
     "exp_reward": 1,
     "silver": [
       20,
@@ -572,7 +574,7 @@
       4
     ],
     "weight": 5,
-    "desc": "피로 기를 닦는 광신도.",
+    "desc": "피로 기를 닦는 혈교의 승려. 눈이 붉다.",
     "specials": [
       {
         "name": "혈기폭주",
@@ -627,14 +629,16 @@
     "drop": {
       "skill": "열화장"
     },
-    "faction": "혈교"
+    "faction": "혈교",
+    "title": "혈교 경전승",
+    "stand_in": "혈마귀졸"
   },
   "독문고수": {
     "name": "백사독수 여창",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 1715,
-    "attack": 89,
+    "hp": 1595,
+    "attack": 81,
     "exp_reward": 2,
     "silver": [
       35,
@@ -716,8 +720,8 @@
     "name": "철벽도 강무",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 1945,
-    "attack": 103,
+    "hp": 1810,
+    "attack": 93,
     "exp_reward": 2,
     "silver": [
       38,
@@ -787,7 +791,7 @@
     "below": "절정고수",
     "title": "철혈대 부대주",
     "drop": {
-      "skill": "악가창법"
+      "skill": "이화창법"
     },
     "stand_in": "동창번자"
   },
@@ -795,8 +799,8 @@
     "name": "적발마두 염철",
     "tier": "강적",
     "realm": "초절정",
-    "hp": 2320,
-    "attack": 98,
+    "hp": 2160,
+    "attack": 89,
     "exp_reward": 3,
     "silver": [
       63,
@@ -890,8 +894,8 @@
     "name": "음풍마군 고진",
     "tier": "난적",
     "realm": "화경",
-    "hp": 3480,
-    "attack": 147,
+    "hp": 3170,
+    "attack": 129,
     "exp_reward": 2,
     "silver": [
       49,
@@ -994,8 +998,8 @@
     "name": "혈귀장 연팔",
     "tier": "일반",
     "realm": "초절정",
-    "hp": 2320,
-    "attack": 122,
+    "hp": 2115,
+    "attack": 108,
     "exp_reward": 1,
     "silver": [
       28,
@@ -1070,8 +1074,8 @@
     "name": "제오마장 파산마왕 호달",
     "tier": "강적",
     "realm": "현경",
-    "hp": 5315,
-    "attack": 169,
+    "hp": 4840,
+    "attack": 148,
     "exp_reward": 3,
     "silver": [
       91,
@@ -1197,8 +1201,8 @@
     "name": "혈마의 잔영",
     "tier": "강적",
     "realm": "화경",
-    "hp": 1520,
-    "attack": 70,
+    "hp": 1415,
+    "attack": 63,
     "exp_reward": 3,
     "silver": [
       42,
@@ -1242,8 +1246,8 @@
     "name": "무명노인",
     "tier": "강적",
     "realm": "현경",
-    "hp": 3400,
-    "attack": 120,
+    "hp": 3100,
+    "attack": 105,
     "exp_reward": 3,
     "silver": [
       0,
@@ -1271,8 +1275,8 @@
     "name": "파풍검 진관",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 1540,
-    "attack": 83,
+    "hp": 1435,
+    "attack": 75,
     "exp_reward": 2,
     "silver": [
       28,
@@ -1332,8 +1336,8 @@
     "name": "천마",
     "tier": "보스",
     "realm": "생사경",
-    "hp": 33000,
-    "attack": 260,
+    "hp": 36000,
+    "attack": 280,
     "exp_reward": 5,
     "silver": [
       0,
@@ -1666,6 +1670,72 @@
                 "sect": "곤륜"
               },
               "text": "곤륜의 운룡이 설봉을 타고 내려왔다. 장문인이 내 등 뒤에서 탁한 기운을 걷어 갔다.",
+              "effects": {
+                "clear": true,
+                "qi_pct": 15
+              }
+            },
+            {
+              "key": "제갈",
+              "requires": {
+                "sect": "제갈"
+              },
+              "text": "산허리의 돌들이 밤새 자리를 바꾸었다. 제갈의 진에 갇힌 호위들이 제자리를 맴돌았다.",
+              "effects": {
+                "clear": true,
+                "qi_pct": 15
+              }
+            },
+            {
+              "key": "모용",
+              "requires": {
+                "sect": "모용"
+              },
+              "text": "고소의 깃발이 산 아래에 올랐다. 모용의 창들이 호위들의 힘을 돌려 그들끼리 쓰러뜨렸다.",
+              "effects": {
+                "clear": true,
+                "qi_pct": 15
+              }
+            },
+            {
+              "key": "공동",
+              "requires": {
+                "sect": "공동"
+              },
+              "text": "공동의 권사들이 변경에서 올라왔다. 주먹으로 산길을 열며 호위들을 밀어 올렸다.",
+              "effects": {
+                "clear": true,
+                "qi_pct": 15
+              }
+            },
+            {
+              "key": "청성",
+              "requires": {
+                "sect": "청성"
+              },
+              "text": "청성의 도사들이 소나무 바람 같은 진을 펼쳤다. 거칠던 숨이 잦아들었다.",
+              "effects": {
+                "clear": true,
+                "qi_pct": 15
+              }
+            },
+            {
+              "key": "점창",
+              "requires": {
+                "sect": "점창"
+              },
+              "text": "창산의 쾌검수들이 눈보라 속에서 번쩍였다. 호위 몇이 칼을 뽑기도 전에 쓰러졌다.",
+              "effects": {
+                "clear": true,
+                "qi_pct": 15
+              }
+            },
+            {
+              "key": "종남",
+              "requires": {
+                "sect": "종남"
+              },
+              "text": "종남의 검수들이 일직선으로 산허리를 뚫고 올라왔다. 앞을 막던 호위들의 진이 갈라졌다.",
               "effects": {
                 "clear": true,
                 "qi_pct": 15
@@ -2237,6 +2307,72 @@
                 "sect": "곤륜"
               },
               "text": "곤륜의 운룡이 설봉을 타고 내려왔다. 장문인이 내 등 뒤에서 탁한 기운을 걷어 갔다.",
+              "effects": {
+                "clear": true,
+                "qi_pct": 15
+              }
+            },
+            {
+              "key": "제갈",
+              "requires": {
+                "sect": "제갈"
+              },
+              "text": "산허리의 돌들이 밤새 자리를 바꾸었다. 제갈의 진에 갇힌 호위들이 제자리를 맴돌았다.",
+              "effects": {
+                "clear": true,
+                "qi_pct": 15
+              }
+            },
+            {
+              "key": "모용",
+              "requires": {
+                "sect": "모용"
+              },
+              "text": "고소의 깃발이 산 아래에 올랐다. 모용의 창들이 호위들의 힘을 돌려 그들끼리 쓰러뜨렸다.",
+              "effects": {
+                "clear": true,
+                "qi_pct": 15
+              }
+            },
+            {
+              "key": "공동",
+              "requires": {
+                "sect": "공동"
+              },
+              "text": "공동의 권사들이 변경에서 올라왔다. 주먹으로 산길을 열며 호위들을 밀어 올렸다.",
+              "effects": {
+                "clear": true,
+                "qi_pct": 15
+              }
+            },
+            {
+              "key": "청성",
+              "requires": {
+                "sect": "청성"
+              },
+              "text": "청성의 도사들이 소나무 바람 같은 진을 펼쳤다. 거칠던 숨이 잦아들었다.",
+              "effects": {
+                "clear": true,
+                "qi_pct": 15
+              }
+            },
+            {
+              "key": "점창",
+              "requires": {
+                "sect": "점창"
+              },
+              "text": "창산의 쾌검수들이 눈보라 속에서 번쩍였다. 호위 몇이 칼을 뽑기도 전에 쓰러졌다.",
+              "effects": {
+                "clear": true,
+                "qi_pct": 15
+              }
+            },
+            {
+              "key": "종남",
+              "requires": {
+                "sect": "종남"
+              },
+              "text": "종남의 검수들이 일직선으로 산허리를 뚫고 올라왔다. 앞을 막던 호위들의 진이 갈라졌다.",
               "effects": {
                 "clear": true,
                 "qi_pct": 15
@@ -2922,8 +3058,8 @@
     "name": "귀도객",
     "tier": "일반",
     "realm": "일류",
-    "hp": 475,
-    "attack": 47,
+    "hp": 465,
+    "attack": 46,
     "exp_reward": 1,
     "silver": [
       15,
@@ -3000,8 +3136,8 @@
     "name": "금의위 밀정",
     "tier": "일반",
     "realm": "일류",
-    "hp": 460,
-    "attack": 40,
+    "hp": 450,
+    "attack": 39,
     "exp_reward": 1,
     "silver": [
       21,
@@ -3074,8 +3210,8 @@
     "name": "수귀 황칠",
     "tier": "난적",
     "realm": "절정",
-    "hp": 605,
-    "attack": 46,
+    "hp": 595,
+    "attack": 45,
     "exp_reward": 2,
     "silver": [
       35,
@@ -3161,11 +3297,11 @@
     "stand_in": "수로채졸"
   },
   "독고객": {
-    "name": "독행객",
+    "name": "독행객 마효",
     "tier": "일반",
     "realm": "절정",
-    "hp": 945,
-    "attack": 65,
+    "hp": 880,
+    "attack": 59,
     "exp_reward": 1,
     "silver": [
       21,
@@ -3239,14 +3375,16 @@
     "side": "사도",
     "drop": {
       "skill": "낙성비도"
-    }
+    },
+    "title": "강호 독객",
+    "stand_in": "떠돌이패"
   },
   "장강수적": {
     "name": "쌍부장 양패",
     "tier": "난적",
     "realm": "절정",
-    "hp": 1495,
-    "attack": 88,
+    "hp": 1390,
+    "attack": 79,
     "exp_reward": 2,
     "silver": [
       35,
@@ -3321,8 +3459,8 @@
     "name": "제칠마장 귀곡자",
     "tier": "강적",
     "realm": "현경",
-    "hp": 4595,
-    "attack": 162,
+    "hp": 4185,
+    "attack": 142,
     "exp_reward": 3,
     "silver": [
       84,
@@ -3397,8 +3535,8 @@
     "name": "천년 혈망",
     "tier": "강적",
     "realm": "현경",
-    "hp": 3615,
-    "attack": 125,
+    "hp": 3295,
+    "attack": 110,
     "exp_reward": 3,
     "silver": [
       0,
@@ -3449,8 +3587,8 @@
     "name": "제삼마장 혈수라",
     "tier": "강적",
     "realm": "현경",
-    "hp": 7950,
-    "attack": 176,
+    "hp": 7540,
+    "attack": 165,
     "exp_reward": 3,
     "silver": [
       105,
@@ -3522,8 +3660,8 @@
     "name": "제일마장 무영",
     "tier": "강적",
     "realm": "현경",
-    "hp": 6640,
-    "attack": 187,
+    "hp": 6295,
+    "attack": 175,
     "exp_reward": 3,
     "silver": [
       112,
@@ -3600,8 +3738,8 @@
     "name": "석면귀 오문",
     "tier": "난적",
     "realm": "화경",
-    "hp": 5970,
-    "attack": 190,
+    "hp": 5660,
+    "attack": 177,
     "exp_reward": 2,
     "silver": [
       56,
@@ -3685,8 +3823,8 @@
     "name": "혈수인",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 1525,
-    "attack": 86,
+    "hp": 1420,
+    "attack": 78,
     "exp_reward": 2,
     "silver": [
       42,
@@ -3724,8 +3862,8 @@
     "name": "십팔동인",
     "tier": "난적",
     "realm": "절정",
-    "hp": 1050,
-    "attack": 59,
+    "hp": 1010,
+    "attack": 55,
     "exp_reward": 2,
     "silver": [
       0,
@@ -3766,8 +3904,8 @@
     "name": "운학 진인",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 930,
-    "attack": 55,
+    "hp": 895,
+    "attack": 52,
     "exp_reward": 2,
     "silver": [
       0,
@@ -3810,8 +3948,8 @@
     "name": "운양 진인",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 1245,
-    "attack": 73,
+    "hp": 1160,
+    "attack": 66,
     "exp_reward": 2,
     "silver": [
       0,
@@ -3859,8 +3997,8 @@
     "name": "정혜 사태",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 1290,
-    "attack": 74,
+    "hp": 1200,
+    "attack": 67,
     "exp_reward": 2,
     "silver": [
       0,
@@ -3895,8 +4033,8 @@
     "name": "취개 왕삼",
     "tier": "난적",
     "realm": "절정",
-    "hp": 850,
-    "attack": 59,
+    "hp": 815,
+    "attack": 55,
     "exp_reward": 2,
     "silver": [
       0,
@@ -3949,8 +4087,8 @@
     "name": "독수 당현",
     "tier": "난적",
     "realm": "절정",
-    "hp": 870,
-    "attack": 64,
+    "hp": 835,
+    "attack": 60,
     "exp_reward": 2,
     "silver": [
       28,
@@ -3990,8 +4128,8 @@
     "name": "묵형판관 사갈",
     "tier": "강적",
     "realm": "화경",
-    "hp": 2885,
-    "attack": 111,
+    "hp": 2625,
+    "attack": 98,
     "exp_reward": 3,
     "silver": [
       35,
@@ -4047,8 +4185,8 @@
     "name": "적운 도장",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 1095,
-    "attack": 75,
+    "hp": 1050,
+    "attack": 70,
     "exp_reward": 2,
     "silver": [
       14,
@@ -4075,8 +4213,8 @@
     "name": "천면노수 소낭",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 1215,
-    "attack": 78,
+    "hp": 1165,
+    "attack": 73,
     "exp_reward": 2,
     "silver": [
       42,
@@ -4119,8 +4257,8 @@
     "name": "권마의 그림자",
     "tier": "강적",
     "realm": "화경",
-    "hp": 3065,
-    "attack": 115,
+    "hp": 2790,
+    "attack": 102,
     "exp_reward": 3,
     "silver": [
       0,
@@ -4161,8 +4299,8 @@
     "name": "청풍검 주문양",
     "tier": "일반",
     "realm": "절정",
-    "hp": 1565,
-    "attack": 96,
+    "hp": 1425,
+    "attack": 85,
     "exp_reward": 2,
     "silver": [
       0,
@@ -4203,14 +4341,15 @@
         "text": "\"선배의 이름은 익히 들었소. 그래서 더 물러서지 않겠소.\""
       }
     ],
-    "title": "청성파 후기지수"
+    "title": "청성파 후기지수",
+    "faction": "청성"
   },
   "비무철권": {
     "name": "철권왕 마대호",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 2350,
-    "attack": 116,
+    "hp": 2140,
+    "attack": 102,
     "exp_reward": 2,
     "silver": [
       0,
@@ -4263,8 +4402,8 @@
     "name": "혈의공자",
     "tier": "강적",
     "realm": "초절정",
-    "hp": 2870,
-    "attack": 111,
+    "hp": 2610,
+    "attack": 98,
     "exp_reward": 3,
     "silver": [
       0,
@@ -4345,11 +4484,11 @@
     "title": "비무대회 결승 상대"
   },
   "묘지기": {
-    "name": "협객의 묘지기",
+    "name": "묵수 한오",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 1485,
-    "attack": 83,
+    "hp": 1385,
+    "attack": 76,
     "exp_reward": 3,
     "silver": [
       30,
@@ -4383,14 +4522,15 @@
         "text": "\"눈이 맑은 분이군요. 그래도 규칙은 규칙이오.\""
       }
     ],
-    "named": true
+    "named": true,
+    "title": "협객의 묘지기"
   },
   "생사문지기": {
     "name": "생사의 문지기",
     "tier": "강적",
     "realm": "현경",
-    "hp": 8240,
-    "attack": 201,
+    "hp": 8295,
+    "attack": 197,
     "exp_reward": 5,
     "silver": [
       80,
@@ -4428,7 +4568,7 @@
     "named": true
   },
   "세가공자": {
-    "name": "오대세가 공자 패거리",
+    "name": "토호 자제 패거리",
     "tier": "일반",
     "realm": "이류",
     "hp": 245,
@@ -4446,11 +4586,11 @@
     "level": 6,
     "hp_style": 1.0,
     "attack_style": 1.0,
-    "desc": "이름값으로 사는 세가의 공자와 그 시종들.",
-    "intro": "\"내가 누군지 아느냐. 우리 아버지가 누군지 아느냐. 이놈들, 저놈 다리부터 부러뜨려라.\"",
+    "desc": "고을 토호의 아들과 그를 따르는 왈패들. 아버지 이름으로 산다.",
+    "intro": "\"내가 누군지 아느냐. 우리 아버지가 이 고을의 어른이시다. 얘들아, 저놈 다리부터 부러뜨려라.\"",
     "specials": [
       {
-        "name": "집안 비전",
+        "name": "왈패 몰이",
         "every": 3,
         "mult": 1.5
       }
@@ -4460,7 +4600,7 @@
         "requires": {
           "origin": "하북팽가"
         },
-        "text": "\"팽가 칼이면 다냐. 우리 집안도 오대세가다.\""
+        "text": "\"팽가 칼이면 다냐. 이 고을에선 우리 아버지가 법이다.\""
       },
       {
         "requires": {
@@ -4503,15 +4643,14 @@
       1,
       2
     ],
-    "above": "세가무사",
-    "side": "정도"
+    "above": "세가호위"
   },
   "녹림채주": {
     "name": "개산도 나대붕",
     "tier": "난적",
     "realm": "절정",
-    "hp": 805,
-    "attack": 57,
+    "hp": 780,
+    "attack": 55,
     "exp_reward": 3,
     "silver": [
       35,
@@ -4597,8 +4736,8 @@
     "name": "유성검 소문혁",
     "tier": "난적",
     "realm": "절정",
-    "hp": 855,
-    "attack": 59,
+    "hp": 825,
+    "attack": 56,
     "exp_reward": 3,
     "silver": [
       30,
@@ -4670,14 +4809,15 @@
     "drop": {
       "skill": "기초검법"
     },
-    "stand_in": "세가무사"
+    "stand_in": "세가무사",
+    "faction": "종남"
   },
   "혈교혈승": {
     "name": "혈불 무진",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 2205,
-    "attack": 110,
+    "hp": 2010,
+    "attack": 98,
     "exp_reward": 3,
     "silver": [
       50,
@@ -4760,11 +4900,11 @@
     "returned": "목에 칼자국을 두른 혈승이 합장한다. \"연못이 내 피를 도로 뱉더이다, 시주.\""
   },
   "동창번자": {
-    "name": "동창의 번자",
+    "name": "음수 곽진",
     "tier": "일반",
     "realm": "절정",
-    "hp": 1565,
-    "attack": 96,
+    "hp": 1425,
+    "attack": 85,
     "exp_reward": 1,
     "silver": [
       40,
@@ -4817,14 +4957,16 @@
         },
         "text": "\"이름 높은 자가 입을 열면 조정이 기뻐하지.\""
       }
-    ]
+    ],
+    "title": "동창 번자장",
+    "stand_in": "금의위밀정"
   },
   "남만술사": {
     "name": "만독왕 아루타",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 2520,
-    "attack": 120,
+    "hp": 2295,
+    "attack": 106,
     "exp_reward": 3,
     "silver": [
       50,
@@ -4887,8 +5029,8 @@
     "name": "설령수 하란",
     "tier": "강적",
     "realm": "화경",
-    "hp": 6415,
-    "attack": 169,
+    "hp": 5955,
+    "attack": 154,
     "exp_reward": 5,
     "silver": [
       90,
@@ -4965,8 +5107,8 @@
     "name": "도흔 오광",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 5040,
-    "attack": 173,
+    "hp": 4655,
+    "attack": 156,
     "exp_reward": 3,
     "silver": [
       100,
@@ -5088,7 +5230,8 @@
         },
         "text": "\"선배님 성함이 어찌 되십니까? 일지에 적어야 해서요.\""
       }
-    ]
+    ],
+    "faction": "점창"
   },
   "세가호위": {
     "name": "세가 호위",
@@ -5137,11 +5280,11 @@
     ]
   },
   "살막살수": {
-    "name": "살막의 살수",
+    "name": "귀영 사칠",
     "tier": "일반",
     "realm": "절정",
-    "hp": 385,
-    "attack": 49,
+    "hp": 380,
+    "attack": 48,
     "exp_reward": 1,
     "silver": [
       15,
@@ -5219,14 +5362,16 @@
     "drop": {
       "skill": "낙성비도"
     },
-    "faction": "살막"
+    "faction": "살막",
+    "title": "살막 살수",
+    "stand_in": "사파자객"
   },
   "세가무사": {
-    "name": "세가의 무사",
+    "name": "오대세가 철검대",
     "tier": "일반",
     "realm": "절정",
-    "hp": 1915,
-    "attack": 114,
+    "hp": 1745,
+    "attack": 101,
     "exp_reward": 1,
     "silver": [
       7,
@@ -5234,7 +5379,7 @@
     ],
     "chapters": [],
     "weight": 0,
-    "desc": "오대세가가 길러 낸 무사들. 집안 이름을 칼끝에 달고 다닌다.",
+    "desc": "오대세가가 길러 낸 정예 무사대. 집안 이름을 칼끝에 달고 다닌다.",
     "specials": [
       {
         "name": "발도",
@@ -5283,8 +5428,8 @@
     "name": "철봉 탁발승",
     "tier": "일반",
     "realm": "일류",
-    "hp": 530,
-    "attack": 51,
+    "hp": 520,
+    "attack": 49,
     "exp_reward": 1,
     "silver": [
       7,
@@ -5341,8 +5486,8 @@
     "name": "젊은 협객",
     "tier": "일반",
     "realm": "일류",
-    "hp": 385,
-    "attack": 49,
+    "hp": 380,
+    "attack": 48,
     "exp_reward": 1,
     "silver": [
       15,
@@ -5405,8 +5550,8 @@
     "name": "백의검 하운성",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 1715,
-    "attack": 96,
+    "hp": 1595,
+    "attack": 87,
     "exp_reward": 2,
     "silver": [
       28,
@@ -5480,11 +5625,11 @@
     "stand_in": "맹순찰조"
   },
   "나한승": {
-    "name": "소림 나한승",
+    "name": "혜공",
     "tier": "일반",
     "realm": "절정",
-    "hp": 1770,
-    "attack": 107,
+    "hp": 1610,
+    "attack": 95,
     "exp_reward": 1,
     "silver": [
       20,
@@ -5495,7 +5640,7 @@
       4
     ],
     "weight": 4,
-    "desc": "마를 항복시키러 내려온 소림의 무승들.",
+    "desc": "마를 항복시키러 내려온 소림의 무승.",
     "specials": [
       {
         "name": "나한권",
@@ -5535,14 +5680,16 @@
         "text": "\"이름이 높을수록 업도 깊지요.\""
       }
     ],
-    "faction": "소림"
+    "faction": "소림",
+    "title": "소림 나한당 무승",
+    "stand_in": "맹순찰조"
   },
   "정파명숙": {
     "name": "태산검 배원철",
     "tier": "강적",
     "realm": "화경",
-    "hp": 5190,
-    "attack": 168,
+    "hp": 4725,
+    "attack": 147,
     "exp_reward": 3,
     "silver": [
       63,
@@ -5613,8 +5760,8 @@
     "name": "쌍벽검 문천기",
     "tier": "난적",
     "realm": "화경",
-    "hp": 5970,
-    "attack": 190,
+    "hp": 5660,
+    "attack": 177,
     "exp_reward": 2,
     "silver": [
       56,
@@ -5669,11 +5816,11 @@
     "stand_in": "맹순찰조"
   },
   "마교척살조": {
-    "name": "마교 척살조",
+    "name": "천마신교 적수대",
     "tier": "일반",
-    "realm": "일류",
-    "hp": 385,
-    "attack": 49,
+    "realm": "절정",
+    "hp": 575,
+    "attack": 58,
     "exp_reward": 1,
     "silver": [
       15,
@@ -5681,11 +5828,12 @@
     ],
     "chapters": [
       2,
-      3
+      3,
+      4
     ],
     "weight": 5,
     "evasion": 0.12,
-    "desc": "정파의 이름 높은 자를 지우러 다니는 붉은 소매들.",
+    "desc": "정파의 이름 높은 자를 지우러 다니는 신교의 붉은 소매들. 맡은 머리를 놓친 적이 없다.",
     "specials": [
       {
         "name": "암습",
@@ -5698,12 +5846,12 @@
       }
     ],
     "intro": "\"맹의 개로구나. 조용히 죽어 주어라.\"",
-    "level": 25,
+    "level": 38,
     "hp_style": 0.86,
     "attack_style": 1.13,
     "ranks": [
       2,
-      3
+      4
     ],
     "requires": {
       "dominant": "정도"
@@ -5741,8 +5889,8 @@
     "name": "독비도객 갈충",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 1715,
-    "attack": 96,
+    "hp": 1595,
+    "attack": 87,
     "exp_reward": 2,
     "silver": [
       28,
@@ -5796,8 +5944,8 @@
     "name": "무음귀 사무",
     "tier": "일반",
     "realm": "초절정",
-    "hp": 2320,
-    "attack": 122,
+    "hp": 2115,
+    "attack": 108,
     "exp_reward": 1,
     "silver": [
       28,
@@ -5854,8 +6002,8 @@
     "name": "구혈마견 아독",
     "tier": "강적",
     "realm": "화경",
-    "hp": 8900,
-    "attack": 217,
+    "hp": 8435,
+    "attack": 202,
     "exp_reward": 3,
     "silver": [
       63,
@@ -5914,8 +6062,8 @@
     "name": "현상금 사냥꾼",
     "tier": "일반",
     "realm": "일류",
-    "hp": 385,
-    "attack": 49,
+    "hp": 380,
+    "attack": 48,
     "exp_reward": 1,
     "silver": [
       15,
@@ -5981,8 +6129,8 @@
     "name": "철조 조무성",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 1715,
-    "attack": 96,
+    "hp": 1595,
+    "attack": 87,
     "exp_reward": 2,
     "silver": [
       28,
@@ -6035,8 +6183,8 @@
     "name": "철쇄수 왕백",
     "tier": "일반",
     "realm": "초절정",
-    "hp": 2320,
-    "attack": 122,
+    "hp": 2115,
+    "attack": 108,
     "exp_reward": 1,
     "silver": [
       40,
@@ -6073,8 +6221,8 @@
     "name": "철면판관 서도진",
     "tier": "강적",
     "realm": "화경",
-    "hp": 8900,
-    "attack": 217,
+    "hp": 8435,
+    "attack": 202,
     "exp_reward": 3,
     "silver": [
       63,
@@ -6131,8 +6279,8 @@
     "name": "이름 사냥꾼",
     "tier": "일반",
     "realm": "일류",
-    "hp": 385,
-    "attack": 49,
+    "hp": 380,
+    "attack": 48,
     "exp_reward": 1,
     "silver": [
       15,
@@ -6192,8 +6340,8 @@
     "name": "일도무적 백장풍",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 2680,
-    "attack": 132,
+    "hp": 2435,
+    "attack": 117,
     "exp_reward": 2,
     "silver": [
       28,
@@ -6245,8 +6393,8 @@
     "name": "부동검 남천우",
     "tier": "강적",
     "realm": "화경",
-    "hp": 8900,
-    "attack": 217,
+    "hp": 8435,
+    "attack": 202,
     "exp_reward": 3,
     "silver": [
       63,
@@ -6305,8 +6453,8 @@
     "name": "무명 사냥꾼",
     "tier": "일반",
     "realm": "일류",
-    "hp": 530,
-    "attack": 51,
+    "hp": 520,
+    "attack": 49,
     "exp_reward": 1,
     "silver": [
       7,
@@ -6355,8 +6503,8 @@
     "name": "강호시랑 두칠",
     "tier": "일반",
     "realm": "절정",
-    "hp": 3155,
-    "attack": 140,
+    "hp": 2890,
+    "attack": 125,
     "exp_reward": 1,
     "silver": [
       28,
@@ -6402,8 +6550,8 @@
     "title": "흑사방 향주",
     "tier": "난적",
     "realm": "절정",
-    "hp": 805,
-    "attack": 57,
+    "hp": 780,
+    "attack": 55,
     "exp_reward": 3,
     "silver": [
       35,
@@ -6476,8 +6624,8 @@
     "title": "귀문교 사령승",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 1480,
-    "attack": 86,
+    "hp": 1375,
+    "attack": 78,
     "exp_reward": 3,
     "silver": [
       50,
@@ -6747,11 +6895,11 @@
     ]
   },
   "왕지네": {
-    "name": "묵은 왕지네",
+    "name": "백년 묵은 왕지네",
     "tier": "일반",
     "realm": "일류",
-    "hp": 405,
-    "attack": 44,
+    "hp": 395,
+    "attack": 43,
     "exp_reward": 1,
     "silver": [
       0,
@@ -6765,7 +6913,7 @@
     "level": 25,
     "hp_style": 0.9,
     "attack_style": 1.0,
-    "desc": "수십 년 독을 쌓아 온 지네. 다리 소리만으로 소름이 돋는다.",
+    "desc": "백 년을 독으로 살아온 지네. 다리 소리만으로 소름이 돋는다.",
     "intro": "바위틈에서 사람 팔뚝만 한 지네가 흘러나왔다.",
     "ranks": [
       2,
@@ -6795,8 +6943,8 @@
     "name": "설산 설표",
     "tier": "일반",
     "realm": "절정",
-    "hp": 880,
-    "attack": 79,
+    "hp": 820,
+    "attack": 71,
     "exp_reward": 1,
     "silver": [
       0,
@@ -6837,8 +6985,8 @@
     "name": "금안신조",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 1400,
-    "attack": 90,
+    "hp": 1305,
+    "attack": 82,
     "exp_reward": 3,
     "silver": [
       0,
@@ -6900,8 +7048,8 @@
     "name": "구미 은호",
     "tier": "난적",
     "realm": "초절정",
-    "hp": 1325,
-    "attack": 82,
+    "hp": 1230,
+    "attack": 74,
     "exp_reward": 3,
     "silver": [
       0,
@@ -6970,8 +7118,8 @@
     "name": "백액호",
     "tier": "난적",
     "realm": "화경",
-    "hp": 3655,
-    "attack": 154,
+    "hp": 3330,
+    "attack": 135,
     "exp_reward": 3,
     "silver": [
       0,
@@ -7034,8 +7182,8 @@
     "name": "철갑 현귀",
     "tier": "강적",
     "realm": "화경",
-    "hp": 5315,
-    "attack": 127,
+    "hp": 4840,
+    "attack": 111,
     "exp_reward": 3,
     "silver": [
       0,
@@ -7086,8 +7234,8 @@
     "name": "천년 이무기",
     "tier": "강적",
     "realm": "현경",
-    "hp": 8390,
-    "attack": 191,
+    "hp": 7955,
+    "attack": 178,
     "exp_reward": 3,
     "silver": [
       0,
@@ -7146,11 +7294,11 @@
     "returned": "황룡담이 다시 끓어오른다. 찢어진 비늘 아래 눈이 나를 알아본다."
   },
   "사도련고수": {
-    "name": "사도련 칼잡이들",
+    "name": "사도련 흑수대",
     "tier": "일반",
     "realm": "절정",
-    "hp": 2320,
-    "attack": 122,
+    "hp": 2115,
+    "attack": 108,
     "exp_reward": 2,
     "silver": [
       40,
@@ -7164,7 +7312,7 @@
     "level": 73,
     "hp_style": 1.0,
     "attack_style": 1.0,
-    "desc": "사도련이 돈으로 사 온 칼잡이 무리. 이름은 장부에만 있다.",
+    "desc": "사도련이 돈으로 사 온 칼잡이 부대. 이름은 장부에만 있다.",
     "intro": "\"값은 다 받았소. 이번엔 머릿수로 하겠소.\"",
     "named": false,
     "side": "사도",
@@ -7207,8 +7355,8 @@
     "name": "수로채 수적 무리",
     "tier": "일반",
     "realm": "일류",
-    "hp": 450,
-    "attack": 44,
+    "hp": 440,
+    "attack": 43,
     "exp_reward": 2,
     "silver": [
       40,
@@ -7252,8 +7400,8 @@
     "name": "천마신교 호교대",
     "tier": "일반",
     "realm": "절정",
-    "hp": 2320,
-    "attack": 122,
+    "hp": 2115,
+    "attack": 108,
     "exp_reward": 2,
     "silver": [
       40,
@@ -7310,8 +7458,8 @@
     "name": "혈마대 귀졸 무리",
     "tier": "일반",
     "realm": "절정",
-    "hp": 2320,
-    "attack": 122,
+    "hp": 2115,
+    "attack": 108,
     "exp_reward": 2,
     "silver": [
       40,
@@ -7353,11 +7501,11 @@
     ]
   },
   "떠돌이패": {
-    "name": "떠돌이 고수 패거리",
+    "name": "낭인패 흑랑단",
     "tier": "일반",
     "realm": "절정",
-    "hp": 2320,
-    "attack": 122,
+    "hp": 2115,
+    "attack": 108,
     "exp_reward": 2,
     "silver": [
       40,
@@ -7371,7 +7519,7 @@
     "level": 73,
     "hp_style": 1.0,
     "attack_style": 1.0,
-    "desc": "전란 틈에 칼 하나로 먹고사는 자들.",
+    "desc": "전란 틈에 칼 하나로 먹고사는 낭인 무리.",
     "intro": "\"정마대전 틈에 한몫 잡아야지. 짐 내려놓으시오.\"",
     "named": false,
     "specials": [
@@ -7412,8 +7560,8 @@
     "name": "무림맹 순찰조",
     "tier": "일반",
     "realm": "절정",
-    "hp": 2320,
-    "attack": 122,
+    "hp": 2115,
+    "attack": 108,
     "exp_reward": 2,
     "silver": [
       40,
@@ -7469,8 +7617,8 @@
     "title": "평생의 호적수",
     "tier": "난적",
     "realm": "절정",
-    "hp": 805,
-    "attack": 57,
+    "hp": 780,
+    "attack": 55,
     "exp_reward": 3,
     "silver": [
       0,
@@ -7517,8 +7665,8 @@
     "title": "무림맹주",
     "tier": "강적",
     "realm": "현경",
-    "hp": 8390,
-    "attack": 200,
+    "hp": 7955,
+    "attack": 187,
     "exp_reward": 4,
     "silver": [
       120,
@@ -7602,5 +7750,320 @@
       }
     ],
     "returned": "가슴에 큰 칼자국을 두른 맹주가 지팡이를 짚고 선다. \"맹의 의원들이 밤을 새웠소. 나는 천마를 보기 전에는 죽을 수 없는 사람이오.\""
+  },
+  "종남장로": {
+    "name": "태을검 곽진명",
+    "tier": "난적",
+    "realm": "초절정",
+    "hp": 895,
+    "attack": 52,
+    "exp_reward": 2,
+    "silver": [
+      0,
+      0
+    ],
+    "chapters": [],
+    "weight": 0,
+    "evasion": 0.1,
+    "desc": "곧은 찌르기를 숭상하는 관중의 검문의 장로.",
+    "intro": "\"한 수 보겠네.\"",
+    "specials": [
+      {
+        "name": "일점뇌격",
+        "every": 4,
+        "mult": 1.5
+      }
+    ],
+    "level": 37,
+    "hp_style": 0.93,
+    "attack_style": 0.85,
+    "intros": [
+      {
+        "requires": {
+          "dominant": "마도"
+        },
+        "text": "\"기운이 탁하구려. 그래도 약속은 약속이니 칼끝은 멈추겠소.\""
+      },
+      {
+        "requires": {
+          "min_fame": 60
+        },
+        "text": "\"소문난 이름이니 나도 손을 늦추지 않겠소.\""
+      }
+    ],
+    "title": "종남파 장로",
+    "faction": "종남",
+    "side": "정도"
+  },
+  "점창장로": {
+    "name": "쾌수검 사마령",
+    "tier": "난적",
+    "realm": "초절정",
+    "hp": 895,
+    "attack": 52,
+    "exp_reward": 2,
+    "silver": [
+      0,
+      0
+    ],
+    "chapters": [],
+    "weight": 0,
+    "evasion": 0.1,
+    "desc": "운남 창산의 쾌검 문파의 장로.",
+    "intro": "\"한 수 보겠네.\"",
+    "specials": [
+      {
+        "name": "사일연환",
+        "every": 4,
+        "mult": 1.5
+      }
+    ],
+    "level": 37,
+    "hp_style": 0.93,
+    "attack_style": 0.85,
+    "intros": [
+      {
+        "requires": {
+          "dominant": "마도"
+        },
+        "text": "\"기운이 탁하구려. 그래도 약속은 약속이니 칼끝은 멈추겠소.\""
+      },
+      {
+        "requires": {
+          "min_fame": 60
+        },
+        "text": "\"소문난 이름이니 나도 손을 늦추지 않겠소.\""
+      }
+    ],
+    "title": "점창파 장로",
+    "faction": "점창",
+    "side": "정도"
+  },
+  "청성장로": {
+    "name": "송풍도인 허진",
+    "tier": "난적",
+    "realm": "초절정",
+    "hp": 895,
+    "attack": 52,
+    "exp_reward": 2,
+    "silver": [
+      0,
+      0
+    ],
+    "chapters": [],
+    "weight": 0,
+    "evasion": 0.1,
+    "desc": "사천 청성산의 도가 문파의 장로.",
+    "intro": "\"한 수 보겠네.\"",
+    "specials": [
+      {
+        "name": "최혼일장",
+        "every": 4,
+        "mult": 1.5
+      }
+    ],
+    "level": 37,
+    "hp_style": 0.93,
+    "attack_style": 0.85,
+    "intros": [
+      {
+        "requires": {
+          "dominant": "마도"
+        },
+        "text": "\"기운이 탁하구려. 그래도 약속은 약속이니 칼끝은 멈추겠소.\""
+      },
+      {
+        "requires": {
+          "min_fame": 60
+        },
+        "text": "\"소문난 이름이니 나도 손을 늦추지 않겠소.\""
+      }
+    ],
+    "title": "청성파 장로",
+    "faction": "청성",
+    "side": "정도"
+  },
+  "공동장로": {
+    "name": "복호권 종리건",
+    "tier": "난적",
+    "realm": "초절정",
+    "hp": 895,
+    "attack": 52,
+    "exp_reward": 2,
+    "silver": [
+      0,
+      0
+    ],
+    "chapters": [],
+    "weight": 0,
+    "evasion": 0.1,
+    "desc": "변경 공동산의 권법 문파의 장로.",
+    "intro": "\"한 수 보겠네.\"",
+    "specials": [
+      {
+        "name": "복호일권",
+        "every": 4,
+        "mult": 1.5
+      }
+    ],
+    "level": 37,
+    "hp_style": 0.93,
+    "attack_style": 0.85,
+    "intros": [
+      {
+        "requires": {
+          "dominant": "마도"
+        },
+        "text": "\"기운이 탁하구려. 그래도 약속은 약속이니 칼끝은 멈추겠소.\""
+      },
+      {
+        "requires": {
+          "min_fame": 60
+        },
+        "text": "\"소문난 이름이니 나도 손을 늦추지 않겠소.\""
+      }
+    ],
+    "title": "공동파 장로",
+    "faction": "공동",
+    "side": "정도"
+  },
+  "모용장로": {
+    "name": "회천창 모용경",
+    "tier": "난적",
+    "realm": "초절정",
+    "hp": 895,
+    "attack": 52,
+    "exp_reward": 2,
+    "silver": [
+      0,
+      0
+    ],
+    "chapters": [],
+    "weight": 0,
+    "evasion": 0.1,
+    "desc": "고소의 명문의 장로.",
+    "intro": "\"한 수 보겠네.\"",
+    "specials": [
+      {
+        "name": "회천일창",
+        "every": 4,
+        "mult": 1.5
+      }
+    ],
+    "level": 37,
+    "hp_style": 0.93,
+    "attack_style": 0.85,
+    "intros": [
+      {
+        "requires": {
+          "dominant": "마도"
+        },
+        "text": "\"기운이 탁하구려. 그래도 약속은 약속이니 칼끝은 멈추겠소.\""
+      },
+      {
+        "requires": {
+          "min_fame": 60
+        },
+        "text": "\"소문난 이름이니 나도 손을 늦추지 않겠소.\""
+      }
+    ],
+    "title": "모용세가 장로",
+    "faction": "모용",
+    "side": "정도"
+  },
+  "제갈장로": {
+    "name": "천기자 제갈운",
+    "tier": "난적",
+    "realm": "초절정",
+    "hp": 895,
+    "attack": 52,
+    "exp_reward": 2,
+    "silver": [
+      0,
+      0
+    ],
+    "chapters": [],
+    "weight": 0,
+    "evasion": 0.1,
+    "desc": "융중의 명문의 장로.",
+    "intro": "\"한 수 보겠네.\"",
+    "specials": [
+      {
+        "name": "구궁만발",
+        "every": 4,
+        "mult": 1.5
+      }
+    ],
+    "level": 37,
+    "hp_style": 0.93,
+    "attack_style": 0.85,
+    "intros": [
+      {
+        "requires": {
+          "dominant": "마도"
+        },
+        "text": "\"기운이 탁하구려. 그래도 약속은 약속이니 칼끝은 멈추겠소.\""
+      },
+      {
+        "requires": {
+          "min_fame": 60
+        },
+        "text": "\"소문난 이름이니 나도 손을 늦추지 않겠소.\""
+      }
+    ],
+    "title": "제갈세가 장로",
+    "faction": "제갈",
+    "side": "정도"
+  },
+  "세가직계": {
+    "name": "옥면창 모용결",
+    "tier": "난적",
+    "realm": "절정",
+    "hp": 825,
+    "attack": 56,
+    "exp_reward": 3,
+    "silver": [
+      30,
+      50
+    ],
+    "chapters": [],
+    "weight": 0,
+    "level": 32,
+    "hp_style": 1.0,
+    "attack_style": 1.0,
+    "desc": "오대세가 모용의 직계 후기지수. 오만하지만 실력은 진짜다.",
+    "intro": "\"모용의 창을 받아 보겠소? 물러서도 흉은 아니오.\"",
+    "specials": [
+      {
+        "name": "회천일창",
+        "every": 4,
+        "mult": 1.5
+      }
+    ],
+    "intros": [
+      {
+        "requires": {
+          "dominant": "마도"
+        },
+        "text": "\"마도와는 겨루지 않소. 다만 치워야겠지.\""
+      },
+      {
+        "requires": {
+          "min_fame": 60
+        },
+        "text": "\"그 이름이 궁금했소. 창끝으로 묻겠소.\""
+      }
+    ],
+    "ranks": [
+      3,
+      4
+    ],
+    "side": "정도",
+    "title": "모용세가 직계",
+    "drop": {
+      "skill": "기초검법"
+    },
+    "stand_in": "세가무사",
+    "faction": "모용"
   }
 }

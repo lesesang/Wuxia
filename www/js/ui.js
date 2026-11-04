@@ -4,7 +4,7 @@ import { INJURY_PENALTY } from "./battle.js";
 import { DB } from "./data.js";
 import { eventView } from "./events.js";
 import { Game } from "./game.js";
-import { bonusFor, equipmentBonus, itemName, stockView } from "./market.js";
+import { bonusFor, equipmentBonus, gearGimmick, itemGrade, itemName, sellableView, stockView } from "./market.js";
 import {
   buyContent, buyProvision, buyUpgrade, exportRecords, extraSlots, importRecords, legacyAvailable, loadCheckpoint, loadEventLog, loadMeta, nextReward, openLegacy, refundProvision, setUpgradeUse, upgradeUse,
   toggleContent, unlockOrigin, unlockTrait, upgradeLevel,
@@ -14,7 +14,7 @@ import {
   ORIGIN_SECTS, realmProgress, traitSlots, realmPerks, activeCompanions, MAX_COMPANIONS } from "./rules.js";
 import { MAX_TURN } from "./character.js";
 import { storage } from "./storage.js";
-import { josa } from "./josa.js";
+import { halpun, josa } from "./josa.js";
 
 const game = new Game();
 const ui = {
@@ -63,10 +63,10 @@ function skillDetail(s) {
     if (s.secret_technique) lines.push(`비기 ${s.secret_technique.name}: ${s.secret_technique.unlock_grade} 품계, 성취 ${s.secret_technique.unlock_mastery}, 위력 ${s.secret_technique.multiplier}배, 내력 ${s.secret_technique.qi_cost}`);
   } else if (s.type === "심공") {
     const e = s.effect;
-    lines.push(`체력 ${e.heal_hp_pct}%, 내력 ${e.heal_qi_pct}% 회복${e.atk_buff_pct ? `, ${e.buff_rounds}합 동안 위력 +${e.atk_buff_pct}%` : ""}`);
+    lines.push(`체력 ${halpun(e.heal_hp_pct)}, 내력 ${halpun(e.heal_qi_pct)} 회복${e.atk_buff_pct ? `, ${e.buff_rounds}합 동안 위력 +${halpun(e.atk_buff_pct)}` : ""}`);
   } else {
     const e = s.effect;
-    lines.push(`회피 ${e.evade}%, 다음 공격 +${e.counter_pct}%, 도주 +${e.flee_bonus}%, 내력 ${s.qi_cost}`);
+    lines.push(`회피 ${halpun(e.evade)}, 다음 공격 +${halpun(e.counter_pct)}, 도주 +${halpun(e.flee_bonus)}, 내력 ${s.qi_cost}`);
   }
   if (s.gimmick) lines.push(`묘리 ${s.gimmick.name}(상승 품계부터): ${s.gimmick.text}`);
   if (s.origin) lines.push(`${DB.origins.origins[s.origin].name} 전용`);
@@ -108,7 +108,7 @@ function codexRows(tab, meta) {
       total: Object.keys(DB.market).length, filterLabel: "종류", filters: cats, empty: "장터에서 사거나 쓴 물건이 이곳에 기록됩니다.",
       rows: meta.known_items.filter((k) => DB.market[k]).map((k) => {
         const i = DB.market[k];
-        return { key: k, name: i.name, meta: categoryName(i.category), desc: i.desc, cats: [categoryName(i.category)] };
+        return { key: k, name: i.name, meta: `${categoryName(i.category)}, ${i.grade ?? "비급"}`, desc: i.gimmick ? `${i.desc} 묘리 ${i.gimmick.name}: ${i.gimmick.text}` : i.desc, cats: [categoryName(i.category)] };
       }),
     };
   }
@@ -220,57 +220,69 @@ function refreshCodexList() {
 
 function helpModal() {
   const section = (title, lines) => `<div class="modal-section"><h4>${title}</h4>${lines.map((l) => `<p class="help-line">${l}</p>`).join("")}</div>`;
-  return modalShell("help-modal", "강호 입문서", `
-    ${section("목표", ["10년(120달) 뒤 겨울, 천마봉에서 천마를 쓰러뜨립니다.", "처음에는 어렵습니다. 죽어도 카르마가 남고, 멀리 갈수록 많이 받습니다.", "카르마로 출신과 자질, 항상 적용되는 기틀, 새 인연을 얻을 수 있습니다. 쌓인 카르마가 늘면 누적 보상도 저절로 받습니다. 채비는 다음 강호행 한 번에만 쓰는 값싼 준비물입니다. 천마를 한 번 쓰러뜨리면 전설의 유산도 열 수 있습니다."])}
-    ${section("매달 하는 일", [
+    const pages = {
+    처음: `${section("목표", ["10년(120달) 뒤 겨울, 천마봉에서 천마를 쓰러뜨립니다.", "처음에는 어렵습니다. 죽어도 카르마가 남고, 멀리 갈수록 많이 받습니다.", "카르마로 출신과 자질, 항상 적용되는 기틀, 새 인연을 얻을 수 있습니다. 쌓인 카르마가 늘면 누적 보상도 저절로 받습니다. 채비는 다음 강호행 한 번에만 쓰는 값싼 준비물입니다. 천마를 한 번 쓰러뜨리면 전설의 유산도 열 수 있습니다."])}
+${section("매달 하는 일", [
     "<b>탐색</b>: 강호를 떠돌며 전투, 사건, 기연 중 하나를 만납니다. 가장 크게 성장하지만 위험합니다.",
     "<b>수련</b>: 외공과 무리, 주무공 성취가 오릅니다. 대련으로 실전 경험을 얻기도 합니다.",
     "<b>운기</b>: 내공과 심경이 오르고 내력을 되찾습니다. 초식을 깨치기도 합니다.",
     "<b>요양</b>: 체력과 내력을 채우고 내상을 치료합니다. 싸우기 전에 몸을 챙기세요."])}
-    ${section("경지", ["일류, 절정, 초절정, 화경, 현경 순으로 오릅니다. 기량과 <b>실전 경험</b>이 함께 차야 돌파합니다. 위쪽 띠에서 남은 조건을 볼 수 있습니다.", "경지가 오르면 주는 피해가 크게 늘고 받는 피해가 줄어듭니다. 심경이 낮으면 돌파할 때 기가 역류해 다칠 수 있습니다.", ...Object.entries(DB.realms.perks).map(([realm, perk]) => `<b>${esc(realm)}의 특전, ${esc(perk.name)}</b>: ${esc(perk.desc)}`)])}
-    ${section("무공의 품계", [
+${section("저장", ["매달 초 자동으로 저장됩니다. 도중에 끄면 그달의 처음부터 이어 합니다."])}
+${section("할과 푼", ["비율은 할과 푼으로 적습니다. 1할은 열에 하나, 1푼은 백에 하나입니다. 3할 5푼이면 백에 서른다섯입니다."])}`,
+    경지: `${section("경지", ["일류, 절정, 초절정, 화경, 현경 순으로 오릅니다. 기량과 <b>실전 경험</b>이 함께 차야 돌파합니다. 화면 위쪽 띠의 평균, 최저, 실전 경험이 남은 조건입니다.", "경지가 오르면 주는 피해가 크게 늘고 받는 피해가 줄어듭니다. 심경이 낮으면 돌파할 때 기가 역류해 다칠 수 있습니다.", ...Object.entries(DB.realms.perks).map(([realm, perk]) => `<b>${esc(realm)}의 특전, ${esc(perk.name)}</b>: ${esc(perk.desc)}`)])}
+${section("생사경", [
+    "현경 너머의 숨은 경지이자 가장 높은 결말입니다. 돌파로는 오르지 못하고, 천마를 쓰러뜨린 바로 그 순간에만 판가름 납니다.",
+    "네 기량이 끝에 가깝고 실전이 충분히 쌓인 무인이, 체력과 내력을 넉넉히 남긴 채 천마를 넘어서면 이릅니다. 카르마는 모두 25를 받습니다."])}`,
+    무공: `${section("무공의 품계", [
     "<b>기본</b>: 강호 어디서나 배우는 무공. 낮아 보여도 성취를 쌓으면 승급합니다.",
     "<b>명품</b>: 이름난 문파와 고수의 무공. 절정 이상의 적이 가끔 지니고 있고 장터에도 나옵니다.",
     "<b>상승</b>: 고수만이 쓰는 무공. 화경 이상의 적에게서나, 뒤쪽 장터에서 얻습니다.",
     "<b>일절</b>: 한 문파나 한 시대의 끝을 이룬 무공. 소속의 비전이나 큰 인연에서만 얻고, 승급으로 오를 수 있는 끝입니다.",
-    "<b>신공</b>: 전설의 무공. 승급이나 장터, 일반 사건이나 유산으로는 얻을 수 없고 출신의 이야기와 카르마로 연 인연에서만 나옵니다.",
+    "<b>신공</b>: 전설의 무공. 승급이나 장터, 일반 사건이나 유산으로는 얻을 수 없고 출신의 이야기와 카르마로 연 인연에서만 나옵니다. 일절의 끝에서 큰 깨달음으로 오르기도 합니다.",
     "품계가 높을수록 위력이 크고 내력을 많이 쓰며, 일부 무공은 성취가 차면 <b>비기</b>가 열립니다.",
     "<b>묘리</b>: 상승 품계부터 무공마다 고유한 묘리가 드러납니다. 승급으로 상승에 이른 무공도 같습니다. 나눠 쳐서 번번이 회심을 가리는 공격, 준 피해를 빨아들이는 공격, 적을 굳히는 공격, 호신 기운을 두르는 심법, 저절로 피하거나 되받아치는 경공처럼 무공마다 다릅니다. 신상의 무공 칸에서 볼 수 있습니다.",
     "무공은 공격, 심법, 경공 셋으로 나뉘고 칸마다 쓸 무공 하나를 고릅니다. 새로 얻었다고 저절로 바뀌지 않으니 신상의 무공 칸에서 고르세요.",
     "성취가 100을 넘어 더 쌓이면 다음 품계로 승급합니다. 승급하면 성취가 줄어들고 위력은 오릅니다.",
     "<b>같은 무공을 또 얻으면</b> 성취가 오릅니다. <b>같은 갈래의 더 깊은 무공</b>을 얻으면 따로 쌓이지 않고 쓰던 무공이 그것으로 이어지며 성취와 오른 품계는 그대로 갑니다."])}
-    ${section("적과 강호의 수준", [
+${section("위력의 기준", ["무공에 적힌 <b>위력 N배</b>는 기본 공격력에 곱하는 값입니다. 기본 공격력은 네 기량(무리가 가장 크고, 다음이 외공, 내공, 심경 순)에 병기의 위력을 더한 값입니다. 맨손 공격이 1배입니다.", "거기에 경지, 자질, 소속, 성향의 보정이 곱해지고, 품계가 오르면 2할 5푼, 성취 1마다 0.003배가 더해집니다. 성취가 100이면 0.3배가 늘어납니다.", "비기의 위력은 그 무공의 위력에 비기 배수를 한 번 더 곱합니다. 비기는 내공이 위력에 더 크게 들어갑니다."])}
+${section("성취 쌓기", ["주무공은 수련과 싸움에서, 심법은 운기와 심법 운기, 승리에서, 보법은 수련과 경공 사용, 승리에서 성취가 오릅니다."])}
+${section("일절 너머", ["일절 무공의 성취가 100에 이르면 드물게 큰 깨달음이 찾아옵니다. 받아들이면 그 무공이 신공의 경지에 오르고, 그 대가로 몸이 크게 상합니다. 공격 무공, 심법, 보법 모두 그렇습니다."])}`,
+    전투: `${section("전투", [
+    "무공은 내력을 씁니다. 내력이 없으면 맨손으로 싸웁니다.",
+    "적의 필살기는 한 합 전에 미리 예고됩니다. <b>경공</b>으로 흘려내면 다음 공격이 강해집니다.",
+    "<b>심법</b>은 숨을 고르며 회복하고 점혈을 풉니다. 위험하면 <b>도주</b>도 방법입니다.",
+    "내상은 전투가 끝나도 남고 주는 피해를 줄입니다.",
+    "강호행마다 한 번, 쓰러지는 순간 마지막 힘을 끌어모을 수 있습니다. 화면 가운데 창에서 고르며, 끌어모으면 체력과 내력이 최대의 절반만큼 차오릅니다."])}
+${section("비무", ["비무에서는 져도 죽지 않습니다. 체력이 1할만 남고 얻는 것이 없으며, 그 비무가 이어지는 일의 한 편이었다면 그 일은 어그러집니다. 기권해도 같습니다. 이겨도 사람을 죽인 것은 아니어서 처치 수와 성향은 오르지 않습니다."])}
+${section("결전에 달려오는 사람", [`강호에서 자주 마주치는 사람들과 인연을 끝까지 맺으면 천마와의 결전에 달려옵니다. 몇 합마다 대신 공격하거나, 회복시켜 주거나, 천마의 기세를 꺾거나, 함께 있는 것만으로 위력과 방어를 올려 줍니다. 한 번에 ${MAX_COMPANIONS}명까지 옵니다. 대부분 카르마로 인연을 사야 만날 수 있고, 내 성향과 출신에 따라 대하는 태도가 다릅니다.`])}
+${section("적과 강호의 수준", [
     "적의 경지는 이류, 일류, 절정, 초절정, 화경, 현경 순입니다. 산적은 산적이고, 이름난 고수는 그만한 경지입니다.",
     "<b>힘의 기준</b>: 생사경은 천마뿐입니다. 현경은 무림맹주와 천마의 최고 간부(십이마장), 화경은 각 세력의 수장과 천마신교 장로, 초절정은 각 세력의 주력과 큰 세력의 수장, 절정은 손꼽히는 후기지수와 작은 세력의 수장입니다.",
     "이름 없는 산적이나 자객은 몇 번이고 나오지만, 이름 있는 자는 쓰러뜨리면 다시 나오지 않습니다. 그 자리에는 다른 자가 나서고, 아주 드물게는 죽음에서 돌아옵니다.",
     "지금이 몇 장인지에 따라 만날 수 있는 적이 정해지고, 그중에서 내 경지와 가까운 적을 더 자주 만납니다. 성향과 명성에 따라 찾아오는 적도 달라집니다.",
     "<b>일반, 난적, 강적</b> 순으로 강합니다. 절정부터 이름 있는 자가 나오기 시작하고, 초절정부터는 대개 소속과 별호를 가진 인물입니다.",
     "적은 경지에 맞는 비급과 약을 지니고 있습니다. 위로 갈수록 좋은 품계가 나오고 주무공과 같은 계열이 더 잘 나옵니다. 짐승과 영물은 비급 대신 쓸개나 내단을 남깁니다. 내단은 행낭에서 삼키면 기량이 오릅니다."])}
-    ${section("비무", ["비무에서는 져도 죽지 않습니다. 체력이 1할만 남고 얻는 것이 없으며, 그 비무가 이어지는 일의 한 편이었다면 그 일은 어그러집니다. 기권해도 같습니다. 이겨도 사람을 죽인 것은 아니어서 처치 수와 성향은 오르지 않습니다."])}
-    ${section("영물과 내단", ["산과 물에는 짐승과 오래 묵은 영물이 삽니다. 이들은 쓸개, 뼈, 구슬, 내단을 남깁니다. 행낭에서 쓰면 기량이 오릅니다. 천년 내단은 이무기나 늪의 왕 같은 큰 영물에게서나 얻습니다."])}
-    ${section("소속", [
+${section("영물과 내단", ["산과 물에는 짐승과 오래 묵은 영물이 삽니다. 이들은 쓸개, 뼈, 구슬, 내단을 남깁니다. 행낭에서 쓰면 기량이 오릅니다. 천년 내단은 이무기나 늪의 왕 같은 큰 영물에게서나 얻습니다."])}`,
+    세력: `${section("소속", [
     "문파나 세력을 돕고 나면 제안이 오고, 받아들여야 소속이 됩니다. 소속마다 고유한 혜택과 이야기, 비전 무공이 있습니다. 한번 들어가면 다른 소속을 받을 수 없습니다.",
     "소속 없이 3년 차 늦봄에서 여름에 이르면 성향에 맞는 문을 직접 두드릴 수 있습니다. 어디에도 가지 않고 홀로 가면 그 뒤로 문파의 손길이 드물게 닿습니다.",
     "성향이 맞지 않는 세력은 도움을 청하기는커녕 칼을 뽑기도 합니다."])}
-    ${section("전투", [
-    "무공은 내력을 씁니다. 내력이 없으면 맨손으로 싸웁니다.",
-    "적의 필살기는 한 합 전에 미리 예고됩니다. <b>경공</b>으로 흘려내면 다음 공격이 강해집니다.",
-    "<b>심법</b>은 숨을 고르며 회복하고 점혈을 풉니다. 위험하면 <b>도주</b>도 방법입니다.",
-    "내상은 전투가 끝나도 남고 주는 피해를 줄입니다.",
-    "강호행마다 한 번, 쓰러지는 순간 마지막 힘을 끌어모을 수 있습니다. 화면 가운데 창에서 고르며, 끌어모으면 체력과 내력이 최대의 절반만큼 차오릅니다."])}
-    ${section("결전에 달려오는 사람", [`강호에서 자주 마주치는 사람들과 인연을 끝까지 맺으면 천마와의 결전에 달려옵니다. 몇 합마다 대신 공격하거나, 회복시켜 주거나, 천마의 기세를 꺾거나, 함께 있는 것만으로 위력과 방어를 올려 줍니다. 한 번에 ${MAX_COMPANIONS}명까지 옵니다. 대부분 카르마로 인연을 사야 만날 수 있고, 내 성향과 출신에 따라 대하는 태도가 다릅니다.`])}
-    ${section("장터와 성장", ["매년 말 장터가 열리고 달을 쓰지 않습니다. 더 나은 병기와 호신구가 항상 진열되고, 익힌 무공과 맞는 물건이 더 자주 나옵니다.", "도구는 계열이 맞으면 제 효과를 내고 맞지 않으면 절반입니다. 수련 도구는 언제든, 전투 도구는 전투 중에 씁니다.", "같은 계열 무공의 성취는 품계가 같으면 절반, 낮으면 3할을 주무공으로 옮길 수 있습니다. 신상의 무공 칸에서 합니다.", "새해가 밝으면 체력과 내력이 가득 차고 내상이 낫습니다.", "무공은 성취 100을 넘겨 더 쌓으면 다음 품계로 승급합니다. 일절이 승급의 끝입니다. 신공은 출신의 이야기나 카르마로 연 인연에서만 얻습니다.", "병기는 주무공과 계열이 맞아야 제 힘을 냅니다. 맞지 않으면 3/4만 나옵니다.", "사건의 선택으로 정도, 사도, 마도 성향이 최대 999까지 쌓입니다. 60, 200, 400, 600, 850에서 단계가 오르며 혜택이 커지고, 사람들의 대접과 사건, 결말이 달라집니다. 한 길에 집중하면 더 잘 오르지만 정도와 마도는 서로 깎아 먹고 사도도 양쪽과 조금씩 부딪칩니다."])}
-    ${section("카르마를 얻는 길", [
+${section("오대세가와 구파일방", ["<b>구파일방</b>: 소림, 무당, 화산, 아미, 곤륜, 종남, 점창, 청성, 공동의 아홉 문파와 개방입니다.", "<b>오대세가</b>: 남궁, 하북팽가, 사천당가, 모용, 제갈입니다. 남궁과 팽가는 천마신교의 손에 멸문해 이제 들어갈 수 없습니다. 그 마지막 사람은 출신으로 고를 수 있습니다.", "<b>사파</b>: 사도련, 녹림맹, 살막, 흑사방, 하오문. <b>마도</b>: 천마신교, 혈교, 귀문교입니다.", "사천당가는 독과 암기를 다루지만 해독과 의술에 밝은 정파의 명문입니다."])}
+${section("출신의 이야기", ["출신마다 전용 이야기가 있습니다. 조건을 채운 이야기는 탐색에서 더 자주 찾아오고, 끝까지 만나지 못했으면 결전 전 마지막 해에 찾아옵니다. 카르마로 켠 출신 인연도 같습니다. 조건을 끝내 채우지 못한 이야기는 나오지 않습니다.", "이어지는 인연은 여러 달을 쓰는 대신 끝을 맺으면 보상이 큽니다."])}`,
+    장터: `${section("장터", ["매년 말 장터가 열리고 달을 쓰지 않습니다. 병기와 호신구는 해마다 진열되고, 주무공에 맞는 병기가 먼저 나옵니다. 심법과 보법 비급도 칸을 따로 둡니다.", "주무공과 맞는 무공, 병기, 도구가 더 자주 나옵니다. 기틀 <b>외길 안목</b>을 올리면 장터와 적의 품에서 더 잘 나옵니다.", "병기 값 옆의 품계를 보세요. 비급은 그 무공의 품계, 나머지는 범품, 양품, 명품, 보물, 신물로 나뉩니다."])}
+    ${section("병장기와 물건의 품계", ["<b>범품, 양품</b>: 위력이나 방어만 오르는 물건입니다. <b>명품, 보물, 신물</b> 병장기에는 저마다의 <b>묘리</b>가 있습니다. 방어를 무시하는 칼, 맞으면 적이 굳는 곤, 공격을 저절로 피하게 하는 옷처럼 다릅니다. 병기의 묘리는 주무공 계열과 맞아야 나타납니다.", "보물과 신물 대부분은 장터에 없습니다. 큰 사건과 이어지는 인연, 카르마로 산 인연에서 얻습니다.", "새로 얻은 병장기가 더 나으면 바로 듭니다. 지금 것이 더 나으면 행낭에 챙기고, 신상의 행낭 칸이나 장터에서 언제든 바꿔 들 수 있습니다.", "약과 도구, 쓰지 않는 병장기는 장터에서 값의 4할에 되팔 수 있습니다. 들고 있는 병장기는 먼저 내려놓아야 합니다."])}
+    ${section("도구와 약 쓰기", ["전투 중 약이나 도구 <b>하나는 합을 쓰지 않습니다</b>. 같은 합에 하나를 더 쓰면 그때는 합이 지나가고 적이 움직입니다.", "수련 도구는 언제든, 전투 도구는 전투 중에 씁니다. 계열이 정해진 도구는 맞으면 제 효과를 내고 맞지 않으면 절반입니다.", "같은 계열 무공의 성취는 신상의 무공 칸에서 주무공으로 옮길 수 있습니다. 품계가 같으면 절반, 낮으면 3할이 옮겨 갑니다."])}`,
+    카르마: `${section("카르마를 얻는 길", [
     "<b>도달한 장</b>: 천마까지 가지 못하고 끝나면 1장 +1부터 5장 +5까지 받습니다. 천마에게 져도 +5입니다.",
     `<b>결말</b>: 천마까지 가면 장 대신 받습니다. ${Object.entries(DB.endings.karma).filter(([k]) => !["생사경", "사망"].includes(k)).map(([k, v]) => `${esc(DB.endings.titles[k])} +${v}`).join(", ")}`,
     "<b>경지</b>: 어느 쪽이든 오른 경지에 따라 더 받습니다. 절정 +1, 초절정 +2, 화경 +3, 현경 +4",
     "<b>공적</b>: 처음 이룰 때 한 번 더 받습니다. 강호록의 공적 칸에서 볼 수 있습니다.",
     "카르마는 써도 누적은 줄지 않고, 누적 보상을 다 받은 뒤에도 계속 쌓입니다."])}
-    ${section("생사경", [
-    "현경 너머의 숨은 경지이자 가장 높은 결말입니다. 돌파로는 오르지 못하고, 천마를 쓰러뜨린 바로 그 순간에만 판가름 납니다.",
-    "네 기량이 끝에 가깝고 실전이 충분히 쌓인 무인이, 체력과 내력을 넉넉히 남긴 채 천마를 넘어서면 이릅니다. 카르마는 모두 25를 받습니다."])}
-    ${section("겹쳐 받을 때", ["자질, 기틀, 채비, 누적 보상에서 받는 시작 병기와 갑의는 겹칠수록 한 단계씩 좋아지고, 끝을 넘으면 은자로 돌아옵니다. 같은 비급과 무공이 겹치면 성취가 됩니다."])}
-    ${section("저장", ["매달 초 자동으로 저장됩니다. 도중에 끄면 그달의 처음부터 이어 합니다."])}
+${section("겹쳐 받을 때", ["자질, 기틀, 채비, 누적 보상에서 받는 시작 병기와 갑의는 겹칠수록 한 단계씩 좋아지고, 끝을 넘으면 은자로 돌아옵니다. 같은 비급과 무공이 겹치면 성취가 됩니다."])}`,
+  };
+  const page = pages[ui.helpPage] ? ui.helpPage : "처음";
+  return modalShell("help-modal", "강호 입문서", `<div class="tabs help-tabs">${Object.keys(pages).map((name) => `<button class="tab-btn${page === name ? " active" : ""}" data-act="help-page" data-key="${name}">${name}</button>`).join("")}</div>
+    ${pages[page]}
     <label class="guide-off"><input type="checkbox" id="guide-off" class="toggle" ${storage.get("wuxia-show-guide") === "off" ? "checked" : ""}> 강호행을 시작할 때 이 안내문을 보지 않기</label>`);
 }
 
@@ -565,6 +577,22 @@ function companionList(p) {
   return rows.length ? `<div class="modal-section"><h4>결전에 달려올 사람</h4>${rows.map((c) => `<div class="skill-row">${esc(c.name)}<div class="skill-meta">${esc(c.help_text)}</div></div>`).join("")}</div>` : "";
 }
 
+/** 병장기의 묘리 한 줄 */
+function gimmickLine(p, slot) {
+  const g = DB.market[p[slot]]?.gimmick;
+  if (!g) return "";
+  const on = gearGimmick(p, slot);
+  return `<p class="skill-meta">묘리 ${esc(g.name)}${on ? "" : " (주무공과 맞지 않아 쉬는 중)"}: ${esc(g.text)}</p>`;
+}
+
+/** 챙겨 둔 병장기. 싸우지 않을 때 바꿔 든다 */
+function spareGear(p) {
+  if (!p.gear.length) return "";
+  return `<div class="modal-section"><h4>챙겨 둔 병장기</h4>${p.gear.filter((k) => DB.market[k]).map((key) => `<div class="skill-row"><div class="skill-head">
+    <span>${esc(DB.market[key].name)} <span class="skill-meta">${esc(itemGrade(key))}</span><br><span class="skill-meta">${esc(DB.market[key].desc)}${DB.market[key].gimmick ? ` 묘리 ${esc(DB.market[key].gimmick.name)}: ${esc(DB.market[key].gimmick.text)}` : ""}</span></span>
+    ${!game.battle && p.alive ? `<button class="mini-btn" data-act="equip-gear" data-key="${esc(key)}">들기</button>` : ""}</div></div>`).join("")}</div>`;
+}
+
 function statusModal() {
   const p = game.player;
   const row = (label, value) => `<div class="stat-row"><span>${esc(label)}</span><span>${esc(value)}</span></div>`;
@@ -594,7 +622,7 @@ function statusModal() {
   }).join("") || `<p class="codex-empty">아직 익힌 무공이 없습니다.</p>`;
 
   const bag = inventory.map(([key, count]) => `<div class="skill-row"><div class="skill-head">
-    <span>${esc(DB.market[key].name)} ${count}개<br><span class="skill-meta">${esc(DB.market[key].desc)}</span></span>
+    <span>${esc(DB.market[key].name)} ${count}개 <span class="skill-meta">${esc(itemGrade(key))}</span><br><span class="skill-meta">${esc(DB.market[key].desc)}</span></span>
     ${!game.battle && p.alive && !DB.market[key].battle_only ? `<button class="mini-btn" data-act="use-item" data-key="${esc(key)}">사용</button>` : ""}</div></div>`).join("")
     || `<p class="codex-empty">장터에서 산 상비약과 도구가 이곳에 들어옵니다.</p>`;
 
@@ -606,7 +634,7 @@ function statusModal() {
       <div class="modal-section">
         ${row("출신", p.origin)}${row("사문", sect ? `${sect.name} (${sect.bonus_text})` : "없음")}
         ${row("명성", `${p.fame} (${fameRank(p.fame)})`)}
-        ${p.injury ? row("내상", `${p.injury}단계, 주는 피해 -${p.injury * INJURY_PENALTY}%, 요양으로 치료`) : ""}
+        ${p.injury ? row("내상", `${p.injury}단계, 주는 피해 -${halpun(p.injury * INJURY_PENALTY)}, 요양으로 치료`) : ""}
         ${row("실전 경험", `${p.battles} (${p.kills}명 처치)`)}
         ${row("끌어모을 마지막 힘", `${p.revives}번`)}
       </div>
@@ -624,9 +652,11 @@ function statusModal() {
     history: chronicleList(p) || `<p class="codex-empty">아직 남길 만한 일이 없습니다.</p>`,
     bag: `<div class="modal-section">
         ${row("은자", p.silver)}
-        ${row("병기", weapon ? `${weapon} (위력 +${equipmentBonus(p, "weapon")})` : "없음")}
-        ${row("호신구", armor ? `${armor} (받는 피해 -${equipmentBonus(p, "armor")})` : "없음")}
-      </div><div class="modal-section"><h4>상비약과 도구</h4>${bag}</div>`,
+        ${row("병기", weapon ? `${weapon}, ${itemGrade(p.weapon)} (위력 +${equipmentBonus(p, "weapon")})` : "없음")}
+        ${gimmickLine(p, "weapon")}
+        ${row("호신구", armor ? `${armor}, ${itemGrade(p.armor)} (받는 피해 -${equipmentBonus(p, "armor")})` : "없음")}
+        ${gimmickLine(p, "armor")}
+      </div>${spareGear(p)}<div class="modal-section"><h4>상비약과 도구</h4>${bag}</div>`,
   };
   const tabs = [["stats", "기량"], ["skills", "무공"], ["bag", "행낭"], ["history", "기록"]];
   return modalShell("status-modal", "신상", `
@@ -670,8 +700,8 @@ function renderBattle() {
   if (b.poison) tags.push(["bad", `중독 ${b.poison.rounds}`]);
   if (b.sealed) tags.push(["bad", "혈도 봉쇄"]);
   if (p.injury) tags.push(["bad", `내상 ${p.injury}`]);
-  if (b.atkBuff) tags.push(["good", `위력 +${b.atkBuff.percent}%`]);
-  if (b.counterPct) tags.push(["good", `반격 +${b.counterPct}%`]);
+  if (b.atkBuff) tags.push(["good", `위력 +${halpun(b.atkBuff.percent)}`]);
+  if (b.counterPct) tags.push(["good", `반격 +${halpun(b.counterPct)}`]);
   if (b.enemyPoison) tags.push(["good", "적 중독"]);
   for (const c of b.companions) tags.push(["good", c.name]);
   const lowHp = p.hp < p.maxHp() * 0.3;
@@ -715,10 +745,10 @@ function renderBattle() {
       <div class="battle-actions">
         <button class="bt-btn" data-act="battle" data-action="비기" ${secretReady ? "" : "disabled"}>${skill?.secretUnlocked ? esc(skill.secretName) : "비기"}<small>${esc(secretNote)}</small></button>
         <button class="bt-btn${b.sealed ? " suggest" : ""}" data-act="battle" data-action="심법" ${mindset ? "" : "disabled"}>${mindset ? esc(mindset.name) : "심법"}<small>${mindset ? "회복, 점혈 해제" : "익힌 심법 없음"}</small></button>
-        <button class="bt-btn${warning && movement ? " suggest" : ""}" data-act="battle" data-action="경공" ${movement && p.qi >= movement.qiCost ? "" : "disabled"}>${movement ? esc(movement.name) : "경공"}<small>${movement ? `내력 ${movement.qiCost}, 회피 ${movement.effectValue("evade")}%` : "익힌 경공 없음"}</small></button>
+        <button class="bt-btn${warning && movement ? " suggest" : ""}" data-act="battle" data-action="경공" ${movement && p.qi >= movement.qiCost ? "" : "disabled"}>${movement ? esc(movement.name) : "경공"}<small>${movement ? `내력 ${movement.qiCost}, 회피 ${halpun(movement.effectValue("evade"))}` : "익힌 경공 없음"}</small></button>
         ${b.isFinal ? "" : `<button class="bt-btn flee" data-act="battle" data-action="도주">도주<small>실패하면 공격받음</small></button>`}
       </div>
-      ${items.length ? `<div class="battle-items">${items.map(([key, count]) => `<button class="item-btn${lowHp && DB.market[key].effects.some((e) => e.type === "heal") ? " suggest" : ""}" data-act="battle" data-action="소비품" data-key="${esc(key)}">${esc(DB.market[key].name)} ${count}개</button>`).join("")}</div>` : ""}
+      ${items.length ? `<p class="item-hint">${b.freeItemUsed ? "이번 합에 도구를 썼다. 하나 더 쓰면 합이 지나간다" : "도구 하나는 합을 쓰지 않는다"}</p><div class="battle-items">${items.map(([key, count]) => `<button class="item-btn${lowHp && DB.market[key].effects.some((e) => e.type === "heal") ? " suggest" : ""}" data-act="battle" data-action="소비품" data-key="${esc(key)}">${esc(DB.market[key].name)} ${count}개</button>`).join("")}</div>` : ""}
     </div>`}${gameModals()}`;
   const log = document.querySelector(".battle-log");
   if (log) log.scrollTop = log.scrollHeight;
@@ -808,6 +838,7 @@ function renderEnding() {
       ${ending.epilogue.map((l) => `<p class="epilogue">${esc(l)}</p>`).join("")}
       ${p.chronicle.length ? `<details class="chronicle"><summary>이번 강호행 돌아보기</summary>${chronicleList(p)}</details>` : ""}
       ${legacyPanel()}
+      ${ending.key === "생사경" ? `<div class="run-facts saengsa-stats"><div><b>${p.external}</b>외공</div><div><b>${p.internal}</b>내공</div><div><b>${p.martial}</b>무리</div><div><b>${p.mind}</b>심경</div></div>` : ""}
       <p class="karma-gain">카르마 +${ending.karma} (보유 ${meta.current_karma}, 누적 ${meta.total_karma})</p>
       <p class="karma-lines">${(ending.karmaLines || []).map(esc).join(", ")}</p>
       <p class="ending-hint">카르마로 출신과 자질, 기틀, 인연, 유산을 얻어 다시 도전할 수 있습니다. 첫 화면의 상점에서 살 수 있습니다.</p>
@@ -830,11 +861,22 @@ function compareNote(player, key) {
   const label = effect.slot === "weapon" ? "위력" : "호신력";
   const note = `지금 ${label} +${equipmentBonus(player, effect.slot)} → +${bonusFor(player, key)}`;
   if (effect.slot !== "weapon" || !effect.style) return note;
-  return player.bestSkill()?.category === effect.style ? `${note}, 주무공과 맞음` : `${note}, 주무공과 달라 3/4만 적용`;
+  return player.bestSkill()?.category === effect.style ? `${note}, 주무공과 맞음` : `${note}, 주무공과 달라 7할 5푼만 적용`;
 }
 
 const CATEGORY_NAMES = { 무기: "병기", 방어구: "호신구", 소비품: "상비약" };
 const categoryName = (c) => CATEGORY_NAMES[c] || c;
+
+/** 내 짐. 들고 있지 않은 병장기는 바꿔 들 수 있고, 약과 도구와 함께 되팔 수 있다. */
+function sellSection(player) {
+  const views = sellableView(player);
+  if (!views.length) return "";
+  const rows = views.map((v) => `<div class="market-item"><div class="item-info">
+      <div class="item-name">${esc(v.name)}<span class="item-category">${esc(categoryName(v.category))}, ${esc(v.grade)}${v.count > 1 ? `, ${v.count}개` : ""}</span></div>
+      <div class="item-desc">${esc(v.desc)}</div></div>
+      <div class="item-actions">${v.kind === "gear" ? `<button class="buy-btn" data-act="equip-gear" data-key="${esc(v.key)}">들기</button>` : ""}<button class="buy-btn" data-act="sell" data-key="${esc(v.key)}">팔기 ${v.price}</button></div></div>`).join("");
+  return `<h4 class="market-group">내 짐 팔기</h4>${rows}`;
+}
 
 function renderMarket() {
   const { market, player } = game;
@@ -846,8 +888,8 @@ function renderMarket() {
     const label = item.sold ? "품절" : item.blocked === "효과 없음" ? "필요 없음" : item.karma ? `카르마 ${item.karma}` : `은자 ${item.price}`;
     const note = item.sold ? "" : compareNote(player, item.key);
     return `<div class="market-item${item.sold ? " sold" : ""}"><div class="item-info">
-      <div class="item-name">${esc(item.name)}<span class="item-category">${esc(categoryName(item.category))}${item.stackable && !item.sold ? `, ${item.left}개 남음` : ""}</span></div>
-      <div class="item-desc">${esc(item.desc)}</div>${note ? `<div class="item-note">${esc(note)}</div>` : ""}</div>
+      <div class="item-name">${esc(item.name)}<span class="item-category">${esc(categoryName(item.category))}, ${esc(item.grade)}${item.stackable && !item.sold ? `, ${item.left}개 남음` : ""}</span></div>
+      <div class="item-desc">${esc(item.desc)}</div>${DB.market[item.key].gimmick ? `<div class="item-note">묘리 ${esc(DB.market[item.key].gimmick.name)}: ${esc(DB.market[item.key].gimmick.text)}</div>` : ""}${note ? `<div class="item-note">${esc(note)}</div>` : ""}</div>
       <button class="buy-btn${item.blocked === "은자 부족" ? " poor" : ""}" data-act="buy" data-key="${esc(item.key)}" ${item.sold || item.blocked ? "disabled" : ""}>${label}</button></div>`;
   };
   const known = GROUPS.flatMap(([, cats]) => cats);
@@ -861,7 +903,7 @@ function renderMarket() {
       <h2 class="market-title">${esc(market.name)}</h2>
       <p class="market-sub">${market.special ? "결전을 앞둔 밤, 누군가 말없이 보따리를 풀어 놓는다." : "달을 쓰지 않습니다. 다음 장터는 일 년 뒤입니다."}</p>
       ${market.message ? `<p class="market-message">${esc(market.message)}</p>` : ""}
-      ${stock}</div></div>
+      ${stock}${sellSection(player)}</div></div>
     <div class="action-area"><div class="action-inner"><button class="next-btn" data-act="leave-market">${market.special ? "떠나서 결전으로" : `장터를 떠난다 (은자 ${player.silver})`}</button></div></div>`;
 }
 
@@ -1129,6 +1171,9 @@ const actions = {
   battle: (el) => { game.battleAction(el.dataset.action, el.dataset.key ?? null); render(); },
   interlude: (el) => { game.battleInterlude(Number(el.dataset.key)); render(); },
   buy: (el) => { game.marketBuy(el.dataset.key); render(); },
+  sell: (el) => { game.marketSell(el.dataset.key); render(); },
+  "equip-gear": (el) => { game.equipGear(el.dataset.key); render(); },
+  "help-page": (el) => { ui.helpPage = el.dataset.key; render(); },
   "leave-market": () => { game.marketLeave(); render(); },
   "finish-arts": () => { game.finishArtsPick(); render(); },
   "main-skill": (el) => { game.setMainSkill(el.dataset.key); render(); },
