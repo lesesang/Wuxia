@@ -4,7 +4,7 @@ import { DB } from "./data.js";
 import { checkRequires, reactiveLine } from "./events.js";
 import { equipmentBonus } from "./market.js";
 import { pick, pickWeighted, randInt, rng, uniform } from "./rng.js";
-import { applyGrowth, isNamed, battleBuffs, fameRankChanged, hasEffect, alignValue, dominant, KILL_ALIGN, realmBonus, realmIndex, sectBonus, sumEffect, talkLine } from "./rules.js";
+import { activeCompanions, applyGrowth, isNamed, battleBuffs, fameRankChanged, hasEffect, alignValue, dominant, KILL_ALIGN, realmBonus, realmIndex, sectBonus, sumEffect, talkLine } from "./rules.js";
 import { josa } from "./josa.js";
 
 const BASE_HIT = 0.88;
@@ -184,6 +184,9 @@ export class Battle {
     this.regen = null;       // 합마다 차오르는 체력과 내력
     this.reflect = null;     // 받은 피해를 되돌림
     this.lifestealBuff = null;
+    this.askStand = false;      // 쓰러지는 순간 힘을 끌어모을지 플레이어에게 묻는다
+    this.standPending = false;
+    this.companions = isFinal ? activeCompanions(player) : [];
     const ward = sumEffect(player.traits, "battle_start_ward", "percent");
     if (ward) {
       this.ward = Math.trunc(player.maxHp() * ward / 100);
@@ -229,6 +232,7 @@ export class Battle {
     scale *= 1 + sectBonus(p, "damage") / 100;
     scale *= 1 - p.injury * INJURY_PENALTY / 100;
     scale *= 1 + alignValue(p.alignment, "마도", "damage") / 100;
+    for (const c of this.companions) scale *= 1 + (c.help.atk || 0) / 100;
     if (this.atkBuff) scale *= 1 + this.atkBuff.percent / 100;
     return scale;
   }
@@ -556,6 +560,7 @@ export class Battle {
     base *= 1 - alignValue(this.player.alignment, "정도", "guard") / 100;
     base *= 1 - Math.min(MAX_DAMAGE_REDUCE, sumEffect(this.player.traits, "damage_reduce", "percent")) / 100;
     if (this.guard) base *= 1 - this.guard.percent / 100;
+    for (const c of this.companions) base *= 1 - (c.help.guard || 0) / 100;
     const raw = Math.max(1, Math.trunc(base * uniform(0.9, 1.1)) - equipmentBonus(this.player, "armor"));
     // 호신강기는 맞을 때마다 일정한 양을 막는다. 다만 아무리 약한 공격도 조금은 들어온다
     const guard = sumEffect(this.player.traits, "flat_guard", "amount");
@@ -614,7 +619,7 @@ export class Battle {
       this.log.push(`받은 힘이 되돌아갔다. ${this.enemy.name}에게 ${back}의 피해.`);
     }
     this.checkRevive();
-    if (special) this.applySpecialEffects(special);
+    if (special && !this.standPending) this.applySpecialEffects(special);
     return damage;
   }
 
@@ -668,15 +673,37 @@ export class Battle {
     }
   }
 
-  /** 쓰러지는 순간 남은 기회가 있으면 되살아난다. 체력은 최대의 절반, 내력은 최대의 절반만큼 차오른다. */
+  /** 쓰러지는 순간 남은 기회가 있으면 마지막 힘을 끌어모은다. 플레이어가 고르게 되어 있으면 먼저 묻는다. */
   checkRevive() {
     const p = this.player;
-    if (this.spar || p.hp > 0 || p.revives <= 0) return;
+    if (this.spar || p.hp > 0 || p.revives <= 0 || this.standPending) return;
+    if (this.askStand) {
+      this.standPending = true;
+      return;
+    }
+    this.gatherLastStrength();
+  }
+
+  /** 물음에 답한다. 힘을 끌어모으면 null, 눈을 감으면 전투 결과를 돌려준다 */
+  answerStand(gather) {
+    if (!this.standPending) return null;
+    this.standPending = false;
+    if (!gather) {
+      this.log.push("끌어모을 수 있는 힘을 그대로 놓았다. 눈이 감긴다.");
+      return this.finish(false);
+    }
+    this.gatherLastStrength();
+    return null;
+  }
+
+  /** 체력은 최대의 절반, 내력은 최대의 절반만큼 차오른다. */
+  gatherLastStrength() {
+    const p = this.player;
     p.revives -= 1;
     p.hp = Math.max(1, Math.trunc(p.maxHp() * REVIVE_RATE));
     p.qi = Math.min(p.maxQi(), p.qi + Math.trunc(p.maxQi() * REVIVE_RATE));
-    p.note(`${this.enemy.name}에게 쓰러졌다가 다시 일어섰다.`);
-    this.log.push(`🕯️ 숨이 끊어지려는 순간 단전의 마지막 불씨가 되살아났다! (체력 ${p.hp}, 내력 ${p.qi}, 남은 기회 ${p.revives})`);
+    p.note(`${this.enemy.name} 앞에서 쓰러지려다 마지막 힘을 끌어모아 버텼다.`);
+    this.log.push(`🕯️ 꺼져 가던 단전의 불씨를 어떻게든 끌어모았다. 몸이 다시 움직인다! (체력 ${p.hp}, 내력 ${p.qi}, 남은 기회 ${p.revives})`);
   }
 
   nextSpecialWarning() { return this.enemy.specialForRound(this.roundNum + 1)?.name ?? null; }
@@ -715,6 +742,7 @@ export class Battle {
         if (this[field].rounds <= 0) this[field] = null;
       }
     }
+    this.companionsAct();
     if (this.sealed) this.sealed -= 1;
     if (this.atkBuff) {
       this.atkBuff.rounds -= 1;
@@ -723,6 +751,37 @@ export class Battle {
     if (this.guard) {
       this.guard.rounds -= 1;
       if (this.guard.rounds <= 0) this.guard = null;
+    }
+  }
+
+  /** 결전에 달려온 인연들이 저마다의 주기로 돕는다. */
+  companionsAct() {
+    const p = this.player;
+    if (p.hp <= 0) return;
+    for (const c of this.companions) {
+      const { help } = c;
+      if (!help.every || this.roundNum % help.every !== 0) continue;
+      const line = pick(c.lines);
+      if (help.strike) {
+        const damage = Math.max(1, Math.trunc(this.attackPower(p.bestSkill()) * help.strike / 100));
+        this.enemy.takeDamage(damage);
+        this.log.push(`${line} (${this.enemy.name}에게 ${damage}의 피해)`);
+      } else if (help.hp || help.qi) {
+        const [hp, qi] = p.healPercent(help.hp || 0, help.qi || 0);
+        this.log.push(`${line} (${hp ? `체력 +${hp}` : ""}${hp && qi ? ", " : ""}${qi ? `내력 +${qi}` : ""})`);
+      } else if (help.stun) {
+        if (rng.random() * 100 < help.stun) {
+          this.enemyStun = true;
+          this.log.push(`${line} (${this.enemy.name}의 몸이 굳었다!)`);
+        }
+      } else if (help.weaken) {
+        this.enemyWeaken = { percent: help.weaken, rounds: help.rounds || 2 };
+        this.log.push(`${line} (${help.rounds || 2}합 동안 ${this.enemy.name}의 위력 -${help.weaken}%)`);
+      } else if (help.poison) {
+        const damage = Math.max(1, Math.trunc(this.attackPower(p.bestSkill()) * help.poison / 100));
+        this.burn = { damage, rounds: 3 };
+        this.log.push(`${line} (세 합 동안 ${this.enemy.name}에게 ${damage}의 피해)`);
+      }
     }
   }
 
@@ -807,7 +866,9 @@ export class Battle {
     if (phase && this.openInterlude(phase)) return null;
 
     this.enemyAttack(evadeSkill);
+    if (this.standPending) return null;
     if (this.player.hp > 0) this.tickEffects();
+    if (this.standPending) return null;
     if (this.player.hp <= 0) return this.finish(false);
     if (!this.enemy.isAlive()) return this.finish(true);
 
@@ -827,6 +888,8 @@ export class Battle {
       if (!this.spar) {
         this.player.kills += 1;
         if (isNamed(this.enemy.key) && !this.player.slain.includes(this.enemy.key)) this.player.slain.push(this.enemy.key);
+        const flag = DB.enemies[this.enemy.key].kill_flag;
+        if (flag) this.player.addFlag(flag);
         const side = dominant(this.player.alignment);
         if (KILL_ALIGN[side]) this.player.adjustAlignment(side, KILL_ALIGN[side] / 2); // 앞선 길은 두 배로 오른다
       }

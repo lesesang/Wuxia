@@ -403,3 +403,10 @@ body { word-break: keep-all; overflow-wrap: anywhere; }
 .reward-main { flex: 1; font-size: .9rem; }
 .reward-row.done b { color: var(--gold); }
 
+/* 쓰러지는 순간의 선택 */
+.stand-overlay { position: fixed; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center; padding: 16px; background: rgba(8, 6, 5, .78); }
+.stand-box { width: min(420px, 100%); padding: 1.25rem; border: 1px solid #8a6a3a; border-radius: 10px; background: #1b1512; text-align: center; color: #f0e6d6; }
+.stand-box h3 { margin: 0 0 .75rem; color: #e8c37a; }
+.stand-box p { margin: 0 0 .75rem; line-height: 1.6; }
+.stand-box .stand-note { font-size: .82rem; color: #b49f94; }
+.stand-box button { display: block; width: 100%; margin-top: .5rem; }

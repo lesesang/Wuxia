@@ -791,7 +791,7 @@ test("상황별 반응: 출신, 무공, 명성, 능력치, 시작 특성이 고�
   const uses = { origin: 0, min_fame: 0, max_fame: 0, stat_min: 0, trait: 0, any_skill: 0, main_category: 0 };
   let reactive = 0;
   for (const event of events) {
-    if (event.variants?.length) reactive += 1;
+    if (event.variants?.length || event.reacts?.length) reactive += 1;
     for (const variant of event.variants || []) {
       for (const key of Object.keys(uses)) if (variant.requires?.[key]) uses[key] += 1;
     }
@@ -2447,7 +2447,7 @@ test("같은 계열의 낮거나 같은 품계 무공만 주무공으로 성취�
   const same = new Skill("매화검법");
   same.grade = "명품";
   same.mastery = 40;
-  const low = new Skill("운룡검법");
+  const low = new Skill("양의검법");
   low.grade = "기본";
   low.mastery = 50;
   const high = new Skill("천뢰검법");
@@ -2475,7 +2475,7 @@ test("옮긴 성취로 승급할 수 있고 전투 중에는 옮길 수 없다",
   const p = game.player;
   const main = p.bestSkill();
   main.mastery = 90;
-  const low = new Skill("운룡검법");
+  const low = new Skill("양의검법");
   low.mastery = 60;
   p.skills.push(low);
   const grade = main.grade;
@@ -2780,7 +2780,7 @@ test("경지가 오르면 대사와 특전이 따른다", () => {
   const lines = game.checkRealm();
   assert.equal(p.realm, "절정");
   assert.ok(lines.length >= 6, "돌파의 대사가 넉넉하다");
-  assert.ok(lines.some((l) => l.includes("기운이 병기를 타다")));
+  assert.ok(lines.some((l) => l.includes("상인")));
   assert.equal(p.traits.length, before + 1);
   assert.ok(sumEffect(p.traits, "qi_cost_cut", "percent") >= 10);
   for (const realm of ["절정", "초절정", "화경", "현경"]) {
@@ -2855,6 +2855,7 @@ test("상승 이상의 무공에만 묘리가 드러나고 모든 무공에 묘�
   assert.ok(battle.enemy.hp < hp);
   // 흡수, 호신, 저절로 피하기
   const blood = new Skill("혈영도법");
+  blood.grade = "상승";
   const b2 = new Battle(p, new Enemy("천마"));
   b2.enemy.evasion = -9;
   p.hp = 10;
@@ -3060,5 +3061,94 @@ test("산 인연은 일반 인연보다 자주 찾아오고 새 인연은 이야
     assert.ok(DB.karma.content[key].cost > 0);
     assert.ok(Object.values(DB.events).filter((e) => e.requires?.unlocked === key).length >= 2, key);
   }
-  assert.ok(DB.enemies.천마.phases.every((ph) => ph.interlude.allies.some((a) => a.key === "호적수")));
+});
+
+test("쓰러지는 순간 힘을 끌어모을지 고른다", () => {
+  const make = () => {
+    const game = newGame();
+    const p = game.player;
+    game.startBattle("산적");
+    game.battle.enemy.attack = 1e6;
+    game.battle.enemy.hp = game.battle.enemy.maxHp = 1e7;
+    p.revives = 1;
+    game.battle.runRound("심법");
+    return game;
+  };
+  const yes = make();
+  assert.equal(yes.battle.standPending, true);
+  assert.equal(yes.player.hp, 0);
+  yes.battleStand(true);
+  assert.equal(yes.battle.standPending, false);
+  assert.ok(yes.player.hp > 0);
+  assert.equal(yes.player.revives, 0);
+  assert.ok(!yes.log.join().includes("부활"));
+  const no = make();
+  no.battleStand(false);
+  assert.equal(no.battle, null);
+  assert.equal(no.player.alive, false);
+});
+
+test("결전에 달려온 사람이 저마다 돕는다", () => {
+  assert.ok(Object.keys(DB.companions).length >= 8);
+  for (const [k, c] of Object.entries(DB.companions)) assert.ok(c.flag && c.join && c.help_text && c.lines.length, k);
+  const free = Object.values(DB.companions).filter((c) => !Object.values(DB.events).some((e) => e.requires?.unlocked && JSON.stringify(e).includes(`"${c.flag}"`)));
+  assert.ok(free.length < Object.keys(DB.companions).length / 2, "대부분 카르마로 산 인연이다");
+  const p = new Player("표국표사");
+  const base = new Battle(p, new Enemy("천마"), true);
+  const power = base.attackPower();
+  p.addFlag("묘아_친구");
+  p.addFlag("노병_맹세");
+  p.addFlag("호적수_약속");
+  p.addFlag("장칠_의리");
+  const b = new Battle(p, new Enemy("천마"), true);
+  assert.equal(b.companions.length, 3, "세 사람까지 온다");
+  const q = new Player("표국표사");
+  q.addFlag("묘아_친구");
+  q.addFlag("적연_동행");
+  q.addFlag("길의원_은혜");
+  const c = new Battle(q, new Enemy("천마"), true);
+  assert.ok(c.attackPower() > power, "묘아가 빈틈을 일러 준다");
+  c.roundNum = 12;
+  q.hp = 10;
+  const hp = c.enemy.hp;
+  c.companionsAct();
+  assert.ok(c.burn, "적연이 혈맥을 태운다");
+  assert.ok(q.hp > 10, "의원이 채운다");
+  assert.equal(hp, c.enemy.hp);
+  assert.equal(new Battle(q, new Enemy("낭인")).companions.length, 0, "결전에만 온다");
+  const w = new Player("표국표사");
+  w.addFlag("호적수_약속");
+  const d = new Battle(w, new Enemy("천마"), true);
+  d.roundNum = 3;
+  const before = d.enemy.hp;
+  d.companionsAct();
+  assert.ok(d.enemy.hp < before, "위무결이 대신 벤다");
+});
+
+test("사도나 마도를 걷는 무인에게는 무림맹주도 적으로 나온다", () => {
+  assert.equal(DB.enemies.무림맹주.realm, "현경");
+  const seen = (setup) => {
+    const game = newGame();
+    setup(game.player);
+    game.player.turn = 100;
+    const names = new Set();
+    for (let i = 0; i < 600; i++) names.add(game.pickEnemy());
+    return names;
+  };
+  assert.ok(seen((p) => { p.alignment.마도 = 500; }).has("무림맹주"));
+  assert.ok(seen((p) => { p.alignment.사도 = 500; }).has("무림맹주"));
+  assert.ok(!seen((p) => { p.alignment.정도 = 500; }).has("무림맹주"));
+  assert.ok(!seen(() => {}).has("무림맹주"));
+});
+
+test("무공의 품계가 위상에 맞는다", () => {
+  for (const [k, g] of [["타구봉법", "일절"], ["백보신권", "일절"], ["만천화우", "일절"], ["역근공", "일절"], ["달마심공", "일절"], ["태극검", "상승"], ["파산권", "명품"]]) assert.equal(DB.skills[k].grade, g, k);
+  // 문파의 비전은 장터에 나오지 않는다
+  for (const k of ["매화검법", "역근공", "태극검", "타구봉법"]) assert.ok(!Object.values(DB.market).some((i) => i.effects.some((e) => e.skill === k)), k);
+  assert.equal(DB.events.제안_개방.choices[0].outcomes[0].effects.skill, "오호곤법", "개방에 들어가자마자 방주의 봉법을 주지 않는다");
+  assert.equal(DB.events.제안_무당.choices[0].outcomes[0].effects.skill, "양의검법");
+  for (const [k, s] of Object.entries(DB.skills)) assert.ok(s.gimmick?.text, k);
+  const p = new Player("개방제자");
+  p.learnSkill(new Skill("타구봉법"));
+  assert.equal(p.mainSkill, "타구봉법", "걸개곤법이 이어진다");
 });
