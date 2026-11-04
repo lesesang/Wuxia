@@ -8,10 +8,13 @@ export const ALIGNMENT_CAP = 999;
 export const ALIGNMENT_SCALE = 20; // 성향이 낮은 수로 쌓이던 때의 저장을 옮길 때 쓴다
 const DOMINANT_THRESHOLD = 60;
 export const FOCUS_RATIO = 2;      // 한 길이 둘째 길의 이만큼을 넘으면 그 길에 집중한 것으로 친다
-export const FOCUS_GAIN = 2;       // 앞선 길은 사건에서 이만큼 더 오른다
-export const FOCUS_DRIFT = 3;      // 집중한 길은 달마다 저절로 오른다
-export const KILL_ALIGN = { 사도: 6, 마도: 10 }; // 싸워 이길수록 깊어지는 길
-export const ALIGN_STEPS = [60, 250, 500, 750, 950];
+// 앞선 길은 사건에서 이만큼 더 오른다. 사건이 적은 길일수록 크다
+export const FOCUS_GAIN = { 정도: 1.1, 사도: 1.35, 마도: 1.7 };
+export const FOCUS_DRIFT = 1;       // 집중한 길은 달마다 저절로 오른다
+// 한 길이 오르면 부딪치는 길이 그 비율만큼 깎인다
+export const ALIGN_CLASH = { 정도: { 마도: 0.6, 사도: 0.3 }, 마도: { 정도: 0.6, 사도: 0.2 }, 사도: { 정도: 0.3, 마도: 0.15 } };
+export const KILL_ALIGN = { 사도: 2, 마도: 5 }; // 싸워 이길수록 깊어지는 길
+export const ALIGN_STEPS = [60, 200, 400, 600, 850];
 const ALIGN_TABLE = {
   정도: { names: ["협행의 첫걸음", "협객", "대협", "협의 명숙", "강호의 등불"], discount: [8, 10, 12, 14, 16], guard: [0, 1, 2, 3, 4] },
   사도: { names: ["사파의 첫걸음", "사파 고수", "사파 거물", "사파 거두", "사파 제왕"], silver: [25, 30, 35, 40, 50], crit: [2, 4, 6, 8, 10] },
@@ -181,16 +184,26 @@ export function fameRank(fame) {
 export const fameRankChanged = (before, after) =>
   (fameRank(before) !== fameRank(after) ? fameRank(after) : null);
 
-/** 강호에서 불리는 별호. 성향과 주무공 계열로 정해지고 명성이 오르면 뒷글자가 무거워진다. */
+/**
+ * 강호에서 불리는 별호. 앞글자는 성향과 그 깊이, 출신에서, 뒷글자는 주무공 계열과 명성에서 온다.
+ * 이름이 알려지기 전에는 별호가 없다.
+ */
 export function byname(player) {
   if (player.fame < 10) return "이름 없는 무인";
-  const top = dominant(player.alignment) || "중립";
-  const category = player.bestSkill()?.category || "맨손";
   const names = DB.flavor.bynames;
-  const deep = (alignTier(player.alignment)?.step ?? 0) >= 2;
-  const prefixes = (deep && names.prefix_high?.[top]) || names.prefix[top];
+  const tier = alignTier(player.alignment);
+  const side = tier?.side ?? "중립";
+  const depth = !tier || tier.step < 2 ? 0 : tier.step < 4 ? 1 : 2;
+  const category = player.bestSkill()?.category || "맨손";
+  const rank = player.fame < 40 ? 0 : player.fame < 100 ? 1 : 2;
+  const home = names.origin_prefix[player.originKey];
   const seed = [...player.origin].reduce((total, c) => total + c.codePointAt(0), 0);
-  const suffixes = names.suffix[category] || names.suffix.맨손;
-  const tier = player.fame < 40 ? 0 : player.fame < 100 ? 1 : 2;
-  return prefixes[seed % prefixes.length] + suffixes[tier];
+  const prefixes = names.prefix[side][depth] ?? names.prefix[side][0];
+  // 깊이 물들기 전에는 집안의 이름으로 불리기도 한다
+  const suffix = ((names.suffix[side] ?? names.suffix.중립)[category] ?? names.suffix.중립.맨손)[rank];
+  // 앞뒤에 같은 글자가 겹치면 어색하므로 겹치지 않는 앞글자를 고른다
+  const clean = (name) => ![...name].some((c) => suffix.includes(c));
+  const rotated = prefixes.map((_, i) => prefixes[(seed + i) % prefixes.length]);
+  const prefix = (home && depth === 0 && rank >= 1 && clean(home) ? home : rotated.find(clean)) ?? rotated[0];
+  return prefix + suffix;
 }

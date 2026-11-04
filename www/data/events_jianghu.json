@@ -20781,7 +20781,7 @@
     ],
     "requires": {
       "alignment_min": {
-        "정도": 500
+        "정도": 400
       },
       "dominant": "정도"
     },
@@ -20838,7 +20838,7 @@
     ],
     "requires": {
       "alignment_min": {
-        "정도": 850
+        "정도": 700
       },
       "dominant": "정도"
     },
@@ -20895,7 +20895,7 @@
     ],
     "requires": {
       "alignment_min": {
-        "사도": 500
+        "사도": 400
       },
       "dominant": "사도"
     },
@@ -20952,7 +20952,7 @@
     ],
     "requires": {
       "alignment_min": {
-        "사도": 850
+        "사도": 700
       },
       "dominant": "사도"
     },
@@ -21009,7 +21009,7 @@
     ],
     "requires": {
       "alignment_min": {
-        "마도": 500
+        "마도": 400
       },
       "dominant": "마도"
     },
@@ -21071,7 +21071,7 @@
     ],
     "requires": {
       "alignment_min": {
-        "마도": 850
+        "마도": 700
       },
       "dominant": "마도"
     },

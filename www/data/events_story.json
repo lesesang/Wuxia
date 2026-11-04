@@ -887,7 +887,7 @@
         "label": "강호의 이름으로 천마에게 항복을 권한다",
         "requires": {
           "alignment_min": {
-            "정도": 800
+            "정도": 700
           }
         },
         "outcomes": [
@@ -909,7 +909,7 @@
         "label": "천마교 곳간 열쇠를 천마 앞에 던진다",
         "requires": {
           "alignment_min": {
-            "사도": 800
+            "사도": 700
           }
         },
         "outcomes": [
@@ -929,7 +929,7 @@
         "label": "내가 데려온 마인들을 그의 호법들에게 풀어 놓는다",
         "requires": {
           "alignment_min": {
-            "마도": 800
+            "마도": 700
           }
         },
         "outcomes": [
@@ -951,7 +951,7 @@
         "label": "맹의 고수들이 봉우리를 에워싸게 한다",
         "requires": {
           "alignment_min": {
-            "정도": 400
+            "정도": 300
           }
         },
         "outcomes": [
@@ -973,7 +973,7 @@
         "label": "며칠 전 그의 술에 탄 독이 돌 때를 기다린다",
         "requires": {
           "alignment_min": {
-            "사도": 400
+            "사도": 300
           }
         },
         "outcomes": [
@@ -992,7 +992,7 @@
         "label": "무릎을 꿇는다. 천하를 함께 가지겠다",
         "requires": {
           "alignment_min": {
-            "마도": 400
+            "마도": 300
           }
         },
         "outcomes": [
@@ -1010,7 +1010,7 @@
         "label": "그 자리를 내놓아라. 내가 다음 천마다",
         "requires": {
           "alignment_min": {
-            "마도": 400
+            "마도": 300
           }
         },
         "outcomes": [

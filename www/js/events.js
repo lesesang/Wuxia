@@ -395,8 +395,10 @@ export function applyEffects(player, effects) {
     }
   }
 
-  for (const [name, amount] of Object.entries(effects.alignment || {})) {
-    const change = player.adjustAlignment(name, amount);
+  const leaning = { ...player.alignment };
+  for (const [name, amount] of Object.entries(effects.alignment || {})) player.adjustAlignment(name, amount);
+  for (const name of ALIGNMENTS) {
+    const change = (player.alignment[name] || 0) - (leaning[name] || 0);
     if (change) summary.push(`${name}${signed(change)}`);
   }
 
