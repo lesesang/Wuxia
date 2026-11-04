@@ -1339,6 +1339,19 @@
               "effects": {
                 "boss_hp_pct": 3
               }
+            },
+            {
+              "key": "구결",
+              "requires": {
+                "flag": "천마_구결"
+              },
+              "text": "🩸 비동에서 읽은 구결이 혈맥을 거슬러 돈다. 그 구결을 쓰던 자가 눈앞에 있다.",
+              "effects": {
+                "atk_buff": {
+                  "percent": 15,
+                  "rounds": 3
+                }
+              }
             }
           ],
           "choices": [
@@ -1896,6 +1909,19 @@
               "text": "💰 값을 받은 사도련 향주가 약속대로 천마 쪽 산길의 다리를 끊어 놓았다.",
               "effects": {
                 "boss_hp_pct": 3
+              }
+            },
+            {
+              "key": "구결",
+              "requires": {
+                "flag": "천마_구결"
+              },
+              "text": "🩸 비동에서 읽은 구결이 혈맥을 거슬러 돈다. 그 구결을 쓰던 자가 눈앞에 있다.",
+              "effects": {
+                "atk_buff": {
+                  "percent": 15,
+                  "rounds": 3
+                }
               }
             }
           ],

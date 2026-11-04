@@ -574,7 +574,8 @@
         "stat": "hp",
         "percent": 10
       }
-    ]
+    ],
+    "battle_only": true
   },
   "활혈단": {
     "name": "활혈단",
@@ -685,7 +686,7 @@
     ]
   },
   "태산신검": {
-    "name": "태산신검",
+    "name": "태산신병",
     "category": "무기",
     "price": 0,
     "markets": [],
@@ -711,6 +712,54 @@
       {
         "type": "skill",
         "skill": "기초도법"
+      }
+    ]
+  },
+  "기초검법비급": {
+    "name": "기초검법 비급",
+    "category": "비급",
+    "price": 50,
+    "markets": [
+      1,
+      2
+    ],
+    "desc": "검법 「기초검법」을 익힌다. (위력 1.1배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "기초검법"
+      }
+    ]
+  },
+  "운룡검법비급": {
+    "name": "운룡검법 비급",
+    "category": "비급",
+    "price": 60,
+    "markets": [
+      1,
+      2
+    ],
+    "desc": "검법 「운룡검법」을 익힌다. (위력 1.2배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "운룡검법"
+      }
+    ]
+  },
+  "백호도법비급": {
+    "name": "백호도법 비급",
+    "category": "비급",
+    "price": 55,
+    "markets": [
+      1,
+      2
+    ],
+    "desc": "도법 「백호도법」을 익힌다. (위력 1.14배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "백호도법"
       }
     ]
   },

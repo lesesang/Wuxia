@@ -14,6 +14,7 @@ import {
   activeContent, addKarma, buyContent, buyProvision, refundProvision, upgradeTraits, buyUpgrade, exportRecords, importRecords, extraSlots, loadCheckpoint, legacyAvailable, loadEventLog, loadMeta, nextReward, recordEventPick, openLegacy, saveMeta, takeLegacy, toggleContent, unlockOrigin,
 } from "../www/js/meta.js";
 import { applyGrowth, breakthroughBlock, byname, fameRank, getChapter, getYear, marketTurns, traitSlots } from "../www/js/rules.js";
+import { rng } from "../www/js/rng.js";
 import { storage } from "../www/js/storage.js";
 
 function newGame(origin = "무림초출") {
@@ -1371,6 +1372,73 @@ test("누적 카르마는 마지막 보상을 넘어도 계속 쌓인다", () =>
   assert.equal(loadMeta().total_karma, 1500);
   assert.equal(loadMeta().current_karma, 1500);
   withKarma(0);
+});
+
+test("싸움이 걸린 결과는 이긴 뒤에 적용되고, 달아나면 다시 만날 수 있다", () => {
+  const key = "비무초친";
+  const play = (flee) => {
+    const game = newGame();
+    game.event = null;
+    game.pendingNext = false;
+    game.event = { key, forced: false };
+    const before = game.player.silver;
+    game.chooseEvent(0);
+    assert.ok(game.battle);
+    assert.equal(game.player.silver, before, "싸우기 전에는 받지 않는다");
+    assert.ok(!game.log.some((l) => l.includes("혼인은 사양")));
+    game.player.qi = 0;
+    if (flee) {
+      rng.random = () => 0;
+      game.battleAction("도주");
+      assert.ok(!game.player.seenEvents.includes(key));
+      assert.equal(game.player.silver, before);
+    } else {
+      game.battle.enemy.hp = 1;
+      rng.random = () => 0.5;
+      game.battleAction("기본공격");
+      assert.ok(game.player.silver > before);
+      assert.ok(game.log.some((l) => l.includes("혼인은 사양")));
+    }
+  };
+  play(false);
+  play(true);
+});
+
+test("강호초출이 이어받은 공격 무공은 첫 병기를 골라도 사라지지 않는다", () => {
+  const p = new Player("무림초출");
+  p.learnSkill(new Skill("천뢰검법"));
+  applyEffects(p, { start_weapon: "도법" });
+  assert.ok(p.hasSkill("천뢰검법"));
+  assert.equal(p.bestSkill().category, "도법");
+  assert.ok(!p.hasSkill("기초검법"));
+});
+
+test("전투가 끝나면 전투 중 오른 기량만큼 늘어난 체력을 넘지 않는다", () => {
+  const p = new Player("무림초출", ["전투광"]);
+  const battle = new Battle(p, new Enemy("낭인"));
+  p.hp = p.maxHp();
+  battle.finish(false, true);
+  assert.ok(p.hp <= p.maxHp());
+});
+
+test("천마를 약하게 하는 물건은 사건으로 약해져 있어도 살 수 있다", () => {
+  const p = new Player();
+  p.silver = 100000;
+  p.bossWeaken = 10;
+  const key = Object.keys(DB.market).find((k) => DB.market[k].effects.some((e) => e.type === "boss_weaken") && !DB.market[k].karma_price);
+  assert.notEqual(blockReason(p, key), "효과 없음");
+});
+
+test("빠진 항목이 남은 저장을 읽어도 깨지지 않는다", () => {
+  const p = new Player();
+  const d = p.toDict();
+  d.skills.push({ key: "없는무공", grade: "기본", mastery: 0 });
+  d.chains = [{ id: "없는연계", next: 1, due: 5 }];
+  d.inventory.없는물건 = 2;
+  const q = Player.fromDict(d);
+  assert.ok(!q.hasSkill("없는무공"));
+  assert.deepEqual(q.chains, []);
+  assert.equal(q.inventory.없는물건, undefined);
 });
 
 test("조사는 받침에 맞게 붙는다", () => {

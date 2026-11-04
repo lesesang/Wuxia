@@ -40,6 +40,13 @@ export function loadMeta() {
 }
 
 function refundRemoved(data) {
+  // 데이터에서 빠진 항목이 기록에 남아 있어도 화면이 깨지지 않게 걸러 낸다
+  if (DB.karma) {
+    data.content = data.content.filter((k) => DB.karma.content[k]);
+    data.content_off = data.content_off.filter((k) => DB.karma.content[k]);
+    data.legacies = data.legacies.filter((l) => (l.kind === "skill" ? DB.skills[l.key] : DB.market[l.key]));
+  }
+  if (!data.upgrades || typeof data.upgrades !== "object" || Array.isArray(data.upgrades)) data.upgrades = {};
   for (const [key, cost] of Object.entries(REMOVED_TRAITS)) {
     if (data.unlocked_traits.includes(key)) {
       data.unlocked_traits = data.unlocked_traits.filter((k) => k !== key);

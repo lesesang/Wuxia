@@ -204,6 +204,12 @@ export class Player {
     return [this.hp - hpBefore, this.qi - qiBefore];
   }
 
+  /** 기량이 줄어 최대치가 내려가면 남은 체력과 내력도 맞춘다. */
+  clampVitals() {
+    this.hp = Math.min(this.hp, this.maxHp());
+    this.qi = Math.min(this.qi, this.maxQi());
+  }
+
   gainSilver(amount) {
     let percent = sumEffect(this.traits, "silver_rate", "percent") + sectBonus(this, "silver");
     if (this.dominantAlignment() === "사도") percent += SA_SILVER_BONUS;
@@ -309,7 +315,7 @@ export class Player {
     p.originKey = DB.origins.origins[key] ? key : "무림초출";
     p.chronicle = d.chronicle ?? [];
     p.content = d.content ?? [];
-    p.chains = d.chains ?? [];
+    p.chains = (d.chains ?? []).filter((c) => DB.chains[c.id]);
     p.chainsDone = d.chains_done ?? 0;
     p.realm = d.realm;
     p.external = d.external;
@@ -323,7 +329,7 @@ export class Player {
     p.battles = d.battles ?? 0;
     p.encounteredEnemies = [...(d.encountered_enemies || [])];
     p.pendingEncounters = [...(d.pending_encounters || [])];
-    p.skills = (d.skills || []).map((s) => Skill.fromDict(s));
+    p.skills = (d.skills || []).filter((s) => DB.skills[s.key]).map((s) => Skill.fromDict(s));
     p.mainSkill = d.main_skill ?? null;
     p.chosenArts = { ...(d.chosen_arts || {}) };
     if (!d.chosen_arts) {
@@ -337,9 +343,9 @@ export class Player {
     p.traits = (d.traits || []).filter((k) => DB.traits[k]);
     p.skills.forEach((s) => p.applyEvolveTrait(s));
     p.silver = d.silver ?? 0;
-    p.weapon = d.weapon ?? null;
-    p.armor = d.armor ?? null;
-    p.inventory = { ...(d.inventory || {}) };
+    p.weapon = DB.market[d.weapon] ? d.weapon : null;
+    p.armor = DB.market[d.armor] ? d.armor : null;
+    p.inventory = Object.fromEntries(Object.entries(d.inventory || {}).filter(([k]) => DB.market[k]));
     p.bossWeaken = d.boss_weaken ?? 0;
     p.alignment = { ...newAlignment(), ...(d.alignment || {}) };
     p.flags = [...(d.flags || [])];

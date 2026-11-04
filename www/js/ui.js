@@ -72,7 +72,7 @@ function skillDetail(s) {
 }
 
 function enemyDetail(e) {
-  const lines = [`체력 ${e.hp}, 공격 ${e.attack}${e.armor ? `, 방어 ${e.armor}` : ""}`];
+  const lines = [`체력 ${e.hp}, 위력 ${e.attack}${e.armor ? `, 방어 ${e.armor}` : ""}`];
   if (e.specials?.length) lines.push(`필살기: ${e.specials.map((x) => x.name).join(", ")}`);
   if (e.chapters?.length) lines.push(`나오는 곳: ${e.chapters.join(", ")}장`);
   return lines;
@@ -82,7 +82,7 @@ function enemyDetail(e) {
 function codexRows(tab, meta) {
   if (tab === "enemies") {
     return {
-      total: Object.keys(DB.enemies).length, filterLabel: "등급", filters: ["일반", "난적", "강적", "마두"], empty: "적을 만나면 다음 달에 이곳에 기록됩니다.",
+      total: Object.keys(DB.enemies).length, filterLabel: "갈래", filters: ["일반", "난적", "강적", "마두"], empty: "적을 만나면 다음 달에 이곳에 기록됩니다.",
       rows: meta.global_codex.filter((k) => DB.enemies[k]).map((k) => {
         const e = DB.enemies[k];
         const tier = TIER_NAMES[e.tier] || e.tier;
@@ -219,7 +219,7 @@ function refreshCodexList() {
 function helpModal() {
   const section = (title, lines) => `<div class="modal-section"><h4>${title}</h4>${lines.map((l) => `<p class="help-line">${l}</p>`).join("")}</div>`;
   return modalShell("help-modal", "강호 입문서", `
-    ${section("목표", ["10년(120달) 뒤 겨울, 천마봉에서 천마를 쓰러뜨립니다.", "처음에는 어렵습니다. 죽어도 카르마가 남고, 멀리 갈수록 많이 받습니다.", "카르마로 출신과 자질, 항상 적용되는 기틀, 새 인연을 얻을 수 있습니다. 쌓인 카르마가 늘면 누적 보상도 저절로 받습니다. 천마를 한 번 쓰러뜨리면 전설의 유산도 열 수 있습니다."])}
+    ${section("목표", ["10년(120달) 뒤 겨울, 천마봉에서 천마를 쓰러뜨립니다.", "처음에는 어렵습니다. 죽어도 카르마가 남고, 멀리 갈수록 많이 받습니다.", "카르마로 출신과 자질, 항상 적용되는 기틀, 새 인연을 얻을 수 있습니다. 쌓인 카르마가 늘면 누적 보상도 저절로 받습니다. 채비는 다음 강호행 한 번에만 쓰는 값싼 준비물입니다. 천마를 한 번 쓰러뜨리면 전설의 유산도 열 수 있습니다."])}
     ${section("매달 하는 일", [
     "<b>탐색</b>: 강호를 떠돌며 전투, 사건, 기연 중 하나를 만납니다. 가장 크게 성장하지만 위험합니다.",
     "<b>수련</b>: 외공과 무리, 주무공 성취가 오릅니다. 대련으로 실전 경험을 얻기도 합니다.",
@@ -477,7 +477,7 @@ function renderSetup() {
     <div class="home-wrap">
       ${ui.setupTab === "content" ? contentSetup(meta) : ui.setupTab === "legacy" ? legacySetup(meta) : ui.setupTab === "origin" ? origins : `<p class="section-note">${next ? `자질을 ${slots}개 장착할 수 있습니다. 누적 카르마 ${next}이 되면 하나 더 열립니다. 누적 보상은 상점에서 볼 수 있습니다.` : "자질 칸이 모두 열렸습니다."}</p>${filterRow()}${traits}`}
     </div>
-    <div class="setup-bar"><div class="setup-summary">${esc(originName)}${ui.traits.size ? `, 자질 ${ui.traits.size}개` : ""}${chosenLegacy(meta) ? `, 유산 「${esc(chosenLegacy(meta).label)}」` : ""}</div>
+    <div class="setup-bar"><div class="setup-summary">${esc(originName)}${ui.traits.size ? `, 자질 ${ui.traits.size}개` : ""}${chosenLegacy(meta) ? `, 유산 「${esc(chosenLegacy(meta).label)}」` : ""}${meta.provisions.length ? `, 채비 ${meta.provisions.length}개` : ""}</div>
       <button class="start-btn" data-act="${hasSave ? "confirm-start" : "start"}">강호로 나선다</button></div>
     ${modalShell("confirm-start-modal", "새 강호행을 시작할까요?", `
       <p class="modal-text">저장된 진행이 사라집니다. 카르마와 강호록은 남습니다.</p>
@@ -558,8 +558,8 @@ function statusModal() {
     history: chronicleList(p) || `<p class="codex-empty">아직 남길 만한 일이 없습니다.</p>`,
     bag: `<div class="modal-section">
         ${row("은자", p.silver)}
-        ${row("무기", weapon ? `${weapon} (위력 +${equipmentBonus(p, "weapon")})` : "없음")}
-        ${row("방어구", armor ? `${armor} (받는 피해 -${equipmentBonus(p, "armor")})` : "없음")}
+        ${row("병기", weapon ? `${weapon} (위력 +${equipmentBonus(p, "weapon")})` : "없음")}
+        ${row("호신구", armor ? `${armor} (받는 피해 -${equipmentBonus(p, "armor")})` : "없음")}
       </div><div class="modal-section"><h4>상비약과 도구</h4>${bag}</div>`,
   };
   const tabs = [["stats", "기량"], ["skills", "무공"], ["bag", "행낭"], ["history", "기록"]];
@@ -590,7 +590,7 @@ function renderBattle() {
   if (b.poison) tags.push(["bad", `중독 ${b.poison.rounds}`]);
   if (b.sealed) tags.push(["bad", "혈도 봉쇄"]);
   if (p.injury) tags.push(["bad", `내상 ${p.injury}`]);
-  if (b.atkBuff) tags.push(["good", `공격 +${b.atkBuff.percent}%`]);
+  if (b.atkBuff) tags.push(["good", `위력 +${b.atkBuff.percent}%`]);
   if (b.counterPct) tags.push(["good", `반격 +${b.counterPct}%`]);
   if (b.enemyPoison) tags.push(["good", "적 중독"]);
   const lowHp = p.hp < p.maxHp() * 0.3;
@@ -601,7 +601,7 @@ function renderBattle() {
   const items = Object.entries(p.inventory).filter(([k]) => DB.market[k]);
   const attackNote = !skill ? "내력 소모 없음"
     : b.sealed ? "혈도가 막혀 맨손 공격"
-      : p.qi < skill.qiCost ? "내력이 모자라 맨손 공격" : `내력 ${skill.qiCost}`;
+      : p.qi < b.artCost(skill) ? "내력이 모자라 맨손 공격" : `내력 ${b.artCost(skill)}`;
 
   const actName = b.isFinal ? `천마와의 결전, 제${["일", "이", "삼"][b.enemy.phase] ?? "삼"}막` : "전투";
   const interlude = b.interlude ? `<div class="battle-panel interlude">
@@ -751,7 +751,7 @@ function compareNote(player, key) {
   return player.bestSkill()?.category === effect.style ? `${note}, 주무공과 맞음` : `${note}, 주무공과 달라 3/4만 적용`;
 }
 
-const CATEGORY_NAMES = { 병기: "병기", 호신구: "호신구", 상비약: "상비약" };
+const CATEGORY_NAMES = { 무기: "병기", 방어구: "호신구", 소비품: "상비약" };
 const categoryName = (c) => CATEGORY_NAMES[c] || c;
 
 function renderMarket() {
@@ -815,7 +815,7 @@ function logLine(line, isLast) {
 
 function renderTurn() {
   const p = game.player;
-  const lines = game.log.slice(-9);
+  const lines = game.log.slice(-12);
   const nextMarket = marketTurns().find((t) => t >= p.turn);
   const body = lines.length
     ? lines.map((l, i) => logLine(l, i === lines.length - 1)).join("")
@@ -829,7 +829,7 @@ function renderTurn() {
   const action = (value, label, note, extra = "") => `<button class="act-btn${extra}" data-act="action" data-action="${value}">${label}<small>${note}</small></button>`;
   const market = nextMarket ? (nextMarket === p.turn ? "이번 달 말에 장터가 열립니다." : `다음 장터까지 ${nextMarket - p.turn}개월`) : "";
   const controls = game.pendingNext
-    ? `<button class="next-btn" data-act="next">${nextMarket === p.turn ? "🏪 장터으로" : "▶️ 다음 달로"}</button>`
+    ? `<button class="next-btn" data-act="next">${nextMarket === p.turn ? "🏪 장터로" : "▶️ 다음 달로"}</button>`
     : `${advice ? `<p class="advice">${advice}</p>` : ""}<div class="actions">
         ${action("탐색", "🗺️ 탐색", "전투, 사건, 기연")}${action("수련", "⚔️ 수련", "외공, 무리, 성취")}
         ${action("명상", "🧘 운기", "내공, 심경, 내력")}${action("휴식", "💤 요양", "체력, 내력, 내상", needRest ? " suggest" : "")}
@@ -852,6 +852,12 @@ function renderPlay() {
 
 // ---------- 글자 효과 ----------
 
+/** 기록이 길면 가장 최근 줄이 보이도록 내려 준다. */
+function followLog() {
+  const stage = document.querySelector('.stage[aria-live="polite"]');
+  if (stage) stage.scrollTop = stage.scrollHeight;
+}
+
 function typeText() {
   const nodes = [...document.querySelectorAll("[data-type]")];
   const delay = parseInt(storage.get("wuxia-speed") ?? "18", 10);
@@ -871,6 +877,7 @@ function typeText() {
     clearInterval(timer);
     document.body.classList.remove("typing");
     nodes.forEach((n, k) => { n.textContent = full[k]; });
+    followLog();
     document.removeEventListener("pointerdown", finish, true);
     document.removeEventListener("keydown", finish, true);
   };
@@ -883,6 +890,7 @@ function typeText() {
     }
     count += 1;
     nodes[index].textContent = full[index].slice(0, count);
+    followLog();
     if (count >= full[index].length) {
       index += 1;
       count = 0;
@@ -908,6 +916,7 @@ export function render() {
   if (document.body.classList.contains("home")) window.scrollTo(0, homeScroll);
   else if (!document.body.classList.contains("in-battle")) window.scrollTo(0, 0);
   typeText();
+  followLog();
 }
 
 // ---------- 입력 ----------
@@ -1047,6 +1056,7 @@ export function installInput() {
     }
     if (target.name === "origin") {
       ui.origin = target.value;
+      render();
     } else if (target.name === "trait") {
       if (target.checked) ui.traits.add(target.value);
       else ui.traits.delete(target.value);

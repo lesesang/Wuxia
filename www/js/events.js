@@ -30,7 +30,7 @@ export function unmetReason(player, requires) {
   if (r.equip && player.weapon !== r.equip && player.armor !== r.equip) return `${DB.market[r.equip].name} 필요`;
   if (r.any_skill && !r.any_skill.some((k) => player.hasSkill(k))) return "필요한 무공이 없다";
   if (r.injured && !player.injury) return "내상이 없다";
-  if (r.main_category && player.bestSkill()?.category !== r.main_category) return `${r.main_category}을 쓰는 무인이 아니다`;
+  if (r.main_category && player.bestSkill()?.category !== r.main_category) return `${r.main_category}${josa(r.main_category, "을/를")} 쓰는 무인이 아니다`;
   if (r.trait && !player.traits.includes(r.trait)) return "타고난 바가 다르다";
   if (r.unlocked && !player.content.includes(r.unlocked)) return "아직 인연이 닿지 않았다";
   if (r.dominant && player.dominantAlignment() !== r.dominant) return `${r.dominant}의 길이 아니다`;
@@ -205,17 +205,19 @@ export function enemyIntro(player, enemyKey) {
   return special ? special.text : (data.intro || null);
 }
 
-/** 선택을 처리하고 {text, summary, effects}를 돌려준다. 고를 수 없으면 null */
+/** 선택을 처리하고 {text, summary, effects, deferred, lead}를 돌려준다. 고를 수 없으면 null */
 export function resolveChoice(player, key, index) {
   const choice = eventChoices(player, key)[index];
   if (!choice || !checkRequires(player, choice.requires)) return null;
   const outcome = pickWeighted(choice.outcomes, choice.outcomes.map((o) => o.weight ?? 1));
   const effects = outcome.effects || {};
   if (!DB.events[key].prelude) recordEventPick(key, eventText(player, key), choice.label, outcome.text);
-  const summary = applyEffects(player, effects);
+  // 싸움이 걸린 결과는 이긴 뒤에 적용한다. 달아나면 얻는 것도 잃는 것도 없다
+  const deferred = !!effects.battle;
+  const summary = deferred ? [] : applyEffects(player, effects);
   if (!player.seenEvents.includes(key)) player.seenEvents.push(key);
   if (!DB.events[key].prelude) updateKnown([], [], [key]);
-  return { text: outcome.text, label: choice.label, summary, effects };
+  return { text: outcome.text, label: choice.label, summary, effects, deferred, lead: !!outcome.lead };
 }
 
 /** 비급으로 파는 공격무공 중 하나를 고른다. 익힌 계열이 나올 가능성이 높다. */
@@ -254,7 +256,10 @@ const STARTER_SKILLS = {
 function takeStartWeapon(player, style) {
   // 강호초출은 고른 병기에 맞는 무공 하나로 시작한다
   const key = STARTER_SKILLS[style];
-  player.skills = player.skills.filter((s) => s.type !== "공격무공");
+  // 유산이나 채비로 받은 무공은 그대로 두고 출신의 기본 무공만 바꾼다
+  const defaults = DB.origins.origins[player.originKey].skills || [];
+  player.skills = player.skills.filter((s) => s.type !== "공격무공" || !defaults.includes(s.key));
+  player.mainSkill = null;
   const skill = new Skill(key);
   const summary = [`📕 무공 「${skill.name}」`, ...player.learnSkill(skill)];
   player.mainSkill = key;
@@ -344,6 +349,7 @@ export function applyEffects(player, effects) {
       summary.push(`${STAT_NAMES[stat]}${lost}`);
     }
   }
+  player.clampVitals();
 
   if ("hp_pct" in effects || "qi_pct" in effects) {
     const [hp, qi] = player.healPercent(effects.hp_pct || 0, effects.qi_pct || 0);
@@ -378,17 +384,18 @@ export function applyEffects(player, effects) {
   if ("fame" in effects) {
     const before = player.fame;
     player.fame = Math.max(0, player.fame + effects.fame);
-    summary.push(`명성${signed(effects.fame)}`);
+    if (player.fame !== before) summary.push(`명성${signed(player.fame - before)}`);
     const rank = fameRankChanged(before, player.fame);
     if (rank) {
-      summary.push(`강호에서 「${rank}」로 불리기 시작했다`);
-      player.note(`강호에서 「${rank}」로 불리기 시작했다.`);
+      summary.push(`강호에서 「${rank}」${josa(rank, "으로")} 불리기 시작했다`);
+      player.note(`강호에서 「${rank}」${josa(rank, "으로")} 불리기 시작했다.`);
     }
   }
 
   if ("injury" in effects) {
+    const before = player.injury;
     player.addInjury(effects.injury);
-    summary.push(`내상${signed(effects.injury)}`);
+    if (player.injury !== before) summary.push(`내상${signed(player.injury - before)}`);
   }
 
   if (effects.join_sect && !player.sect) {
