@@ -4,13 +4,14 @@ import { DB } from "./data.js";
 import { checkRequires, reactiveLine } from "./events.js";
 import { equipmentBonus } from "./market.js";
 import { pick, randInt, rng, uniform } from "./rng.js";
-import { applyGrowth, battleBuffs, hasEffect, MA_DAMAGE_BONUS, realmBonus, sectBonus, sumEffect } from "./rules.js";
+import { applyGrowth, battleBuffs, fameRankChanged, hasEffect, MA_DAMAGE_BONUS, realmBonus, sectBonus, sumEffect } from "./rules.js";
 import { josa } from "./josa.js";
 
 const BASE_HIT = 0.88;
 const SECRET_INTERNAL_RATE = 1.0;
 const INTERNAL_ATTACK_RATE = 0.3;
 const FLEE_BASE = 0.5;
+const MAX_DAMAGE_REDUCE = 60; // 자질과 기틀을 겹쳐도 받는 피해를 이 이상 줄이지 못한다
 export const INJURY_PENALTY = 7;
 const FAME_BY_TIER = { 일반: 1, 난적: 2, 강적: 4, 보스: 10 };
 const STAT_GROWTH_RANGE = { 일반: [10, 20], 난적: [10, 30], 강적: [20, 40], 보스: [50, 100] };
@@ -107,19 +108,21 @@ export const enemyPool = (chapter) =>
 
 export function useConsumable(player, key) {
   const rate = 1 + sumEffect(player.traits, "consumable_rate", "percent") / 100;
+  const notes = [];
   for (const effect of DB.market[key].effects) {
     if (effect.type === "heal") {
       if (effect.stat === "hp") player.healPercent(effect.percent * rate, 0);
       else player.healPercent(0, effect.percent * rate);
     } else if (effect.type === "mastery") {
       const main = player.bestSkill();
-      if (main) main.gainMastery(main.category === effect.style ? effect.amount : Math.floor(effect.amount / 2));
+      if (main) notes.push(...main.gainMastery(main.category === effect.style ? effect.amount : Math.floor(effect.amount / 2)));
     } else if (effect.type === "cure" && effect.what === "injury") {
       player.addInjury(-(effect.amount ?? 1));
     }
   }
   player.inventory[key] -= 1;
   if (player.inventory[key] <= 0) delete player.inventory[key];
+  return notes;
 }
 
 export class Battle {
@@ -154,6 +157,7 @@ export class Battle {
   revertTempBuffs() {
     for (const [stat, amount] of this.tempBuffs) this.player[stat] -= amount;
     this.tempBuffs = [];
+    this.player.clampVitals();
   }
 
   applyBattleEndBuffs() {
@@ -340,7 +344,7 @@ export class Battle {
       return null;
     }
     this.player.qi -= skill.qiCost;
-    this.log.push(`${skill.name}으로 몸을 띄웠다.`);
+    this.log.push(`${skill.name}${josa(skill.name, "으로")} 몸을 띄웠다.`);
     this.log.push(...skill.gainMastery(this.player.masteryGainAmount()));
     return skill;
   }
@@ -357,8 +361,8 @@ export class Battle {
       const full = this.player.bestSkill()?.category === tool.style;
       this.atkBuff = { percent: full ? tool.percent : Math.floor(tool.percent / 2), rounds: tool.rounds + 1 };
     }
-    useConsumable(this.player, key);
-    this.log.push(`${item.name}${josa(item.name, "을/를")} 썼다. (${item.desc})`);
+    const notes = useConsumable(this.player, key);
+    this.log.push(`${item.name}${josa(item.name, "을/를")} 썼다. (${item.desc})`, ...notes);
   }
 
   flee() {
@@ -380,7 +384,7 @@ export class Battle {
     let base = this.enemy.attack * this.enemy.attackMultiplier() * multiplier;
     base *= 1 - realmBonus(this.player.realm) / 2;
     base *= 1 - sectBonus(this.player, "damage_reduce") / 100;
-    base *= 1 - sumEffect(this.player.traits, "damage_reduce", "percent") / 100;
+    base *= 1 - Math.min(MAX_DAMAGE_REDUCE, sumEffect(this.player.traits, "damage_reduce", "percent")) / 100;
     if (this.guard) base *= 1 - this.guard.percent / 100;
     return Math.max(1, Math.trunc(base * uniform(0.9, 1.1)) - equipmentBonus(this.player, "armor"));
   }
@@ -578,7 +582,13 @@ export class Battle {
       const outro = reactiveLine(this.player, this.enemy.outros, this.enemy.outro);
       if (outro) this.log.push(outro);
       this.log.push(`${this.enemy.name}${josa(this.enemy.name, "을/를")} 쓰러뜨렸다! 실전 경험 +${exp}`);
+      const fameBefore = this.player.fame;
       this.player.fame += FAME_BY_TIER[this.enemy.tier] || 0;
+      const rank = fameRankChanged(fameBefore, this.player.fame);
+      if (rank) {
+        this.log.push(`강호에서 「${rank}」${josa(rank, "으로")} 불리기 시작했다.`);
+        this.player.note(`강호에서 「${rank}」${josa(rank, "으로")} 불리기 시작했다.`);
+      }
       this.applyStatGrowth();
       this.gainSilver();
       this.rollDrop();
@@ -599,8 +609,8 @@ export class Battle {
     const { drop } = this.enemy;
     if (drop && rng.random() < drop.chance && !this.player.hasSkill(drop.skill)) {
       const skill = new Skill(drop.skill);
-      this.log.push(...this.player.learnSkill(skill));
-      this.log.push(`📕 품에서 비급이 떨어졌다. 새 무공 「${skill.name}」${josa(skill.name, "을/를")} 익혔다!`);
+      const notes = this.player.learnSkill(skill);
+      this.log.push(`📕 품에서 비급이 떨어졌다. 새 무공 「${skill.name}」${josa(skill.name, "을/를")} 익혔다!`, ...notes);
     }
   }
 

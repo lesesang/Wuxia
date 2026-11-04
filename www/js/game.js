@@ -43,6 +43,7 @@ export class Game {
     this.gauntlet = null;
     this.ending = null;
     this.pendingNext = false;
+    this.afterBattle = null;    // 이기면 적용할 사건의 결과
   }
 
   get active() { return this.player !== null; }
@@ -100,7 +101,7 @@ export class Game {
   legacyOptions() {
     const p = this.player;
     // 신공은 출신과 카르마 인연으로만 얻으므로 유산으로 넘기지 못한다
-    const skills = p.skills.filter((s) => GRADE_ORDER.indexOf(s.grade) >= 1 && DB.skills[s.key].grade !== "신공")
+    const skills = p.skills.filter((s) => GRADE_ORDER.indexOf(s.grade) >= 1 && DB.skills[s.key].grade !== "신공" && !DB.skills[s.key].origin)
       .sort((a, b) => GRADE_ORDER.indexOf(b.grade) - GRADE_ORDER.indexOf(a.grade)).slice(0, 4)
       .map((s) => ({ kind: "skill", key: s.key, grade: s.grade, label: `${s.name} (${s.grade} 품계)` }));
     const gear = [p.weapon, p.armor].filter((k) => DB.market[k]?.markets.length)
@@ -275,7 +276,9 @@ export class Game {
     const result = resolveChoice(this.player, state.key, index);
     if (!result) return;
 
-    const lines = [`「${DB.events[state.key].title}」`, result.text];
+    // lead가 붙은 문장은 싸움에 들어가는 말이고, 나머지는 싸움이 끝난 뒤의 이야기다
+    const lines = [`「${DB.events[state.key].title}」`, ...(!result.deferred || result.lead ? [result.text] : [])];
+    if (result.deferred) this.afterBattle = { key: state.key, text: result.lead ? null : result.text, effects: result.effects };
     if (DB.events[state.key].kind === "story") this.player.note(`${DB.events[state.key].title}: ${result.label}`);
     if (result.summary.length) lines.push(result.summary.join(", "));
     this.setLog(state.forced ? [...this.log, ...lines] : lines);
@@ -329,6 +332,7 @@ export class Game {
     if (!result) return;
 
     this.battle = null;
+    this.settleAfterBattle(result);
     if (result.victory && this.gauntlet && !battle.isFinal) {
       if (this.continueGauntlet()) return;
     } else {
@@ -342,6 +346,20 @@ export class Game {
     if (battle.isFinal || player.hp <= 0) this.finishGame(result.victory);
     else if (this.chainsMustFinish()) this.openStoryEvent();
     else this.pendingNext = true;
+  }
+
+  /** 싸움이 걸린 사건의 결과를 정리한다. 달아나면 나중에 다시 만날 수 있다. */
+  settleAfterBattle(result) {
+    const after = this.afterBattle;
+    this.afterBattle = null;
+    if (!after) return;
+    const { player } = this;
+    if (result.victory) {
+      const summary = applyEffects(player, after.effects);
+      this.addLog([...(after.text ? [after.text] : []), ...(summary.length ? [summary.join(", ")] : [])]);
+    } else if (result.fled && !DB.events[after.key].chain && !DB.events[after.key].turn) {
+      player.seenEvents = player.seenEvents.filter((k) => k !== after.key);
+    }
   }
 
   /** 천마봉 앞에서 끝나지 않은 연계가 남아 있으면 달을 넘기지 않는다. */
@@ -369,7 +387,11 @@ export class Game {
   useItem(key) {
     if (DB.market[key]?.battle_only) return;
     if (!this.active || this.battle || !this.player.alive) return;
-    if (DB.market[key] && this.player.inventory[key] > 0) useConsumable(this.player, key);
+    if (DB.market[key] && this.player.inventory[key] > 0) {
+      const name = DB.market[key].name;
+      const notes = useConsumable(this.player, key);
+      this.addLog([`${name}${josa(name, "을/를")} 썼다.`, ...notes]);
+    }
   }
 
   /** 같은 계열 무공의 성취 일부를 주무공으로 옮긴다. 옮긴 무공의 성취는 0이 된다. */

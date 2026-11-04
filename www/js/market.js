@@ -7,6 +7,8 @@ import { getChapter, hasEffect, JUNG_DISCOUNT, marketName, sumEffect } from "./r
 import { josa } from "./josa.js";
 
 const STOCK_SIZE = 10;
+const MAX_BOSS_WEAKEN = 60; // 천마의 체력은 이 이상 깎이지 않는다
+const MAX_DISCOUNT = 70;
 
 const LAST_MARKET_TURN = 119;
 
@@ -113,7 +115,7 @@ export function openMarket(turn, player) {
 export function priceOf(player, key) {
   let percent = sumEffect(player.traits, "market_discount", "percent");
   if (player.dominantAlignment() === "정도") percent += JUNG_DISCOUNT;
-  return Math.max(1, Math.trunc(DB.market[key].price * (100 - percent) / 100));
+  return Math.max(1, Math.trunc(DB.market[key].price * (100 - Math.min(percent, MAX_DISCOUNT)) / 100));
 }
 
 function effectIsUseful(player, effect, key) {
@@ -122,7 +124,7 @@ function effectIsUseful(player, effect, key) {
     case "heal": case "cure": case "mastery": case "atk_buff": return (effect.percent ?? 1) > 0;
     case "stat": return player[effect.stat] < STAT_CAP;
     case "skill": return !player.hasSkill(effect.skill);
-    case "boss_weaken": return player.bossWeaken === 0;
+    case "boss_weaken": return player.bossWeaken < MAX_BOSS_WEAKEN;
     default: return false;
   }
 }
