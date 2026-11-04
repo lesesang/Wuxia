@@ -36,6 +36,9 @@ export async function loadData(read) {
       DB.traits[`환생_${key}_${i + 1}`] = { name: upgrade.name, desc: upgrade.desc, hidden: true, effects: upgrade.effects };
     });
   }
+  for (const [key, item] of Object.entries(DB.karma.provisions)) {
+    DB.traits[`채비_${key}`] = { name: item.name, desc: item.desc, hidden: true, effects: item.effects };
+  }
   for (const reward of DB.karma.rewards) {
     DB.traits[`누적_${reward.at}`] = { name: reward.name, desc: reward.desc, hidden: true, effects: reward.effects };
   }

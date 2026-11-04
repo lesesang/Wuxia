@@ -1068,6 +1068,153 @@
     "origin": "무림초출",
     "reacts": true
   },
+  "창궁의기세": {
+    "name": "창궁의 기세",
+    "desc": "전투의 첫 합에서 주는 피해가 60% 늘고 회심의 일격 확률이 5% 오른다. 남궁의 옛사람들이 그 기세를 먼저 알아본다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "first_strike",
+        "percent": 60
+      },
+      {
+        "type": "crit",
+        "percent": 5
+      }
+    ],
+    "origin": "남궁세가",
+    "reacts": true
+  },
+  "호랑이맷집": {
+    "name": "호랑이 맷집",
+    "desc": "받는 피해가 8% 줄고 매달 체력을 4% 더 회복한다. 팽가 사람은 맞으면서 가르치고 맞으면서 배운다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "damage_reduce",
+        "percent": 8
+      },
+      {
+        "type": "turn_regen",
+        "hp_pct": 4,
+        "qi_pct": 0
+      }
+    ],
+    "origin": "하북팽가",
+    "reacts": true
+  },
+  "표행길몸": {
+    "name": "표행길 몸",
+    "desc": "장터 가격이 10% 싸고 매달 체력과 내력을 3%씩 더 회복한다. 표로의 객잔과 나루가 표두의 얼굴을 기억한다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "market_discount",
+        "percent": 10
+      },
+      {
+        "type": "turn_regen",
+        "hp_pct": 3,
+        "qi_pct": 3
+      }
+    ],
+    "origin": "표국표사",
+    "reacts": true
+  },
+  "동냥밥심": {
+    "name": "동냥 밥심",
+    "desc": "매달 체력과 내력을 4%씩 더 회복하고 요양으로 되찾는 양이 30% 늘어난다. 얻어먹어 본 사람끼리는 말이 필요 없다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "turn_regen",
+        "hp_pct": 4,
+        "qi_pct": 4
+      },
+      {
+        "type": "heal_rate",
+        "percent": 30
+      }
+    ],
+    "origin": "개방제자",
+    "reacts": true
+  },
+  "권마의주먹뼈": {
+    "name": "권마의 주먹뼈",
+    "desc": "주무공과 계열이 맞는 병기의 위력이 25% 늘고 회심의 일격 확률이 8% 오른다. 비록대로 부수고 다시 굳힌 손이다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "main_weapon_bonus",
+        "percent": 25
+      },
+      {
+        "type": "crit",
+        "percent": 8
+      }
+    ],
+    "origin": "권마계승",
+    "reacts": true
+  },
+  "식지않는손": {
+    "name": "식지 않는 손",
+    "desc": "공격이 적을 중독시키고 심법 회복이 20% 늘어난다. 그 손을 잡아 본 사람은 연못을 안다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "inflict_poison",
+        "power": 6
+      },
+      {
+        "type": "mindset_power",
+        "percent": 20
+      }
+    ],
+    "origin": "혈지생환",
+    "reacts": true
+  },
+  "귀동냥": {
+    "name": "귀동냥",
+    "desc": "기연을 만날 확률이 15% 오르고 장터에 물건이 2개 더 진열된다. 찻집 구석에 앉으면 소문 길이 들린다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "fortune_rate",
+        "percent": 15
+      },
+      {
+        "type": "extra_stock",
+        "amount": 2
+      }
+    ],
+    "origin": "하오문",
+    "reacts": true
+  },
+  "사부의잔소리": {
+    "name": "사부의 잔소리",
+    "desc": "무공 성취를 40% 더 빠르게 얻고 심법 회복이 15% 늘어난다. 십 년 들은 잔소리가 위기마다 귀에 울린다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "mastery_rate",
+        "percent": 40
+      },
+      {
+        "type": "mindset_power",
+        "percent": 15
+      }
+    ],
+    "origin": "무림초출",
+    "reacts": true
+  },
   "전투광": {
     "name": "전투광",
     "desc": "전투가 시작되면 네 기량이 전투 중에만 40 오른다. 전투가 끝나면 체력과 내력을 각각 25% 회복한다.",

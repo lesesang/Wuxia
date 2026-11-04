@@ -22,6 +22,7 @@ const defaults = () => ({
   endings_seen: [], runs: [], total_runs: 0,
   upgrades: {}, content: [], content_off: [], legacy_open: false, legacies: [], milestones: [],
   known_events: [], achievements: [], origin_wins: [], total_wins: 0, best_turn: 0,
+  provisions: [],
 });
 
 export function loadMeta() {
@@ -118,9 +119,44 @@ export function buyUpgrade(key) {
 }
 
 /** 강화 단계에 해당하는 숨은 특성 목록 */
-export function upgradeTraits(data = loadMeta()) {
-  return Object.entries(data.upgrades).flatMap(([key, level]) =>
-    Array.from({ length: level }, (_, i) => `환생_${key}_${i + 1}`)).filter((k) => DB.traits[k]);
+export function upgradeTraits(data = loadMeta(), originKey = null) {
+  return Object.entries(data.upgrades)
+    .filter(([key]) => !DB.karma.upgrades[key]?.origin || !originKey || DB.karma.upgrades[key].origin === originKey)
+    .flatMap(([key, level]) => Array.from({ length: level }, (_, i) => `환생_${key}_${i + 1}`)).filter((k) => DB.traits[k]);
+}
+
+// ---------- 한 번 쓰는 채비 ----------
+
+/** 다음 강호행 한 번에 쓸 채비를 산다. 같은 것은 한 번에 하나만 챙길 수 있다. */
+export function buyProvision(key) {
+  const data = loadMeta();
+  const cost = DB.karma.provisions[key]?.cost;
+  if (cost === undefined || data.provisions.includes(key) || data.current_karma < cost) return false;
+  data.current_karma -= cost;
+  data.provisions.push(key);
+  saveMeta(data);
+  return true;
+}
+
+/** 아직 쓰지 않은 채비를 물린다. 값은 그대로 돌려준다. */
+export function refundProvision(key) {
+  const data = loadMeta();
+  if (!data.provisions.includes(key)) return false;
+  data.provisions = data.provisions.filter((k) => k !== key);
+  data.current_karma += DB.karma.provisions[key]?.cost ?? 0;
+  saveMeta(data);
+  return true;
+}
+
+/** 강호행을 시작하며 챙겨 둔 채비를 꺼내 쓴다. 숨은 특성 키 목록을 돌려준다. */
+export function takeProvisions() {
+  const data = loadMeta();
+  const keys = data.provisions.filter((k) => DB.karma.provisions[k]);
+  if (data.provisions.length) {
+    data.provisions = [];
+    saveMeta(data);
+  }
+  return keys;
 }
 
 export const extraSlots = (data = loadMeta()) => data.upgrades.그릇 || 0;
@@ -298,7 +334,7 @@ export function importRecords(text) {
   const legend = data?.format === "wuxia-records" ? data.legend : data;
   if (!legend || typeof legend.current_karma !== "number" || typeof legend.total_karma !== "number") return false;
   const merged = { ...defaults(), ...legend };
-  for (const key of ["unlocked_origins", "unlocked_traits", "global_codex", "known_skills", "known_items", "endings_seen", "runs", "content", "content_off", "legacies", "milestones", "known_events", "achievements", "origin_wins"]) {
+  for (const key of ["unlocked_origins", "unlocked_traits", "global_codex", "known_skills", "known_items", "endings_seen", "runs", "content", "content_off", "provisions", "legacies", "milestones", "known_events", "achievements", "origin_wins"]) {
     if (!Array.isArray(merged[key])) merged[key] = defaults()[key];
   }
   saveMeta(merged);

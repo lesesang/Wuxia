@@ -410,6 +410,176 @@
         100
       ],
       "effects": []
+    },
+    "창궁검리": {
+      "group": "출신 전용",
+      "name": "창궁 검리",
+      "desc": "회심의 일격 확률이 단계마다 2%, 비기의 피해가 4% 오른다.",
+      "costs": [
+        3,
+        6,
+        10
+      ],
+      "effects": [
+        {
+          "type": "crit",
+          "percent": 2
+        },
+        {
+          "type": "secret_power",
+          "percent": 4
+        }
+      ],
+      "origin": "남궁세가"
+    },
+    "오호기개": {
+      "group": "출신 전용",
+      "name": "오호의 기개",
+      "desc": "받는 피해가 단계마다 2% 줄고 회심의 일격 피해가 6% 늘어난다.",
+      "costs": [
+        3,
+        6,
+        10
+      ],
+      "effects": [
+        {
+          "type": "damage_reduce",
+          "percent": 2
+        },
+        {
+          "type": "crit_power",
+          "percent": 6
+        }
+      ],
+      "origin": "하북팽가"
+    },
+    "표행밑천": {
+      "group": "출신 전용",
+      "name": "표행 밑천",
+      "desc": "은자 40과 금창약 1개를 단계마다 더 들고 시작한다.",
+      "costs": [
+        3,
+        6,
+        10
+      ],
+      "effects": [
+        {
+          "type": "start_silver",
+          "amount": 40
+        },
+        {
+          "type": "start_item",
+          "item": "금창약",
+          "amount": 1
+        }
+      ],
+      "origin": "표국표사"
+    },
+    "거지인심": {
+      "group": "출신 전용",
+      "name": "거지 인심",
+      "desc": "매달 체력과 내력을 단계마다 2%씩 더 회복하고 기연을 만날 확률이 2% 오른다.",
+      "costs": [
+        3,
+        6,
+        10
+      ],
+      "effects": [
+        {
+          "type": "turn_regen",
+          "hp_pct": 2,
+          "qi_pct": 2
+        },
+        {
+          "type": "fortune_rate",
+          "percent": 2
+        }
+      ],
+      "origin": "개방제자"
+    },
+    "비록되새김": {
+      "group": "출신 전용",
+      "name": "비록 되새기기",
+      "desc": "비기의 피해가 단계마다 8%, 회심의 일격 피해가 6% 늘어난다.",
+      "costs": [
+        3,
+        6,
+        10
+      ],
+      "effects": [
+        {
+          "type": "secret_power",
+          "percent": 8
+        },
+        {
+          "type": "crit_power",
+          "percent": 6
+        }
+      ],
+      "origin": "권마계승"
+    },
+    "연못의기억": {
+      "group": "출신 전용",
+      "name": "연못의 기억",
+      "desc": "심법 회복이 단계마다 10%, 요양으로 되찾는 양이 8% 늘어난다.",
+      "costs": [
+        3,
+        6,
+        10
+      ],
+      "effects": [
+        {
+          "type": "mindset_power",
+          "percent": 10
+        },
+        {
+          "type": "heal_rate",
+          "percent": 8
+        }
+      ],
+      "origin": "혈지생환"
+    },
+    "단골장부": {
+      "group": "출신 전용",
+      "name": "단골 장부",
+      "desc": "장터 가격이 단계마다 3% 싸고 얻는 은자가 5% 늘어난다.",
+      "costs": [
+        3,
+        6,
+        10
+      ],
+      "effects": [
+        {
+          "type": "market_discount",
+          "percent": 3
+        },
+        {
+          "type": "silver_rate",
+          "percent": 5
+        }
+      ],
+      "origin": "하오문"
+    },
+    "사부회초리": {
+      "group": "출신 전용",
+      "name": "사부의 회초리",
+      "desc": "주무공 성취를 단계마다 10 쌓은 채로 시작하고 무공 성취를 5% 더 빠르게 얻는다.",
+      "costs": [
+        3,
+        6,
+        10
+      ],
+      "effects": [
+        {
+          "type": "start_mastery",
+          "amount": 10
+        },
+        {
+          "type": "mastery_rate",
+          "percent": 5
+        }
+      ],
+      "origin": "무림초출"
     }
   },
   "content": {
@@ -430,8 +600,9 @@
     },
     "권마의시험": {
       "name": "권마의 시험",
-      "cost": 12,
-      "desc": "권마의 그림자가 내는 시험. 이기면 파천권을 얻는다."
+      "cost": 8,
+      "desc": "권마의 그림자가 계곡에서 내는 시험. 세 번을 받아 내면 비록에 없는 주먹이 몸에 남는다.",
+      "origin": "권마계승"
     },
     "천마의유산": {
       "name": "백 년 전의 비동",
@@ -505,6 +676,48 @@
       "name": "칼을 놓은 명장",
       "cost": 10,
       "desc": "은거한 전설의 대장장이를 설득하는 두 편의 이야기. 끝까지 가면 주무공 계열의 최상급 병기를 얻는다."
+    },
+    "창궁위패": {
+      "name": "다시 모시는 위패",
+      "cost": 8,
+      "desc": "위패를 지고 떠도는 옛 마부를 만나는 두 편의 이야기. 끝까지 가면 결전에 남궁의 식솔들이 달려온다.",
+      "origin": "남궁세가"
+    },
+    "오호조카": {
+      "name": "큰형의 아들",
+      "cost": 8,
+      "desc": "큰형이 남긴 아이를 찾는 두 편의 이야기. 끝까지 가면 큰형의 수련 일지 남은 장을 얻는다.",
+      "origin": "하북팽가"
+    },
+    "표물의뢰인": {
+      "name": "그날의 의뢰인",
+      "cost": 8,
+      "desc": "그날 표물을 맡긴 자를 찾는 두 편의 이야기. 끝까지 가면 천마를 약하게 만든다.",
+      "origin": "표국표사"
+    },
+    "분타재건": {
+      "name": "끊어진 분타",
+      "cost": 8,
+      "desc": "연락이 끊긴 분타를 되살리는 두 편의 이야기. 끝까지 가면 천마를 약하게 만든다.",
+      "origin": "개방제자"
+    },
+    "거짓소문": {
+      "name": "거짓 소문 한 냥",
+      "cost": 8,
+      "desc": "판 소문을 되짚고 거짓을 파는 두 편의 이야기. 끝까지 가면 천마를 약하게 만든다.",
+      "origin": "하오문"
+    },
+    "삼백의이름": {
+      "name": "삼백의 이름",
+      "cost": 8,
+      "desc": "연못에 끌려간 아이들의 이름을 찾는 두 편의 이야기. 끝까지 가면 결전에 그 이름들이 함께한다.",
+      "origin": "혈지생환"
+    },
+    "초출벗": {
+      "name": "같은 날 내려온 벗",
+      "cost": 8,
+      "desc": "같은 날 하산한 또래를 만나는 두 편의 이야기. 끝까지 가면 결전에 벗이 달려온다.",
+      "origin": "무림초출"
     }
   },
   "legacy": {
@@ -967,5 +1180,263 @@
         }
       ]
     }
-  ]
+  ],
+  "provisions": {
+    "호골주": {
+      "group": "기량",
+      "name": "호골주 한 병",
+      "cost": 2,
+      "desc": "시작 외공이 40 높다.",
+      "effects": [
+        {
+          "type": "start_stat",
+          "stat": "external",
+          "amount": 40
+        }
+      ]
+    },
+    "산삼탕": {
+      "group": "기량",
+      "name": "산삼 달인 물",
+      "cost": 2,
+      "desc": "시작 내공이 40 높다.",
+      "effects": [
+        {
+          "type": "start_stat",
+          "stat": "internal",
+          "amount": 40
+        }
+      ]
+    },
+    "초식필사": {
+      "group": "기량",
+      "name": "초식 필사본",
+      "cost": 2,
+      "desc": "시작 무리가 40 높다.",
+      "effects": [
+        {
+          "type": "start_stat",
+          "stat": "martial",
+          "amount": 40
+        }
+      ]
+    },
+    "청심향": {
+      "group": "기량",
+      "name": "청심향 한 갑",
+      "cost": 2,
+      "desc": "시작 심경이 40 높다.",
+      "effects": [
+        {
+          "type": "start_stat",
+          "stat": "mind",
+          "amount": 40
+        }
+      ]
+    },
+    "보약": {
+      "group": "기량",
+      "name": "보약 한 제",
+      "cost": 3,
+      "desc": "네 기량이 모두 25 높게 시작한다.",
+      "effects": [
+        {
+          "type": "start_stat",
+          "stat": "external",
+          "amount": 25
+        },
+        {
+          "type": "start_stat",
+          "stat": "internal",
+          "amount": 25
+        },
+        {
+          "type": "start_stat",
+          "stat": "martial",
+          "amount": 25
+        },
+        {
+          "type": "start_stat",
+          "stat": "mind",
+          "amount": 25
+        }
+      ]
+    },
+    "대련상대": {
+      "group": "기량",
+      "name": "대련 상대",
+      "cost": 2,
+      "desc": "실전 경험 5를 쌓은 채로 시작한다.",
+      "effects": [
+        {
+          "type": "start_battles",
+          "amount": 5
+        }
+      ]
+    },
+    "초식되새김": {
+      "group": "기량",
+      "name": "초식 되새기기",
+      "cost": 1,
+      "desc": "주무공 성취를 25 쌓은 채로 시작한다.",
+      "effects": [
+        {
+          "type": "start_mastery",
+          "amount": 25
+        }
+      ]
+    },
+    "노자": {
+      "group": "물건",
+      "name": "노자 주머니",
+      "cost": 1,
+      "desc": "은자 120을 더 들고 시작한다.",
+      "effects": [
+        {
+          "type": "start_silver",
+          "amount": 120
+        }
+      ]
+    },
+    "약꾸러미": {
+      "group": "물건",
+      "name": "약 꾸러미",
+      "cost": 1,
+      "desc": "금창약 3개와 회기단 2개를 들고 시작한다.",
+      "effects": [
+        {
+          "type": "start_item",
+          "item": "금창약",
+          "amount": 3
+        },
+        {
+          "type": "start_item",
+          "item": "회기단",
+          "amount": 2
+        }
+      ]
+    },
+    "해독단두알": {
+      "group": "물건",
+      "name": "해독단 두 알",
+      "cost": 1,
+      "desc": "해독단 2개를 들고 시작한다.",
+      "effects": [
+        {
+          "type": "start_item",
+          "item": "해독단",
+          "amount": 2
+        }
+      ]
+    },
+    "구명단한알": {
+      "group": "물건",
+      "name": "구명단 한 알",
+      "cost": 2,
+      "desc": "구명단 1개를 들고 시작한다.",
+      "effects": [
+        {
+          "type": "start_item",
+          "item": "구명단",
+          "amount": 1
+        }
+      ]
+    },
+    "수련도구두점": {
+      "group": "물건",
+      "name": "수련 도구 두 점",
+      "cost": 1,
+      "desc": "주무공 계열 수련 도구 2개를 들고 시작한다.",
+      "effects": [
+        {
+          "type": "start_style_tool",
+          "amount": 2
+        }
+      ]
+    },
+    "전투도구두점": {
+      "group": "물건",
+      "name": "전투 도구 두 점",
+      "cost": 1,
+      "desc": "주무공 계열 전투 도구 2개를 들고 시작한다.",
+      "effects": [
+        {
+          "type": "start_battle_tool",
+          "amount": 2
+        }
+      ]
+    },
+    "갑의한벌": {
+      "group": "물건",
+      "name": "철사 갑의 한 벌",
+      "cost": 2,
+      "desc": "철사 갑의를 입고 시작한다.",
+      "effects": [
+        {
+          "type": "start_equip",
+          "item": "철사갑의"
+        }
+      ]
+    },
+    "쓸만한병기": {
+      "group": "물건",
+      "name": "쓸 만한 병기",
+      "cost": 3,
+      "desc": "주무공 계열의 좋은 병기를 들고 시작한다.",
+      "effects": [
+        {
+          "type": "start_style_weapon",
+          "tier": 1
+        }
+      ]
+    },
+    "소문한자락": {
+      "group": "물건",
+      "name": "소문 한 자락",
+      "cost": 1,
+      "desc": "명성 8로 시작한다.",
+      "effects": [
+        {
+          "type": "start_fame",
+          "amount": 8
+        }
+      ]
+    },
+    "명품비급": {
+      "group": "무공",
+      "name": "명품 비급 한 권",
+      "cost": 3,
+      "desc": "주무공 계열의 명품 공격무공 하나를 더 익히고 시작한다.",
+      "effects": [
+        {
+          "type": "start_style_skill",
+          "grade": "명품"
+        }
+      ]
+    },
+    "심법구결": {
+      "group": "무공",
+      "name": "심법 구결",
+      "cost": 3,
+      "desc": "심법 「곤륜현기공」을 익힌 채로 시작한다.",
+      "effects": [
+        {
+          "type": "start_skill",
+          "skill": "곤륜현기공"
+        }
+      ]
+    },
+    "보법구결": {
+      "group": "무공",
+      "name": "보법 구결",
+      "cost": 3,
+      "desc": "경공 「유운신법」을 익힌 채로 시작한다.",
+      "effects": [
+        {
+          "type": "start_skill",
+          "skill": "유운신법"
+        }
+      ]
+    }
+  }
 }
