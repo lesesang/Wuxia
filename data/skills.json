@@ -1,0 +1,5136 @@
+{
+  "기초검법": {
+    "name": "기초검법",
+    "type": "공격무공",
+    "category": "검법",
+    "grade": "기본",
+    "base_multiplier": 1.1,
+    "qi_cost": 4,
+    "desc": "강호 어디서나 배울 수 있는 검법. 익힐수록 정직하게 강해진다.",
+    "secret_technique": {
+      "name": "일섬",
+      "unlock_grade": "명품",
+      "unlock_mastery": 50,
+      "multiplier": 1.8,
+      "qi_cost": 30
+    },
+    "forms": [
+      "직자",
+      "횡소천군",
+      "낙엽귀근"
+    ],
+    "gimmick": {
+      "power": 10,
+      "accuracy": 10,
+      "name": "정직한 일검",
+      "text": "위력 +1할, 명중 +1할."
+    }
+  },
+  "육합권": {
+    "name": "육합권",
+    "type": "공격무공",
+    "category": "권법",
+    "grade": "기본",
+    "base_multiplier": 1.16,
+    "qi_cost": 3,
+    "desc": "저잣거리의 무사들이 즐겨 익히는 권법.",
+    "secret_technique": {
+      "name": "육합귀일",
+      "unlock_grade": "명품",
+      "unlock_mastery": 60,
+      "multiplier": 1.8,
+      "qi_cost": 28
+    },
+    "forms": [
+      "흑호투심",
+      "금계독립",
+      "육합귀원"
+    ],
+    "gimmick": {
+      "hits": 2,
+      "hit_rate": 0.6,
+      "name": "육합귀원",
+      "text": "2번 나눠 치며(한 번마다 위력 6할) 번번이 명중과 회심을 따로 가린다."
+    }
+  },
+  "창궁검법": {
+    "name": "창궁검법",
+    "type": "공격무공",
+    "category": "검법",
+    "grade": "명품",
+    "base_multiplier": 1.22,
+    "qi_cost": 6,
+    "desc": "남궁세가의 가전 검법. 하늘을 뒤덮듯 넓게 펼쳐진다.",
+    "secret_technique": {
+      "name": "창궁무애",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 40
+    },
+    "forms": [
+      "창궁일색",
+      "백운출수",
+      "유성추월",
+      "무애검"
+    ],
+    "origin": "남궁세가",
+    "lineage": "창궁검",
+    "lineage_rank": 1,
+    "gimmick": {
+      "hits": 2,
+      "hit_rate": 0.62,
+      "name": "창궁광익",
+      "text": "2번 나눠 치며(한 번마다 위력 6할 2푼) 번번이 명중과 회심을 따로 가린다."
+    }
+  },
+  "암향비도": {
+    "name": "암향비도",
+    "type": "공격무공",
+    "category": "암기",
+    "grade": "기본",
+    "base_multiplier": 1.2,
+    "qi_cost": 3,
+    "desc": "하오문이 뒷골목에서 갈고닦은 비도술. 향기처럼 소리가 없다.",
+    "secret_technique": {
+      "name": "만화비영",
+      "unlock_grade": "명품",
+      "unlock_mastery": 60,
+      "multiplier": 1.9,
+      "qi_cost": 30
+    },
+    "forms": [
+      "암향부동",
+      "월하무흔",
+      "일비충천"
+    ],
+    "origin": "하오문",
+    "lineage": "암향비도",
+    "lineage_rank": 1,
+    "gimmick": {
+      "accuracy": 15,
+      "crit": 8,
+      "name": "암향부동",
+      "text": "명중 +1할 5푼, 회심 확률 +8푼."
+    }
+  },
+  "파천권": {
+    "name": "파천권",
+    "type": "공격무공",
+    "category": "권법",
+    "grade": "명품",
+    "base_multiplier": 1.15,
+    "qi_cost": 7,
+    "desc": "권마가 남긴 권법. 강하지만 내력을 거칠게 태운다.",
+    "secret_technique": {
+      "name": "권마강림",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.5,
+      "qi_cost": 55
+    },
+    "forms": [
+      "붕산",
+      "열지",
+      "파천"
+    ],
+    "risky": true,
+    "origin": "권마계승",
+    "lineage": "파천권",
+    "lineage_rank": 1,
+    "gimmick": {
+      "power": 15,
+      "recoil": 2,
+      "name": "파천일권",
+      "text": "위력 +1할 5푼, 쓸 때마다 체력 2푼을 태운다."
+    }
+  },
+  "매화검법": {
+    "name": "매화검법",
+    "type": "공격무공",
+    "category": "검법",
+    "grade": "일절",
+    "base_multiplier": 1.9,
+    "qi_cost": 14,
+    "desc": "꽃잎이 흩날리듯 변화무쌍한 화산의 정종 검법. 화산이 인정한 제자에게만 전한다.",
+    "secret_technique": {
+      "name": "매화난무",
+      "unlock_grade": "일절",
+      "unlock_mastery": 50,
+      "multiplier": 2.8,
+      "qi_cost": 70
+    },
+    "forms": [
+      "매화점점",
+      "이십사향",
+      "낙화무정"
+    ],
+    "lineage": "매화검",
+    "lineage_rank": 3,
+    "gimmick": {
+      "hits": 3,
+      "hit_rate": 0.42,
+      "name": "매화난무",
+      "text": "3번 나눠 치며(한 번마다 위력 4할 2푼) 번번이 명중과 회심을 따로 가린다."
+    },
+    "school": "화산"
+  },
+  "천뢰검법": {
+    "name": "천뢰검법",
+    "type": "공격무공",
+    "category": "검법",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "번개처럼 찌르고 천둥이 뒤따른다는 종남 최후의 검.",
+    "secret_technique": {
+      "name": "천뢰일섬",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "forms": [
+      "뇌동",
+      "섬광",
+      "벽력"
+    ],
+    "gimmick": {
+      "crit": 15,
+      "crit_power": 30,
+      "name": "뇌정일섬",
+      "text": "회심 확률 +1할 5푼, 회심 위력 +3할."
+    },
+    "school": "종남",
+    "reserved": true
+  },
+  "항마장": {
+    "name": "항마장",
+    "type": "공격무공",
+    "category": "장법",
+    "grade": "상승",
+    "base_multiplier": 1.5,
+    "qi_cost": 9,
+    "desc": "마를 굴복시키는 정도의 장법. 협객에게만 전해진다.",
+    "secret_technique": {
+      "name": "금강항마",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.3,
+      "qi_cost": 42
+    },
+    "forms": [
+      "금강역사",
+      "복호",
+      "항마인"
+    ],
+    "gimmick": {
+      "vs_side": {
+        "마도": 25
+      },
+      "guard": 8,
+      "name": "항마인",
+      "text": "맞힌 합에 받는 피해 -8푼, 마도의 적에게 위력 +2할 5푼."
+    }
+  },
+  "독룡장": {
+    "name": "독룡장",
+    "type": "공격무공",
+    "category": "장법",
+    "grade": "명품",
+    "base_multiplier": 1.3,
+    "qi_cost": 6,
+    "desc": "손바닥에 독기를 실어 내지르는 사파의 장법.",
+    "secret_technique": {
+      "name": "독룡출해",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.3,
+      "qi_cost": 40
+    },
+    "forms": [
+      "독수",
+      "맹룡과강",
+      "해저침독"
+    ],
+    "inflict": {
+      "poison": 8
+    },
+    "gimmick": {
+      "poison": 12,
+      "name": "독룡토신",
+      "text": "적을 중독시킨다(독 위력 12)."
+    }
+  },
+  "혈영도법": {
+    "name": "혈영도법",
+    "type": "공격무공",
+    "category": "도법",
+    "grade": "명품",
+    "base_multiplier": 1.25,
+    "qi_cost": 6,
+    "desc": "피 그림자를 끌고 다니는 마도의 도법. 쓸수록 손이 떨린다.",
+    "secret_technique": {
+      "name": "혈해만리",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 40
+    },
+    "forms": [
+      "혈우",
+      "귀곡",
+      "혈영무종"
+    ],
+    "risky": true,
+    "gimmick": {
+      "lifesteal": 12,
+      "recoil": 2,
+      "name": "혈영탈기",
+      "text": "준 피해의 1할 2푼을 체력으로 흡수, 쓸 때마다 체력 2푼을 태운다."
+    },
+    "school": "마교"
+  },
+  "태허검결": {
+    "name": "태허검결",
+    "type": "공격무공",
+    "category": "검법",
+    "grade": "일절",
+    "base_multiplier": 1.9,
+    "qi_cost": 12,
+    "desc": "이름 없는 노인이 평생을 바쳐 다듬은 검결. 비어 있기에 모든 것을 벤다.",
+    "secret_technique": {
+      "name": "태허무극",
+      "unlock_grade": "일절",
+      "unlock_mastery": 40,
+      "multiplier": 2.8,
+      "qi_cost": 70
+    },
+    "forms": [
+      "허",
+      "공",
+      "무"
+    ],
+    "legend": true,
+    "gimmick": {
+      "accuracy": 20,
+      "pierce": 100,
+      "crit": 10,
+      "name": "허실상생",
+      "text": "명중 +2할, 회심 확률 +1할, 방어 10할 무시."
+    }
+  },
+  "토납법": {
+    "name": "토납법",
+    "type": "심공",
+    "category": "심공",
+    "grade": "기본",
+    "base_multiplier": 1.0,
+    "qi_cost": 0,
+    "desc": "숨을 고르는 가장 기초적인 심법. 싸움 중에도 내력을 되찾는다.",
+    "effect": {
+      "heal_hp_pct": 5,
+      "heal_qi_pct": 15,
+      "atk_buff_pct": 0,
+      "buff_rounds": 0
+    },
+    "gimmick": {
+      "regen": {
+        "percent": 3,
+        "rounds": 2
+      },
+      "name": "고른 숨",
+      "text": "운기하면 2합 동안 합마다 체력 3푼."
+    }
+  },
+  "곤륜현기공": {
+    "name": "곤륜현기공",
+    "type": "심공",
+    "category": "심공",
+    "grade": "명품",
+    "base_multiplier": 1.0,
+    "qi_cost": 0,
+    "desc": "곤륜의 정통 심법. 호흡 한 번에 몸과 마음을 함께 다스린다.",
+    "effect": {
+      "heal_hp_pct": 12,
+      "heal_qi_pct": 22,
+      "atk_buff_pct": 10,
+      "buff_rounds": 2
+    },
+    "gimmick": {
+      "ward": 10,
+      "cleanse": 1,
+      "name": "현기호체",
+      "text": "운기하면 독을 밀어낸다, 최대 체력 1할의 호신 기운."
+    },
+    "school": "곤륜"
+  },
+  "역근공": {
+    "name": "역근공",
+    "type": "심공",
+    "category": "심공",
+    "grade": "일절",
+    "base_multiplier": 1.0,
+    "qi_cost": 0,
+    "desc": "근골을 바꾼다는 소림의 비전. 상처가 빠르게 아물고 몸이 새로 짜인다.",
+    "effect": {
+      "heal_hp_pct": 28,
+      "heal_qi_pct": 30,
+      "atk_buff_pct": 20,
+      "buff_rounds": 3
+    },
+    "gimmick": {
+      "regen": {
+        "percent": 8,
+        "rounds": 3
+      },
+      "injury": 50,
+      "name": "역근세수",
+      "text": "운기하면 5할 확률로 내상 한 단계 회복, 3합 동안 합마다 체력 8푼."
+    },
+    "school": "소림"
+  },
+  "혈마심공": {
+    "name": "혈마심공",
+    "type": "심공",
+    "category": "심공",
+    "grade": "상승",
+    "base_multiplier": 1.0,
+    "qi_cost": 0,
+    "desc": "제 피를 태워 힘으로 바꾸는 마공. 몸은 축나지만 기세가 무섭게 오른다.",
+    "effect": {
+      "heal_hp_pct": -8,
+      "heal_qi_pct": 30,
+      "atk_buff_pct": 40,
+      "buff_rounds": 3
+    },
+    "gimmick": {
+      "next_power": 50,
+      "name": "혈마증력",
+      "text": "운기하면 다음 공격 위력 +5할."
+    },
+    "school": "혈교"
+  },
+  "태허심법": {
+    "name": "태허심법",
+    "type": "심공",
+    "category": "심공",
+    "grade": "일절",
+    "base_multiplier": 1.0,
+    "qi_cost": 0,
+    "desc": "태허검결과 짝을 이루는 심법. 마음이 비면 기가 스스로 찬다.",
+    "effect": {
+      "heal_hp_pct": 25,
+      "heal_qi_pct": 35,
+      "atk_buff_pct": 25,
+      "buff_rounds": 3
+    },
+    "gimmick": {
+      "guard": {
+        "percent": 25,
+        "rounds": 2
+      },
+      "cleanse": 1,
+      "name": "허심합도",
+      "text": "운기하면 독을 밀어낸다, 2합 동안 받는 피해 -2할 5푼."
+    }
+  },
+  "초상비": {
+    "name": "경신보",
+    "type": "경공",
+    "category": "경공",
+    "grade": "기본",
+    "base_multiplier": 1.0,
+    "qi_cost": 5,
+    "desc": "발끝으로 땅을 밀어 몸을 띄우는 기초 경공. 기초적이지만 쓸모 있다.",
+    "effect": {
+      "evade": 60,
+      "counter_pct": 60,
+      "flee_bonus": 15
+    },
+    "gimmick": {
+      "partial": 0.4,
+      "name": "풀잎 디딤",
+      "text": "다 피하지 못해도 위력을 6할 줄인다."
+    }
+  },
+  "부운보": {
+    "name": "부운보",
+    "type": "경공",
+    "category": "경공",
+    "grade": "명품",
+    "base_multiplier": 1.0,
+    "qi_cost": 6,
+    "desc": "뜬구름처럼 종잡을 수 없는 보법. 하오문의 생존 기술이다.",
+    "effect": {
+      "evade": 70,
+      "counter_pct": 80,
+      "flee_bonus": 25
+    },
+    "origin": "하오문",
+    "lineage": "부운보",
+    "lineage_rank": 1,
+    "gimmick": {
+      "refund": 1,
+      "partial": 0.4,
+      "name": "부운무적",
+      "text": "다 피하지 못해도 위력을 6할 줄인다, 다 피하면 쓴 내력의 절반을 되찾는다."
+    }
+  },
+  "유운신법": {
+    "name": "유운신법",
+    "type": "경공",
+    "category": "경공",
+    "grade": "상승",
+    "base_multiplier": 1.0,
+    "qi_cost": 8,
+    "desc": "흐르는 구름처럼 공격을 흘려보낸 뒤 그 틈을 찌른다.",
+    "effect": {
+      "evade": 80,
+      "counter_pct": 100,
+      "flee_bonus": 30
+    },
+    "gimmick": {
+      "strike": 40,
+      "name": "유운반격",
+      "text": "다 피하면 곧바로 위력 4할로 되받아친다."
+    }
+  },
+  "능공허도": {
+    "name": "능공허도",
+    "type": "경공",
+    "category": "경공",
+    "grade": "일절",
+    "base_multiplier": 1.0,
+    "qi_cost": 10,
+    "desc": "허공을 밟는다는 전설의 경공.",
+    "effect": {
+      "evade": 90,
+      "counter_pct": 150,
+      "flee_bonus": 45
+    },
+    "gimmick": {
+      "auto_evade": 8,
+      "partial": 0.25,
+      "name": "허공답보",
+      "text": "경공을 쓰지 않아도 8푼 확률로 저절로 공격을 피한다, 다 피하지 못해도 위력을 7할 5푼 줄인다."
+    }
+  },
+  "나한권": {
+    "name": "나한권",
+    "category": "권법",
+    "type": "공격무공",
+    "grade": "기본",
+    "base_multiplier": 1.15,
+    "qi_cost": 4,
+    "desc": "소림 무승이 처음 배우는 권법. 천하 권법의 뿌리다.",
+    "forms": [
+      "나한출동",
+      "호심권",
+      "금강권"
+    ],
+    "secret_technique": {
+      "name": "나한복호",
+      "unlock_grade": "명품",
+      "unlock_mastery": 50,
+      "multiplier": 2.0,
+      "qi_cost": 32
+    },
+    "lineage": "소림권",
+    "lineage_rank": 1,
+    "gimmick": {
+      "guard": 10,
+      "power": 8,
+      "name": "나한호신",
+      "text": "위력 +8푼, 맞힌 합에 받는 피해 -1할."
+    },
+    "school": "소림"
+  },
+  "백보신권": {
+    "name": "백보신권",
+    "category": "권법",
+    "type": "공격무공",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "백 보 밖에서 촛불을 끄고 바위를 부순다는 소림 칠십이절예의 으뜸.",
+    "forms": [
+      "격산타우",
+      "공권",
+      "일권백보"
+    ],
+    "secret_technique": {
+      "name": "백보무형",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "lineage": "소림권",
+    "lineage_rank": 4,
+    "gimmick": {
+      "accuracy": 30,
+      "opening": 40,
+      "name": "백보권풍",
+      "text": "위력 +1할 2푼, 명중 +3할, 첫 합 위력 +4할.",
+      "power": 12
+    },
+    "school": "소림",
+    "reserved": true
+  },
+  "태극검": {
+    "name": "태극검",
+    "category": "검법",
+    "type": "공격무공",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "검을 쓰지 않는 듯 쓴다는 무당의 끝. 장문인 대에도 온전히 이룬 이가 드물다.",
+    "forms": [
+      "기수식",
+      "운수",
+      "태극원전"
+    ],
+    "secret_technique": {
+      "name": "양의검화",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "gimmick": {
+      "guard": 20,
+      "qi_back": 3,
+      "name": "이유제강",
+      "text": "맞힐 때 내력 3푼 회복, 맞힌 합에 받는 피해 -2할."
+    },
+    "school": "무당",
+    "lineage": "무당검",
+    "lineage_rank": 4,
+    "reserved": true
+  },
+  "이십사수매화검법": {
+    "name": "이십사수매화검법",
+    "category": "검법",
+    "type": "공격무공",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "화산 검학의 끝. 스물네 수가 끝나면 꽃비만 남는다는 화산 최후의 비전.",
+    "forms": [
+      "매화삼롱",
+      "암향소영",
+      "암향부동",
+      "낙화유수"
+    ],
+    "secret_technique": {
+      "name": "만개매화",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "lineage": "매화검",
+    "lineage_rank": 4,
+    "gimmick": {
+      "crit": 8,
+      "hits": 4,
+      "hit_rate": 0.36,
+      "name": "이십사수",
+      "text": "4번 나눠 치며(한 번마다 위력 3할 6푼) 번번이 명중과 회심을 따로 가린다, 회심 확률 +8푼."
+    },
+    "school": "화산",
+    "reserved": true
+  },
+  "금정면장": {
+    "name": "금정면장",
+    "category": "장법",
+    "type": "공격무공",
+    "grade": "명품",
+    "base_multiplier": 1.25,
+    "qi_cost": 5,
+    "desc": "솜처럼 부드럽게 파고드는 아미의 장법.",
+    "forms": [
+      "금정불광",
+      "면리장침",
+      "자항보도"
+    ],
+    "secret_technique": {
+      "name": "불광보조",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 38
+    },
+    "gimmick": {
+      "lifesteal": 5,
+      "weaken": {
+        "percent": 12,
+        "rounds": 2
+      },
+      "name": "면리장침",
+      "text": "준 피해의 5푼을 체력으로 흡수, 맞히면 2합 동안 적 위력 -1할 2푼."
+    },
+    "school": "아미"
+  },
+  "타구봉법": {
+    "name": "타구봉법",
+    "category": "봉법",
+    "type": "공격무공",
+    "grade": "일절",
+    "base_multiplier": 1.92,
+    "qi_cost": 13,
+    "desc": "역대 개방 방주가 물려주는 봉법. 개를 때리듯 고수를 때린다.",
+    "forms": [
+      "봉타쌍견",
+      "악구탈식",
+      "천하무구"
+    ],
+    "secret_technique": {
+      "name": "천하무구",
+      "unlock_grade": "일절",
+      "unlock_mastery": 50,
+      "multiplier": 2.7,
+      "qi_cost": 62
+    },
+    "lineage": "걸개봉",
+    "lineage_rank": 2,
+    "gimmick": {
+      "stun": 22,
+      "weaken": {
+        "percent": 10,
+        "rounds": 2
+      },
+      "name": "악견불식",
+      "text": "맞히면 2할 2푼 확률로 적이 다음 합에 손을 쓰지 못한다, 맞히면 2합 동안 적 위력 -1할."
+    },
+    "school": "개방"
+  },
+  "항룡장": {
+    "name": "항룡장",
+    "category": "장법",
+    "type": "공격무공",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "역대 방주만 이어받는 개방의 장법. 손바닥에서 용 울음이 난다.",
+    "forms": [
+      "견룡재전",
+      "비룡재천",
+      "항룡유회"
+    ],
+    "secret_technique": {
+      "name": "항룡유회",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "gimmick": {
+      "power": 22,
+      "stun": 12,
+      "name": "항룡유회",
+      "text": "위력 +2할 2푼, 맞히면 1할 2푼 확률로 적이 다음 합에 손을 쓰지 못한다."
+    },
+    "school": "개방",
+    "reserved": true
+  },
+  "당가비도": {
+    "name": "당가비도",
+    "category": "암기",
+    "type": "공격무공",
+    "grade": "기본",
+    "base_multiplier": 1.1,
+    "qi_cost": 3,
+    "desc": "독을 바른 비도. 맞으면 천천히 죽는다.",
+    "forms": [
+      "일점홍",
+      "연환비도",
+      "회선도"
+    ],
+    "inflict": {
+      "poison": 4
+    },
+    "secret_technique": {
+      "name": "칠보단혼",
+      "unlock_grade": "명품",
+      "unlock_mastery": 50,
+      "multiplier": 1.9,
+      "qi_cost": 28
+    },
+    "lineage": "당가암기",
+    "lineage_rank": 1,
+    "gimmick": {
+      "poison": 10,
+      "name": "사천독수",
+      "text": "적을 중독시킨다(독 위력 10)."
+    },
+    "school": "당가"
+  },
+  "만천화우": {
+    "name": "만천화우",
+    "category": "암기",
+    "type": "공격무공",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "당가의 끝. 하늘 가득 꽃비가 내리면 침은 혈도마다 꽂혀 있다.",
+    "forms": [
+      "화우",
+      "만천",
+      "독화"
+    ],
+    "inflict": {
+      "poison": 14
+    },
+    "secret_technique": {
+      "name": "만천화우",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "lineage": "당가암기",
+    "lineage_rank": 4,
+    "gimmick": {
+      "poison": 8,
+      "hits": 5,
+      "hit_rate": 0.34,
+      "name": "만천화우",
+      "text": "5번 나눠 치며(한 번마다 위력 3할 4푼) 번번이 명중과 회심을 따로 가린다, 적을 중독시킨다(독 위력 8)."
+    },
+    "school": "당가",
+    "reserved": true
+  },
+  "천마파천공": {
+    "name": "천마파천공",
+    "category": "장법",
+    "type": "공격무공",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "역대 천마만 익힌다는 신교 최후의 장법.",
+    "forms": [
+      "천마낙일",
+      "마기충천",
+      "파천"
+    ],
+    "risky": true,
+    "secret_technique": {
+      "name": "천마강림",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "gimmick": {
+      "power": 35,
+      "recoil": 5,
+      "lifesteal": 10,
+      "name": "천마탈혼",
+      "text": "위력 +3할 5푼, 준 피해의 1할을 체력으로 흡수, 쓸 때마다 체력 5푼을 태운다."
+    },
+    "school": "마교",
+    "reserved": true
+  },
+  "대라검법": {
+    "name": "대라검법",
+    "category": "검법",
+    "type": "공격무공",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "곤륜 장문인의 검. 칼끝이 지나간 자리에 눈이 내리지 않는다.",
+    "forms": [
+      "대라천개",
+      "설봉",
+      "곤륜일점"
+    ],
+    "secret_technique": {
+      "name": "대라귀진",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "gimmick": {
+      "pierce": 50,
+      "chain": 6,
+      "chain_max": 36,
+      "name": "대라무량",
+      "text": "방어 5할 무시, 끊이지 않고 맞힐수록 위력이 6푼씩 오른다(최대 3할 6푼)."
+    },
+    "school": "곤륜",
+    "reserved": true
+  },
+  "제왕검형": {
+    "name": "제왕검형",
+    "category": "검법",
+    "type": "공격무공",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "남궁의 마지막 비전. 검이 움직이면 천지가 고개를 숙인다.",
+    "forms": [
+      "왕림",
+      "군림천하",
+      "제왕일검"
+    ],
+    "secret_technique": {
+      "name": "창천무극",
+      "unlock_grade": "신공",
+      "unlock_mastery": 40,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "origin": "남궁세가",
+    "lineage": "창궁검",
+    "lineage_rank": 2,
+    "gimmick": {
+      "power": 15,
+      "crit": 10,
+      "weaken": {
+        "percent": 15,
+        "rounds": 2
+      },
+      "name": "제왕지기",
+      "text": "위력 +1할 5푼, 회심 확률 +1할, 맞히면 2합 동안 적 위력 -1할 5푼."
+    }
+  },
+  "천수나찰": {
+    "name": "천수나찰",
+    "category": "암기",
+    "type": "공격무공",
+    "grade": "상승",
+    "base_multiplier": 1.6,
+    "qi_cost": 8,
+    "desc": "천 개의 손으로 던지는 듯한 하오문의 비전.",
+    "forms": [
+      "나찰소",
+      "천수",
+      "귀영"
+    ],
+    "secret_technique": {
+      "name": "천수귀영",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.4,
+      "qi_cost": 48
+    },
+    "gimmick": {
+      "crit": 8,
+      "hits": 3,
+      "hit_rate": 0.44,
+      "name": "천수난비",
+      "text": "3번 나눠 치며(한 번마다 위력 4할 4푼) 번번이 명중과 회심을 따로 가린다, 회심 확률 +8푼."
+    },
+    "school": "하오문"
+  },
+  "권왕패천": {
+    "name": "권왕패천",
+    "category": "권법",
+    "type": "공격무공",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "권마 비록의 마지막 장. 주먹으로 하늘을 친다.",
+    "forms": [
+      "패권",
+      "파천",
+      "개벽"
+    ],
+    "risky": true,
+    "secret_technique": {
+      "name": "권왕개벽",
+      "unlock_grade": "신공",
+      "unlock_mastery": 30,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "origin": "권마계승",
+    "lineage": "파천권",
+    "lineage_rank": 2,
+    "gimmick": {
+      "power": 25,
+      "recoil": 3,
+      "stun": 15,
+      "low_hp": 30,
+      "name": "권왕패천",
+      "text": "위력 +2할 5푼, 체력 절반 이하에서 위력 +3할, 맞히면 1할 5푼 확률로 적이 다음 합에 손을 쓰지 못한다, 쓸 때마다 체력 3푼을 태운다."
+    }
+  },
+  "오호단문도": {
+    "name": "오호단문도",
+    "category": "도법",
+    "type": "공격무공",
+    "grade": "명품",
+    "base_multiplier": 1.25,
+    "qi_cost": 5,
+    "desc": "다섯 호랑이처럼 사납게 몰아치는 도법.",
+    "forms": [
+      "호포",
+      "맹호출림",
+      "단문"
+    ],
+    "secret_technique": {
+      "name": "오호단문",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 40
+    },
+    "origin": "하북팽가",
+    "lineage": "오호도",
+    "lineage_rank": 1,
+    "gimmick": {
+      "hits": 5,
+      "hit_rate": 0.26,
+      "name": "오호쟁식",
+      "text": "5번 나눠 치며(한 번마다 위력 2할 6푼) 번번이 명중과 회심을 따로 가린다."
+    }
+  },
+  "달마심공": {
+    "name": "달마심공",
+    "type": "심공",
+    "category": "심공",
+    "grade": "신공",
+    "base_multiplier": 1.0,
+    "qi_cost": 0,
+    "desc": "달마 조사가 면벽 끝에 남겼다는 소림 제일의 심법. 몸이 금강처럼 굳고 마음은 잠잠하다.",
+    "effect": {
+      "heal_hp_pct": 25,
+      "heal_qi_pct": 45,
+      "atk_buff_pct": 30,
+      "buff_rounds": 3
+    },
+    "gimmick": {
+      "guard": {
+        "percent": 35,
+        "rounds": 2
+      },
+      "injury": 40,
+      "name": "면벽금강",
+      "text": "운기하면 4할 확률로 내상 한 단계 회복, 최대 체력 1할 2푼의 호신 기운, 2합 동안 받는 피해 -3할 5푼.",
+      "ward": 12
+    },
+    "school": "소림",
+    "reserved": true
+  },
+  "태극심공": {
+    "name": "태극심공",
+    "type": "심공",
+    "category": "심공",
+    "grade": "신공",
+    "base_multiplier": 1.0,
+    "qi_cost": 0,
+    "desc": "음과 양이 돌면 내력이 끝나지 않는다.",
+    "effect": {
+      "heal_hp_pct": 25,
+      "heal_qi_pct": 45,
+      "atk_buff_pct": 30,
+      "buff_rounds": 3
+    },
+    "gimmick": {
+      "reflect": {
+        "percent": 30,
+        "rounds": 2
+      },
+      "guard": {
+        "percent": 15,
+        "rounds": 2
+      },
+      "name": "태극회선",
+      "text": "운기하면 2합 동안 받는 피해 -1할 5푼, 2합 동안 받은 피해의 3할을 되돌린다."
+    },
+    "school": "무당",
+    "reserved": true
+  },
+  "청음심공": {
+    "name": "청음심공",
+    "type": "심공",
+    "category": "심공",
+    "grade": "상승",
+    "base_multiplier": 1.0,
+    "qi_cost": 0,
+    "desc": "맑은 소리처럼 몸속을 씻어 내는 심법. 아미에서 귀하게 여긴다.",
+    "effect": {
+      "heal_hp_pct": 25,
+      "heal_qi_pct": 25,
+      "atk_buff_pct": 10,
+      "buff_rounds": 2
+    },
+    "gimmick": {
+      "cleanse": 1,
+      "injury": 40,
+      "regen": {
+        "percent": 4,
+        "rounds": 2
+      },
+      "name": "청음세심",
+      "text": "운기하면 독을 밀어낸다, 4할 확률로 내상 한 단계 회복, 2합 동안 합마다 체력 4푼."
+    },
+    "school": "아미"
+  },
+  "제운종": {
+    "name": "제운종",
+    "type": "경공",
+    "category": "경공",
+    "grade": "상승",
+    "base_multiplier": 1.0,
+    "qi_cost": 7,
+    "desc": "구름을 사다리 삼아 오른다는 무당의 신법.",
+    "effect": {
+      "evade": 82,
+      "counter_pct": 100,
+      "flee_bonus": 30
+    },
+    "gimmick": {
+      "refund": 1,
+      "next_crit": 1,
+      "name": "제운상승",
+      "text": "다 피하면 쓴 내력의 절반을 되찾는다, 다 피하면 다음 공격은 반드시 회심."
+    },
+    "school": "무당"
+  },
+  "표운보": {
+    "name": "표운보",
+    "type": "경공",
+    "category": "경공",
+    "grade": "명품",
+    "base_multiplier": 1.0,
+    "qi_cost": 6,
+    "desc": "구름 위를 스치듯 걷는 보법. 아미에서 즐겨 쓴다.",
+    "effect": {
+      "evade": 72,
+      "counter_pct": 80,
+      "flee_bonus": 25
+    },
+    "gimmick": {
+      "auto_evade": 5,
+      "partial": 0.4,
+      "name": "구름 스침",
+      "text": "경공을 쓰지 않아도 5푼 확률로 저절로 공격을 피한다, 다 피하지 못해도 위력을 6할 줄인다."
+    }
+  },
+  "기초도법": {
+    "name": "기초도법",
+    "type": "공격무공",
+    "category": "도법",
+    "grade": "기본",
+    "base_multiplier": 1.1,
+    "qi_cost": 4,
+    "desc": "칼등과 날을 가리지 않는 투박한 도법. 힘이 정직하다.",
+    "forms": [
+      "내려치기",
+      "횡참",
+      "역풍"
+    ],
+    "secret_technique": {
+      "name": "일도양단",
+      "unlock_grade": "명품",
+      "unlock_mastery": 50,
+      "multiplier": 1.9,
+      "qi_cost": 30
+    },
+    "gimmick": {
+      "power": 10,
+      "name": "우직한 칼",
+      "text": "위력 +1할."
+    }
+  },
+  "기초창법": {
+    "name": "기초창법",
+    "type": "공격무공",
+    "category": "창법",
+    "grade": "기본",
+    "base_multiplier": 1.18,
+    "qi_cost": 4,
+    "desc": "찌르고 거두는 것이 전부인 창법. 그 전부가 어렵다.",
+    "forms": [
+      "직자",
+      "횡소",
+      "회마창"
+    ],
+    "secret_technique": {
+      "name": "일점한광",
+      "unlock_grade": "명품",
+      "unlock_mastery": 50,
+      "multiplier": 1.9,
+      "qi_cost": 30
+    },
+    "gimmick": {
+      "accuracy": 15,
+      "pierce": 30,
+      "name": "곧은 찌르기",
+      "text": "명중 +1할 5푼, 방어 3할 무시."
+    }
+  },
+  "기초봉법": {
+    "name": "기초봉법",
+    "type": "공격무공",
+    "category": "봉법",
+    "grade": "기본",
+    "base_multiplier": 1.1,
+    "qi_cost": 3,
+    "desc": "길에서 주운 막대도 병기가 된다는 것을 가르치는 봉법.",
+    "forms": [
+      "개문",
+      "쌍룡탈주",
+      "횡소천군"
+    ],
+    "secret_technique": {
+      "name": "풍차륜",
+      "unlock_grade": "명품",
+      "unlock_mastery": 50,
+      "multiplier": 1.8,
+      "qi_cost": 28
+    },
+    "gimmick": {
+      "accuracy": 10,
+      "guard": 8,
+      "name": "막고 치기",
+      "text": "명중 +1할, 맞힌 합에 받는 피해 -8푼."
+    }
+  },
+  "기초장법": {
+    "name": "기초장법",
+    "type": "공격무공",
+    "category": "장법",
+    "grade": "기본",
+    "base_multiplier": 1.13,
+    "qi_cost": 4,
+    "desc": "손바닥에 내력을 싣는 첫걸음.",
+    "forms": [
+      "추수",
+      "탁장",
+      "쌍장"
+    ],
+    "secret_technique": {
+      "name": "장풍일격",
+      "unlock_grade": "명품",
+      "unlock_mastery": 50,
+      "multiplier": 1.9,
+      "qi_cost": 30
+    },
+    "gimmick": {
+      "pierce": 60,
+      "power": 6,
+      "name": "침투경",
+      "text": "위력 +6푼, 방어 6할 무시."
+    }
+  },
+  "유엽비도": {
+    "name": "유엽비도",
+    "type": "공격무공",
+    "category": "암기",
+    "grade": "기본",
+    "base_multiplier": 1.1,
+    "qi_cost": 3,
+    "desc": "버들잎처럼 얇은 비도. 멀리서 먼저 친다.",
+    "forms": [
+      "일엽",
+      "쌍비",
+      "연환엽"
+    ],
+    "secret_technique": {
+      "name": "비엽만천",
+      "unlock_grade": "명품",
+      "unlock_mastery": 50,
+      "multiplier": 1.9,
+      "qi_cost": 28
+    },
+    "gimmick": {
+      "opening": 40,
+      "accuracy": 10,
+      "name": "선수일비",
+      "text": "명중 +1할, 첫 합 위력 +4할."
+    }
+  },
+  "광풍도법": {
+    "name": "광풍도법",
+    "type": "공격무공",
+    "category": "도법",
+    "grade": "명품",
+    "base_multiplier": 1.25,
+    "qi_cost": 6,
+    "desc": "광풍처럼 몰아치는 도법. 한번 시작되면 멈추기 어렵다.",
+    "forms": [
+      "광풍일도",
+      "선풍참",
+      "폭풍연환"
+    ],
+    "secret_technique": {
+      "name": "광풍노호",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 40
+    },
+    "gimmick": {
+      "chain": 5,
+      "chain_max": 30,
+      "name": "광풍연참",
+      "text": "끊이지 않고 맞힐수록 위력이 5푼씩 오른다(최대 3할)."
+    }
+  },
+  "양가창법": {
+    "name": "양가창법",
+    "type": "공격무공",
+    "category": "창법",
+    "grade": "명품",
+    "base_multiplier": 1.25,
+    "qi_cost": 5,
+    "desc": "대대로 군문에 전해진 창법. 군더더기가 없다.",
+    "forms": [
+      "봉황점두",
+      "이화창",
+      "회마일창"
+    ],
+    "secret_technique": {
+      "name": "양가회마",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 38
+    },
+    "gimmick": {
+      "accuracy": 15,
+      "opening": 30,
+      "name": "선수필살",
+      "text": "명중 +1할 5푼, 첫 합 위력 +3할."
+    }
+  },
+  "팔괘곤법": {
+    "name": "팔괘곤법",
+    "type": "공격무공",
+    "category": "봉법",
+    "grade": "명품",
+    "base_multiplier": 1.25,
+    "qi_cost": 5,
+    "desc": "팔괘 방위를 밟으며 사방을 막고 치는 곤법.",
+    "forms": [
+      "건곤",
+      "감리",
+      "팔방풍우"
+    ],
+    "secret_technique": {
+      "name": "팔괘진곤",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 38
+    },
+    "gimmick": {
+      "guard": 15,
+      "accuracy": 10,
+      "name": "팔괘방위",
+      "text": "명중 +1할, 맞힌 합에 받는 피해 -1할 5푼."
+    }
+  },
+  "열화장": {
+    "name": "열화장",
+    "type": "공격무공",
+    "category": "장법",
+    "grade": "명품",
+    "base_multiplier": 1.25,
+    "qi_cost": 6,
+    "desc": "손바닥에 불기운을 싣는 장법. 스치면 살이 탄다.",
+    "forms": [
+      "염장",
+      "열화충천",
+      "화룡장"
+    ],
+    "secret_technique": {
+      "name": "열화요원",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.3,
+      "qi_cost": 42
+    },
+    "gimmick": {
+      "burn": 25,
+      "name": "열화번신",
+      "text": "준 피해의 2할 5푼이 두 합 동안 더 번진다."
+    },
+    "school": "혈교"
+  },
+  "금강권": {
+    "name": "금강권",
+    "type": "공격무공",
+    "category": "권법",
+    "grade": "명품",
+    "base_multiplier": 1.25,
+    "qi_cost": 5,
+    "desc": "주먹을 쇠처럼 단련하는 권법.",
+    "forms": [
+      "금강출세",
+      "철문권",
+      "복호권"
+    ],
+    "secret_technique": {
+      "name": "금강파산",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 38
+    },
+    "gimmick": {
+      "pierce": 100,
+      "power": 5,
+      "name": "금강철권",
+      "text": "위력 +5푼, 방어 10할 무시."
+    }
+  },
+  "낙성비도": {
+    "name": "낙성비도",
+    "type": "공격무공",
+    "category": "암기",
+    "grade": "명품",
+    "base_multiplier": 1.25,
+    "qi_cost": 5,
+    "desc": "떨어지는 별처럼 위에서 꽂히는 비도술.",
+    "forms": [
+      "낙성",
+      "유성추월",
+      "쌍성"
+    ],
+    "secret_technique": {
+      "name": "낙성만천",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 36
+    },
+    "gimmick": {
+      "accuracy": 10,
+      "hits": 2,
+      "hit_rate": 0.62,
+      "name": "쌍성낙하",
+      "text": "2번 나눠 치며(한 번마다 위력 6할 2푼) 번번이 명중과 회심을 따로 가린다, 명중 +1할."
+    }
+  },
+  "귀면도법": {
+    "name": "귀면도법",
+    "type": "공격무공",
+    "category": "도법",
+    "grade": "명품",
+    "base_multiplier": 1.25,
+    "qi_cost": 6,
+    "desc": "귀신 가면을 쓴 도객이 남긴 도법. 상대의 숨을 끊는 데만 쓰인다.",
+    "forms": [
+      "귀곡",
+      "참혼",
+      "귀면무상"
+    ],
+    "secret_technique": {
+      "name": "귀면일도",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 40
+    },
+    "gimmick": {
+      "execute": {
+        "below": 35,
+        "percent": 60
+      },
+      "name": "귀면단명",
+      "text": "적 체력 3할 5푼 이하에서 위력 +6할."
+    }
+  },
+  "패왕창법": {
+    "name": "패왕창법",
+    "type": "공격무공",
+    "category": "창법",
+    "grade": "상승",
+    "base_multiplier": 1.55,
+    "qi_cost": 10,
+    "desc": "전장에서 만 명을 물린 장수의 창법.",
+    "forms": [
+      "패왕출진",
+      "횡창입마",
+      "파진"
+    ],
+    "secret_technique": {
+      "name": "패왕일창",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 52
+    },
+    "gimmick": {
+      "power": 20,
+      "stun": 10,
+      "name": "패왕횡소",
+      "text": "위력 +2할, 맞히면 1할 확률로 적이 다음 합에 손을 쓰지 못한다."
+    }
+  },
+  "벽력곤법": {
+    "name": "벽력곤법",
+    "type": "공격무공",
+    "category": "봉법",
+    "grade": "상승",
+    "base_multiplier": 1.5,
+    "qi_cost": 9,
+    "desc": "내려치는 순간 벼락 소리가 나는 곤법.",
+    "forms": [
+      "벽력",
+      "개산",
+      "뇌정만균"
+    ],
+    "secret_technique": {
+      "name": "벽력개산",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    },
+    "gimmick": {
+      "stun": 15,
+      "power": 10,
+      "name": "벽력일곤",
+      "text": "위력 +1할, 맞히면 1할 5푼 확률로 적이 다음 합에 손을 쓰지 못한다."
+    }
+  },
+  "현빙장": {
+    "name": "현빙장",
+    "type": "공격무공",
+    "category": "장법",
+    "grade": "상승",
+    "base_multiplier": 1.5,
+    "qi_cost": 9,
+    "desc": "손바닥에 얼음 기운을 실어 혈맥을 얼리는 장법.",
+    "forms": [
+      "빙정",
+      "현빙일장",
+      "동혈"
+    ],
+    "secret_technique": {
+      "name": "현빙만리",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    },
+    "gimmick": {
+      "stun": 8,
+      "weaken": {
+        "percent": 15,
+        "rounds": 2
+      },
+      "name": "현빙침골",
+      "text": "맞히면 8푼 확률로 적이 다음 합에 손을 쓰지 못한다, 맞히면 2합 동안 적 위력 -1할 5푼."
+    }
+  },
+  "벽력권": {
+    "name": "뇌음권",
+    "type": "공격무공",
+    "category": "권법",
+    "grade": "상승",
+    "base_multiplier": 1.5,
+    "qi_cost": 9,
+    "desc": "주먹이 공기를 찢으며 벼락 소리를 낸다.",
+    "forms": [
+      "선공",
+      "뇌권",
+      "벽력일권"
+    ],
+    "secret_technique": {
+      "name": "뇌음권강",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    },
+    "gimmick": {
+      "stun": 18,
+      "name": "뇌음진격",
+      "text": "맞히면 1할 8푼 확률로 적이 다음 합에 손을 쓰지 못한다."
+    }
+  },
+  "천라지망": {
+    "name": "천라지망",
+    "type": "공격무공",
+    "category": "암기",
+    "grade": "상승",
+    "base_multiplier": 1.5,
+    "qi_cost": 8,
+    "desc": "하늘과 땅을 덮는 그물처럼 비도를 뿌린다.",
+    "forms": [
+      "천라",
+      "지망",
+      "무소부재"
+    ],
+    "secret_technique": {
+      "name": "천라지망",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 48
+    },
+    "gimmick": {
+      "hits": 2,
+      "hit_rate": 0.62,
+      "weaken": {
+        "percent": 15,
+        "rounds": 2
+      },
+      "name": "천라지망",
+      "text": "2번 나눠 치며(한 번마다 위력 6할 2푼) 번번이 명중과 회심을 따로 가린다, 맞히면 2합 동안 적 위력 -1할 5푼."
+    }
+  },
+  "백호도법": {
+    "name": "백호도법",
+    "type": "공격무공",
+    "category": "도법",
+    "grade": "기본",
+    "base_multiplier": 1.14,
+    "qi_cost": 4,
+    "desc": "오랑캐 고수를 상대하려고 변방 군문에서 다듬은 도법. 꾸밈없이 목숨을 노린다.",
+    "forms": [
+      "맹호출림",
+      "호미횡소",
+      "백호도강"
+    ],
+    "secret_technique": {
+      "name": "백호참",
+      "unlock_grade": "명품",
+      "unlock_mastery": 50,
+      "multiplier": 2.0,
+      "qi_cost": 32
+    },
+    "gimmick": {
+      "execute": {
+        "below": 40,
+        "percent": 30
+      },
+      "name": "백호단목",
+      "text": "적 체력 4할 이하에서 위력 +3할."
+    }
+  },
+  "낙일검법": {
+    "name": "낙일검법",
+    "type": "공격무공",
+    "category": "검법",
+    "grade": "상승",
+    "base_multiplier": 1.52,
+    "qi_cost": 9,
+    "desc": "해가 지는 순간의 빛처럼 마지막 일 초에 모든 것을 싣는다.",
+    "forms": [
+      "잔양",
+      "석조",
+      "낙일"
+    ],
+    "secret_technique": {
+      "name": "일검낙일",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    },
+    "gimmick": {
+      "low_hp": 40,
+      "execute": {
+        "below": 30,
+        "percent": 40
+      },
+      "name": "낙일귀원",
+      "text": "체력 절반 이하에서 위력 +4할, 적 체력 3할 이하에서 위력 +4할."
+    }
+  },
+  "낙월도법": {
+    "name": "낙월도법",
+    "type": "공격무공",
+    "category": "도법",
+    "grade": "명품",
+    "base_multiplier": 1.25,
+    "qi_cost": 6,
+    "desc": "달이 떨어지듯 위에서 아래로 곧게 베는 도법.",
+    "forms": [
+      "월락",
+      "참월",
+      "낙하"
+    ],
+    "secret_technique": {
+      "name": "낙월무흔",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 40
+    },
+    "gimmick": {
+      "power": 12,
+      "crit_power": 20,
+      "name": "낙월일도",
+      "text": "위력 +1할 2푼, 회심 위력 +2할."
+    }
+  },
+  "회풍도법": {
+    "name": "회풍도법",
+    "type": "공격무공",
+    "category": "도법",
+    "grade": "명품",
+    "base_multiplier": 1.25,
+    "qi_cost": 6,
+    "desc": "몸을 돌리며 연달아 베는 도법. 여럿을 상대할 때 빛난다.",
+    "forms": [
+      "회선",
+      "풍륜",
+      "연환참"
+    ],
+    "secret_technique": {
+      "name": "회풍만리",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 40
+    },
+    "gimmick": {
+      "hits": 2,
+      "hit_rate": 0.62,
+      "name": "회풍연참",
+      "text": "2번 나눠 치며(한 번마다 위력 6할 2푼) 번번이 명중과 회심을 따로 가린다."
+    }
+  },
+  "단혼도법": {
+    "name": "단혼도법",
+    "type": "공격무공",
+    "category": "도법",
+    "grade": "상승",
+    "base_multiplier": 1.52,
+    "qi_cost": 9,
+    "desc": "칼 한 번에 혼을 끊는다는 사파의 쾌도.",
+    "forms": [
+      "쾌참",
+      "단혼",
+      "무성"
+    ],
+    "secret_technique": {
+      "name": "일도단혼",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    },
+    "gimmick": {
+      "crit": 15,
+      "execute": {
+        "below": 25,
+        "percent": 50
+      },
+      "name": "일도단혼",
+      "text": "회심 확률 +1할 5푼, 적 체력 2할 5푼 이하에서 위력 +5할."
+    }
+  },
+  "풍뢰도법": {
+    "name": "풍뢰도법",
+    "type": "공격무공",
+    "category": "도법",
+    "grade": "명품",
+    "base_multiplier": 1.25,
+    "qi_cost": 6,
+    "desc": "바람처럼 다가가 벼락처럼 내려친다.",
+    "forms": [
+      "풍기",
+      "뇌락",
+      "풍뢰교가"
+    ],
+    "secret_technique": {
+      "name": "풍뢰천하",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 40
+    },
+    "gimmick": {
+      "stun": 8,
+      "hits": 2,
+      "hit_rate": 0.7,
+      "name": "풍뢰쌍참",
+      "text": "2번 나눠 치며(한 번마다 위력 7할) 번번이 명중과 회심을 따로 가린다, 맞히면 8푼 확률로 적이 다음 합에 손을 쓰지 못한다."
+    }
+  },
+  "패천도결": {
+    "name": "패천도결",
+    "type": "공격무공",
+    "category": "도법",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "하늘을 베겠다던 광인이 남긴 도결.",
+    "forms": [
+      "패도",
+      "개천",
+      "멸지"
+    ],
+    "secret_technique": {
+      "name": "패천일도",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "gimmick": {
+      "power": 30,
+      "pierce": 100,
+      "low_hp": 25,
+      "name": "패천일도",
+      "text": "위력 +3할, 방어 10할 무시, 체력 절반 이하에서 위력 +2할 5푼."
+    }
+  },
+  "무상도결": {
+    "name": "단애도결",
+    "type": "공격무공",
+    "category": "도법",
+    "grade": "일절",
+    "base_multiplier": 1.9,
+    "qi_cost": 14,
+    "desc": "벼랑 끝에서 모든 형을 버린 뒤 남은 단 하나의 칼.",
+    "forms": [
+      "무상",
+      "무형",
+      "귀일"
+    ],
+    "secret_technique": {
+      "name": "무상참",
+      "unlock_grade": "일절",
+      "unlock_mastery": 50,
+      "multiplier": 2.8,
+      "qi_cost": 70
+    },
+    "legend": true,
+    "gimmick": {
+      "crit": 20,
+      "crit_power": 40,
+      "name": "단애일도",
+      "text": "회심 확률 +2할, 회심 위력 +4할."
+    }
+  },
+  "오호창법": {
+    "name": "오행창법",
+    "type": "공격무공",
+    "category": "창법",
+    "grade": "기본",
+    "base_multiplier": 1.12,
+    "qi_cost": 4,
+    "desc": "군문에서 처음 배우는 다섯 가지 찌르기.",
+    "forms": [
+      "직자",
+      "횡란",
+      "회창"
+    ],
+    "secret_technique": {
+      "name": "오호단창",
+      "unlock_grade": "명품",
+      "unlock_mastery": 50,
+      "multiplier": 1.9,
+      "qi_cost": 30
+    },
+    "gimmick": {
+      "chain": 4,
+      "chain_max": 20,
+      "name": "오행연환",
+      "text": "끊이지 않고 맞힐수록 위력이 4푼씩 오른다(최대 2할)."
+    }
+  },
+  "이화창법": {
+    "name": "이화창법",
+    "type": "공격무공",
+    "category": "창법",
+    "grade": "명품",
+    "base_multiplier": 1.25,
+    "qi_cost": 6,
+    "desc": "배꽃이 지듯 창끝이 흩어지는 창법.",
+    "forms": [
+      "이화",
+      "난점",
+      "낙화"
+    ],
+    "secret_technique": {
+      "name": "이화만천",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 40
+    },
+    "gimmick": {
+      "hits": 3,
+      "hit_rate": 0.42,
+      "name": "이화난락",
+      "text": "3번 나눠 치며(한 번마다 위력 4할 2푼) 번번이 명중과 회심을 따로 가린다."
+    }
+  },
+  "악가창법": {
+    "name": "악가창법",
+    "type": "공격무공",
+    "category": "창법",
+    "grade": "상승",
+    "base_multiplier": 1.5,
+    "qi_cost": 9,
+    "desc": "충절의 장수 집안에 전하는 창법. 곧고 무겁다.",
+    "forms": [
+      "정충",
+      "보국",
+      "파로"
+    ],
+    "secret_technique": {
+      "name": "정충일창",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 40
+    },
+    "gimmick": {
+      "guard": 15,
+      "power": 10,
+      "name": "충절의 창",
+      "text": "위력 +1할, 맞힌 합에 받는 피해 -1할 5푼."
+    }
+  },
+  "칠탐사창": {
+    "name": "칠탐사창",
+    "type": "공격무공",
+    "category": "창법",
+    "grade": "명품",
+    "base_multiplier": 1.25,
+    "qi_cost": 6,
+    "desc": "뱀처럼 일곱 번 머리를 내미는 창법.",
+    "forms": [
+      "사출",
+      "칠탐",
+      "독아"
+    ],
+    "secret_technique": {
+      "name": "칠사연환",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 40
+    },
+    "gimmick": {
+      "poison": 6,
+      "hits": 3,
+      "hit_rate": 0.42,
+      "name": "칠탐독아",
+      "text": "3번 나눠 치며(한 번마다 위력 4할 2푼) 번번이 명중과 회심을 따로 가린다, 적을 중독시킨다(독 위력 6)."
+    },
+    "school": "귀문교"
+  },
+  "낙혼창법": {
+    "name": "낙혼창법",
+    "type": "공격무공",
+    "category": "창법",
+    "grade": "명품",
+    "base_multiplier": 1.25,
+    "qi_cost": 6,
+    "desc": "찌르기 전에 기세로 상대의 혼을 빼앗는다.",
+    "forms": [
+      "위압",
+      "낙혼",
+      "관심"
+    ],
+    "secret_technique": {
+      "name": "탈혼일점",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 40
+    },
+    "gimmick": {
+      "opening": 30,
+      "weaken": {
+        "percent": 18,
+        "rounds": 2
+      },
+      "name": "낙혼탈기",
+      "text": "첫 합 위력 +3할, 맞히면 2합 동안 적 위력 -1할 8푼."
+    }
+  },
+  "뇌정창법": {
+    "name": "뇌정창법",
+    "type": "공격무공",
+    "category": "창법",
+    "grade": "상승",
+    "base_multiplier": 1.52,
+    "qi_cost": 9,
+    "desc": "창끝에 내력을 실어 벼락처럼 찌른다.",
+    "forms": [
+      "뇌섬",
+      "정벽",
+      "천뢰"
+    ],
+    "secret_technique": {
+      "name": "뇌정만균",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    },
+    "gimmick": {
+      "crit": 12,
+      "pierce": 100,
+      "name": "뇌정관통",
+      "text": "회심 확률 +1할 2푼, 방어 10할 무시."
+    }
+  },
+  "청룡창법": {
+    "name": "청룡창법",
+    "type": "공격무공",
+    "category": "창법",
+    "grade": "상승",
+    "base_multiplier": 1.52,
+    "qi_cost": 9,
+    "desc": "청룡이 몸을 틀듯 창을 휘감는다.",
+    "forms": [
+      "청룡출수",
+      "반룡",
+      "승천"
+    ],
+    "secret_technique": {
+      "name": "청룡회천",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    },
+    "gimmick": {
+      "guard": 8,
+      "chain": 6,
+      "chain_max": 30,
+      "name": "청룡반신",
+      "text": "맞힌 합에 받는 피해 -8푼, 끊이지 않고 맞힐수록 위력이 6푼씩 오른다(최대 3할)."
+    }
+  },
+  "용담신창": {
+    "name": "용담신창",
+    "type": "공격무공",
+    "category": "창법",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "한 자루 창으로 만군 사이를 일곱 번 드나들었다는 전설의 창법.",
+    "forms": [
+      "칠진칠출",
+      "용담",
+      "호위"
+    ],
+    "secret_technique": {
+      "name": "용담무쌍",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "gimmick": {
+      "lifesteal": 6,
+      "hits": 7,
+      "hit_rate": 0.2,
+      "name": "칠진칠출",
+      "text": "7번 나눠 치며(한 번마다 위력 2할) 번번이 명중과 회심을 따로 가린다, 준 피해의 6푼을 체력으로 흡수."
+    }
+  },
+  "무상창결": {
+    "name": "파진창결",
+    "type": "공격무공",
+    "category": "창법",
+    "grade": "일절",
+    "base_multiplier": 1.9,
+    "qi_cost": 14,
+    "desc": "창이 곧 몸이요 몸이 곧 창이라는 경지.",
+    "forms": [
+      "무상",
+      "일점",
+      "귀진"
+    ],
+    "secret_technique": {
+      "name": "무상일창",
+      "unlock_grade": "일절",
+      "unlock_mastery": 50,
+      "multiplier": 2.8,
+      "qi_cost": 70
+    },
+    "legend": true,
+    "gimmick": {
+      "pierce": 100,
+      "power": 20,
+      "opening": 50,
+      "name": "파진일창",
+      "text": "위력 +2할, 방어 10할 무시, 첫 합 위력 +5할."
+    }
+  },
+  "오호곤법": {
+    "name": "걸개곤법",
+    "type": "공격무공",
+    "category": "봉법",
+    "grade": "기본",
+    "base_multiplier": 1.2,
+    "qi_cost": 4,
+    "desc": "거리의 거지들이 몸으로 전하는 다섯 수의 곤법.",
+    "forms": [
+      "타두",
+      "소퇴",
+      "붕곤"
+    ],
+    "secret_technique": {
+      "name": "오호타곤",
+      "unlock_grade": "명품",
+      "unlock_mastery": 50,
+      "multiplier": 1.9,
+      "qi_cost": 30
+    },
+    "origin": "개방제자",
+    "lineage": "걸개봉",
+    "lineage_rank": 1,
+    "gimmick": {
+      "stun": 8,
+      "qi_back": 2,
+      "name": "걸개타법",
+      "text": "맞힐 때 내력 2푼 회복, 맞히면 8푼 확률로 적이 다음 합에 손을 쓰지 못한다."
+    }
+  },
+  "나한곤법": {
+    "name": "나한곤법",
+    "type": "공격무공",
+    "category": "봉법",
+    "grade": "명품",
+    "base_multiplier": 1.25,
+    "qi_cost": 6,
+    "desc": "절집 무승들이 익히는 묵직한 곤법.",
+    "forms": [
+      "나한",
+      "복호",
+      "항룡"
+    ],
+    "secret_technique": {
+      "name": "나한복마",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 40
+    },
+    "gimmick": {
+      "guard": 12,
+      "power": 8,
+      "name": "나한곤진",
+      "text": "위력 +8푼, 맞힌 합에 받는 피해 -1할 2푼."
+    }
+  },
+  "천지곤법": {
+    "name": "천지곤법",
+    "type": "공격무공",
+    "category": "봉법",
+    "grade": "명품",
+    "base_multiplier": 1.25,
+    "qi_cost": 6,
+    "desc": "하늘과 땅을 번갈아 치는 곤법.",
+    "forms": [
+      "천타",
+      "지소",
+      "천지일기"
+    ],
+    "secret_technique": {
+      "name": "천지개벽",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 40
+    },
+    "gimmick": {
+      "pierce": 30,
+      "hits": 2,
+      "hit_rate": 0.62,
+      "name": "천지양단",
+      "text": "2번 나눠 치며(한 번마다 위력 6할 2푼) 번번이 명중과 회심을 따로 가린다, 방어 3할 무시."
+    }
+  },
+  "풍마곤법": {
+    "name": "풍마곤법",
+    "type": "공격무공",
+    "category": "봉법",
+    "grade": "명품",
+    "base_multiplier": 1.25,
+    "qi_cost": 6,
+    "desc": "미친 듯 휘두르는 듯하나 한 치도 어긋나지 않는다.",
+    "forms": [
+      "풍마",
+      "난타",
+      "광풍"
+    ],
+    "secret_technique": {
+      "name": "풍마난무",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 40
+    },
+    "gimmick": {
+      "hits": 3,
+      "hit_rate": 0.44,
+      "name": "풍마난타",
+      "text": "3번 나눠 치며(한 번마다 위력 4할 4푼) 번번이 명중과 회심을 따로 가린다."
+    }
+  },
+  "여의곤법": {
+    "name": "여의곤법",
+    "type": "공격무공",
+    "category": "봉법",
+    "grade": "상승",
+    "base_multiplier": 1.52,
+    "qi_cost": 9,
+    "desc": "늘었다 줄었다 하듯 거리를 속이는 곤법.",
+    "forms": [
+      "여의",
+      "신축",
+      "변환"
+    ],
+    "secret_technique": {
+      "name": "여의천균",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    },
+    "gimmick": {
+      "accuracy": 25,
+      "chain": 4,
+      "chain_max": 20,
+      "name": "여의신축",
+      "text": "명중 +2할 5푼, 끊이지 않고 맞힐수록 위력이 4푼씩 오른다(최대 2할)."
+    }
+  },
+  "항마곤법": {
+    "name": "항마곤법",
+    "type": "공격무공",
+    "category": "봉법",
+    "grade": "상승",
+    "base_multiplier": 1.52,
+    "qi_cost": 9,
+    "desc": "마귀를 때려잡는다는 절집의 비전 곤법.",
+    "forms": [
+      "항마",
+      "파사",
+      "현정"
+    ],
+    "secret_technique": {
+      "name": "항마대곤",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    },
+    "gimmick": {
+      "vs_side": {
+        "마도": 25
+      },
+      "power": 10,
+      "name": "항마복호",
+      "text": "위력 +1할, 마도의 적에게 위력 +2할 5푼."
+    }
+  },
+  "제천곤결": {
+    "name": "제천곤결",
+    "type": "공격무공",
+    "category": "봉법",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "하늘과 겨루겠다는 뜻을 담은 곤법의 끝.",
+    "forms": [
+      "제천",
+      "요천",
+      "파운"
+    ],
+    "secret_technique": {
+      "name": "제천일곤",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "gimmick": {
+      "power": 25,
+      "stun": 15,
+      "chain": 4,
+      "chain_max": 20,
+      "name": "제천대성",
+      "text": "위력 +2할 5푼, 맞히면 1할 5푼 확률로 적이 다음 합에 손을 쓰지 못한다, 끊이지 않고 맞힐수록 위력이 4푼씩 오른다(최대 2할)."
+    }
+  },
+  "무상곤결": {
+    "name": "부동곤결",
+    "type": "공격무공",
+    "category": "봉법",
+    "grade": "일절",
+    "base_multiplier": 1.9,
+    "qi_cost": 14,
+    "desc": "막대 하나로 천하를 쓸어 낸 노인의 곤결.",
+    "forms": [
+      "무상",
+      "소천",
+      "귀원"
+    ],
+    "secret_technique": {
+      "name": "일곤소천",
+      "unlock_grade": "일절",
+      "unlock_mastery": 50,
+      "multiplier": 2.8,
+      "qi_cost": 70
+    },
+    "legend": true,
+    "gimmick": {
+      "guard": 25,
+      "power": 18,
+      "name": "부동여산",
+      "text": "위력 +1할 8푼, 맞힌 합에 받는 피해 -2할 5푼."
+    }
+  },
+  "맹호권": {
+    "name": "맹호권",
+    "type": "공격무공",
+    "category": "권법",
+    "grade": "명품",
+    "base_multiplier": 1.28,
+    "qi_cost": 6,
+    "desc": "호랑이가 덮치듯 전신을 실어 치는 권법.",
+    "forms": [
+      "맹호",
+      "출림",
+      "하산"
+    ],
+    "secret_technique": {
+      "name": "맹호파산",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 40
+    },
+    "gimmick": {
+      "stun": 10,
+      "opening": 30,
+      "name": "맹호출림",
+      "text": "첫 합 위력 +3할, 맞히면 1할 확률로 적이 다음 합에 손을 쓰지 못한다."
+    }
+  },
+  "구궁권": {
+    "name": "구궁권",
+    "type": "공격무공",
+    "category": "권법",
+    "grade": "상승",
+    "base_multiplier": 1.52,
+    "qi_cost": 9,
+    "desc": "아홉 방위를 밟으며 끊임없이 치는 권법.",
+    "forms": [
+      "구궁",
+      "이형",
+      "연격"
+    ],
+    "secret_technique": {
+      "name": "구궁귀일",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    },
+    "gimmick": {
+      "hits": 3,
+      "hit_rate": 0.42,
+      "name": "구궁연환",
+      "text": "3번 나눠 치며(한 번마다 위력 4할 2푼) 번번이 명중과 회심을 따로 가린다."
+    }
+  },
+  "파산권": {
+    "name": "파산권",
+    "type": "공격무공",
+    "category": "권법",
+    "grade": "명품",
+    "base_multiplier": 1.3,
+    "qi_cost": 6,
+    "desc": "산을 부순다는 무식한 권법. 실제로 바위 정도는 부순다. 고수에게는 잘 맞지 않는다.",
+    "forms": [
+      "개산",
+      "붕권",
+      "파산"
+    ],
+    "secret_technique": {
+      "name": "일권파산",
+      "unlock_grade": "명품",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    },
+    "gimmick": {
+      "pierce": 100,
+      "power": 20,
+      "accuracy": -10,
+      "name": "파산일격",
+      "text": "위력 +2할, 명중 -1할, 방어 10할 무시."
+    }
+  },
+  "천강권경": {
+    "name": "천강권경",
+    "type": "공격무공",
+    "category": "권법",
+    "grade": "일절",
+    "base_multiplier": 1.9,
+    "qi_cost": 14,
+    "desc": "하늘의 강기를 주먹에 싣는다는 권경.",
+    "forms": [
+      "천강",
+      "강기",
+      "천붕"
+    ],
+    "secret_technique": {
+      "name": "천강일권",
+      "unlock_grade": "일절",
+      "unlock_mastery": 50,
+      "multiplier": 2.8,
+      "qi_cost": 70
+    },
+    "legend": true,
+    "gimmick": {
+      "power": 20,
+      "crit": 12,
+      "name": "천강권기",
+      "text": "위력 +2할, 회심 확률 +1할 2푼."
+    }
+  },
+  "무상권결": {
+    "name": "허공권결",
+    "type": "공격무공",
+    "category": "권법",
+    "grade": "일절",
+    "base_multiplier": 1.9,
+    "qi_cost": 14,
+    "desc": "형을 다 잊은 뒤 남는 한 주먹.",
+    "forms": [
+      "무상",
+      "귀진",
+      "일권"
+    ],
+    "secret_technique": {
+      "name": "무상일권",
+      "unlock_grade": "일절",
+      "unlock_mastery": 50,
+      "multiplier": 2.8,
+      "qi_cost": 70
+    },
+    "legend": true,
+    "gimmick": {
+      "accuracy": 30,
+      "power": 15,
+      "name": "허공일권",
+      "text": "위력 +1할 5푼, 명중 +3할."
+    }
+  },
+  "철사장": {
+    "name": "철사장",
+    "type": "공격무공",
+    "category": "장법",
+    "grade": "기본",
+    "base_multiplier": 1.12,
+    "qi_cost": 4,
+    "desc": "모래와 쇠를 치며 손바닥을 단련하는 기초 장법.",
+    "forms": [
+      "철사",
+      "단장",
+      "쌍추"
+    ],
+    "secret_technique": {
+      "name": "철사일장",
+      "unlock_grade": "명품",
+      "unlock_mastery": 50,
+      "multiplier": 1.9,
+      "qi_cost": 30
+    },
+    "gimmick": {
+      "pierce": 100,
+      "power": 5,
+      "name": "철사수",
+      "text": "위력 +5푼, 방어 10할 무시."
+    }
+  },
+  "한빙면장": {
+    "name": "음풍장",
+    "type": "공격무공",
+    "category": "장법",
+    "grade": "상승",
+    "base_multiplier": 1.52,
+    "qi_cost": 9,
+    "desc": "음산한 바람처럼 스며들어 뼛속을 시리게 한다.",
+    "forms": [
+      "면장",
+      "한빙",
+      "동골"
+    ],
+    "secret_technique": {
+      "name": "한빙천리",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    },
+    "gimmick": {
+      "weaken": {
+        "percent": 20,
+        "rounds": 2
+      },
+      "name": "음풍투골",
+      "text": "맞히면 2합 동안 적 위력 -2할."
+    }
+  },
+  "대력금강장": {
+    "name": "대력금강장",
+    "type": "공격무공",
+    "category": "장법",
+    "grade": "상승",
+    "base_multiplier": 1.52,
+    "qi_cost": 9,
+    "desc": "금강 같은 힘을 손바닥에 싣는 외문 장력.",
+    "forms": [
+      "금강",
+      "대력",
+      "파석"
+    ],
+    "secret_technique": {
+      "name": "금강일장",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    },
+    "gimmick": {
+      "power": 15,
+      "pierce": 100,
+      "name": "대력무쌍",
+      "text": "위력 +1할 5푼, 방어 10할 무시."
+    }
+  },
+  "여래신장": {
+    "name": "여래신장",
+    "type": "공격무공",
+    "category": "장법",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "부처의 손바닥이라 불리는 전설의 장법.",
+    "forms": [
+      "여래",
+      "불광",
+      "대자대비"
+    ],
+    "secret_technique": {
+      "name": "만불조종",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "gimmick": {
+      "power": 20,
+      "stun": 20,
+      "guard": 15,
+      "name": "불광보조",
+      "text": "위력 +2할, 맞힌 합에 받는 피해 -1할 5푼, 맞히면 2할 확률로 적이 다음 합에 손을 쓰지 못한다."
+    }
+  },
+  "매화침법": {
+    "name": "산화침법",
+    "type": "공격무공",
+    "category": "암기",
+    "grade": "명품",
+    "base_multiplier": 1.25,
+    "qi_cost": 6,
+    "desc": "매화 꽃잎처럼 작은 침을 흩뿌린다.",
+    "forms": [
+      "일침",
+      "매화",
+      "만점"
+    ],
+    "secret_technique": {
+      "name": "매화만천",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 40
+    },
+    "gimmick": {
+      "hits": 4,
+      "hit_rate": 0.32,
+      "name": "산화만개",
+      "text": "4번 나눠 치며(한 번마다 위력 3할 2푼) 번번이 명중과 회심을 따로 가린다."
+    }
+  },
+  "철련자술": {
+    "name": "철련자술",
+    "type": "공격무공",
+    "category": "암기",
+    "grade": "명품",
+    "base_multiplier": 1.27,
+    "qi_cost": 6,
+    "desc": "쇠구슬을 튕겨 혈도를 치는 기술.",
+    "forms": [
+      "탄지",
+      "철련",
+      "연주"
+    ],
+    "secret_technique": {
+      "name": "연주탄",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 40
+    },
+    "gimmick": {
+      "stun": 12,
+      "accuracy": 10,
+      "name": "혈도격타",
+      "text": "명중 +1할, 맞히면 1할 2푼 확률로 적이 다음 합에 손을 쓰지 못한다."
+    }
+  },
+  "낭아표법": {
+    "name": "낭아표법",
+    "type": "공격무공",
+    "category": "암기",
+    "grade": "명품",
+    "base_multiplier": 1.25,
+    "qi_cost": 6,
+    "desc": "이리 이빨 모양의 표창을 던지는 기술.",
+    "forms": [
+      "낭아",
+      "회표",
+      "쌍표"
+    ],
+    "secret_technique": {
+      "name": "낭아회선",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 40
+    },
+    "gimmick": {
+      "burn": 20,
+      "crit": 5,
+      "name": "낭아혈흔",
+      "text": "회심 확률 +5푼, 준 피해의 2할이 두 합 동안 더 번진다."
+    }
+  },
+  "무영신침": {
+    "name": "무형신침",
+    "type": "공격무공",
+    "category": "암기",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "보이지 않는다는 침. 맞은 사람도 모른다.",
+    "forms": [
+      "무영",
+      "무성",
+      "무흔"
+    ],
+    "secret_technique": {
+      "name": "무영일침",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "gimmick": {
+      "accuracy": 100,
+      "crit": 20,
+      "poison": 8,
+      "name": "무형일침",
+      "text": "명중 +10할, 회심 확률 +2할, 적을 중독시킨다(독 위력 8)."
+    }
+  },
+  "만리추혼": {
+    "name": "만리추혼",
+    "type": "공격무공",
+    "category": "암기",
+    "grade": "일절",
+    "base_multiplier": 1.9,
+    "qi_cost": 14,
+    "desc": "던진 뒤에도 쫓아간다는 전설의 비도술.",
+    "forms": [
+      "추혼",
+      "회선",
+      "만리"
+    ],
+    "secret_technique": {
+      "name": "만리일비",
+      "unlock_grade": "일절",
+      "unlock_mastery": 50,
+      "multiplier": 2.8,
+      "qi_cost": 70
+    },
+    "legend": true,
+    "gimmick": {
+      "accuracy": 40,
+      "execute": {
+        "below": 30,
+        "percent": 50
+      },
+      "name": "추혼불식",
+      "text": "명중 +4할, 적 체력 3할 이하에서 위력 +5할."
+    }
+  },
+  "양생공": {
+    "name": "양생공",
+    "type": "심공",
+    "category": "심공",
+    "grade": "기본",
+    "base_multiplier": 1.0,
+    "qi_cost": 0,
+    "desc": "숨과 몸을 함께 기르는 심법. 내력보다 몸이 먼저 살아난다.",
+    "effect": {
+      "heal_hp_pct": 12,
+      "heal_qi_pct": 8,
+      "atk_buff_pct": 0,
+      "buff_rounds": 0
+    },
+    "gimmick": {
+      "cleanse": 1,
+      "regen": {
+        "percent": 4,
+        "rounds": 2
+      },
+      "name": "양생",
+      "text": "운기하면 독을 밀어낸다, 2합 동안 합마다 체력 4푼."
+    }
+  },
+  "정기공": {
+    "name": "정기공",
+    "type": "심공",
+    "category": "심공",
+    "grade": "기본",
+    "base_multiplier": 1.0,
+    "qi_cost": 0,
+    "desc": "숨을 모아 기세로 바꾸는 심법. 잠시 위력이 오른다.",
+    "effect": {
+      "heal_hp_pct": 3,
+      "heal_qi_pct": 10,
+      "atk_buff_pct": 10,
+      "buff_rounds": 2
+    },
+    "gimmick": {
+      "next_power": 30,
+      "name": "기세 집중",
+      "text": "운기하면 다음 공격 위력 +3할."
+    }
+  },
+  "창궁심법": {
+    "name": "창궁심법",
+    "type": "심공",
+    "category": "심공",
+    "grade": "기본",
+    "base_multiplier": 1.0,
+    "qi_cost": 0,
+    "desc": "창궁의 기운을 다스리는 남궁세가의 심법. 고르게 회복하고 위력이 조금 오른다.",
+    "effect": {
+      "heal_hp_pct": 4,
+      "heal_qi_pct": 12,
+      "atk_buff_pct": 8,
+      "buff_rounds": 2
+    },
+    "origin": "남궁세가",
+    "lineage": "창궁심법",
+    "lineage_rank": 1,
+    "gimmick": {
+      "next_crit": 1,
+      "name": "창궁일념",
+      "text": "운기하면 다음 공격은 반드시 회심."
+    }
+  },
+  "오호심법": {
+    "name": "오호심법",
+    "type": "심공",
+    "category": "심공",
+    "grade": "기본",
+    "base_multiplier": 1.0,
+    "qi_cost": 0,
+    "desc": "다섯 호랑이처럼 기세를 몰아 붙이는 팽가의 심법. 회복은 적어도 위력이 크게 오른다.",
+    "effect": {
+      "heal_hp_pct": 2,
+      "heal_qi_pct": 8,
+      "atk_buff_pct": 15,
+      "buff_rounds": 2
+    },
+    "origin": "하북팽가",
+    "lineage": "오호심법",
+    "lineage_rank": 1,
+    "gimmick": {
+      "next_power": 40,
+      "name": "호랑이 숨",
+      "text": "운기하면 다음 공격 위력 +4할."
+    }
+  },
+  "철마공": {
+    "name": "철마공",
+    "type": "심공",
+    "category": "심공",
+    "grade": "기본",
+    "base_multiplier": 1.0,
+    "qi_cost": 0,
+    "desc": "먼 길과 긴 싸움을 버티는 표국의 심법. 몸이 빨리 추슬러진다.",
+    "effect": {
+      "heal_hp_pct": 14,
+      "heal_qi_pct": 10,
+      "atk_buff_pct": 0,
+      "buff_rounds": 0
+    },
+    "origin": "표국표사",
+    "lineage": "철마공",
+    "lineage_rank": 1,
+    "gimmick": {
+      "ward": 12,
+      "name": "철마호신",
+      "text": "운기하면 최대 체력 1할 2푼의 호신 기운."
+    }
+  },
+  "소요공": {
+    "name": "소요공",
+    "type": "심공",
+    "category": "심공",
+    "grade": "기본",
+    "base_multiplier": 1.0,
+    "qi_cost": 0,
+    "desc": "취한 듯 풀린 호흡으로 내력을 되찾는 개방의 심법.",
+    "effect": {
+      "heal_hp_pct": 9,
+      "heal_qi_pct": 16,
+      "atk_buff_pct": 0,
+      "buff_rounds": 0
+    },
+    "origin": "개방제자",
+    "lineage": "소요공",
+    "lineage_rank": 1,
+    "gimmick": {
+      "regen_qi": {
+        "percent": 5,
+        "rounds": 3
+      },
+      "name": "취중운기",
+      "text": "운기하면 3합 동안 합마다 내력 5푼."
+    }
+  },
+  "권마심결": {
+    "name": "권마심결",
+    "type": "심공",
+    "category": "심공",
+    "grade": "기본",
+    "base_multiplier": 1.0,
+    "qi_cost": 0,
+    "desc": "피를 끓여 주먹에 싣는 권마의 심결. 몸이 조금 상하지만 위력이 크게 오른다.",
+    "effect": {
+      "heal_hp_pct": -3,
+      "heal_qi_pct": 12,
+      "atk_buff_pct": 14,
+      "buff_rounds": 2
+    },
+    "origin": "권마계승",
+    "lineage": "권마심결",
+    "lineage_rank": 1,
+    "gimmick": {
+      "next_power": 50,
+      "name": "혈맥역행",
+      "text": "운기하면 다음 공격 위력 +5할."
+    }
+  },
+  "적혈공": {
+    "name": "적혈공",
+    "type": "심공",
+    "category": "심공",
+    "grade": "기본",
+    "base_multiplier": 1.0,
+    "qi_cost": 0,
+    "desc": "피 연못에서 몸에 밴 마공의 호흡. 몸을 태워 내력과 위력을 얻는다.",
+    "effect": {
+      "heal_hp_pct": -2,
+      "heal_qi_pct": 20,
+      "atk_buff_pct": 10,
+      "buff_rounds": 2
+    },
+    "origin": "혈지생환",
+    "lineage": "적혈공",
+    "lineage_rank": 1,
+    "gimmick": {
+      "lifesteal_buff": {
+        "percent": 15,
+        "rounds": 3
+      },
+      "name": "혈기흡수",
+      "text": "운기하면 3합 동안 준 피해의 1할 5푼을 흡수."
+    }
+  },
+  "암향심법": {
+    "name": "암향심법",
+    "type": "심공",
+    "category": "심공",
+    "grade": "기본",
+    "base_multiplier": 1.0,
+    "qi_cost": 0,
+    "desc": "숨소리까지 지우는 하오문의 심법. 내력 회복이 빠르다.",
+    "effect": {
+      "heal_hp_pct": 3,
+      "heal_qi_pct": 22,
+      "atk_buff_pct": 0,
+      "buff_rounds": 0
+    },
+    "origin": "하오문",
+    "lineage": "암향심법",
+    "lineage_rank": 1,
+    "gimmick": {
+      "next_crit": 1,
+      "regen_qi": {
+        "percent": 3,
+        "rounds": 2
+      },
+      "name": "숨죽이기",
+      "text": "운기하면 2합 동안 합마다 내력 3푼, 다음 공격은 반드시 회심."
+    }
+  },
+  "무극검결": {
+    "name": "무극검결",
+    "type": "공격무공",
+    "category": "검법",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "검의 끝에 이른 이름 없는 고수가 남긴 검결. 어느 가문의 것도 아니다.",
+    "forms": [
+      "무극",
+      "무형",
+      "귀원"
+    ],
+    "secret_technique": {
+      "name": "무극일검",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "gimmick": {
+      "pierce": 100,
+      "crit": 10,
+      "hits": 2,
+      "hit_rate": 0.75,
+      "name": "무극일기",
+      "text": "2번 나눠 치며(한 번마다 위력 7할 5푼) 번번이 명중과 회심을 따로 가린다, 회심 확률 +1할, 방어 10할 무시."
+    }
+  },
+  "개천권결": {
+    "name": "개천권결",
+    "type": "공격무공",
+    "category": "권법",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "주먹 하나로 산문을 열었다는 전설의 권결.",
+    "forms": [
+      "개산",
+      "개천",
+      "벽력"
+    ],
+    "secret_technique": {
+      "name": "개천일권",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "gimmick": {
+      "pierce": 100,
+      "stun": 20,
+      "power": 10,
+      "name": "개천벽지",
+      "text": "위력 +1할, 방어 10할 무시, 맞히면 2할 확률로 적이 다음 합에 손을 쓰지 못한다."
+    }
+  },
+  "오호단혼도": {
+    "name": "오호단혼도",
+    "type": "공격무공",
+    "category": "도법",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "오호단문도의 끝. 다섯 호랑이가 한 칼에 든다. 팽가 〈남매〉가 함께 다듬었다.",
+    "forms": [
+      "맹호출림",
+      "오호분시",
+      "단문"
+    ],
+    "secret_technique": {
+      "name": "오호단혼",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "origin": "하북팽가",
+    "lineage": "오호도",
+    "lineage_rank": 2,
+    "gimmick": {
+      "crit": 8,
+      "hits": 5,
+      "hit_rate": 0.34,
+      "name": "오호일도",
+      "text": "5번 나눠 치며(한 번마다 위력 3할 4푼) 번번이 명중과 회심을 따로 가린다, 회심 확률 +8푼."
+    }
+  },
+  "철마신창": {
+    "name": "철마신창",
+    "type": "공격무공",
+    "category": "창법",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "철마표국 총표두가 평생 숨겨 온 창법. 표물을 지키는 창은 물러서지 않는다.",
+    "forms": [
+      "철마돌격",
+      "호표",
+      "만리행"
+    ],
+    "secret_technique": {
+      "name": "만리표행",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "origin": "표국표사",
+    "gimmick": {
+      "guard": 25,
+      "power": 15,
+      "pierce": 100,
+      "name": "철마불퇴",
+      "text": "위력 +1할 5푼, 방어 10할 무시, 맞힌 합에 받는 피해 -2할 5푼."
+    }
+  },
+  "타구신봉": {
+    "name": "타구신봉",
+    "type": "공격무공",
+    "category": "봉법",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "역대 방주만 읽었다는 타구봉의 끝. 봉 하나로 사방을 봉쇄한다.",
+    "forms": [
+      "봉타쌍견",
+      "악구난로",
+      "사면팔방"
+    ],
+    "secret_technique": {
+      "name": "타구대진",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "origin": "개방제자",
+    "lineage": "걸개봉",
+    "lineage_rank": 3,
+    "gimmick": {
+      "stun": 25,
+      "power": 10,
+      "weaken": {
+        "percent": 15,
+        "rounds": 2
+      },
+      "name": "사방봉쇄",
+      "text": "위력 +1할, 맞히면 2할 5푼 확률로 적이 다음 합에 손을 쓰지 못한다, 맞히면 2합 동안 적 위력 -1할 5푼."
+    }
+  },
+  "적혈신장": {
+    "name": "적혈신장",
+    "type": "공격무공",
+    "category": "장법",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "피 연못이 손바닥에 남긴 마기를 다스려 완성한 장법.",
+    "forms": [
+      "적련",
+      "혈수",
+      "화지"
+    ],
+    "secret_technique": {
+      "name": "혈해역류",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "origin": "혈지생환",
+    "gimmick": {
+      "lifesteal": 18,
+      "burn": 20,
+      "name": "혈해번신",
+      "text": "준 피해의 1할 8푼을 체력으로 흡수, 준 피해의 2할이 두 합 동안 더 번진다."
+    }
+  },
+  "무영비도": {
+    "name": "무영비도",
+    "type": "공격무공",
+    "category": "암기",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "하오문 장부의 뒷장에만 전하는 비도술. 소문보다 먼저 닿는다.",
+    "forms": [
+      "무영",
+      "무성",
+      "무흔"
+    ],
+    "secret_technique": {
+      "name": "무영일비",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "origin": "하오문",
+    "lineage": "암향비도",
+    "lineage_rank": 2,
+    "gimmick": {
+      "crit": 20,
+      "opening": 60,
+      "accuracy": 25,
+      "name": "무영일비",
+      "text": "명중 +2할 5푼, 회심 확률 +2할, 첫 합 위력 +6할."
+    }
+  },
+  "창궁현천공": {
+    "name": "창궁현천공",
+    "type": "심공",
+    "category": "심공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 0,
+    "desc": "역대 가주만 앉았던 석실의 심법. 하늘처럼 고르게 차오른다.",
+    "effect": {
+      "heal_hp_pct": 25,
+      "heal_qi_pct": 40,
+      "atk_buff_pct": 30,
+      "buff_rounds": 3
+    },
+    "origin": "남궁세가",
+    "lineage": "창궁심법",
+    "lineage_rank": 2,
+    "gimmick": {
+      "next_crit": 1,
+      "guard": {
+        "percent": 20,
+        "rounds": 2
+      },
+      "ward": 10,
+      "name": "현천일념",
+      "text": "운기하면 최대 체력 1할의 호신 기운, 2합 동안 받는 피해 -2할, 다음 공격은 반드시 회심."
+    }
+  },
+  "오호맹혼공": {
+    "name": "오호맹혼공",
+    "type": "심공",
+    "category": "심공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 0,
+    "desc": "〈다섯형제〉가 새벽마다 맞추던 호흡. 기세가 호랑이처럼 치솟는다.",
+    "effect": {
+      "heal_hp_pct": 12,
+      "heal_qi_pct": 30,
+      "atk_buff_pct": 50,
+      "buff_rounds": 3
+    },
+    "origin": "하북팽가",
+    "lineage": "오호심법",
+    "lineage_rank": 2,
+    "gimmick": {
+      "next_power": 70,
+      "ward": 8,
+      "name": "맹호합일",
+      "text": "운기하면 최대 체력 8푼의 호신 기운, 다음 공격 위력 +7할."
+    }
+  },
+  "철마금신공": {
+    "name": "철마금신공",
+    "type": "심공",
+    "category": "심공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 0,
+    "desc": "철마공의 끝. 쓰러지지 않는 것이 표사의 일이다.",
+    "effect": {
+      "heal_hp_pct": 40,
+      "heal_qi_pct": 30,
+      "atk_buff_pct": 15,
+      "buff_rounds": 3
+    },
+    "origin": "표국표사",
+    "lineage": "철마공",
+    "lineage_rank": 2,
+    "gimmick": {
+      "ward": 20,
+      "guard": {
+        "percent": 20,
+        "rounds": 2
+      },
+      "name": "금신불괴",
+      "text": "운기하면 최대 체력 2할의 호신 기운, 2합 동안 받는 피해 -2할."
+    }
+  },
+  "소요무애공": {
+    "name": "소요무애공",
+    "type": "심공",
+    "category": "심공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 0,
+    "desc": "소요공의 끝. 술에 취한 듯 걸림이 없어 내력이 끝없이 돈다.",
+    "effect": {
+      "heal_hp_pct": 25,
+      "heal_qi_pct": 55,
+      "atk_buff_pct": 15,
+      "buff_rounds": 3
+    },
+    "origin": "개방제자",
+    "lineage": "소요공",
+    "lineage_rank": 2,
+    "gimmick": {
+      "regen_qi": {
+        "percent": 10,
+        "rounds": 3
+      },
+      "cleanse": 1,
+      "name": "무애운기",
+      "text": "운기하면 독을 밀어낸다, 3합 동안 합마다 내력 1할."
+    }
+  },
+  "권마혈천결": {
+    "name": "권마혈천결",
+    "type": "심공",
+    "category": "심공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 0,
+    "desc": "권마심결의 끝. 피를 끓여 하늘을 친다. 몸이 상해도 멈추지 않는다.",
+    "effect": {
+      "heal_hp_pct": -5,
+      "heal_qi_pct": 35,
+      "atk_buff_pct": 65,
+      "buff_rounds": 3
+    },
+    "origin": "권마계승",
+    "lineage": "권마심결",
+    "lineage_rank": 2,
+    "gimmick": {
+      "next_power": 80,
+      "lifesteal_buff": {
+        "percent": 10,
+        "rounds": 2
+      },
+      "name": "혈천일념",
+      "text": "운기하면 2합 동안 준 피해의 1할을 흡수, 다음 공격 위력 +8할."
+    }
+  },
+  "혈지환생공": {
+    "name": "혈지환생공",
+    "type": "심공",
+    "category": "심공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 0,
+    "desc": "피 연못에서 되살아난 몸의 호흡. 태우던 피가 이제 몸을 살린다.",
+    "effect": {
+      "heal_hp_pct": 15,
+      "heal_qi_pct": 45,
+      "atk_buff_pct": 40,
+      "buff_rounds": 3
+    },
+    "origin": "혈지생환",
+    "lineage": "적혈공",
+    "lineage_rank": 2,
+    "gimmick": {
+      "lifesteal_buff": {
+        "percent": 25,
+        "rounds": 3
+      },
+      "injury": 50,
+      "name": "환생혈맥",
+      "text": "운기하면 5할 확률로 내상 한 단계 회복, 3합 동안 준 피해의 2할 5푼을 흡수."
+    }
+  },
+  "암향귀원공": {
+    "name": "암향귀원공",
+    "type": "심공",
+    "category": "심공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 0,
+    "desc": "숨을 지워 기운을 되돌리는 하오문의 끝. 내력 회복이 무섭게 빠르다.",
+    "effect": {
+      "heal_hp_pct": 15,
+      "heal_qi_pct": 65,
+      "atk_buff_pct": 10,
+      "buff_rounds": 3
+    },
+    "origin": "하오문",
+    "lineage": "암향심법",
+    "lineage_rank": 2,
+    "gimmick": {
+      "regen_qi": {
+        "percent": 12,
+        "rounds": 3
+      },
+      "next_crit": 1,
+      "name": "귀원일기",
+      "text": "운기하면 3합 동안 합마다 내력 1할 2푼, 다음 공격은 반드시 회심."
+    }
+  },
+  "혼원일기공": {
+    "name": "혼원일기공",
+    "type": "심공",
+    "category": "심공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 0,
+    "desc": "천지의 기운을 한 호흡으로 모은다는 전설의 심법.",
+    "effect": {
+      "heal_hp_pct": 28,
+      "heal_qi_pct": 42,
+      "atk_buff_pct": 28,
+      "buff_rounds": 3
+    },
+    "gimmick": {
+      "ward": 15,
+      "regen": {
+        "percent": 6,
+        "rounds": 3
+      },
+      "regen_qi": {
+        "percent": 6,
+        "rounds": 3
+      },
+      "cleanse": 1,
+      "name": "혼원귀일",
+      "text": "운기하면 독을 밀어낸다, 최대 체력 1할 5푼의 호신 기운, 3합 동안 합마다 체력 6푼, 3합 동안 합마다 내력 6푼."
+    }
+  },
+  "창궁비운보": {
+    "name": "창궁비운보",
+    "type": "경공",
+    "category": "경공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 10,
+    "desc": "남궁의 불탄 회랑에 새겨진 걸음. 구름을 타듯 흘리고 되받는다.",
+    "effect": {
+      "evade": 92,
+      "counter_pct": 170,
+      "flee_bonus": 45
+    },
+    "origin": "남궁세가",
+    "gimmick": {
+      "strike": 60,
+      "next_crit": 1,
+      "name": "비운반격",
+      "text": "다 피하면 다음 공격은 반드시 회심, 다 피하면 곧바로 위력 6할로 되받아친다."
+    }
+  },
+  "맹호하산보": {
+    "name": "맹호하산보",
+    "type": "경공",
+    "category": "경공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 12,
+    "desc": "산에서 내려오는 호랑이의 걸음. 피하는 것이 곧 덮치는 것이다.",
+    "effect": {
+      "evade": 85,
+      "counter_pct": 230,
+      "flee_bonus": 35
+    },
+    "origin": "하북팽가",
+    "gimmick": {
+      "strike": 80,
+      "name": "하산일격",
+      "text": "다 피하면 곧바로 위력 8할로 되받아친다."
+    }
+  },
+  "만리행보": {
+    "name": "만리행보",
+    "type": "경공",
+    "category": "경공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 8,
+    "desc": "표로 만 리가 몸에 밴 걸음. 지치지 않고 어디로든 빠져나간다.",
+    "effect": {
+      "evade": 90,
+      "counter_pct": 140,
+      "flee_bonus": 70
+    },
+    "origin": "표국표사",
+    "gimmick": {
+      "refund": 1,
+      "auto_evade": 6,
+      "step_heal": 3,
+      "name": "만리부진",
+      "text": "경공을 쓰지 않아도 6푼 확률로 저절로 공격을 피한다, 다 피하면 쓴 내력의 절반을 되찾는다, 다 피하면 체력 3푼 회복."
+    }
+  },
+  "취선보": {
+    "name": "취선보",
+    "type": "경공",
+    "category": "경공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 11,
+    "desc": "취한 신선의 걸음. 넘어질 듯 넘어지지 않는다.",
+    "effect": {
+      "evade": 95,
+      "counter_pct": 160,
+      "flee_bonus": 50
+    },
+    "origin": "개방제자",
+    "gimmick": {
+      "auto_evade": 10,
+      "strike": 30,
+      "name": "취선난보",
+      "text": "경공을 쓰지 않아도 1할 확률로 저절로 공격을 피한다, 다 피하면 곧바로 위력 3할로 되받아친다."
+    }
+  },
+  "패왕보": {
+    "name": "권왕보",
+    "type": "경공",
+    "category": "경공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 12,
+    "desc": "땅을 갈라 힘을 얻는 권마의 걸음. 받아치는 주먹이 무겁다.",
+    "effect": {
+      "evade": 80,
+      "counter_pct": 260,
+      "flee_bonus": 30
+    },
+    "origin": "권마계승",
+    "gimmick": {
+      "strike": 90,
+      "name": "권왕진각",
+      "text": "다 피하면 곧바로 위력 9할로 되받아친다."
+    }
+  },
+  "혈영신법": {
+    "name": "혈영신법",
+    "type": "경공",
+    "category": "경공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 12,
+    "desc": "붉은 소매들을 따돌리며 익힌 핏빛 그림자의 신법.",
+    "effect": {
+      "evade": 92,
+      "counter_pct": 190,
+      "flee_bonus": 55
+    },
+    "origin": "혈지생환",
+    "gimmick": {
+      "strike": 50,
+      "step_heal": 5,
+      "name": "혈영환보",
+      "text": "다 피하면 체력 5푼 회복, 다 피하면 곧바로 위력 5할로 되받아친다."
+    }
+  },
+  "부운무종보": {
+    "name": "부운무종보",
+    "type": "경공",
+    "category": "경공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 10,
+    "desc": "부운보의 끝. 간 곳도 온 곳도 남지 않는다.",
+    "effect": {
+      "evade": 97,
+      "counter_pct": 130,
+      "flee_bonus": 80
+    },
+    "origin": "하오문",
+    "lineage": "부운보",
+    "lineage_rank": 2,
+    "gimmick": {
+      "auto_evade": 12,
+      "refund": 1,
+      "name": "무종무적",
+      "text": "경공을 쓰지 않아도 1할 2푼 확률로 저절로 공격을 피한다, 다 피하면 쓴 내력의 절반을 되찾는다."
+    }
+  },
+  "이형환위": {
+    "name": "이형환위",
+    "type": "경공",
+    "category": "경공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 10,
+    "desc": "몸은 여기 있는데 그림자가 먼저 자리를 바꾼다는 전설의 보법.",
+    "effect": {
+      "evade": 95,
+      "counter_pct": 180,
+      "flee_bonus": 50
+    },
+    "gimmick": {
+      "auto_evade": 12,
+      "strike": 60,
+      "partial": 0.25,
+      "name": "이형환위",
+      "text": "경공을 쓰지 않아도 1할 2푼 확률로 저절로 공격을 피한다, 다 피하지 못해도 위력을 7할 5푼 줄인다, 다 피하면 곧바로 위력 6할로 되받아친다."
+    }
+  },
+  "양의검법": {
+    "name": "양의검법",
+    "type": "공격무공",
+    "category": "검법",
+    "grade": "기본",
+    "base_multiplier": 1.15,
+    "qi_cost": 4,
+    "desc": "무당 제자가 처음 받는 검법. 음과 양을 번갈아 내어 태극검의 기초가 된다.",
+    "forms": [
+      "음양분로",
+      "양의귀일",
+      "쌍수운검"
+    ],
+    "school": "무당",
+    "lineage": "무당검",
+    "lineage_rank": 1,
+    "secret_technique": {
+      "name": "양의합벽",
+      "unlock_grade": "명품",
+      "unlock_mastery": 50,
+      "multiplier": 2.0,
+      "qi_cost": 34
+    },
+    "gimmick": {
+      "name": "음양호근",
+      "guard": 12,
+      "qi_back": 2,
+      "text": "맞힐 때 내력 2푼 회복, 맞힌 합에 받는 피해 -1할 2푼."
+    }
+  },
+  "유성검법": {
+    "name": "유성검법",
+    "type": "공격무공",
+    "category": "검법",
+    "grade": "명품",
+    "base_multiplier": 1.27,
+    "qi_cost": 6,
+    "desc": "떨어지는 별처럼 곧게 찌르는 강호의 쾌검.",
+    "forms": [
+      "유성낙지",
+      "성광일점",
+      "추성"
+    ],
+    "secret_technique": {
+      "name": "천외유성",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.0,
+      "qi_cost": 36
+    },
+    "gimmick": {
+      "name": "유성쾌검",
+      "accuracy": 12,
+      "crit": 8,
+      "text": "명중 +1할 2푼, 회심 확률 +8푼."
+    }
+  },
+  "청정심공": {
+    "name": "청정심공",
+    "type": "심공",
+    "category": "심공",
+    "grade": "명품",
+    "base_multiplier": 1.0,
+    "qi_cost": 0,
+    "desc": "마음을 맑게 닦는 강호의 심법. 어느 문파에나 비슷한 것이 있다.",
+    "effect": {
+      "heal_hp_pct": 10,
+      "heal_qi_pct": 22,
+      "atk_buff_pct": 5,
+      "buff_rounds": 2
+    },
+    "gimmick": {
+      "name": "청정무구",
+      "cleanse": 1,
+      "regen_qi": {
+        "percent": 3,
+        "rounds": 2
+      },
+      "text": "운기하면 독을 밀어낸다, 2합 동안 합마다 내력 3푼."
+    }
+  },
+  "호체공": {
+    "name": "호체공",
+    "type": "심공",
+    "category": "심공",
+    "grade": "명품",
+    "base_multiplier": 1.0,
+    "qi_cost": 0,
+    "desc": "몸 둘레에 기를 둘러 맷집을 기르는 심법.",
+    "effect": {
+      "heal_hp_pct": 14,
+      "heal_qi_pct": 14,
+      "atk_buff_pct": 5,
+      "buff_rounds": 2
+    },
+    "gimmick": {
+      "name": "호체진기",
+      "ward": 8,
+      "text": "운기하면 최대 체력 8푼의 호신 기운."
+    }
+  },
+  "구전현공": {
+    "name": "구전현공",
+    "type": "심공",
+    "category": "심공",
+    "grade": "상승",
+    "base_multiplier": 1.0,
+    "qi_cost": 0,
+    "desc": "기를 아홉 번 돌려 단전에 쌓는 심법. 고수들이 쉬쉬하며 돌려 본다.",
+    "effect": {
+      "heal_hp_pct": 18,
+      "heal_qi_pct": 32,
+      "atk_buff_pct": 15,
+      "buff_rounds": 2
+    },
+    "gimmick": {
+      "name": "구전귀원",
+      "regen_qi": {
+        "percent": 6,
+        "rounds": 3
+      },
+      "next_power": 20,
+      "text": "운기하면 3합 동안 합마다 내력 6푼, 다음 공격 위력 +2할."
+    }
+  },
+  "답설무흔": {
+    "name": "답설무흔",
+    "type": "경공",
+    "category": "경공",
+    "grade": "상승",
+    "base_multiplier": 1.0,
+    "qi_cost": 8,
+    "desc": "눈 위를 걸어도 흔적이 없다는 보법.",
+    "effect": {
+      "evade": 82,
+      "counter_pct": 90,
+      "flee_bonus": 32
+    },
+    "gimmick": {
+      "name": "무흔",
+      "auto_evade": 5,
+      "next_crit": 1,
+      "text": "경공을 쓰지 않아도 5푼 확률로 저절로 공격을 피한다, 다 피하면 다음 공격은 반드시 회심."
+    }
+  },
+  "백리신법": {
+    "name": "백리신법",
+    "type": "경공",
+    "category": "경공",
+    "grade": "명품",
+    "base_multiplier": 1.0,
+    "qi_cost": 6,
+    "desc": "하루 백 리를 달리며 몸을 가볍게 하는 강호의 신법.",
+    "effect": {
+      "evade": 70,
+      "counter_pct": 75,
+      "flee_bonus": 30
+    },
+    "gimmick": {
+      "name": "일일백리",
+      "partial": 0.4,
+      "step_heal": 2,
+      "text": "다 피하지 못해도 위력을 6할 줄인다, 다 피하면 체력 2푼 회복."
+    }
+  },
+  "점창쾌검": {
+    "name": "점창쾌검",
+    "type": "공격무공",
+    "category": "검법",
+    "grade": "기본",
+    "base_multiplier": 1.12,
+    "qi_cost": 4,
+    "desc": "점창 제자가 처음 받는 쾌검. 뽑는 순간에 승부를 낸다.",
+    "forms": [
+      "발검",
+      "일섬",
+      "추풍"
+    ],
+    "secret_technique": {
+      "name": "회풍일섬",
+      "unlock_grade": "명품",
+      "unlock_mastery": 50,
+      "multiplier": 1.8,
+      "qi_cost": 30
+    },
+    "gimmick": {
+      "name": "뽑는 순간",
+      "opening": 30,
+      "accuracy": 8,
+      "text": "명중 +8푼, 첫 합 위력 +3할."
+    },
+    "school": "점창",
+    "lineage": "점창검",
+    "lineage_rank": 1
+  },
+  "사일검법": {
+    "name": "사일검법",
+    "type": "공격무공",
+    "category": "검법",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "해를 쏘아 떨어뜨렸다는 점창 최후의 쾌검.",
+    "forms": [
+      "제일초 사일",
+      "연환 구초",
+      "낙일 십팔초"
+    ],
+    "secret_technique": {
+      "name": "십팔연환",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "gimmick": {
+      "name": "십팔연환",
+      "hits": 3,
+      "hit_rate": 0.42,
+      "accuracy": 8,
+      "text": "3번 나눠 치며(한 번마다 위력 4할 2푼) 번번이 명중과 회심을 따로 가린다, 명중 +8푼."
+    },
+    "school": "점창",
+    "lineage": "점창검",
+    "lineage_rank": 3,
+    "reserved": true
+  },
+  "연환도법": {
+    "name": "연환도법",
+    "type": "공격무공",
+    "category": "도법",
+    "grade": "명품",
+    "base_multiplier": 1.26,
+    "qi_cost": 6,
+    "desc": "쉬지 않고 이어 베는 도법.",
+    "forms": [
+      "연참",
+      "회도",
+      "삼환"
+    ],
+    "secret_technique": {
+      "name": "삼환일도",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.0,
+      "qi_cost": 36
+    },
+    "gimmick": {
+      "name": "끊이지 않는 칼",
+      "chain": 5,
+      "chain_max": 25,
+      "text": "끊이지 않고 맞힐수록 위력이 5푼씩 오른다(최대 2할 5푼)."
+    }
+  },
+  "금강도법": {
+    "name": "금강도법",
+    "type": "공격무공",
+    "category": "도법",
+    "grade": "상승",
+    "base_multiplier": 1.52,
+    "qi_cost": 9,
+    "desc": "칼을 산처럼 세워 맞받아 베는 도법.",
+    "forms": [
+      "금강좌",
+      "세산",
+      "일도양단"
+    ],
+    "secret_technique": {
+      "name": "일도양단",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.3,
+      "qi_cost": 42
+    },
+    "gimmick": {
+      "name": "맞받아 베기",
+      "guard": 15,
+      "pierce": 25,
+      "text": "적의 방어 2할 5푼 무시, 맞힌 합에 받는 피해 -1할 5푼."
+    }
+  },
+  "모용창법": {
+    "name": "모용창법",
+    "type": "공격무공",
+    "category": "창법",
+    "grade": "기본",
+    "base_multiplier": 1.12,
+    "qi_cost": 4,
+    "desc": "모용세가 사람이 처음 받는 창법. 상대의 힘을 받아 돌려 찌른다.",
+    "forms": [
+      "승세",
+      "회창",
+      "일자창"
+    ],
+    "secret_technique": {
+      "name": "회창일점",
+      "unlock_grade": "명품",
+      "unlock_mastery": 50,
+      "multiplier": 1.8,
+      "qi_cost": 30
+    },
+    "gimmick": {
+      "name": "받아 찌르기",
+      "guard": 10,
+      "accuracy": 8,
+      "text": "명중 +8푼, 맞힌 합에 받는 피해 -1할."
+    },
+    "school": "모용",
+    "lineage": "모용창",
+    "lineage_rank": 1
+  },
+  "회천창법": {
+    "name": "회천창법",
+    "type": "공격무공",
+    "category": "창법",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "받은 힘을 그대로 돌려준다는 모용 가주의 창.",
+    "forms": [
+      "이화접목",
+      "회천",
+      "만류귀종"
+    ],
+    "secret_technique": {
+      "name": "회천일창",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "gimmick": {
+      "name": "되돌리는 창",
+      "guard": 15,
+      "weaken": {
+        "percent": 10,
+        "rounds": 2
+      },
+      "pierce": 20,
+      "text": "적의 방어 2할 무시, 맞힌 적의 위력을 2합 동안 1할 깎는다, 맞힌 합에 받는 피해 -1할 5푼."
+    },
+    "school": "모용",
+    "lineage": "모용창",
+    "lineage_rank": 4,
+    "reserved": true
+  },
+  "천축곤법": {
+    "name": "천축곤법",
+    "type": "공격무공",
+    "category": "봉법",
+    "grade": "명품",
+    "base_multiplier": 1.26,
+    "qi_cost": 6,
+    "desc": "서역 승려에게서 전해졌다는 곤법.",
+    "forms": [
+      "천축",
+      "개산",
+      "항복"
+    ],
+    "secret_technique": {
+      "name": "항복일곤",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.0,
+      "qi_cost": 36
+    },
+    "gimmick": {
+      "name": "서역의 힘",
+      "stun": 6,
+      "power": 4,
+      "text": "위력 +4푼, 맞히면 6푼 확률로 적이 다음 합에 손을 쓰지 못한다."
+    }
+  },
+  "금고곤법": {
+    "name": "금고곤법",
+    "type": "공격무공",
+    "category": "봉법",
+    "grade": "상승",
+    "base_multiplier": 1.52,
+    "qi_cost": 9,
+    "desc": "곤 끝이 쇠테처럼 머리를 조인다는 곤법.",
+    "forms": [
+      "금고",
+      "조임",
+      "천근"
+    ],
+    "secret_technique": {
+      "name": "금고천근",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.3,
+      "qi_cost": 42
+    },
+    "gimmick": {
+      "name": "조이는 곤",
+      "weaken": {
+        "percent": 12,
+        "rounds": 2
+      },
+      "stun": 8,
+      "text": "맞힌 적의 위력을 2합 동안 1할 2푼 깎는다, 맞히면 8푼 확률로 적이 다음 합에 손을 쓰지 못한다."
+    }
+  },
+  "공동장권": {
+    "name": "공동장권",
+    "type": "공격무공",
+    "category": "권법",
+    "grade": "기본",
+    "base_multiplier": 1.12,
+    "qi_cost": 4,
+    "desc": "공동파 제자가 처음 받는 권법. 길게 뻗어 멀리서 친다.",
+    "forms": [
+      "장권",
+      "충권",
+      "회신"
+    ],
+    "secret_technique": {
+      "name": "장권일격",
+      "unlock_grade": "명품",
+      "unlock_mastery": 50,
+      "multiplier": 1.8,
+      "qi_cost": 30
+    },
+    "gimmick": {
+      "name": "뻗는 주먹",
+      "accuracy": 10,
+      "power": 5,
+      "text": "위력 +5푼, 명중 +1할."
+    },
+    "school": "공동",
+    "lineage": "공동권",
+    "lineage_rank": 1
+  },
+  "복호신권": {
+    "name": "복호신권",
+    "type": "공격무공",
+    "category": "권법",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "맞기 전에 호랑이가 먼저 눕는다는 공동 최후의 권법.",
+    "forms": [
+      "복호",
+      "항룡",
+      "칠상"
+    ],
+    "secret_technique": {
+      "name": "복호일권",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "gimmick": {
+      "name": "엎드리게 하는 주먹",
+      "stun": 12,
+      "crit": 6,
+      "text": "회심 확률 +6푼, 맞히면 1할 2푼 확률로 적이 다음 합에 손을 쓰지 못한다."
+    },
+    "school": "공동",
+    "lineage": "공동권",
+    "lineage_rank": 3,
+    "reserved": true
+  },
+  "송풍장": {
+    "name": "송풍장",
+    "type": "공격무공",
+    "category": "장법",
+    "grade": "기본",
+    "base_multiplier": 1.12,
+    "qi_cost": 4,
+    "desc": "청성 제자가 처음 받는 장법. 소나무 바람처럼 가볍다.",
+    "forms": [
+      "송풍",
+      "유수",
+      "청풍"
+    ],
+    "secret_technique": {
+      "name": "청풍일장",
+      "unlock_grade": "명품",
+      "unlock_mastery": 50,
+      "multiplier": 1.8,
+      "qi_cost": 30
+    },
+    "gimmick": {
+      "name": "가벼운 손",
+      "qi_back": 2,
+      "accuracy": 6,
+      "text": "명중 +6푼, 맞힐 때 내력 2푼 회복."
+    },
+    "school": "청성",
+    "lineage": "청성장",
+    "lineage_rank": 1
+  },
+  "최혼장": {
+    "name": "최혼장",
+    "type": "공격무공",
+    "category": "장법",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "사람을 치지 않고 넋을 친다는 청성 최후의 장법.",
+    "forms": [
+      "최혼",
+      "낙백",
+      "혼비"
+    ],
+    "secret_technique": {
+      "name": "낙백일장",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "gimmick": {
+      "name": "넋을 흔드는 손",
+      "weaken": {
+        "percent": 12,
+        "rounds": 2
+      },
+      "burn": 10,
+      "text": "맞힌 적이 두 합 동안 준 피해의 1할을 더 입는다, 맞힌 적의 위력을 2합 동안 1할 2푼 깎는다."
+    },
+    "school": "청성",
+    "lineage": "청성장",
+    "lineage_rank": 3,
+    "reserved": true
+  },
+  "제갈탄침": {
+    "name": "제갈탄침",
+    "type": "공격무공",
+    "category": "암기",
+    "grade": "기본",
+    "base_multiplier": 1.12,
+    "qi_cost": 4,
+    "desc": "제갈세가의 기관통으로 쏘는 침. 손목을 쓰지 않는다.",
+    "forms": [
+      "단발",
+      "연사",
+      "매복"
+    ],
+    "secret_technique": {
+      "name": "연사일침",
+      "unlock_grade": "명품",
+      "unlock_mastery": 50,
+      "multiplier": 1.8,
+      "qi_cost": 30
+    },
+    "gimmick": {
+      "name": "기관의 정확함",
+      "accuracy": 12,
+      "text": "명중 +1할 2푼."
+    },
+    "school": "제갈",
+    "lineage": "제갈침",
+    "lineage_rank": 1
+  },
+  "구궁연노": {
+    "name": "구궁연노",
+    "type": "공격무공",
+    "category": "암기",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "아홉 칸의 침이 한 호흡에 쏟아진다는 제갈 가주의 기관술.",
+    "forms": [
+      "구궁",
+      "연노",
+      "팔진"
+    ],
+    "secret_technique": {
+      "name": "구궁만발",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "gimmick": {
+      "name": "쉼 없는 기관",
+      "accuracy": 10,
+      "text": "3번 나눠 치며(한 번마다 위력 4할 2푼) 번번이 명중과 회심을 따로 가린다, 명중 +1할.",
+      "hits": 3,
+      "hit_rate": 0.42
+    },
+    "school": "제갈",
+    "lineage": "제갈침",
+    "lineage_rank": 3,
+    "reserved": true
+  },
+  "육합검법": {
+    "name": "육합검법",
+    "type": "공격무공",
+    "category": "검법",
+    "grade": "기본",
+    "base_multiplier": 1.12,
+    "qi_cost": 4,
+    "desc": "여섯 방향을 고루 닦는 화산의 기초 검법.",
+    "forms": [
+      "일합",
+      "삼합",
+      "육합귀일"
+    ],
+    "secret_technique": {
+      "name": "육합귀원",
+      "unlock_grade": "명품",
+      "unlock_mastery": 50,
+      "multiplier": 1.8,
+      "qi_cost": 30
+    },
+    "gimmick": {
+      "accuracy": 5,
+      "name": "육합",
+      "text": "명중 +5푼."
+    },
+    "school": "화산",
+    "lineage": "매화검",
+    "lineage_rank": 1
+  },
+  "낙화검법": {
+    "name": "낙화검법",
+    "type": "공격무공",
+    "category": "검법",
+    "grade": "상승",
+    "base_multiplier": 1.52,
+    "qi_cost": 9,
+    "desc": "지는 꽃잎을 베며 닦는 화산의 검. 망설임 없이 떨어진다.",
+    "forms": [
+      "낙화일점",
+      "풍전낙화",
+      "만화귀근"
+    ],
+    "secret_technique": {
+      "name": "낙화유수",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    },
+    "gimmick": {
+      "crit": 8,
+      "crit_power": 25,
+      "name": "낙화무정",
+      "text": "회심 확률 +8푼, 회심 위력 +2할 5푼."
+    },
+    "school": "화산",
+    "lineage": "매화검",
+    "lineage_rank": 2
+  },
+  "칠성검법": {
+    "name": "칠성검법",
+    "type": "공격무공",
+    "category": "검법",
+    "grade": "상승",
+    "base_multiplier": 1.52,
+    "qi_cost": 9,
+    "desc": "북두를 따라 일곱 걸음으로 펼치는 무당의 검.",
+    "forms": [
+      "천추",
+      "옥형",
+      "요광"
+    ],
+    "secret_technique": {
+      "name": "칠성귀일",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    },
+    "gimmick": {
+      "accuracy": 8,
+      "guard": 12,
+      "name": "칠성보",
+      "text": "명중 +8푼, 맞힌 합에 받는 피해 -1할 2푼."
+    },
+    "school": "무당",
+    "lineage": "무당검",
+    "lineage_rank": 2
+  },
+  "현무검법": {
+    "name": "현무검법",
+    "type": "공격무공",
+    "category": "검법",
+    "grade": "일절",
+    "base_multiplier": 1.9,
+    "qi_cost": 14,
+    "desc": "거북처럼 지키다 뱀처럼 무는 무당의 깊은 검.",
+    "forms": [
+      "현무섭수",
+      "귀사상교",
+      "북명회류"
+    ],
+    "secret_technique": {
+      "name": "현무진천",
+      "unlock_grade": "일절",
+      "unlock_mastery": 50,
+      "multiplier": 2.8,
+      "qi_cost": 70
+    },
+    "gimmick": {
+      "guard": 18,
+      "qi_back": 3,
+      "name": "이유제강",
+      "text": "맞힐 때 내력 3푼 회복, 맞힌 합에 받는 피해 -1할 8푼."
+    },
+    "school": "무당",
+    "lineage": "무당검",
+    "lineage_rank": 3
+  },
+  "운룡검법": {
+    "name": "운룡검법",
+    "type": "공격무공",
+    "category": "검법",
+    "grade": "일절",
+    "base_multiplier": 1.9,
+    "qi_cost": 14,
+    "desc": "구름 사이로 몸을 튼 용처럼 위에서 내려꽂는 곤륜의 검.",
+    "forms": [
+      "운중현룡",
+      "반룡부공",
+      "신룡하세"
+    ],
+    "secret_technique": {
+      "name": "운룡구천",
+      "unlock_grade": "일절",
+      "unlock_mastery": 50,
+      "multiplier": 2.8,
+      "qi_cost": 70
+    },
+    "gimmick": {
+      "opening": 35,
+      "accuracy": 10,
+      "name": "운룡일현",
+      "text": "명중 +1할, 첫 합 위력 +3할 5푼."
+    },
+    "school": "곤륜"
+  },
+  "태을검법": {
+    "name": "태을검법",
+    "type": "공격무공",
+    "category": "검법",
+    "grade": "일절",
+    "base_multiplier": 1.9,
+    "qi_cost": 14,
+    "desc": "오래 겨눈 끝에 단 한 번 찌르는 종남의 검.",
+    "forms": [
+      "태을일기",
+      "분광",
+      "귀원"
+    ],
+    "secret_technique": {
+      "name": "태을분광",
+      "unlock_grade": "일절",
+      "unlock_mastery": 50,
+      "multiplier": 2.8,
+      "qi_cost": 70
+    },
+    "gimmick": {
+      "pierce": 30,
+      "crit": 6,
+      "name": "태을분광",
+      "text": "적의 방어 3할 무시, 회심 확률 +6푼."
+    },
+    "school": "종남"
+  },
+  "연환쾌검": {
+    "name": "연환쾌검",
+    "type": "공격무공",
+    "category": "검법",
+    "grade": "일절",
+    "base_multiplier": 1.9,
+    "qi_cost": 14,
+    "desc": "칼집에서 나온 줄도 모르게 잇달아 베는 점창의 쾌검.",
+    "forms": [
+      "쾌일",
+      "쾌이",
+      "쾌삼"
+    ],
+    "secret_technique": {
+      "name": "연환탈명",
+      "unlock_grade": "일절",
+      "unlock_mastery": 50,
+      "multiplier": 2.8,
+      "qi_cost": 70
+    },
+    "gimmick": {
+      "hits": 4,
+      "hit_rate": 0.33,
+      "name": "연환",
+      "text": "4번 나눠 치며(한 번마다 위력 3할 3푼) 번번이 명중과 회심을 따로 가린다."
+    },
+    "school": "점창",
+    "lineage": "점창검",
+    "lineage_rank": 2
+  },
+  "낙엽검법": {
+    "name": "낙엽검법",
+    "type": "공격무공",
+    "category": "검법",
+    "grade": "명품",
+    "base_multiplier": 1.25,
+    "qi_cost": 6,
+    "desc": "가을 숲의 잎처럼 가볍게 흩어지는 검.",
+    "forms": [
+      "추풍",
+      "낙엽",
+      "귀근"
+    ],
+    "secret_technique": {
+      "name": "추풍소엽",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 40
+    },
+    "gimmick": {
+      "accuracy": 10,
+      "name": "낙엽",
+      "text": "명중 +1할."
+    }
+  },
+  "나한신권": {
+    "name": "나한신권",
+    "type": "공격무공",
+    "category": "권법",
+    "grade": "상승",
+    "base_multiplier": 1.52,
+    "qi_cost": 9,
+    "desc": "나한권의 뿌리를 깊게 판 소림의 주먹.",
+    "forms": [
+      "나한항룡",
+      "나한복호",
+      "금신"
+    ],
+    "secret_technique": {
+      "name": "나한금신",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    },
+    "gimmick": {
+      "guard": 15,
+      "power": 6,
+      "name": "금신",
+      "text": "위력 +6푼, 맞힌 합에 받는 피해 -1할 5푼."
+    },
+    "school": "소림",
+    "lineage": "소림권",
+    "lineage_rank": 2
+  },
+  "금강복마권": {
+    "name": "금강복마권",
+    "type": "공격무공",
+    "category": "권법",
+    "grade": "일절",
+    "base_multiplier": 1.9,
+    "qi_cost": 14,
+    "desc": "마를 눕히려고 금강의 힘을 빌린다는 소림의 권법.",
+    "forms": [
+      "금강저",
+      "복마",
+      "대위덕"
+    ],
+    "secret_technique": {
+      "name": "금강복마",
+      "unlock_grade": "일절",
+      "unlock_mastery": 50,
+      "multiplier": 2.8,
+      "qi_cost": 70
+    },
+    "gimmick": {
+      "vs_side": {
+        "마도": 30
+      },
+      "power": 8,
+      "name": "복마",
+      "text": "위력 +8푼, 마도의 적에게 위력 +3할."
+    },
+    "school": "소림",
+    "lineage": "소림권",
+    "lineage_rank": 3
+  },
+  "칠절권": {
+    "name": "칠절권",
+    "type": "공격무공",
+    "category": "권법",
+    "grade": "일절",
+    "base_multiplier": 1.9,
+    "qi_cost": 14,
+    "desc": "일곱 번 끊어 치는 공동의 권법. 쓰는 사람도 쉽게 지친다.",
+    "forms": [
+      "일절",
+      "사절",
+      "칠절"
+    ],
+    "secret_technique": {
+      "name": "칠절단혼",
+      "unlock_grade": "일절",
+      "unlock_mastery": 50,
+      "multiplier": 2.8,
+      "qi_cost": 70
+    },
+    "gimmick": {
+      "hits": 3,
+      "hit_rate": 0.45,
+      "recoil": 4,
+      "name": "칠절",
+      "text": "3번 나눠 치며(한 번마다 위력 4할 5푼) 번번이 명중과 회심을 따로 가린다, 쓸 때마다 체력 4푼을 태운다."
+    },
+    "school": "공동",
+    "lineage": "공동권",
+    "lineage_rank": 2
+  },
+  "벽공권": {
+    "name": "벽공권",
+    "type": "공격무공",
+    "category": "권법",
+    "grade": "상승",
+    "base_multiplier": 1.52,
+    "qi_cost": 9,
+    "desc": "허공을 때려 앞을 친다는 권법.",
+    "forms": [
+      "벽공",
+      "파공",
+      "연공"
+    ],
+    "secret_technique": {
+      "name": "벽공일권",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    },
+    "gimmick": {
+      "pierce": 20,
+      "accuracy": 6,
+      "name": "벽공",
+      "text": "명중 +6푼, 적의 방어 2할 무시."
+    }
+  },
+  "십이로장권": {
+    "name": "십이로장권",
+    "type": "공격무공",
+    "category": "권법",
+    "grade": "명품",
+    "base_multiplier": 1.25,
+    "qi_cost": 6,
+    "desc": "열두 갈래의 길로 나아가는 정통 장권.",
+    "forms": [
+      "일로",
+      "칠로",
+      "십이로"
+    ],
+    "secret_technique": {
+      "name": "십이로귀일",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 40
+    },
+    "gimmick": {
+      "chain": 4,
+      "chain_max": 20,
+      "name": "연로",
+      "text": "끊이지 않고 맞힐수록 위력이 4푼씩 오른다(최대 2할)."
+    }
+  },
+  "오독침": {
+    "name": "오독침",
+    "type": "공격무공",
+    "category": "암기",
+    "grade": "상승",
+    "base_multiplier": 1.52,
+    "qi_cost": 9,
+    "desc": "다섯 가지 독을 번갈아 묻히는 당가의 침.",
+    "forms": [
+      "전갈",
+      "지네",
+      "두꺼비"
+    ],
+    "secret_technique": {
+      "name": "오독귀일",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    },
+    "gimmick": {
+      "poison": 10,
+      "accuracy": 8,
+      "name": "오독",
+      "text": "명중 +8푼, 적을 중독시킨다(독 위력 10)."
+    },
+    "school": "당가",
+    "lineage": "당가암기",
+    "lineage_rank": 2
+  },
+  "산화천침": {
+    "name": "산화천침",
+    "type": "공격무공",
+    "category": "암기",
+    "grade": "일절",
+    "base_multiplier": 1.9,
+    "qi_cost": 14,
+    "desc": "한 손에 천 개의 침이 흩어진다는 당가의 수법.",
+    "forms": [
+      "산화",
+      "비우",
+      "천침"
+    ],
+    "secret_technique": {
+      "name": "산화만개",
+      "unlock_grade": "일절",
+      "unlock_mastery": 50,
+      "multiplier": 2.8,
+      "qi_cost": 70
+    },
+    "gimmick": {
+      "hits": 4,
+      "hit_rate": 0.34,
+      "poison": 8,
+      "name": "산화",
+      "text": "4번 나눠 치며(한 번마다 위력 3할 4푼) 번번이 명중과 회심을 따로 가린다, 적을 중독시킨다(독 위력 8)."
+    },
+    "school": "당가",
+    "lineage": "당가암기",
+    "lineage_rank": 3
+  },
+  "팔진비침": {
+    "name": "팔진비침",
+    "type": "공격무공",
+    "category": "암기",
+    "grade": "일절",
+    "base_multiplier": 1.9,
+    "qi_cost": 14,
+    "desc": "여덟 문을 따라 쏘는 제갈의 침. 달아날 자리가 먼저 막힌다.",
+    "forms": [
+      "생문",
+      "경문",
+      "사문"
+    ],
+    "secret_technique": {
+      "name": "팔진봉쇄",
+      "unlock_grade": "일절",
+      "unlock_mastery": 50,
+      "multiplier": 2.8,
+      "qi_cost": 70
+    },
+    "gimmick": {
+      "stun": 14,
+      "accuracy": 12,
+      "name": "팔진",
+      "text": "명중 +1할 2푼, 맞히면 1할 4푼 확률로 적이 다음 합에 손을 쓰지 못한다."
+    },
+    "school": "제갈",
+    "lineage": "제갈침",
+    "lineage_rank": 2
+  },
+  "귀영표": {
+    "name": "귀영표",
+    "type": "공격무공",
+    "category": "암기",
+    "grade": "상승",
+    "base_multiplier": 1.52,
+    "qi_cost": 9,
+    "desc": "그림자 속에서 날아온다는 살막의 표창.",
+    "forms": [
+      "무성",
+      "무영",
+      "무흔"
+    ],
+    "secret_technique": {
+      "name": "귀영일표",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    },
+    "gimmick": {
+      "opening": 30,
+      "crit": 8,
+      "name": "첫 표",
+      "text": "회심 확률 +8푼, 첫 합 위력 +3할."
+    },
+    "school": "살막"
+  },
+  "비황표": {
+    "name": "비황표",
+    "type": "공격무공",
+    "category": "암기",
+    "grade": "명품",
+    "base_multiplier": 1.25,
+    "qi_cost": 6,
+    "desc": "메뚜기 떼처럼 날아드는 표창술.",
+    "forms": [
+      "일표",
+      "쌍표",
+      "비황"
+    ],
+    "secret_technique": {
+      "name": "비황난무",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 40
+    },
+    "gimmick": {
+      "hits": 2,
+      "hit_rate": 0.62,
+      "name": "쌍표",
+      "text": "2번 나눠 치며(한 번마다 위력 6할 2푼) 번번이 명중과 회심을 따로 가린다."
+    }
+  },
+  "취선장": {
+    "name": "취선장",
+    "type": "공격무공",
+    "category": "장법",
+    "grade": "일절",
+    "base_multiplier": 1.9,
+    "qi_cost": 14,
+    "desc": "취한 듯 비틀거리다 손바닥이 먼저 닿는 개방의 장법.",
+    "forms": [
+      "취선헌주",
+      "도음",
+      "귀주"
+    ],
+    "secret_technique": {
+      "name": "취선귀천",
+      "unlock_grade": "일절",
+      "unlock_mastery": 50,
+      "multiplier": 2.8,
+      "qi_cost": 70
+    },
+    "gimmick": {
+      "lifesteal": 6,
+      "crit": 6,
+      "name": "취중진기",
+      "text": "회심 확률 +6푼, 준 피해의 6푼을 체력으로 흡수."
+    },
+    "school": "개방"
+  },
+  "파천마장": {
+    "name": "파천마장",
+    "type": "공격무공",
+    "category": "장법",
+    "grade": "일절",
+    "base_multiplier": 1.9,
+    "qi_cost": 14,
+    "desc": "하늘도 부순다는 신교의 장법. 몸이 먼저 상한다.",
+    "forms": [
+      "마운",
+      "파천",
+      "천붕"
+    ],
+    "secret_technique": {
+      "name": "파천일장",
+      "unlock_grade": "일절",
+      "unlock_mastery": 50,
+      "multiplier": 2.8,
+      "qi_cost": 70
+    },
+    "gimmick": {
+      "power": 14,
+      "recoil": 5,
+      "name": "파천",
+      "text": "위력 +1할 4푼, 쓸 때마다 체력 5푼을 태운다."
+    },
+    "school": "마교"
+  },
+  "청풍비장": {
+    "name": "청풍비장",
+    "type": "공격무공",
+    "category": "장법",
+    "grade": "일절",
+    "base_multiplier": 1.9,
+    "qi_cost": 14,
+    "desc": "바람결에 실려 오는 청성의 장력.",
+    "forms": [
+      "청풍",
+      "서래",
+      "비장"
+    ],
+    "secret_technique": {
+      "name": "청풍만리",
+      "unlock_grade": "일절",
+      "unlock_mastery": 50,
+      "multiplier": 2.8,
+      "qi_cost": 70
+    },
+    "gimmick": {
+      "weaken": {
+        "percent": 18,
+        "rounds": 2
+      },
+      "accuracy": 8,
+      "name": "청풍",
+      "text": "명중 +8푼, 맞히면 2합 동안 적 위력 -1할 8푼."
+    },
+    "school": "청성",
+    "lineage": "청성장",
+    "lineage_rank": 2
+  },
+  "불광장": {
+    "name": "불광장",
+    "type": "공격무공",
+    "category": "장법",
+    "grade": "일절",
+    "base_multiplier": 1.9,
+    "qi_cost": 14,
+    "desc": "손바닥에 금빛이 어린다는 아미의 장법.",
+    "forms": [
+      "불광",
+      "보현",
+      "자항"
+    ],
+    "secret_technique": {
+      "name": "불광보조",
+      "unlock_grade": "일절",
+      "unlock_mastery": 50,
+      "multiplier": 2.8,
+      "qi_cost": 70
+    },
+    "gimmick": {
+      "lifesteal": 6,
+      "vs_side": {
+        "마도": 20
+      },
+      "name": "불광",
+      "text": "준 피해의 6푼을 체력으로 흡수, 마도의 적에게 위력 +2할."
+    },
+    "school": "아미"
+  },
+  "금정불광수": {
+    "name": "금정불광수",
+    "type": "공격무공",
+    "category": "장법",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "금정의 불광이 손끝에 머문다는 아미 최후의 수법.",
+    "forms": [
+      "금정",
+      "대광명",
+      "무량"
+    ],
+    "secret_technique": {
+      "name": "금정만광",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "gimmick": {
+      "lifesteal": 10,
+      "power": 20,
+      "name": "대광명",
+      "text": "위력 +2할, 준 피해의 1할을 체력으로 흡수."
+    },
+    "school": "아미",
+    "reserved": true
+  },
+  "벽파장": {
+    "name": "벽파장",
+    "type": "공격무공",
+    "category": "장법",
+    "grade": "명품",
+    "base_multiplier": 1.25,
+    "qi_cost": 6,
+    "desc": "물결을 가르듯 밀어내는 장력.",
+    "forms": [
+      "벽파",
+      "연파",
+      "쌍파"
+    ],
+    "secret_technique": {
+      "name": "벽파만리",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 40
+    },
+    "gimmick": {
+      "weaken": {
+        "percent": 8,
+        "rounds": 2
+      },
+      "name": "벽파",
+      "text": "맞히면 2합 동안 적 위력 -8푼."
+    }
+  },
+  "칠성도법": {
+    "name": "칠성도법",
+    "type": "공격무공",
+    "category": "도법",
+    "grade": "상승",
+    "base_multiplier": 1.52,
+    "qi_cost": 9,
+    "desc": "북두의 자리를 밟으며 일곱 번 내려치는 도법.",
+    "forms": [
+      "천권",
+      "개양",
+      "요광"
+    ],
+    "secret_technique": {
+      "name": "칠성참",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    },
+    "gimmick": {
+      "chain": 6,
+      "chain_max": 30,
+      "name": "칠성",
+      "text": "끊이지 않고 맞힐수록 위력이 6푼씩 오른다(최대 3할)."
+    }
+  },
+  "혈라도결": {
+    "name": "혈라도결",
+    "type": "공격무공",
+    "category": "도법",
+    "grade": "일절",
+    "base_multiplier": 1.9,
+    "qi_cost": 14,
+    "desc": "칼이 피를 먹을수록 무거워진다는 혈교의 도결.",
+    "forms": [
+      "혈라",
+      "적우",
+      "혈해"
+    ],
+    "secret_technique": {
+      "name": "혈라천참",
+      "unlock_grade": "일절",
+      "unlock_mastery": 50,
+      "multiplier": 2.8,
+      "qi_cost": 70
+    },
+    "gimmick": {
+      "lifesteal": 8,
+      "low_hp": 25,
+      "name": "혈라",
+      "text": "체력 절반 이하에서 위력 +2할 5푼, 준 피해의 8푼을 체력으로 흡수."
+    },
+    "school": "혈교"
+  },
+  "오행도법": {
+    "name": "오행도법",
+    "type": "공격무공",
+    "category": "도법",
+    "grade": "기본",
+    "base_multiplier": 1.12,
+    "qi_cost": 4,
+    "desc": "쇠 나무 물 불 흙을 따라 다섯 번 베는 기초 도법.",
+    "forms": [
+      "금",
+      "수",
+      "토"
+    ],
+    "secret_technique": {
+      "name": "오행귀일",
+      "unlock_grade": "명품",
+      "unlock_mastery": 50,
+      "multiplier": 1.8,
+      "qi_cost": 30
+    },
+    "gimmick": {
+      "accuracy": 5,
+      "name": "오행",
+      "text": "명중 +5푼."
+    }
+  },
+  "회룡창법": {
+    "name": "회룡창법",
+    "type": "공격무공",
+    "category": "창법",
+    "grade": "상승",
+    "base_multiplier": 1.52,
+    "qi_cost": 9,
+    "desc": "찌른 창을 돌려 받아치는 모용의 창.",
+    "forms": [
+      "회룡",
+      "고조",
+      "반격"
+    ],
+    "secret_technique": {
+      "name": "회룡고조",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    },
+    "gimmick": {
+      "guard": 14,
+      "accuracy": 6,
+      "name": "회룡",
+      "text": "명중 +6푼, 맞힌 합에 받는 피해 -1할 4푼."
+    },
+    "school": "모용",
+    "lineage": "모용창",
+    "lineage_rank": 2
+  },
+  "추월창법": {
+    "name": "추월창법",
+    "type": "공격무공",
+    "category": "창법",
+    "grade": "일절",
+    "base_multiplier": 1.9,
+    "qi_cost": 14,
+    "desc": "달을 쫓듯 한 번 더 뻗는 모용의 창.",
+    "forms": [
+      "추월",
+      "낙월",
+      "탈월"
+    ],
+    "secret_technique": {
+      "name": "추월일섬",
+      "unlock_grade": "일절",
+      "unlock_mastery": 50,
+      "multiplier": 2.8,
+      "qi_cost": 70
+    },
+    "gimmick": {
+      "pierce": 25,
+      "chain": 5,
+      "chain_max": 25,
+      "name": "추월",
+      "text": "적의 방어 2할 5푼 무시, 끊이지 않고 맞힐수록 위력이 5푼씩 오른다(최대 2할 5푼)."
+    },
+    "school": "모용",
+    "lineage": "모용창",
+    "lineage_rank": 3
+  },
+  "음혼창결": {
+    "name": "음혼창결",
+    "type": "공격무공",
+    "category": "창법",
+    "grade": "일절",
+    "base_multiplier": 1.9,
+    "qi_cost": 14,
+    "desc": "찔린 자의 넋이 먼저 빠져나간다는 귀문교의 창결.",
+    "forms": [
+      "음풍",
+      "혼귀",
+      "적막"
+    ],
+    "secret_technique": {
+      "name": "음혼탈백",
+      "unlock_grade": "일절",
+      "unlock_mastery": 50,
+      "multiplier": 2.8,
+      "qi_cost": 70
+    },
+    "gimmick": {
+      "weaken": {
+        "percent": 15,
+        "rounds": 2
+      },
+      "lifesteal": 5,
+      "name": "음혼",
+      "text": "맞히면 2합 동안 적 위력 -1할 5푼, 준 피해의 5푼을 체력으로 흡수."
+    },
+    "school": "귀문교"
+  },
+  "단봉창법": {
+    "name": "단봉창법",
+    "type": "공격무공",
+    "category": "창법",
+    "grade": "명품",
+    "base_multiplier": 1.25,
+    "qi_cost": 6,
+    "desc": "짧게 잡고 파고드는 창법.",
+    "forms": [
+      "단봉",
+      "근신",
+      "점혈"
+    ],
+    "secret_technique": {
+      "name": "단봉연격",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 40
+    },
+    "gimmick": {
+      "accuracy": 10,
+      "name": "근신",
+      "text": "명중 +1할."
+    }
+  },
+  "오행곤법": {
+    "name": "오행곤법",
+    "type": "공격무공",
+    "category": "봉법",
+    "grade": "기본",
+    "base_multiplier": 1.12,
+    "qi_cost": 4,
+    "desc": "다섯 가지 힘의 길을 따라 휘두르는 기초 곤법.",
+    "forms": [
+      "금",
+      "목",
+      "토"
+    ],
+    "secret_technique": {
+      "name": "오행타",
+      "unlock_grade": "명품",
+      "unlock_mastery": 50,
+      "multiplier": 1.8,
+      "qi_cost": 30
+    },
+    "gimmick": {
+      "accuracy": 5,
+      "name": "오행",
+      "text": "명중 +5푼."
+    }
+  },
+  "복호곤결": {
+    "name": "복호곤결",
+    "type": "공격무공",
+    "category": "봉법",
+    "grade": "일절",
+    "base_multiplier": 1.9,
+    "qi_cost": 14,
+    "desc": "호랑이를 눕힌다는 소림의 곤결. 무거워도 고요하다.",
+    "forms": [
+      "복호",
+      "금강",
+      "부동"
+    ],
+    "secret_technique": {
+      "name": "복호항룡",
+      "unlock_grade": "일절",
+      "unlock_mastery": 50,
+      "multiplier": 2.8,
+      "qi_cost": 70
+    },
+    "gimmick": {
+      "stun": 12,
+      "weaken": {
+        "percent": 12,
+        "rounds": 2
+      },
+      "name": "복호",
+      "text": "맞히면 1할 2푼 확률로 적이 다음 합에 손을 쓰지 못한다, 맞히면 2합 동안 적 위력 -1할 2푼."
+    },
+    "school": "소림"
+  },
+  "복룡곤법": {
+    "name": "복룡곤법",
+    "type": "공격무공",
+    "category": "봉법",
+    "grade": "상승",
+    "base_multiplier": 1.52,
+    "qi_cost": 9,
+    "desc": "숨은 용처럼 낮게 깔렸다가 솟구치는 곤법.",
+    "forms": [
+      "복룡",
+      "승천",
+      "비룡"
+    ],
+    "secret_technique": {
+      "name": "복룡승천",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    },
+    "gimmick": {
+      "opening": 28,
+      "power": 4,
+      "name": "승천",
+      "text": "위력 +4푼, 첫 합 위력 +2할 8푼."
+    }
+  },
+  "반야심공": {
+    "name": "반야심공",
+    "type": "심공",
+    "category": "심공",
+    "grade": "일절",
+    "base_multiplier": 1.0,
+    "qi_cost": 0,
+    "desc": "헛된 것을 비우면 내력이 스스로 차오른다는 소림의 심법.",
+    "effect": {
+      "heal_hp_pct": 25,
+      "heal_qi_pct": 35,
+      "atk_buff_pct": 18,
+      "buff_rounds": 3
+    },
+    "gimmick": {
+      "cleanse": 1,
+      "regen_qi": {
+        "percent": 6,
+        "rounds": 3
+      },
+      "name": "반야",
+      "text": "운기하면 독을 밀어낸다, 3합 동안 합마다 내력 6푼."
+    },
+    "school": "소림"
+  },
+  "양의심공": {
+    "name": "양의심공",
+    "type": "심공",
+    "category": "심공",
+    "grade": "일절",
+    "base_multiplier": 1.0,
+    "qi_cost": 0,
+    "desc": "음과 양을 번갈아 돌리는 무당의 심법.",
+    "effect": {
+      "heal_hp_pct": 20,
+      "heal_qi_pct": 40,
+      "atk_buff_pct": 20,
+      "buff_rounds": 3
+    },
+    "gimmick": {
+      "guard": {
+        "percent": 15,
+        "rounds": 2
+      },
+      "name": "양의회선",
+      "text": "운기하면 2합 동안 받는 피해 -1할 5푼."
+    },
+    "school": "무당"
+  },
+  "화운장결": {
+    "name": "화운장결",
+    "type": "공격무공",
+    "category": "장법",
+    "grade": "일절",
+    "base_multiplier": 1.9,
+    "qi_cost": 14,
+    "desc": "구름을 태운다는 옛 장력. 어느 문파의 것인지 아는 사람이 없다.",
+    "forms": [
+      "화운",
+      "열풍",
+      "소천"
+    ],
+    "secret_technique": {
+      "name": "화운소천",
+      "unlock_grade": "일절",
+      "unlock_mastery": 50,
+      "multiplier": 2.8,
+      "qi_cost": 70
+    },
+    "gimmick": {
+      "burn": 22,
+      "power": 8,
+      "name": "화운",
+      "text": "위력 +8푼, 준 피해의 2할 2푼이 두 합 동안 더 번진다."
+    },
+    "legend": true
+  }
+}

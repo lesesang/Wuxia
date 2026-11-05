@@ -1,0 +1,4361 @@
+{
+  "금창약": {
+    "name": "금창약",
+    "category": "소비품",
+    "price": 20,
+    "markets": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "always": true,
+    "desc": "체력을 3할 회복한다. 행낭에 넣어 두었다가 쓴다.",
+    "effects": [
+      {
+        "type": "heal",
+        "stat": "hp",
+        "percent": 30
+      }
+    ],
+    "consumable": true,
+    "stock_qty": 3,
+    "grade": "범품"
+  },
+  "회기단": {
+    "name": "회기단",
+    "category": "소비품",
+    "price": 20,
+    "markets": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "always": true,
+    "desc": "내력을 4할 회복한다. 행낭에 넣어 두었다가 쓴다.",
+    "effects": [
+      {
+        "type": "heal",
+        "stat": "qi",
+        "percent": 40
+      }
+    ],
+    "consumable": true,
+    "stock_qty": 3,
+    "grade": "범품"
+  },
+  "호골주": {
+    "name": "호골주",
+    "category": "영약",
+    "price": 130,
+    "markets": [
+      1,
+      2,
+      3
+    ],
+    "desc": "호랑이 뼈로 담근 약주. 외공이 40 오른다.",
+    "effects": [
+      {
+        "type": "stat",
+        "stat": "external",
+        "amount": 40
+      }
+    ],
+    "grade": "양품"
+  },
+  "소환단": {
+    "name": "소환단",
+    "category": "영약",
+    "price": 130,
+    "markets": [
+      1,
+      2,
+      3
+    ],
+    "desc": "진기를 북돋는 단약. 내공이 40 오른다.",
+    "effects": [
+      {
+        "type": "stat",
+        "stat": "internal",
+        "amount": 40
+      }
+    ],
+    "grade": "양품"
+  },
+  "무학잡록": {
+    "name": "무학잡록",
+    "category": "영약",
+    "price": 130,
+    "markets": [
+      1,
+      2,
+      3
+    ],
+    "desc": "이름 없는 고수의 수련 기록. 무리가 40 오른다.",
+    "effects": [
+      {
+        "type": "stat",
+        "stat": "martial",
+        "amount": 40
+      }
+    ],
+    "grade": "양품"
+  },
+  "청심환": {
+    "name": "청심환",
+    "category": "영약",
+    "price": 130,
+    "markets": [
+      1,
+      2,
+      3
+    ],
+    "desc": "마음을 가라앉히는 환약. 심경이 40 오른다.",
+    "effects": [
+      {
+        "type": "stat",
+        "stat": "mind",
+        "amount": 40
+      }
+    ],
+    "grade": "양품"
+  },
+  "공청석유": {
+    "name": "공청석유",
+    "category": "영약",
+    "price": 385,
+    "markets": [
+      3,
+      4,
+      5
+    ],
+    "desc": "천년 석굴에 맺힌 영액. 내공이 120 오른다.",
+    "effects": [
+      {
+        "type": "stat",
+        "stat": "internal",
+        "amount": 120
+      }
+    ],
+    "grade": "보물"
+  },
+  "대환단": {
+    "name": "대환단",
+    "category": "영약",
+    "price": 770,
+    "markets": [
+      4,
+      5
+    ],
+    "desc": "소림이 귀하게 여기는 영단. 네 기량이 모두 60 오른다.",
+    "effects": [
+      {
+        "type": "stat",
+        "stat": "external",
+        "amount": 60
+      },
+      {
+        "type": "stat",
+        "stat": "internal",
+        "amount": 60
+      },
+      {
+        "type": "stat",
+        "stat": "martial",
+        "amount": 60
+      },
+      {
+        "type": "stat",
+        "stat": "mind",
+        "amount": 60
+      }
+    ],
+    "grade": "보물"
+  },
+  "철검": {
+    "name": "철검",
+    "category": "무기",
+    "price": 40,
+    "markets": [
+      1,
+      2
+    ],
+    "desc": "대장간에서 흔히 파는 검. 검법에 맞음, 위력 +10",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 10,
+        "style": "검법"
+      }
+    ],
+    "grade": "범품"
+  },
+  "강철검": {
+    "name": "강철검",
+    "category": "무기",
+    "price": 120,
+    "markets": [
+      2,
+      3
+    ],
+    "desc": "잘 벼린 강철검. 검법에 맞음, 위력 +26",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 26,
+        "style": "검법"
+      }
+    ],
+    "grade": "양품"
+  },
+  "현철검": {
+    "name": "현철검",
+    "category": "무기",
+    "price": 280,
+    "markets": [
+      3,
+      4
+    ],
+    "desc": "현철을 섞어 만든 명검. 검법에 맞음, 위력 +50",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 50,
+        "style": "검법"
+      }
+    ],
+    "grade": "명품",
+    "gimmick": {
+      "name": "날선 결",
+      "pierce": 20,
+      "text": "적의 방어 2할 무시."
+    }
+  },
+  "운철보검": {
+    "name": "운철보검",
+    "category": "무기",
+    "price": 500,
+    "markets": [
+      4,
+      5
+    ],
+    "desc": "하늘에서 떨어진 쇠로 벼린 보검. 검법에 맞음, 위력 +80",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 80,
+        "style": "검법"
+      }
+    ],
+    "grade": "보물",
+    "gimmick": {
+      "name": "운철의 결",
+      "crit": 8,
+      "crit_power": 25,
+      "text": "회심 확률 +8푼, 회심 위력 +2할 5푼."
+    }
+  },
+  "가죽호구": {
+    "name": "가죽 갑의",
+    "category": "방어구",
+    "price": 40,
+    "markets": [
+      1,
+      2
+    ],
+    "desc": "질긴 소가죽 갑의. 받는 피해 -4",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "armor",
+        "bonus": 4
+      }
+    ],
+    "grade": "범품"
+  },
+  "철사갑의": {
+    "name": "철사 갑의",
+    "category": "방어구",
+    "price": 120,
+    "markets": [
+      2,
+      3
+    ],
+    "desc": "철사를 엮어 넣은 옷. 받는 피해 -10",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "armor",
+        "bonus": 10
+      }
+    ],
+    "grade": "양품"
+  },
+  "금사보의": {
+    "name": "금사 보의",
+    "category": "방어구",
+    "price": 280,
+    "markets": [
+      3,
+      4
+    ],
+    "desc": "금실로 짠 보의. 받는 피해 -20",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "armor",
+        "bonus": 20
+      }
+    ],
+    "grade": "명품",
+    "gimmick": {
+      "name": "금실의 결",
+      "poison_immune": true,
+      "text": "독에 걸리지 않는다."
+    }
+  },
+  "천잠보의": {
+    "name": "천잠 보의",
+    "category": "방어구",
+    "price": 500,
+    "markets": [
+      4,
+      5
+    ],
+    "desc": "천잠사로 지은 옷. 칼끝이 미끄러진다. 받는 피해 -32",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "armor",
+        "bonus": 32
+      }
+    ],
+    "grade": "보물",
+    "gimmick": {
+      "name": "숨 쉬는 비단",
+      "regen": 2,
+      "text": "합마다 체력 2푼 회복(한 싸움에 3할까지)."
+    }
+  },
+  "천마약점기록": {
+    "name": "천마의 약점 기록",
+    "category": "밀서",
+    "price": 500,
+    "markets": [
+      5
+    ],
+    "always": true,
+    "desc": "누군가 목숨과 바꾼 기록. 천마와의 결전에서 천마의 체력이 2할 줄어든 채 시작한다.",
+    "effects": [
+      {
+        "type": "boss_weaken",
+        "percent": 20
+      }
+    ],
+    "grade": "보물"
+  },
+  "혈마단": {
+    "name": "혈마단",
+    "category": "금단",
+    "price": 500,
+    "markets": [
+      5
+    ],
+    "always": true,
+    "desc": "마도의 금단 약물. 외공과 무리가 120씩 오르지만 체력을 3할 잃는다.",
+    "effects": [
+      {
+        "type": "stat",
+        "stat": "external",
+        "amount": 120
+      },
+      {
+        "type": "stat",
+        "stat": "martial",
+        "amount": 120
+      },
+      {
+        "type": "heal",
+        "stat": "hp",
+        "percent": -30
+      }
+    ],
+    "grade": "보물"
+  },
+  "초상비비급": {
+    "name": "경신보 비급",
+    "category": "비급",
+    "price": 60,
+    "markets": [
+      1,
+      2
+    ],
+    "desc": "경공 경신보를 익힌다. 전투에서 적의 공격을 흘려낼 수 있다.",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "초상비"
+      }
+    ]
+  },
+  "육합권보": {
+    "name": "육합권보",
+    "category": "비급",
+    "price": 50,
+    "markets": [
+      1,
+      2
+    ],
+    "desc": "권법 육합권을 익힌다. (위력 1.1배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "육합권"
+      }
+    ]
+  },
+  "유운신법비급": {
+    "name": "유운신법 비급",
+    "category": "비급",
+    "price": 320,
+    "markets": [
+      3,
+      4,
+      5
+    ],
+    "desc": "경공 유운신법을 익힌다.",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "유운신법"
+      }
+    ]
+  },
+  "항마장비급": {
+    "name": "항마장 비급",
+    "category": "비급",
+    "price": 430,
+    "markets": [
+      3,
+      4,
+      5
+    ],
+    "desc": "협객에게만 전해지는 장법 항마장을 익힌다. (위력 1.5배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "항마장"
+      }
+    ],
+    "dominant": "정도",
+    "always": true
+  },
+  "독룡장비급": {
+    "name": "독룡장 비급",
+    "category": "비급",
+    "price": 190,
+    "markets": [
+      2,
+      3,
+      4
+    ],
+    "desc": "사파의 장법 독룡장을 익힌다. (위력 1.3배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "독룡장"
+      }
+    ],
+    "dominant": "사도",
+    "always": true
+  },
+  "혈영도법비급": {
+    "name": "혈영도법 비급",
+    "category": "비급",
+    "price": 190,
+    "markets": [
+      2,
+      3,
+      4
+    ],
+    "desc": "마도의 도법 혈영도법을 익힌다. (위력 1.25배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "혈영도법"
+      }
+    ],
+    "dominant": "마도",
+    "always": true
+  },
+  "구명단": {
+    "name": "구명단",
+    "category": "소비품",
+    "price": 55,
+    "markets": [
+      3,
+      4
+    ],
+    "consumable": true,
+    "stock_qty": 2,
+    "desc": "체력과 내력을 모두 4할 회복한다.",
+    "effects": [
+      {
+        "type": "heal",
+        "stat": "hp",
+        "percent": 40
+      },
+      {
+        "type": "heal",
+        "stat": "qi",
+        "percent": 40
+      }
+    ],
+    "grade": "명품"
+  },
+  "해독단": {
+    "name": "해독단",
+    "category": "소비품",
+    "price": 20,
+    "markets": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "consumable": true,
+    "stock_qty": 2,
+    "desc": "전투에서 쓰면 중독이 풀리고 체력을 조금 회복한다.",
+    "effects": [
+      {
+        "type": "cure",
+        "what": "poison"
+      },
+      {
+        "type": "heal",
+        "stat": "hp",
+        "percent": 10
+      }
+    ],
+    "battle_only": true,
+    "grade": "범품"
+  },
+  "활혈단": {
+    "name": "활혈단",
+    "category": "소비품",
+    "price": 45,
+    "markets": [
+      2,
+      3,
+      4
+    ],
+    "consumable": true,
+    "stock_qty": 2,
+    "desc": "내상을 2단계 치료한다.",
+    "effects": [
+      {
+        "type": "cure",
+        "what": "injury",
+        "amount": 2
+      }
+    ],
+    "grade": "양품"
+  },
+  "천년하수오": {
+    "name": "천년 하수오",
+    "category": "영약",
+    "price": 385,
+    "markets": [
+      2,
+      3,
+      4
+    ],
+    "desc": "사람 모양으로 자란 영초. 네 기량이 모두 30 오른다.",
+    "effects": [
+      {
+        "type": "stat",
+        "stat": "external",
+        "amount": 30
+      },
+      {
+        "type": "stat",
+        "stat": "internal",
+        "amount": 30
+      },
+      {
+        "type": "stat",
+        "stat": "martial",
+        "amount": 30
+      },
+      {
+        "type": "stat",
+        "stat": "mind",
+        "amount": 30
+      }
+    ],
+    "grade": "보물"
+  },
+  "설산영지": {
+    "name": "설산 영지",
+    "category": "영약",
+    "price": 255,
+    "markets": [
+      2,
+      3,
+      4
+    ],
+    "desc": "만년설에서 자란 영지. 심경이 80 오른다.",
+    "effects": [
+      {
+        "type": "stat",
+        "stat": "mind",
+        "amount": 80
+      }
+    ],
+    "grade": "명품"
+  },
+  "호왕골": {
+    "name": "호왕의 뼈",
+    "category": "영약",
+    "price": 255,
+    "markets": [
+      2,
+      3,
+      4
+    ],
+    "desc": "산군의 뼈를 달인 것. 외공이 80 오른다.",
+    "effects": [
+      {
+        "type": "stat",
+        "stat": "external",
+        "amount": 80
+      }
+    ],
+    "grade": "명품"
+  },
+  "심득잡기": {
+    "name": "고수의 심득",
+    "category": "영약",
+    "price": 255,
+    "markets": [
+      2,
+      3,
+      4
+    ],
+    "desc": "어느 고수가 평생 적어 둔 기록. 무리가 80 오른다.",
+    "effects": [
+      {
+        "type": "stat",
+        "stat": "martial",
+        "amount": 80
+      }
+    ],
+    "grade": "명품"
+  },
+  "태산신검": {
+    "name": "태산신병",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "비무대회 우승자에게 주어지는 신병이기. 위력 +60",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 60
+      }
+    ],
+    "grade": "보물",
+    "gimmick": {
+      "name": "태산의 이름",
+      "power": 5,
+      "crit": 5,
+      "text": "위력 +5푼, 회심 확률 +5푼."
+    },
+    "no_drop": true
+  },
+  "기초도법비급": {
+    "name": "기초도법 비급",
+    "category": "비급",
+    "price": 50,
+    "markets": [
+      1,
+      2
+    ],
+    "desc": "도법 기초도법을 익힌다. (위력 1.1배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "기초도법"
+      }
+    ]
+  },
+  "기초검법비급": {
+    "name": "기초검법 비급",
+    "category": "비급",
+    "price": 50,
+    "markets": [
+      1,
+      2
+    ],
+    "desc": "검법 기초검법을 익힌다. (위력 1.1배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "기초검법"
+      }
+    ]
+  },
+  "백호도법비급": {
+    "name": "백호도법 비급",
+    "category": "비급",
+    "price": 50,
+    "markets": [
+      1,
+      2
+    ],
+    "desc": "도법 백호도법을 익힌다. (위력 1.14배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "백호도법"
+      }
+    ]
+  },
+  "기초창법비급": {
+    "name": "기초창법 비급",
+    "category": "비급",
+    "price": 50,
+    "markets": [
+      1,
+      2
+    ],
+    "desc": "창법 기초창법을 익힌다. (위력 1.1배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "기초창법"
+      }
+    ]
+  },
+  "기초봉법비급": {
+    "name": "기초봉법 비급",
+    "category": "비급",
+    "price": 50,
+    "markets": [
+      1,
+      2
+    ],
+    "desc": "봉법 기초봉법을 익힌다. (위력 1.1배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "기초봉법"
+      }
+    ]
+  },
+  "기초장법비급": {
+    "name": "기초장법 비급",
+    "category": "비급",
+    "price": 50,
+    "markets": [
+      1,
+      2
+    ],
+    "desc": "장법 기초장법을 익힌다. (위력 1.1배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "기초장법"
+      }
+    ]
+  },
+  "유엽비도비급": {
+    "name": "유엽비도 비급",
+    "category": "비급",
+    "price": 50,
+    "markets": [
+      1,
+      2
+    ],
+    "desc": "암기 유엽비도를 익힌다. (위력 1.1배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "유엽비도"
+      }
+    ]
+  },
+  "광풍도법비급": {
+    "name": "광풍도법 비급",
+    "category": "비급",
+    "price": 190,
+    "markets": [
+      2,
+      3
+    ],
+    "desc": "도법 광풍도법을 익힌다. (위력 1.25배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "광풍도법"
+      }
+    ]
+  },
+  "양가창법비급": {
+    "name": "양가창법 비급",
+    "category": "비급",
+    "price": 190,
+    "markets": [
+      2,
+      3
+    ],
+    "desc": "창법 양가창법을 익힌다. (위력 1.25배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "양가창법"
+      }
+    ]
+  },
+  "팔괘곤법비급": {
+    "name": "팔괘곤법 비급",
+    "category": "비급",
+    "price": 190,
+    "markets": [
+      2,
+      3
+    ],
+    "desc": "봉법 팔괘곤법을 익힌다. (위력 1.25배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "팔괘곤법"
+      }
+    ]
+  },
+  "열화장비급": {
+    "name": "열화장 비급",
+    "category": "비급",
+    "price": 190,
+    "markets": [
+      2,
+      3
+    ],
+    "desc": "장법 열화장을 익힌다. (위력 1.25배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "열화장"
+      }
+    ]
+  },
+  "금강권비급": {
+    "name": "금강권 비급",
+    "category": "비급",
+    "price": 190,
+    "markets": [
+      2,
+      3
+    ],
+    "desc": "권법 금강권을 익힌다. (위력 1.25배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "금강권"
+      }
+    ]
+  },
+  "낙성비도비급": {
+    "name": "낙성비도 비급",
+    "category": "비급",
+    "price": 190,
+    "markets": [
+      2,
+      3
+    ],
+    "desc": "암기 낙성비도를 익힌다. (위력 1.25배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "낙성비도"
+      }
+    ]
+  },
+  "귀면도법비급": {
+    "name": "귀면도법 비급",
+    "category": "비급",
+    "price": 190,
+    "markets": [
+      2,
+      3
+    ],
+    "desc": "도법 귀면도법을 익힌다. (위력 1.25배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "귀면도법"
+      }
+    ]
+  },
+  "패왕창법비급": {
+    "name": "패왕창법 비급",
+    "category": "비급",
+    "price": 430,
+    "markets": [
+      3,
+      4,
+      5
+    ],
+    "desc": "창법 패왕창법을 익힌다. (위력 1.55배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "패왕창법"
+      }
+    ]
+  },
+  "벽력곤법비급": {
+    "name": "벽력곤법 비급",
+    "category": "비급",
+    "price": 430,
+    "markets": [
+      3,
+      4,
+      5
+    ],
+    "desc": "봉법 벽력곤법을 익힌다. (위력 1.5배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "벽력곤법"
+      }
+    ]
+  },
+  "현빙장비급": {
+    "name": "현빙장 비급",
+    "category": "비급",
+    "price": 430,
+    "markets": [
+      3,
+      4,
+      5
+    ],
+    "desc": "장법 현빙장을 익힌다. (위력 1.5배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "현빙장"
+      }
+    ]
+  },
+  "벽력권비급": {
+    "name": "뇌음권 비급",
+    "category": "비급",
+    "price": 430,
+    "markets": [
+      3,
+      4,
+      5
+    ],
+    "desc": "권법 뇌음권을 익힌다. (위력 1.5배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "벽력권"
+      }
+    ]
+  },
+  "천라지망비급": {
+    "name": "천라지망 비급",
+    "category": "비급",
+    "price": 430,
+    "markets": [
+      3,
+      4,
+      5
+    ],
+    "desc": "암기 천라지망을 익힌다. (위력 1.5배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "천라지망"
+      }
+    ]
+  },
+  "박도": {
+    "name": "박도",
+    "category": "무기",
+    "price": 40,
+    "markets": [
+      1,
+      2
+    ],
+    "desc": "날이 넓고 묵직한 칼. 도법에 맞음, 위력 +10",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 10,
+        "style": "도법"
+      }
+    ],
+    "grade": "범품"
+  },
+  "귀면도": {
+    "name": "귀면도",
+    "category": "무기",
+    "price": 120,
+    "markets": [
+      2,
+      3
+    ],
+    "desc": "칼등에 귀신 얼굴을 새긴 넓은 칼. 도법에 맞음, 위력 +26",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 26,
+        "style": "도법"
+      }
+    ],
+    "grade": "양품"
+  },
+  "현철대도": {
+    "name": "현철대도",
+    "category": "무기",
+    "price": 280,
+    "markets": [
+      3,
+      4
+    ],
+    "desc": "현철을 섞어 벼린 큰 칼. 도법에 맞음, 위력 +50",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 50,
+        "style": "도법"
+      }
+    ],
+    "grade": "명품",
+    "gimmick": {
+      "name": "묵직한 날",
+      "power": 6,
+      "text": "위력 +6푼."
+    }
+  },
+  "혈룡보도": {
+    "name": "혈룡보도",
+    "category": "무기",
+    "price": 500,
+    "markets": [
+      4,
+      5
+    ],
+    "desc": "붉은 무늬가 도는 보도. 도법에 맞음, 위력 +80",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 80,
+        "style": "도법"
+      }
+    ],
+    "grade": "보물",
+    "gimmick": {
+      "name": "핏빛 날",
+      "lifesteal": 6,
+      "low_hp": 15,
+      "text": "체력 절반 이하에서 위력 +1할 5푼, 준 피해의 6푼을 체력으로 흡수."
+    }
+  },
+  "백목창": {
+    "name": "백목창",
+    "category": "무기",
+    "price": 40,
+    "markets": [
+      1,
+      2
+    ],
+    "desc": "흰 나무 자루의 창. 창법에 맞음, 위력 +10",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 10,
+        "style": "창법"
+      }
+    ],
+    "grade": "범품"
+  },
+  "강철창": {
+    "name": "강철창",
+    "category": "무기",
+    "price": 120,
+    "markets": [
+      2,
+      3
+    ],
+    "desc": "강철로 벼린 장창. 창법에 맞음, 위력 +26",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 26,
+        "style": "창법"
+      }
+    ],
+    "grade": "양품"
+  },
+  "현철창": {
+    "name": "현철창",
+    "category": "무기",
+    "price": 280,
+    "markets": [
+      3,
+      4
+    ],
+    "desc": "현철 날을 단 창. 창법에 맞음, 위력 +50",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 50,
+        "style": "창법"
+      }
+    ],
+    "grade": "명품",
+    "gimmick": {
+      "name": "뚫는 끝",
+      "pierce": 20,
+      "text": "적의 방어 2할 무시."
+    }
+  },
+  "용담창": {
+    "name": "용담창",
+    "category": "무기",
+    "price": 500,
+    "markets": [
+      4,
+      5
+    ],
+    "desc": "용의 담력을 품었다는 명창. 창법에 맞음, 위력 +80",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 80,
+        "style": "창법"
+      }
+    ],
+    "grade": "보물",
+    "gimmick": {
+      "name": "선수",
+      "opening": 30,
+      "accuracy": 8,
+      "text": "명중 +8푼, 첫 합 위력 +3할."
+    }
+  },
+  "박달곤": {
+    "name": "박달곤",
+    "category": "무기",
+    "price": 40,
+    "markets": [
+      1,
+      2
+    ],
+    "desc": "단단한 박달나무 곤봉. 봉법에 맞음, 위력 +10",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 10,
+        "style": "봉법"
+      }
+    ],
+    "grade": "범품"
+  },
+  "철곤": {
+    "name": "철곤",
+    "category": "무기",
+    "price": 120,
+    "markets": [
+      2,
+      3
+    ],
+    "desc": "쇠로 만든 곤봉. 봉법에 맞음, 위력 +26",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 26,
+        "style": "봉법"
+      }
+    ],
+    "grade": "양품"
+  },
+  "오금곤": {
+    "name": "오금곤",
+    "category": "무기",
+    "price": 280,
+    "markets": [
+      3,
+      4
+    ],
+    "desc": "다섯 쇠를 섞은 곤봉. 봉법에 맞음, 위력 +50",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 50,
+        "style": "봉법"
+      }
+    ],
+    "grade": "명품",
+    "gimmick": {
+      "name": "누르는 무게",
+      "weaken": {
+        "percent": 8,
+        "rounds": 2
+      },
+      "text": "맞힌 적의 위력을 2합 동안 8푼 깎는다."
+    }
+  },
+  "타룡신봉": {
+    "name": "타룡신봉",
+    "category": "무기",
+    "price": 500,
+    "markets": [
+      4,
+      5
+    ],
+    "desc": "용을 때려잡았다는 신봉. 봉법에 맞음, 위력 +80",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 80,
+        "style": "봉법"
+      }
+    ],
+    "grade": "보물",
+    "gimmick": {
+      "name": "용을 치는 봉",
+      "stun": 10,
+      "weaken": {
+        "percent": 12,
+        "rounds": 2
+      },
+      "text": "맞힌 적의 위력을 2합 동안 1할 2푼 깎는다, 맞히면 1할 확률로 적이 다음 합에 손을 쓰지 못한다."
+    }
+  },
+  "가죽권대": {
+    "name": "가죽 권대",
+    "category": "무기",
+    "price": 40,
+    "markets": [
+      1,
+      2
+    ],
+    "desc": "손을 감싸는 가죽 띠. 권법에 맞음, 위력 +10",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 10,
+        "style": "권법"
+      }
+    ],
+    "grade": "범품"
+  },
+  "강철권갑": {
+    "name": "강철 권갑",
+    "category": "무기",
+    "price": 120,
+    "markets": [
+      2,
+      3
+    ],
+    "desc": "강철 판을 덧댄 권갑. 권법에 맞음, 위력 +26",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 26,
+        "style": "권법"
+      }
+    ],
+    "grade": "양품"
+  },
+  "현철권갑": {
+    "name": "현철 권갑",
+    "category": "무기",
+    "price": 280,
+    "markets": [
+      3,
+      4
+    ],
+    "desc": "현철로 만든 권갑. 권법에 맞음, 위력 +50",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 50,
+        "style": "권법"
+      }
+    ],
+    "grade": "명품",
+    "gimmick": {
+      "name": "쇠 주먹",
+      "crit": 5,
+      "text": "회심 확률 +5푼."
+    }
+  },
+  "금강권갑": {
+    "name": "금강 권갑",
+    "category": "무기",
+    "price": 500,
+    "markets": [
+      4,
+      5
+    ],
+    "desc": "금강석 가루를 입힌 권갑. 권법에 맞음, 위력 +80",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 80,
+        "style": "권법"
+      }
+    ],
+    "grade": "보물",
+    "gimmick": {
+      "name": "금강의 손",
+      "guard": 8,
+      "power": 5,
+      "text": "위력 +5푼, 맞힌 합에 받는 피해 -8푼."
+    }
+  },
+  "사슴가죽장갑": {
+    "name": "사슴가죽 장갑",
+    "category": "무기",
+    "price": 40,
+    "markets": [
+      1,
+      2
+    ],
+    "desc": "손목을 보호하는 장갑. 장법에 맞음, 위력 +10",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 10,
+        "style": "장법"
+      }
+    ],
+    "grade": "범품"
+  },
+  "철사장갑": {
+    "name": "철사 장갑",
+    "category": "무기",
+    "price": 120,
+    "markets": [
+      2,
+      3
+    ],
+    "desc": "철사를 엮은 장갑. 장법에 맞음, 위력 +26",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 26,
+        "style": "장법"
+      }
+    ],
+    "grade": "양품"
+  },
+  "천잠장갑": {
+    "name": "천잠 장갑",
+    "category": "무기",
+    "price": 280,
+    "markets": [
+      3,
+      4
+    ],
+    "desc": "천잠사로 짠 장갑. 장법에 맞음, 위력 +50",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 50,
+        "style": "장법"
+      }
+    ],
+    "grade": "명품",
+    "gimmick": {
+      "name": "기운을 잇는 실",
+      "qi_back": 2,
+      "text": "맞힐 때 내력 2푼 회복."
+    }
+  },
+  "화룡장갑": {
+    "name": "화룡 장갑",
+    "category": "무기",
+    "price": 500,
+    "markets": [
+      4,
+      5
+    ],
+    "desc": "불에도 타지 않는 장갑. 장법에 맞음, 위력 +80",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 80,
+        "style": "장법"
+      }
+    ],
+    "grade": "보물",
+    "gimmick": {
+      "name": "화룡의 숨",
+      "burn": 20,
+      "power": 4,
+      "text": "위력 +4푼, 맞힌 적이 두 합 동안 준 피해의 2할을 더 입는다."
+    }
+  },
+  "비도묶음": {
+    "name": "비도 묶음",
+    "category": "무기",
+    "price": 40,
+    "markets": [
+      1,
+      2
+    ],
+    "desc": "잘 벼린 비도 한 묶음. 암기에 맞음, 위력 +10",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 10,
+        "style": "암기"
+      }
+    ],
+    "grade": "범품"
+  },
+  "강철비도": {
+    "name": "강철 비도",
+    "category": "무기",
+    "price": 120,
+    "markets": [
+      2,
+      3
+    ],
+    "desc": "강철 비도 스물네 자루. 암기에 맞음, 위력 +26",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 26,
+        "style": "암기"
+      }
+    ],
+    "grade": "양품"
+  },
+  "현철비침": {
+    "name": "현철 비침",
+    "category": "무기",
+    "price": 280,
+    "markets": [
+      3,
+      4
+    ],
+    "desc": "현철로 만든 가는 침. 암기에 맞음, 위력 +50",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 50,
+        "style": "암기"
+      }
+    ],
+    "grade": "명품",
+    "gimmick": {
+      "name": "곧은 침",
+      "accuracy": 10,
+      "text": "명중 +1할."
+    }
+  },
+  "천녀비침": {
+    "name": "천녀 비침",
+    "category": "무기",
+    "price": 500,
+    "markets": [
+      4,
+      5
+    ],
+    "desc": "꽃비처럼 뿌리는 비침. 암기에 맞음, 위력 +80",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 80,
+        "style": "암기"
+      }
+    ],
+    "grade": "보물",
+    "gimmick": {
+      "name": "천녀의 손",
+      "poison": 10,
+      "crit": 6,
+      "text": "회심 확률 +6푼, 적을 중독시킨다(독 위력 10)."
+    }
+  },
+  "낡은검": {
+    "name": "낡은 검",
+    "category": "무기",
+    "price": 10,
+    "markets": [],
+    "desc": "날이 조금 이가 빠졌지만 곧다. 검법에 맞음, 위력 +5",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 5,
+        "style": "검법"
+      }
+    ],
+    "grade": "범품",
+    "no_drop": true
+  },
+  "낡은도": {
+    "name": "낡은 도",
+    "category": "무기",
+    "price": 10,
+    "markets": [],
+    "desc": "무겁고 투박한 칼. 도법에 맞음, 위력 +5",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 5,
+        "style": "도법"
+      }
+    ],
+    "grade": "범품",
+    "no_drop": true
+  },
+  "낡은창": {
+    "name": "낡은 창",
+    "category": "무기",
+    "price": 10,
+    "markets": [],
+    "desc": "자루에 손때가 까맣게 묻었다. 창법에 맞음, 위력 +5",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 5,
+        "style": "창법"
+      }
+    ],
+    "grade": "범품",
+    "no_drop": true
+  },
+  "낡은곤봉": {
+    "name": "낡은 곤봉",
+    "category": "무기",
+    "price": 10,
+    "markets": [],
+    "desc": "여러 번 부러졌다 이어 붙인 곤봉. 봉법에 맞음, 위력 +5",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 5,
+        "style": "봉법"
+      }
+    ],
+    "grade": "범품",
+    "no_drop": true
+  },
+  "낡은권대": {
+    "name": "낡은 권대",
+    "category": "무기",
+    "price": 10,
+    "markets": [],
+    "desc": "피와 땀이 밴 가죽 띠. 권법에 맞음, 위력 +5",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 5,
+        "style": "권법"
+      }
+    ],
+    "grade": "범품",
+    "no_drop": true
+  },
+  "낡은장갑": {
+    "name": "낡은 장갑",
+    "category": "무기",
+    "price": 10,
+    "markets": [],
+    "desc": "손끝이 해진 가죽 장갑. 장법에 맞음, 위력 +5",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 5,
+        "style": "장법"
+      }
+    ],
+    "grade": "범품",
+    "no_drop": true
+  },
+  "낡은비도": {
+    "name": "낡은 비도",
+    "category": "무기",
+    "price": 10,
+    "markets": [],
+    "desc": "녹을 벗겨 낸 비도 몇 자루. 암기에 맞음, 위력 +5",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 5,
+        "style": "암기"
+      }
+    ],
+    "grade": "범품",
+    "no_drop": true
+  },
+  "생사단": {
+    "name": "생사단",
+    "category": "금단",
+    "price": 0,
+    "karma_price": 1,
+    "always": true,
+    "markets": [
+      5
+    ],
+    "desc": "죽은 자의 몫을 당겨 쓰는 단약. 체력과 내력이 가득 차고 네 기량이 30씩 오른다. 카르마로 거래한다.",
+    "effects": [
+      {
+        "type": "heal",
+        "stat": "hp",
+        "percent": 100
+      },
+      {
+        "type": "heal",
+        "stat": "qi",
+        "percent": 100
+      },
+      {
+        "type": "stat",
+        "stat": "external",
+        "amount": 30
+      },
+      {
+        "type": "stat",
+        "stat": "internal",
+        "amount": 30
+      },
+      {
+        "type": "stat",
+        "stat": "martial",
+        "amount": 30
+      },
+      {
+        "type": "stat",
+        "stat": "mind",
+        "amount": 30
+      }
+    ],
+    "grade": "신물"
+  },
+  "운명의패": {
+    "name": "운명의 패",
+    "category": "밀서",
+    "price": 0,
+    "karma_price": 1,
+    "always": true,
+    "markets": [
+      5
+    ],
+    "desc": "수상한 누군가가 내미는 패 한 장. 천마의 체력이 1할 줄어든 채 싸움이 시작된다. 카르마로 거래한다.",
+    "effects": [
+      {
+        "type": "boss_weaken",
+        "percent": 10
+      }
+    ],
+    "grade": "보물"
+  },
+  "낙일검법비급": {
+    "name": "낙일검법 비급",
+    "category": "비급",
+    "price": 430,
+    "markets": [
+      3,
+      4,
+      5
+    ],
+    "desc": "검법 낙일검법을 익힌다. (위력 1.52배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "낙일검법"
+      }
+    ]
+  },
+  "낙월도법비급": {
+    "name": "낙월도법 비급",
+    "category": "비급",
+    "price": 190,
+    "markets": [
+      2,
+      3
+    ],
+    "desc": "도법 낙월도법을 익힌다. (위력 1.25배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "낙월도법"
+      }
+    ]
+  },
+  "회풍도법비급": {
+    "name": "회풍도법 비급",
+    "category": "비급",
+    "price": 190,
+    "markets": [
+      2,
+      3
+    ],
+    "desc": "도법 회풍도법을 익힌다. (위력 1.25배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "회풍도법"
+      }
+    ]
+  },
+  "단혼도법비급": {
+    "name": "단혼도법 비급",
+    "category": "비급",
+    "price": 430,
+    "markets": [
+      3,
+      4,
+      5
+    ],
+    "desc": "도법 단혼도법을 익힌다. (위력 1.52배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "단혼도법"
+      }
+    ]
+  },
+  "풍뢰도법비급": {
+    "name": "풍뢰도법 비급",
+    "category": "비급",
+    "price": 190,
+    "markets": [
+      2,
+      3
+    ],
+    "desc": "도법 풍뢰도법을 익힌다. (위력 1.25배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "풍뢰도법"
+      }
+    ]
+  },
+  "오호창법비급": {
+    "name": "오행창법 비급",
+    "category": "비급",
+    "price": 50,
+    "markets": [
+      1,
+      2
+    ],
+    "desc": "창법 오행창법을 익힌다. (위력 1.12배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "오호창법"
+      }
+    ]
+  },
+  "이화창법비급": {
+    "name": "이화창법 비급",
+    "category": "비급",
+    "price": 190,
+    "markets": [
+      2,
+      3
+    ],
+    "desc": "창법 이화창법을 익힌다. (위력 1.25배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "이화창법"
+      }
+    ]
+  },
+  "악가창법비급": {
+    "name": "악가창법 비급",
+    "category": "비급",
+    "price": 430,
+    "markets": [
+      3,
+      4,
+      5
+    ],
+    "desc": "창법 악가창법을 익힌다. (위력 1.5배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "악가창법"
+      }
+    ]
+  },
+  "칠탐사창비급": {
+    "name": "칠탐사창 비급",
+    "category": "비급",
+    "price": 190,
+    "markets": [
+      2,
+      3
+    ],
+    "desc": "창법 칠탐사창을 익힌다. (위력 1.25배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "칠탐사창"
+      }
+    ]
+  },
+  "낙혼창법비급": {
+    "name": "낙혼창법 비급",
+    "category": "비급",
+    "price": 190,
+    "markets": [
+      2,
+      3
+    ],
+    "desc": "창법 낙혼창법을 익힌다. (위력 1.25배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "낙혼창법"
+      }
+    ]
+  },
+  "뇌정창법비급": {
+    "name": "뇌정창법 비급",
+    "category": "비급",
+    "price": 430,
+    "markets": [
+      3,
+      4,
+      5
+    ],
+    "desc": "창법 뇌정창법을 익힌다. (위력 1.52배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "뇌정창법"
+      }
+    ]
+  },
+  "청룡창법비급": {
+    "name": "청룡창법 비급",
+    "category": "비급",
+    "price": 430,
+    "markets": [
+      3,
+      4,
+      5
+    ],
+    "desc": "창법 청룡창법을 익힌다. (위력 1.52배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "청룡창법"
+      }
+    ]
+  },
+  "나한곤법비급": {
+    "name": "나한곤법 비급",
+    "category": "비급",
+    "price": 190,
+    "markets": [
+      2,
+      3
+    ],
+    "desc": "봉법 나한곤법을 익힌다. (위력 1.25배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "나한곤법"
+      }
+    ]
+  },
+  "천지곤법비급": {
+    "name": "천지곤법 비급",
+    "category": "비급",
+    "price": 190,
+    "markets": [
+      2,
+      3
+    ],
+    "desc": "봉법 천지곤법을 익힌다. (위력 1.25배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "천지곤법"
+      }
+    ]
+  },
+  "풍마곤법비급": {
+    "name": "풍마곤법 비급",
+    "category": "비급",
+    "price": 190,
+    "markets": [
+      2,
+      3
+    ],
+    "desc": "봉법 풍마곤법을 익힌다. (위력 1.25배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "풍마곤법"
+      }
+    ]
+  },
+  "여의곤법비급": {
+    "name": "여의곤법 비급",
+    "category": "비급",
+    "price": 430,
+    "markets": [
+      3,
+      4,
+      5
+    ],
+    "desc": "봉법 여의곤법을 익힌다. (위력 1.52배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "여의곤법"
+      }
+    ]
+  },
+  "항마곤법비급": {
+    "name": "항마곤법 비급",
+    "category": "비급",
+    "price": 430,
+    "markets": [
+      3,
+      4,
+      5
+    ],
+    "desc": "봉법 항마곤법을 익힌다. (위력 1.52배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "항마곤법"
+      }
+    ]
+  },
+  "맹호권비급": {
+    "name": "맹호권 비급",
+    "category": "비급",
+    "price": 190,
+    "markets": [
+      2,
+      3,
+      4
+    ],
+    "desc": "권법 맹호권을 익힌다. (위력 1.28배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "맹호권"
+      }
+    ]
+  },
+  "구궁권비급": {
+    "name": "구궁권 비급",
+    "category": "비급",
+    "price": 430,
+    "markets": [
+      3,
+      4,
+      5
+    ],
+    "desc": "권법 구궁권을 익힌다. (위력 1.52배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "구궁권"
+      }
+    ]
+  },
+  "파산권비급": {
+    "name": "파산권 비급",
+    "category": "비급",
+    "price": 190,
+    "markets": [
+      2,
+      3,
+      4
+    ],
+    "desc": "권법 파산권을 익힌다. (위력 1.3배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "파산권"
+      }
+    ]
+  },
+  "철사장비급": {
+    "name": "철사장 비급",
+    "category": "비급",
+    "price": 50,
+    "markets": [
+      1,
+      2
+    ],
+    "desc": "장법 철사장을 익힌다. (위력 1.12배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "철사장"
+      }
+    ]
+  },
+  "한빙면장비급": {
+    "name": "음풍장 비급",
+    "category": "비급",
+    "price": 430,
+    "markets": [
+      3,
+      4,
+      5
+    ],
+    "desc": "장법 음풍장을 익힌다. (위력 1.52배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "한빙면장"
+      }
+    ]
+  },
+  "대력금강장비급": {
+    "name": "대력금강장 비급",
+    "category": "비급",
+    "price": 430,
+    "markets": [
+      3,
+      4,
+      5
+    ],
+    "desc": "장법 대력금강장을 익힌다. (위력 1.52배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "대력금강장"
+      }
+    ]
+  },
+  "매화침법비급": {
+    "name": "산화침법 비급",
+    "category": "비급",
+    "price": 190,
+    "markets": [
+      2,
+      3
+    ],
+    "desc": "암기 산화침법을 익힌다. (위력 1.25배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "매화침법"
+      }
+    ]
+  },
+  "철련자술비급": {
+    "name": "철련자술 비급",
+    "category": "비급",
+    "price": 190,
+    "markets": [
+      2,
+      3,
+      4
+    ],
+    "desc": "암기 철련자술을 익힌다. (위력 1.27배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "철련자술"
+      }
+    ]
+  },
+  "낭아표법비급": {
+    "name": "낭아표법 비급",
+    "category": "비급",
+    "price": 190,
+    "markets": [
+      2,
+      3
+    ],
+    "desc": "암기 낭아표법을 익힌다. (위력 1.25배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "낭아표법"
+      }
+    ]
+  },
+  "청강검": {
+    "name": "청강검",
+    "category": "무기",
+    "price": 190,
+    "markets": [
+      2,
+      3,
+      4
+    ],
+    "desc": "푸른빛이 도는 잘 벼린 검. 검법에 맞음, 위력 +38",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 38,
+        "style": "검법"
+      }
+    ],
+    "grade": "양품"
+  },
+  "자전검": {
+    "name": "자전검",
+    "category": "무기",
+    "price": 380,
+    "markets": [
+      3,
+      4
+    ],
+    "desc": "번개 무늬가 도는 명검. 검법에 맞음, 위력 +65",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 65,
+        "style": "검법"
+      }
+    ],
+    "grade": "명품",
+    "gimmick": {
+      "name": "자전",
+      "crit": 6,
+      "stun": 6,
+      "text": "회심 확률 +6푼, 맞히면 6푼 확률로 적이 다음 합에 손을 쓰지 못한다."
+    }
+  },
+  "안령도": {
+    "name": "안령도",
+    "category": "무기",
+    "price": 190,
+    "markets": [
+      2,
+      3,
+      4
+    ],
+    "desc": "기러기 깃처럼 가볍고 날이 긴 칼. 도법에 맞음, 위력 +38",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 38,
+        "style": "도법"
+      }
+    ],
+    "grade": "양품"
+  },
+  "항마대도": {
+    "name": "항마대도",
+    "category": "무기",
+    "price": 380,
+    "markets": [
+      3,
+      4
+    ],
+    "desc": "마를 베려고 벼렸다는 큰 칼. 도법에 맞음, 위력 +65",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 65,
+        "style": "도법"
+      }
+    ],
+    "grade": "명품",
+    "gimmick": {
+      "name": "항마",
+      "vs_side": {
+        "마도": 25
+      },
+      "text": "마도의 적에게 위력 +2할 5푼."
+    }
+  },
+  "장팔사모": {
+    "name": "장팔사모",
+    "category": "무기",
+    "price": 190,
+    "markets": [
+      2,
+      3,
+      4
+    ],
+    "desc": "뱀처럼 굽은 날의 긴 창. 창법에 맞음, 위력 +38",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 38,
+        "style": "창법"
+      }
+    ],
+    "grade": "양품"
+  },
+  "방천화극": {
+    "name": "방천화극",
+    "category": "무기",
+    "price": 380,
+    "markets": [
+      3,
+      4
+    ],
+    "desc": "초승달 날이 달린 극. 창법에 맞음, 위력 +65",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 65,
+        "style": "창법"
+      }
+    ],
+    "grade": "명품",
+    "gimmick": {
+      "name": "화극의 갈고리",
+      "stun": 6,
+      "power": 3,
+      "text": "위력 +3푼, 맞히면 6푼 확률로 적이 다음 합에 손을 쓰지 못한다."
+    }
+  },
+  "제미곤": {
+    "name": "제미곤",
+    "category": "무기",
+    "price": 190,
+    "markets": [
+      2,
+      3,
+      4
+    ],
+    "desc": "눈썹 높이로 맞춘 단단한 곤. 봉법에 맞음, 위력 +38",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 38,
+        "style": "봉법"
+      }
+    ],
+    "grade": "양품"
+  },
+  "반룡곤": {
+    "name": "반룡곤",
+    "category": "무기",
+    "price": 380,
+    "markets": [
+      3,
+      4
+    ],
+    "desc": "용 무늬를 감은 쇠곤. 봉법에 맞음, 위력 +65",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 65,
+        "style": "봉법"
+      }
+    ],
+    "grade": "명품",
+    "gimmick": {
+      "name": "감기는 곤",
+      "stun": 6,
+      "power": 3,
+      "text": "위력 +3푼, 맞히면 6푼 확률로 적이 다음 합에 손을 쓰지 못한다."
+    }
+  },
+  "호피권갑": {
+    "name": "호피 권갑",
+    "category": "무기",
+    "price": 190,
+    "markets": [
+      2,
+      3,
+      4
+    ],
+    "desc": "호랑이 가죽을 덧댄 권갑. 권법에 맞음, 위력 +38",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 38,
+        "style": "권법"
+      }
+    ],
+    "grade": "양품"
+  },
+  "용린권갑": {
+    "name": "용린 권갑",
+    "category": "무기",
+    "price": 380,
+    "markets": [
+      3,
+      4
+    ],
+    "desc": "비늘처럼 쇠를 엮은 권갑. 권법에 맞음, 위력 +65",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 65,
+        "style": "권법"
+      }
+    ],
+    "grade": "명품",
+    "gimmick": {
+      "name": "용비늘",
+      "guard": 6,
+      "power": 2,
+      "text": "위력 +2푼, 맞힌 합에 받는 피해 -6푼."
+    }
+  },
+  "흑사장갑": {
+    "name": "흑사 장갑",
+    "category": "무기",
+    "price": 190,
+    "markets": [
+      2,
+      3,
+      4
+    ],
+    "desc": "검은 철사로 엮은 장갑. 장법에 맞음, 위력 +38",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 38,
+        "style": "장법"
+      }
+    ],
+    "grade": "양품"
+  },
+  "금사장갑": {
+    "name": "금사 장갑",
+    "category": "무기",
+    "price": 380,
+    "markets": [
+      3,
+      4
+    ],
+    "desc": "금실을 섞어 짠 장갑. 장법에 맞음, 위력 +65",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 65,
+        "style": "장법"
+      }
+    ],
+    "grade": "명품",
+    "gimmick": {
+      "name": "스며드는 장력",
+      "burn": 10,
+      "text": "맞힌 적이 두 합 동안 준 피해의 1할을 더 입는다."
+    }
+  },
+  "유엽표": {
+    "name": "유엽표",
+    "category": "무기",
+    "price": 190,
+    "markets": [
+      2,
+      3,
+      4
+    ],
+    "desc": "버들잎 모양의 표창 묶음. 암기에 맞음, 위력 +38",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 38,
+        "style": "암기"
+      }
+    ],
+    "grade": "양품"
+  },
+  "매화침통": {
+    "name": "매화침통",
+    "category": "무기",
+    "price": 380,
+    "markets": [
+      3,
+      4
+    ],
+    "desc": "매화 무늬 통에서 침을 쏘아 낸다. 암기에 맞음, 위력 +65",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 65,
+        "style": "암기"
+      }
+    ],
+    "grade": "명품",
+    "gimmick": {
+      "name": "독 묻은 침",
+      "poison": 8,
+      "text": "적을 중독시킨다(독 위력 8)."
+    }
+  },
+  "매화숫돌": {
+    "name": "숫돌",
+    "category": "도구",
+    "price": 70,
+    "markets": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "desc": "검날을 갈며 검로를 되짚는다. 쓰면 주무공 성취 +25. 검법이 아니면 절반.",
+    "effects": [
+      {
+        "type": "mastery",
+        "amount": 25,
+        "style": "검법"
+      }
+    ],
+    "grade": "범품"
+  },
+  "벽력검유": {
+    "name": "검날 기름",
+    "category": "도구",
+    "price": 60,
+    "markets": [
+      2,
+      3,
+      4
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "battle_only": true,
+    "desc": "검날에 먹이면 기운이 오래 머문다. 전투에서 쓰면 세 합 동안 주는 피해 +4할. 검법이 아니면 절반.",
+    "effects": [
+      {
+        "type": "atk_buff",
+        "percent": 40,
+        "rounds": 3,
+        "style": "검법"
+      }
+    ],
+    "grade": "양품"
+  },
+  "베기짚단": {
+    "name": "볏짚 묶음",
+    "category": "도구",
+    "price": 70,
+    "markets": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "desc": "볏짚을 베며 손을 익힌다. 쓰면 주무공 성취 +25. 도법이 아니면 절반.",
+    "effects": [
+      {
+        "type": "mastery",
+        "amount": 25,
+        "style": "도법"
+      }
+    ],
+    "grade": "범품"
+  },
+  "맹호도유": {
+    "name": "칼날 기름",
+    "category": "도구",
+    "price": 60,
+    "markets": [
+      2,
+      3,
+      4
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "battle_only": true,
+    "desc": "칼날에 먹이면 베는 힘이 무거워진다. 전투에서 쓰면 세 합 동안 주는 피해 +4할. 도법이 아니면 절반.",
+    "effects": [
+      {
+        "type": "atk_buff",
+        "percent": 40,
+        "rounds": 3,
+        "style": "도법"
+      }
+    ],
+    "grade": "양품"
+  },
+  "납창추": {
+    "name": "창끝 추",
+    "category": "도구",
+    "price": 70,
+    "markets": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "desc": "창끝에 달아 찌르기를 단련한다. 쓰면 주무공 성취 +25. 창법이 아니면 절반.",
+    "effects": [
+      {
+        "type": "mastery",
+        "amount": 25,
+        "style": "창법"
+      }
+    ],
+    "grade": "범품"
+  },
+  "파갑창날": {
+    "name": "철갑 뚫는 창날",
+    "category": "도구",
+    "price": 60,
+    "markets": [
+      2,
+      3,
+      4
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "battle_only": true,
+    "desc": "갑옷을 뚫으려고 따로 벼린 창날. 전투에서 쓰면 세 합 동안 주는 피해 +4할. 창법이 아니면 절반.",
+    "effects": [
+      {
+        "type": "atk_buff",
+        "percent": 40,
+        "rounds": 3,
+        "style": "창법"
+      }
+    ],
+    "grade": "양품"
+  },
+  "무쇠수련곤": {
+    "name": "수련용 쇠곤",
+    "category": "도구",
+    "price": 70,
+    "markets": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "desc": "평소의 세 배 무게인 쇠곤. 쓰면 주무공 성취 +25. 봉법이 아니면 절반.",
+    "effects": [
+      {
+        "type": "mastery",
+        "amount": 25,
+        "style": "봉법"
+      }
+    ],
+    "grade": "범품"
+  },
+  "쇠테고리": {
+    "name": "쇠테 고리",
+    "category": "도구",
+    "price": 60,
+    "markets": [
+      2,
+      3,
+      4
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "battle_only": true,
+    "desc": "곤 끝에 끼우면 타격이 무거워진다. 전투에서 쓰면 세 합 동안 주는 피해 +4할. 봉법이 아니면 절반.",
+    "effects": [
+      {
+        "type": "atk_buff",
+        "percent": 40,
+        "rounds": 3,
+        "style": "봉법"
+      }
+    ],
+    "grade": "양품"
+  },
+  "철사모래자루": {
+    "name": "모래 자루",
+    "category": "도구",
+    "price": 70,
+    "markets": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "desc": "주먹을 단련하는 모래 자루. 쓰면 주무공 성취 +25. 권법이 아니면 절반.",
+    "effects": [
+      {
+        "type": "mastery",
+        "amount": 25,
+        "style": "권법"
+      }
+    ],
+    "grade": "범품"
+  },
+  "철지환": {
+    "name": "쇠가락지",
+    "category": "도구",
+    "price": 60,
+    "markets": [
+      2,
+      3,
+      4
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "battle_only": true,
+    "desc": "손가락에 끼워 주먹을 무겁게 하는 쇠고리. 전투에서 쓰면 세 합 동안 주는 피해 +4할. 권법이 아니면 절반.",
+    "effects": [
+      {
+        "type": "atk_buff",
+        "percent": 40,
+        "rounds": 3,
+        "style": "권법"
+      }
+    ],
+    "grade": "양품"
+  },
+  "철사항아리": {
+    "name": "모래 항아리",
+    "category": "도구",
+    "price": 70,
+    "markets": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "desc": "손바닥을 꽂아 단련하는 항아리. 쓰면 주무공 성취 +25. 장법이 아니면 절반.",
+    "effects": [
+      {
+        "type": "mastery",
+        "amount": 25,
+        "style": "장법"
+      }
+    ],
+    "grade": "범품"
+  },
+  "열양가루": {
+    "name": "열양 가루",
+    "category": "도구",
+    "price": 60,
+    "markets": [
+      2,
+      3,
+      4
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "battle_only": true,
+    "desc": "손바닥에 바르면 장력이 뜨거워진다. 전투에서 쓰면 세 합 동안 주는 피해 +4할. 장법이 아니면 절반.",
+    "effects": [
+      {
+        "type": "atk_buff",
+        "percent": 40,
+        "rounds": 3,
+        "style": "장법"
+      }
+    ],
+    "grade": "양품"
+  },
+  "과녁목패": {
+    "name": "수련 과녁",
+    "category": "도구",
+    "price": 70,
+    "markets": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "desc": "바람 부는 날 맞히는 작은 과녁. 쓰면 주무공 성취 +25. 암기가 아니면 절반.",
+    "effects": [
+      {
+        "type": "mastery",
+        "amount": 25,
+        "style": "암기"
+      }
+    ],
+    "grade": "범품"
+  },
+  "마비독물": {
+    "name": "마비 독",
+    "category": "도구",
+    "price": 60,
+    "markets": [
+      2,
+      3,
+      4
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "battle_only": true,
+    "desc": "암기 끝에 바르는 독. 맞은 자리가 저려 몸이 굳는다. 전투에서 쓰면 세 합 동안 주는 피해 +4할. 암기가 아니면 절반.",
+    "effects": [
+      {
+        "type": "atk_buff",
+        "percent": 40,
+        "rounds": 3,
+        "style": "암기"
+      }
+    ],
+    "grade": "양품"
+  },
+  "창궁고검": {
+    "name": "창궁고검",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "남궁 가주가 대대로 차던 옛 검. 검법에 맞음, 위력 +70",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 70,
+        "style": "검법"
+      }
+    ],
+    "grade": "보물",
+    "gimmick": {
+      "name": "창궁의 위엄",
+      "power": 8,
+      "execute": {
+        "below": 30,
+        "percent": 25
+      },
+      "text": "위력 +8푼, 적 체력 3할 이하에서 위력 +2할 5푼."
+    },
+    "origin": "남궁세가",
+    "no_drop": true
+  },
+  "오호맹도": {
+    "name": "오호맹도",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "〈넷째형〉의 칼을 다시 벼린 칼. 다섯 호랑이가 새겨져 있다. 도법에 맞음, 위력 +70",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 70,
+        "style": "도법"
+      }
+    ],
+    "grade": "보물",
+    "gimmick": {
+      "name": "맹호의 기세",
+      "opening": 30,
+      "low_hp": 20,
+      "text": "첫 합 위력 +3할, 체력 절반 이하에서 위력 +2할."
+    },
+    "origin": "하북팽가",
+    "no_drop": true
+  },
+  "철마장창": {
+    "name": "철마장창",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "철마표국 총표두의 창. 창대에 표기를 묶던 자리가 있다. 창법에 맞음, 위력 +70",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 70,
+        "style": "창법"
+      }
+    ],
+    "grade": "보물",
+    "gimmick": {
+      "name": "표행의 창",
+      "guard": 8,
+      "execute": {
+        "below": 25,
+        "percent": 25
+      },
+      "text": "적 체력 2할 5푼 이하에서 위력 +2할 5푼, 맞힌 합에 받는 피해 -8푼."
+    },
+    "origin": "표국표사",
+    "no_drop": true
+  },
+  "녹죽봉": {
+    "name": "녹죽봉",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "역대 방주가 전해 온 푸른 대나무 봉. 쇠보다 질기다. 봉법에 맞음, 위력 +70",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 70,
+        "style": "봉법"
+      }
+    ],
+    "grade": "보물",
+    "gimmick": {
+      "name": "방주의 대나무",
+      "qi_back": 3,
+      "accuracy": 10,
+      "text": "명중 +1할, 맞힐 때 내력 3푼 회복."
+    },
+    "origin": "개방제자",
+    "no_drop": true
+  },
+  "혈권갑": {
+    "name": "혈권갑",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "권마가 묻어 둔 권갑. 안쪽에 오래된 피가 배어 있다. 권법에 맞음, 위력 +70",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 70,
+        "style": "권법"
+      }
+    ],
+    "grade": "보물",
+    "gimmick": {
+      "name": "피 끓는 주먹",
+      "low_hp": 25,
+      "lifesteal": 4,
+      "text": "체력 절반 이하에서 위력 +2할 5푼, 준 피해의 4푼을 체력으로 흡수."
+    },
+    "origin": "권마계승",
+    "no_drop": true
+  },
+  "적련장갑": {
+    "name": "적련 장갑",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "연못의 쇠붙이로 벼린 장갑. 뜨거움을 받아 낸다. 장법에 맞음, 위력 +70",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 70,
+        "style": "장법"
+      }
+    ],
+    "grade": "보물",
+    "gimmick": {
+      "name": "붉은 손",
+      "burn": 15,
+      "lifesteal": 5,
+      "text": "준 피해의 5푼을 체력으로 흡수, 맞힌 적이 두 합 동안 준 피해의 1할 5푼을 더 입는다."
+    },
+    "origin": "혈지생환",
+    "no_drop": true
+  },
+  "무흔비도": {
+    "name": "무흔비도",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "이름을 잊은 어느 문주의 비도. 던진 흔적이 남지 않는다. 암기에 맞음, 위력 +70",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 70,
+        "style": "암기"
+      }
+    ],
+    "grade": "보물",
+    "gimmick": {
+      "name": "흔적 없는 날",
+      "accuracy": 15,
+      "crit": 8,
+      "opening": 20,
+      "text": "명중 +1할 5푼, 회심 확률 +8푼, 첫 합 위력 +2할."
+    },
+    "origin": "하오문",
+    "no_drop": true
+  },
+  "웅담": {
+    "name": "곰 쓸개",
+    "category": "영약",
+    "price": 95,
+    "markets": [
+      1,
+      2
+    ],
+    "desc": "달여 먹으면 외공이 30 오른다.",
+    "effects": [
+      {
+        "type": "stat",
+        "stat": "external",
+        "amount": 30
+      }
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "drop_only": false,
+    "grade": "양품"
+  },
+  "사담": {
+    "name": "뱀 쓸개",
+    "category": "영약",
+    "price": 95,
+    "markets": [
+      1,
+      2
+    ],
+    "desc": "말려 삼키면 내공이 30 오른다.",
+    "effects": [
+      {
+        "type": "stat",
+        "stat": "internal",
+        "amount": 30
+      }
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "drop_only": false,
+    "grade": "양품"
+  },
+  "호골": {
+    "name": "호랑이 뼈",
+    "category": "영약",
+    "price": 160,
+    "markets": [],
+    "desc": "고아 마시면 외공과 무리가 25씩 오른다.",
+    "effects": [
+      {
+        "type": "stat",
+        "stat": "external",
+        "amount": 25
+      },
+      {
+        "type": "stat",
+        "stat": "martial",
+        "amount": 25
+      }
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "drop_only": true,
+    "grade": "명품"
+  },
+  "금안": {
+    "name": "금안조의 눈",
+    "category": "영약",
+    "price": 190,
+    "markets": [],
+    "desc": "빛을 읽는다는 새의 눈. 삼키면 무리가 60 오른다.",
+    "effects": [
+      {
+        "type": "stat",
+        "stat": "martial",
+        "amount": 60
+      }
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "drop_only": true,
+    "grade": "명품"
+  },
+  "호주": {
+    "name": "은호의 구슬",
+    "category": "영약",
+    "price": 190,
+    "markets": [],
+    "desc": "여우가 입에 물고 있던 구슬. 머금으면 심경이 60 오른다.",
+    "effects": [
+      {
+        "type": "stat",
+        "stat": "mind",
+        "amount": 60
+      }
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "drop_only": true,
+    "grade": "명품"
+  },
+  "영물내단": {
+    "name": "영물의 내단",
+    "category": "영약",
+    "price": 360,
+    "markets": [
+      3,
+      4,
+      5
+    ],
+    "desc": "오래 묵은 영물의 내단. 삼키면 내공이 70 오르고 체력과 내력이 차오른다.",
+    "effects": [
+      {
+        "type": "stat",
+        "stat": "internal",
+        "amount": 70
+      },
+      {
+        "type": "heal",
+        "stat": "hp",
+        "percent": 40
+      },
+      {
+        "type": "heal",
+        "stat": "qi",
+        "percent": 40
+      }
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "drop_only": false,
+    "grade": "보물"
+  },
+  "천년내단": {
+    "name": "천년 내단",
+    "category": "영약",
+    "price": 850,
+    "markets": [
+      5
+    ],
+    "desc": "천 년의 기운이 뭉친 구슬. 삼키면 네 기량이 40씩 오르고 체력과 내력이 가득 찬다.",
+    "effects": [
+      {
+        "type": "stat",
+        "stat": "external",
+        "amount": 40
+      },
+      {
+        "type": "stat",
+        "stat": "internal",
+        "amount": 40
+      },
+      {
+        "type": "stat",
+        "stat": "martial",
+        "amount": 40
+      },
+      {
+        "type": "stat",
+        "stat": "mind",
+        "amount": 40
+      },
+      {
+        "type": "heal",
+        "stat": "hp",
+        "percent": 100
+      },
+      {
+        "type": "heal",
+        "stat": "qi",
+        "percent": 100
+      }
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "drop_only": true,
+    "grade": "신물"
+  },
+  "유성검법비급": {
+    "name": "유성검법 비급",
+    "category": "비급",
+    "price": 190,
+    "markets": [
+      2,
+      3,
+      4
+    ],
+    "desc": "검법 유성검법을 익힌다. (위력 1.27배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "유성검법"
+      }
+    ]
+  },
+  "청정심공비급": {
+    "name": "청정심공 비급",
+    "category": "비급",
+    "price": 180,
+    "markets": [
+      2,
+      3
+    ],
+    "desc": "심공 청정심공을 익힌다.",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "청정심공"
+      }
+    ]
+  },
+  "호체공비급": {
+    "name": "호체공 비급",
+    "category": "비급",
+    "price": 180,
+    "markets": [
+      2,
+      3,
+      4
+    ],
+    "desc": "심공 호체공을 익힌다.",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "호체공"
+      }
+    ]
+  },
+  "구전현공비급": {
+    "name": "구전현공 비급",
+    "category": "비급",
+    "price": 320,
+    "markets": [
+      3,
+      4,
+      5
+    ],
+    "desc": "심공 구전현공을 익힌다.",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "구전현공"
+      }
+    ]
+  },
+  "답설무흔비급": {
+    "name": "답설무흔 비급",
+    "category": "비급",
+    "price": 320,
+    "markets": [
+      3,
+      4,
+      5
+    ],
+    "desc": "경공 답설무흔을 익힌다.",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "답설무흔"
+      }
+    ]
+  },
+  "백리신법비급": {
+    "name": "백리신법 비급",
+    "category": "비급",
+    "price": 180,
+    "markets": [
+      2,
+      3
+    ],
+    "desc": "경공 백리신법을 익힌다.",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "백리신법"
+      }
+    ]
+  },
+  "태아검": {
+    "name": "태아검",
+    "category": "무기",
+    "price": 1100,
+    "markets": [
+      5
+    ],
+    "desc": "옛 왕의 칼이라 전하는 명검. 쇠를 진흙처럼 가른다. 검법에 맞음, 위력 +100",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 100,
+        "style": "검법"
+      }
+    ],
+    "grade": "신물",
+    "gimmick": {
+      "name": "왕의 칼",
+      "power": 10,
+      "pierce": 40,
+      "crit": 8,
+      "text": "위력 +1할, 회심 확률 +8푼, 적의 방어 4할 무시."
+    },
+    "no_drop": true
+  },
+  "청룡언월도": {
+    "name": "청룡언월도",
+    "category": "무기",
+    "price": 1100,
+    "markets": [
+      5
+    ],
+    "desc": "옛 장수의 큰 칼을 본떠 벼렸다는 언월도. 한 번 내려치면 말이 멎는다. 도법에 맞음, 위력 +100",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 100,
+        "style": "도법"
+      }
+    ],
+    "grade": "신물",
+    "gimmick": {
+      "name": "언월의 무게",
+      "power": 12,
+      "stun": 10,
+      "lifesteal": 5,
+      "text": "위력 +1할 2푼, 준 피해의 5푼을 체력으로 흡수, 맞히면 1할 확률로 적이 다음 합에 손을 쓰지 못한다."
+    },
+    "no_drop": true
+  },
+  "패왕금창": {
+    "name": "패왕금창",
+    "category": "무기",
+    "price": 1100,
+    "markets": [
+      5
+    ],
+    "desc": "패왕이 들었다는 금빛 창. 찌르면 진이 갈라진다. 창법에 맞음, 위력 +100",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 100,
+        "style": "창법"
+      }
+    ],
+    "grade": "신물",
+    "gimmick": {
+      "name": "패왕의 일격",
+      "pierce": 35,
+      "opening": 25,
+      "crit": 6,
+      "text": "회심 확률 +6푼, 적의 방어 3할 5푼 무시, 첫 합 위력 +2할 5푼."
+    },
+    "no_drop": true
+  },
+  "여의신곤": {
+    "name": "여의신곤",
+    "category": "무기",
+    "price": 1100,
+    "markets": [
+      5
+    ],
+    "desc": "무게를 마음대로 바꾼다는 전설의 곤. 봉법에 맞음, 위력 +100",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 100,
+        "style": "봉법"
+      }
+    ],
+    "grade": "신물",
+    "gimmick": {
+      "name": "뜻대로 내리누름",
+      "stun": 14,
+      "weaken": {
+        "percent": 15,
+        "rounds": 2
+      },
+      "power": 6,
+      "text": "위력 +6푼, 맞힌 적의 위력을 2합 동안 1할 5푼 깎는다, 맞히면 1할 4푼 확률로 적이 다음 합에 손을 쓰지 못한다."
+    },
+    "no_drop": true
+  },
+  "파천신권갑": {
+    "name": "파천신권갑",
+    "category": "무기",
+    "price": 1100,
+    "markets": [
+      5
+    ],
+    "desc": "하늘을 쳤다는 권사가 낀 권갑. 권법에 맞음, 위력 +100",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 100,
+        "style": "권법"
+      }
+    ],
+    "grade": "신물",
+    "gimmick": {
+      "name": "하늘을 치는 주먹",
+      "power": 10,
+      "crit": 8,
+      "guard": 6,
+      "text": "위력 +1할, 회심 확률 +8푼, 맞힌 합에 받는 피해 -6푼."
+    },
+    "no_drop": true
+  },
+  "빙화장갑": {
+    "name": "빙화 장갑",
+    "category": "무기",
+    "price": 1100,
+    "markets": [
+      5
+    ],
+    "desc": "얼음과 불을 함께 품은 장갑. 손바닥이 닿은 자리가 얼었다가 탄다. 장법에 맞음, 위력 +100",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 100,
+        "style": "장법"
+      }
+    ],
+    "grade": "신물",
+    "gimmick": {
+      "name": "빙화의 장력",
+      "burn": 20,
+      "weaken": {
+        "percent": 12,
+        "rounds": 2
+      },
+      "qi_back": 3,
+      "text": "맞힐 때 내력 3푼 회복, 맞힌 적이 두 합 동안 준 피해의 2할을 더 입는다, 맞힌 적의 위력을 2합 동안 1할 2푼 깎는다."
+    },
+    "no_drop": true
+  },
+  "만화신침": {
+    "name": "만화신침",
+    "category": "무기",
+    "price": 1100,
+    "markets": [
+      5
+    ],
+    "desc": "꽃잎처럼 흩어지는 침을 쏘는 통. 만든 이의 이름이 남지 않았다. 암기에 맞음, 위력 +100",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 100,
+        "style": "암기"
+      }
+    ],
+    "grade": "신물",
+    "gimmick": {
+      "name": "만 송이 꽃",
+      "poison": 14,
+      "crit": 10,
+      "accuracy": 12,
+      "text": "명중 +1할 2푼, 회심 확률 +1할, 적을 중독시킨다(독 위력 14)."
+    },
+    "no_drop": true
+  },
+  "흑룡피갑": {
+    "name": "흑룡피갑",
+    "category": "방어구",
+    "price": 380,
+    "markets": [
+      3,
+      4
+    ],
+    "desc": "검은 비늘 가죽으로 지은 갑옷. 받는 피해 -26",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "armor",
+        "bonus": 26
+      }
+    ],
+    "grade": "명품",
+    "gimmick": {
+      "name": "가시 비늘",
+      "thorns": 10,
+      "text": "받은 피해의 1할을 되돌린다."
+    }
+  },
+  "운룡보의": {
+    "name": "운룡보의",
+    "category": "방어구",
+    "price": 640,
+    "markets": [
+      4,
+      5
+    ],
+    "desc": "구름무늬 비단옷. 입으면 몸이 먼저 비켜선다. 받는 피해 -38",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "armor",
+        "bonus": 38
+      }
+    ],
+    "grade": "보물",
+    "gimmick": {
+      "name": "구름 걸음",
+      "auto_evade": 8,
+      "text": "8푼 확률로 공격을 저절로 피한다."
+    }
+  },
+  "현무갑": {
+    "name": "현무갑",
+    "category": "방어구",
+    "price": 700,
+    "markets": [
+      5
+    ],
+    "desc": "거북 등딱지로 엮은 옛 갑옷. 받는 피해 -42",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "armor",
+        "bonus": 42
+      }
+    ],
+    "grade": "보물",
+    "gimmick": {
+      "name": "현무의 등",
+      "guard_pct": 6,
+      "thorns": 8,
+      "text": "받는 피해 -6푼, 받은 피해의 8푼을 되돌린다."
+    },
+    "no_drop": true
+  },
+  "금강불괴갑": {
+    "name": "금강불괴갑",
+    "category": "방어구",
+    "price": 1100,
+    "markets": [
+      5
+    ],
+    "desc": "칼도 불도 들지 않는다는 전설의 보갑. 받는 피해 -48",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "armor",
+        "bonus": 48
+      }
+    ],
+    "grade": "신물",
+    "gimmick": {
+      "name": "금강불괴",
+      "guard_pct": 8,
+      "start_ward": 12,
+      "seal_immune": true,
+      "text": "받는 피해 -8푼, 싸움을 시작할 때 최대 체력 1할 2푼의 호신 기운을 두른다, 점혈에 걸리지 않는다."
+    },
+    "no_drop": true
+  },
+  "금강호신단": {
+    "name": "금강호신단",
+    "category": "소비품",
+    "price": 130,
+    "markets": [
+      2,
+      3,
+      4
+    ],
+    "desc": "삼키면 최대 체력 2할 5푼의 호신 기운이 몸을 두른다.",
+    "effects": [
+      {
+        "type": "ward",
+        "percent": 25
+      }
+    ],
+    "consumable": true,
+    "stock_qty": 2,
+    "grade": "명품",
+    "battle_only": true
+  },
+  "회천단": {
+    "name": "회천단",
+    "category": "소비품",
+    "price": 240,
+    "markets": [
+      4,
+      5
+    ],
+    "desc": "체력과 내력을 7할 채우고 독을 몰아낸다.",
+    "effects": [
+      {
+        "type": "heal",
+        "stat": "hp",
+        "percent": 70
+      },
+      {
+        "type": "heal",
+        "stat": "qi",
+        "percent": 70
+      },
+      {
+        "type": "cure",
+        "what": "poison"
+      }
+    ],
+    "consumable": true,
+    "stock_qty": 3,
+    "grade": "보물"
+  },
+  "칠보영단": {
+    "name": "칠보영단",
+    "category": "소비품",
+    "price": 660,
+    "markets": [
+      5
+    ],
+    "desc": "체력과 내력을 가득 채우고 내상을 씻으며 네 기량이 25씩 오른다.",
+    "effects": [
+      {
+        "type": "heal",
+        "stat": "hp",
+        "percent": 100
+      },
+      {
+        "type": "heal",
+        "stat": "qi",
+        "percent": 100
+      },
+      {
+        "type": "cure",
+        "what": "injury",
+        "amount": 3
+      },
+      {
+        "type": "stat",
+        "stat": "external",
+        "amount": 25
+      },
+      {
+        "type": "stat",
+        "stat": "internal",
+        "amount": 25
+      },
+      {
+        "type": "stat",
+        "stat": "martial",
+        "amount": 25
+      },
+      {
+        "type": "stat",
+        "stat": "mind",
+        "amount": 25
+      }
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "grade": "보물"
+  },
+  "신농백초환": {
+    "name": "신농백초환",
+    "category": "소비품",
+    "price": 900,
+    "markets": [
+      5
+    ],
+    "desc": "백 가지 풀로 빚은 환약. 쓰러질 때 끌어모을 힘이 하나 더 생기고 체력을 5할 채운다.",
+    "effects": [
+      {
+        "type": "heal",
+        "stat": "hp",
+        "percent": 50
+      },
+      {
+        "type": "last_strength",
+        "amount": 1
+      }
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "grade": "신물"
+  },
+  "벽력탄": {
+    "name": "벽력탄",
+    "category": "도구",
+    "price": 140,
+    "markets": [
+      3,
+      4
+    ],
+    "desc": "터지면 적 최대 체력의 1할 2푼을 깎고 다음 합에 손을 쓰지 못하게 한다. 천마에게는 3분의 1만 든다.",
+    "effects": [
+      {
+        "type": "burst",
+        "percent": 12
+      },
+      {
+        "type": "enemy_stun"
+      }
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "grade": "명품",
+    "battle_only": true
+  },
+  "산공분": {
+    "name": "산공분",
+    "category": "도구",
+    "price": 120,
+    "markets": [
+      3,
+      4
+    ],
+    "desc": "뿌리면 세 합 동안 적의 위력을 2할 5푼 깎는다.",
+    "effects": [
+      {
+        "type": "enemy_weaken",
+        "percent": 25,
+        "rounds": 3
+      }
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "grade": "명품",
+    "battle_only": true
+  },
+  "천심향": {
+    "name": "천심향",
+    "category": "도구",
+    "price": 150,
+    "markets": [
+      3,
+      4
+    ],
+    "desc": "피우면 세 합 동안 위력이 3할 오르고 다음 공격은 반드시 회심이다. 어떤 계열이든 든다.",
+    "effects": [
+      {
+        "type": "atk_buff",
+        "percent": 30,
+        "rounds": 3
+      },
+      {
+        "type": "next_crit"
+      }
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "grade": "명품",
+    "battle_only": true
+  },
+  "명사수련첩": {
+    "name": "명사의 수련첩",
+    "category": "도구",
+    "price": 170,
+    "markets": [
+      2,
+      3,
+      4
+    ],
+    "desc": "이름난 사범이 적어 둔 수련의 요령. 쓰는 주무공의 성취가 60 오른다.",
+    "effects": [
+      {
+        "type": "mastery",
+        "amount": 60
+      }
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "grade": "명품"
+  },
+  "천금연마석": {
+    "name": "천금연마석",
+    "category": "도구",
+    "price": 340,
+    "markets": [
+      4,
+      5
+    ],
+    "desc": "천금을 줘도 못 구한다는 연마석. 쓰는 주무공의 성취가 120 오른다.",
+    "effects": [
+      {
+        "type": "mastery",
+        "amount": 120
+      }
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "grade": "보물"
+  },
+  "표운보비급": {
+    "name": "표운보 비급",
+    "category": "비급",
+    "price": 180,
+    "markets": [
+      2,
+      3,
+      4
+    ],
+    "desc": "경공 표운보를 익힌다.",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "표운보"
+      }
+    ]
+  },
+  "연환도법비급": {
+    "name": "연환도법 비급",
+    "category": "비급",
+    "price": 190,
+    "markets": [
+      2,
+      3,
+      4
+    ],
+    "desc": "도법 연환도법을 익힌다. (위력 1.26배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "연환도법"
+      }
+    ]
+  },
+  "금강도법비급": {
+    "name": "금강도법 비급",
+    "category": "비급",
+    "price": 430,
+    "markets": [
+      3,
+      4,
+      5
+    ],
+    "desc": "도법 금강도법을 익힌다. (위력 1.52배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "금강도법"
+      }
+    ]
+  },
+  "천축곤법비급": {
+    "name": "천축곤법 비급",
+    "category": "비급",
+    "price": 190,
+    "markets": [
+      2,
+      3,
+      4
+    ],
+    "desc": "봉법 천축곤법을 익힌다. (위력 1.26배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "천축곤법"
+      }
+    ]
+  },
+  "금고곤법비급": {
+    "name": "금고곤법 비급",
+    "category": "비급",
+    "price": 430,
+    "markets": [
+      3,
+      4,
+      5
+    ],
+    "desc": "봉법 금고곤법을 익힌다. (위력 1.52배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "금고곤법"
+      }
+    ]
+  },
+  "금골환": {
+    "name": "금골환",
+    "grade": "보물",
+    "price": 385,
+    "markets": [
+      5
+    ],
+    "category": "영약",
+    "desc": "뼈마디에 금빛이 돈다는 환약. 외공이 120 오른다.",
+    "effects": [
+      {
+        "type": "stat",
+        "stat": "external",
+        "amount": 120
+      }
+    ]
+  },
+  "천기비록": {
+    "name": "천기 비록",
+    "grade": "보물",
+    "price": 385,
+    "markets": [
+      5
+    ],
+    "category": "영약",
+    "desc": "수많은 고수의 수를 적은 책. 무리가 120 오른다.",
+    "effects": [
+      {
+        "type": "stat",
+        "stat": "martial",
+        "amount": 120
+      }
+    ]
+  },
+  "설련고": {
+    "name": "설련고",
+    "grade": "보물",
+    "price": 385,
+    "markets": [
+      5
+    ],
+    "category": "영약",
+    "desc": "설산의 연꽃을 달여 굳힌 약. 심경이 120 오른다.",
+    "effects": [
+      {
+        "type": "stat",
+        "stat": "mind",
+        "amount": 120
+      }
+    ]
+  },
+  "천뢰탄": {
+    "name": "천뢰탄",
+    "grade": "보물",
+    "price": 235,
+    "markets": [
+      5
+    ],
+    "category": "도구",
+    "consumable": true,
+    "desc": "터지면 적 최대 체력의 2할을 깎고 다음 합에 손을 쓰지 못하게 한다. 천마에게는 3분의 1만 든다.",
+    "effects": [
+      {
+        "type": "burst",
+        "percent": 20
+      },
+      {
+        "type": "enemy_stun"
+      }
+    ]
+  },
+  "파공분": {
+    "name": "파공분",
+    "grade": "보물",
+    "price": 190,
+    "markets": [
+      5
+    ],
+    "category": "도구",
+    "consumable": true,
+    "desc": "뿌리면 세 합 동안 적의 위력을 4할 깎는다.",
+    "effects": [
+      {
+        "type": "enemy_weaken",
+        "percent": 40,
+        "rounds": 3
+      }
+    ]
+  },
+  "천심비향": {
+    "name": "천심비향",
+    "grade": "보물",
+    "price": 250,
+    "markets": [
+      5
+    ],
+    "category": "도구",
+    "consumable": true,
+    "desc": "피우면 세 합 동안 위력이 5할 오르고 다음 공격은 반드시 회심이다. 어떤 계열이든 든다.",
+    "effects": [
+      {
+        "type": "atk_buff",
+        "percent": 50,
+        "rounds": 3
+      },
+      {
+        "type": "next_crit"
+      }
+    ]
+  },
+  "불괴호신단": {
+    "name": "불괴호신단",
+    "grade": "보물",
+    "price": 235,
+    "markets": [
+      5
+    ],
+    "category": "소비품",
+    "consumable": true,
+    "desc": "삼키면 최대 체력 4할 5푼의 호신 기운이 몸을 두른다.",
+    "effects": [
+      {
+        "type": "ward",
+        "percent": 45
+      }
+    ]
+  },
+  "천마봉지도": {
+    "name": "천마봉의 지도",
+    "grade": "보물",
+    "price": 250,
+    "markets": [
+      5
+    ],
+    "always": true,
+    "category": "밀서",
+    "desc": "뒷길과 호위가 바뀌는 때를 그린 지도. 천마의 체력이 1할 줄어든 채 싸움이 시작된다.",
+    "effects": [
+      {
+        "type": "boss_weaken",
+        "percent": 10
+      }
+    ]
+  },
+  "역천부": {
+    "name": "역천부",
+    "grade": "신물",
+    "price": 0,
+    "karma_price": 2,
+    "markets": [
+      5
+    ],
+    "always": true,
+    "category": "밀서",
+    "desc": "천마의 호신 기운에 틈을 내는 부적. 천마의 체력이 1할 5푼 줄어든 채 싸움이 시작된다. 카르마로 거래한다.",
+    "effects": [
+      {
+        "type": "boss_weaken",
+        "percent": 15
+      }
+    ]
+  },
+  "꺼지지않는불씨": {
+    "name": "꺼지지 않는 불씨",
+    "grade": "신물",
+    "price": 0,
+    "karma_price": 2,
+    "markets": [
+      5
+    ],
+    "always": true,
+    "category": "금단",
+    "desc": "품에 넣어 두면 쓰러질 때 끌어모을 힘이 하나 더 생긴다. 카르마로 거래한다.",
+    "effects": [
+      {
+        "type": "last_strength",
+        "amount": 1
+      }
+    ]
+  },
+  "이름지운비망록": {
+    "name": "이름 지운 비망록",
+    "grade": "보물",
+    "price": 0,
+    "karma_price": 1,
+    "markets": [
+      5
+    ],
+    "always": true,
+    "category": "금단",
+    "desc": "누가 썼는지 지워진 수련 기록. 쓰는 주무공의 성취가 200 오른다. 카르마로 거래한다.",
+    "effects": [
+      {
+        "type": "mastery",
+        "amount": 200
+      }
+    ],
+    "consumable": true
+  },
+  "천기서": {
+    "name": "천기서",
+    "grade": "신물",
+    "price": 0,
+    "karma_price": 2,
+    "markets": [
+      5
+    ],
+    "always": true,
+    "category": "금단",
+    "desc": "펼칠 때마다 글자가 바뀌는 책. 네 기량이 60씩 오른다. 카르마로 거래한다.",
+    "effects": [
+      {
+        "type": "stat",
+        "stat": "external",
+        "amount": 60
+      },
+      {
+        "type": "stat",
+        "stat": "internal",
+        "amount": 60
+      },
+      {
+        "type": "stat",
+        "stat": "martial",
+        "amount": 60
+      },
+      {
+        "type": "stat",
+        "stat": "mind",
+        "amount": 60
+      }
+    ]
+  },
+  "신병증표": {
+    "name": "신병 증표",
+    "grade": "신물",
+    "price": 0,
+    "karma_price": 3,
+    "markets": [
+      5
+    ],
+    "always": true,
+    "category": "금단",
+    "desc": "이름 모를 장인이 건네는 쇠패. 주무공에 맞는 신물 병기 하나를 내어 준다. 카르마로 거래한다.",
+    "effects": [
+      {
+        "type": "main_gear",
+        "grade": "신물"
+      }
+    ]
+  },
+  "수호금패": {
+    "name": "수호 금패",
+    "grade": "신물",
+    "price": 0,
+    "karma_price": 3,
+    "markets": [
+      5
+    ],
+    "always": true,
+    "category": "금단",
+    "desc": "쇠패를 내밀면 칼도 불도 들지 않는다는 금강불괴갑을 내어 준다. 카르마로 거래한다.",
+    "effects": [
+      {
+        "type": "main_gear",
+        "grade": "신물",
+        "slot": "armor"
+      }
+    ]
+  },
+  "낙엽검법비급": {
+    "name": "낙엽검법 비급",
+    "category": "비급",
+    "price": 190,
+    "markets": [
+      2,
+      3
+    ],
+    "desc": "검법 낙엽검법을 익힌다. (위력 1.25배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "낙엽검법"
+      }
+    ]
+  },
+  "십이로장권비급": {
+    "name": "십이로장권 비급",
+    "category": "비급",
+    "price": 190,
+    "markets": [
+      2,
+      3
+    ],
+    "desc": "권법 십이로장권을 익힌다. (위력 1.25배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "십이로장권"
+      }
+    ]
+  },
+  "비황표비급": {
+    "name": "비황표 비급",
+    "category": "비급",
+    "price": 190,
+    "markets": [
+      2,
+      3
+    ],
+    "desc": "암기 비황표를 익힌다. (위력 1.25배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "비황표"
+      }
+    ]
+  },
+  "벽파장비급": {
+    "name": "벽파장 비급",
+    "category": "비급",
+    "price": 190,
+    "markets": [
+      2,
+      3
+    ],
+    "desc": "장법 벽파장을 익힌다. (위력 1.25배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "벽파장"
+      }
+    ]
+  },
+  "단봉창법비급": {
+    "name": "단봉창법 비급",
+    "category": "비급",
+    "price": 190,
+    "markets": [
+      2,
+      3
+    ],
+    "desc": "창법 단봉창법을 익힌다. (위력 1.25배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "단봉창법"
+      }
+    ]
+  },
+  "벽공권비급": {
+    "name": "벽공권 비급",
+    "category": "비급",
+    "price": 430,
+    "markets": [
+      3,
+      4,
+      5
+    ],
+    "desc": "권법 벽공권을 익힌다. (위력 1.52배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "벽공권"
+      }
+    ]
+  },
+  "칠성도법비급": {
+    "name": "칠성도법 비급",
+    "category": "비급",
+    "price": 430,
+    "markets": [
+      3,
+      4,
+      5
+    ],
+    "desc": "도법 칠성도법을 익힌다. (위력 1.52배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "칠성도법"
+      }
+    ]
+  },
+  "복룡곤법비급": {
+    "name": "복룡곤법 비급",
+    "category": "비급",
+    "price": 430,
+    "markets": [
+      3,
+      4,
+      5
+    ],
+    "desc": "봉법 복룡곤법을 익힌다. (위력 1.52배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "복룡곤법"
+      }
+    ]
+  },
+  "오행도법비급": {
+    "name": "오행도법 비급",
+    "category": "비급",
+    "price": 50,
+    "markets": [
+      1,
+      2
+    ],
+    "desc": "도법 오행도법을 익힌다. (위력 1.12배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "오행도법"
+      }
+    ]
+  },
+  "오행곤법비급": {
+    "name": "오행곤법 비급",
+    "category": "비급",
+    "price": 50,
+    "markets": [
+      1,
+      2
+    ],
+    "desc": "봉법 오행곤법을 익힌다. (위력 1.12배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "오행곤법"
+      }
+    ]
+  },
+  "태허검결비급": {
+    "name": "태허검결 비급",
+    "category": "비급",
+    "price": 800,
+    "markets": [
+      5
+    ],
+    "desc": "검법 태허검결을 익힌다. (위력 1.9배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "태허검결"
+      }
+    ]
+  },
+  "무상도결비급": {
+    "name": "단애도결 비급",
+    "category": "비급",
+    "price": 800,
+    "markets": [
+      5
+    ],
+    "desc": "도법 단애도결을 익힌다. (위력 1.9배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "무상도결"
+      }
+    ]
+  },
+  "무상창결비급": {
+    "name": "파진창결 비급",
+    "category": "비급",
+    "price": 800,
+    "markets": [
+      5
+    ],
+    "desc": "창법 파진창결을 익힌다. (위력 1.9배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "무상창결"
+      }
+    ]
+  },
+  "무상곤결비급": {
+    "name": "부동곤결 비급",
+    "category": "비급",
+    "price": 800,
+    "markets": [
+      5
+    ],
+    "desc": "봉법 부동곤결을 익힌다. (위력 1.9배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "무상곤결"
+      }
+    ]
+  },
+  "천강권경비급": {
+    "name": "천강권경 비급",
+    "category": "비급",
+    "price": 800,
+    "markets": [
+      5
+    ],
+    "desc": "권법 천강권경을 익힌다. (위력 1.9배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "천강권경"
+      }
+    ]
+  },
+  "무상권결비급": {
+    "name": "허공권결 비급",
+    "category": "비급",
+    "price": 800,
+    "markets": [
+      5
+    ],
+    "desc": "권법 허공권결을 익힌다. (위력 1.9배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "무상권결"
+      }
+    ]
+  },
+  "만리추혼비급": {
+    "name": "만리추혼 비급",
+    "category": "비급",
+    "price": 800,
+    "markets": [
+      5
+    ],
+    "desc": "암기 만리추혼을 익힌다. (위력 1.9배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "만리추혼"
+      }
+    ]
+  },
+  "화운장결비급": {
+    "name": "화운장결 비급",
+    "category": "비급",
+    "price": 800,
+    "markets": [
+      5
+    ],
+    "desc": "장법 화운장결을 익힌다. (위력 1.9배)",
+    "effects": [
+      {
+        "type": "skill",
+        "skill": "화운장결"
+      }
+    ]
+  }
+}
