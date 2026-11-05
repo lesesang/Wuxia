@@ -547,9 +547,9 @@ test("별호와 명성", () => {
 test("명성의 이름은 성향과 경지를 따르고 천하제일인은 천마를 넘어선 사람뿐이다", () => {
   const p = new Player();
   p.fame = 500;
-  assert.equal(fameRank(p), "이름난 무인", "일류가 아무리 이름나도 일방의 명인은 아니다");
+  assert.equal(fameRank(p), "이름난 무인", "일류가 아무리 이름나도 일방의 고수는 아니다");
   p.realm = "화경";
-  assert.equal(fameRank(p), "당대의 고인");
+  assert.equal(fameRank(p), "당대의 고수");
   p.alignment.정도 = 300;
   assert.equal(fameRank(p), "만인의 대협");
   p.alignment.정도 = 0;
@@ -1649,7 +1649,7 @@ test("성향은 단계마다 혜택이 커지고 한 길에 집중하면 더 잘
   const low = new Player(); low.alignment.정도 = 100;
   const high = new Player(); high.alignment.정도 = 960;
   assert.ok(priceOf(high, "호골주") < priceOf(low, "호골주"));
-  assert.equal(alignTier(high.alignment).name, "일대종사");
+  assert.equal(alignTier(high.alignment).name, "천하대협");
   const clash = new Player(); clash.alignment.마도 = 200; clash.alignment.정도 = 10;
   clash.adjustAlignment("정도", 100);
   assert.equal(clash.alignment.마도, 140);
