@@ -1649,7 +1649,7 @@ test("성향은 단계마다 혜택이 커지고 한 길에 집중하면 더 잘
   const low = new Player(); low.alignment.정도 = 100;
   const high = new Player(); high.alignment.정도 = 960;
   assert.ok(priceOf(high, "호골주") < priceOf(low, "호골주"));
-  assert.equal(alignTier(high.alignment).name, "강호의 등불");
+  assert.equal(alignTier(high.alignment).name, "일대종사");
   const clash = new Player(); clash.alignment.마도 = 200; clash.alignment.정도 = 10;
   clash.adjustAlignment("정도", 100);
   assert.equal(clash.alignment.마도, 140);
