@@ -17,6 +17,8 @@ const ATTACK_USE_RATE = 0.5;
 const GRADE_BONUS = 0.25;       // 승급 1단계당 위력 계수 증가
 const MASTERY_BONUS = 0.003;    // 성취 1당 위력 계수 증가
 const EFFECT_GRADE_BONUS = 0.2; // 심공·경공 승급 1단계당 효과 증가율
+const EVADE_GRADE_BONUS = 0.1;
+const EVADE_MASTERY_BONUS = 0.001;
 
 export const START_SILVER = 30;
 export const HOME_ART_MASTERY = 40; // 출신이 오래 갈고닦은 무공의 처음 성취
@@ -133,6 +135,8 @@ export class Skill {
   effectValue(name) {
     const value = this.effect[name] || 0;
     if (value <= 0) return value;
+    // 회피는 쉽게 끝에 닿지 않도록 더디게 는다
+    if (name === "evade") return Math.trunc(value * (1 + this.gradesGained() * EVADE_GRADE_BONUS + this.mastery * EVADE_MASTERY_BONUS));
     return Math.trunc(value * (1 + this.gradesGained() * EFFECT_GRADE_BONUS + this.mastery * 0.002));
   }
 

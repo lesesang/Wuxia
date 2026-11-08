@@ -51,7 +51,8 @@
     "bonus_text": "공격이 적을 중독시킨다",
     "bonus": {
       "poison": 6
-    }
+    },
+    "house": true
   },
   "마교": {
     "name": "천마신교",
@@ -78,7 +79,8 @@
     "bonus_text": "주는 피해 5푼 증가",
     "bonus": {
       "damage": 5
-    }
+    },
+    "house": true
   },
   "하오문": {
     "name": "하오문",
@@ -197,7 +199,8 @@
       "damage": 5,
       "silver": 10
     },
-    "bonus_text": "주는 피해 5푼 증가, 얻는 은자 1할 증가"
+    "bonus_text": "주는 피해 5푼 증가, 얻는 은자 1할 증가",
+    "house": true
   },
   "제갈": {
     "name": "제갈세가",
@@ -207,6 +210,7 @@
       "crit": 4,
       "silver": 15
     },
-    "bonus_text": "회심의 일격 확률 4푼 증가, 얻는 은자 1할 5푼 증가"
+    "bonus_text": "회심의 일격 확률 4푼 증가, 얻는 은자 1할 5푼 증가",
+    "house": true
   }
 }

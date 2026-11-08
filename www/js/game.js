@@ -9,7 +9,7 @@ import { equipBestGear, grantStartGear, grantStartSkills,
 import { bonusFor, buy, equipmentBonus, openMarket, sell } from "./market.js";
 import {
   activeContent, addKarma, claimAchievements, clearCheckpoint, extraSlots, rewardTraits, loadCheckpoint, loadMeta, recordRun, saveCheckpoint,
-  legacyPowers, storeLegacy, takeProvisions, updateGlobalCodex, updateKnown, upgradeTraits,
+  legacyPowers, storeLegacy, canLeaveLegacy, sameLegacy, takeProvisions, updateGlobalCodex, updateKnown, upgradeTraits,
 } from "./meta.js";
 import { pick, pickWeighted, randInt, rng } from "./rng.js";
 import {
@@ -20,7 +20,7 @@ import {
 import { halpun, josa } from "./josa.js";
 
 const FINAL_UNLEASH_FROM = 880; // 평균 기량이 이보다 높으면 천마가 숨긴 힘을 꺼낸다
-const FINAL_UNLEASH_HP = 0.38;
+const FINAL_UNLEASH_HP = 0.28;
 const FINAL_UNLEASH_ATTACK = 0.2;
 const NATURAL_REGEN = 5;
 const MAX_TURN_REGEN = 30;
@@ -101,9 +101,10 @@ export class Game {
     this.player.content = activeContent(meta);
     this.player.person = settlePerson(originKey, person);
     const giftLines = DB.origins.origins[originKey].choose_start ? [] : grantStartSkills(this.player);
-    // 고른 유산은 바로 받지 않는다. 첫 해 안에 그 흔적을 찾아낸다
+    // 고른 유산은 바로 받지 않는다. 첫 해 안에 한 자리에서 한꺼번에 찾아낸다
     if (meta.legacy_open) this.player.pendingLegacy = legacyPicks.map((i) => meta.legacies[i])
-      .filter((e) => e && (e.kind === "skill" ? DB.skills[e.key] : DB.market[e.key])).slice(0, legacyPowers(meta).take);
+      .filter((e, i, all) => e && (e.kind === "skill" ? DB.skills[e.key] : DB.market[e.key]) && all.findIndex((x) => x && sameLegacy(x, e)) === i)
+      .slice(0, legacyPowers(meta).take);
     updateKnown(this.player.skills.map((s) => s.key));
     const intro = getChapterInfo(1);
     const provisionLines = provisions.length ? [`챙겨 온 채비: ${provisions.map((k) => DB.karma.provisions[k].name).join(", ")}`] : [];
@@ -114,6 +115,8 @@ export class Game {
   /** 이번 강호행에서 유산으로 남길 수 있는 것들 */
   legacyOptions() {
     const p = this.player;
+    if (!this.ending || !canLeaveLegacy(this.ending.key)) return [];
+    const stored = loadMeta().legacies;
     const { divine } = legacyPowers();
     // 신공은 유산을 끝까지 강화해야 남길 수 있다
     const skills = p.skills.filter((s) => GRADE_ORDER.indexOf(s.grade) >= 1 && (divine || s.grade !== "신공"))
@@ -124,7 +127,8 @@ export class Game {
     // 병장기 말고도 행낭의 귀한 물건(명품 이상의 도구, 영약, 서책)을 남길 수 있다
     const items = Object.entries(p.inventory).filter(([k, n]) => n > 0 && DB.market[k] && ["명품", "보물", "신물"].includes(DB.market[k].grade) && !DB.market[k].karma_price)
       .map(([k]) => ({ kind: "item", key: k, label: `${DB.market[k].name} (${DB.market[k].grade})` }));
-    return [...skills, ...gear, ...items];
+    // 이미 보관한 것은 다시 남기지 않는다
+    return [...skills, ...gear, ...items].filter((o) => !stored.some((l) => sameLegacy(l, o)));
   }
 
   /** 끝날 때 유산을 남긴다. 보관이 가득 찼으면 지울 것을 골라야 한다 */
@@ -146,16 +150,13 @@ export class Game {
     this.openStoryEvent();
   }
 
-  /** 그달의 일을 마쳤다. 다시 열어도 달의 처음으로 돌아가지 않게 저장한다. */
+  /** 그달의 일을 마쳤다. 저장은 다음 달로 넘어갈 때 하므로, 그 전에 다시 열면 이 달의 처음으로 돌아간다. */
   finishMonth() {
     this.pendingNext = true;
-    this.saveMonthEnd();
   }
 
-  /** 그달의 일을 마친 뒤의 저장. 결과 화면과 열린 장터로 돌아온다. */
-  saveMonthEnd() {
-    if (this.player?.alive && !this.ending) saveCheckpoint(this.player.toDict(), this.log, { pending: true, market: this.market });
-  }
+  /** 달 중간에는 저장하지 않는다 */
+  saveMonthEnd() {}
 
   /** 그달의 줄거리와 연계 인카운터를 연다. 천마봉 전에는 남은 연계를 먼저 끝낸다. */
   openStoryEvent() {
@@ -282,9 +283,8 @@ export class Game {
 
   /** 이어받기로 한 유산의 흔적을 이번 달에 찾아내는가. 첫 해가 끝나기 전에는 반드시 찾는다 */
   legacyFound() {
-    const left = this.player.pendingLegacy.length;
-    if (!left) return false;
-    return this.player.turn >= LEGACY_LAST_TURN - left || rng.random() < LEGACY_FIND_RATE;
+    if (!this.player.pendingLegacy.length) return false;
+    return this.player.turn >= LEGACY_LAST_TURN - 1 || rng.random() < LEGACY_FIND_RATE;
   }
 
   grow(stat) {
@@ -392,6 +392,7 @@ export class Game {
   // ---------- 이벤트 ----------
 
   chooseEvent(index) {
+    this.notice = null;
     if (!this.event) return;
     const state = this.event;
     const result = resolveChoice(this.player, state.key, index);
@@ -594,7 +595,8 @@ export class Game {
 
   startNextTurn() {
     const p = this.player;
-    const lines = [...this.commitCodex(), ...this.checkRealm()];
+    const realm = this.checkRealm();
+    const lines = [...this.commitCodex(), ...realm];
     p.turn += 1;
     // 달마다 저절로 차는 양에도 끝이 있어 요양할 일이 남는다
     const hp = Math.min(MAX_TURN_REGEN, NATURAL_REGEN + sumEffect(p.traits, "turn_regen", "hp_pct"));
@@ -616,6 +618,8 @@ export class Game {
     }
     this.pendingNext = false;
     this.enterTurn(lines);
+    // 그달이 사건으로 바로 열리면 기록이 가려지므로, 경지에 오른 소식을 사건 위에 따로 보인다
+    this.notice = this.event && realm.length ? realm : null;
   }
 
   /** 한 길에 집중한 무인은 달마다 그 길이 깊어진다. 단계가 오르면 알린다. */

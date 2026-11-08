@@ -219,6 +219,9 @@ export const activeContent = (data = loadMeta()) => data.content.filter((k) => !
 
 const WIN_ENDINGS = ["기본", "배드", "생사경"];
 export const legacyAvailable = (data = loadMeta()) => data.endings_seen.some((k) => WIN_ENDINGS.includes(k));
+/** 유산은 천마를 쓰러뜨린 사람만 남긴다 */
+export const canLeaveLegacy = (endingKey) => WIN_ENDINGS.includes(endingKey);
+export const sameLegacy = (a, b) => a.kind === b.kind && a.key === b.key;
 
 export function openLegacy() {
   const data = loadMeta();
@@ -251,6 +254,8 @@ export function upgradeLegacy() {
 /** 유산을 보관한다. 자리가 차면 지울 것을 골라야 한다. 지울 것을 고르지 않았으면 false */
 export function storeLegacy(entry, dropIndex = null) {
   const data = loadMeta();
+  // 같은 무공이나 물건은 둘 보관하지 않는다
+  if (data.legacies.some((l) => sameLegacy(l, entry))) return false;
   if (data.legacies.length >= legacyPowers(data).shelf) {
     if (dropIndex === null || !data.legacies[dropIndex]) return false;
     data.legacies.splice(dropIndex, 1);

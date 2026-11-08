@@ -28,11 +28,11 @@ export function unmetReason(player, requires) {
   if (r.skill && !player.hasSkill(r.skill)) return "필요한 무공이 없다";
   if (r.no_skill && player.hasSkill(r.no_skill)) return "이미 익혔다";
   if (r.sect && player.sect !== r.sect) return "다른 문파의 일이다";
-  if (r.no_sect && player.sect) return "이미 사문이 있다";
+  if (r.no_sect && player.sect) return "이미 몸담은 곳이 있다";
   if (r.gender && player.person?.gender !== r.gender) return "해당하지 않는다";
   if (r.not_sect?.includes(player.sect)) return "사문과 맞지 않는 일이다";
   if (r.not_dominant?.includes(player.dominantAlignment())) return "내 길과 맞지 않는다";
-  if (r.has_sect && !player.sect) return "사문이 없다";
+  if (r.has_sect && !player.sect) return "몸담은 곳이 없다";
   // sect_side: 사문이 없거나, 사문의 성향이 이 값일 때만 그 세력에 설 수 있다
   if (r.sect_side && player.sect && DB.sects[player.sect]?.alignment !== r.sect_side) return "사문이 허락하지 않는다";
   if (r.item && !(player.inventory[r.item] > 0)) return `${DB.market[r.item].name} 필요`;
@@ -248,13 +248,20 @@ function eventText(player, key) {
 
 /** 유산의 흔적을 찾는 장면. 같은 달에는 같은 장면이 나온다 */
 function legacyScene(player, event) {
-  const entry = player.pendingLegacy[0];
-  const seed = [...`${entry.key}${player.turn}`].reduce((total, c) => (total * 31 + c.codePointAt(0)) % 100003, 7);
+  const entries = player.pendingLegacy;
+  const seed = [...`${entries[0].key}${player.turn}`].reduce((total, c) => (total * 31 + c.codePointAt(0)) % 100003, 7);
   const finds = DB.karma.legacy.finds;
-  const list = finds[entry.kind];
-  const name = entry.kind === "skill" ? DB.skills[entry.key].name : DB.market[entry.key].name;
-  const fit = entry.origin === player.origin ? finds.same_origin : null;
-  return [event.scenes[seed % event.scenes.length].replaceAll("〈별호〉", entry.from), list[seed % list.length].replaceAll("〈유산〉", name), fit].filter(Boolean).join(" ");
+  // 여러 강호행의 별호가 한 자리에 함께 묻혀 있다
+  const names = [...new Set(entries.map((e) => e.from))];
+  const lines = [event.scenes[seed % event.scenes.length].replaceAll("〈별호〉", names[0])];
+  if (names.length > 1) lines.push(finds.many.replaceAll("〈별호들〉", names.slice(1).map((n) => `'${n}'`).join(", ")));
+  entries.forEach((entry, i) => {
+    const list = finds[entry.kind];
+    const name = entry.kind === "skill" ? DB.skills[entry.key].name : DB.market[entry.key].name;
+    lines.push(list[(seed + i) % list.length].replaceAll("〈유산〉", name));
+  });
+  if (entries.some((e) => e.origin === player.origin)) lines.push(finds.same_origin);
+  return lines.join(" ");
 }
 
 /** 유산 무공은 한 품계 낮아지고 상승을 넘지 않는다. 강화하면 그대로 온다 */
@@ -279,8 +286,12 @@ function inheritedGear(key, powers) {
 
 /** 찾아낸 유산 하나를 거둔다 */
 function takeFoundLegacy(player) {
-  const entry = player.pendingLegacy.shift();
-  if (!entry) return [];
+  const lines = [];
+  while (player.pendingLegacy.length) lines.push(...takeOneLegacy(player, player.pendingLegacy.shift()));
+  return lines;
+}
+
+function takeOneLegacy(player, entry) {
   const powers = legacyPowers(loadMeta());
   let name;
   let worn = false;
@@ -352,7 +363,10 @@ export function enemyIntro(player, enemyKey) {
 export function resolveChoice(player, key, index) {
   const choice = eventChoices(player, key)[index];
   if (!choice || !checkRequires(player, choice.requires)) return null;
-  const outcome = pickWeighted(choice.outcomes, choice.outcomes.map((o) => o.weight ?? 1));
+  // 결과에도 조건을 둘 수 있다. 기량이나 경지에 맞는 결과만 남긴다
+  const fits = choice.outcomes.filter((o) => checkRequires(player, o.requires));
+  const pool = fits.length ? fits : choice.outcomes;
+  const outcome = pickWeighted(pool, pool.map((o) => o.weight ?? 1));
   const effects = outcome.effects || {};
   // 지는 것이 정해진 일도 내 경지에 따라 그 모습이 다르다. 맞는 가장 높은 경지의 문장을 쓴다
   const tier = (outcome.realm_text || []).filter((t) => realmIndex(player.realm) >= realmIndex(t.realm_min)).pop();
@@ -532,6 +546,10 @@ export function grantStartGear(player) {
   const books = effects.filter((e) => e.type === "start_style_skill").length;
   const mastery = total("start_mastery", "amount") + Math.max(0, books - 1) * SPARE_BOOK_MASTERY;
   if (mastery) lines.push(...main.gainMastery(mastery));
+  // 숨을 먼저 익힌 무인은 심법의 성취를 쌓은 채로 시작한다
+  const breath = total("start_mindset_mastery", "amount");
+  const mind = breath && player.bestOfType("심공");
+  if (mind) lines.push(...mind.gainMastery(breath));
   equipBestGear(player);
   return lines;
 }
@@ -612,7 +630,7 @@ export function applyEffects(player, effects) {
 
   if (effects.join_sect && !player.sect) {
     player.sect = effects.join_sect;
-    summary.push(`${DB.sects[player.sect].name} 입문`);
+    summary.push(`${DB.sects[player.sect].name} ${DB.sects[player.sect].house ? "가솔이 됨" : "입문"}`);
     player.note(`${DB.sects[player.sect].name}에 들어갔다.`);
   }
 
@@ -743,6 +761,7 @@ export function validateEvents() {
       checkRequiresData(key, choice.requires);
       for (const outcome of choice.outcomes) {
         checkEffects(key, outcome.effects || {});
+        checkRequiresData(key, outcome.requires);
         const item = outcome.effects?.consume_item;
         if (item && !DB.market[item]) errors.push(`${key}: 없는 품목 ${item}`);
       }

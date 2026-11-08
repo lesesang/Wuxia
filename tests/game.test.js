@@ -660,35 +660,31 @@ test("저장은 달 시작 지점으로 복구된다", () => {
   assert.equal(early.player.turn, 2);
   assert.equal(early.player.silver, 77);
   assert.equal(early.pendingNext, false);
-  // 그달의 일을 마친 뒤에 끊기면 그 결과 화면이다
+  // 그달의 일을 마친 뒤라도 다음 달로 넘어가기 전에 끊기면 그달의 처음이다
+  const before = game.player.external;
   game.action("수련");
   const fresh = new Game();
   assert.ok(fresh.continueFromSave());
   assert.equal(fresh.player.turn, 2);
-  assert.equal(fresh.player.external, game.player.external, "한 일은 사라지지 않는다");
-  assert.ok(fresh.pendingNext);
-  assert.deepEqual(fresh.log, game.log);
-  fresh.advanceTurn();
-  assert.equal(fresh.player.turn, 3);
+  assert.equal(fresh.player.external, before);
+  assert.equal(fresh.pendingNext, false);
+  game.advanceTurn();
   assert.equal(loadCheckpoint().player.turn, 3);
 });
 
-test("장터에서 끊겨도 진열과 산 것이 남는다", () => {
+test("장터에서 끊기면 그달의 처음으로 돌아간다", () => {
   const game = newGame();
   toTurnEnd(game, 12);
+  const turn = loadCheckpoint().player.turn;
   game.player.silver = 500;
   game.advanceTurn();
   assert.ok(game.market);
-  const stock = game.market.stock.map((s) => s.key);
-  const key = stock.find((k) => !blockReason(game.player, k));
+  const key = game.market.stock.map((s) => s.key).find((k) => !blockReason(game.player, k));
   game.marketBuy(key);
   const fresh = new Game();
   assert.ok(fresh.continueFromSave());
-  assert.ok(fresh.market);
-  assert.deepEqual(fresh.market.stock.map((s) => s.key), stock);
-  assert.equal(fresh.player.silver, game.player.silver);
-  fresh.marketLeave();
-  assert.equal(fresh.player.turn, 13);
+  assert.ok(!fresh.market);
+  assert.equal(fresh.player.turn, turn);
 });
 
 test("120달에서 복구하면 천마봉 선택부터", () => {
@@ -823,7 +819,7 @@ test("성장 특성은 작은 수에서 두 배가 되지 않는다", () => {
   seed(5);
   let total = 0;
   for (let i = 0; i < 1000; i++) total += applyGrowth(1, ["오성"], "mind");
-  assert.ok(total > 1050 && total < 1150, String(total));
+  assert.ok(total > 1150 && total < 1250, String(total));
 });
 
 // ---------- 소속과 상황별 반응 ----------
@@ -1297,8 +1293,8 @@ test("능력치 기틀과 자질은 네 기량에 고르게 있다", () => {
   }
   const single = Object.values(DB.traits).filter((t) => !t.hidden && t.effects.length === 2);
   for (const stat of stats) {
-    assert.ok(single.some((t) => t.effects.some((e) => e.type === "start_stat" && e.stat === stat && e.amount === 120)
-      && t.effects.some((e) => e.type === "growth_rate" && e.stat === stat && e.percent === 15)), stat);
+    assert.ok(single.some((t) => t.effects.some((e) => e.type === "start_stat" && e.stat === stat && e.amount === 60)
+      && t.effects.some((e) => e.type === "growth_rate" && e.stat === stat && e.percent === 25)), stat);
   }
 });
 
@@ -2197,10 +2193,13 @@ test("유산은 천마를 쓰러뜨린 뒤 열리고, 이어받아도 남으며,
   first.start("무림초출");
   first.player.learnSkill(Skill.fromDict({ key: "양가창법", grade: "일절", mastery: 80 }));
   first.player.weapon = "운철보검";
-  first.finishGame(false);
+  first.finishGame(true, "기본");
   const options = first.legacyOptions();
   assert.ok(first.leaveLegacy(options.findIndex((o) => o.key === "양가창법")));
   assert.ok(!first.leaveLegacy(0), "한 판에 하나만 남긴다");
+  first.ending.legacyLeft = null;
+  assert.ok(!first.legacyOptions().some((o) => o.key === "양가창법"), "같은 무공은 둘 보관하지 않는다");
+  first.ending.legacyLeft = "양가창법";
   assert.equal(loadMeta().legacies.length, 1);
 
   const next = new Game();
@@ -2269,7 +2268,7 @@ test("유산 강화: 이어받을 수와 보관 수가 늘고, 단계와 품계�
   g.start("무림초출");
   g.player.learnSkill(Skill.fromDict({ key: "무극검결", grade: "신공", mastery: 10 }));
   g.player.weapon = "운철보검";
-  g.finishGame(false);
+  g.finishGame(true, "기본");
   assert.ok(g.legacyOptions().some((o) => o.key === "무극검결"));
   g.leaveLegacy(g.legacyOptions().findIndex((o) => o.key === "무극검결"));
   g.ending.legacyLeft = null;
@@ -2282,12 +2281,10 @@ test("유산 강화: 이어받을 수와 보관 수가 늘고, 단계와 품계�
   n.event = null;
   n.action("휴식");
   n.chooseEvent(0);
+  // 고른 유산은 한 자리에서 한꺼번에 이어받는다
   assert.equal(n.player.skills.find((s) => s.key === "무극검결").grade, "신공");
-  n.pendingNext = false;
-  n.event = null;
-  n.action("명상");
-  n.chooseEvent(0);
-  assert.equal(n.player.weapon, "운철보검");
+  assert.ok(n.player.weapon === "운철보검" || n.player.gear.includes("운철보검"));
+  assert.equal(n.player.pendingLegacy.length, 0);
   withKarma(0);
 });
 
@@ -3179,10 +3176,12 @@ test("상승 이상의 무공에만 묘리가 드러나고 모든 무공에 묘�
   p.qi = 999;
   b2.useSkill(blood);
   assert.ok(p.hp !== 10);
+  // 심법의 묘리는 운기하지 않아도 늘 흐른다
   const mind = new Skill("철마금신공");
+  p.skills.push(mind);
+  p.chosenArts.심공 = "철마금신공";
   const b3 = new Battle(p, new Enemy("낭인"));
-  b3.applyMindGimmick(mind);
-  assert.ok(b3.ward > 0 && b3.guard);
+  assert.ok(b3.ward > 0 && b3.mindGuard() > 0);
   p.hp = p.maxHp();
   b3.roundNum = 1;
   b3.enemyAttack();
@@ -3776,7 +3775,7 @@ test("호칭은 성별과 이름을 따르고 받침에 맞는 조사를 쓴다"
 });
 
 test("데이터의 자리표시는 모두 뜻이 있다", () => {
-  const leftovers = new Set(["별호", "유산", "이름", "기", "강", "기상인"]);
+  const leftovers = new Set(["별호", "별호들", "유산", "이름", "기", "강", "기상인"]);
   const person = { gender: "여", surname: "위", given: "서린" };
   const walk = (value) => {
     if (typeof value === "string") {
@@ -3863,6 +3862,7 @@ test("설정을 처음으로 돌리면 기틀은 산 단계를 모두 쓰고 인
 });
 
 test("새 묘리: 방어 깎기, 겹치는 칼자국, 장단", () => {
+  seed(4);
   const game = newGame();
   const p = game.player;
   p.learnSkill(new Skill("패왕창법"));
@@ -3936,6 +3936,7 @@ test("같은 계열의 명품 이상 무공은 묘리의 짜임이 겹치지 않
 test("유산으로 귀한 물건도 남기고, 출신마다 결전의 조력이 하나씩 있다", () => {
   const game = newGame();
   game.player.addItem("설삼");
+  game.finishGame(true, "기본");
   assert.ok(game.legacyOptions().some((o) => o.kind === "item" && o.key === "설삼"));
   const allyFlags = DB.enemies.천마.phases[0].interlude.allies.map((a) => a.requires.flag).filter(Boolean);
   for (const flag of ["창궁_깃발", "조카_합류", "표사_옛동료", "분타_합류", "권마_그림자", "삼백_비석", "소문_매복", "초출_벗"]) assert.ok(allyFlags.includes(flag), flag);
@@ -3967,4 +3968,137 @@ test("개방 방주의 생사는 출신과 상관없이 같다", () => {
   assert.ok(!DB.events.문파대사_개방.requires);
   assert.ok(!DB.events.개방_비전.text.startsWith("방주가"));
   assert.ok(DB.sects.개방.desc.includes("쓰러진 뒤"));
+});
+
+test("유산은 천마를 쓰러뜨린 강호행에서만 남긴다", () => {
+  withKarma(100, { endings_seen: ["기본"], legacy_open: true });
+  const g = new Game();
+  g.start("무림초출");
+  g.player.learnSkill(Skill.fromDict({ key: "양가창법", grade: "일절", mastery: 80 }));
+  g.finishGame(false);
+  assert.equal(g.legacyOptions().length, 0);
+  assert.ok(!g.leaveLegacy(0));
+  withKarma(0);
+});
+
+test("새 묘리: 표식, 여운, 회심의 호신, 잔상, 기세, 늘 흐르는 심법", () => {
+  seed(9);
+  const p = new Player("무림초출");
+  p.qi = 9999;
+  const dart = new Skill("만리추혼"); dart.grade = "일절";
+  const b = new Battle(p, new Enemy("낭인"));
+  b.enemy.evasion = -9;
+  b.enemy.hp = b.enemy.maxHp = 999999;
+  for (let i = 0; i < 3; i++) b.strike(100, "시험", dart);
+  assert.ok(b.log.some((l) => l.includes("표식이 터졌다")));
+  const plum = new Skill("매화검법"); plum.grade = "상승";
+  for (let i = 0; i < 20; i++) b.strike(100, "시험", plum);
+  assert.ok(b.log.some((l) => l.includes("남은 여운")));
+  const palm = new Skill("대력금강장"); palm.grade = "상승";
+  b.forceCrit = true;
+  b.strike(1000, "시험", palm);
+  assert.ok(b.ward > 0 && b.ward <= p.maxHp() * 0.4);
+  // 잔상과 기세
+  const step = new Skill("제운종"); step.grade = "상승";
+  b.afterEvade(step, step.activeGimmick());
+  b.afterEvade(step, step.activeGimmick());
+  b.afterEvade(step, step.activeGimmick());
+  b.afterEvade(step, step.activeGimmick());
+  assert.equal(b.momentum, 30, "기세는 3할까지");
+  // 늘 흐르는 심법: 숨이 트이는 것은 한 번뿐이다
+  const q = new Player("무림초출");
+  const breath = new Skill("달마심공");
+  q.skills.push(breath);
+  q.chosenArts.심공 = "달마심공";
+  const c = new Battle(q, new Enemy("낭인"));
+  c.roundNum = 1;
+  q.hp = Math.floor(q.maxHp() * 0.2);
+  c.enemy.attack = 1;
+  c.enemyAttack();
+  const after = q.hp;
+  assert.ok(c.secondWind && after > Math.floor(q.maxHp() * 0.2));
+  q.hp = Math.floor(q.maxHp() * 0.2);
+  c.enemyAttack();
+  assert.ok(q.hp <= Math.floor(q.maxHp() * 0.2));
+});
+
+test("무엇을 겹쳐도 무적이 되지 않는다", () => {
+  const p = new Player("무림초출");
+  p.mind = 999;
+  p.realm = "현경";
+  p.traits.push(...Object.keys(DB.traits).filter((k) => DB.traits[k].effects?.some((e) => ["damage_reduce", "aura_guard"].includes(e.type))));
+  p.armor = "금강불괴갑";
+  const mind = new Skill("달마심공");
+  p.skills.push(mind);
+  p.chosenArts.심공 = "달마심공";
+  const b = new Battle(p, new Enemy("천마"), true);
+  b.guard = { percent: 90, rounds: 9 };
+  b.enemyWeaken = { percent: 90, rounds: 9 };
+  p.hp = 1;
+  const full = b.enemy.attack * b.enemy.attackMultiplier();
+  assert.ok(b.incoming() >= Math.ceil(full * 0.1), "맞는 힘의 1할은 닿는다");
+  // 저절로 피하는 것에도 끝이 있다
+  const steps = new Skill("이형환위");
+  p.skills.push(steps);
+  p.chosenArts.경공 = "이형환위";
+  p.armor = "운룡보의";
+  const c = new Battle(p, new Enemy("낭인"));
+  c.afterimage = 99;
+  c.roundNum = 1;
+  p.hp = p.maxHp();
+  let dodged = 0;
+  for (let i = 0; i < 400; i++) {
+    c.afterimage = 99;
+    c.log = [];
+    c.enemyAttack();
+    if (c.log.some((l) => l.includes("저절로"))) dodged += 1;
+    p.hp = p.maxHp();
+  }
+  assert.ok(dodged < 400 * 0.6, String(dodged));
+  for (const s of Object.values(DB.skills)) if (s.type === "경공") assert.ok(s.effect.evade <= 92, s.name);
+});
+
+test("씨름판은 경지와 기량에 따라 결과가 다르고, 곤륜의 호흡은 심법 성취를 쌓은 채로 시작한다", () => {
+  const p = new Player("무림초출");
+  p.realm = "초절정";
+  for (let i = 0; i < 20; i++) {
+    const r = resolveChoice(p, "철권씨름", 0);
+    assert.ok(r.text.includes("무릎이 먼저 꺾였다"), r.text);
+    p.seenEvents = [];
+  }
+  const weak = new Player("무림초출");
+  weak.external = 100;
+  const texts = new Set();
+  for (let i = 0; i < 40; i++) texts.add(resolveChoice(weak, "철권씨름", 0).text);
+  assert.ok([...texts].some((t) => t.includes("하늘이 돌았다")));
+  const g = new Game();
+  withKarma(0, { unlocked_traits: [...loadMeta().unlocked_traits, "곤륜의호흡"] });
+  const key = Object.keys(DB.traits).find((k) => DB.traits[k].name === "곤륜의 호흡");
+  g.start("무림초출", [key]);
+  if (g.pickingArts) g.finishArtsPick();
+  assert.ok(g.player.bestOfType("심공").mastery >= 30);
+  withKarma(0);
+});
+
+test("영약을 쓰면 심법 성취가 오른다", () => {
+  const p = new Player("무림초출");
+  const mind = p.bestOfType("심공");
+  const before = mind.mastery;
+  p.addItem("소환단");
+  useConsumable(p, "소환단");
+  assert.ok(mind.mastery > before);
+});
+
+test("달이 사건으로 바로 열려도 경지에 오른 소식이 보인다", () => {
+  const game = newGame();
+  const p = game.player;
+  for (const s of ["external", "internal", "martial", "mind"]) p[s] = 700;
+  p.battles = 99;
+  p.turn = 24;
+  game.event = null;
+  game.startNextTurn();
+  assert.ok(game.event, "줄거리 사건이 열린다");
+  assert.ok(game.notice?.some((l) => l.includes("경지 돌파")), JSON.stringify(game.notice));
+  game.chooseEvent(0);
+  assert.equal(game.notice, null);
 });
