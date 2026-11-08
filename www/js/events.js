@@ -349,14 +349,17 @@ export function resolveChoice(player, key, index) {
   if (!choice || !checkRequires(player, choice.requires)) return null;
   const outcome = pickWeighted(choice.outcomes, choice.outcomes.map((o) => o.weight ?? 1));
   const effects = outcome.effects || {};
-  if (!DB.events[key].prelude) recordEventPick(key, eventText(player, key), choice.label, outcome.text);
+  // 지는 것이 정해진 일도 내 경지에 따라 그 모습이 다르다. 맞는 가장 높은 경지의 문장을 쓴다
+  const tier = (outcome.realm_text || []).filter((t) => realmIndex(player.realm) >= realmIndex(t.realm_min)).pop();
+  const text = tier?.text ?? outcome.text;
+  if (!DB.events[key].prelude) recordEventPick(key, eventText(player, key), choice.label, text);
   // 싸움이 걸린 결과는 이긴 뒤에 적용한다. 달아나면 얻는 것도 잃는 것도 없다
   const deferred = !!effects.battle;
   const summary = deferred ? [] : applyEffects(player, effects);
   // again이 붙은 선택은 그 일을 뒤로 미룬다. 나중에 다시 찾아온다
   if (!effects.again && !DB.events[key].legacy_find && !player.seenEvents.includes(key)) player.seenEvents.push(key);
   if (!DB.events[key].prelude) updateKnown([], [], [key]);
-  return { text: outcome.text, label: choice.label, summary, effects, deferred, lead: !!outcome.lead };
+  return { text, label: choice.label, summary, effects, deferred, lead: !!outcome.lead };
 }
 
 /** 비급으로 파는 공격무공 중 하나를 고른다. 익힌 계열이 나올 가능성이 높다. */
