@@ -3885,3 +3885,39 @@ test("새 묘리: 방어 깎기, 겹치는 칼자국, 장단", () => {
   assert.equal(DB.realms.movement_tiers.상승[0], "답설무흔");
   assert.ok(!Object.values(DB.skills).some((s) => ["초상비", "등평도수", "답설무흔", "능공허도", "이형환위"].includes(s.name)), "경공의 경지는 무공 이름이 아니다");
 });
+
+test("한 사건 안에서 여러 번 고르고, 사도의 동맹은 이름이 높으면 맹주를 직접 만난다", () => {
+  const game = newGame();
+  const p = game.player;
+  p.alignment.사도 = 400;
+  p.fame = 450;
+  game.event = { key: "사도_임시동맹", forced: false };
+  const meet = eventView(p, "사도_임시동맹").choices.findIndex((c) => c.label === "맹주를 만나러 간다");
+  assert.ok(meet >= 0);
+  game.chooseEvent(meet);
+  assert.equal(game.event.key, "사도_임시동맹:대면");
+  const join = eventView(p, "사도_임시동맹:대면").choices.findIndex((c) => c.label === "사파의 이름으로 동맹에 선다");
+  const before = p.alignment.정도;
+  game.chooseEvent(join);
+  assert.ok(p.hasFlag("정사동맹_대표") && p.alignment.정도 > before);
+  assert.ok(!checkRequires(p, DB.events.사도_임시동맹.requires), "한 번 정한 동맹은 다시 오지 않는다");
+  const low = new Player();
+  low.alignment.사도 = 400;
+  low.fame = 160;
+  assert.ok(!eventView(low, "사도_임시동맹").choices.some((c) => c.label === "맹주를 만나러 간다"));
+});
+
+test("지는 것이 정해진 일도 경지에 따라 모습이 다르고, 달빛 아래의 여인은 결전의 동료가 된다", () => {
+  const p = new Player();
+  p.realm = "현경";
+  const game = newGame();
+  game.player = p;
+  game.event = { key: "기인_첫판", forced: false };
+  const i = eventView(p, "기인_첫판").choices.findIndex((c) => c.label === "바둑돌을 잡는다");
+  game.chooseEvent(i);
+  assert.ok(game.log.some((l) => l.includes("이 판은 자네가 이겼네")));
+  assert.ok(DB.companions.은비_약조);
+  assert.ok(DB.events["은호의저녁:약조"].choices.some((c) => c.outcomes[0].effects.flags?.includes("은비_약조")));
+  assert.ok(!DB.enemies.은호.desc.includes("늙은"));
+  assert.ok(!DB.events_story["5장_결전"].text.includes("머리맡"), "천마가 몰래 다녀가지 않는다");
+});

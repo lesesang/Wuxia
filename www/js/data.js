@@ -30,6 +30,12 @@ export async function loadData(read) {
       DB.events[keys[i]] = entry;
     });
   }
+  // 한 사건 안의 다음 장면. 그 사건의 키 뒤에 장면 이름을 붙인다. 탐색에는 나오지 않는다
+  for (const [key, event] of Object.entries({ ...DB.events })) {
+    for (const [scene, body] of Object.entries(event.parts || {})) {
+      DB.events[`${key}:${scene}`] = { title: event.title, ...body, scene_of: key };
+    }
+  }
   // 경지 특전도 숨은 특성으로 적용한다
   for (const [realm, perk] of Object.entries(DB.realms.perks)) {
     DB.traits[`경지_${realm}`] = { name: perk.name, desc: perk.desc, hidden: true, effects: perk.effects };

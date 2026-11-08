@@ -414,6 +414,11 @@ export class Game {
       this.finishGame(true, effects.ending);
       return;
     }
+    // 한 사건 안에서 이어지는 다음 장면. 달을 더 쓰지 않는다
+    if (effects.next && !effects.battle) {
+      this.event = { key: sceneKey(state.key, effects.next), forced: state.forced, rest: state.forced };
+      return;
+    }
     // 도운 뒤에 받는 소속 제안. 받아야 소속이 된다
     if (effects.sect_offer && !effects.battle && this.player.sect === null) {
       this.event = { key: `제안_${effects.sect_offer}`, forced: state.forced };
@@ -511,7 +516,8 @@ export class Game {
     if (result.victory) {
       const summary = applyEffects(player, after.effects);
       this.addLog([...(after.text ? [after.text] : []), ...(summary.length ? [summary.join(", ")] : [])]);
-      if (after.effects.sect_offer && player.sect === null) this.offerAfterBattle = `제안_${after.effects.sect_offer}`;
+      if (after.effects.next) this.offerAfterBattle = sceneKey(after.key, after.effects.next);
+      else if (after.effects.sect_offer && player.sect === null) this.offerAfterBattle = `제안_${after.effects.sect_offer}`;
     } else if (result.fled && !DB.events[after.key].chain && !DB.events[after.key].turn) {
       player.seenEvents = player.seenEvents.filter((k) => k !== after.key);
     }
@@ -791,6 +797,13 @@ function karmaGain(player, key, victory) {
 }
 
 /** 성별과 이름을 정한다. 가문의 성씨는 고정이고 비워 둔 칸은 저절로 정한다 */
+/** 다음 장면의 키. 같은 사건의 장면 이름이면 그 사건 아래에서 찾는다 */
+export function sceneKey(from, next) {
+  if (DB.events[next]) return next;
+  const root = DB.events[from]?.scene_of || from;
+  return `${root}:${next}`;
+}
+
 export function settlePerson(originKey, person = {}) {
   const gender = person.gender === "여" ? "여" : "남";
   const names = DB.flavor.names;
