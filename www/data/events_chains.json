@@ -326,274 +326,6 @@
       }
     ]
   },
-  "역병의고을": {
-    "title": "역병의 고을",
-    "chapters": [
-      2,
-      3
-    ],
-    "steps": [
-      {
-        "gap": 0,
-        "title": "닫힌 성문",
-        "text": "고을 성문이 안에서 닫혔다. 성벽 위 사람이 소리친다. \"역병이오! 들어오면 못 나가오!\" 안에서 사람 부르는 소리가 들린다.",
-        "choices": [
-          {
-            "label": "성벽을 넘는다",
-            "outcomes": [
-              {
-                "text": "코를 천으로 막고 넘었다. 병자들이 절집 마당까지 차 있었다.",
-                "effects": {
-                  "chain_start": true,
-                  "hp_pct": -10
-                }
-              }
-            ]
-          },
-          {
-            "label": "약값을 던져 주고 지나간다",
-            "outcomes": [
-              {
-                "text": "은자 주머니가 성벽 안으로 떨어지는 소리가 났다.",
-                "effects": {
-                  "silver": -15,
-                  "alignment": {
-                    "정도": 20
-                  }
-                }
-              }
-            ],
-            "requires": {
-              "min_silver": 15
-            }
-          },
-          {
-            "label": "돌아간다",
-            "outcomes": [
-              {
-                "text": "부르는 소리가 멀어졌다.",
-                "effects": {
-                  "stats": {
-                    "internal": 1
-                  }
-                }
-              }
-            ]
-          },
-          {
-            "label": "성벽 위 사람을 끌어내리고 성문을 연다",
-            "outcomes": [
-              {
-                "text": "병은 고을 밖으로 번졌다. 사람들이 내 별호를 병 이름처럼 불렀다.",
-                "effects": {
-                  "fame": 5,
-                  "alignment": {
-                    "마도": 30
-                  }
-                }
-              }
-            ]
-          },
-          {
-            "label": "성문 밖에 약값 흥정 자리를 편다",
-            "outcomes": [
-              {
-                "text": "닫힌 성은 가장 비싼 장터다. 들여보낸 약은 값을 세 번 물었다.",
-                "effects": {
-                  "silver": 40,
-                  "alignment": {
-                    "사도": 20
-                  }
-                }
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "gap": 1,
-        "title": "약재가 없다",
-        "text": "마을 의원이 울상이다. 처방은 있는데 약초가 산 너머 약초골에 있다. 그런데 그쪽 산길을 산적들이 막고 약값을 열 배로 받는다.",
-        "choices": [
-          {
-            "label": "산길을 뚫는다",
-            "outcomes": [
-              {
-                "text": "산적들은 약을 태우려 했다. 그 전에 끝냈다.",
-                "effects": {
-                  "battle": "낭인",
-                  "stats": {
-                    "external": 2
-                  },
-                  "foe": "약초 길목의 산적"
-                }
-              }
-            ]
-          },
-          {
-            "label": "웃돈을 주고 약을 산다",
-            "outcomes": [
-              {
-                "text": "은자가 꽤 들었다. 그래도 약은 약이다.",
-                "effects": {
-                  "silver": -60
-                }
-              }
-            ],
-            "requires": {
-              "min_silver": 60
-            }
-          },
-          {
-            "label": "산적과 약값을 나눠 먹는다",
-            "outcomes": [
-              {
-                "text": "약은 고을로 들어갔다. 값의 두 푼은 내 몫이었다. 산적은 나를 〈형제〉라 불렀다.",
-                "effects": {
-                  "silver": 30,
-                  "alignment": {
-                    "사도": 20
-                  }
-                }
-              }
-            ]
-          },
-          {
-            "label": "산적들의 머리를 약초골 입구에 꽂는다",
-            "outcomes": [
-              {
-                "text": "그 뒤로 약값을 부르는 사람이 없었다. 약초꾼도 내 쪽을 보지 않았다.",
-                "effects": {
-                  "battle": "낭인",
-                  "stats": {
-                    "external": 2
-                  },
-                  "foe": "약초 길목의 산적",
-                  "alignment": {
-                    "마도": 20
-                  }
-                }
-              }
-            ]
-          },
-          {
-            "label": "여기서 손을 뗀다",
-            "outcomes": [
-              {
-                "text": "다른 데서 약을 구하겠다고 말하고 떠났다. 돌아가지 않았다.",
-                "effects": {
-                  "chain_abandon": true,
-                  "alignment": {
-                    "사도": 20
-                  }
-                }
-              }
-            ]
-          }
-        ],
-        "variants": [
-          {
-            "requires": {
-              "trait": "약초꾼"
-            },
-            "choices": [
-              {
-                "label": "근처 산에서 대신 쓸 약초를 찾는다",
-                "outcomes": [
-                  {
-                    "text": "처방을 조금 바꿨다. 스승들이 들으면 욕할 처방이었지만 들었다.",
-                    "effects": {
-                      "stats": {
-                        "mind": 3
-                      }
-                    }
-                  }
-                ]
-              }
-            ],
-            "tag": "신의의 손"
-          }
-        ]
-      },
-      {
-        "gap": 1,
-        "title": "마지막 환자들",
-        "text": "약이 돌자 사람들이 살아난다. 그런데 고을 수령이 곡식을 빼돌려 성 밖으로 빠져나가려 한다. 수레 뒤에 병든 아전 하나가 매달려 있다.",
-        "choices": [
-          {
-            "label": "수령을 막고 곡식을 푼다",
-            "outcomes": [
-              {
-                "text": "병이 물러간 고을에서 사람들이 내 이름으로 아이 이름을 지었다.",
-                "effects": {
-                  "fame": 30,
-                  "alignment": {
-                    "정도": 60
-                  },
-                  "flags": [
-                    "역병을막다"
-                  ],
-                  "hp_pct": -10,
-                  "grade_item": {
-                    "grade": "명품",
-                    "category": "소비품"
-                  },
-                  "stats": {
-                    "mind": 9,
-                    "internal": 9
-                  },
-                  "full_growth": true
-                }
-              }
-            ]
-          },
-          {
-            "label": "수령과 값을 나눈다",
-            "outcomes": [
-              {
-                "text": "곡식 일부를 풀게 하고 은자도 받았다. 모두가 조금씩 불만이었다.",
-                "effects": {
-                  "silver": 320,
-                  "alignment": {
-                    "사도": 20
-                  },
-                  "fame": 10,
-                  "full_growth": true
-                }
-              }
-            ]
-          },
-          {
-            "label": "수령을 쓰러뜨리고 곡식을 내 사람에게만 푼다",
-            "outcomes": [
-              {
-                "text": "고을 사람 절반이 내 앞에 줄을 섰다. 그들의 눈이 수령을 볼 때보다 더 낮았다.",
-                "effects": {
-                  "fame": 30,
-                  "flags": [
-                    "역병을막다"
-                  ],
-                  "hp_pct": -10,
-                  "grade_item": {
-                    "grade": "명품",
-                    "category": "소비품"
-                  },
-                  "stats": {
-                    "mind": 9,
-                    "internal": 9
-                  },
-                  "full_growth": true,
-                  "alignment": {
-                    "마도": 60
-                  }
-                }
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  },
   "제자를키우다": {
     "title": "떠돌이 아이",
     "chapters": [
@@ -2136,13 +1868,13 @@
               {
                 "text": "맞고 또 맞았다. 어디에 힘이 빠지는지 알았다.",
                 "effects": {
-                  "battle": "낭인",
+                  "battle": "나한승",
                   "stats": {
                     "external": 3,
                     "mind": 2
                   },
                   "spar": true,
-                  "foe": "소림 지객승"
+                  "foe": "소림 지객승 혜정"
                 }
               }
             ]
@@ -2180,13 +1912,13 @@
               {
                 "text": "합장하던 손이 돌아가지 않았다. 산문이 소리 없이 닫혔다.",
                 "effects": {
-                  "battle": "낭인",
+                  "battle": "나한승",
                   "stats": {
                     "external": 3,
                     "mind": 2
                   },
                   "spar": true,
-                  "foe": "소림 지객승",
+                  "foe": "소림 지객승 혜정",
                   "alignment": {
                     "마도": 20
                   }
@@ -2341,216 +2073,6 @@
                   "silver": 80,
                   "alignment": {
                     "사도": 20
-                  }
-                }
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  },
-  "세가의혼사": {
-    "title": "세가의 혼사",
-    "chapters": [
-      3,
-      4
-    ],
-    "requires": {
-      "min_fame": 50
-    },
-    "steps": [
-      {
-        "gap": 0,
-        "title": "도망친 신부",
-        "text": "비단옷 여인이 객잔 뒷문으로 뛰어든다. \"팔리듯 시집가게 생겼어요. 저를 숨겨 주세요.\" 뒤에서 세가의 호위 소리가 난다.",
-        "choices": [
-          {
-            "label": "숨겨 준다",
-            "outcomes": [
-              {
-                "text": "호위들을 먼 길로 보냈다. 여인이 내 병기를 보더니 제 이름을 밝혔다. 오대세가 직계였다.",
-                "effects": {
-                  "chain_start": true
-                }
-              }
-            ]
-          },
-          {
-            "label": "호위들에게 넘긴다",
-            "outcomes": [
-              {
-                "text": "사례는 후했다. 여인이 끌려가며 나를 오래 봤다.",
-                "effects": {
-                  "silver": 60,
-                  "alignment": {
-                    "사도": 20
-                  }
-                }
-              }
-            ]
-          },
-          {
-            "label": "호위들을 쓰러뜨리고 여인을 볼모로 삼는다",
-            "outcomes": [
-              {
-                "text": "세가의 이름이 가진 값을 알게 되었다. 여인은 나를 도망칠 때보다 무서워했다.",
-                "effects": {
-                  "chain_start": true,
-                  "alignment_dummy": 0,
-                  "alignment": {
-                    "마도": 30
-                  }
-                }
-              }
-            ]
-          }
-        ],
-        "variants": [
-          {
-            "requires": {
-              "gender": "여"
-            },
-            "text": "비단옷 여인이 객잔 뒷문으로 뛰어든다. 내 병기를 보더니 곧장 소매를 잡는다. \"같은 여인이시니 아시겠지요. 팔리듯 시집가게 생겼어요. 저를 숨겨 주세요.\" 뒤에서 세가의 호위 소리가 난다."
-          }
-        ]
-      },
-      {
-        "gap": 1,
-        "title": "혼약의 뒷면",
-        "text": "여인의 혼처를 알아보니 사도련과 손잡은 세가다. 천마와 맞설 맹의 자금줄이 그쪽으로 넘어가는 혼사였다.",
-        "choices": [
-          {
-            "label": "돈줄이 적힌 장부를 찾는다",
-            "outcomes": [
-              {
-                "text": "은자가 어디로 가는지 드러났다.",
-                "effects": {
-                  "stats": {
-                    "mind": 4
-                  }
-                }
-              }
-            ]
-          },
-          {
-            "label": "상대 공자를 찾아가 겁을 준다",
-            "outcomes": [
-              {
-                "text": "공자의 호위가 먼저 칼을 뽑았다.",
-                "effects": {
-                  "battle": "세가공자",
-                  "fame": 10,
-                  "foe": "혼담의 공자"
-                },
-                "lead": true
-              }
-            ]
-          },
-          {
-            "label": "상대 공자의 손목을 꺾어 혼사를 끝낸다",
-            "outcomes": [
-              {
-                "text": "혼사는 없던 일이 되었다. 양가 모두 내 이름을 입에 올리지 않게 되었다.",
-                "effects": {
-                  "battle": "세가공자",
-                  "fame": 10,
-                  "foe": "혼담의 공자",
-                  "alignment": {
-                    "마도": 30
-                  }
-                }
-              }
-            ]
-          },
-          {
-            "label": "장부 사본을 사도련에 먼저 판다",
-            "outcomes": [
-              {
-                "text": "둘 다 손에 쥐면 값은 두 번 받는다.",
-                "effects": {
-                  "silver": 80,
-                  "alignment": {
-                    "사도": 20
-                  }
-                }
-              }
-            ]
-          },
-          {
-            "label": "여기서 손을 뗀다",
-            "outcomes": [
-              {
-                "text": "어른들 일이다. 여인을 믿을 만한 곳에 맡겼다.",
-                "effects": {
-                  "chain_abandon": true
-                }
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "gap": 1,
-        "title": "혼례 날",
-        "text": "혼례 날 큰 대청에 장부를 들고 들어섰다. 양가 어른들과 구파의 하객이 모두 본다. 사도련 향주가 하객석에서 일어선다.",
-        "choices": [
-          {
-            "label": "증거를 내놓고 맞선다",
-            "outcomes": [
-              {
-                "text": "향주가 쓰러지고 혼사는 깨졌다. 여인이 무림맹 쪽으로 은자를 돌렸다.",
-                "effects": {
-                  "battle": "사도련향주",
-                  "boss_weaken": 10,
-                  "fame": 30,
-                  "alignment": {
-                    "정도": 60
-                  },
-                  "foe": "뒷돈 받은 향주",
-                  "style_gear": {
-                    "grade": "명품",
-                    "slot": "armor"
-                  },
-                  "silver": 300,
-                  "full_growth": true
-                }
-              }
-            ]
-          },
-          {
-            "label": "증거를 팔아넘긴다",
-            "outcomes": [
-              {
-                "text": "양쪽이 값을 올리다 지쳤다. 내 주머니만 무거워졌다.",
-                "effects": {
-                  "silver": 900,
-                  "alignment": {
-                    "사도": 60
-                  },
-                  "full_growth": true
-                }
-              }
-            ]
-          },
-          {
-            "label": "대청의 어른들까지 모두 쓰러뜨린다",
-            "outcomes": [
-              {
-                "text": "혼례 대청이 조용해졌다. 장부는 필요 없게 되었다.",
-                "effects": {
-                  "battle": "사도련향주",
-                  "boss_weaken": 10,
-                  "fame": 30,
-                  "foe": "뒷돈 받은 향주",
-                  "style_gear": {
-                    "grade": "명품",
-                    "slot": "armor"
-                  },
-                  "silver": 300,
-                  "full_growth": true,
-                  "alignment": {
-                    "마도": 75
                   }
                 }
               }
@@ -3086,7 +2608,7 @@
                   "alignment": {
                     "정도": 20
                   },
-                  "foe": "수령의 세가 호위"
+                  "foe": "수령이 부리는 호위"
                 }
               }
             ]
@@ -3113,7 +2635,7 @@
                 "effects": {
                   "battle": "세가호위",
                   "fame": 15,
-                  "foe": "수령의 세가 호위",
+                  "foe": "수령이 부리는 호위",
                   "alignment": {
                     "마도": 60
                   }

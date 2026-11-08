@@ -20,7 +20,7 @@ import {
 import { halpun, josa } from "./josa.js";
 
 const FINAL_UNLEASH_FROM = 880; // 평균 기량이 이보다 높으면 천마가 숨긴 힘을 꺼낸다
-const FINAL_UNLEASH_HP = 0.45;
+const FINAL_UNLEASH_HP = 0.38;
 const FINAL_UNLEASH_ATTACK = 0.2;
 const NATURAL_REGEN = 5;
 const MAX_TURN_REGEN = 30;
@@ -121,7 +121,10 @@ export class Game {
       .map((s) => ({ kind: "skill", key: s.key, grade: s.grade, label: `${s.name} (${s.grade} 품계)` }));
     const gear = [p.weapon, p.armor, ...p.gear].filter((k, i, all) => DB.market[k] && DB.market[k].grade !== "범품" && all.indexOf(k) === i)
       .map((k) => ({ kind: "gear", key: k, label: `${DB.market[k].name} (${DB.market[k].grade})` }));
-    return [...skills, ...gear];
+    // 병장기 말고도 행낭의 귀한 물건(명품 이상의 도구, 영약, 서책)을 남길 수 있다
+    const items = Object.entries(p.inventory).filter(([k, n]) => n > 0 && DB.market[k] && ["명품", "보물", "신물"].includes(DB.market[k].grade) && !DB.market[k].karma_price)
+      .map(([k]) => ({ kind: "item", key: k, label: `${DB.market[k].name} (${DB.market[k].grade})` }));
+    return [...skills, ...gear, ...items];
   }
 
   /** 끝날 때 유산을 남긴다. 보관이 가득 찼으면 지울 것을 골라야 한다 */

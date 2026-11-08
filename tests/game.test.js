@@ -2480,7 +2480,7 @@ test("남은 달이 모자라면 연계가 시작되지 않는다", () => {
   p.turn += 1;
   assert.ok(!canStartChain(p, id));
   p.turn = 1;
-  p.chains = [{ id: "역병의고을", next: 1, due: 5 }, { id: "장강수로", next: 1, due: 5 }];
+  p.chains = [{ id: "과부의복수", next: 1, due: 5 }, { id: "장강수로", next: 1, due: 5 }];
   assert.ok(!canStartChain(p, id), "동시에 둘까지만");
 });
 
@@ -2548,7 +2548,7 @@ test("중간에 손을 떼면 다음 편이 나오지 않는다", () => {
 
 test("저장했다 이어 해도 연계가 유지된다", () => {
   const p = new Player();
-  p.chains = [{ id: "역병의고을", next: 1, due: 9 }];
+  p.chains = [{ id: "과부의복수", next: 1, due: 9 }];
   assert.deepEqual(Player.fromDict(p.toDict()).chains, p.chains);
 });
 
@@ -3920,4 +3920,24 @@ test("지는 것이 정해진 일도 경지에 따라 모습이 다르고, 달�
   assert.ok(DB.events["은호의저녁:약조"].choices.some((c) => c.outcomes[0].effects.flags?.includes("은비_약조")));
   assert.ok(!DB.enemies.은호.desc.includes("늙은"));
   assert.ok(!DB.events_story["5장_결전"].text.includes("머리맡"), "천마가 몰래 다녀가지 않는다");
+});
+
+test("같은 계열의 명품 이상 무공은 묘리의 짜임이 겹치지 않는다", () => {
+  const seen = new Map();
+  for (const [key, s] of Object.entries(DB.skills)) {
+    if (!s.gimmick || !["명품", "상승", "일절", "신공"].includes(s.grade)) continue;
+    const sig = `${s.category || s.type}:${Object.keys(s.gimmick).filter((k) => k !== "name" && k !== "text").sort().join(",")}`;
+    assert.ok(!seen.has(sig), `${key}와 ${seen.get(sig)}의 묘리가 같다`);
+    seen.set(sig, key);
+  }
+});
+
+test("유산으로 귀한 물건도 남기고, 출신마다 결전의 조력이 하나씩 있다", () => {
+  const game = newGame();
+  game.player.addItem("설삼");
+  assert.ok(game.legacyOptions().some((o) => o.kind === "item" && o.key === "설삼"));
+  const allyFlags = DB.enemies.천마.phases[0].interlude.allies.map((a) => a.requires.flag).filter(Boolean);
+  for (const flag of ["창궁_깃발", "조카_합류", "표사_옛동료", "분타_합류", "권마_그림자", "삼백_비석", "소문_매복", "초출_벗"]) assert.ok(allyFlags.includes(flag), flag);
+  assert.ok(DB.events.백록의길 && DB.events.해치의눈);
+  assert.ok(!DB.enemies.궁기 && DB.enemies.불가사리);
 });
