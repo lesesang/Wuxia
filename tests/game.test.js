@@ -3952,3 +3952,11 @@ test("천마는 한 사람이고 맹주 사건은 맹주의 아들 이야기 중
   assert.ok(!all.includes("첫 천마") && !all.includes("전대 천마"));
   assert.ok(!DB.companions.은비 && DB.companions.설백);
 });
+
+test("십이마장 열두 자리와 천마의 일지가 모두 채워져 있다", () => {
+  const seats = Object.values(DB.enemies).map((e) => e.name.match(/^제(.+)마장 /)?.[1]).filter(Boolean);
+  assert.equal(new Set(seats).size, 12);
+  assert.ok(DB.enemies.천마.intros.some((i) => i.requires.flag === "천마_일지"));
+  assert.ok(DB.enemies.천마.outros.some((i) => i.requires.flag === "천마_일지"));
+  for (const sect of ["소림", "무당", "화산", "아미", "곤륜", "종남", "점창", "청성", "공동", "개방"]) assert.ok(DB.events[`문파대사_${sect}`], sect);
+});
