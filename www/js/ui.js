@@ -19,7 +19,7 @@ import { halpun, josa } from "./josa.js";
 const game = new Game();
 const ui = {
   screen: "title", setupTab: "origin", origin: loadSetup().origin, traits: new Set(loadSetup().traits),
-  modals: [], popsToIgnore: 0, traitFilter: "전체", codexQuery: "", codexFilter: "전체", codexRead: null, legacy: new Set(), legacyDrop: null, person: loadPerson(), shopTab: "origin", shopFrom: "title", modal: null, tab: "enemies", statusTab: "stats", notice: null, lastTyped: "", bars: null,
+  modals: [], popsToIgnore: 0, traitFilter: "전체", codexQuery: "", codexFilter: "전체", codexRead: null, legacy: new Set(), legacyDrop: null, shopGroup: {}, person: loadPerson(), shopTab: "origin", shopFrom: "title", modal: null, tab: "enemies", statusTab: "stats", notice: null, lastTyped: "", bars: null,
 };
 let installPrompt = null;
 const app = () => document.getElementById("app");
@@ -383,6 +383,12 @@ function filterRow() {
   return `<div class="filter-row">${["전체", "능력", "물건과 무공", "사건 반응", "출신 전용"].map((r) => `<button class="filter-btn${ui.traitFilter === r ? " on" : ""}" data-act="trait-filter" data-key="${r}">${r}</button>`).join("")}</div>`;
 }
 
+/** 기틀, 인연, 채비를 갈래로 걸러 보는 줄 */
+function groupFilter(tab, groups) {
+  const on = ui.shopGroup[tab] && groups.includes(ui.shopGroup[tab]) ? ui.shopGroup[tab] : "전체";
+  return { on, row: `<div class="filter-row">${["전체", ...groups].map((g) => `<button class="filter-btn${on === g ? " on" : ""}" data-act="shop-group" data-tab="${tab}" data-key="${esc(g)}">${esc(g)}</button>`).join("")}</div>` };
+}
+
 const GIFT_EFFECTS = ["start_item", "start_armor", "start_skill", "start_style_weapon", "start_style_tool", "start_battle_tool", "start_style_skill"];
 
 /** 자질의 갈래. 고르는 화면과 상점의 분류에 쓴다. */
@@ -426,12 +432,19 @@ function shopPanels(meta) {
     if (cost === undefined) return `<div class="pick-row"><div class="pick-main"><div class="pick-name">${name}</div>${desc}</div><span class="pick-stats">다 올림</span></div>`;
     return shopRow(name, desc, "buy-upgrade", key, cost, meta, "올리기");
   };
-  const upgrades = groups.map((g) => `<h4 class="shop-group">${esc(g)}</h4>${upgradeEntries(g).map(upgradeRow).join("")}`).join("");
+  const upgradeFilter = groupFilter("upgrade", groups);
+  const upgrades = upgradeFilter.row + groups.filter((g) => upgradeFilter.on === "전체" || upgradeFilter.on === g)
+    .map((g) => `<h4 class="shop-group">${esc(g)}</h4>${upgradeEntries(g).map(upgradeRow).join("")}`).join("");
   const contentRow = ([k, c]) => shopRow(esc(c.name), `<p class="pick-desc">${esc(c.desc)}</p>${originOnly(c.origin)}`, "buy-content", k, c.cost, meta);
   const contentLeft = Object.entries(DB.karma.content).filter(([k]) => !meta.content.includes(k));
-  const contentOwn = byOrigin(contentLeft.filter(([, c]) => c.origin), ([, c]) => c.origin);
-  const content = contentLeft.filter(([, c]) => !c.origin).map(contentRow).join("")
-    + (contentOwn.length ? `<h4 class="shop-group">출신 전용</h4>${contentOwn.map(contentRow).join("")}` : "");
+  const contentGroups = [...new Set(Object.values(DB.karma.content).map((c) => c.group))];
+  const contentFilter = groupFilter("content", contentGroups);
+  const contentList = contentGroups.filter((g) => contentFilter.on === "전체" || contentFilter.on === g).map((g) => {
+    const entries = contentLeft.filter(([, c]) => c.group === g);
+    const sorted = g === "출신 전용" ? byOrigin(entries, ([, c]) => c.origin) : entries;
+    return sorted.length ? `<h4 class="shop-group">${esc(g)}</h4>${sorted.map(contentRow).join("")}` : "";
+  }).join("");
+  const content = contentLeft.length ? contentFilter.row + contentList : "";
   const legacy = legacyShop(meta);
   const provisionGroups = [...new Set(Object.values(DB.karma.provisions).map((p) => p.group))];
   const provisionRow = ([key, p]) => {
@@ -440,7 +453,8 @@ function shopPanels(meta) {
     return `<div class="pick-row"><div class="pick-main"><div class="pick-name">${esc(p.name)} <span class="rarity">챙겨 둠</span></div>${desc}</div>
       <button class="unlock-btn" data-act="refund-provision" data-key="${esc(key)}">카르마 ${p.cost}<br>물리기</button></div>`;
   };
-  const provisions = provisionGroups.map((g) => `<h4 class="shop-group">${esc(g)}</h4>${Object.entries(DB.karma.provisions).filter(([, p]) => p.group === g).map(provisionRow).join("")}`).join("");
+  const provisionFilter = groupFilter("provision", provisionGroups);
+  const provisions = provisionFilter.row + provisionGroups.filter((g) => provisionFilter.on === "전체" || provisionFilter.on === g).map((g) => `<h4 class="shop-group">${esc(g)}</h4>${Object.entries(DB.karma.provisions).filter(([, p]) => p.group === g).map(provisionRow).join("")}`).join("");
   return {
     provision: `<p class="section-note">채비는 다음 강호행 한 번에만 쓰입니다. 시작할 때 저절로 꺼내 쓰고, 그 전에는 물릴 수 있습니다.</p>${provisions}`,
     origin: origins || emptyNote("모든 출신을 해금했습니다."),
@@ -987,7 +1001,7 @@ function sellSection(player) {
 
 function renderMarket() {
   const { market, player } = game;
-  const GROUPS = [["병장기", ["무기", "방어구"]], ["비급", ["비급"]], ["약", ["소비품", "영약"]], ["도구", ["도구"]]];
+  const GROUPS = [["병장기", ["무기", "방어구"]], ["비급", ["비급"]], ["약", ["소비품", "영약"]], ["서책", ["서책"]], ["도구", ["도구"]]];
   const main = player.bestSkill()?.category;
   const views = stockView(player, market);
   const fits = (item) => (compareNote(player, item.key).includes("맞음") || compareNote(player, item.key).includes("같은 계열") || (DB.market[item.key].effects[0]?.style === main) ? 0 : 1);
@@ -1269,6 +1283,7 @@ const actions = {
   },
   "status-tab": (el) => { ui.statusTab = el.dataset.tab; render(); },
   "trait-filter": (el) => { ui.traitFilter = el.dataset.key; render(); },
+  "shop-group": (el) => { ui.shopGroup[el.dataset.tab] = el.dataset.key; render(); },
   "setup-tab": (el) => { ui.setupTab = el.dataset.tab; render(); window.scrollTo(0, 0); },
   setup: () => { if (!keepSetup()) resetSetup(); ui.screen = "setup"; render(); window.scrollTo(0, 0); },
   shop: () => { ui.shopFrom = ui.screen; ui.screen = "shop"; render(); window.scrollTo(0, 0); },
