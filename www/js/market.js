@@ -216,6 +216,10 @@ export function buy(player, market, key) {
   if (item.karma_price) {
     spendKarma(item.karma_price);
     entry.left -= 1;
+    if (item.consumable) {
+      player.addItem(key);
+      return [true, `${item.name}${josa(item.name, "을/를")} 거래했다. (카르마 -${item.karma_price}) 행낭에 넣었다.`];
+    }
     for (const effect of item.effects) applyEffect(player, key, effect);
     return [true, `${item.name}${josa(item.name, "을/를")} 거래했다. (카르마 -${item.karma_price})`];
   }

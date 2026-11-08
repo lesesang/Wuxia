@@ -1448,13 +1448,15 @@ test("채비는 다음 강호행 한 번만 쓰이고 값이 싸며 네 기량�
   first.start("무림초출");
   const second = new Game();
   second.start("무림초출");
-  assert.equal(first.player.external, second.player.external + 40);
+  assert.equal(first.player.external, second.player.external, "채비의 영약은 행낭에 들어간다");
+  assert.equal(first.player.inventory.호골주, 1);
   assert.equal(first.player.inventory.금창약, (second.player.inventory.금창약 || 0) + 3);
   assert.deepEqual(loadMeta().provisions, []);
   assert.ok(Object.values(DB.karma.provisions).every((p) => p.cost <= 3));
-  const singles = Object.values(DB.karma.provisions).map((p) => p.effects).filter((e) => e.length === 1 && e[0].type === "start_stat");
-  assert.deepEqual(singles.map((e) => e[0].stat).sort(), ["external", "internal", "martial", "mind"].sort());
-  assert.equal(new Set(singles.map((e) => e[0].amount)).size, 1);
+  const singles = Object.values(DB.karma.provisions).map((p) => p.effects).filter((e) => e.length === 1 && e[0].type === "start_item" && DB.market[e[0].item].effects.length === 1 && DB.market[e[0].item].effects[0].type === "stat")
+    .map((e) => DB.market[e[0].item].effects[0]);
+  assert.deepEqual(singles.map((e) => e.stat).sort(), ["external", "internal", "martial", "mind"].sort());
+  assert.equal(new Set(singles.map((e) => e.amount)).size, 1);
   withKarma(0);
 });
 
@@ -1472,7 +1474,12 @@ test("출신 고유 무공은 장터나 적에게서 얻지 못하고 권마의 
     assert.ok(!Object.values(DB.enemies).some((e) => e.drop?.skill === k), k);
   }
   assert.equal(DB.events.권마시험.requires.origin, "권마계승");
-  assert.equal(DB.karma.content.권마의시험.origin, "권마계승");
+  // 출신마다 전용 인연은 둘이고 값이 같다
+  for (const origin of DB.origins.order) {
+    const own = Object.values(DB.karma.content).filter((c) => c.origin === origin);
+    assert.equal(own.length, 2, origin);
+    assert.ok(own.every((c) => c.cost === 8), origin);
+  }
 });
 
 test("누적 카르마는 마지막 보상을 넘어도 계속 쌓인다", () => {
@@ -2414,6 +2421,9 @@ test("수상한 누군가에게 카르마로 거래한다", () => {
   assert.equal(blockReason(game.player, "역천부"), "카르마 부족");
   const before = game.player.external;
   assert.ok(buy(game.player, market, "생사단")[0]);
+  assert.equal(game.player.external, before, "영약은 행낭에 넣었다가 원할 때 먹는다");
+  assert.equal(game.player.inventory.생사단, 1);
+  game.useItem("생사단");
   assert.equal(game.player.external, before + 30);
   assert.equal(loadMeta().current_karma, 0);
   withKarma(0);

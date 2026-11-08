@@ -8292,5 +8292,249 @@
     "title": "전대 천마",
     "faction": "마교",
     "named": true
+  },
+  "만년빙잠": {
+    "name": "만년 빙잠",
+    "tier": "난적",
+    "realm": "초절정",
+    "hp": 1235,
+    "attack": 76,
+    "exp_reward": 3,
+    "silver": [
+      0,
+      0
+    ],
+    "chapters": [
+      3,
+      4
+    ],
+    "weight": 2,
+    "level": 49,
+    "hp_style": 0.85,
+    "attack_style": 0.95,
+    "desc": "만 년을 얼음 속에서 살았다는 누에. 닿는 것마다 얼려 버린다.",
+    "intro": "빙굴 천장에서 흰 실이 내려온다. 숨을 쉴 때마다 폐가 언다.",
+    "ranks": [
+      3,
+      4
+    ],
+    "beast": true,
+    "title": "설산 빙굴의 영물",
+    "specials": [
+      {
+        "name": "빙잠사",
+        "every": 3,
+        "mult": 1.25,
+        "seal": 1
+      }
+    ],
+    "evasion": 0.05,
+    "loot": {
+      "item": "빙잠정수",
+      "chance": 0.5
+    },
+    "intros": [
+      {
+        "requires": {
+          "realm_min": "화경"
+        },
+        "text": "실이 내 몸에 닿기도 전에 녹아내린다. 누에가 처음으로 움찔한다."
+      }
+    ]
+  },
+  "금섬": {
+    "name": "금섬",
+    "tier": "난적",
+    "realm": "초절정",
+    "hp": 1235,
+    "attack": 76,
+    "exp_reward": 3,
+    "silver": [
+      0,
+      0
+    ],
+    "chapters": [
+      3,
+      4
+    ],
+    "weight": 2,
+    "level": 49,
+    "hp_style": 0.85,
+    "attack_style": 0.95,
+    "desc": "금빛 등을 가진 커다란 두꺼비. 내쉬는 숨이 그대로 독안개다.",
+    "intro": "늪 한가운데 바위가 눈을 떴다. 금빛 등에서 안개가 피어오른다.",
+    "ranks": [
+      3,
+      4
+    ],
+    "beast": true,
+    "title": "독늪의 영물",
+    "specials": [
+      {
+        "name": "독무",
+        "every": 3,
+        "mult": 1.2,
+        "poison": {
+          "damage": 22,
+          "rounds": 3
+        }
+      }
+    ],
+    "evasion": 0,
+    "loot": {
+      "item": "금섬내단",
+      "chance": 0.5
+    },
+    "intros": [
+      {
+        "requires": {
+          "trait": "맑은정신"
+        },
+        "text": "독안개가 코끝에서 흩어진다. 두꺼비가 목을 부풀린다."
+      }
+    ]
+  },
+  "궁기": {
+    "name": "궁기",
+    "tier": "난적",
+    "realm": "화경",
+    "hp": 3960,
+    "attack": 145,
+    "exp_reward": 3,
+    "silver": [
+      0,
+      0
+    ],
+    "chapters": [
+      4,
+      5
+    ],
+    "weight": 2,
+    "level": 73,
+    "hp_style": 1.176,
+    "attack_style": 1.05,
+    "desc": "날개 달린 범의 모습을 한 옛 흉수. 착한 사람을 물고 악한 사람에게 짐승을 바친다고 전한다.",
+    "intro": "모래바람 위로 날개 그림자가 지나간다. 범이 하늘에서 내려앉는다.",
+    "ranks": [
+      4,
+      5
+    ],
+    "beast": true,
+    "title": "서쪽 황야의 흉수",
+    "specials": [
+      {
+        "name": "천익강하",
+        "every": 3,
+        "mult": 1.6
+      }
+    ],
+    "loot": {
+      "item": "궁기골",
+      "chance": 0.5
+    },
+    "armor": 12,
+    "intros": [
+      {
+        "requires": {
+          "dominant": "정도",
+          "min_fame": 50
+        },
+        "text": "궁기가 이빨을 드러낸다. 착한 자를 먼저 문다는 옛말 그대로다."
+      },
+      {
+        "requires": {
+          "dominant": "마도",
+          "min_fame": 50
+        },
+        "text": "궁기가 머리를 낮춘다. 그러다 갑자기 덮쳐 온다. 고개를 숙인 것은 냄새를 맡으려던 것이었다."
+      }
+    ]
+  },
+  "필방": {
+    "name": "필방",
+    "tier": "난적",
+    "realm": "화경",
+    "hp": 3960,
+    "attack": 145,
+    "exp_reward": 3,
+    "silver": [
+      0,
+      0
+    ],
+    "chapters": [
+      4,
+      5
+    ],
+    "weight": 2,
+    "level": 73,
+    "hp_style": 1.176,
+    "attack_style": 1.05,
+    "desc": "외다리에 푸른 깃, 흰 부리를 가진 새. 이 새가 우는 고을에는 불이 난다고 한다.",
+    "intro": "한쪽 다리로 선 새가 울자 마른 숲에 불이 붙는다.",
+    "ranks": [
+      4,
+      5
+    ],
+    "beast": true,
+    "title": "불길을 부르는 새",
+    "specials": [
+      {
+        "name": "화조명",
+        "every": 3,
+        "mult": 1.5
+      }
+    ],
+    "loot": {
+      "item": "필방우",
+      "chance": 0.5
+    },
+    "armor": 12,
+    "evasion": 0.1
+  },
+  "도철": {
+    "name": "도철",
+    "tier": "강적",
+    "realm": "현경",
+    "hp": 10575,
+    "attack": 196,
+    "exp_reward": 3,
+    "silver": [
+      0,
+      0
+    ],
+    "chapters": [
+      5
+    ],
+    "weight": 1,
+    "level": 97,
+    "hp_style": 1.38,
+    "attack_style": 1.05,
+    "desc": "모든 것을 삼킨다는 옛 흉수. 사람의 얼굴에 범의 이빨을 가졌다.",
+    "intro": "산 하나가 통째로 입을 벌린 것 같다. 얼굴은 사람인데 웃음이 없다.",
+    "ranks": [
+      5,
+      5
+    ],
+    "beast": true,
+    "title": "사흉의 하나",
+    "specials": [
+      {
+        "name": "탄천",
+        "every": 3,
+        "mult": 1.7
+      },
+      {
+        "name": "흡혼",
+        "every": 5,
+        "mult": 1.2,
+        "seal": 1
+      }
+    ],
+    "armor": 33,
+    "loot": {
+      "item": "도철내단",
+      "chance": 1
+    },
+    "named": true
   }
 }

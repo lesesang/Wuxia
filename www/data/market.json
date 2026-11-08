@@ -54,7 +54,7 @@
       2,
       3
     ],
-    "desc": "호랑이 뼈로 담근 약주. 외공이 40 오른다.",
+    "desc": "호랑이 뼈로 담근 약주. 외공이 40 오른다. 행낭에 넣어 두었다가 원할 때 먹는다.",
     "effects": [
       {
         "type": "stat",
@@ -62,7 +62,9 @@
         "amount": 40
       }
     ],
-    "grade": "양품"
+    "grade": "양품",
+    "consumable": true,
+    "stock_qty": 1
   },
   "소환단": {
     "name": "소환단",
@@ -73,7 +75,7 @@
       2,
       3
     ],
-    "desc": "진기를 북돋는 단약. 내공이 40 오른다.",
+    "desc": "진기를 북돋는 단약. 내공이 40 오른다. 행낭에 넣어 두었다가 원할 때 먹는다.",
     "effects": [
       {
         "type": "stat",
@@ -81,18 +83,20 @@
         "amount": 40
       }
     ],
-    "grade": "양품"
+    "grade": "양품",
+    "consumable": true,
+    "stock_qty": 1
   },
   "무학잡록": {
     "name": "무학잡록",
-    "category": "영약",
+    "category": "서책",
     "price": 130,
     "markets": [
       1,
       2,
       3
     ],
-    "desc": "이름 없는 고수의 수련 기록. 무리가 40 오른다.",
+    "desc": "이름 없는 고수의 수련 기록. 무리가 40 오른다. 행낭에 넣어 두었다가 원할 때 펼친다.",
     "effects": [
       {
         "type": "stat",
@@ -100,7 +104,9 @@
         "amount": 40
       }
     ],
-    "grade": "양품"
+    "grade": "양품",
+    "consumable": true,
+    "stock_qty": 1
   },
   "청심환": {
     "name": "청심환",
@@ -111,7 +117,7 @@
       2,
       3
     ],
-    "desc": "마음을 가라앉히는 환약. 심경이 40 오른다.",
+    "desc": "마음을 가라앉히는 환약. 심경이 40 오른다. 행낭에 넣어 두었다가 원할 때 먹는다.",
     "effects": [
       {
         "type": "stat",
@@ -119,7 +125,9 @@
         "amount": 40
       }
     ],
-    "grade": "양품"
+    "grade": "양품",
+    "consumable": true,
+    "stock_qty": 1
   },
   "공청석유": {
     "name": "공청석유",
@@ -130,7 +138,7 @@
       4,
       5
     ],
-    "desc": "천년 석굴에 맺힌 영액. 내공이 120 오른다.",
+    "desc": "천년 석굴에 맺힌 영액. 내공이 120 오른다. 행낭에 넣어 두었다가 원할 때 먹는다.",
     "effects": [
       {
         "type": "stat",
@@ -138,7 +146,9 @@
         "amount": 120
       }
     ],
-    "grade": "보물"
+    "grade": "보물",
+    "consumable": true,
+    "stock_qty": 1
   },
   "대환단": {
     "name": "대환단",
@@ -148,7 +158,7 @@
       4,
       5
     ],
-    "desc": "소림이 귀하게 여기는 영단. 네 기량이 모두 60 오른다.",
+    "desc": "소림이 귀하게 여기는 영단. 네 기량이 모두 60 오른다. 행낭에 넣어 두었다가 원할 때 먹는다.",
     "effects": [
       {
         "type": "stat",
@@ -171,7 +181,9 @@
         "amount": 60
       }
     ],
-    "grade": "보물"
+    "grade": "보물",
+    "consumable": true,
+    "stock_qty": 1
   },
   "철검": {
     "name": "철검",
@@ -575,7 +587,7 @@
       3,
       4
     ],
-    "desc": "사람 모양으로 자란 영초. 네 기량이 모두 30 오른다.",
+    "desc": "사람 모양으로 자란 영초. 네 기량이 모두 30 오른다. 행낭에 넣어 두었다가 원할 때 먹는다.",
     "effects": [
       {
         "type": "stat",
@@ -598,7 +610,9 @@
         "amount": 30
       }
     ],
-    "grade": "보물"
+    "grade": "보물",
+    "consumable": true,
+    "stock_qty": 1
   },
   "설산영지": {
     "name": "설산 영지",
@@ -609,7 +623,7 @@
       3,
       4
     ],
-    "desc": "만년설에서 자란 영지. 심경이 80 오른다.",
+    "desc": "만년설에서 자란 영지. 심경이 80 오른다. 행낭에 넣어 두었다가 원할 때 먹는다.",
     "effects": [
       {
         "type": "stat",
@@ -617,7 +631,9 @@
         "amount": 80
       }
     ],
-    "grade": "명품"
+    "grade": "명품",
+    "consumable": true,
+    "stock_qty": 1
   },
   "호왕골": {
     "name": "호왕의 뼈",
@@ -628,7 +644,7 @@
       3,
       4
     ],
-    "desc": "산군의 뼈를 달인 것. 외공이 80 오른다.",
+    "desc": "산군의 뼈를 달인 것. 외공이 80 오른다. 행낭에 넣어 두었다가 원할 때 먹는다.",
     "effects": [
       {
         "type": "stat",
@@ -636,18 +652,20 @@
         "amount": 80
       }
     ],
-    "grade": "명품"
+    "grade": "명품",
+    "consumable": true,
+    "stock_qty": 1
   },
   "심득잡기": {
     "name": "고수의 심득",
-    "category": "영약",
+    "category": "서책",
     "price": 255,
     "markets": [
       2,
       3,
       4
     ],
-    "desc": "어느 고수가 평생 적어 둔 기록. 무리가 80 오른다.",
+    "desc": "어느 고수가 평생 적어 둔 기록. 무리가 80 오른다. 행낭에 넣어 두었다가 원할 때 펼친다.",
     "effects": [
       {
         "type": "stat",
@@ -655,7 +673,9 @@
         "amount": 80
       }
     ],
-    "grade": "명품"
+    "grade": "명품",
+    "consumable": true,
+    "stock_qty": 1
   },
   "태산신검": {
     "name": "태산신병",
@@ -1644,7 +1664,7 @@
     "markets": [
       5
     ],
-    "desc": "죽은 자의 몫을 당겨 쓰는 단약. 체력과 내력이 가득 차고 네 기량이 30씩 오른다. 카르마로 거래한다.",
+    "desc": "죽은 자의 몫을 당겨 쓰는 단약. 체력과 내력이 가득 차고 네 기량이 30씩 오른다. 카르마로 거래한다. 행낭에 넣어 두었다가 원할 때 먹는다.",
     "effects": [
       {
         "type": "heal",
@@ -1677,25 +1697,31 @@
         "amount": 30
       }
     ],
-    "grade": "신물"
+    "grade": "신물",
+    "consumable": true,
+    "stock_qty": 1
   },
   "운명의패": {
     "name": "운명의 패",
-    "category": "밀서",
+    "category": "도구",
     "price": 0,
     "karma_price": 1,
     "always": true,
     "markets": [
       5
     ],
-    "desc": "수상한 누군가가 내미는 패 한 장. 천마의 체력이 1할 줄어든 채 싸움이 시작된다. 카르마로 거래한다.",
+    "desc": "수상한 누군가가 내미는 패 한 장. 싸움 중에 뒤집으면 세 합 동안 상대의 위력이 2할 5푼 꺾인다. 행낭에 넣어 두었다가 쓴다. 카르마로 거래한다.",
     "effects": [
       {
-        "type": "boss_weaken",
-        "percent": 10
+        "type": "enemy_weaken",
+        "percent": 25,
+        "rounds": 3
       }
     ],
-    "grade": "보물"
+    "grade": "보물",
+    "consumable": true,
+    "battle_only": true,
+    "stock_qty": 1
   },
   "낙일검법비급": {
     "name": "낙일검법 비급",
@@ -2938,7 +2964,7 @@
       1,
       2
     ],
-    "desc": "달여 먹으면 외공이 30 오른다.",
+    "desc": "달여 먹으면 외공이 30 오른다. 행낭에 넣어 두었다가 원할 때 먹는다.",
     "effects": [
       {
         "type": "stat",
@@ -2959,7 +2985,7 @@
       1,
       2
     ],
-    "desc": "말려 삼키면 내공이 30 오른다.",
+    "desc": "말려 삼키면 내공이 30 오른다. 행낭에 넣어 두었다가 원할 때 먹는다.",
     "effects": [
       {
         "type": "stat",
@@ -2977,7 +3003,7 @@
     "category": "영약",
     "price": 160,
     "markets": [],
-    "desc": "고아 마시면 외공과 무리가 25씩 오른다.",
+    "desc": "고아 마시면 외공과 무리가 25씩 오른다. 행낭에 넣어 두었다가 원할 때 먹는다.",
     "effects": [
       {
         "type": "stat",
@@ -3000,7 +3026,7 @@
     "category": "영약",
     "price": 190,
     "markets": [],
-    "desc": "빛을 읽는다는 새의 눈. 삼키면 무리가 60 오른다.",
+    "desc": "빛을 읽는다는 새의 눈. 삼키면 무리가 60 오른다. 행낭에 넣어 두었다가 원할 때 먹는다.",
     "effects": [
       {
         "type": "stat",
@@ -3018,7 +3044,7 @@
     "category": "영약",
     "price": 190,
     "markets": [],
-    "desc": "여우가 입에 물고 있던 구슬. 머금으면 심경이 60 오른다.",
+    "desc": "여우가 입에 물고 있던 구슬. 머금으면 심경이 60 오른다. 행낭에 넣어 두었다가 원할 때 먹는다.",
     "effects": [
       {
         "type": "stat",
@@ -3040,7 +3066,7 @@
       4,
       5
     ],
-    "desc": "오래 묵은 영물의 내단. 삼키면 내공이 70 오르고 체력과 내력이 차오른다.",
+    "desc": "오래 묵은 영물의 내단. 삼키면 내공이 70 오르고 체력과 내력이 차오른다. 행낭에 넣어 두었다가 원할 때 먹는다.",
     "effects": [
       {
         "type": "stat",
@@ -3070,7 +3096,7 @@
     "markets": [
       5
     ],
-    "desc": "천 년의 기운이 뭉친 구슬. 삼키면 네 기량이 40씩 오르고 체력과 내력이 가득 찬다.",
+    "desc": "천 년의 기운이 뭉친 구슬. 삼키면 네 기량이 40씩 오르고 체력과 내력이 가득 찬다. 행낭에 넣어 두었다가 원할 때 먹는다.",
     "effects": [
       {
         "type": "stat",
@@ -3813,14 +3839,16 @@
       5
     ],
     "category": "영약",
-    "desc": "뼈마디에 금빛이 돈다는 환약. 외공이 120 오른다.",
+    "desc": "뼈마디에 금빛이 돈다는 환약. 외공이 120 오른다. 행낭에 넣어 두었다가 원할 때 먹는다.",
     "effects": [
       {
         "type": "stat",
         "stat": "external",
         "amount": 120
       }
-    ]
+    ],
+    "consumable": true,
+    "stock_qty": 1
   },
   "천기비록": {
     "name": "천기 비록",
@@ -3829,15 +3857,17 @@
     "markets": [
       5
     ],
-    "category": "영약",
-    "desc": "수많은 고수의 수를 적은 책. 무리가 120 오른다.",
+    "category": "서책",
+    "desc": "수많은 고수의 수를 적은 책. 무리가 120 오른다. 행낭에 넣어 두었다가 원할 때 펼친다.",
     "effects": [
       {
         "type": "stat",
         "stat": "martial",
         "amount": 120
       }
-    ]
+    ],
+    "consumable": true,
+    "stock_qty": 1
   },
   "설련고": {
     "name": "설련고",
@@ -3847,14 +3877,16 @@
       5
     ],
     "category": "영약",
-    "desc": "설산의 연꽃을 달여 굳힌 약. 심경이 120 오른다.",
+    "desc": "설산의 연꽃을 달여 굳힌 약. 심경이 120 오른다. 행낭에 넣어 두었다가 원할 때 먹는다.",
     "effects": [
       {
         "type": "stat",
         "stat": "mind",
         "amount": 120
       }
-    ]
+    ],
+    "consumable": true,
+    "stock_qty": 1
   },
   "천뢰탄": {
     "name": "천뢰탄",
@@ -3958,14 +3990,18 @@
       5
     ],
     "always": true,
-    "category": "밀서",
-    "desc": "천마의 호신 기운에 틈을 내는 부적. 천마의 체력이 1할 5푼 줄어든 채 싸움이 시작된다. 카르마로 거래한다.",
+    "category": "도구",
+    "desc": "하늘을 거스른다는 부적. 싸움 중에 사르면 세 합 동안 받는 피해가 3할 준다. 행낭에 넣어 두었다가 쓴다. 카르마로 거래한다.",
     "effects": [
       {
-        "type": "boss_weaken",
-        "percent": 15
+        "type": "guard_buff",
+        "percent": 30,
+        "rounds": 3
       }
-    ]
+    ],
+    "consumable": true,
+    "battle_only": true,
+    "stock_qty": 1
   },
   "꺼지지않는불씨": {
     "name": "꺼지지 않는 불씨",
@@ -3994,15 +4030,16 @@
       5
     ],
     "always": true,
-    "category": "금단",
-    "desc": "누가 썼는지 지워진 수련 기록. 쓰는 주무공의 성취가 200 오른다. 카르마로 거래한다.",
+    "category": "서책",
+    "desc": "누가 썼는지 지워진 수련 기록. 쓰는 주무공의 성취가 200 오른다. 카르마로 거래한다. 행낭에 넣어 두었다가 원할 때 펼친다.",
     "effects": [
       {
         "type": "mastery",
         "amount": 200
       }
     ],
-    "consumable": true
+    "consumable": true,
+    "stock_qty": 1
   },
   "천기서": {
     "name": "천기서",
@@ -4013,8 +4050,8 @@
       5
     ],
     "always": true,
-    "category": "금단",
-    "desc": "펼칠 때마다 글자가 바뀌는 책. 네 기량이 60씩 오른다. 카르마로 거래한다.",
+    "category": "서책",
+    "desc": "펼칠 때마다 글자가 바뀌는 책. 네 기량이 60씩 오른다. 카르마로 거래한다. 행낭에 넣어 두었다가 원할 때 펼친다.",
     "effects": [
       {
         "type": "stat",
@@ -4036,7 +4073,9 @@
         "stat": "mind",
         "amount": 60
       }
-    ]
+    ],
+    "consumable": true,
+    "stock_qty": 1
   },
   "신병증표": {
     "name": "신병 증표",
@@ -4355,6 +4394,265 @@
       {
         "type": "skill",
         "skill": "화운장결"
+      }
+    ]
+  },
+  "녹용": {
+    "name": "녹용",
+    "category": "영약",
+    "price": 130,
+    "markets": [
+      1,
+      2,
+      3
+    ],
+    "desc": "봄에 갓 돋은 사슴뿔. 외공과 내공이 20씩 오른다. 행낭에 넣어 두었다가 원할 때 먹는다.",
+    "effects": [
+      {
+        "type": "stat",
+        "stat": "external",
+        "amount": 20
+      },
+      {
+        "type": "stat",
+        "stat": "internal",
+        "amount": 20
+      }
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "drop_only": false,
+    "grade": "양품"
+  },
+  "설삼": {
+    "name": "설삼",
+    "category": "영약",
+    "price": 160,
+    "markets": [
+      2,
+      3,
+      4
+    ],
+    "desc": "눈 속에서 백 년을 자란 인삼. 심경이 50 오른다. 행낭에 넣어 두었다가 원할 때 먹는다.",
+    "effects": [
+      {
+        "type": "stat",
+        "stat": "mind",
+        "amount": 50
+      }
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "drop_only": false,
+    "grade": "명품"
+  },
+  "주과": {
+    "name": "주과",
+    "category": "영약",
+    "price": 190,
+    "markets": [
+      3,
+      4
+    ],
+    "desc": "붉은 빛이 도는 영과. 네 기량이 15씩 오른다. 행낭에 넣어 두었다가 원할 때 먹는다.",
+    "effects": [
+      {
+        "type": "stat",
+        "stat": "external",
+        "amount": 15
+      },
+      {
+        "type": "stat",
+        "stat": "internal",
+        "amount": 15
+      },
+      {
+        "type": "stat",
+        "stat": "martial",
+        "amount": 15
+      },
+      {
+        "type": "stat",
+        "stat": "mind",
+        "amount": 15
+      }
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "drop_only": false,
+    "grade": "명품"
+  },
+  "빙잠정수": {
+    "name": "빙잠의 정수",
+    "category": "영약",
+    "price": 373,
+    "markets": [],
+    "desc": "만년 빙잠이 품은 차가운 정수. 내공이 50, 심경이 40 오르고 내력이 차오른다. 행낭에 넣어 두었다가 원할 때 먹는다.",
+    "effects": [
+      {
+        "type": "stat",
+        "stat": "internal",
+        "amount": 50
+      },
+      {
+        "type": "stat",
+        "stat": "mind",
+        "amount": 40
+      },
+      {
+        "type": "heal",
+        "stat": "qi",
+        "percent": 50
+      }
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "drop_only": true,
+    "grade": "보물",
+    "no_drop": true
+  },
+  "금섬내단": {
+    "name": "금섬의 내단",
+    "category": "영약",
+    "price": 243,
+    "markets": [],
+    "desc": "금빛 두꺼비의 내단. 내공이 60 오르고 몸속의 독이 씻긴다. 행낭에 넣어 두었다가 원할 때 먹는다.",
+    "effects": [
+      {
+        "type": "stat",
+        "stat": "internal",
+        "amount": 60
+      },
+      {
+        "type": "cure",
+        "what": "poison"
+      },
+      {
+        "type": "heal",
+        "stat": "hp",
+        "percent": 30
+      }
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "drop_only": true,
+    "grade": "보물",
+    "no_drop": true
+  },
+  "궁기골": {
+    "name": "궁기의 뼈",
+    "category": "영약",
+    "price": 320,
+    "markets": [],
+    "desc": "날개 달린 범의 뼈. 외공과 무리가 50씩 오른다. 행낭에 넣어 두었다가 원할 때 먹는다.",
+    "effects": [
+      {
+        "type": "stat",
+        "stat": "external",
+        "amount": 50
+      },
+      {
+        "type": "stat",
+        "stat": "martial",
+        "amount": 50
+      }
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "drop_only": true,
+    "grade": "보물",
+    "no_drop": true
+  },
+  "필방우": {
+    "name": "필방의 깃",
+    "category": "영약",
+    "price": 320,
+    "markets": [],
+    "desc": "외다리 불새의 깃. 무리와 심경이 50씩 오른다. 행낭에 넣어 두었다가 원할 때 먹는다.",
+    "effects": [
+      {
+        "type": "stat",
+        "stat": "martial",
+        "amount": 50
+      },
+      {
+        "type": "stat",
+        "stat": "mind",
+        "amount": 50
+      }
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "drop_only": true,
+    "grade": "보물",
+    "no_drop": true
+  },
+  "도철내단": {
+    "name": "도철의 내단",
+    "category": "영약",
+    "price": 980,
+    "markets": [],
+    "desc": "모든 것을 삼킨다는 흉수의 내단. 네 기량이 50씩 오르고 체력과 내력이 가득 찬다. 행낭에 넣어 두었다가 원할 때 먹는다.",
+    "effects": [
+      {
+        "type": "stat",
+        "stat": "external",
+        "amount": 50
+      },
+      {
+        "type": "stat",
+        "stat": "internal",
+        "amount": 50
+      },
+      {
+        "type": "stat",
+        "stat": "martial",
+        "amount": 50
+      },
+      {
+        "type": "stat",
+        "stat": "mind",
+        "amount": 50
+      },
+      {
+        "type": "heal",
+        "stat": "hp",
+        "percent": 100
+      },
+      {
+        "type": "heal",
+        "stat": "qi",
+        "percent": 100
+      }
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "drop_only": true,
+    "grade": "신물",
+    "no_drop": true
+  },
+  "환혼향": {
+    "name": "환혼향",
+    "grade": "보물",
+    "price": 0,
+    "karma_price": 1,
+    "markets": [
+      5
+    ],
+    "always": true,
+    "category": "도구",
+    "consumable": true,
+    "battle_only": true,
+    "stock_qty": 1,
+    "desc": "한 줄기 향. 싸움 중에 피우면 내력이 가득 차고 다음 공격이 반드시 회심이 된다. 행낭에 넣어 두었다가 쓴다. 카르마로 거래한다.",
+    "effects": [
+      {
+        "type": "heal",
+        "stat": "qi",
+        "percent": 100
+      },
+      {
+        "type": "next_crit"
       }
     ]
   }
