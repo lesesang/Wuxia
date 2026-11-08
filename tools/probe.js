@@ -64,6 +64,13 @@ for (let run = 0; run < count; run++) {
     }
     const wasBattle = game.battle;
     if (!game.battle) equipBestGear(game.player); // 사람은 더 좋은 병장기를 얻으면 바꿔 든다
+    // 사람은 행낭의 영약과 책을 그때그때 먹고 읽는다
+    if (!game.battle && !game.event) {
+      for (const key of Object.keys(game.player.inventory)) {
+        const item = DB.market[key];
+        if (item && !item.battle_only && item.effects.some((e) => ["stat", "mastery"].includes(e.type))) game.useItem(key);
+      }
+    }
     if (game.event && DB.events[game.event.key].prelude) {
       // 사람은 대개 지금 무공에 맞는 무기를 고른다
       const list = eventView(p, game.event.key).choices;

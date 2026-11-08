@@ -221,7 +221,7 @@ export class Battle {
     this.regen = null;       // 합마다 차오르는 체력과 내력
     this.reflect = null;     // 받은 피해를 되돌림
     this.lifestealBuff = null;
-    this.askStand = false;      // 쓰러지는 순간 힘을 끌어모을지 플레이어에게 묻는다
+    this.askStand = false;      // 쓰러지는 순간 선천진기를 일으킬지 플레이어에게 묻는다
     this.standPending = false;
     this.stepStreak = 0;     // 경공을 잇달아 펼친 수
     this.mindStreak = 0;     // 운기를 잇달아 한 수
@@ -782,7 +782,7 @@ export class Battle {
     }
   }
 
-  /** 쓰러지는 순간 남은 기회가 있으면 마지막 힘을 끌어모은다. 플레이어가 고르게 되어 있으면 먼저 묻는다. */
+  /** 쓰러지는 순간 남은 기회가 있으면 선천진기를 일으킨다. 플레이어가 고르게 되어 있으면 먼저 묻는다. */
   checkRevive() {
     const p = this.player;
     if (this.spar || p.hp > 0 || p.revives <= 0 || this.standPending) return;
@@ -793,7 +793,7 @@ export class Battle {
     this.gatherLastStrength();
   }
 
-  /** 물음에 답한다. 힘을 끌어모으면 null, 눈을 감으면 전투 결과를 돌려준다 */
+  /** 물음에 답한다. 선천진기를 일으키면 null, 눈을 감으면 전투 결과를 돌려준다 */
   answerStand(gather) {
     if (!this.standPending) return null;
     this.standPending = false;
