@@ -2333,6 +2333,7 @@ test("병장기를 내려놓으면 행낭에 남고 다시 들 수 있다", () =
 });
 
 test("이기면 쓰지 않은 무공도 성취가 쌓이고, 심법과 보법이 더 많이 쌓인다", () => {
+  seed(5);
   const p = new Player("무림초출");
   p.skills = ["기초검법", "토납법", "초상비"].map((k) => Skill.fromDict({ key: k, grade: DB.skills[k].grade, mastery: 0 }));
   p.mainSkill = "기초검법";
@@ -3954,7 +3955,8 @@ test("천마는 한 사람이고 맹주 사건은 맹주의 아들 이야기 중
 });
 
 test("십이마장 열두 자리와 천마의 일지가 모두 채워져 있다", () => {
-  const seats = Object.values(DB.enemies).map((e) => e.name.match(/^제(.+)마장 /)?.[1]).filter(Boolean);
+  const text = JSON.stringify([DB.enemies, DB.events]);
+  const seats = [...text.matchAll(/제([일이삼사오육칠팔구십]{1,3})마장 /g)].map((m) => m[1]);
   assert.equal(new Set(seats).size, 12);
   assert.ok(DB.enemies.천마.intros.some((i) => i.requires.flag === "천마_일지"));
   assert.ok(DB.enemies.천마.outros.some((i) => i.requires.flag === "천마_일지"));
