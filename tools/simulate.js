@@ -71,6 +71,13 @@ function play({ style = "섞어서", useMarket = true, origin = "무림초출", 
   for (let i = 0; i < 3000 && game.player.alive; i++) {
     const p = game.player;
     if (!game.battle) equipBestGear(game.player); // 사람은 더 좋은 병장기를 얻으면 바꿔 든다
+    // 사람은 행낭의 영약과 책을 그때그때 먹고 읽는다
+    if (!game.battle && !game.event) {
+      for (const key of Object.keys(game.player.inventory)) {
+        const item = DB.market[key];
+        if (item && !item.battle_only && item.effects.some((e) => ["stat", "mastery"].includes(e.type))) game.useItem(key);
+      }
+    }
     if (game.event && DB.events[game.event.key].prelude) {
 
       const list = eventView(p, game.event.key).choices;

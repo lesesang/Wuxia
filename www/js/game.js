@@ -20,8 +20,8 @@ import {
 import { halpun, josa } from "./josa.js";
 
 const FINAL_UNLEASH_FROM = 880; // 평균 기량이 이보다 높으면 천마가 숨긴 힘을 꺼낸다
-const FINAL_UNLEASH_HP = 0.6;
-const FINAL_UNLEASH_ATTACK = 0.3;
+const FINAL_UNLEASH_HP = 0.45;
+const FINAL_UNLEASH_ATTACK = 0.2;
 const NATURAL_REGEN = 5;
 const MAX_TURN_REGEN = 30;
 const EXPLORE_BATTLE = 0.35; // 나머지는 사건과 기연
@@ -456,7 +456,7 @@ export class Game {
     // 막간을 고르지 않고 합을 진행하면 첫 선택지를 따른다
     if (battle.interlude) this.battleInterlude(0);
 
-    // 힘을 끌어모을지 고르지 않고 합을 진행하면 끌어모은다
+    // 선천진기를 고르지 않고 합을 진행하면 일으킨다
     if (battle.standPending) {
       this.battleStand(true);
       return;
@@ -468,7 +468,7 @@ export class Game {
     if (result) this.closeBattle(battle, result);
   }
 
-  /** 쓰러지는 순간의 선택. 힘을 끌어모을지, 여기서 눈을 감을지 */
+  /** 쓰러지는 순간의 선택. 선천진기를 일으킬지, 여기서 눈을 감을지 */
   battleStand(gather) {
     const { battle } = this;
     if (!battle?.standPending) return;
