@@ -6623,7 +6623,8 @@
     "variants": [
       {
         "requires": {
-          "has_sect": true
+          "has_sect": true,
+          "no_house": true
         },
         "tag": "사문",
         "choices": [

@@ -4103,3 +4103,18 @@ test("달이 사건으로 바로 열려도 경지에 오른 소식이 보인다"
   game.chooseEvent(0);
   assert.equal(game.notice, null);
 });
+
+test("세가의 무인에게 사문으로서 하는 선택지가 보이지 않는다", () => {
+  const p = new Player("남궁세가");
+  assert.ok(DB.sects[p.sect]?.house);
+  const view = eventView(p, "사형제싸움");
+  assert.ok(view.choices.every((c) => !c.label.includes("사문")), JSON.stringify(view.choices.map((c) => c.label)));
+  // 사문을 내세우는 선택지는 모두 세가를 뺀다
+  for (const [key, e] of Object.entries(DB.events)) {
+    for (const v of e.variants || []) {
+      for (const c of v.choices || []) {
+        if (/사문/.test(c.label) && v.requires?.has_sect) assert.ok(v.requires.no_house, key);
+      }
+    }
+  }
+});

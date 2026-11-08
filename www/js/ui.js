@@ -51,7 +51,7 @@ function eventKind(e) {
   if (e.kind === "story" || e.kind === "final") return "줄거리";
   if (e.requires?.unlocked) return "카르마 인연";
   if (e.requires?.origin) return "출신 이야기";
-  if (e.requires?.sect || e.requires?.no_sect) return "사문";
+  if (e.requires?.sect || e.requires?.no_sect) return "소속";
   return "강호 사건";
 }
 
@@ -113,7 +113,7 @@ function codexRows(tab, meta) {
     };
   }
   if (tab === "events") {
-    const kinds = ["줄거리", "강호 사건", "출신 이야기", "사문", "이어지는 인연", "카르마 인연"];
+    const kinds = ["줄거리", "강호 사건", "출신 이야기", "소속", "이어지는 인연", "카르마 인연"];
     return {
       total: Object.keys(DB.events).length, filterLabel: "갈래", filters: kinds, empty: "강호에서 겪은 사건이 이곳에 기록됩니다.",
       rows: meta.known_events.filter((k) => DB.events[k]).map((k) => {
