@@ -2117,7 +2117,8 @@ test("시작 선물은 주무공 계열을 따른다", () => {
   applyEffects(drifter, { start_weapon: "창법", start_mindset: "양생공" });
   grantStartGear(drifter);
   assert.equal(drifter.inventory.납창추, 5, "강호초출은 첫 병기를 고른 뒤 받는다");
-  assert.ok(drifter.hasSkill("곤륜현기공"), "자질로 받은 심법은 첫 심법을 골라도 남는다");
+  assert.ok(!drifter.hasSkill("곤륜현기공"), "곤륜의 호흡은 심법을 주지 않는다");
+  assert.ok(drifter.bestOfType("심공").mastery >= 40, "고른 첫 심법이 성취를 쌓은 채로 시작한다");
 });
 
 test("누적 카르마 보상은 넘긴 만큼 적용되고 자질 칸과 맞는다", () => {
@@ -4071,12 +4072,12 @@ test("씨름판은 경지와 기량에 따라 결과가 다르고, 곤륜의 호
   const texts = new Set();
   for (let i = 0; i < 40; i++) texts.add(resolveChoice(weak, "철권씨름", 0).text);
   assert.ok([...texts].some((t) => t.includes("하늘이 돌았다")));
-  const g = new Game();
-  withKarma(0, { unlocked_traits: [...loadMeta().unlocked_traits, "곤륜의호흡"] });
-  const key = Object.keys(DB.traits).find((k) => DB.traits[k].name === "곤륜의 호흡");
-  g.start("무림초출", [key]);
-  if (g.pickingArts) g.finishArtsPick();
-  assert.ok(g.player.bestOfType("심공").mastery >= 30);
+  const base = new Player("하북팽가");
+  const breath = new Player("하북팽가", ["현기의호흡"]);
+  grantStartGear(base);
+  grantStartGear(breath);
+  assert.equal(breath.skills.length, base.skills.length, "심법을 따로 주지 않는다");
+  assert.equal(breath.bestOfType("심공").mastery, Math.min(100, base.bestOfType("심공").mastery + 40));
   withKarma(0);
 });
 

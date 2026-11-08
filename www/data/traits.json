@@ -536,21 +536,17 @@
   },
   "현기의호흡": {
     "name": "곤륜의 호흡",
-    "desc": "심법 곤륜현기공을 성취 30 쌓은 채로 익히고 시작하며, 심법 회복이 2할 늘어난다.",
+    "desc": "시작 심법의 성취를 40 쌓은 채로 시작하고, 심법 회복이 2할 늘어난다.",
     "rarity": "일반",
     "cost": 5,
     "effects": [
-      {
-        "type": "start_skill",
-        "skill": "곤륜현기공"
-      },
       {
         "type": "mindset_power",
         "percent": 20
       },
       {
         "type": "start_mindset_mastery",
-        "amount": 30
+        "amount": 40
       }
     ]
   },
