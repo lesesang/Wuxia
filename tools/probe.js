@@ -1,5 +1,6 @@
 // 난이도 곡선 측정: 해마다 플레이어의 강함과 전투 소모, 챕터별 사망률을 본다.
 //   node tools/probe.js 300 [출신]
+import { equipBestGear } from "../www/js/events.js";
 import { readFile } from "node:fs/promises";
 import { pickArts } from "./arts.js";
 import { Battle } from "../www/js/battle.js";
@@ -62,6 +63,7 @@ for (let run = 0; run < count; run++) {
       fight = { battle: game.battle, hp: p.hp, ch: getChapter(p.turn), tier: game.battle.enemy.tier };
     }
     const wasBattle = game.battle;
+    if (!game.battle) equipBestGear(game.player); // 사람은 더 좋은 병장기를 얻으면 바꿔 든다
     if (game.event && DB.events[game.event.key].prelude) {
       // 사람은 대개 지금 무공에 맞는 무기를 고른다
       const list = eventView(p, game.event.key).choices;

@@ -4,7 +4,7 @@ import { DB } from "./data.js";
 import { checkRequires, reactiveLine } from "./events.js";
 import { equipmentBonus, gearGimmick } from "./market.js";
 import { pick, pickWeighted, randInt, rng, uniform } from "./rng.js";
-import { activeCompanions, applyGrowth, scaledGrowth, isNamed, battleBuffs, fameRankChanged, hasEffect, alignValue, dominant, KILL_ALIGN, realmBonus, realmIndex, sectBonus, sumEffect, talkLine } from "./rules.js";
+import { activeCompanions, MAX_FAME, veteranBonus, applyGrowth, scaledGrowth, isNamed, battleBuffs, fameRankChanged, hasEffect, alignValue, dominant, KILL_ALIGN, realmBonus, realmIndex, sectBonus, sumEffect, talkLine } from "./rules.js";
 import { halpun, josa } from "./josa.js";
 
 const BASE_HIT = 0.88;
@@ -18,11 +18,12 @@ const DROP_MAIN_RATE = 3;    // 주무공과 같은 계열의 비급은 더 잘 
 const DROP_OTHER_RATE = 0.6;
 const DROP_HINT_RATE = 0.6;      // 적이 품은 무공이 있으면 먼저 그것이 나온다
 const DROP_MEDICINE_RATE = 0.05; // 약이 나올 확률
-const WIN_ART_MASTERY = 4; // 이기면 쓰던 심법과 경공도 깊어진다
+const WIN_ART_MASTERY = 5; // 이기면 쓰던 심법과 경공도 깊어진다
 const WIN_MAIN_MASTERY = 1; // 이기면 쓰던 공격 무공도 아주 조금 깊어진다
-const ART_USE_RATE = 2; // 심법과 경공은 자주 쓰지 않으므로 한 번에 더 쌓인다
+const ART_USE_RATE = 2.5; // 심법과 경공은 자주 쓰지 않으므로 한 번에 더 쌓인다
 const REVIVE_RATE = 0.5;
-const MIN_THROUGH_GUARD = 0.3; // 호신강기를 뚫고 들어오는 최소 비율
+const MAX_AURA_GUARD = 25; // 호신강기가 줄이는 피해의 끝
+const INNATE_POWER = 15; // 선천진기를 일으킨 싸움에서 오르는 위력과 줄어드는 피해
 const VICTORY_TALK_RATE = 0.3;
 const SPAR_LOSS_HP = 0.1; // 비무에 진 뒤 남는 체력
 const MAX_KILL_POWER = 40; // 쓰러뜨린 적만큼 강해지는 자질의 끝
@@ -41,7 +42,7 @@ const MAX_MIND_HP = 50; // 한 번의 운기로 채우는 체력의 끝
 const MAX_MIND_QI = 70;
 const MIND_STREAK_RATE = 0.5; // 운기를 잇달아 하면 회복이 이만큼으로 준다
 export const INJURY_PENALTY = 7;
-const FAME_BY_TIER = { 일반: 1, 난적: 2, 강적: 4, 보스: 10 };
+const FAME_BY_TIER = { 일반: 5, 난적: 10, 강적: 20, 보스: 50 };
 const STAT_GROWTH_RANGE = { 일반: [9, 18], 난적: [10, 27], 강적: [18, 37], 보스: [50, 100] };
 
 /** 표(12달 간격)에서 해당 달의 값을 읽는다. */
@@ -88,6 +89,14 @@ export class Enemy {
       this.hp = this.maxHp;
       this.attack = Math.max(1, Math.round(this.attack * attackScale));
       this.armor = Math.round(this.armor * attackScale);
+    }
+    // 적은 오래 버티되 한 번에 덜 아프게 친다
+    const scale = DB.balance.enemy_scale;
+    if (scale && data.tier !== "보스") {
+      this.maxHp = Math.max(1, Math.round(this.maxHp * scale.hp / 5) * 5);
+      this.hp = this.maxHp;
+      this.attack = Math.max(1, Math.round(this.attack * scale.attack));
+      this.armor = Math.round(this.armor * scale.armor);
     }
   }
 
@@ -167,7 +176,7 @@ export function useConsumable(player, key) {
       if (main) notes.push(...main.gainMastery(!effect.style || main.category === effect.style ? effect.amount : Math.floor(effect.amount / 2)));
     } else if (effect.type === "last_strength") {
       player.revives += effect.amount ?? 1;
-      notes.push("쓰러질 때 끌어모을 힘이 하나 더 생겼다");
+      notes.push("선천진기를 한 번 더 일으킬 수 있다");
     } else if (effect.type === "cure" && effect.what === "injury") {
       player.addInjury(-(effect.amount ?? 1));
     } else if (effect.type === "stat") {
@@ -216,6 +225,7 @@ export class Battle {
     this.regenUsedQi = 0;
     this.stunRest = false;   // 굳었다 풀린 다음 합
     this.companions = isFinal ? activeCompanions(player) : [];
+    this.innate = false; // 선천진기를 일으켰는가
     this.freeItemUsed = false;  // 한 합에 도구 하나는 합을 쓰지 않는다
     this.weaponG = gearGimmick(player, "weapon");
     this.armorG = gearGimmick(player, "armor");
@@ -259,6 +269,8 @@ export class Battle {
   attackScale() {
     const p = this.player;
     let scale = 1 + realmBonus(p.realm);
+    scale *= 1 + veteranBonus(p).damage / 100;
+    if (this.innate) scale *= 1 + INNATE_POWER / 100;
     scale *= 1 + sumEffect(p.traits, "damage_bonus", "percent") / 100;
     scale *= 1 + Math.min(MAX_KILL_POWER, p.kills * sumEffect(p.traits, "kill_power", "percent")) / 100;
     scale *= 1 + sectBonus(p, "damage") / 100;
@@ -620,6 +632,8 @@ export class Battle {
     let base = this.enemy.attack * this.enemy.attackMultiplier() * multiplier;
     if (this.enemyWeaken) base *= 1 - this.enemyWeaken.percent / 100;
     base *= 1 - realmBonus(this.player.realm) / 2;
+    base *= 1 - veteranBonus(this.player).reduce / 100;
+    if (this.innate) base *= 1 - INNATE_POWER / 100;
     base *= 1 - Math.min(MAX_MIND_GUARD, this.player.mind / MIND_GUARD_RATE);
     base *= 1 - sectBonus(this.player, "damage_reduce") / 100;
     base *= 1 - alignValue(this.player.alignment, "정도", "guard") / 100;
@@ -629,9 +643,9 @@ export class Battle {
     for (const c of this.companions) base *= 1 - (c.help.guard || 0) / 100;
     const blow = Math.trunc(base * uniform(0.9, 1.1));
     const raw = Math.max(1, Math.ceil(blow * MIN_THROUGH_ARMOR), blow - equipmentBonus(this.player, "armor"));
-    // 호신강기는 맞을 때마다 일정한 양을 막는다. 다만 아무리 약한 공격도 조금은 들어온다
-    const guard = sumEffect(this.player.traits, "flat_guard", "amount");
-    const taken = guard ? Math.max(Math.ceil(raw * MIN_THROUGH_GUARD), raw - guard) : raw;
+    // 호신강기는 맞는 피해를 몇 푼 줄인다
+    const guard = Math.min(MAX_AURA_GUARD, sumEffect(this.player.traits, "aura_guard", "percent"));
+    const taken = guard ? Math.round(raw * (1 - guard / 100)) : raw;
     this.guardedLast = raw - taken;
     return Math.max(1, taken);
   }
@@ -771,7 +785,7 @@ export class Battle {
     this.regenUsedQi = 0;
     this.stunRest = false;   // 굳었다 풀린 다음 합
     if (!gather) {
-      this.log.push("끌어모을 수 있는 힘을 그대로 놓았다. 눈이 감긴다.");
+      this.log.push("단전 깊은 곳의 선천진기를 건드리지 않았다. 눈이 감긴다.");
       return this.finish(false);
     }
     this.gatherLastStrength();
@@ -784,8 +798,9 @@ export class Battle {
     p.revives -= 1;
     p.hp = Math.max(1, Math.trunc(p.maxHp() * REVIVE_RATE));
     p.qi = Math.min(p.maxQi(), p.qi + Math.trunc(p.maxQi() * REVIVE_RATE));
-    p.note(`${this.enemy.name} 앞에서 쓰러지려다 마지막 힘을 끌어모아 버텼다.`);
-    this.log.push(`꺼져 가던 단전의 불씨를 어떻게든 끌어모았다. 몸이 다시 움직인다. (체력 ${p.hp}, 내력 ${p.qi}, 남은 기회 ${p.revives})`);
+    this.innate = true;
+    p.note(`${this.enemy.name} 앞에서 쓰러지려다 선천진기를 일으켜 버텼다.`);
+    this.log.push(`단전 깊이 잠든 선천진기를 깨웠다. 타고난 기운이 온몸에 차오른다. 이 싸움 동안 위력이 ${halpun(INNATE_POWER)} 오르고 받는 피해가 ${halpun(INNATE_POWER)} 준다. (체력 ${p.hp}, 내력 ${p.qi}, 남은 선천진기 ${p.revives})`);
   }
 
   nextSpecialWarning() { return this.enemy.specialForRound(this.roundNum + 1)?.name ?? null; }
@@ -1001,7 +1016,7 @@ export class Battle {
       }
       this.log.push(this.spar ? `${this.enemy.name}${josa(this.enemy.name, "을/를")} 꺾었다. 실전 경험 +${exp}` : `${this.enemy.name}${josa(this.enemy.name, "을/를")} 쓰러뜨렸다. 실전 경험 +${exp}`);
       const fameBefore = this.player.fame;
-      this.player.fame += FAME_BY_TIER[this.enemy.tier] || 0;
+      this.player.fame = Math.min(MAX_FAME, this.player.fame + (FAME_BY_TIER[this.enemy.tier] || 0));
       const rank = fameRankChanged(this.player, fameBefore, this.player.fame);
       if (rank) {
         this.log.push(`강호에서 ${rank}${josa(rank, "으로")} 불리기 시작했다.`);

@@ -224,7 +224,7 @@
                 "text": "무관주가 쓰러졌다. 소년들이 울면서 절을 했다. 여인은 다음 날 고을을 떠났다.",
                 "effects": {
                   "battle": "귀도객",
-                  "fame": 4,
+                  "fame": 20,
                   "flags": [
                     "복수의끝"
                   ],
@@ -253,7 +253,7 @@
                 "effects": {
                   "silver": 300,
                   "alignment": {
-                    "사도": 40
+                    "사도": 60
                   },
                   "full_growth": true
                 }
@@ -267,7 +267,7 @@
                 "text": "과부의 은자는 돌려주지 않았다. 마교 쪽 장부에 적힌 이름이 내 이름으로 바뀌었다.",
                 "effects": {
                   "battle": "귀도객",
-                  "fame": 4,
+                  "fame": 20,
                   "flags": [
                     "복수의끝"
                   ],
@@ -282,7 +282,7 @@
                   "silver": 120,
                   "full_growth": true,
                   "alignment": {
-                    "마도": 60
+                    "마도": 90
                   }
                 }
               }
@@ -303,7 +303,7 @@
                     "effects": {
                       "battle": "귀도객",
                       "alignment": {
-                        "마도": 40
+                        "마도": 60
                       },
                       "stats": {
                         "external": 8,
@@ -386,7 +386,7 @@
               {
                 "text": "병은 고을 밖으로 번졌다. 사람들이 내 별호를 병 이름처럼 불렀다.",
                 "effects": {
-                  "fame": 1,
+                  "fame": 5,
                   "alignment": {
                     "마도": 30
                   }
@@ -526,9 +526,9 @@
               {
                 "text": "병이 물러간 고을에서 사람들이 내 이름으로 아이 이름을 지었다.",
                 "effects": {
-                  "fame": 6,
+                  "fame": 30,
                   "alignment": {
-                    "정도": 40
+                    "정도": 60
                   },
                   "flags": [
                     "역병을막다"
@@ -557,7 +557,7 @@
                   "alignment": {
                     "사도": 20
                   },
-                  "fame": 2,
+                  "fame": 10,
                   "full_growth": true
                 }
               }
@@ -569,7 +569,7 @@
               {
                 "text": "고을 사람 절반이 내 앞에 줄을 섰다. 그들의 눈이 수령을 볼 때보다 더 낮았다.",
                 "effects": {
-                  "fame": 6,
+                  "fame": 30,
                   "flags": [
                     "역병을막다"
                   ],
@@ -584,7 +584,7 @@
                   },
                   "full_growth": true,
                   "alignment": {
-                    "마도": 40
+                    "마도": 60
                   }
                 }
               }
@@ -784,7 +784,7 @@
                 "text": "더는 내 옆에 두면 안 되겠다. 아이를 사문 있는 사람에게 보냈다.",
                 "effects": {
                   "chain_abandon": true,
-                  "fame": 1
+                  "fame": 5
                 }
               }
             ]
@@ -806,7 +806,7 @@
                   "flags": [
                     "제자_완성"
                   ],
-                  "fame": 3,
+                  "fame": 15,
                   "mastery": 60,
                   "stats": {
                     "martial": 9
@@ -847,14 +847,14 @@
                   "flags": [
                     "제자_완성"
                   ],
-                  "fame": 3,
+                  "fame": 15,
                   "mastery": 60,
                   "stats": {
                     "martial": 9
                   },
                   "full_growth": true,
                   "alignment": {
-                    "마도": 40
+                    "마도": 60
                   }
                 }
               }
@@ -959,7 +959,7 @@
               {
                 "text": "늙은 뱃사공이 노를 안고 울었다. 수로채에서 먼저 사람을 보내왔다.",
                 "effects": {
-                  "fame": 1,
+                  "fame": 5,
                   "alignment": {
                     "마도": 20
                   }
@@ -983,7 +983,7 @@
                   "stats": {
                     "mind": 3
                   },
-                  "fame": 1
+                  "fame": 5
                 }
               }
             ]
@@ -1012,7 +1012,7 @@
                   "stats": {
                     "mind": 3
                   },
-                  "fame": 1,
+                  "fame": 5,
                   "alignment": {
                     "마도": 30
                   }
@@ -1067,7 +1067,7 @@
                       "stats": {
                         "mind": 3
                       },
-                      "fame": 2
+                      "fame": 10
                     }
                   }
                 ]
@@ -1089,7 +1089,7 @@
                 "text": "물이 사흘 붉었다. 두 놈은 사라졌다.",
                 "effects": {
                   "alignment": {
-                    "사도": 40
+                    "사도": 60
                   },
                   "silver": 60
                 }
@@ -1103,7 +1103,7 @@
                 "text": "물 위에서 싸우는 법을 몸으로 배웠다.",
                 "effects": {
                   "battle": "장강수적",
-                  "fame": 2,
+                  "fame": 10,
                   "stats": {
                     "martial": 3
                   },
@@ -1140,7 +1140,7 @@
                 "text": "총채주가 물에 떨어졌다. 뱃사공들이 노로 물을 두드렸다.",
                 "effects": {
                   "battle": "수적두목",
-                  "fame": 6,
+                  "fame": 30,
                   "flags": [
                     "수로평정"
                   ],
@@ -1166,7 +1166,7 @@
                   "battle": "수적두목",
                   "silver": 800,
                   "alignment": {
-                    "사도": 60
+                    "사도": 90
                   },
                   "foe": "장강 총채주 물귀신 우대강",
                   "full_growth": true
@@ -1181,7 +1181,7 @@
                 "text": "뱃사공들도 돌아서지 못했다. 강물이 며칠 붉었고 통행세는 이제 내게 온다.",
                 "effects": {
                   "battle": "수적두목",
-                  "fame": 6,
+                  "fame": 30,
                   "flags": [
                     "수로평정"
                   ],
@@ -1192,7 +1192,7 @@
                   },
                   "full_growth": true,
                   "alignment": {
-                    "마도": 60
+                    "마도": 90
                   }
                 }
               }
@@ -1267,7 +1267,7 @@
                 "text": "그 값이 은자로 나갔지만 침은 안 맞았다.",
                 "effects": {
                   "silver": -40,
-                  "fame": 2,
+                  "fame": 10,
                   "alignment": {
                     "정도": 20
                   }
@@ -1311,7 +1311,7 @@
               {
                 "text": "그 고을에서 내 이름에 침 뱉을 사람은 이제 없다. 말하는 사람도 없다.",
                 "effects": {
-                  "fame": 1,
+                  "fame": 5,
                   "alignment": {
                     "마도": 20
                   }
@@ -1326,7 +1326,7 @@
                 "text": "이름이야 어찌 되든 천마는 안 기다린다. 쫓는 일을 그만뒀다.",
                 "effects": {
                   "chain_abandon": true,
-                  "fame": -3
+                  "fame": -15
                 }
               }
             ]
@@ -1345,7 +1345,7 @@
                 "text": "그가 쓰러지며 웃었다. \"이제 〈대협〉은 하나요.\" 이름값이 맞는 느낌이었다.",
                 "effects": {
                   "battle": "낭인",
-                  "fame": 8,
+                  "fame": 40,
                   "foe": "내 별호를 쓰는 낭인",
                   "style_gear": {
                     "grade": "명품"
@@ -1362,9 +1362,9 @@
                 "text": "그는 그 뒤 진짜 산적을 쫓으러 다녔다. 강호에 〈대협〉이 둘이 되었다.",
                 "effects": {
                   "alignment": {
-                    "정도": 40
+                    "정도": 60
                   },
-                  "fame": 4,
+                  "fame": 20,
                   "stats": {
                     "mind": 14
                   },
@@ -1380,14 +1380,14 @@
                 "text": "내 별호를 쓰면 어떻게 되는지 고을마다 소문이 났다.",
                 "effects": {
                   "battle": "낭인",
-                  "fame": 8,
+                  "fame": 40,
                   "foe": "내 별호를 쓰는 낭인",
                   "style_gear": {
                     "grade": "명품"
                   },
                   "full_growth": true,
                   "alignment": {
-                    "마도": 40
+                    "마도": 60
                   }
                 }
               }
@@ -1400,7 +1400,7 @@
                 "text": "둘이 번갈아 같은 별호를 팔았다. 고을마다 값이 달랐다.",
                 "effects": {
                   "silver": 150,
-                  "fame": 2,
+                  "fame": 10,
                   "full_growth": true,
                   "alignment": {
                     "사도": 30
@@ -1422,7 +1422,7 @@
                   {
                     "text": "둘이 머리를 맞대고 전설을 만들었다. 이야기는 한 달 뒤 천 리 밖에서 돌아왔다.",
                     "effects": {
-                      "fame": 14,
+                      "fame": 70,
                       "silver": 200,
                       "full_growth": true
                     }
@@ -1436,7 +1436,7 @@
       }
     ],
     "requires": {
-      "min_fame": 10
+      "min_fame": 50
     }
   },
   "세조각비급": {
@@ -1537,7 +1537,7 @@
                   "alignment": {
                     "사도": 20
                   },
-                  "fame": -1
+                  "fame": -5
                 }
               }
             ]
@@ -1548,7 +1548,7 @@
               {
                 "text": "할아버지가 평생 지킨 것이라 했다. 지키는 사람이 없어졌다.",
                 "effects": {
-                  "fame": -1,
+                  "fame": -5,
                   "alignment": {
                     "마도": 30
                   }
@@ -1587,7 +1587,7 @@
                   "style_skill": {
                     "grade": "일절"
                   },
-                  "fame": 3,
+                  "fame": 15,
                   "foe": "셋째 조각의 도객"
                 }
               }
@@ -1621,7 +1621,7 @@
                   "style_skill": {
                     "grade": "일절"
                   },
-                  "fame": 3,
+                  "fame": 15,
                   "foe": "셋째 조각의 도객",
                   "alignment": {
                     "마도": 30
@@ -1640,7 +1640,7 @@
                   "style_skill": {
                     "grade": "일절"
                   },
-                  "fame": 3,
+                  "fame": 15,
                   "foe": "셋째 조각의 도객",
                   "silver": 200,
                   "alignment": {
@@ -1683,7 +1683,7 @@
               {
                 "text": "맹에서 고맙다는 말이 왔다. 그 뒤 소식은 없었다.",
                 "effects": {
-                  "fame": 1
+                  "fame": 5
                 }
               }
             ]
@@ -1743,7 +1743,7 @@
                 "text": "복면인들을 베는 사이 호법은 달아났다. 낙양은 무사했다.",
                 "effects": {
                   "battle": "혈마대귀",
-                  "fame": 4,
+                  "fame": 20,
                   "alignment": {
                     "정도": 20
                   },
@@ -1778,7 +1778,7 @@
                     "martial": 3
                   },
                   "alignment": {
-                    "마도": 40
+                    "마도": 60
                   }
                 }
               }
@@ -1814,7 +1814,7 @@
                   "battle": "혈마대귀",
                   "boss_weaken": 15,
                   "alignment": {
-                    "정도": 40
+                    "정도": 60
                   },
                   "foe": "아이를 붙든 혈마대 귀졸",
                   "style_gear": {
@@ -1833,7 +1833,7 @@
                 "effects": {
                   "boss_weaken": 12,
                   "alignment": {
-                    "마도": 40
+                    "마도": 60
                   },
                   "silver": 300,
                   "full_growth": true
@@ -1848,7 +1848,7 @@
                 "text": "그의 칼은 일부러 느렸다.",
                 "effects": {
                   "battle": "무림맹추격대",
-                  "fame": 6,
+                  "fame": 30,
                   "foe": "내통한 호법 은장 곽수",
                   "grade_item": {
                     "grade": "보물",
@@ -2001,7 +2001,7 @@
                 "text": "이 일은 맹 안의 일이다. 공자를 믿을 만한 집에 맡기고 물러났다.",
                 "effects": {
                   "chain_abandon": true,
-                  "fame": -1
+                  "fame": -5
                 }
               }
             ]
@@ -2019,7 +2019,7 @@
               {
                 "text": "회의장이 얼어붙었다. 그 호법의 손이 떨렸다.",
                 "effects": {
-                  "fame": 3,
+                  "fame": 15,
                   "alignment": {
                     "정도": 20
                   }
@@ -2083,12 +2083,12 @@
                 "effects": {
                   "battle": "무림맹추격대",
                   "boss_weaken": 12,
-                  "fame": 5,
+                  "fame": 25,
                   "flags": [
                     "맹주의아들"
                   ],
                   "alignment": {
-                    "정도": 40
+                    "정도": 60
                   },
                   "foe": "배신한 호법 백선 진무",
                   "style_gear": {
@@ -2129,7 +2129,7 @@
                 "effects": {
                   "battle": "무림맹추격대",
                   "boss_weaken": 12,
-                  "fame": 5,
+                  "fame": 25,
                   "flags": [
                     "맹주의아들"
                   ],
@@ -2139,7 +2139,7 @@
                   },
                   "full_growth": true,
                   "alignment": {
-                    "마도": 40
+                    "마도": 60
                   }
                 }
               }
@@ -2153,7 +2153,7 @@
                 "effects": {
                   "battle": "무림맹추격대",
                   "boss_weaken": 12,
-                  "fame": 5,
+                  "fame": 25,
                   "flags": [
                     "맹주의아들"
                   ],
@@ -2245,7 +2245,7 @@
                   "style_skill": {
                     "grade": "일절"
                   },
-                  "fame": 4,
+                  "fame": 20,
                   "spar": true,
                   "foe": "낙일봉의 백발 무인"
                 }
@@ -2277,7 +2277,7 @@
                   "style_skill": {
                     "grade": "일절"
                   },
-                  "fame": 4,
+                  "fame": 20,
                   "spar": true,
                   "foe": "낙일봉의 백발 무인",
                   "alignment": {
@@ -2297,7 +2297,7 @@
                   "style_skill": {
                     "grade": "일절"
                   },
-                  "fame": 4,
+                  "fame": 20,
                   "spar": true,
                   "foe": "낙일봉의 백발 무인",
                   "silver": 60,
@@ -2508,7 +2508,7 @@
                 "effects": {
                   "battle": "종남검수",
                   "mastery": 60,
-                  "fame": 6,
+                  "fame": 30,
                   "style_weapon": 3,
                   "spar": true,
                   "foe": "화산 장로 운계 진인",
@@ -2542,7 +2542,7 @@
                 "effects": {
                   "battle": "종남검수",
                   "mastery": 60,
-                  "fame": 6,
+                  "fame": 30,
                   "style_weapon": 3,
                   "spar": true,
                   "foe": "화산 장로 운계 진인",
@@ -2582,7 +2582,7 @@
       4
     ],
     "requires": {
-      "min_fame": 10
+      "min_fame": 50
     },
     "steps": [
       {
@@ -2665,7 +2665,7 @@
                 "text": "공자의 호위가 먼저 칼을 뽑았다.",
                 "effects": {
                   "battle": "세가공자",
-                  "fame": 2,
+                  "fame": 10,
                   "foe": "혼담의 공자"
                 },
                 "lead": true
@@ -2679,7 +2679,7 @@
                 "text": "혼사는 없던 일이 되었다. 양가 모두 내 이름을 입에 올리지 않게 되었다.",
                 "effects": {
                   "battle": "세가공자",
-                  "fame": 2,
+                  "fame": 10,
                   "foe": "혼담의 공자",
                   "alignment": {
                     "마도": 30
@@ -2728,9 +2728,9 @@
                 "effects": {
                   "battle": "사도련향주",
                   "boss_weaken": 10,
-                  "fame": 6,
+                  "fame": 30,
                   "alignment": {
-                    "정도": 40
+                    "정도": 60
                   },
                   "foe": "뒷돈 받은 향주",
                   "style_gear": {
@@ -2751,7 +2751,7 @@
                 "effects": {
                   "silver": 900,
                   "alignment": {
-                    "사도": 40
+                    "사도": 60
                   },
                   "full_growth": true
                 }
@@ -2766,7 +2766,7 @@
                 "effects": {
                   "battle": "사도련향주",
                   "boss_weaken": 10,
-                  "fame": 6,
+                  "fame": 30,
                   "foe": "뒷돈 받은 향주",
                   "style_gear": {
                     "grade": "명품",
@@ -2775,7 +2775,7 @@
                   "silver": 300,
                   "full_growth": true,
                   "alignment": {
-                    "마도": 50
+                    "마도": 75
                   }
                 }
               }
@@ -2983,7 +2983,7 @@
                 "text": "품평회 마당이 조용해졌다. 첫 잔을 든 고을 어른이 눈을 감았다. 술도가는 백한 해째를 맞았다.",
                 "effects": {
                   "battle": "흑풍채두목",
-                  "fame": 3,
+                  "fame": 15,
                   "silver": 160,
                   "hp_pct": 20,
                   "foe": "주루 뒷배 두목",
@@ -3004,10 +3004,10 @@
               {
                 "text": "주루 주인이 항아리를 놓치고 달아났다. 며느리 동생의 빚도 그 자리에서 지워졌다.",
                 "effects": {
-                  "fame": 4,
+                  "fame": 20,
                   "silver": 200,
                   "alignment": {
-                    "정도": 40
+                    "정도": 60
                   },
                   "grade_item": {
                     "grade": "양품",
@@ -3029,7 +3029,7 @@
                 "effects": {
                   "silver": 260,
                   "alignment": {
-                    "사도": 40
+                    "사도": 60
                   },
                   "full_growth": true
                 }
@@ -3043,7 +3043,7 @@
                 "text": "그해 품평회의 일등은 말할 것도 없었다. 다만 술맛을 칭찬하는 사람이 없었다.",
                 "effects": {
                   "battle": "흑풍채두목",
-                  "fame": 3,
+                  "fame": 15,
                   "silver": 160,
                   "hp_pct": 20,
                   "foe": "주루 뒷배 두목",
@@ -3075,7 +3075,7 @@
                   {
                     "text": "열두 항아리를 다 맞혔다. 아무도 내 판정에 토를 달지 못했다. 공짜 술을 평생 약속받았다.",
                     "effects": {
-                      "fame": 5,
+                      "fame": 25,
                       "hp_pct": 30,
                       "stats": {
                         "mind": 10
@@ -3128,7 +3128,7 @@
                   "alignment": {
                     "정도": 20
                   },
-                  "fame": 1
+                  "fame": 5
                 }
               }
             ],
@@ -3144,7 +3144,7 @@
                 "effects": {
                   "silver": 50,
                   "alignment": {
-                    "사도": 40
+                    "사도": 60
                   }
                 }
               }
@@ -3202,7 +3202,7 @@
                 "text": "은자는 빠르게 사라졌고 사람은 빠르게 모였다.",
                 "effects": {
                   "silver": -40,
-                  "fame": 2,
+                  "fame": 10,
                   "alignment": {
                     "정도": 20
                   }
@@ -3223,7 +3223,7 @@
                     "external": 5
                   },
                   "hp_pct": -15,
-                  "fame": 2
+                  "fame": 10
                 }
               }
             ]
@@ -3286,7 +3286,7 @@
                       "stats": {
                         "mind": 3
                       },
-                      "fame": 3
+                      "fame": 15
                     }
                   }
                 ]
@@ -3307,7 +3307,7 @@
                 "text": "아침이 밝았을 때 제방은 그대로였다. 호위들이 두고 간 깃발로 불을 지폈다.",
                 "effects": {
                   "battle": "세가호위",
-                  "fame": 3,
+                  "fame": 15,
                   "alignment": {
                     "정도": 20
                   },
@@ -3325,7 +3325,7 @@
                   "stats": {
                     "mind": 4
                   },
-                  "fame": 2
+                  "fame": 10
                 }
               }
             ]
@@ -3337,10 +3337,10 @@
                 "text": "돌이 모자라던 참이었다. 인부들이 그 자리를 밟지 않고 돌아다녔다.",
                 "effects": {
                   "battle": "세가호위",
-                  "fame": 3,
+                  "fame": 15,
                   "foe": "수령의 세가 호위",
                   "alignment": {
-                    "마도": 40
+                    "마도": 60
                   }
                 }
               }
@@ -3384,9 +3384,9 @@
               {
                 "text": "새벽까지 업어 날랐다. 수령의 논이 호수가 되었다. 그 고을 아이 이름에 내 이름이 들어갔다.",
                 "effects": {
-                  "fame": 5,
+                  "fame": 25,
                   "alignment": {
-                    "정도": 40
+                    "정도": 60
                   },
                   "stats": {
                     "external": 10,
@@ -3408,7 +3408,7 @@
               {
                 "text": "허리까지 물이 찼다. 사람들이 돌을 이고 내 옆에 섰다. 제방은 그날 무너지지 않았다.",
                 "effects": {
-                  "fame": 4,
+                  "fame": 20,
                   "stats": {
                     "external": 12,
                     "internal": 10
@@ -3431,8 +3431,8 @@
                 "effects": {
                   "silver": 420,
                   "alignment": {
-                    "사도": 20,
-                    "마도": 40
+                    "사도": 30,
+                    "마도": 60
                   },
                   "full_growth": true
                 }
@@ -3445,7 +3445,7 @@
               {
                 "text": "수령의 논부터 호수가 되었다. 수령이 어디까지 잠겼는지는 말하는 사람이 없다.",
                 "effects": {
-                  "fame": 2,
+                  "fame": 10,
                   "alignment": {
                     "마도": 30
                   }
@@ -3467,9 +3467,9 @@
                   {
                     "text": "약재를 미리 모아 두었다. 그해 그 고을에는 앓는 사람이 없었다.",
                     "effects": {
-                      "fame": 5,
+                      "fame": 25,
                       "alignment": {
-                        "정도": 40
+                        "정도": 60
                       },
                       "stats": {
                         "mind": 10

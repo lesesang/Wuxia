@@ -10,6 +10,8 @@ export const ALIGNMENT_SCALE = 20; // 성향이 낮은 수로 쌓이던 때의 �
 const DOMINANT_THRESHOLD = 60;
 export const FOCUS_RATIO = 2;      // 한 길이 둘째 길의 이만큼을 넘으면 그 길에 집중한 것으로 친다
 // 앞선 길은 사건에서 이만큼 더 오른다. 사건이 적은 길일수록 크다
+export const MAX_FAME = 999;
+export const ALIGN_EASE = 1.1; // 성향은 조금 쉽게 오른다
 export const FOCUS_GAIN = { 정도: 1.1, 사도: 1.35, 마도: 1.7 };
 export const FOCUS_DRIFT = 1;       // 집중한 길은 달마다 저절로 오른다
 // 한 길이 오르면 부딪치는 길이 그 비율만큼 깎인다
@@ -222,6 +224,13 @@ export function returnedLine(key) {
   return pick(list).replaceAll("〈이름〉", name).replaceAll("{이/가}", josa(name, "이/가"));
 }
 
+/** 실전 경험이 쌓일수록 손이 노련해진다. 정해진 수마다 주는 피해가 늘고 받는 피해가 준다 */
+export function veteranBonus(player) {
+  const v = DB.realms.veteran;
+  const step = Math.min(v.names.length, Math.floor((player.battles || 0) / v.every));
+  return { step, name: step ? v.names[step - 1] : null, damage: step * v.damage, reduce: step * v.reduce, next: step < v.names.length ? (step + 1) * v.every : null };
+}
+
 export const perkTrait = (realm) => `경지_${realm}`;
 
 export function nextRealm(realm) {
@@ -268,7 +277,8 @@ export function realmProgress(player) {
 /** 히든 엔딩. 일반 돌파로는 오르지 못하고 천마를 쓰러뜨린 그 순간에만 판정한다. */
 export function checkSaengsa(player) {
   const req = DB.realms.saengsa;
-  return Math.min(...statsOf(player)) >= req.min_stat && player.battles >= req.battles
+  return realmIndex(player.realm) >= realmIndex(req.min_realm)
+    && Math.min(...statsOf(player)) >= req.min_stat && player.battles >= req.battles
     && player.hp >= player.maxHp() * req.hp_ratio && player.qi >= player.maxQi() * req.qi_ratio;
 }
 
@@ -285,11 +295,11 @@ const DEEP_STEP = 2; // 이 단계부터 그 길이 깊어진 무인으로 대�
 export function talkKeys(player) {
   const keys = [];
   const tier = alignTier(player.alignment);
-  if (player.fame >= 100) keys.push("천하");
-  else if (player.fame >= 40) keys.push("유명");
-  else if (player.fame <= 9) keys.push("무명");
+  if (player.fame >= 500) keys.push("천하");
+  else if (player.fame >= 200) keys.push("유명");
+  else if (player.fame < 50) keys.push("무명");
   // 이름이 나기 전에는 내 성향을 아는 사람이 없다
-  if (tier && player.fame >= 10) keys.push(tier.step >= DEEP_STEP ? `${tier.side}_깊음` : tier.side);
+  if (tier && player.fame >= 50) keys.push(tier.step >= DEEP_STEP ? `${tier.side}_깊음` : tier.side);
   return keys;
 }
 
@@ -324,7 +334,7 @@ export const fameRankChanged = (player, before, after) =>
  * 이름이 알려지기 전에는 별호가 없다.
  */
 export function byname(player) {
-  if (player.fame < 10) return "이름 없는 무인";
+  if (player.fame < 50) return "이름 없는 무인";
   return personalize(bynameOf(player), player.person);
 }
 
@@ -334,7 +344,7 @@ function bynameOf(player) {
   const side = tier?.side ?? "중립";
   const depth = !tier || tier.step < 2 ? 0 : tier.step < 4 ? 1 : 2;
   const category = player.bestSkill()?.category || "맨손";
-  const rank = player.fame < 40 ? 0 : player.fame < 100 ? 1 : 2;
+  const rank = player.fame < 200 ? 0 : player.fame < 500 ? 1 : 2;
   const home = names.origin_prefix[player.originKey];
   const seed = [...player.origin].reduce((total, c) => total + c.codePointAt(0), 0);
   const prefixes = names.prefix[side][depth] ?? names.prefix[side][0];

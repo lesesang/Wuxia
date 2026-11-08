@@ -148,7 +148,7 @@
         "martial": 2,
         "mind": 2
       },
-      "fame": 1
+      "fame": 5
     }
   },
   {
@@ -168,7 +168,7 @@
     "text": "구해 준 소년이 알고 보니 유명 표국의 도련님이었다. 사례가 두둑했다.",
     "effects": {
       "silver": 30,
-      "fame": 2
+      "fame": 10
     },
     "requires": {
       "max_alignment": {
@@ -387,7 +387,7 @@
     },
     "effects": {
       "item": "회기단",
-      "fame": 1
+      "fame": 5
     }
   },
   {
@@ -451,7 +451,7 @@
       "trait": "입담꾼"
     },
     "effects": {
-      "fame": 2
+      "fame": 10
     }
   },
   {
@@ -609,7 +609,7 @@
       "sect": "개방"
     },
     "effects": {
-      "fame": 1,
+      "fame": 5,
       "silver": 15
     }
   },

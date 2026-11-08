@@ -35,39 +35,39 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"〈협객나리〉가 혼자 납셨네. 지난달에도 〈네놈〉 같은 놈 목을 장터에 팔았다.\""
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"같은 밥 먹는 처지에 짐 절반만 내놔라. 아니, 생각해 보니 전부 내놔라.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "칼 쥔 손이 떨리면서도 눈은 내 전대에 가 있다. \"피 냄새고 뭐고, 은자만 있으면 그만이다! 쳐라!\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"저, 저 이름은... 형제들, 물러서면 두목이 먼저 벤다! 다 같이 덤벼!\""
       },
       {
         "requires": {
-          "max_fame": 9
+          "max_fame": 49
         },
         "text": "\"초행길이군. 아까 그 노인네도 그렇게 웃다가 저기 누웠다.\""
       },
       {
         "requires": {
-          "max_fame": 9
+          "max_fame": 49
         },
         "text": "\"뒤에 아무도 없는 〈놈〉이네. 죽여도 찾는 사람이 없겠어.\""
       }
@@ -136,33 +136,33 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"협객이라. 칼값은 협객 쪽이 제일 후하더군. 목에 걸린 현상금이 있으니.\""
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"같은 바닥 사람이니 말로 하지. 지갑 놓고 가시오. 싫다? 그럼 칼로.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"피 냄새 나는 놈 하나 베면 관아에서 상을 준다더군. 잘됐소.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"그 이름 앞에 서라고 은자를 받았소. 미친 값이었지. 그래도 받은 건 받은 거요.\""
       },
       {
         "requires": {
-          "max_fame": 9
+          "max_fame": 49
         },
         "text": "\"이름 없는 〈놈〉이네. 값은 싸도 일은 쉽겠어.\""
       }
@@ -217,7 +217,7 @@
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "우두머리 늑대가 내 기세를 재더니 무리를 둘로 나눈다. 짐승도 상대를 알아본다."
       }
@@ -277,33 +277,33 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 20
+          "min_fame": 100
         },
         "text": "\"〈대협〉 납셨군. 〈네놈〉 머리를 꽂아 두면 올해 통행세는 절로 걷히겠다.\""
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"이 고개는 내 밥그릇이다. 밥그릇 건드린 놈은 뼈만 추려 준다.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"마도 놈이라고 겁낼 줄 알았나. 도끼는 사람을 안 가린다.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"그 이름이 왜 이런 고개에. 물러서면 내 부하들이 나를 벤다. 덤벼 보자.\""
       },
       {
         "requires": {
-          "max_fame": 9
+          "max_fame": 49
         },
         "text": "\"이름도 없는 〈놈〉이 혼자 이 고개를 넘어? 잘 왔다. 도끼 날이 근질거렸거든.\""
       }
@@ -340,40 +340,40 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"협객이면 산 아래서 놀 일이지. 산에선 칼이 곧 관아다.\""
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"이쪽 〈형님〉 아니십니까. 길은 비켜 드립니다. 다만 위에서 짐은 받아 오라시네요.\""
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"같은 산 밥을 먹어도 네 몫은 없다.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"피 냄새를 달고 산에 들어오다니. 〈네놈〉 때문에 애꿎은 우리 형제가 맞아 죽을 일은 없어야지.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"채주가 그 머리에 쌀 열 섬을 걸었소. 나도 안 될 줄은 아오.\""
       },
       {
         "requires": {
-          "max_fame": 9
+          "max_fame": 49
         },
         "text": "\"초짜네. 첫 값은 비싸게 받는 거다.\""
       }
@@ -446,33 +446,33 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"정의로운 분들은 뒤가 허술해서 좋습니다.\""
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"돈 받고 하는 일이오. 같은 사파라고 깎아 주진 않소.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"마인의 목은 수당이 곱절이더군.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"베러 온 게 아니오. 그 이름에 덤볐다는 소문을 사러 왔소.\""
       },
       {
         "requires": {
-          "max_fame": 9
+          "max_fame": 49
         },
         "text": "\"이름 없는 표적은 은자 다섯 냥입니다. 싸게 끝내지요.\""
       }
@@ -534,33 +534,33 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"협객 놀음은 칼을 맞아 봐야 끝나더군.\""
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"사파의 칼이 얼마나 정직한지 볼까.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"그 살기, 쓸 만하다. 먼저 벤 놈이 다 가져가는 거다.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"소문이 네 칼보다 앞서더군. 어느 쪽이 빠른지 재 보자.\""
       },
       {
         "requires": {
-          "max_fame": 9
+          "max_fame": 49
         },
         "text": "\"이름 없는 〈놈〉이 이 수를 받겠다고? 강호가 많이 싸졌구나.\""
       }
@@ -616,27 +616,27 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"맑은 피는 경전에 쓰기 좋다.\""
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"은자 냄새 나는 피는 맛이 떨어져. 그래도 받아 두지.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"같은 길을 걷는 자여, 네 피도 함께 바쳐라.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"이름 높은 자의 피는 한 방울에 경전 한 장이다!\""
       }
@@ -703,27 +703,27 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"의원 흉내 내는 협객들이 제일 먼저 죽더군. 맨손으로 상처를 잡아 주다가.\""
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"약값은 얼마든 좋소. 해독약이 한 알뿐이라는 게 문제지.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"독보다 지독한 기운이로군. 약재로 쓰면 값이 좋겠어.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"소문난 몸은 시험하기에 제일 좋소.\""
       }
@@ -786,27 +786,27 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"협객이라도 관도에서는 명부에 이름을 쓰시오. 안 쓰면 비석에 쓰게 될 것이오.\""
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"장물 냄새가 나는군. 철혈대 앞에서 칼을 뽑았으니 재판은 끝났다.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"마인은 포박 없이 벤다. 군령이다.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"그 이름이 민심을 흔든다. 그래서 왔다.\""
       }
@@ -882,27 +882,27 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"등불을 끄면 어두워지지. 강호는 어두운 게 어울린다.\""
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"돈으로 무엇을 사겠느냐. 내게 팔 것은 네 비명뿐이다.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"제법 진한 피 냄새로구나. 삼켜 주마.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"이름 높은 자의 심장은 맛이 다르다더군.\""
       }
@@ -990,27 +990,27 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"맹의 개로구나. 네 이름은 교단 장부에 이미 있다.\""
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"네 값을 치른 자가 본교에도 있다. 몰랐느냐.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"우리 쪽 냄새가 나는구나. 그래도 교주 앞에 설 자리는 하나다.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"천하가 부르는 이름을 교주께 드리면 본좌도 한 계단 오르겠지.\""
       }
@@ -1072,27 +1072,27 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"맑은 놈이 왔다. 경전에 쓰자.\""
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "귀졸장이 은자 주머니를 밟아 터뜨렸다. \"우리는 그런 것 안 받는다.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"같은 피를 마시는 놈. 그래도 명은 명이다.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"위에서 네 이름을 불렀다. 머리만 가져오라 하더군.\""
       }
@@ -1166,27 +1166,27 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"등불을 든 놈이 제일 잘 보이더군.\""
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"은자로 산 호법이 있다지. 나는 값이 없다.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"대마두 소리를 듣는다지. 진짜 마도를 보여 주마.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"천하가 부른다는 그 이름이냐. 네 목에 값을 매길 수가 없다더구나.\""
       }
@@ -1276,7 +1276,7 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"깨끗한 손으로 왔구나. 언제까지 깨끗한지 보자.\""
       }
@@ -1350,20 +1350,20 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"짐작대로군. 그 피비린내, 산 아래까지 나더라.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"마기가 코를 찌르는구나. 맹의 이름으로 묻지 않겠다.\""
       },
       {
         "requires": {
-          "min_fame": 60,
+          "min_fame": 300,
           "not_dominant": [
             "사도",
             "마도"
@@ -2101,13 +2101,13 @@
             },
             {
               "requires": {
-                "min_fame": 100
+                "min_fame": 500
               },
               "text": "천마의 머리칼이 희게 타오르고 하늘의 색이 바뀐다. 산 아래 수천 명이 숨을 죽인 것이 느껴진다. \"보아라. 네 이름을 부르던 놈들이 지금 다 떨고 있다.\" 이제 천마멸겁이 온다."
             },
             {
               "requires": {
-                "max_fame": 29
+                "max_fame": 149
               },
               "text": "천마의 머리칼이 희게 타오르고 하늘의 색이 바뀐다. \"네 이름을 아는 자가 이 산 아래 하나도 없더구나. 그런데도 왔느냐. 재미있는 놈이다.\" 이제 천마멸겁이 온다."
             }
@@ -2663,7 +2663,7 @@
                 }
               },
               "requires": {
-                "min_fame": 100
+                "min_fame": 500
               },
               "tag": "명성"
             },
@@ -2674,7 +2674,7 @@
                 "counter_pct": 200
               },
               "requires": {
-                "max_fame": 29
+                "max_fame": 149
               },
               "tag": "무명"
             },
@@ -2895,13 +2895,13 @@
       },
       {
         "requires": {
-          "min_fame": 100
+          "min_fame": 500
         },
         "text": "\"천하가 네 별호를 부르더구나. 나도 한 번 불러 주마. 죽은 뒤에.\""
       },
       {
         "requires": {
-          "max_fame": 29
+          "max_fame": 149
         },
         "text": "\"누구냐, 너는. 이름 없는 자가 여기까지 온 것은 백 년 만이다.\""
       }
@@ -3002,27 +3002,27 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"협객 양반, 부적 한 장 사시오. 안 사면 저잣거리에 그대가 사람 잡았다고 소문을 내지.\""
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"같은 바닥 아닌가. 판 깨지 말고 꺼지시오. 칼은 나도 있소.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"요, 요기가 아니라 진짜가 왔구먼... 얘들아, 다 나와라!\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"그 이름 빌려 부적을 팔았는데 본인이 오다니. 입을 막아야겠군.\""
       }
@@ -3083,21 +3083,21 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"그 눈빛, 옛 표두 같군. 그래서 그 사람도 내가 등을 찔렀소.\""
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"값을 부르시오. 나는 원래 값만 맞으면 다 내주는 사람이오.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"독한 〈놈〉이네. 그래도 등 뒤는 다 똑같이 약하지.\""
       }
@@ -3148,33 +3148,33 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"협객의 목이라. 벽에 걸면 보기 좋겠어.\""
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"네 칼값은 얼마나 하나. 내 칼값보다 비싸면 받아 가라.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"귀신보다 더한 놈이 왔군. 그래 봐야 칼 한 번이다.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"이기지는 못해도 옷에 칼자국 하나는 낸다. 그것만으로 내 값이 곱절이야.\""
       },
       {
         "requires": {
-          "max_fame": 9
+          "max_fame": 49
         },
         "text": "\"이름 없는 〈놈〉은 베어도 재미가 없어.\""
       }
@@ -3236,20 +3236,20 @@
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"장부에 네 이름이 세 번 나온다. 곤장은 몇 대부터 시작할까.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"요사한 기운이로군. 산 채로 묶어 가면 벼슬이 오르지.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"이름이 높으면 조정의 눈에도 든다. 축하한다, 역적이 될 차례다.\""
       }
@@ -3315,33 +3315,33 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 20
+          "min_fame": 100
         },
         "text": "\"〈대협〉도 물에 빠지면 똑같이 허우적거리더라.\""
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"같은 뱃길 먹는 놈은 뱃삯이 곱절이다.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"〈네놈〉이 지나간 고을마다 물길이 끊겼어. 장강은 네 것이 아니다.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"장강에서 네 이름이 나오면 다들 배를 돌리더라. 한번 보고 싶었다.\""
       },
       {
         "requires": {
-          "max_fame": 9
+          "max_fame": 49
         },
         "text": "\"초행이면 뱃삯이 비싼 줄 알아라. 목숨까지 포함이다.\""
       }
@@ -3407,27 +3407,27 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"사람 구하다 죽겠군. 내 독은 그런 놈부터 찾아가오.\""
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"은자는 받소. 해독약은 팔지 않소.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"그 몸에는 독이 더 들어갈 자리가 있나.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"독 한 방울로 강호가 뒤집어지겠군. 좋은 이름이오.\""
       }
@@ -3489,27 +3489,27 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 20
+          "min_fame": 100
         },
         "text": "\"〈대협〉 시체는 하류까지 잘 떠내려가더군.\""
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"배를 넘겼으면 곱게 물러날 것이지.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"물귀신이 무서운 줄 아느냐!\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"두목께 네 머리를 가져가면 배가 한 척 생긴다.\""
       }
@@ -3564,27 +3564,27 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"협객의 시체는 꼭두각시로 쓰기 제일 좋다. 사람들이 믿고 다가오거든.\""
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"돈으로 줄을 끊어 보겠느냐.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"네 안에 든 것을 보자. 줄을 맬 데가 남았느냐.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"이름 높은 인형은 값이 비싸다.\""
       }
@@ -3695,27 +3695,27 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"손이 깨끗해서 부끄럽지 않나. 내가 씻어 주마, 피로.\""
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"은자로 내 칼을 멈출 수 있나 해 봐라.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"피! 네 피 냄새는 내 것과 닮았다!\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"이름 높은 놈의 피는 뜨겁겠지!\""
       }
@@ -3776,27 +3776,27 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"정의로운 자는 늘 앞만 보더군.\" 목소리는 등 뒤에서 들렸다."
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"값을 치른 소문이 내 이름도 샀더군.\" 목소리는 등 뒤에서 들렸다."
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"제법 어두워졌구나. 그래도 나보다는 밝다.\" 목소리는 등 뒤에서 들렸다."
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"천하가 네 이름을 부르는 동안 나는 네 뒤에 있었다.\""
       }
@@ -3862,27 +3862,27 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"맹의 등불을 끄고 오라는 명이다.\""
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"네 돈을 받은 동료가 셋이었다. 나는 넷째가 아니다.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"제 힘으로 여기까지 온 마인이여. 무릎을 꿇으면 살려 주마.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"그 이름, 천마께 바칠 첫 제물이다.\""
       }
@@ -4018,7 +4018,7 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"기운이 탁하구려. 쓸어 내 드리리다.\""
       }
@@ -4104,7 +4104,7 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"자비는 그대에게 어울리지 않는 말이오.\""
       }
@@ -4250,7 +4250,7 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"연못은 맑은 물도 받는다. 한 번은.\""
       }
@@ -4416,13 +4416,13 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"마도의 손으로 이 단에 오르다니. 청성이 씻어 주겠소.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"선배의 이름은 익히 들었소. 그래서 더 물러서지 않겠소.\""
       }
@@ -4471,13 +4471,13 @@
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"그 이름을 꺾으면 내 주먹값도 뛰겠지!\""
       },
       {
         "requires": {
-          "max_fame": 9
+          "max_fame": 49
         },
         "text": "\"이름 없는 〈놈〉이 여기까지? 재미있네!\""
       }
@@ -4551,20 +4551,20 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"맑은 사람은 칼을 받아도 붉더군.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"같은 색이네. 그럼 더 재미있지.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"단 아래 다들 네 이름을 부른다. 곧 내 이름을 부르겠지.\""
       }
@@ -4600,14 +4600,14 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"그 기운으로 이 묘에 발을 들이겠다는 거요. 그분께서 뭐라 하실지 아시오.\""
       },
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"눈이 맑은 분이군요. 그래도 규칙은 규칙이오.\""
       }
@@ -4708,26 +4708,26 @@
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"사파 냄새가 나네. 치워 버려도 아버님은 칭찬만 하실 거다.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"마, 마인이다! 얘들아, 앞으로 나가! 〈네놈〉들 일당은 누가 주는데!\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"이, 이름만 높은 거겠지! 아버님께 다 이를 거다!\""
       },
       {
         "requires": {
-          "max_fame": 9
+          "max_fame": 49
         },
         "text": "\"어디서 굴러먹던 〈놈〉이 내 앞에서 고개를 들어? 눈부터 파 줘라.\""
       }
@@ -4782,33 +4782,33 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 20
+          "min_fame": 100
         },
         "text": "\"〈대협〉 값이면 쌀 세 수레는 되겠소. 산채 아이들이 올겨울 배부르겠어.\""
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"칠십이 채 앞에서 값 흥정을 하겠다? 칼로 해 보시오.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"산에 피비린내가 올라왔군. 쫓아내지 않으면 내 체면이 안 서오.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"천하가 안다는 그 이름을 내 산에서 꺾으면 녹림왕도 내 술을 받겠지.\""
       },
       {
         "requires": {
-          "max_fame": 9
+          "max_fame": 49
         },
         "text": "\"이름 없는 〈놈〉 하나쯤 산에서 사라져도 아무도 안 찾소.\""
       }
@@ -4872,26 +4872,26 @@
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"시정잡배의 칼이 어디까지 오나 보자. 종남의 검이 더럽혀지긴 하겠지만.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"마도의 무리가 명문 앞에 서다니. 비무가 아니라 처단이다.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"이름만 큰 건 아닌지 내가 재 주지.\""
       },
       {
         "requires": {
-          "max_fame": 9
+          "max_fame": 49
         },
         "text": "\"이름 없는 낭인 따위에게 검을 뽑는 것도 망신이구나.\""
       }
@@ -4961,27 +4961,27 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"맑은 시주의 보시는 공덕이 크지요.\""
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"시주, 은자는 됐소. 피로 받소.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"같은 불법을 닦는 분이군요. 누구 염주가 더 붉은가 봅시다.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"이름 높은 분의 피는 경전 한 권 값이오.\""
       }
@@ -5043,20 +5043,20 @@
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"장물과 함께 묶어 가겠다. 곤장은 동창 지하에서 맞게 될 거다.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"마인을 잡아 가면 공이 두 칸 오른다.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"이름 높은 자가 입을 열면 조정이 기뻐하지.\""
       }
@@ -5106,14 +5106,14 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "벌레들이 맑은 기운을 싫어하는 듯 소매 안으로 숨었다가 다시 기어 나온다."
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "벌레들이 내 기운에 몸을 떨며 달려든다. 먹이로 아는 모양이다."
       }
@@ -5175,27 +5175,27 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"협의라. 북해에는 그런 말이 얼어 죽었다.\""
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"장사꾼이군. 얼음은 값을 흥정하지 않는다.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"뜨거운 피는 얼리면 더 잘 부서진다.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"중원의 이름이 어디까지 닿나 보러 왔다.\""
       }
@@ -5244,41 +5244,41 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"〈협객나리〉, 값은 얼마요? 없다고요? 그게 가장 비싼 값이지.\""
       },
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"위선자 양반, 그 깨끗한 손으로 뭘 하시려고.\""
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"같은 밥그릇이 하나 줄면 내 몫이 늘지. 원망은 마시오.\""
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"우리 쪽 사람 냄새가 나는군. 값을 맞춰 볼까?\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"마인과는 흥정이 안 되더군. 그래서 칼로 하는 거요.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"그 이름, 사도련 장부에는 만 냥으로 적혀 있소.\""
       }
@@ -5329,19 +5329,19 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"스승님이 마인은 말을 섞지 말랬지만, 제일초입니다!\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"선배님 이름을 수련 일지 맨 윗줄에 적어 두었습니다!\""
       },
       {
         "requires": {
-          "max_fame": 9
+          "max_fame": 49
         },
         "text": "\"선배님 성함이 어찌 되십니까? 일지에 적어야 해서요.\""
       }
@@ -5383,13 +5383,13 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"마도 무리가 아가씨를 노리는구나. 비켜라!\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"이름 높은 분이 왜 남의 집안일에 끼십니까.\""
       }
@@ -5441,33 +5441,33 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"협객 목이 요즘 값이 좋습니다.\""
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"같은 바닥이라도 의뢰는 의뢰요.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"마인의 목은 수당이 곱절이더군.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"이름값이 비싼 분이라 저도 긴장됩니다. 값은 이미 받았소.\""
       },
       {
         "requires": {
-          "max_fame": 9
+          "max_fame": 49
         },
         "text": "\"두 냥짜리 일이오. 금방 끝냅시다.\""
       }
@@ -5520,20 +5520,20 @@
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"명문의 일에 사파가 끼어들다니. 치우겠소.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"마도 무리는 가문의 이름으로 벤다.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"이름 높은 분이라 들었소. 그래도 가문의 명이오.\""
       }
@@ -5580,27 +5580,27 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"협객이면 공양도 후하겠지. 전대부터 내놓으시오.\""
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"같은 밥 빌어먹는 처지에 눈치는 있겠지.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"파계승 눈에도 그 마기는 보이오. 쇠몽둥이로 씻어 드리리다.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"소문을 들었소. 시주 대신 한 수만 받읍시다. 안 주면 소승이 먼저 드리지요.\""
       }
@@ -5653,20 +5653,20 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"내 사형이 그대 이름 아래 죽었다. 받아라.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"강호의 정의가 아직 죽지 않았다.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"스승님은 말리셨소. 그래도 그대의 이름 아래 죽은 이들이 있으니.\""
       }
@@ -5731,20 +5731,20 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"〈네놈〉 이름을 쓴 방이 구파 산문마다 붙었다. 오늘로 지운다.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"피 묻은 손으로 무슨 강호를 말하나.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"이름이 높을수록 죄가 무겁다.\""
       }
@@ -5798,13 +5798,13 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"그 살업이 숭산까지 들렸소. 끊어 드리리다.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"이름이 높을수록 업도 깊지요.\""
       }
@@ -5872,13 +5872,13 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"젊은이들이 네 이름을 대며 죽었다. 노부가 치러 주마.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"네 이름이 이렇게 높아질 때까지 놔둔 것이 우리 잘못이다.\""
       }
@@ -5933,14 +5933,14 @@
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"돈으로 천하를 팔던 자로군. 맹의 칼은 안 팔린다.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"대마두 소리를 듣는 〈네놈〉이다. 천마보다 네가 먼저다.\""
       }
@@ -5999,20 +5999,20 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"그 등불, 천마봉에서 잘 보이더군.\""
       },
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"협객들 묘비는 우리가 대신 세워 주지.\""
       },
       {
         "requires": {
-          "min_fame": 60,
+          "min_fame": 300,
           "not_dominant": [
             "사도",
             "마도"
@@ -6064,13 +6064,13 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"정의라 불렀겠지. 내 집에서는 다른 이름으로 부른다.\""
       },
       {
         "requires": {
-          "min_fame": 60,
+          "min_fame": 300,
           "not_dominant": [
             "사도",
             "마도"
@@ -6129,13 +6129,13 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"등불은 등 뒤가 제일 어둡지.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"이름 높은 자의 목은 천마봉에 걸린다.\""
       }
@@ -6190,13 +6190,13 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"그 등불 냄새를 따라 천 리를 왔다.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"네 이름을 불러 대는 놈들이 시끄러워 왔다.\""
       }
@@ -6253,20 +6253,20 @@
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"흑도 거두 머리 값은 값을 잘 쳐 주더군.\""
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"장부에 네 이름이 세 곳이나 있소. 다 받으러 왔소.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"값이 너무 비싸서 다들 내뺐소. 남은 건 나뿐이오.\""
       }
@@ -6314,13 +6314,13 @@
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"은자로 안 되는 일이 있다는 것을 알려 주마. 사도 바닥에 네 이름이 너무 비싸졌다.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"이름이 높다고 옥문이 넓어지지는 않는다.\""
       }
@@ -6411,13 +6411,13 @@
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"사도의 거두라 불린다지. 맹의 법은 사람을 가리지 않는다.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"이름이 높다고 법이 낮아지지는 않는다.\""
       }
@@ -6462,26 +6462,26 @@
       3
     ],
     "requires": {
-      "min_fame": 30
+      "min_fame": 150
     },
     "intros": [
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 20
+          "min_fame": 100
         },
         "text": "\"〈대협〉이라 불리는 〈놈〉을 꺾어야 내 이름이 서오.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"마두를 잡았다는 이름이 필요해서.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"그 이름에 덤비다 죽어도 내 이름은 남겠지.\""
       }
@@ -6521,19 +6521,19 @@
       4
     ],
     "requires": {
-      "min_fame": 60
+      "min_fame": 300
     },
     "title": "천하의 도전자",
     "intros": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"구경꾼까지 불러 놨소. 그대 이름 위에 내 이름을 쓰게.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"그 이름 꺾으러 천 리를 왔소.\""
       }
@@ -6574,28 +6574,28 @@
       5
     ],
     "requires": {
-      "min_fame": 100
+      "min_fame": 500
     },
     "title": "천하십대고수",
     "intros": [
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"협객이라는 말은 들었네. 명부에 협객 자리는 없네.\""
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"장사꾼이 올 곳은 아닐세. 그래도 값은 치르게.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"마두가 명부에 오르면 천하가 곤란하지. 여기서 끝내세.\""
       }
@@ -6636,18 +6636,18 @@
       3
     ],
     "requires": {
-      "max_fame": 9
+      "max_fame": 49
     },
     "intros": [
       {
         "requires": {
-          "max_fame": 9
+          "max_fame": 49
         },
         "text": "\"죽어도 소문 하나 안 나겠어. 그래서 네가 좋다.\""
       },
       {
         "requires": {
-          "max_fame": 9
+          "max_fame": 49
         },
         "text": "\"이름도 없는 〈놈〉 보따리 터는 게 제일 편하지.\""
       }
@@ -6686,13 +6686,13 @@
       5
     ],
     "requires": {
-      "max_fame": 29
+      "max_fame": 149
     },
     "title": "강호의 승냥이",
     "intros": [
       {
         "requires": {
-          "max_fame": 9
+          "max_fame": 49
         },
         "text": "\"이름 없는 〈놈〉을 물어뜯는 게 제일 쉽지. 뼈까지 발라 주마.\""
       }
@@ -6741,27 +6741,27 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"장부 태우고 다니는 협객이 〈네놈〉이냐. 이자가 꽤 붙었다.\""
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"같은 저잣거리 밥을 먹으면 몫을 알아야지.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"도박판에 피 냄새 풍기는 놈은 손님이 아니야.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"그 이름으로 빚을 내면 얼마나 나올까.\""
       }
@@ -6819,27 +6819,27 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"맹의 등불이로군. 꺼진 등불은 내 뼈 사이에 잘 어울린다.\""
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"은자는 무덤에 못 가져가지. 내가 대신 받아 주마.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"같은 어둠을 걷는 자여, 네 뼈도 곧 내 것이 된다.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"이름 높은 뼈 하나면 잡뼈 백을 부린다.\""
       }
@@ -6890,7 +6890,7 @@
     "intros": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "우두머리 멧돼지가 내 기세에 콧김만 뿜다가, 그래도 땅을 박찬다."
       }
@@ -6994,7 +6994,7 @@
     "intros": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "곰이 킁킁거리더니 그래도 달려든다. 짐승은 별호를 모른다."
       }
@@ -7048,7 +7048,7 @@
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "호랑이가 내 병기를 보더니 꼬리를 낮춘다. 그래도 물러나지 않는다."
       }
@@ -7192,13 +7192,13 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "금빛 눈이 나를 알아보자 날카롭게 운다. 하늘이 먼저 싫어하는 기운이다."
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "금빛 눈이 내 기세를 재듯 깊게 숨을 들이켰다."
       }
@@ -7268,7 +7268,7 @@
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"소문으로 듣던 분이구나. 산속까지 들렸답니다.\""
       }
@@ -7331,7 +7331,7 @@
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "산군이 천천히 일어선다. 산군은 이름을 모르지만 기세는 안다."
       }
@@ -7447,7 +7447,7 @@
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "이무기의 비늘이 일제히 곤두선다. 사람에게 이런 적은 처음이라는 듯이."
       }
@@ -7490,27 +7490,27 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"협객 하나당 은자가 곱절이오.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"마인은 수당이 더 붙더군.\""
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"같은 바닥이라도 의뢰는 의뢰요.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"이름 높은 분 머리는 다 함께 나눠 먹읍시다.\""
       }
@@ -7550,13 +7550,13 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 20
+          "min_fame": 100
         },
         "text": "\"〈대협〉이라도 물에 빠지면 똑같소. 가라앉는 건 금방이오.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"저, 저 사람이요? 형님, 배를 돌립시다!\""
       }
@@ -7597,27 +7597,27 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"맹의 개들은 다 묻어 주마.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"교주께 고개를 숙일 줄 모르는 마인이로군.\""
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"돈으로는 안 돌아서는 놈들을 보여 주지.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"그 이름, 교단 장부에 붉게 적혔다.\""
       }
@@ -7658,14 +7658,14 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"맑은 놈이 왔다.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"같은 피 냄새. 그래도 명은 명이다.\""
       }
@@ -7704,27 +7704,27 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 20
+          "min_fame": 100
         },
         "text": "\"〈대협〉이 혼자 다니면 어쩌나. 호위비 받읍시다.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"피 묻은 은자도 은자요!\""
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"같은 업이니 깔끔하게 끝냅시다.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"그 이름값이면 우리 넷이 일 년은 먹겠네.\""
       }
@@ -7769,20 +7769,20 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"마기가 코를 찌른다! 호각을 불어라!\""
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"장물 냄새가 나는군. 짐을 열어라.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"그 이름이면 맹에서 곱게 모셔 오라 했소. 칼끝으로.\""
       }
@@ -7819,20 +7819,20 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"길은 달라졌어도 약속은 약속이오. 그래도 그 기운은 마음에 안 드오.\""
       },
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 20
+          "min_fame": 100
         },
         "text": "\"〈대협〉 소리 들으면서 칼이 무뎌졌는지 봅시다.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"이름은 그쪽이 먼저 났소. 칼은 어떨지 모르지.\""
       }
@@ -7899,20 +7899,20 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"젊은이들이 그대 이름을 대며 죽었소. 내가 직접 왔소.\""
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"값으로 안 되는 칼이 있다는 것을 알려 드리지.\""
       },
       {
         "requires": {
-          "min_fame": 100
+          "min_fame": 500
         },
         "text": "\"천하가 그대 이름을 부르오. 그래서 맹주가 나선 것이오.\""
       },
@@ -7961,13 +7961,13 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"기운이 탁하구려. 그래도 약속은 약속이니 칼끝은 멈추겠소.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"소문난 이름이니 나도 손을 늦추지 않겠소.\""
       }
@@ -8006,13 +8006,13 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"기운이 탁하구려. 그래도 약속은 약속이니 칼끝은 멈추겠소.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"소문난 이름이니 나도 손을 늦추지 않겠소.\""
       }
@@ -8051,13 +8051,13 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"기운이 탁하구려. 그래도 약속은 약속이니 칼끝은 멈추겠소.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"소문난 이름이니 나도 손을 늦추지 않겠소.\""
       }
@@ -8096,13 +8096,13 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"기운이 탁하구려. 그래도 약속은 약속이니 칼끝은 멈추겠소.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"소문난 이름이니 나도 손을 늦추지 않겠소.\""
       }
@@ -8141,13 +8141,13 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"기운이 탁하구려. 그래도 약속은 약속이니 칼끝은 멈추겠소.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"소문난 이름이니 나도 손을 늦추지 않겠소.\""
       }
@@ -8186,13 +8186,13 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"기운이 탁하구려. 그래도 약속은 약속이니 칼끝은 멈추겠소.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"소문난 이름이니 나도 손을 늦추지 않겠소.\""
       }
@@ -8230,13 +8230,13 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"마도와는 겨루지 않소. 다만 치워야겠지.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"그 이름이 궁금했소. 창끝으로 묻겠소.\""
       }
@@ -8252,5 +8252,45 @@
     },
     "stand_in": "세가무사",
     "faction": "모용"
+  },
+  "전대천마잔영": {
+    "name": "옛 천마의 잔영",
+    "tier": "강적",
+    "realm": "현경",
+    "hp": 5800,
+    "attack": 150,
+    "exp_reward": 3,
+    "silver": [
+      84,
+      112
+    ],
+    "chapters": [
+      4,
+      5
+    ],
+    "weight": 0,
+    "armor": 36,
+    "desc": "눈보라 속에 남은 전대 천마의 의지. 몸은 없어도 그 경지는 현경에 머문다.",
+    "intro": "\"내 자리를 원하느냐, 내 아이를 베려느냐. 어느 쪽이든 먼저 나를 넘어라.\"",
+    "specials": [
+      {
+        "name": "천마무영",
+        "every": 3,
+        "mult": 1.7
+      },
+      {
+        "name": "잔영분신",
+        "every": 5,
+        "mult": 1.3,
+        "seal": 1
+      }
+    ],
+    "level": 74,
+    "hp_style": 1.296,
+    "attack_style": 1.15,
+    "side": "마도",
+    "title": "전대 천마",
+    "faction": "마교",
+    "named": true
   }
 }
