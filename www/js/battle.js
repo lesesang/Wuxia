@@ -741,6 +741,10 @@ export class Battle {
       this.log.push("(힘을 들이지 않았다. 쓴 내력의 절반을 되찾았다.)");
     }
     if (g.next_crit) this.forceCrit = true;
+    if (g.next_power) {
+      this.counterPct = Math.max(this.counterPct, g.next_power);
+      this.log.push(`(몸을 비튼 힘이 남았다. 다음 공격 +${halpun(g.next_power)})`);
+    }
     if (g.step_heal) {
       const [healed] = p.healPercent(g.step_heal, 0);
       if (healed > 0) this.log.push(`(숨을 돌렸다. 체력 +${healed})`);

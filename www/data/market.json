@@ -4539,12 +4539,37 @@
     "grade": "보물",
     "no_drop": true
   },
-  "궁기골": {
-    "name": "궁기의 뼈",
+  "환혼향": {
+    "name": "환혼향",
+    "grade": "보물",
+    "price": 0,
+    "karma_price": 1,
+    "markets": [
+      5
+    ],
+    "always": true,
+    "category": "도구",
+    "consumable": true,
+    "battle_only": true,
+    "stock_qty": 1,
+    "desc": "한 줄기 향. 싸움 중에 피우면 내력이 가득 차고 다음 공격이 반드시 회심이 된다. 행낭에 넣어 두었다가 쓴다. 카르마로 거래한다.",
+    "effects": [
+      {
+        "type": "heal",
+        "stat": "qi",
+        "percent": 100
+      },
+      {
+        "type": "next_crit"
+      }
+    ]
+  },
+  "불가사리뿔": {
+    "name": "불가사리의 뿔",
     "category": "영약",
     "price": 320,
     "markets": [],
-    "desc": "날개 달린 범의 뼈. 외공과 무리가 50씩 오른다. 행낭에 넣어 두었다가 원할 때 먹는다.",
+    "desc": "쇠를 먹고 자란 뿔. 갈아 먹으면 외공과 무리가 50씩 오른다. 행낭에 넣어 두었다가 원할 때 먹는다.",
     "effects": [
       {
         "type": "stat",
@@ -4563,22 +4588,22 @@
     "grade": "보물",
     "no_drop": true
   },
-  "필방우": {
-    "name": "필방의 깃",
+  "백사내단": {
+    "name": "백사의 내단",
     "category": "영약",
     "price": 320,
     "markets": [],
-    "desc": "외다리 불새의 깃. 무리와 심경이 50씩 오른다. 행낭에 넣어 두었다가 원할 때 먹는다.",
+    "desc": "천년 백사의 내단. 내공이 70, 심경이 30 오른다. 행낭에 넣어 두었다가 원할 때 먹는다.",
     "effects": [
       {
         "type": "stat",
-        "stat": "martial",
-        "amount": 50
+        "stat": "internal",
+        "amount": 70
       },
       {
         "type": "stat",
         "stat": "mind",
-        "amount": 50
+        "amount": 30
       }
     ],
     "consumable": true,
@@ -4587,12 +4612,12 @@
     "grade": "보물",
     "no_drop": true
   },
-  "도철내단": {
-    "name": "도철의 내단",
+  "흑룡여의주": {
+    "name": "흑룡의 여의주",
     "category": "영약",
     "price": 980,
     "markets": [],
-    "desc": "모든 것을 삼킨다는 흉수의 내단. 네 기량이 50씩 오르고 체력과 내력이 가득 찬다. 행낭에 넣어 두었다가 원할 때 먹는다.",
+    "desc": "흑룡이 끝내 물지 못한 구슬. 삼키면 네 기량이 50씩 오르고 체력과 내력이 가득 찬다. 행낭에 넣어 두었다가 원할 때 먹는다.",
     "effects": [
       {
         "type": "stat",
@@ -4630,30 +4655,5 @@
     "drop_only": true,
     "grade": "신물",
     "no_drop": true
-  },
-  "환혼향": {
-    "name": "환혼향",
-    "grade": "보물",
-    "price": 0,
-    "karma_price": 1,
-    "markets": [
-      5
-    ],
-    "always": true,
-    "category": "도구",
-    "consumable": true,
-    "battle_only": true,
-    "stock_qty": 1,
-    "desc": "한 줄기 향. 싸움 중에 피우면 내력이 가득 차고 다음 공격이 반드시 회심이 된다. 행낭에 넣어 두었다가 쓴다. 카르마로 거래한다.",
-    "effects": [
-      {
-        "type": "heal",
-        "stat": "qi",
-        "percent": 100
-      },
-      {
-        "type": "next_crit"
-      }
-    ]
   }
 }

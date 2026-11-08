@@ -290,6 +290,10 @@ function takeFoundLegacy(player) {
     name = skill.name;
     // 이미 익혔으면 유산은 성취가 된다
     player.learnSkill(skill);
+  } else if (entry.kind === "item") {
+    // 물건은 세월에 바래지 않는다
+    name = DB.market[entry.key].name;
+    player.addItem(entry.key);
   } else {
     const key = inheritedGear(entry.key, powers);
     worn = key !== entry.key;

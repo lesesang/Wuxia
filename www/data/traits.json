@@ -599,7 +599,7 @@
     "name": "천생근골",
     "desc": "시작 외공과 무리가 60 높고 성장이 각각 1할 2푼 늘어난다.",
     "rarity": "희귀",
-    "cost": 9,
+    "cost": 8,
     "effects": [
       {
         "type": "start_stat",
@@ -627,7 +627,7 @@
     "name": "오성",
     "desc": "시작 내공과 심경이 60 높고 성장이 각각 1할 2푼 늘어난다.",
     "rarity": "희귀",
-    "cost": 9,
+    "cost": 8,
     "effects": [
       {
         "type": "start_stat",
@@ -655,7 +655,7 @@
     "name": "혼원지체",
     "desc": "시작 외공과 내공이 60 높고 성장이 각각 1할 2푼 늘어난다.",
     "rarity": "희귀",
-    "cost": 9,
+    "cost": 8,
     "effects": [
       {
         "type": "start_stat",
@@ -683,7 +683,7 @@
     "name": "철석같은 심지",
     "desc": "시작 외공과 심경이 60 높고 성장이 각각 1할 2푼 늘어난다.",
     "rarity": "희귀",
-    "cost": 9,
+    "cost": 8,
     "effects": [
       {
         "type": "start_stat",
@@ -711,7 +711,7 @@
     "name": "현묘한 재능",
     "desc": "시작 내공과 무리가 60 높고 성장이 각각 1할 2푼 늘어난다.",
     "rarity": "희귀",
-    "cost": 9,
+    "cost": 8,
     "effects": [
       {
         "type": "start_stat",
@@ -739,7 +739,7 @@
     "name": "타고난 지혜",
     "desc": "시작 무리와 심경이 60 높고 성장이 각각 1할 2푼 늘어난다.",
     "rarity": "희귀",
-    "cost": 9,
+    "cost": 8,
     "effects": [
       {
         "type": "start_stat",
@@ -826,7 +826,7 @@
     "name": "필중의 눈",
     "desc": "회심의 일격 확률이 2할 오른다.",
     "rarity": "희귀",
-    "cost": 8,
+    "cost": 7,
     "effects": [
       {
         "type": "crit",
@@ -838,7 +838,7 @@
     "name": "일격필살",
     "desc": "비기의 피해가 1할 8푼 늘어난다.",
     "rarity": "희귀",
-    "cost": 8,
+    "cost": 7,
     "effects": [
       {
         "type": "secret_power",
@@ -903,7 +903,7 @@
     "name": "병기통달",
     "desc": "주무공 계열의 좋은 병기를 들고 시작한다. 어떤 병기든 제 힘을 내고 병기 위력이 2할 5푼 늘어난다.",
     "rarity": "희귀",
-    "cost": 8,
+    "cost": 7,
     "effects": [
       {
         "type": "no_mismatch"
@@ -934,7 +934,7 @@
     "name": "운중보",
     "desc": "경공 표운보를 익힌 채로 시작하고 달아날 확률이 3할 오른다.",
     "rarity": "희귀",
-    "cost": 8,
+    "cost": 7,
     "effects": [
       {
         "type": "start_skill",
@@ -1266,7 +1266,7 @@
     "name": "호연지기",
     "desc": "정도 70으로 시작하고 정도가 오를 때 15 더 오른다. 받는 피해가 5푼 줄어든다.",
     "rarity": "희귀",
-    "cost": 9,
+    "cost": 8,
     "effects": [
       {
         "type": "start_alignment",
@@ -1288,7 +1288,7 @@
     "name": "권모술수",
     "desc": "사도 70으로 시작하고 사도가 오를 때 15 더 오른다. 얻는 은자가 1할 늘고 회심의 일격 확률이 3푼 오른다.",
     "rarity": "희귀",
-    "cost": 9,
+    "cost": 8,
     "effects": [
       {
         "type": "start_alignment",
@@ -1314,7 +1314,7 @@
     "name": "마성",
     "desc": "마도 70으로 시작하고 마도가 오를 때 15 더 오른다. 주는 피해가 3푼 늘어난다.",
     "rarity": "희귀",
-    "cost": 9,
+    "cost": 8,
     "effects": [
       {
         "type": "start_alignment",
@@ -1336,7 +1336,7 @@
     "name": "싸움귀신",
     "desc": "전투가 시작되면 네 기량이 전투 중에만 60 오른다. 전투가 끝나면 체력과 내력을 각각 1할 5푼 회복한다.",
     "rarity": "전설",
-    "cost": 18,
+    "cost": 27,
     "effects": [
       {
         "type": "battle_buff",
@@ -1384,7 +1384,7 @@
     "name": "불사지체",
     "desc": "전투에서 합마다 체력을 2푼(한 싸움에 3할까지), 달마다 체력을 1할 5푼 더 회복한다. 베여도 베여도 살이 차오른다.",
     "rarity": "전설",
-    "cost": 18,
+    "cost": 27,
     "effects": [
       {
         "type": "round_regen",
@@ -1401,7 +1401,7 @@
     "name": "천하제일기재",
     "desc": "모든 기량이 120 높게 시작하고 성장이 각각 8푼 늘어난다.",
     "rarity": "전설",
-    "cost": 25,
+    "cost": 38,
     "effects": [
       {
         "type": "start_stat",
@@ -1449,7 +1449,7 @@
     "name": "천살성",
     "desc": "마도 60으로 시작한다. 쓰러뜨린 적 하나마다 주는 피해가 1푼 늘고(최대 4할) 전투가 끝나면 체력을 1할 되찾는다. 살성을 타고나 사람들이 먼저 알아본다.",
     "rarity": "전설",
-    "cost": 20,
+    "cost": 30,
     "effects": [
       {
         "type": "start_alignment",
@@ -1473,7 +1473,7 @@
     "name": "천무지체",
     "desc": "모든 기량이 60 높게 시작하고 성장이 각각 1할 늘며, 무공 성취를 6할 더 빠르게 얻고 승급해도 성취가 50에서 다시 시작한다. 백 년에 하나 난다는 무공의 그릇이다.",
     "rarity": "전설",
-    "cost": 22,
+    "cost": 33,
     "effects": [
       {
         "type": "start_stat",
