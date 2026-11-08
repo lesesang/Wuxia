@@ -33,6 +33,8 @@ export function unmetReason(player, requires) {
   if (r.not_sect?.includes(player.sect)) return "사문과 맞지 않는 일이다";
   if (r.not_dominant?.includes(player.dominantAlignment())) return "내 길과 맞지 않는다";
   if (r.has_sect && !player.sect) return "몸담은 곳이 없다";
+  // 세가는 사문이 아니다. 문파의 법도로 하는 일은 세가의 무인에게 보이지 않는다
+  if (r.no_house && DB.sects[player.sect]?.house) return "사문의 일이 아니다";
   // sect_side: 사문이 없거나, 사문의 성향이 이 값일 때만 그 세력에 설 수 있다
   if (r.sect_side && player.sect && DB.sects[player.sect]?.alignment !== r.sect_side) return "사문이 허락하지 않는다";
   if (r.item && !(player.inventory[r.item] > 0)) return `${DB.market[r.item].name} 필요`;
