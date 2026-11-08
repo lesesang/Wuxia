@@ -337,7 +337,7 @@ export class Player {
       else this.chosenArts[skill.type] = skill.key;
       return [];
     }
-    return [`${skill.name}${josa(skill.name, "은/는")} 신상의 무공 칸에서 골라 쓸 수 있다.`];
+    return [];
   }
 
   /** 같은 갈래의 더 깊은 무공을 얻으면 따로 쌓지 않고 이어받는다. 성취와 오른 품계는 그대로 간다. */

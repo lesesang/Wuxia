@@ -185,8 +185,8 @@ function applyEffect(player, key, effect) {
       break;
     case "stat": player.gainStat(effect.stat, effect.amount); break;
     case "equip":
-      // 더 나으면 바로 들고, 아니면 행낭에 챙긴다
-      if (bonusFor(player, key) > equipmentBonus(player, effect.slot)) player.equipGear(key);
+      // 빈손일 때만 바로 들고, 아니면 행낭에 챙긴다. 바꿔 드는 것은 플레이어의 몫이다
+      if (!player[effect.slot]) player.equipGear(key);
       else if (!player.gear.includes(key)) player.gear.push(key);
       break;
     case "skill": player.learnSkill(new Skill(effect.skill)); break;
@@ -194,7 +194,11 @@ function applyEffect(player, key, effect) {
     case "last_strength": player.revives += effect.amount ?? 1; break;
     case "main_gear": {
       const target = gearFromToken(player, effect);
-      if (target && !player.ownsGear(target)) player.equipGear(target);
+      if (target && !player.ownsGear(target)) {
+        const { slot } = DB.market[target].effects.find((e) => e.type === "equip");
+        if (!player[slot]) player.equipGear(target);
+        else player.gear.push(target);
+      }
       break;
     }
     default:
