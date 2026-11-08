@@ -7,11 +7,11 @@ import { Game } from "./game.js";
 import { bonusFor, equipmentBonus, gearGimmick, itemGrade, itemName, sellableView, stockView } from "./market.js";
 import {
   buyContent, buyProvision, buyUpgrade, exportRecords, extraSlots, importRecords, legacyAvailable, legacyPowers, dropLegacy, upgradeLegacy, loadCheckpoint, loadEventLog, loadMeta, nextReward, openLegacy, refundProvision, setUpgradeUse, upgradeUse,
-  toggleContent, unlockOrigin, unlockTrait, upgradeLevel, resetSetupChoices,
+  toggleContent, unlockOrigin, unlockTrait, upgradeLevel, resetSetupChoices, canLeaveLegacy, sameLegacy,
 } from "./meta.js";
 import {
   ALIGNMENTS, benefitText, byname, fameRank, getChapterInfo, getMonth, getYear, marketTurns, nextSlotThreshold,
-  ORIGIN_SECTS, veteranBonus, personalize, fullName, realmProgress, traitSlots, realmPerks, activeCompanions, MAX_COMPANIONS } from "./rules.js";
+  ORIGIN_SECTS, veteranBonus, personalize, sectWord, fullName, realmProgress, traitSlots, realmPerks, activeCompanions, MAX_COMPANIONS } from "./rules.js";
 import { MAX_TURN } from "./character.js";
 import { storage } from "./storage.js";
 import { halpun, josa } from "./josa.js";
@@ -243,12 +243,12 @@ ${section("생사경", [
     "<b>일절</b>: 한 문파의 깊은 비전이나 한 시대의 끝을 이룬 무공. 소속의 비전이나 큰 인연에서만 얻고, 수상한 누군가가 값비싸게 내놓기도 합니다. 승급으로 오를 수 있는 끝입니다.",
     "<b>신공</b>: 전설의 무공. 승급이나 장터, 일반 사건으로는 얻을 수 없고 출신의 이야기와 카르마로 연 인연에서만 나옵니다. 일절의 끝에서 큰 깨달음으로 오르기도 합니다. 문파와 세가마다 전해 오는 최고의 무공도 이 반열이지만, 아직 세상에 나오지 않았습니다.",
     "품계가 높을수록 위력이 크고 내력을 많이 쓰며, 일부 무공은 성취가 차면 <b>비기</b>가 열립니다.",
-    "<b>묘리</b>: 상승 품계부터 무공마다 고유한 묘리가 드러납니다. 승급으로 상승에 이른 무공도 같습니다. 나눠 쳐서 번번이 회심을 가리는 공격, 준 피해를 빨아들이는 공격, 적을 굳히는 공격, 호신 기운을 두르는 심법, 저절로 피하거나 되받아치는 경공처럼 무공마다 다릅니다. 신상의 무공 칸에서 볼 수 있습니다.",
+    "<b>묘리</b>: 상승 품계부터 무공마다 고유한 묘리가 드러납니다. 승급으로 상승에 이른 무공도 같습니다. 나눠 쳐서 번번이 회심을 가리는 공격, 표식을 쌓아 터뜨리는 공격, 여운이 한 번 더 닿는 공격, 적을 굳히는 공격, 저절로 피하거나 잔상을 남기는 경공처럼 무공마다 다릅니다. 심법의 묘리는 운기하지 않아도 싸우는 내내 늘 흐릅니다. 신상의 무공 칸에서 볼 수 있습니다.",
     "무공은 공격, 심법, 경공 셋으로 나뉘고 칸마다 쓸 무공 하나를 고릅니다. 새로 얻었다고 저절로 바뀌지 않으니 신상의 무공 칸에서 고르세요.",
     "성취가 100을 넘어 더 쌓이면 다음 품계로 승급합니다. 승급하면 성취가 줄어들고 위력은 오릅니다.",
     "<b>같은 무공을 또 얻으면</b> 성취가 오릅니다. <b>같은 갈래의 더 깊은 무공</b>을 얻으면 따로 쌓이지 않고 쓰던 무공이 그것으로 이어지며 성취와 오른 품계는 그대로 갑니다."])}
 ${section("위력의 기준", ["무공에 적힌 <b>위력 N배</b>는 기본 공격력에 곱하는 값입니다. 기본 공격력은 네 기량(무리가 가장 크고, 다음이 외공, 내공, 심경 순)에 병기의 위력을 더한 값입니다. 맨손 공격이 1배입니다.", "거기에 경지, 자질, 소속, 성향의 보정이 곱해지고, 품계가 오르면 2할 5푼, 성취 1마다 0.003배가 더해집니다. 성취가 100이면 0.3배가 늘어납니다.", "비기의 위력은 그 무공의 위력에 비기 배수를 한 번 더 곱합니다. 비기는 내공이 위력에 더 크게 들어갑니다."])}
-${section("성취 쌓기", ["주무공은 수련과 싸움에서 오르고, 싸움에서는 합마다 쓰는 만큼 조금씩 쌓입니다. 심법은 운기와 요양, 전투 중 운기, 승리에서 오릅니다. 보법은 수련과 탐색, 경공 사용, 승리에서 오릅니다. 싸움에 이기면 쓰지 않은 무공도 쌓이고, 심법과 보법이 더 많이 쌓입니다."])}
+${section("성취 쌓기", ["주무공은 수련과 싸움에서 오르고, 싸움에서는 합마다 쓰는 만큼 조금씩 쌓입니다. 심법은 운기와 요양, 전투 중 운기, 승리, 기량을 올리는 영약과 서책을 쓸 때 오릅니다. 보법은 수련과 탐색, 경공 사용, 승리에서 오릅니다. 싸움에 이기면 쓰지 않은 무공도 쌓이고, 심법과 보법이 더 많이 쌓입니다."])}
 ${section("일절 너머", ["일절 무공의 성취가 100에 이르면 드물게 큰 깨달음이 찾아옵니다. 받아들이면 그 무공이 신공의 경지에 오르고, 그 대가로 몸이 크게 상합니다. 공격 무공, 심법, 보법 모두 그렇습니다."])}`,
     전투: `${section("전투", [
     "무공은 내력을 씁니다. 내력이 없으면 맨손으로 싸웁니다.",
@@ -256,7 +256,8 @@ ${section("일절 너머", ["일절 무공의 성취가 100에 이르면 드물�
     "<b>심법</b>은 숨을 고르며 회복하고 점혈을 풉니다. 위험하면 <b>도주</b>도 방법입니다.",
     "내상은 전투가 끝나도 남고 주는 피해를 줄입니다. 사건에서 체력이나 내력이 축날 때는 경지와 기량이 높을수록 덜 축납니다.",
     `<b>경공의 경지</b>: 초상비, 등평도수, 답설무흔, 능공허도, 이형환위는 보법의 이름이 아니라 경공이 이른 경지입니다. 쓰는 경공의 품계가 오를수록 ${Object.values(DB.realms.movement_tiers).map(([name]) => name).join(", ")} 순으로 깊어지고, 무공 칸에 지금의 경지가 나옵니다.`,
-    "<b>경공의 끝</b>: 어떤 경공도 9할을 넘겨 피하지 못합니다. 잇달아 펼치면 걸음을 읽혀 회피가 1할 5푼씩 떨어지고, 다른 일을 하면 돌아옵니다. 필살기를 흘렸을 때 다음 공격이 온전히 강해지고, 보통 공격을 흘리면 그 절반입니다.",
+    "<b>경공의 끝</b>: 어떤 경공도 9할을 넘겨 피하지 못합니다. 잇달아 펼치면 걸음을 읽혀 회피가 1할 5푼씩 떨어지고, 다른 일을 하면 돌아옵니다. 필살기를 흘렸을 때 다음 공격이 온전히 강해지고, 보통 공격을 흘리면 그 절반입니다. 경공을 펼치지 않고 저절로 피하는 것은 5할까지입니다.",
+    "<b>막는 힘의 끝</b>: 심법이 늘 줄여 주는 피해는 1할 5푼까지, 받은 힘을 되돌리는 것은 3할까지, 내력으로 대신 받는 것은 3할까지입니다. 호신 기운은 싸움을 시작할 때 최대 체력의 3할 5푼, 싸우는 동안 4할까지 쌓입니다. 무엇을 겹쳐도 맞는 힘의 1할은 몸에 닿습니다.",
     "<b>회복의 끝</b>: 운기 한 번에 체력은 5할, 내력은 7할까지 차고, 잇달아 운기하면 절반이 됩니다. 준 피해를 빨아들이는 힘은 한 합에 최대 체력의 2할 5푼까지이고, 합마다 저절로 차는 기운은 한 싸움에 3할까지입니다.",
     "<b>선천진기</b>: 누구나 단전 깊은 곳에 타고난 기운을 한 줌 품고 있습니다. 강호행마다 한 번, 쓰러지는 순간 이것을 일으킬 수 있습니다. 화면 가운데 창에서 고르며, 일으키면 체력과 내력이 최대의 절반만큼 차오르고 그 싸움이 끝날 때까지 위력이 1할 5푼 오르고 받는 피해가 1할 5푼 줍니다.", "<b>실전 경험</b>: 싸울수록 쌓입니다. 경지를 넘는 데 필요하고, 열다섯 번마다 손이 노련해져 주는 피해가 2푼 늘고 받는 피해가 1푼 줍니다. 일흔다섯 번이면 싸움의 이치를 깨친 몸에 이릅니다."])}
 ${section("비무", ["비무에서는 져도 죽지 않습니다. 체력이 1할만 남고 얻는 것이 없으며, 그 비무가 이어지는 일의 한 편이었다면 그 일은 어그러집니다. 기권해도 같습니다. 이겨도 사람을 죽인 것은 아니어서 처치 수와 성향은 오르지 않습니다."])}
@@ -356,7 +357,7 @@ function originDetail(key) {
   const sect = ORIGIN_SECTS[key] ? DB.sects[ORIGIN_SECTS[key]] : null;
   return `<span class="pick-desc block">${esc(o.desc)}</span>${statBars(o)}
     <span class="pick-stats block">시작 무공: ${esc(skillNames)}</span>
-    ${sect ? `<span class="pick-stats block">사문: ${esc(sect.name)} (${esc(sect.bonus_text)})</span>` : ""}`;
+    ${sect ? `<span class="pick-stats block">${sectWord(ORIGIN_SECTS[key])}: ${esc(sect.name)} (${esc(sect.bonus_text)})</span>` : ""}`;
 }
 
 const traitName = (t) => `${esc(t.name)}<span class="rarity rarity-${esc(t.rarity)}">${esc(t.rarity)}</span>`;
@@ -550,14 +551,26 @@ function keepSetup() { return storage.get("wuxia-keep-setup") !== "off"; }
 function loadSetup() {
   try {
     const saved = keepSetup() ? JSON.parse(storage.get("wuxia-setup") || "{}") : {};
-    return { origin: saved.origin || "무림초출", traits: Array.isArray(saved.traits) ? saved.traits : [] };
+    return { origin: saved.origin || "무림초출", traits: Array.isArray(saved.traits) ? saved.traits : [], legacy: Array.isArray(saved.legacy) ? saved.legacy : [] };
   } catch {
-    return { origin: "무림초출", traits: [] };
+    return { origin: "무림초출", traits: [], legacy: [] };
   }
 }
 
 function saveSetup() {
-  if (keepSetup()) storage.set("wuxia-setup", JSON.stringify({ origin: ui.origin, traits: [...ui.traits] }));
+  if (!keepSetup()) return;
+  // 유산은 보관함의 자리가 바뀌어도 이어지도록 무엇인지로 적어 둔다
+  const legacies = loadMeta().legacies;
+  const legacy = [...ui.legacy].map((i) => legacies[i]).filter(Boolean).map((l) => ({ kind: l.kind, key: l.key }));
+  storage.set("wuxia-setup", JSON.stringify({ origin: ui.origin, traits: [...ui.traits], legacy }));
+}
+
+/** 이어 쓰기로 적어 둔 유산을 지금 보관함의 자리로 되살린다 */
+function restoreLegacy() {
+  const legacies = loadMeta().legacies;
+  const take = legacyPowers().take;
+  const picks = loadSetup().legacy.map((s) => legacies.findIndex((l) => sameLegacy(l, s))).filter((i) => i >= 0);
+  return new Set([...new Set(picks)].slice(0, take));
 }
 
 /** 이어 쓰기를 끈 채 새로 고르면 출신은 무림초출, 자질과 이름은 비우고, 기틀은 산 단계를 모두 쓰고 인연은 모두 켠다 */
@@ -606,7 +619,7 @@ function legacySetup(meta) {
     <span class="pick-main"><span class="pick-name">${esc(l.label)}</span><span class="pick-desc block">${esc(l.from)}, ${esc(l.origin)}</span></span></label></div>`;
   }).join("");
   const worn = [powers.keepGrade ? "" : "무공은 한 품계 낮아지고", powers.keepGear ? "" : "병장기는 낮은 단계로 돌아옵니다."].filter(Boolean).join(" ");
-  return `<p class="section-note">${powers.take}개까지 고를 수 있습니다. 고른 유산은 시작할 때 받지 않고, 첫 해 안에 수련, 운기, 요양, 탐색 중에 그 자취를 찾아 이어받습니다. 이어받아도 보관함에서 사라지지 않습니다.${worn ? ` ${worn.endsWith("낮아지고") ? `${worn.slice(0, -1)}집니다.` : worn}` : ""}</p>
+  return `<p class="section-note">${powers.take}개까지 고를 수 있습니다. 고른 유산은 시작할 때 받지 않고, 첫 해 안에 수련, 운기, 요양, 탐색 중에 그 자취를 찾아 한꺼번에 이어받습니다. 이어받아도 보관함에서 사라지지 않습니다. 유산은 천마를 쓰러뜨린 강호행에서만 남길 수 있습니다.${worn ? ` ${worn.endsWith("낮아지고") ? `${worn.slice(0, -1)}집니다.` : worn}` : ""}</p>
     ${rows || emptyNote("아직 남겨 둔 유산이 없습니다.")}`;
 }
 
@@ -736,7 +749,7 @@ function statusModal() {
         ${statRow("무리", p.martial, "위력, 명중, 성취")}${statRow("심경", p.mind, "회심의 일격, 받는 피해, 수련, 돌파")}
       </div>
       <div class="modal-section">
-        ${row("출신", p.origin)}${row("사문", sect ? `${sect.name} (${sect.bonus_text})` : "없음")}
+        ${row("출신", p.origin)}${row(sect ? sectWord(p.sect) : "소속", sect ? `${sect.name} (${sect.bonus_text})` : "없음")}
         ${row("명성", `${p.fame} (${fameRank(p)})`)}
         ${p.injury ? row("내상", `${p.injury}단계, 주는 피해 -${halpun(p.injury * INJURY_PENALTY)}, 요양으로 치료`) : ""}
         ${row("실전 경험", `${p.battles} (${p.kills}명 처치)`)}
@@ -930,8 +943,9 @@ function legacyPanel() {
   const meta = loadMeta();
   if (!meta.legacy_open) return "";
   if (ending.legacyLeft) return `<p class="legacy-note">${esc(ending.legacyLeft)}${josa(esc(ending.legacyLeft), "을/를")} 남겼습니다. 다음 강호행에서 이어받을 수 있습니다.</p>`;
+  if (!canLeaveLegacy(ending.key)) return `<p class="legacy-note">전설의 유산은 천마를 쓰러뜨린 사람만 남길 수 있습니다.</p>`;
   const options = game.legacyOptions();
-  if (!options.length) return `<p class="legacy-note">남길 만한 것이 없습니다.</p>`;
+  if (!options.length) return `<p class="legacy-note">남길 만한 것이 없습니다. 이미 보관한 무공과 물건은 다시 남기지 않습니다.</p>`;
   const { shelf } = legacyPowers(meta);
   const full = meta.legacies.length >= shelf;
   // 보관이 가득 찼으면 무엇을 지울지 먼저 고른다
@@ -1054,6 +1068,7 @@ function renderEvent() {
   const p = game.player;
   const view = eventView(p, game.event.key);
   return `<div class="stage"><div class="stage-inner"><div class="event-sheet">
+      ${game.notice ? `<div class="event-notice">${game.notice.map((l) => `<p>${esc(l)}</p>`).join("")}</div>` : ""}
       <h2 class="event-title">${esc(view.title)}</h2>
       <div class="event-body"><p class="event-text" data-type>${esc(view.text)}</p>
         ${view.choices.map((c) => `<button class="choice-btn${c.tag ? " special" : ""}" data-act="choose" data-index="${c.index}" ${c.locked ? "disabled" : ""}>${c.tag ? `<span class="choice-tag">${esc(c.tag)}</span>` : ""}${esc(c.label)}${c.locked ? `<small>${esc(c.locked)}</small>` : ""}</button>`).join("")}
@@ -1126,10 +1141,13 @@ function followLog() {
   if (stage) stage.scrollTop = stage.scrollHeight;
 }
 
+/** 지금 무인의 호칭과 몸담은 곳의 이름 */
+const currentPerson = () => (game.player ? { ...game.player.person, sectWord: sectWord(game.player.sect) } : ui.person);
+
 /** 화면에 나온 글의 호칭 자리표시를 지금 무인의 성별과 이름으로 바꾼다 */
 function personalizeDom(root) {
   if (!root) return;
-  const person = game.player?.person ?? ui.person;
+  const person = currentPerson();
   const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
   for (let node = walker.nextNode(); node; node = walker.nextNode()) {
     if (node.nodeValue.includes("〈")) node.nodeValue = personalize(node.nodeValue, person);
@@ -1141,7 +1159,7 @@ export function watchPerson() {
   new MutationObserver((records) => {
     for (const record of records) for (const node of record.addedNodes) {
       if (node.nodeType === 1) personalizeDom(node);
-      else if (node.nodeType === 3 && node.nodeValue.includes("〈")) node.nodeValue = personalize(node.nodeValue, game.player?.person ?? ui.person);
+      else if (node.nodeType === 3 && node.nodeValue.includes("〈")) node.nodeValue = personalize(node.nodeValue, currentPerson());
     }
   }).observe(document.body, { childList: true, subtree: true });
 }
@@ -1285,7 +1303,7 @@ const actions = {
   "trait-filter": (el) => { ui.traitFilter = el.dataset.key; render(); },
   "shop-group": (el) => { ui.shopGroup[el.dataset.tab] = el.dataset.key; render(); },
   "setup-tab": (el) => { ui.setupTab = el.dataset.tab; render(); window.scrollTo(0, 0); },
-  setup: () => { if (!keepSetup()) resetSetup(); ui.screen = "setup"; render(); window.scrollTo(0, 0); },
+  setup: () => { if (!keepSetup()) resetSetup(); else ui.legacy = restoreLegacy(); ui.setupTab = "origin"; ui.screen = "setup"; render(); window.scrollTo(0, 0); },
   shop: () => { ui.shopFrom = ui.screen; ui.screen = "shop"; render(); window.scrollTo(0, 0); },
   "shop-back": () => { ui.screen = ui.shopFrom || "title"; render(); window.scrollTo(0, 0); },
   "shop-tab": (el) => { ui.shopTab = el.dataset.tab; render(); window.scrollTo(0, 0); },
@@ -1401,6 +1419,7 @@ export function installInput() {
       const index = Number(target.value);
       if (target.checked) ui.legacy.add(index);
       else ui.legacy.delete(index);
+      saveSetup();
       render();
     } else if (target.dataset.content) {
       toggleContent(target.dataset.content);

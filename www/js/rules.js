@@ -46,7 +46,7 @@ const PERSON_WORDS = {
 export function personalize(text, person = null) {
   if (!text || !text.includes("〈")) return text;
   const female = person?.gender === "여" ? 1 : 0;
-  const names = { 성: person?.surname ?? "", 이름: person?.given || "무명", 성명: fullName(person) };
+  const names = { 성: person?.surname ?? "", 이름: person?.given || "무명", 성명: fullName(person), 사문: person?.sectWord ?? "사문" };
   return text.replace(/〈([^〉:]+)(?::([^〉]+))?〉/g, (whole, word, pair) => {
     let out;
     if (word === "성대협") out = names.성 ? `${names.성} ${PERSON_WORDS.대협[female]}` : PERSON_WORDS.대협[female];
@@ -57,6 +57,9 @@ export function personalize(text, person = null) {
     return pair ? `${out}${josa(out, pair)}` : out;
   });
 }
+
+/** 세가에 몸담은 무인에게는 사문 대신 가문이라 한다 */
+export const sectWord = (sect) => (DB.sects[sect]?.house ? "가문" : "사문");
 
 /** 두 글자 성은 띄어 적는다. 지난 저장에는 이름이 없어 무명으로 부른다 */
 export const fullName = (person) => (person?.given ? `${person.surname || ""}${person.surname?.length > 1 ? " " : ""}${person.given}` : "무명");

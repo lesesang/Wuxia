@@ -32,6 +32,20 @@ const MAX_KILL_POWER = 40; // 쓰러뜨린 적만큼 강해지는 자질의 끝
 const MAX_DAMAGE_REDUCE = 45; // 자질과 기틀을 겹쳐도 받는 피해를 이 이상 줄이지 못한다
 const MIN_THROUGH_ARMOR = 0.2; // 호신구를 뚫고 들어오는 최소 비율
 const MAX_EVADE = 90; // 어떤 경공도 반드시 피하지는 못한다
+const MAX_AUTO_EVADE = 50; // 경공을 펼치지 않고 저절로 피하는 끝
+const MAX_START_WARD = 35; // 싸움을 시작할 때 두르는 호신 기운의 끝(최대 체력 대비)
+const MAX_WARD = 40; // 싸우는 동안 쌓이는 호신 기운의 끝(최대 체력 대비)
+const MAX_PASSIVE_GUARD = 15; // 심법이 늘 줄여 주는 피해의 끝
+const MAX_THORNS = 30; // 받은 힘을 되돌리는 끝
+const MAX_QI_SHIELD = 30; // 내력으로 대신 받는 피해의 끝
+const MAX_SECOND_WIND = 25; // 한 싸움에 한 번 숨이 트일 때 채우는 체력의 끝
+const MAX_LAST_GUARD = 20; // 몰렸을 때 갑의가 더 막아 주는 끝
+const MAX_STEP_MOMENTUM = 30; // 피할수록 오르는 위력의 끝
+const MIN_TAKEN = 0.2; // 피해를 줄이는 효과를 겹쳐도 호신구에 닿기 전의 힘은 이만큼 남는다
+const MIN_FINAL_TAKEN = 0.1; // 호신구까지 겹쳐도 몸에 닿는 힘
+const MIND_SURGE_EVERY = 4; // 심법이 숨을 모아 터뜨리는 주기(합)
+const ECHO_RATE = 0.5; // 여운으로 한 번 더 닿는 힘
+const ITEM_MIND_MASTERY_RATE = 8; // 영약과 서책으로 오른 기량 이만큼마다 심법 성취 1
 const STEP_STREAK_PENALTY = 15; // 경공을 잇달아 펼치면 걸음을 읽혀 회피가 이만큼씩 떨어진다
 const MIN_STREAK_EVADE = 30;
 const NORMAL_COUNTER_RATE = 0.5; // 필살기가 아닌 공격을 흘리면 되갚는 힘이 절반이다
@@ -185,6 +199,10 @@ export function useConsumable(player, key) {
       notes.push(`${STAT_NAMES[effect.stat]}+${player.gainStat(effect.stat, effect.amount)}`);
     }
   }
+  // 영약을 삼키거나 서책을 읽으면 그 기운을 갈무리하며 심법도 깊어진다
+  const raised = DB.market[key].effects.filter((e) => e.type === "stat" && e.amount > 0).reduce((sum, e) => sum + e.amount, 0);
+  const mind = raised && player.bestOfType("심공");
+  if (mind) notes.push(...mind.gainMastery(Math.max(1, Math.round(raised / ITEM_MIND_MASTERY_RATE))));
   player.inventory[key] -= 1;
   if (player.inventory[key] <= 0) delete player.inventory[key];
   return notes;
@@ -234,7 +252,13 @@ export class Battle {
     this.freeItemUsed = false;  // 한 합에 도구 하나는 합을 쓰지 않는다
     this.weaponG = gearGimmick(player, "weapon");
     this.armorG = gearGimmick(player, "armor");
-    const ward = sumEffect(player.traits, "battle_start_ward", "percent") + (this.armorG?.start_ward || 0);
+    // 심법의 묘리는 운기하지 않아도 늘 몸에 흐른다
+    this.mindG = player.bestOfType("심공")?.activeGimmick() || null;
+    this.marks = 0;          // 표식을 새긴 수
+    this.momentum = 0;       // 피할 때마다 쌓인 기세(푼)
+    this.afterimage = 0;     // 잔상이 남아 다음 합에 저절로 피할 몫
+    this.secondWind = false; // 한 싸움에 한 번 숨이 트였는가
+    const ward = Math.min(MAX_START_WARD, sumEffect(player.traits, "battle_start_ward", "percent") + (this.armorG?.start_ward || 0) + (this.mindG?.ward || 0));
     if (ward) {
       this.ward = Math.trunc(player.maxHp() * ward / 100);
       this.log.push(`(몸 둘레에 호신 기운이 선다. ${this.ward})`);
@@ -283,6 +307,7 @@ export class Battle {
     scale *= 1 + alignValue(p.alignment, "마도", "damage") / 100;
     for (const c of this.companions) scale *= 1 + (c.help.atk || 0) / 100;
     if (this.atkBuff) scale *= 1 + this.atkBuff.percent / 100;
+    if (this.momentum) scale *= 1 + this.momentum / 100;
     return scale;
   }
 
@@ -307,7 +332,7 @@ export class Battle {
 
   critChance() {
     const p = this.player;
-    return Math.min(MAX_CRIT, p.mind / 4000 + (sumEffect(p.traits, "crit", "percent") + sectBonus(p, "crit") + alignValue(p.alignment, "사도", "crit")) / 100);
+    return Math.min(MAX_CRIT, p.mind / 4000 + (sumEffect(p.traits, "crit", "percent") + sectBonus(p, "crit") + alignValue(p.alignment, "사도", "crit") + (this.mindG?.focus || 0)) / 100);
   }
 
   /** 무공의 묘리에 병기의 영기를 더한다 */
@@ -360,25 +385,51 @@ export class Battle {
       notes.push("빈틈을 찔렀다.");
       this.counterPct = 0;
     }
+    let crit = false;
     if (this.forceCrit || rng.random() < Math.min(MAX_CRIT, this.critChance() + (g.crit || 0) / 100)) {
+      crit = true;
       this.forceCrit = false;
       damage *= 1.5 + (sumEffect(p.traits, "crit_power", "percent") + (g.crit_power || 0)) / 100;
       notes.push("회심의 일격이다.");
     }
     const pierce = Math.min(100, (g.pierce || 0) + sumEffect(p.traits, "pierce_all", "percent"));
     damage = Math.max(1, Math.trunc(damage) - Math.trunc(this.enemy.armor * (1 - this.shred / 100) * (1 - pierce / 100)));
+    // 표식이 정해진 수만큼 쌓이면 방어를 무시하고 터진다
+    if (g.mark) {
+      this.marks += 1;
+      if (this.marks % g.mark.every === 0) {
+        const burst = Math.max(1, Math.trunc(damage * g.mark.percent / 100));
+        damage += burst;
+        notes.push(`쌓인 표식이 터졌다(+${burst}).`);
+      }
+    }
     this.enemy.takeDamage(damage);
     const suffix = notes.length ? ` ${notes.join(" ")}` : "";
     this.log.push(`${label}${josa(label, "으로")} ${this.enemy.name}에게 ${damage}의 피해를 입혔다.${suffix}`);
     this.applyPoisonOnHit(skill, g);
     this.applyGimmickOnHit(g, damage);
+    if (crit && g.crit_ward) this.addWard(Math.trunc(damage * g.crit_ward / 100), "회심의 기운이 몸을 두른다");
+    // 여운이 남는 초식은 때로 한 번 더 닿는다. 여운은 다시 여운을 낳지 않는다
+    if (g.echo && !this.echoing && this.enemy.isAlive() && rng.random() * 100 < g.echo) {
+      this.echoing = true;
+      damage += this.strike(Math.max(1, Math.trunc(power * ECHO_RATE)), "남은 여운", skill);
+      this.echoing = false;
+    }
     return damage;
+  }
+
+  /** 호신 기운을 더한다. 쌓을 수 있는 양에는 끝이 있다 */
+  addWard(amount, why) {
+    const cap = Math.trunc(this.player.maxHp() * MAX_WARD / 100);
+    const before = this.ward;
+    this.ward = Math.min(cap, this.ward + Math.max(0, amount));
+    if (this.ward > before) this.log.push(`(${why}. 호신 기운 ${this.ward})`);
   }
 
   /** 맞힌 뒤에 드러나는 무공의 묘리 */
   applyGimmickOnHit(g, damage) {
     const p = this.player;
-    const steal = (g.lifesteal || 0) + (this.lifestealBuff?.percent || 0);
+    const steal = (g.lifesteal || 0) + (this.lifestealBuff?.percent || 0) + (this.mindG?.lifesteal_buff ? Math.round(this.mindG.lifesteal_buff.percent / 2) : 0);
     if (steal) {
       // 큰 피해를 주어도 한 합에 빨아들이는 양에는 끝이 있다
       const room = Math.max(0, Math.trunc(p.maxHp() * MAX_LIFESTEAL_PCT / 100) - this.stolen);
@@ -538,53 +589,27 @@ export class Battle {
       this.atkBuff = { percent, rounds: rounds + 1 };
       this.log.push(`기세가 오른다. (${rounds}합 동안 위력 +${halpun(percent)})`);
     }
-    this.applyMindGimmick(skill);
     this.log.push(...skill.gainMastery(p.masteryGainAmount() * ART_USE_RATE));
   }
 
-  /** 심법의 묘리. 운기할 때 드러난다. */
-  applyMindGimmick(skill) {
-    const g = skill.activeGimmick();
-    if (!g) return;
-    const p = this.player;
-    const notes = [];
-    if (g.cleanse && this.poison) {
-      this.poison = null;
-      notes.push("독을 밀어냈다");
-    }
-    if (g.injury && p.injury && rng.random() * 100 < g.injury) {
-      p.addInjury(-1);
-      notes.push("내상이 한 단계 가라앉았다");
-    }
-    if (g.ward) {
-      this.ward = Math.max(this.ward, Math.trunc(p.maxHp() * g.ward / 100));
-      notes.push(`호신 기운 ${this.ward}`);
-    }
-    if (g.guard) {
-      this.guard = { percent: g.guard.percent, rounds: g.guard.rounds };
-      notes.push(`${g.guard.rounds}합 동안 받는 피해 -${halpun(g.guard.percent)}`);
-    }
-    if (g.regen || g.regen_qi) {
-      this.regen = { hp: g.regen?.percent || 0, qi: g.regen_qi?.percent || 0, rounds: Math.max(g.regen?.rounds || 0, g.regen_qi?.rounds || 0) };
-      notes.push(`${this.regen.rounds}합 동안 기운이 차오른다`);
-    }
-    if (g.reflect) {
-      this.reflect = { percent: g.reflect.percent, rounds: g.reflect.rounds };
-      notes.push(`${g.reflect.rounds}합 동안 받은 힘의 ${halpun(g.reflect.percent)}을 되돌린다`);
-    }
-    if (g.lifesteal_buff) {
-      this.lifestealBuff = { percent: g.lifesteal_buff.percent, rounds: g.lifesteal_buff.rounds + 1 };
-      notes.push(`${g.lifesteal_buff.rounds}합 동안 준 피해의 ${halpun(g.lifesteal_buff.percent)}을 흡수한다`);
-    }
+  /** 심법의 묘리는 늘 흐른다. 정해진 합마다 모은 숨을 터뜨린다 */
+  mindSurge() {
+    const g = this.mindG;
+    if (!g || this.roundNum % MIND_SURGE_EVERY !== 0) return;
     if (g.next_power) {
       this.counterPct = Math.max(this.counterPct, g.next_power);
-      notes.push(`다음 공격 +${halpun(g.next_power)}`);
+      this.log.push(`(${g.name}: 모은 숨이 차올랐다. 이번 공격 +${halpun(g.next_power)})`);
     }
     if (g.next_crit) {
       this.forceCrit = true;
-      notes.push("다음 공격은 반드시 회심");
+      this.log.push(`(${g.name}: 숨이 한 점에 모였다. 이번 공격은 반드시 회심)`);
     }
-    if (notes.length) this.log.push(`(묘리 ${g.name}: ${notes.join(", ")})`);
+  }
+
+  /** 심법이 늘 줄여 주는 피해 */
+  mindGuard() {
+    const g = this.mindG;
+    return g?.guard ? Math.min(MAX_PASSIVE_GUARD, Math.round(g.guard.percent / 2)) : 0;
   }
 
   useMovement() {
@@ -648,7 +673,8 @@ export class Battle {
   // ---------- 적 행동 ----------
 
   incoming(multiplier = 1) {
-    let base = this.enemy.attack * this.enemy.attackMultiplier() * multiplier;
+    const full = this.enemy.attack * this.enemy.attackMultiplier() * multiplier;
+    let base = full;
     if (this.enemyWeaken) base *= 1 - this.enemyWeaken.percent / 100;
     base *= 1 - realmBonus(this.player.realm) / 2;
     base *= 1 - veteranBonus(this.player).reduce / 100;
@@ -660,13 +686,19 @@ export class Battle {
     if (this.guard) base *= 1 - this.guard.percent / 100;
     if (this.armorG?.guard_pct) base *= 1 - this.armorG.guard_pct / 100;
     for (const c of this.companions) base *= 1 - (c.help.guard || 0) / 100;
+    base *= 1 - this.mindGuard() / 100;
+    const last = this.armorG?.last_guard;
+    if (last && this.player.hp <= this.player.maxHp() * last.below / 100) base *= 1 - Math.min(MAX_LAST_GUARD, last.percent) / 100;
+    // 무엇을 겹쳐도 무적이 되지는 않는다
+    base = Math.max(base, full * MIN_TAKEN);
     const blow = Math.trunc(base * uniform(0.9, 1.1));
     const raw = Math.max(1, Math.ceil(blow * MIN_THROUGH_ARMOR), blow - equipmentBonus(this.player, "armor"));
     // 호신강기는 맞는 피해를 몇 푼 줄인다
     const guard = Math.min(MAX_AURA_GUARD, sumEffect(this.player.traits, "aura_guard", "percent"));
     const taken = guard ? Math.round(raw * (1 - guard / 100)) : raw;
     this.guardedLast = raw - taken;
-    return Math.max(1, taken);
+    // 호신구와 호신강기까지 겹쳐도 맞는 힘의 1할은 몸에 닿는다
+    return Math.max(1, taken, Math.ceil(full * MIN_FINAL_TAKEN));
   }
 
   enemyAttack(evadeSkill = null) {
@@ -699,7 +731,8 @@ export class Battle {
     } else {
       // 묘리를 깨친 경공은 때로 몸이 먼저 움직인다
       const steps = this.player.bestOfType("경공");
-      const auto = (steps?.activeGimmick()?.auto_evade || 0) + (this.armorG?.auto_evade || 0);
+      const auto = Math.min(MAX_AUTO_EVADE, (steps?.activeGimmick()?.auto_evade || 0) + (this.armorG?.auto_evade || 0) + this.afterimage);
+      this.afterimage = 0;
       if (auto && !this.sealed && rng.random() * 100 < auto) {
         this.log.push(`몸이 저절로 움직였다. ${this.enemy.name}의 ${name}${josa(name, "이/가")} 빗나갔다.`);
         return 0;
@@ -713,6 +746,15 @@ export class Battle {
       damage = Math.max(1, Math.floor(damage * rate));
       this.log.push(`다 피하지는 못했지만 몸을 띄운 덕에 위력이 ${halpun(Math.round((1 - rate) * 100))} 줄었다.`);
     }
+    const shield = Math.min(MAX_QI_SHIELD, this.mindG?.qi_shield || 0);
+    if (shield && this.player.qi > 0) {
+      const paid = Math.min(this.player.qi, Math.trunc(damage * shield / 100));
+      if (paid > 0) {
+        this.player.qi -= paid;
+        damage -= paid;
+        this.log.push(`(내력으로 ${paid}의 힘을 받아 냈다.)`);
+      }
+    }
     if (this.ward > 0) {
       const absorbed = Math.min(this.ward, damage);
       this.ward -= absorbed;
@@ -721,11 +763,17 @@ export class Battle {
     }
     this.player.hp = Math.max(0, this.player.hp - damage);
     this.log.push(`${this.enemy.name}의 ${name}${josa(name, "에/에")} ${damage}의 피해를 입었다.${special && this.guardedLast ? ` (호신강기가 ${this.guardedLast}을 막았다)` : ""}`);
-    const thorns = (this.reflect?.percent || 0) + (this.armorG?.thorns || 0);
+    const thorns = Math.min(MAX_THORNS, (this.reflect?.percent || 0) + (this.armorG?.thorns || 0) + (this.mindG?.reflect ? Math.round(this.mindG.reflect.percent / 2) : 0));
     if (thorns && damage > 0) {
       const back = Math.max(1, Math.trunc(damage * thorns / 100));
       this.enemy.takeDamage(back);
       this.log.push(`받은 힘이 되돌아갔다. ${this.enemy.name}에게 ${back}의 피해.`);
+    }
+    const wind = this.mindG?.second_wind;
+    if (wind && !this.secondWind && this.player.hp > 0 && this.player.hp <= this.player.maxHp() * wind.below / 100) {
+      this.secondWind = true;
+      const [healed] = this.player.healPercent(Math.min(MAX_SECOND_WIND, wind.percent), 0);
+      this.log.push(`(${this.mindG.name}: 막혔던 숨이 트였다. 체력 +${healed})`);
     }
     this.checkRevive();
     if (special && !this.standPending) this.applySpecialEffects(special);
@@ -741,6 +789,14 @@ export class Battle {
       this.log.push("(힘을 들이지 않았다. 쓴 내력의 절반을 되찾았다.)");
     }
     if (g.next_crit) this.forceCrit = true;
+    if (g.afterimage) {
+      this.afterimage = g.afterimage;
+      this.log.push("(잔상이 남았다. 다음 합에는 몸이 먼저 움직일 수 있다.)");
+    }
+    if (g.momentum && this.momentum < MAX_STEP_MOMENTUM) {
+      this.momentum = Math.min(MAX_STEP_MOMENTUM, this.momentum + g.momentum);
+      this.log.push(`(피할수록 기세가 오른다. 위력 +${halpun(this.momentum)})`);
+    }
     if (g.next_power) {
       this.counterPct = Math.max(this.counterPct, g.next_power);
       this.log.push(`(몸을 비튼 힘이 남았다. 다음 공격 +${halpun(g.next_power)})`);
@@ -760,11 +816,15 @@ export class Battle {
     const p = this.player;
     if (special.seal && (hasEffect(this.player.traits, "seal_immune") || this.armorG?.seal_immune)) {
       this.log.push("혈도를 노렸지만 기운이 막히지 않았다.");
+    } else if (special.seal && this.mindG?.clear_mind && rng.random() * 100 < this.mindG.clear_mind) {
+      this.log.push(`(${this.mindG.name}: 맑은 숨이 혈도를 지켰다.)`);
     } else if (special.seal) {
       this.sealed = special.seal + 1;
       this.log.push(`혈도를 짚였다. (${special.seal}합 동안 무공 봉쇄, 심법으로 풀 수 있다)`);
     }
-    if (special.injury && p.injury < MAX_INJURY) {
+    if (special.injury && this.mindG?.injury && rng.random() * 100 < this.mindG.injury) {
+      this.log.push(`(${this.mindG.name}: 흔들린 기혈을 숨이 다잡았다.)`);
+    } else if (special.injury && p.injury < MAX_INJURY) {
       p.addInjury(1);
       this.log.push(`장력이 내부를 흔든다. (내상 ${p.injury}단계)`);
     }
@@ -772,6 +832,8 @@ export class Battle {
       this.log.push("독이 들었지만 몸이 아무렇지 않다.");
     } else if (special.poison) {
       this.poison = { ...special.poison };
+      // 독을 밀어내는 심법이면 독이 한 합을 넘기지 못한다
+      if (this.mindG?.cleanse) this.poison.rounds = 1;
       this.log.push(`독이 퍼진다. (${this.poison.rounds}합 동안 매 합 ${this.poison.damage} 피해)`);
     }
     if (special.qi_drain) {
@@ -855,8 +917,10 @@ export class Battle {
       if (this.burn.rounds <= 0) this.burn = null;
     }
     // 저절로 차오르는 기운은 한 싸움에 일정한 양까지다
-    const regen = Math.min(MAX_PASSIVE_REGEN - this.regenUsedHp, sumEffect(this.player.traits, "round_regen", "hp_pct") + (this.armorG?.regen || 0));
-    const regenQi = Math.min(MAX_PASSIVE_REGEN - this.regenUsedQi, sumEffect(this.player.traits, "round_regen", "qi_pct"));
+    const mindHp = this.mindG?.regen ? Math.max(1, Math.round(this.mindG.regen.percent / 2)) : 0;
+    const mindQi = this.mindG?.regen_qi ? Math.max(1, Math.round(this.mindG.regen_qi.percent / 2)) : 0;
+    const regen = Math.min(MAX_PASSIVE_REGEN - this.regenUsedHp, sumEffect(this.player.traits, "round_regen", "hp_pct") + (this.armorG?.regen || 0) + mindHp);
+    const regenQi = Math.min(MAX_PASSIVE_REGEN - this.regenUsedQi, sumEffect(this.player.traits, "round_regen", "qi_pct") + mindQi);
     if ((regen > 0 || regenQi > 0) && this.player.hp > 0) {
       this.player.healPercent(regen, regenQi);
       this.regenUsedHp += regen;
@@ -979,6 +1043,7 @@ export class Battle {
     this.freeItemUsed = false;
     this.roundNum += 1;
     this.stolen = 0;
+    this.mindSurge();
     // 다른 일을 하면 잇달아 쓴 것이 끊긴다. 운기는 쓴 뒤에 세어 이번 운기가 앞의 운기를 볼 수 있게 한다
     this.stepStreak = action === "경공" ? this.stepStreak + 1 : 0;
     const mindNow = action === "심법";

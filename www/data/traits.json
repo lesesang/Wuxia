@@ -1,73 +1,73 @@
 {
   "강건한_육체": {
     "name": "강철 근골",
-    "desc": "시작 외공이 120 높고 외공 성장이 1할 5푼 늘어난다.",
+    "desc": "시작 외공이 60 높고 외공 성장이 2할 5푼 늘어난다.",
     "rarity": "일반",
     "cost": 6,
     "effects": [
       {
         "type": "start_stat",
         "stat": "external",
-        "amount": 120
+        "amount": 60
       },
       {
         "type": "growth_rate",
         "stat": "external",
-        "percent": 15
+        "percent": 25
       }
     ]
   },
   "선천진기": {
     "name": "선천진기",
-    "desc": "시작 내공이 120 높고 내공 성장이 1할 5푼 늘어난다.",
+    "desc": "시작 내공이 60 높고 내공 성장이 2할 5푼 늘어난다.",
     "rarity": "일반",
     "cost": 6,
     "effects": [
       {
         "type": "start_stat",
         "stat": "internal",
-        "amount": 120
+        "amount": 60
       },
       {
         "type": "growth_rate",
         "stat": "internal",
-        "percent": 15
+        "percent": 25
       }
     ]
   },
   "타고난안목": {
     "name": "무학의 재능",
-    "desc": "시작 무리가 120 높고 무리 성장이 1할 5푼 늘어난다.",
+    "desc": "시작 무리가 60 높고 무리 성장이 2할 5푼 늘어난다.",
     "rarity": "일반",
     "cost": 6,
     "effects": [
       {
         "type": "start_stat",
         "stat": "martial",
-        "amount": 120
+        "amount": 60
       },
       {
         "type": "growth_rate",
         "stat": "martial",
-        "percent": 15
+        "percent": 25
       }
     ]
   },
   "총명": {
     "name": "총명",
-    "desc": "시작 심경이 120 높고 심경 성장이 1할 5푼 늘어난다.",
+    "desc": "시작 심경이 60 높고 심경 성장이 2할 5푼 늘어난다.",
     "rarity": "일반",
     "cost": 6,
     "effects": [
       {
         "type": "start_stat",
         "stat": "mind",
-        "amount": 120
+        "amount": 60
       },
       {
         "type": "growth_rate",
         "stat": "mind",
-        "percent": 15
+        "percent": 25
       }
     ]
   },
@@ -536,9 +536,9 @@
   },
   "현기의호흡": {
     "name": "곤륜의 호흡",
-    "desc": "심법 곤륜현기공을 익힌 채로 시작하고 심법 회복이 2할 늘어난다.",
+    "desc": "심법 곤륜현기공을 성취 30 쌓은 채로 익히고 시작하며, 심법 회복이 2할 늘어난다.",
     "rarity": "일반",
-    "cost": 4,
+    "cost": 5,
     "effects": [
       {
         "type": "start_skill",
@@ -547,6 +547,10 @@
       {
         "type": "mindset_power",
         "percent": 20
+      },
+      {
+        "type": "start_mindset_mastery",
+        "amount": 30
       }
     ]
   },
@@ -597,169 +601,169 @@
   },
   "천생근골": {
     "name": "천생근골",
-    "desc": "시작 외공과 무리가 60 높고 성장이 각각 1할 2푼 늘어난다.",
+    "desc": "시작 외공과 무리가 30 높고 성장이 각각 2할 늘어난다.",
     "rarity": "희귀",
     "cost": 8,
     "effects": [
       {
         "type": "start_stat",
         "stat": "external",
-        "amount": 60
+        "amount": 30
       },
       {
         "type": "start_stat",
         "stat": "martial",
-        "amount": 60
+        "amount": 30
       },
       {
         "type": "growth_rate",
         "stat": "external",
-        "percent": 12
+        "percent": 20
       },
       {
         "type": "growth_rate",
         "stat": "martial",
-        "percent": 12
+        "percent": 20
       }
     ]
   },
   "오성": {
     "name": "오성",
-    "desc": "시작 내공과 심경이 60 높고 성장이 각각 1할 2푼 늘어난다.",
+    "desc": "시작 내공과 심경이 30 높고 성장이 각각 2할 늘어난다.",
     "rarity": "희귀",
     "cost": 8,
     "effects": [
       {
         "type": "start_stat",
         "stat": "internal",
-        "amount": 60
+        "amount": 30
       },
       {
         "type": "start_stat",
         "stat": "mind",
-        "amount": 60
+        "amount": 30
       },
       {
         "type": "growth_rate",
         "stat": "internal",
-        "percent": 12
+        "percent": 20
       },
       {
         "type": "growth_rate",
         "stat": "mind",
-        "percent": 12
+        "percent": 20
       }
     ]
   },
   "혼원지체": {
     "name": "혼원지체",
-    "desc": "시작 외공과 내공이 60 높고 성장이 각각 1할 2푼 늘어난다.",
+    "desc": "시작 외공과 내공이 30 높고 성장이 각각 2할 늘어난다.",
     "rarity": "희귀",
     "cost": 8,
     "effects": [
       {
         "type": "start_stat",
         "stat": "external",
-        "amount": 60
+        "amount": 30
       },
       {
         "type": "start_stat",
         "stat": "internal",
-        "amount": 60
+        "amount": 30
       },
       {
         "type": "growth_rate",
         "stat": "external",
-        "percent": 12
+        "percent": 20
       },
       {
         "type": "growth_rate",
         "stat": "internal",
-        "percent": 12
+        "percent": 20
       }
     ]
   },
   "철심석장": {
     "name": "철석같은 심지",
-    "desc": "시작 외공과 심경이 60 높고 성장이 각각 1할 2푼 늘어난다.",
+    "desc": "시작 외공과 심경이 30 높고 성장이 각각 2할 늘어난다.",
     "rarity": "희귀",
     "cost": 8,
     "effects": [
       {
         "type": "start_stat",
         "stat": "external",
-        "amount": 60
+        "amount": 30
       },
       {
         "type": "start_stat",
         "stat": "mind",
-        "amount": 60
+        "amount": 30
       },
       {
         "type": "growth_rate",
         "stat": "external",
-        "percent": 12
+        "percent": 20
       },
       {
         "type": "growth_rate",
         "stat": "mind",
-        "percent": 12
+        "percent": 20
       }
     ]
   },
   "통현지재": {
     "name": "현묘한 재능",
-    "desc": "시작 내공과 무리가 60 높고 성장이 각각 1할 2푼 늘어난다.",
+    "desc": "시작 내공과 무리가 30 높고 성장이 각각 2할 늘어난다.",
     "rarity": "희귀",
     "cost": 8,
     "effects": [
       {
         "type": "start_stat",
         "stat": "internal",
-        "amount": 60
+        "amount": 30
       },
       {
         "type": "start_stat",
         "stat": "martial",
-        "amount": 60
+        "amount": 30
       },
       {
         "type": "growth_rate",
         "stat": "internal",
-        "percent": 12
+        "percent": 20
       },
       {
         "type": "growth_rate",
         "stat": "martial",
-        "percent": 12
+        "percent": 20
       }
     ]
   },
   "혜근": {
     "name": "타고난 지혜",
-    "desc": "시작 무리와 심경이 60 높고 성장이 각각 1할 2푼 늘어난다.",
+    "desc": "시작 무리와 심경이 30 높고 성장이 각각 2할 늘어난다.",
     "rarity": "희귀",
     "cost": 8,
     "effects": [
       {
         "type": "start_stat",
         "stat": "martial",
-        "amount": 60
+        "amount": 30
       },
       {
         "type": "start_stat",
         "stat": "mind",
-        "amount": 60
+        "amount": 30
       },
       {
         "type": "growth_rate",
         "stat": "martial",
-        "percent": 12
+        "percent": 20
       },
       {
         "type": "growth_rate",
         "stat": "mind",
-        "percent": 12
+        "percent": 20
       }
     ]
   },
@@ -1336,7 +1340,7 @@
     "name": "싸움귀신",
     "desc": "전투가 시작되면 네 기량이 전투 중에만 60 오른다. 전투가 끝나면 체력과 내력을 각각 1할 5푼 회복한다.",
     "rarity": "전설",
-    "cost": 27,
+    "cost": 46,
     "effects": [
       {
         "type": "battle_buff",
@@ -1384,7 +1388,7 @@
     "name": "불사지체",
     "desc": "전투에서 합마다 체력을 2푼(한 싸움에 3할까지), 달마다 체력을 1할 5푼 더 회복한다. 베여도 베여도 살이 차오른다.",
     "rarity": "전설",
-    "cost": 27,
+    "cost": 46,
     "effects": [
       {
         "type": "round_regen",
@@ -1399,49 +1403,49 @@
   },
   "천하제일기재": {
     "name": "천하제일기재",
-    "desc": "모든 기량이 120 높게 시작하고 성장이 각각 8푼 늘어난다.",
+    "desc": "모든 기량이 60 높게 시작하고 성장이 각각 1할 5푼 늘어난다.",
     "rarity": "전설",
-    "cost": 38,
+    "cost": 65,
     "effects": [
       {
         "type": "start_stat",
         "stat": "external",
-        "amount": 120
+        "amount": 60
       },
       {
         "type": "start_stat",
         "stat": "internal",
-        "amount": 120
+        "amount": 60
       },
       {
         "type": "start_stat",
         "stat": "martial",
-        "amount": 120
+        "amount": 60
       },
       {
         "type": "start_stat",
         "stat": "mind",
-        "amount": 120
+        "amount": 60
       },
       {
         "type": "growth_rate",
         "stat": "external",
-        "percent": 8
+        "percent": 15
       },
       {
         "type": "growth_rate",
         "stat": "internal",
-        "percent": 8
+        "percent": 15
       },
       {
         "type": "growth_rate",
         "stat": "martial",
-        "percent": 8
+        "percent": 15
       },
       {
         "type": "growth_rate",
         "stat": "mind",
-        "percent": 8
+        "percent": 15
       }
     ]
   },
@@ -1449,7 +1453,7 @@
     "name": "천살성",
     "desc": "마도 60으로 시작한다. 쓰러뜨린 적 하나마다 주는 피해가 1푼 늘고(최대 4할) 전투가 끝나면 체력을 1할 되찾는다. 살성을 타고나 사람들이 먼저 알아본다.",
     "rarity": "전설",
-    "cost": 30,
+    "cost": 51,
     "effects": [
       {
         "type": "start_alignment",
@@ -1471,49 +1475,49 @@
   },
   "천무지체": {
     "name": "천무지체",
-    "desc": "모든 기량이 60 높게 시작하고 성장이 각각 1할 늘며, 무공 성취를 6할 더 빠르게 얻고 승급해도 성취가 50에서 다시 시작한다. 백 년에 하나 난다는 무공의 그릇이다.",
+    "desc": "모든 기량이 30 높게 시작하고 성장이 각각 1할 5푼 늘며, 무공 성취를 6할 더 빠르게 얻고 승급해도 성취가 50에서 다시 시작한다. 백 년에 하나 난다는 무공의 그릇이다.",
     "rarity": "전설",
-    "cost": 33,
+    "cost": 56,
     "effects": [
       {
         "type": "start_stat",
         "stat": "external",
-        "amount": 60
+        "amount": 30
       },
       {
         "type": "start_stat",
         "stat": "internal",
-        "amount": 60
+        "amount": 30
       },
       {
         "type": "start_stat",
         "stat": "martial",
-        "amount": 60
+        "amount": 30
       },
       {
         "type": "start_stat",
         "stat": "mind",
-        "amount": 60
+        "amount": 30
       },
       {
         "type": "growth_rate",
         "stat": "external",
-        "percent": 10
+        "percent": 15
       },
       {
         "type": "growth_rate",
         "stat": "internal",
-        "percent": 10
+        "percent": 15
       },
       {
         "type": "growth_rate",
         "stat": "martial",
-        "percent": 10
+        "percent": 15
       },
       {
         "type": "growth_rate",
         "stat": "mind",
-        "percent": 10
+        "percent": 15
       },
       {
         "type": "mastery_rate",
