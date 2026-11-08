@@ -295,7 +295,7 @@ function takeFoundLegacy(player) {
     worn = key !== entry.key;
     name = DB.market[key].name;
     const { slot } = DB.market[key].effects.find((e) => e.type === "equip");
-    if (bonusFor(player, key) > equipmentBonus(player, slot)) player.equipGear(key);
+    if (!player[slot]) player.equipGear(key);
     else if (!player.ownsGear(key)) player.gear.push(key);
   }
   player.note(`${entry.from}${josa(entry.from, "이/가")} 남긴 ${name}${josa(name, "을/를")} 이어받았다.`);
@@ -377,7 +377,7 @@ function equipReward(player, key) {
   const effect = DB.market[key].effects.find((e) => e.type === "equip");
   const name = DB.market[key].name;
   updateKnown([], [key]);
-  if (bonusFor(player, key) > equipmentBonus(player, effect.slot)) {
+  if (!player[effect.slot]) {
     player.equipGear(key);
     return [`${name} 장착`];
   }
@@ -489,6 +489,15 @@ export function grantStartSkills(player) {
 }
 
 /** 시작 선물 중 병기와 도구, 성취. 주무공이 정해진 뒤 그 계열에 맞춰 받는다. */
+/** 길을 나서기 전에는 챙긴 것 가운데 가장 좋은 병장기를 든다. 그 뒤로는 플레이어가 고른다 */
+export function equipBestAtStart(player) {
+  for (const slot of ["weapon", "armor"]) {
+    const owned = [player[slot], ...player.gear].filter((k) => k && DB.market[k]?.effects.some((e) => e.type === "equip" && e.slot === slot));
+    const best = owned.sort((a, b) => bonusFor(player, b) - bonusFor(player, a))[0];
+    if (best && best !== player[slot]) player.equipGear(best);
+  }
+}
+
 export function grantStartGear(player) {
   const lines = [];
   const effects = giftEffects(player);
@@ -515,6 +524,7 @@ export function grantStartGear(player) {
   const books = effects.filter((e) => e.type === "start_style_skill").length;
   const mastery = total("start_mastery", "amount") + Math.max(0, books - 1) * SPARE_BOOK_MASTERY;
   if (mastery) lines.push(...main.gainMastery(mastery));
+  equipBestAtStart(player);
   return lines;
 }
 

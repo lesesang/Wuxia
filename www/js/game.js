@@ -2,7 +2,7 @@
 import { Battle, enemyPool, Enemy, statureEnemy, useConsumable } from "./battle.js";
 import { GRADE_ORDER, Player, Skill, STAT_NAMES } from "./character.js";
 import { DB } from "./data.js";
-import { grantStartGear, grantStartSkills,
+import { equipBestAtStart, grantStartGear, grantStartSkills,
   advanceChain, applyEffects, failChain, checkRequires, dueChainEvent, enemyIntro, LAST_CHAIN_TURN, pickFortune, pickRandomEvent, resolveChoice,
   reactiveLine, startChain, storyEventForTurn, dueOriginEvent, pendingOriginEvents,
 } from "./events.js";
@@ -795,8 +795,8 @@ export function settlePerson(originKey, person = {}) {
   const gender = person.gender === "여" ? "여" : "남";
   const names = DB.flavor.names;
   const clean = (text, limit) => String(text ?? "").replace(/[<>&"'`\s]/g, "").slice(0, limit);
-  const surname = DB.origins.origins[originKey]?.surname || clean(person.surname, 4) || pick(names.surnames);
-  return { gender, surname, given: clean(person.given, 6) || pick(gender === "여" ? names.female : names.male) };
+  const surname = DB.origins.origins[originKey]?.surname || clean(person.surname, 2) || pick(names.surnames);
+  return { gender, surname, given: clean(person.given, 3) || pick(gender === "여" ? names.female : names.male) };
 }
 
 export function buildEpilogue(player, ending) {

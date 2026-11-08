@@ -205,6 +205,14 @@ export function toggleContent(key) {
   saveMeta(data);
 }
 
+/** 기틀은 산 단계를 모두 쓰고 인연은 모두 켠다 */
+export function resetSetupChoices() {
+  const data = loadMeta();
+  data.upgrade_use = {};
+  data.content_off = [];
+  saveMeta(data);
+}
+
 export const activeContent = (data = loadMeta()) => data.content.filter((k) => !data.content_off.includes(k));
 
 // ---------- 전설의 유산 ----------

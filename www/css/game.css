@@ -330,7 +330,9 @@ body.in-battle #app { height: 100%; display: flex; flex-direction: column; max-w
 .battle-warning { flex-shrink: 0; font-size: .84rem; margin: 0 0 .3rem; padding: .25rem .5rem; background: #3d2c10; }
 .battle-log { flex: 1; min-height: 4.5rem; height: auto; margin-bottom: .5rem; }
 .battle-log .enemy-desc { color: #b49f94; font-weight: 400; text-align: left; margin: 0 0 .3rem; }
-.battle-panel { flex-shrink: 0; }
+.battle-panel { flex-shrink: 1; min-height: 0; max-height: 58dvh; overflow-y: auto; overscroll-behavior: contain; }
+.market-karma { text-align: center; margin: 0 0 .6rem; color: var(--gold); }
+.person-keep { display: flex; align-items: center; gap: .4rem; font-size: .85rem; margin-top: .4rem; }
 .bt-btn { min-height: 52px; }
 .bt-btn.main { font-size: 1.05rem; min-height: 58px; margin-bottom: .4rem; background: #a5362c; }
 .bt-btn.main:hover { background: #bd4034; }

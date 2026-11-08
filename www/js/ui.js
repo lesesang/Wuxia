@@ -7,7 +7,7 @@ import { Game } from "./game.js";
 import { bonusFor, equipmentBonus, gearGimmick, itemGrade, itemName, sellableView, stockView } from "./market.js";
 import {
   buyContent, buyProvision, buyUpgrade, exportRecords, extraSlots, importRecords, legacyAvailable, legacyPowers, dropLegacy, upgradeLegacy, loadCheckpoint, loadEventLog, loadMeta, nextReward, openLegacy, refundProvision, setUpgradeUse, upgradeUse,
-  toggleContent, unlockOrigin, unlockTrait, upgradeLevel,
+  toggleContent, unlockOrigin, unlockTrait, upgradeLevel, resetSetupChoices,
 } from "./meta.js";
 import {
   ALIGNMENTS, benefitText, byname, fameRank, getChapterInfo, getMonth, getYear, marketTurns, nextSlotThreshold,
@@ -18,7 +18,7 @@ import { halpun, josa } from "./josa.js";
 
 const game = new Game();
 const ui = {
-  screen: "title", setupTab: "origin", origin: "무림초출", traits: new Set(),
+  screen: "title", setupTab: "origin", origin: loadSetup().origin, traits: new Set(loadSetup().traits),
   modals: [], popsToIgnore: 0, traitFilter: "전체", codexQuery: "", codexFilter: "전체", codexRead: null, legacy: new Set(), legacyDrop: null, person: loadPerson(), shopTab: "origin", shopFrom: "title", modal: null, tab: "enemies", statusTab: "stats", notice: null, lastTyped: "", bars: null,
 };
 let installPrompt = null;
@@ -276,7 +276,7 @@ ${section("영물과 내단", ["산과 물에는 짐승과 오래 묵은 영물�
 ${section("오대세가와 구파일방", ["<b>구파일방</b>: 소림, 무당, 화산, 아미, 곤륜, 종남, 점창, 청성, 공동의 아홉 문파와 개방입니다.", "<b>오대세가</b>: 남궁, 하북팽가, 사천당가, 모용, 제갈입니다. 남궁과 팽가는 천마신교의 손에 멸문해 이제 들어갈 수 없습니다. 그 마지막 사람은 출신으로 고를 수 있습니다.", "<b>사파</b>: 사도련, 녹림맹, 살막, 흑사방, 하오문. <b>마도</b>: 천마신교, 혈교, 귀문교입니다.", "사천당가는 독과 암기를 다루지만 해독과 의술에 밝은 정파의 명문입니다."])}
 ${section("출신의 이야기", ["출신마다 전용 이야기가 있습니다. 조건을 채운 이야기는 탐색에서 더 자주 찾아오고, 끝까지 만나지 못했으면 결전 전 마지막 해에 찾아옵니다. 카르마로 켠 출신 인연도 같습니다. 조건을 끝내 채우지 못한 이야기는 나오지 않습니다.", "이어지는 인연은 여러 달을 쓰는 대신 끝을 맺으면 보상이 큽니다."])}`,
     장터: `${section("장터", ["매년 말 장터가 열리고 달을 쓰지 않습니다. 병기와 호신구는 해마다 진열되고, 주무공에 맞는 병기가 먼저 나옵니다. 심법과 보법 비급도 칸을 따로 둡니다.", "주무공과 맞는 무공, 병기, 도구가 더 자주 나옵니다. 기틀 <b>외길 안목</b>을 올리면 장터와 적의 품에서 더 잘 나옵니다.", "병기 값 옆의 품계를 보세요. 비급은 그 무공의 품계, 나머지는 범품, 양품, 명품, 보물, 신물로 나뉩니다."])}
-    ${section("병장기와 물건의 품계", ["<b>범품, 양품</b>: 위력이나 방어만 오르는 물건입니다. <b>명품, 보물, 신물</b> 병장기에는 저마다의 <b>영기</b>이 있습니다. 방어를 무시하는 칼, 맞으면 적이 굳는 곤, 공격을 저절로 피하게 하는 옷처럼 다릅니다. 병기의 영기는 주무공 계열과 맞아야 깨어납니다.", "보물과 신물은 드뭅니다. 큰 사건과 이어지는 인연, 카르마로 산 인연에서 얻거나 수상한 누군가에게서 삽니다.", "새로 얻은 병장기가 더 나으면 바로 듭니다. 지금 것이 더 나으면 행낭에 챙기고, 신상의 행낭 칸이나 장터에서 언제든 바꿔 들거나 내려놓을 수 있습니다.", "약과 도구, 쓰지 않는 병장기는 장터에서 값의 4할에 되팔 수 있습니다. 들고 있는 병장기는 먼저 내려놓아야 합니다."])}
+    ${section("병장기와 물건의 품계", ["<b>범품, 양품</b>: 위력이나 방어만 오르는 물건입니다. <b>명품, 보물, 신물</b> 병장기에는 저마다의 <b>영기</b>이 있습니다. 방어를 무시하는 칼, 맞으면 적이 굳는 곤, 공격을 저절로 피하게 하는 옷처럼 다릅니다. 병기의 영기는 주무공 계열과 맞아야 깨어납니다.", "보물과 신물은 드뭅니다. 큰 사건과 이어지는 인연, 카르마로 산 인연에서 얻거나 수상한 누군가에게서 삽니다.", "새로 얻은 병장기는 손이 비어 있을 때만 바로 들고, 그 밖에는 행낭에 들어갑니다. 위력이 더 높아도 저절로 바꿔 들지 않으니 신상의 행낭 칸에서 골라 바꿔 들거나 내려놓으세요. 장터에서는 되팔 수 있습니다.", "약과 도구, 쓰지 않는 병장기는 장터에서 값의 4할에 되팔 수 있습니다. 들고 있는 병장기는 먼저 내려놓아야 합니다."])}
     ${section("수상한 누군가", ["결전 직전 마지막 달에는 장터 대신 수상한 누군가가 보따리를 풉니다. 보물과 신물, 상승 이상의 비급만 다루고 값은 3할쯤 비쌉니다.", "<b>특별한 물건</b>은 언제나 나옵니다. 천마의 체력을 미리 깎는 물건, 쓰러질 때 끌어모을 힘을 더 주는 물건, 주무공에 맞는 신물을 내어 주는 증표처럼 카르마로 거래하는 것도 있습니다. 카르마가 조금 남았다면 이때 쓰면 좋습니다."])}
     ${section("도구와 약 쓰기", ["전투 중 약이나 도구 <b>하나는 합을 쓰지 않습니다</b>. 같은 합에 하나를 더 쓰면 그때는 합이 지나가고 적이 움직입니다.", "수련 도구는 언제든, 전투 도구는 전투 중에 씁니다. 계열이 정해진 도구는 맞으면 제 효과를 내고 맞지 않으면 절반입니다.", "같은 계열 무공의 성취는 신상의 무공 칸에서 주무공으로 옮길 수 있습니다. 품계가 같으면 절반, 낮으면 3할이 옮겨 갑니다."])}`,
     카르마: `${section("카르마를 얻는 길", [
@@ -529,8 +529,36 @@ function upgradeSetup(meta) {
   return rows ? `<p class="section-note">이번에 쓸 단계만 남길 수 있습니다. 내려도 산 단계는 그대로이고 언제든 되돌릴 수 있습니다.</p>${rows}` : emptyNote("아직 올린 기틀이 없습니다. 카르마 상점에서 살 수 있습니다.");
 }
 
+function keepSetup() { return storage.get("wuxia-keep-setup") !== "off"; }
+
+/** 지난번에 고른 출신과 자질. 이어 쓰기를 끄면 처음 상태로 돌아간다 */
+function loadSetup() {
+  try {
+    const saved = keepSetup() ? JSON.parse(storage.get("wuxia-setup") || "{}") : {};
+    return { origin: saved.origin || "무림초출", traits: Array.isArray(saved.traits) ? saved.traits : [] };
+  } catch {
+    return { origin: "무림초출", traits: [] };
+  }
+}
+
+function saveSetup() {
+  if (keepSetup()) storage.set("wuxia-setup", JSON.stringify({ origin: ui.origin, traits: [...ui.traits] }));
+}
+
+/** 이어 쓰기를 끈 채 새로 고르면 출신은 무림초출, 자질과 이름은 비우고, 기틀은 산 단계를 모두 쓰고 인연은 모두 켠다 */
+function resetSetup() {
+  ui.origin = "무림초출";
+  ui.traits = new Set();
+  ui.legacy = new Set();
+  ui.person = { gender: "남", surname: "", given: "" };
+  storage.set("wuxia-person", JSON.stringify(ui.person));
+  storage.set("wuxia-setup", "{}");
+  resetSetupChoices();
+}
+
 /** 지난번에 쓴 성별과 이름 */
 function loadPerson() {
+  if (storage.get("wuxia-keep-setup") === "off") return { gender: "남", surname: "", given: "" };
   try {
     return { gender: "남", surname: "", given: "", ...JSON.parse(storage.get("wuxia-person") || "{}") };
   } catch {
@@ -545,10 +573,11 @@ function personSetup() {
   return `<div class="person-setup">
       <div class="person-row">${radio("남")}${radio("여")}</div>
       <div class="person-row person-names">
-        <label>성씨<input id="person-surname" maxlength="4" autocomplete="off" value="${esc(fixed || ui.person.surname)}" ${fixed ? "disabled" : ""} placeholder="비우면 저절로"></label>
-        <label>이름<input id="person-given" maxlength="6" autocomplete="off" value="${esc(ui.person.given)}" placeholder="비우면 저절로"></label>
+        <label>성씨<input id="person-surname" maxlength="2" autocomplete="off" value="${esc(fixed || ui.person.surname)}" ${fixed ? "disabled" : ""} placeholder="비우면 저절로"></label>
+        <label>이름<input id="person-given" maxlength="3" autocomplete="off" value="${esc(ui.person.given)}" placeholder="비우면 저절로"></label>
       </div>
       ${fixed ? `<p class="section-note">가문의 성씨는 바꿀 수 없습니다.</p>` : ""}
+      <label class="person-keep"><input type="checkbox" id="keep-setup" class="toggle" ${keepSetup() ? "checked" : ""}> 지난 설정 이어 쓰기</label>
     </div>`;
 }
 
@@ -784,7 +813,7 @@ function renderBattle() {
       <button class="round-menu" data-act="open-status" data-tab="stats" aria-label="신상 보기">신상</button>
     </div>
     <div class="vs-row">
-      <div class="combatant" data-side="player"><div class="name">${esc(p.origin)}</div>
+      <div class="combatant" data-side="player"><div class="name">${esc(fullName(p.person))}</div>
         <div class="hpbar-outer${lowHp ? " danger" : ""}"><div class="hpbar-inner mine" data-bar="player" style="width:${percent(p.hp, p.maxHp())}%"></div></div>
         <div class="hpnum">체력 <b>${p.hp}</b>/${p.maxHp()}</div>
         <div class="qibar"><div style="width:${percent(p.qi, p.maxQi())}%"></div></div>
@@ -978,6 +1007,7 @@ function renderMarket() {
   return `<div class="stage market-stage${market.special ? " market-special" : ""}"><div class="market-inner">
       <h2 class="market-title">${esc(market.name)}</h2>
       <p class="market-sub">${market.special ? "결전을 앞둔 밤, 누군가 말없이 보따리를 풀어 놓는다." : "달을 쓰지 않습니다. 다음 장터는 일 년 뒤입니다."}</p>
+      ${market.special ? `<p class="market-karma">은자 <b>${player.silver}</b>, 카르마 <b>${loadMeta().current_karma}</b></p>` : ""}
       ${market.message ? `<p class="market-message">${esc(market.message)}</p>` : ""}
       ${stock}${sellSection(player)}</div></div>
     <div class="action-area"><div class="action-inner"><button class="next-btn" data-act="leave-market">${market.special ? "떠나서 결전으로" : `장터를 떠난다 (은자 ${player.silver})`}</button></div></div>`;
@@ -1237,13 +1267,14 @@ const actions = {
   "status-tab": (el) => { ui.statusTab = el.dataset.tab; render(); },
   "trait-filter": (el) => { ui.traitFilter = el.dataset.key; render(); },
   "setup-tab": (el) => { ui.setupTab = el.dataset.tab; render(); window.scrollTo(0, 0); },
-  setup: () => { ui.screen = "setup"; render(); window.scrollTo(0, 0); },
+  setup: () => { if (!keepSetup()) resetSetup(); ui.screen = "setup"; render(); window.scrollTo(0, 0); },
   shop: () => { ui.shopFrom = ui.screen; ui.screen = "shop"; render(); window.scrollTo(0, 0); },
   "shop-back": () => { ui.screen = ui.shopFrom || "title"; render(); window.scrollTo(0, 0); },
   "shop-tab": (el) => { ui.shopTab = el.dataset.tab; render(); window.scrollTo(0, 0); },
   title: () => { ui.screen = "title"; render(); },
   start: () => {
     closeModalQuietly();
+    saveSetup();
     game.start(ui.origin, [...ui.traits], [...ui.legacy], ui.person);
     ui.legacy = new Set();
     ui.screen = "title";
@@ -1330,6 +1361,12 @@ export function installInput() {
     }
     if (target.name === "origin") {
       ui.origin = target.value;
+      saveSetup();
+      render();
+    } else if (target.id === "keep-setup") {
+      storage.set("wuxia-keep-setup", target.checked ? "on" : "off");
+      if (target.checked) saveSetup();
+      else resetSetup();
       render();
     } else if (target.name === "person-gender") {
       ui.person.gender = target.value;
@@ -1338,6 +1375,7 @@ export function installInput() {
     } else if (target.name === "trait") {
       if (target.checked) ui.traits.add(target.value);
       else ui.traits.delete(target.value);
+      saveSetup();
       render();
     } else if (target.id === "set-speed") {
       storage.set("wuxia-speed", target.value);

@@ -11,7 +11,7 @@ import { buildEpilogue, Game, settlePerson } from "../www/js/game.js";
 import { halpun, josa } from "../www/js/josa.js";
 import { blockReason, buy, equipmentBonus, ITEM_GRADES, openMarket, priceOf, sell } from "../www/js/market.js";
 import {
-  activeContent, legacyPowers, upgradeLegacy, setUpgradeUse, upgradeLevel, addKarma, buyContent, buyProvision, refundProvision, upgradeTraits, buyUpgrade, exportRecords, importRecords, extraSlots, loadCheckpoint, legacyAvailable, loadEventLog, loadMeta, nextReward, recordEventPick, openLegacy, saveMeta, toggleContent, unlockOrigin,
+  activeContent, resetSetupChoices, upgradeUse, legacyPowers, upgradeLegacy, setUpgradeUse, upgradeLevel, addKarma, buyContent, buyProvision, refundProvision, upgradeTraits, buyUpgrade, exportRecords, importRecords, extraSlots, loadCheckpoint, legacyAvailable, loadEventLog, loadMeta, nextReward, recordEventPick, openLegacy, saveMeta, toggleContent, unlockOrigin,
 } from "../www/js/meta.js";
 import { personalize, fullName, alignTier, applyGrowth, breakthroughBlock, focusedSide, byname, fameRank, getChapter, getYear, marketTurns, sumEffect, talkLine, traitSlots } from "../www/js/rules.js";
 import { rng } from "../www/js/rng.js";
@@ -521,7 +521,7 @@ test("비무대회는 세 번 싸우고 보상을 준다", () => {
   assert.deepEqual(seen, ["비무청성", "비무철권", "비무결승"]);
   assert.ok(game.pendingNext && !game.gauntlet);
   assert.ok(p.hasFlag("대회우승") && p.fame >= 14);
-  assert.equal(p.weapon, "태산신검");
+  assert.ok(p.gear.includes("태산신검"), "상품 병기는 행낭에 든다");
 });
 
 test("도망치면 대회가 끝난다", () => {
@@ -643,7 +643,7 @@ test("비기를 터득한 주무공은 자동으로 바뀌지 않는다", () => 
   current.secretUnlocked = true;
   const messages = p.learnSkill(new Skill("태허검결"));
   assert.equal(p.mainSkill, current.key);
-  assert.ok(messages.some((m) => m.includes("골라 쓸 수")));
+  assert.ok(!messages.some((m) => m.includes("골라 쓸 수")), "바꾸는 법은 입문서에서만 알린다");
 });
 
 // ---------- 저장 ----------
@@ -1306,7 +1306,7 @@ test("새로 얻거나 품계가 높아도 쓰던 무공이 바뀌지 않는다"
   const p = new Player("하북팽가");
   const main = p.mainSkill;
   const mind = p.bestOfType("심공").key;
-  assert.ok(p.learnSkill(new Skill("패천도결")).some((l) => l.includes("골라 쓸 수")));
+  assert.deepEqual(p.learnSkill(new Skill("패천도결")), []);
   p.learnSkill(new Skill("혼원일기공"));
   p.learnSkill(new Skill("이형환위"));
   assert.equal(p.mainSkill, main);
@@ -2241,7 +2241,7 @@ test("유산은 천마를 쓰러뜨린 뒤 열리고, 이어받아도 남으며,
   third.event = null;
   third.action("휴식");
   third.chooseEvent(0);
-  assert.equal(third.player.weapon, "강철검", "병장기는 낮은 단계로 돌아온다");
+  assert.ok(third.player.gear.includes("강철검"), "병장기는 낮은 단계로 돌아온다");
   withKarma(0);
 });
 
@@ -3644,7 +3644,9 @@ test("병장기는 바꿔 들고 되팔 수 있으며 진열은 주무공 병기
   p.silver = 1000;
   const market = { stock: [{ key: "강철검", left: 1 }] };
   assert.ok(buy(p, market, "강철검")[0]);
-  assert.equal(p.weapon, "강철검");
+  assert.equal(p.weapon, "철검", "더 좋아도 저절로 바꿔 들지 않는다");
+  assert.ok(p.gear.includes("강철검"));
+  p.equipGear("강철검");
   assert.ok(p.gear.includes("철검"), "들던 것은 행낭에 챙긴다");
   const before = p.silver;
   assert.ok(sell(p, "철검")[0]);
@@ -3831,4 +3833,17 @@ test("사문이 있으면 2장 술자리의 본문과 선택지가 그 세력에
   const free = eventView(p, "2장_세력").choices.map((c) => c.label);
   assert.ok(free.includes("셋 다 거절하고 술값을 낸다"));
   assert.ok(!free.includes("잔을 사양하고 술값을 낸다"));
+});
+
+test("설정을 처음으로 돌리면 기틀은 산 단계를 모두 쓰고 인연은 모두 켠다", () => {
+  const data = loadMeta();
+  data.upgrades = { 그릇: 2 };
+  data.upgrade_use = { 그릇: 0 };
+  data.content = Object.keys(DB.karma.content).slice(0, 2);
+  data.content_off = [...data.content];
+  saveMeta(data);
+  resetSetupChoices();
+  const after = loadMeta();
+  assert.equal(upgradeUse("그릇", after), 2);
+  assert.deepEqual(after.content_off, []);
 });
