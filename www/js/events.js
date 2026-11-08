@@ -21,6 +21,7 @@ export function unmetReason(player, requires) {
   if (r.flag && !player.hasFlag(r.flag)) return "아직 인연이 닿지 않았다";
   if (r.not_flag && player.hasFlag(r.not_flag)) return "이미 지나간 일이다";
   if (r.not_slain && player.slain.includes(r.not_slain)) return "이미 지나간 일이다";
+  if (r.not_chain && player.chains.some((c) => c.id === r.not_chain)) return "다른 일이 한창이다";
   if (r.any_flag && !r.any_flag.some((f) => player.hasFlag(f))) return "아직 인연이 닿지 않았다";
   if (r.min_silver && player.silver < r.min_silver) return `은자 ${r.min_silver} 필요`;
   if (r.realm_min && realmIndex(player.realm) < realmIndex(r.realm_min)) return `${r.realm_min} 이상 필요`;
