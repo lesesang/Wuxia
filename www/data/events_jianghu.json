@@ -32,7 +32,7 @@
                 "사도": 20
               },
               "silver": 60,
-              "fame": 1
+              "fame": 5
             }
           },
           {
@@ -57,9 +57,9 @@
             "text": "칼잡이들이 나를 먼저 처리하기로 합의했다. 그래도 끝까지 서 있었다.",
             "effects": {
               "alignment": {
-                "정도": 40
+                "정도": 60
               },
-              "fame": 3,
+              "fame": 15,
               "battle": "흑풍채두목",
               "foe": "보따리 임자"
             }
@@ -119,7 +119,7 @@
               {
                 "text": "표국 매듭이다. 칼잡이들이 흠칫했다. 원래 주인을 찾아 주기로 하고 내가 들고 나왔다.",
                 "effects": {
-                  "fame": 2,
+                  "fame": 10,
                   "silver": 30,
                   "alignment": {
                     "정도": 20
@@ -154,7 +154,7 @@
       },
       {
         "requires": {
-          "min_fame": 60,
+          "min_fame": 300,
           "not_dominant": [
             "사도",
             "마도"
@@ -189,33 +189,33 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "칼잡이 몇이 내 쪽을 보고 탁자 밑의 손을 고쳐 쥔다. 협객이 끼면 일이 귀찮아진다는 눈치다."
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "칼잡이들이 은근히 내게 눈인사를 보낸다. 판에 낄 건지 묻는 것이다."
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "내가 앉자 양옆 탁자가 슬그머니 비었다."
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "누군가 내 별호를 중얼거리자 젓가락 소리가 한꺼번에 멎었다."
       },
       {
         "requires": {
-          "max_fame": 9
+          "max_fame": 49
         },
         "text": "아무도 나를 판에 세어 넣지 않는다."
       }
@@ -238,7 +238,7 @@
             "text": "고갯마루에서 표두가 깃발을 세우자 녹림의 무리가 절을 하고 물러났다. 이것이 강호의 예법이었다.",
             "effects": {
               "silver": 45,
-              "fame": 1,
+              "fame": 5,
               "stats": {
                 "mind": 1
               }
@@ -249,7 +249,7 @@
             "text": "예법을 모르는 놈들도 있었다.",
             "effects": {
               "silver": 45,
-              "fame": 2,
+              "fame": 10,
               "battle": "배신표사",
               "foe": "표물을 노린 배신자"
             },
@@ -323,7 +323,7 @@
                   "stats": {
                     "mind": 3
                   },
-                  "fame": 1
+                  "fame": 5
                 }
               }
             ]
@@ -344,7 +344,7 @@
                 "text": "샛길을 아는 사람이 앞에 서니 사흘 길이 이틀이 됐다.",
                 "effects": {
                   "silver": 70,
-                  "fame": 2,
+                  "fame": 10,
                   "stats": {
                     "mind": 1
                   }
@@ -356,7 +356,7 @@
       },
       {
         "requires": {
-          "min_fame": 60,
+          "min_fame": 300,
           "not_dominant": [
             "사도",
             "마도"
@@ -369,27 +369,27 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "표두가 내 소문을 들었다며 값을 후하게 부른다."
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "표두가 내 병기보다 내 뒷배를 먼저 묻는다."
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "표두가 고개를 젓다가 표물 쪽을 한 번 보고 한숨을 쉰다. 지금은 사람이 급하다."
       },
       {
         "requires": {
-          "min_fame": 60,
+          "min_fame": 300,
           "not_dominant": [
             "사도",
             "마도"
@@ -399,7 +399,7 @@
       },
       {
         "requires": {
-          "max_fame": 9
+          "max_fame": 49
         },
         "text": "표두가 처음 보는 얼굴이라며 값을 깎는다."
       }
@@ -420,7 +420,7 @@
           {
             "text": "칼을 거둔 그녀가 숨을 고르며 웃었다. \"오늘은 재미있었어요. 다음에 또 싸워요.\" 장주가 사례금을 내밀었다.",
             "effects": {
-              "fame": 2,
+              "fame": 10,
               "silver": 40,
               "battle": "낭인",
               "flags": [
@@ -470,7 +470,7 @@
               "stats": {
                 "external": 2
               },
-              "fame": 1,
+              "fame": 5,
               "alignment": {
                 "마도": 20
               }
@@ -494,7 +494,7 @@
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "장원 앞마당에 깃발이 섰다. 단 위의 아가씨가 나를 보고 눈을 빛낸다. \"그 이름이 왔군요. 오늘은 재미있겠어요. 아버지, 저 사람 도망 못 가게 대문 닫으세요.\""
       },
@@ -510,7 +510,7 @@
               {
                 "text": "혼인이 걸린 줄은 이기고 나서 알았다. 아가씨가 크게 웃었고 장주는 입을 벌렸다. 나는 담을 넘어 도망쳤다.",
                 "effects": {
-                  "fame": 3,
+                  "fame": 15,
                   "flags": [
                     "비무초친"
                   ],
@@ -535,7 +535,7 @@
               {
                 "text": "제 초식을 맞은 아가씨가 눈을 동그랗게 떴다. \"그거 어디서 배웠어요?\" \"방금요.\" 장주가 말없이 사례금을 내밀었다.",
                 "effects": {
-                  "fame": 2,
+                  "fame": 10,
                   "silver": 30,
                   "stats": {
                     "martial": 3
@@ -598,7 +598,7 @@
                 "external": 1,
                 "mind": 2
               },
-              "fame": 2
+              "fame": 10
             }
           }
         ]
@@ -704,9 +704,9 @@
             "text": "셋째를 등에 업고 수채를 빠져나왔다. 맹세는 아직 지켜지고 있다.",
             "effects": {
               "alignment": {
-                "정도": 40
+                "정도": 60
               },
-              "fame": 4,
+              "fame": 20,
               "flags": [
                 "형제구출"
               ],
@@ -723,7 +723,7 @@
             "text": "쪽지를 태웠다. 재에서 복사꽃 냄새가 났다.",
             "effects": {
               "alignment": {
-                "마도": 40
+                "마도": 60
               },
               "stats": {
                 "mind": -3
@@ -762,12 +762,12 @@
                 "effects": {
                   "consume_item": "구명단",
                   "alignment": {
-                    "정도": 60
+                    "정도": 90
                   },
                   "flags": [
                     "형제구출"
                   ],
-                  "fame": 2
+                  "fame": 10
                 }
               }
             ]
@@ -785,7 +785,7 @@
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "쪽지 끝에 값을 묻는 말은 없다. 그쪽은 나를 믿는 모양이다."
       }
@@ -835,7 +835,7 @@
           {
             "text": "등 뒤에 낭떠러지가 있으니 물러설 곳도 고민할 것도 없었다.",
             "effects": {
-              "fame": 2,
+              "fame": 10,
               "battle": "사파자객",
               "foe": "절벽까지 쫓아온 추격자"
             },
@@ -859,7 +859,7 @@
                   "stats": {
                     "martial": 2
                   },
-                  "fame": -1
+                  "fame": -5
                 }
               }
             ]
@@ -881,7 +881,7 @@
                   "stats": {
                     "external": 3
                   },
-                  "fame": 3,
+                  "fame": 15,
                   "hp_pct": -30
                 }
               }
@@ -938,14 +938,14 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "뒤에서 추격자가 소리친다. \"그 이름을 잡으면 값이 세 배다!\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "추격자들의 칼끝이 떨린다. 쫓는 쪽이 더 겁먹은 얼굴이다."
       }
@@ -1125,14 +1125,14 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "노의원은 내 별호를 듣고도 맥만 짚는다. 병은 이름을 가리지 않는다는 얼굴이다."
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "노의원이 맥을 짚다 손을 뗐다가 다시 잡는다. 고쳐 줄지 말지 잠시 생각한 모양이다."
       }
@@ -1154,7 +1154,7 @@
             "text": "달빛이 석문의 글자를 비췄다. 그래서 하지 말라 했구나. 무덤지기가 눈을 떴다.",
             "effects": {
               "silver": 80,
-              "fame": 2,
+              "fame": 10,
               "battle": "절정고수",
               "flags": [
                 "고수의무덤"
@@ -1255,7 +1255,7 @@
             "text": "아는 이름을 하나 댔다. 다음 달 그 이름의 가문이 사라졌다.",
             "effects": {
               "alignment": {
-                "사도": 40
+                "사도": 60
               },
               "silver": 120,
               "stats": {
@@ -1274,7 +1274,7 @@
               "alignment": {
                 "정도": 20
               },
-              "fame": 3,
+              "fame": 15,
               "battle": "금의위밀정",
               "foe": "수춘도를 찬 금의위 사내",
               "foe_line": "\"수춘도는 오랜만에 뽑소. 역모 소문은 그대 입으로 듣겠소.\""
@@ -1304,7 +1304,7 @@
             "effects": {
               "battle": "금의위밀정",
               "foe": "금의위 위사",
-              "fame": 2,
+              "fame": 10,
               "alignment": {
                 "마도": 20
               }
@@ -1330,7 +1330,7 @@
       },
       {
         "requires": {
-          "min_fame": 60,
+          "min_fame": 300,
           "not_dominant": [
             "사도",
             "마도"
@@ -1394,7 +1394,7 @@
               {
                 "text": "금의위가 차를 내려놓았다. \"협사들은 이래서 어렵소.\" 그날 이후로 그의 사람이 나를 따라다닌다.",
                 "effects": {
-                  "fame": 2,
+                  "fame": 10,
                   "alignment": {
                     "정도": 20
                   }
@@ -1414,7 +1414,7 @@
       5
     ],
     "requires": {
-      "min_fame": 8
+      "min_fame": 40
     },
     "title": "그때의 아이",
     "text": "길을 막아선 소년의 손이 떨린다. \"삼 년 전 네가 벤 사람이 내 아버지다.\" 기억이 나지 않는다. 그게 더 끔찍했다.",
@@ -1426,7 +1426,7 @@
             "text": "칼은 어깨에서 멈췄다. 소년이 칼을 버리고 울었다.",
             "effects": {
               "alignment": {
-                "정도": 60
+                "정도": 90
               },
               "hp_pct": -20,
               "stats": {
@@ -1462,12 +1462,12 @@
             "text": "손을 털었다. 이번 일도 곧 기억나지 않을 것이다.",
             "effects": {
               "alignment": {
-                "마도": 60
+                "마도": 90
               },
               "stats": {
                 "external": 2
               },
-              "fame": 1
+              "fame": 5
             }
           }
         ]
@@ -1570,7 +1570,7 @@
             "text": "새벽녘 그가 눈을 떴다. 답례로 평생의 심득을 털어놓았다.",
             "effects": {
               "alignment": {
-                "정도": 40
+                "정도": 60
               },
               "qi_pct": -60,
               "stats": {
@@ -1588,7 +1588,7 @@
             "text": "그의 비망록에는 쓸 만한 구결이 있었다.",
             "effects": {
               "alignment": {
-                "마도": 40
+                "마도": 60
               },
               "mastery": 14,
               "silver": 20
@@ -1646,13 +1646,13 @@
                 "text": "역류하던 기가 내 호흡을 따라 제 길을 찾았다. 나도 심법의 한 대목을 새로 깨쳤다.",
                 "effects": {
                   "alignment": {
-                    "정도": 40
+                    "정도": 60
                   },
                   "stats": {
                     "internal": 4,
                     "mind": 2
                   },
-                  "fame": 2
+                  "fame": 10
                 }
               }
             ]
@@ -1673,7 +1673,7 @@
               {
                 "text": "그의 기가 내 손바닥에서 순식간에 제자리를 찾았다. 눈뜬 무인이 넙죽 절했다.",
                 "effects": {
-                  "fame": 2,
+                  "fame": 10,
                   "qi_pct": -20,
                   "stats": {
                     "internal": 2
@@ -1692,13 +1692,13 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "옆방 사람들이 나를 부르다 말고 문을 닫는다. 그래도 그는 피를 토하고 있다."
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "피를 토하던 그가 내 얼굴을 알아보고 손을 뻗는다."
       }
@@ -1727,7 +1727,7 @@
               "stats": {
                 "internal": 8
               },
-              "fame": 4,
+              "fame": 20,
               "battle": "천년혈망"
             }
           }
@@ -1783,7 +1783,7 @@
                   "stats": {
                     "internal": 7
                   },
-                  "fame": 3,
+                  "fame": 15,
                   "alignment": {
                     "사도": 20
                   }
@@ -1859,7 +1859,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "늪지기 노인이 그 이름이면 혈망도 한번 쳐다는 보겠다고 한다."
       },
@@ -2016,27 +2016,27 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "스님이 내 쪽을 보고 합장을 더 깊이 한다."
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "스님이 전대 쪽을 보지 않으려 애쓴다."
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "스님이 내 기운을 맡고도 바리때를 거두지 않는다."
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "스님이 내 이름을 알지만 바리때는 똑같이 내민다."
       }
@@ -2200,33 +2200,33 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "판주가 정파 손님은 처음이라며 껄껄 웃는다."
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "판주가 얼른 일어나 윗자리를 내준다."
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "주사위를 쥔 사내들의 손이 일제히 땀에 젖는다."
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "구경꾼이 금세 두 겹으로 둘러선다."
       },
       {
         "requires": {
-          "max_fame": 9
+          "max_fame": 49
         },
         "text": "판주가 호구가 왔다는 눈빛을 숨기지 못한다."
       }
@@ -2267,7 +2267,7 @@
           {
             "text": "깨어 보니 시객은 없고, 벽에 내 이야기를 적은 시가 남아 있었다.",
             "effects": {
-              "fame": 2,
+              "fame": 10,
               "hp_pct": 15
             }
           }
@@ -2327,7 +2327,7 @@
                     "mind": 3,
                     "martial": 3
                   },
-                  "fame": 1
+                  "fame": 5
                 }
               }
             ]
@@ -2361,27 +2361,27 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "시객이 협객이라며 잔을 먼저 채운다."
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "시객이 \"그대의 칼은 값이 얼마요\" 하고 묻는다."
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "시객의 붓이 잠시 멈췄다가 더 빨라진다. 재미있는 글감이라는 눈치다."
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "시객이 내 별호로 지은 시도 있다며 웃는다."
       }
@@ -2399,7 +2399,7 @@
         "혈교",
         "귀문교"
       ],
-      "min_fame": 40
+      "min_fame": 200
     },
     "title": "맹주의 격문",
     "text": "격문이 나붙었다. '정마대전에 나설 협사를 구함.' 무림맹 호법이 내 손을 잡는다. \"천 명이 그대 이름 아래 서겠다고 하오. 지휘를 맡아 주겠소?\"",
@@ -2411,9 +2411,9 @@
             "text": "마교의 앞 진영을 깨뜨렸다. 무공보다 이름이 먼저 강을 건넜다.",
             "effects": {
               "alignment": {
-                "정도": 40
+                "정도": 60
               },
-              "fame": 6,
+              "fame": 30,
               "silver": 80,
               "battle": "마교장로",
               "foe": "신교 전초대장 혁련수"
@@ -2428,7 +2428,7 @@
             "text": "이름은 나지 않았고, 사람은 살았다.",
             "effects": {
               "alignment": {
-                "정도": 40
+                "정도": 60
               },
               "stats": {
                 "mind": 3
@@ -2480,7 +2480,7 @@
               {
                 "text": "내가 짚은 곳에서 적이 왔다. 호법이 말을 놓지 못하게 되었다.",
                 "effects": {
-                  "fame": 3,
+                  "fame": 15,
                   "stats": {
                     "martial": 3
                   }
@@ -2517,7 +2517,7 @@
             "text": "곡식 값이 세 배가 되었다. 책사가 만족스러운 듯 웃었다.",
             "effects": {
               "alignment": {
-                "사도": 40
+                "사도": 60
               },
               "silver": 180
             }
@@ -2531,10 +2531,10 @@
             "text": "\"칼이 주인을 물다니.\" 책사의 호위들이 몰려왔다.",
             "effects": {
               "alignment": {
-                "정도": 40,
-                "사도": -40
+                "정도": 60,
+                "사도": -60
               },
-              "fame": 4,
+              "fame": 20,
               "battle": "장강수적",
               "foe": "사도련 부향주 염무"
             },
@@ -2560,14 +2560,14 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"그 이름으로 불을 놓으면 값이 곱절입니다.\""
       },
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"협객께 이런 부탁을 드리는 것이 제일 비싼 일이지요.\""
       }
@@ -2602,7 +2602,7 @@
           {
             "text": "상처 입은 범이 더 사납다.",
             "effects": {
-              "fame": 3,
+              "fame": 15,
               "battle": "마교장로",
               "foe": "흑풍마군 초량"
             },
@@ -2813,7 +2813,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "점쟁이가 그 이름값이면 복채도 올라야 한다고 한다."
       }
@@ -2836,9 +2836,9 @@
             "text": "아이들이 내 병기를 만지작거리다 잠들었다. 다음 날 혈교는 곡식을 걷지 못했다.",
             "effects": {
               "alignment": {
-                "정도": 40
+                "정도": 60
               },
-              "fame": 3,
+              "fame": 15,
               "stats": {
                 "mind": 1
               },
@@ -2907,9 +2907,9 @@
                 "text": "혈교의 무리는 내 별호를 듣고 절반이 돌아섰다. 나머지는 돌아서지 못했다.",
                 "effects": {
                   "alignment": {
-                    "정도": 40
+                    "정도": 60
                   },
-                  "fame": 5,
+                  "fame": 25,
                   "stats": {
                     "mind": 2
                   },
@@ -2930,7 +2930,7 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 20
+          "min_fame": 100
         },
         "text": "마을 어귀에 까마귀가 앉았다. 촌장이 내 눈을 보고 떨며 무릎을 꿇는다. \"가, 가진 것은 씨앗뿐입니다. 내일 혈교가 옵니다. 〈대협〉도 그쪽 분이십니까?\""
       },
@@ -2961,27 +2961,27 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "촌장이 내 소문을 들었다며 이마를 땅에 박는다."
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "촌장이 은자 주머니부터 꺼내 놓는다. 그런 사람으로 들은 모양이다."
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "촌장이 나를 보고 혈교의 앞잡이가 온 줄 알고 까무러칠 뻔한다."
       },
       {
         "requires": {
-          "min_fame": 60,
+          "min_fame": 300,
           "not_dominant": [
             "사도",
             "마도"
@@ -2991,7 +2991,7 @@
       },
       {
         "requires": {
-          "min_fame": 60,
+          "min_fame": 300,
           "dominant": "사도"
         },
         "text": "촌장이 내 이름을 듣고 값을 물을까 봐 먼저 은자를 내민다."
@@ -3189,27 +3189,27 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "노인이 \"맑은 칼이구먼\" 하고 혀를 찬다."
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "노인이 \"셈으로 치는 칼이구먼\" 하고 혀를 찬다."
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "노인이 장기짝을 내려놓지 않고 말한다. \"피 묻은 힘은 어깨에도 안 머무네.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "노인이 내 별호를 듣고도 장기만 둔다."
       }
@@ -3246,7 +3246,7 @@
           {
             "text": "물 위의 싸움은 처음이었다.",
             "effects": {
-              "fame": 2,
+              "fame": 10,
               "stats": {
                 "martial": 1
               },
@@ -3293,7 +3293,7 @@
     "variants": [
       {
         "requires": {
-          "min_fame": 60,
+          "min_fame": 300,
           "not_dominant": [
             "사도",
             "마도"
@@ -3335,7 +3335,7 @@
                 "effects": {
                   "silver": 30,
                   "mastery": 8,
-                  "fame": 1
+                  "fame": 5
                 }
               }
             ]
@@ -3347,33 +3347,33 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "사공이 나를 알아보고 잠시 노를 쥔 손을 망설인다."
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "사공이 웃는다. \"같은 물을 먹는 분이니 뱃삯은 깎아 드리지.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "쪽배 몇 척이 내 쪽을 보고 뱃머리를 조금 돌린다."
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "갈대숲에서 누군가 내 별호를 외치자 쪽배들이 술렁인다."
       },
       {
         "requires": {
-          "max_fame": 9
+          "max_fame": 49
         },
         "text": "사공이 어디서 온 호구인지 묻는 눈으로 웃는다."
       }
@@ -3503,27 +3503,27 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "대장장이가 협객의 칼은 험하게 다루지 않는다며 눈길을 준다."
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "대장장이가 값부터 말하는 쪽이 편하다는 듯 턱짓한다."
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "대장장이가 내 병기의 핏자국을 말없이 들여다본다."
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "대장장이가 내 이름을 듣고도 망치를 멈추지 않는다. 그런 사람이다."
       }
@@ -3572,7 +3572,7 @@
             "text": "악인들은 밥 먹을 때 칼을 풀었다. 그들의 사람 보는 눈은 정파보다 정확했다.",
             "effects": {
               "alignment": {
-                "사도": 40
+                "사도": 60
               },
               "hp_pct": 30,
               "stats": {
@@ -3589,9 +3589,9 @@
             "text": "고기는 타 버렸다.",
             "effects": {
               "alignment": {
-                "정도": 40
+                "정도": 60
               },
-              "fame": 3,
+              "fame": 15,
               "silver": 70,
               "battle": "독고객",
               "foe": "악귀곡 제칠악 구봉"
@@ -3613,7 +3613,7 @@
               {
                 "text": "다 쓰러뜨렸더니 악귀곡 사람들이 나를 〈형님〉이라 불렀다. 욕인지 칭찬인지 모르겠다.",
                 "effects": {
-                  "fame": 4,
+                  "fame": 20,
                   "stats": {
                     "external": 3
                   },
@@ -3629,7 +3629,7 @@
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "악귀곡 입구 푯말에 누가 글을 더 새겼다. '단, 그자는 오지 마라.' 그자가 나인 모양이다. 안쪽에서 웃음소리가 뚝 그쳤다."
       },
@@ -3665,7 +3665,7 @@
       5
     ],
     "requires": {
-      "min_fame": 20
+      "min_fame": 100
     },
     "title": "고루 지붕",
     "text": "이름이 알려지자 도전장이 왔다. '보름달 밤, 고루 지붕에서. 한 번의 초식으로 끝내자.' 이름 대신 칼집 그림 하나.",
@@ -3676,7 +3676,7 @@
           {
             "text": "일 초가 번쩍였고, 달 아래 한 사람만 서 있었다.",
             "effects": {
-              "fame": 5,
+              "fame": 25,
               "stats": {
                 "martial": 3
               },
@@ -3696,7 +3696,7 @@
                 "mind": 3
               },
               "hp_pct": 20,
-              "fame": 2
+              "fame": 10
             }
           }
         ]
@@ -3707,7 +3707,7 @@
           {
             "text": "아침에 고을 사람들이 그것을 올려다보았다. 도전장이 줄었다.",
             "effects": {
-              "fame": 3,
+              "fame": 15,
               "battle": "낭인",
               "foe": "칼집 그림의 도전자",
               "alignment": {
@@ -3726,7 +3726,7 @@
               "stats": {
                 "mind": 2
               },
-              "fame": 2,
+              "fame": 10,
               "alignment": {
                 "사도": 20
               }
@@ -3769,7 +3769,7 @@
               {
                 "text": "칼집 그림의 주인이 지붕 위에서 무릎을 꿇었다. \"그 초식을 보고 죽어도 좋다.\" 죽이지는 않았다.",
                 "effects": {
-                  "fame": 6,
+                  "fame": 30,
                   "stats": {
                     "martial": 3
                   }
@@ -3783,14 +3783,14 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "도전장 끝에 \"〈성명〉에게\"라고 또박또박 적혀 있다."
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 20
+          "min_fame": 100
         },
         "text": "도전장의 글씨 끝이 조금 떨린다. 그래도 온 사람이다."
       }
@@ -3815,7 +3815,7 @@
             "text": "후손은 유품을 받고 오래 울었다. 답례로 가전 경공을 일러 주었다.",
             "effects": {
               "alignment": {
-                "정도": 40
+                "정도": 60
               },
               "skill": "초상비",
               "stats": {
@@ -3922,33 +3922,33 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 20
+          "min_fame": 100
         },
         "text": "상인이 빈말이 아닌 듯 〈대협〉이라 부른다."
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "상인이 눈을 빛낸다. \"장사하시는 분은 값을 아시죠?\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 20
+          "min_fame": 100
         },
         "text": "상인이 \"〈대협〉\"이라 부르다 말끝을 흐린다."
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "상인이 \"그 유명한 분이!\" 하며 값을 슬쩍 올린다."
       },
       {
         "requires": {
-          "max_fame": 9
+          "max_fame": 49
         },
         "text": "상인이 습관처럼 〈대협〉이라 부른다. 나를 아는 건 아니다."
       }
@@ -4034,7 +4034,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "늙은 군졸이 내 별호를 듣고 피식 웃는다. 변방에서는 아무도 모르는 이름이라고 한다."
       }
@@ -4068,7 +4068,7 @@
                 "text": "장사가 하늘을 보고 누웠다. 그가 일어나 권법 이야기를 청하며 술을 샀다.",
                 "effects": {
                   "silver": 30,
-                  "fame": 2,
+                  "fame": 10,
                   "stats": {
                     "external": 1
                   }
@@ -4096,7 +4096,7 @@
                   "stats": {
                     "external": 2
                   },
-                  "fame": 1
+                  "fame": 5
                 }
               }
             ]
@@ -4116,7 +4116,7 @@
                 "text": "장사의 주먹이 먼저 부었다. \"사람 몸이 아니오.\"",
                 "effects": {
                   "silver": 30,
-                  "fame": 1
+                  "fame": 5
                 }
               }
             ]
@@ -4136,7 +4136,7 @@
                 "text": "장사가 뒤로 세 걸음 날아갔다. 구경꾼이 비명을 질렀다. 그래도 은자는 받았다.",
                 "effects": {
                   "silver": 30,
-                  "fame": 2,
+                  "fame": 10,
                   "alignment": {
                     "마도": 20
                   }
@@ -4223,7 +4223,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "장사가 내 별호를 듣더니 판돈을 슬그머니 올린다."
       }
@@ -4327,7 +4327,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "단장이 내 별호를 외치며 구경꾼을 더 불러 모은다."
       }
@@ -4396,7 +4396,7 @@
             "text": "쇠몽둥이가 바람을 갈랐다. 다 끝나고 그가 땀을 닦으며 곤법 한 벌을 땅에 그렸다.",
             "effects": {
               "skill": "팔괘곤법",
-              "fame": 1,
+              "fame": 5,
               "battle": "철봉승",
               "spar": true,
               "foe": "쇠몽둥이 탁발승"
@@ -4425,7 +4425,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "스님이 내 별호를 듣고 더 좋아한다. 오늘 저녁은 배불리 먹겠다며 웃는다."
       },
@@ -4569,7 +4569,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "애꾸눈이 내 별호를 듣고 술동이를 하나 더 올린다."
       }
@@ -4740,7 +4740,7 @@
             "text": "창대에 맞은 어깨가 한 달을 갔다. 대신 그의 창법이 어깨에 남았다.",
             "effects": {
               "skill": "패왕창법",
-              "fame": 2,
+              "fame": 10,
               "battle": "철혈대원",
               "spar": true,
               "foe": "유배 노장 진후"
@@ -4795,7 +4795,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "장수는 강호의 이름 따위는 모른다는 듯 내 손만 본다."
       }
@@ -4833,9 +4833,9 @@
             "effects": {
               "silver": -12,
               "alignment": {
-                "정도": 40
+                "정도": 60
               },
-              "fame": 1
+              "fame": 5
             }
           }
         ]
@@ -4892,9 +4892,9 @@
                 "effects": {
                   "consume_item": "금창약",
                   "alignment": {
-                    "정도": 40
+                    "정도": 60
                   },
-                  "fame": 1,
+                  "fame": 5,
                   "stats": {
                     "mind": 2
                   }
@@ -4977,20 +4977,20 @@
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "아이 손놀림이 제법이다. 어디 패에서 배웠는지 알 만하다."
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "뛰어가던 아이가 돌아보더니 내 얼굴을 보고 더 빨리 달린다."
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "지켜보던 장꾼들이 \"저 양반 전대를 털었어!\" 하며 수군거린다."
       }
@@ -5011,7 +5011,7 @@
           {
             "text": "복면 사내가 약봉지를 털어 넣고 있었다. 마을 땅을 노린 사파의 짓이었다.",
             "effects": {
-              "fame": 2,
+              "fame": 10,
               "alignment": {
                 "정도": 20
               },
@@ -5080,9 +5080,9 @@
                 "text": "한 알로 온 마을을 살렸다. 값은 받지 않았다.",
                 "effects": {
                   "consume_item": "해독단",
-                  "fame": 3,
+                  "fame": 15,
                   "alignment": {
-                    "정도": 40
+                    "정도": 60
                   }
                 }
               }
@@ -5103,7 +5103,7 @@
               {
                 "text": "도망친 외문 제자였다. 그의 독주머니는 내 차지가 되었다.",
                 "effects": {
-                  "fame": 2,
+                  "fame": 10,
                   "stats": {
                     "internal": 3
                   },
@@ -5130,7 +5130,7 @@
                   "alignment": {
                     "정도": 20
                   },
-                  "fame": 2,
+                  "fame": 10,
                   "stats": {
                     "mind": 2
                   }
@@ -5144,7 +5144,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60,
+          "min_fame": 300,
           "not_dominant": [
             "사도",
             "마도"
@@ -5155,7 +5155,7 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "촌장이 나를 보며 우물에 독을 탄 쪽이 아닌지 의심하는 눈치다."
       }
@@ -5242,7 +5242,7 @@
               {
                 "text": "그는 경사의 인맥을 줄줄 일러 주었다. 베푼 은혜는 이렇게 돌아오는 모양이다.",
                 "effects": {
-                  "fame": 2,
+                  "fame": 10,
                   "silver": 30
                 }
               }
@@ -5300,27 +5300,27 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "서생이 협객은 믿을 수 있다며 나귀 고삐부터 넘긴다."
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "서생이 전대를 품 깊이 넣으며 웃는다."
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "서생이 내 얼굴을 보고 말끝을 떨지만 끝내 부탁을 거두지 않는다."
       },
       {
         "requires": {
-          "min_fame": 60,
+          "min_fame": 300,
           "not_dominant": [
             "사도",
             "마도"
@@ -5344,9 +5344,9 @@
           {
             "text": "산신은 늑대 무리였다. 마을은 그날 밤 처음으로 다 함께 잠들었다.",
             "effects": {
-              "fame": 3,
+              "fame": 15,
               "alignment": {
-                "정도": 40
+                "정도": 60
               },
               "battle": "늑대무리",
               "foe": "산신이라 불리는 큰 늑대"
@@ -5399,7 +5399,7 @@
                 "effects": {
                   "silver": 70,
                   "alignment": {
-                    "마도": 40
+                    "마도": 60
                   }
                 }
               }
@@ -5428,7 +5428,7 @@
               {
                 "text": "산신은 곰만 한 늑대였다. 촌장이 까무러쳤고 소녀가 꽃가마에서 내렸다.",
                 "effects": {
-                  "fame": 3,
+                  "fame": 15,
                   "alignment": {
                     "정도": 20
                   },
@@ -5497,7 +5497,7 @@
                 "mind": 4
               },
               "alignment": {
-                "정도": 40
+                "정도": 60
               }
             }
           }
@@ -5650,7 +5650,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "노인은 내 별호를 듣고도 찌도 없는 낚싯대만 본다."
       }
@@ -5790,7 +5790,7 @@
                 "effects": {
                   "silver": -15,
                   "alignment": {
-                    "정도": 40
+                    "정도": 60
                   },
                   "stats": {
                     "mind": 2
@@ -5821,9 +5821,9 @@
           {
             "text": "마을 사람들이 그제야 낫을 들고 일어났다.",
             "effects": {
-              "fame": 3,
+              "fame": 15,
               "alignment": {
-                "정도": 40
+                "정도": 60
               },
               "battle": "녹림호걸",
               "foe": "화적 대장"
@@ -5838,9 +5838,9 @@
             "text": "곡간은 탔지만 사람은 살았다. 온몸에 그을음이 앉았다.",
             "effects": {
               "alignment": {
-                "정도": 40
+                "정도": 60
               },
-              "fame": 1,
+              "fame": 5,
               "hp_pct": -15,
               "stats": {
                 "mind": 2
@@ -5857,7 +5857,7 @@
             "effects": {
               "silver": 70,
               "alignment": {
-                "마도": 40
+                "마도": 60
               }
             }
           }
@@ -5891,9 +5891,9 @@
               {
                 "text": "다리 밑 사람들은 불 앞에서 놀라지 않았다. 화적들은 제풀에 흩어졌고 개방의 이름이 올랐다.",
                 "effects": {
-                  "fame": 4,
+                  "fame": 20,
                   "alignment": {
-                    "정도": 40
+                    "정도": 60
                   }
                 }
               }
@@ -5913,7 +5913,7 @@
               {
                 "text": "불길이 잠시 눌렸다. 화적들은 병기를 버리고 달아났다. 싸울 일도 없었다.",
                 "effects": {
-                  "fame": 4,
+                  "fame": 20,
                   "alignment": {
                     "정도": 20
                   }
@@ -5942,9 +5942,9 @@
                 "text": "그날 밤 못 들어갔던 불이다. 아이 둘을 안고 나왔다. 화적들은 내 얼굴을 보고 달아났다.",
                 "effects": {
                   "hp_pct": -10,
-                  "fame": 3,
+                  "fame": 15,
                   "alignment": {
-                    "정도": 40
+                    "정도": 60
                   }
                 }
               }
@@ -5957,27 +5957,27 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "마을 사람 하나가 내 얼굴을 알아보고 \"살았다!\" 하고 외친다."
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "화적 하나가 내 쪽을 보고 짐 반을 내려놓는다. 몫을 떼어 주겠다는 시늉이다."
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "화적들이 불 앞에서 내 쪽을 보고 웃음을 거둔다."
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "화적 대장이 내 별호를 듣고 침을 삼킨다."
       }
@@ -6123,33 +6123,33 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "여인이 협객이라는 말을 듣고 찾아왔다고 한다."
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "여인이 은자 이야기부터 꺼낸다. 어디서 내 소문을 들은 모양이다."
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "여인이 무서워하면서도 소매를 놓지 않는다. 자객을 이길 사람이면 된다는 눈빛이다."
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "여인이 내 별호를 정확히 부른다."
       },
       {
         "requires": {
-          "max_fame": 9
+          "max_fame": 49
         },
         "text": "여인이 처음 보는 얼굴이 낫다고 한다. 소문이 안 나니까."
       }
@@ -6451,27 +6451,27 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "악사가 내 걸음 소리를 듣더니 곡조를 맑게 바꾼다."
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "악사가 내 전대 소리를 듣고 빙긋 웃는다."
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "악사의 비파 줄이 내가 앉자마자 낮게 운다."
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "악사가 \"별호가 소리보다 먼저 오시는군요\" 한다."
       }
@@ -6492,7 +6492,7 @@
           {
             "text": "둘 다 입을 벌렸다가 울음을 터뜨렸다. 다음 날 함께 무덤을 고치러 갔다 한다.",
             "effects": {
-              "fame": 2,
+              "fame": 10,
               "stats": {
                 "mind": 3
               }
@@ -6507,7 +6507,7 @@
             "text": "이긴 쪽이 사례를 했다. 진 쪽의 눈빛은 오래 남을 것이다.",
             "effects": {
               "silver": 50,
-              "fame": 1,
+              "fame": 5,
               "alignment": {
                 "사도": 20
               }
@@ -6526,7 +6526,7 @@
               },
               "silver": 60,
               "alignment": {
-                "마도": 40
+                "마도": 60
               }
             }
           }
@@ -6546,7 +6546,7 @@
               {
                 "text": "\"너희 사부가 무덤에서 뭐라 하겠느냐.\" 사문에서 배운 말이 내 입에서 나오니 묘했다. 두 사람이 절했다.",
                 "effects": {
-                  "fame": 3,
+                  "fame": 15,
                   "alignment": {
                     "정도": 20
                   },
@@ -6574,7 +6574,7 @@
                   "stats": {
                     "mind": 4
                   },
-                  "fame": 2
+                  "fame": 10
                 }
               }
             ]
@@ -6594,7 +6594,7 @@
                 "text": "피가 흘렀지만 놓지 않았다. 둘이 칼을 떨어뜨렸다.",
                 "effects": {
                   "hp_pct": -5,
-                  "fame": 2,
+                  "fame": 10,
                   "alignment": {
                     "정도": 20
                   }
@@ -6608,7 +6608,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "두 제자가 내 별호를 듣고 칼끝을 조금 내린다. 그러나 유품에서 손을 떼지는 않는다."
       }
@@ -6704,7 +6704,7 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 40
+          "min_fame": 200
         },
         "text": "늙은 원숭이가 내 기운을 맡고 자리를 조금 더 멀리 옮긴다."
       }
@@ -6833,7 +6833,7 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 30
+          "min_fame": 150
         },
         "text": "노인이 내 이름을 들었다며 호미를 하나 더 꺼낸다."
       }
@@ -6853,9 +6853,9 @@
           {
             "text": "창밖에서 뒤를 밟았다. 의뢰인의 자객과 맞닥뜨렸다.",
             "effects": {
-              "fame": 3,
+              "fame": 15,
               "alignment": {
-                "정도": 40
+                "정도": 60
               },
               "battle": "사파자객",
               "foe": "의뢰인의 자객"
@@ -6884,7 +6884,7 @@
           {
             "text": "원로가 말없이 한참 나를 보더니 잔을 건넸다. 맹의 이름 있는 사람들이 내 이름을 듣게 되었다.",
             "effects": {
-              "fame": 4,
+              "fame": 20,
               "alignment": {
                 "정도": 20
               }
@@ -6922,7 +6922,7 @@
                 "effects": {
                   "silver": 220,
                   "alignment": {
-                    "사도": 40
+                    "사도": 60
                   },
                   "stats": {
                     "mind": 2
@@ -6966,7 +6966,7 @@
       },
       {
         "requires": {
-          "min_fame": 60,
+          "min_fame": 300,
           "not_dominant": [
             "사도",
             "마도"
@@ -7045,9 +7045,9 @@
                 "text": "교단은 은혜를 잊지 않는다. 원한도.",
                 "effects": {
                   "alignment": {
-                    "마도": 40
+                    "마도": 60
                   },
-                  "fame": 2,
+                  "fame": 10,
                   "flags": [
                     "마교_포로구출"
                   ],
@@ -7074,7 +7074,7 @@
                 "effects": {
                   "boss_weaken": 4,
                   "alignment": {
-                    "정도": 40
+                    "정도": 60
                   },
                   "stats": {
                     "mind": 2
@@ -7140,7 +7140,7 @@
           {
             "text": "이름은 올렸다. 그들의 시체 위에.",
             "effects": {
-              "fame": 3,
+              "fame": 15,
               "alignment": {
                 "사도": 20
               },
@@ -7156,7 +7156,7 @@
           {
             "text": "필체 때문에 웃음을 샀다.",
             "effects": {
-              "fame": 1
+              "fame": 5
             }
           }
         ]
@@ -7181,7 +7181,7 @@
     "variants": [
       {
         "requires": {
-          "min_fame": 20
+          "min_fame": 100
         },
         "tag": "명성",
         "text": "관도 한가운데 철혈대가 길을 막았다. 대장이 창 자루로 땅을 찍다가 내 얼굴을 보고 멈칫한다. 그래도 창을 거두지는 않는다. \"그 이름도 명부에는 올려야 합니다. 위의 명이오.\"",
@@ -7327,7 +7327,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "노인이 내 손을 놓고 얼굴을 본다. \"그 이름의 손이었군. 값은 그대로요.\""
       }
@@ -7364,7 +7364,7 @@
           {
             "text": "범인은 조카였다. 조문객들 앞에서 드러나자 그가 칼을 찾았다.",
             "effects": {
-              "fame": 4,
+              "fame": 20,
               "alignment": {
                 "정도": 20
               },
@@ -7383,7 +7383,7 @@
             "effects": {
               "silver": 120,
               "alignment": {
-                "마도": 40
+                "마도": 60
               }
             }
           }
@@ -7418,9 +7418,9 @@
               {
                 "text": "거지들이 못 보는 것은 없었다. 범인은 조문도 하기 전에 포박되었다.",
                 "effects": {
-                  "fame": 5,
+                  "fame": 25,
                   "alignment": {
-                    "정도": 40
+                    "정도": 60
                   }
                 }
               }
@@ -7430,7 +7430,7 @@
       },
       {
         "requires": {
-          "min_fame": 60,
+          "min_fame": 300,
           "not_dominant": [
             "사도",
             "마도"
@@ -7441,7 +7441,7 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 20
+          "min_fame": 100
         },
         "text": "강호에서 존경받던 대협이 죽었다. 내가 빈소에 들어서자 정파 조문객들의 손이 칼로 간다. 칼 맡기는 곳에 칼이 없는 자들이다. 상주가 떨리는 목소리로 말한다. \"오늘은 빈소입니다. 부디.\""
       },
@@ -7613,7 +7613,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "노인이 별호는 귀로 듣는 것이 아니라며 웃는다."
       }
@@ -7636,9 +7636,9 @@
             "effects": {
               "hp_pct": -40,
               "injury": 1,
-              "fame": 4,
+              "fame": 20,
               "alignment": {
-                "정도": 60
+                "정도": 90
               },
               "stats": {
                 "mind": 3
@@ -7657,7 +7657,7 @@
               "alignment": {
                 "정도": 20
               },
-              "fame": 1
+              "fame": 5
             }
           }
         ]
@@ -7703,9 +7703,9 @@
               {
                 "text": "사태들이 하는 대로 했다. 군관도 활을 내렸다.",
                 "effects": {
-                  "fame": 4,
+                  "fame": 20,
                   "alignment": {
-                    "정도": 40
+                    "정도": 60
                   },
                   "stats": {
                     "mind": 2
@@ -7730,9 +7730,9 @@
                 "text": "천금의 약이 한 마을 물이 되었다. 후회는 없었다. 아마.",
                 "effects": {
                   "consume_item": "대환단",
-                  "fame": 6,
+                  "fame": 30,
                   "alignment": {
-                    "정도": 80
+                    "정도": 120
                   }
                 }
               }
@@ -7753,9 +7753,9 @@
                 "text": "손끝이 먼저 알았다. 약이 모자랄 때 누구에게 먼저 쓸지 고르는 일이 칼보다 어려웠다. 그래도 절반이 살았다.",
                 "effects": {
                   "alignment": {
-                    "정도": 40
+                    "정도": 60
                   },
-                  "fame": 3,
+                  "fame": 15,
                   "stats": {
                     "mind": 2
                   }
@@ -7778,7 +7778,7 @@
                 "text": "문 안쪽 소리는 사흘 만에 잦아들었다. 병은 번지지 않았다.",
                 "effects": {
                   "alignment": {
-                    "마도": 40
+                    "마도": 60
                   },
                   "stats": {
                     "mind": -1,
@@ -7807,9 +7807,9 @@
             "text": "맹 안의 내통자가 드러났다. 천마의 눈 하나가 멀었다.",
             "effects": {
               "boss_weaken": 6,
-              "fame": 4,
+              "fame": 20,
               "alignment": {
-                "정도": 40
+                "정도": 60
               },
               "battle": "마교심판자",
               "foe": "맹 호법 곽준명"
@@ -7825,7 +7825,7 @@
             "effects": {
               "silver": 250,
               "alignment": {
-                "사도": 40
+                "사도": 60
               }
             }
           }
@@ -7838,7 +7838,7 @@
             "text": "말을 탄 복면인이 내 어깨를 두드렸다. \"교단은 기억한다.\"",
             "effects": {
               "alignment": {
-                "마도": 60
+                "마도": 90
               },
               "silver": 100
             }
@@ -7880,13 +7880,13 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "전령이 내 얼굴을 알아보고 손을 떤다. 그래도 봉서를 놓는다. 다른 사람이 없다."
       },
       {
         "requires": {
-          "min_fame": 60,
+          "min_fame": 300,
           "not_dominant": [
             "사도",
             "마도"
@@ -7941,7 +7941,7 @@
             "effects": {
               "boss_weaken": 2,
               "alignment": {
-                "마도": 40
+                "마도": 60
               }
             }
           }
@@ -8060,7 +8060,7 @@
           {
             "text": "쉬는 날이 끝났다.",
             "effects": {
-              "fame": 4,
+              "fame": 20,
               "alignment": {
                 "정도": 20
               },
@@ -8110,7 +8110,7 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "tag": "마도",
         "text": "객잔 이층에 마장 한 사람이 혼자 앉아 있다. 그가 나를 보더니 일어선다. 사방의 손님이 숨을 죽인다. \"소문의 인물이군. 내가 먼저 잔을 올려야겠소.\"",
@@ -8121,13 +8121,13 @@
               {
                 "text": "마장이 내게 술을 따랐다. 교단 안에서 내 이름이 달라졌다.",
                 "effects": {
-                  "fame": 3,
+                  "fame": 15,
                   "stats": {
                     "external": 2,
                     "internal": 2
                   },
                   "alignment": {
-                    "마도": 40
+                    "마도": 60
                   }
                 }
               }
@@ -8167,7 +8167,7 @@
       },
       {
         "requires": {
-          "max_fame": 29
+          "max_fame": 149
         },
         "text": "객잔 이층에 마장 한 사람이 혼자 앉아 있다. 사방의 손님이 숨을 죽인다. 내 쪽은 보지도 않는다. 이름 없는 자는 눈에 안 든다는 뜻이다. 그런데 빈 잔이 이쪽으로 밀려왔다. \"구경하지 말고 앉아라. 술 따를 놈이 없다.\""
       }
@@ -8205,7 +8205,7 @@
             "text": "모두가 나를 보았다. 노승만 보지 않았다.",
             "effects": {
               "alignment": {
-                "마도": 40
+                "마도": 60
               },
               "stats": {
                 "martial": 2
@@ -8309,7 +8309,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "노승은 내 별호를 묻지 않는다. 옆 사내만 움찔한다."
       }
@@ -8387,7 +8387,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 40
+          "min_fame": 200
         },
         "text": "주인이 내 이름을 듣고 표기 값을 내린다. \"그 표국 사람이구려.\""
       }
@@ -8409,9 +8409,9 @@
             "effects": {
               "silver": 1,
               "boss_weaken": 10,
-              "fame": 5,
+              "fame": 25,
               "alignment": {
-                "정도": 40
+                "정도": 60
               },
               "stats": {
                 "mind": 2
@@ -8440,9 +8440,9 @@
                 "effects": {
                   "silver": 1,
                   "boss_weaken": 12,
-                  "fame": 8,
+                  "fame": 40,
                   "alignment": {
-                    "정도": 60
+                    "정도": 90
                   },
                   "skill": "철마신창",
                   "flags": [
@@ -8484,14 +8484,14 @@
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "소년이 값이 한 냥뿐이라 미안하다고 말한다. 내 소문을 들은 모양이다."
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "소년이 내 눈을 보고도 물러서지 않는다. 아버지를 닮았다."
       }
@@ -8622,7 +8622,7 @@
                 "text": "장부의 절반을 하룻밤에 받아 냈다. 무공은 하나도 쓰지 않았다. 주모가 〈아들〉처럼 밥을 먹였다.",
                 "effects": {
                   "silver": 25,
-                  "fame": 1,
+                  "fame": 5,
                   "stats": {
                     "mind": 2
                   }
@@ -8663,7 +8663,7 @@
           {
             "text": "이름난 자들의 문을 두드렸다. 말로 안 되는 곳이 한 군데 있었다.",
             "effects": {
-              "fame": 2,
+              "fame": 10,
               "silver": 20,
               "battle": "낭인",
               "foe": "외상값 떼먹은 왈패 두목"
@@ -8804,27 +8804,27 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "대장장이가 \"협객 칼은 날이 잘 안 죽지\" 하며 받아 든다."
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "대장장이가 값은 먼저 받겠다고 손을 내민다."
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "대장장이가 날에 묻은 것을 보고 값을 곱으로 부른다."
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "대장장이가 그 이름의 병기를 만지게 됐다며 소매를 걷는다."
       }
@@ -8850,7 +8850,7 @@
               {
                 "text": "입담에 아이가 그쳤다. 대갓집 막내였고, 사내들은 집안 호위였다. 이 고을에 내 이름이 돌았다.",
                 "effects": {
-                  "fame": 3,
+                  "fame": 15,
                   "silver": 30
                 }
               }
@@ -8871,7 +8871,7 @@
               {
                 "text": "사내들이 따라왔지만 표행 때처럼 샛길로 빠졌다. 관아 앞에서 아이가 내 귀에 이름을 말해 주었다.",
                 "effects": {
-                  "fame": 2,
+                  "fame": 10,
                   "alignment": {
                     "정도": 20
                   }
@@ -8901,9 +8901,9 @@
             "text": "그들은 아이를 판 유괴범들이었다. 달려드는 것을 보고 확실해졌다.",
             "effects": {
               "alignment": {
-                "정도": 40
+                "정도": 60
               },
-              "fame": 2,
+              "fame": 10,
               "battle": "낭인",
               "foe": "유괴범 두목"
             },
@@ -8929,27 +8929,27 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "아이가 내 표정을 보고 조금 울음을 그친다."
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "사내들이 내게 먼저 값을 묻는다. 아이를 넘기면 얼마를 쳐 주겠다고."
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "아이가 나를 보고 더 크게 운다."
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "사내들이 내 별호를 듣고 걸음을 멈춘다."
       }
@@ -8978,7 +8978,7 @@
                   "hp_pct": 30,
                   "qi_pct": 30,
                   "silver": 30,
-                  "fame": 1
+                  "fame": 5
                 }
               }
             ]
@@ -9041,27 +9041,27 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "두목이 칼 대신 술잔을 내미는 손이 조심스럽다. 협객에게 들키면 곤란하다는 눈치다."
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "두목이 내 쪽으로 웃으며 잔을 채운다. \"이 바닥 사람은 말이 통하지.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "사내들이 술동이를 든 채로 굳어 버린다."
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "두목이 입 다물 값을 곱절로 부른다."
       }
@@ -9103,7 +9103,7 @@
       },
       {
         "requires": {
-          "min_fame": 100,
+          "min_fame": 500,
           "not_dominant": [
             "사도",
             "마도"
@@ -9202,7 +9202,7 @@
               {
                 "text": "사자가 옷자락을 털며 웃었다. \"그대로 전하지요.\" 산이 조금 가까워진 것 같았다.",
                 "effects": {
-                  "fame": 3,
+                  "fame": 15,
                   "stats": {
                     "external": 3
                   }
@@ -9225,7 +9225,7 @@
                 "text": "한 시진을 떠들었다. 사자는 산의 경비 이야기를 자기도 모르게 흘렸다.",
                 "effects": {
                   "boss_weaken": 5,
-                  "fame": 1
+                  "fame": 5
                 }
               }
             ]
@@ -9260,7 +9260,7 @@
               {
                 "text": "사자의 찻잔에 금이 갔다. 그가 조용히 일어나 깊이 절했다. \"전해 드리겠습니다.\"",
                 "effects": {
-                  "fame": 4,
+                  "fame": 20,
                   "boss_weaken": 3
                 }
               }
@@ -9270,7 +9270,7 @@
       },
       {
         "requires": {
-          "max_fame": 29
+          "max_fame": 149
         },
         "text": "천마가 보낸 사자가 빈 술상을 차려 놓고 기다린다. 그가 명부를 넘기다 고개를 갸웃한다. \"명부에 없는 분이신데. 그래도 오르신다니 일단 전합니다. 오르면 죽는다. 오르지 않으면 살려 준다.\""
       }
@@ -9285,7 +9285,7 @@
               "stats": {
                 "mind": 3
               },
-              "fame": 2
+              "fame": 10
             }
           }
         ]
@@ -9297,7 +9297,7 @@
             "text": "사자는 답이 마음에 들었다는 듯 칼을 뽑았다.",
             "effects": {
               "battle": "마교심판자",
-              "fame": 3,
+              "fame": 15,
               "boss_weaken": 4,
               "foe": "신교 사자 혁천"
             },
@@ -9381,7 +9381,7 @@
                 "effects": {
                   "hp_pct": 15,
                   "qi_pct": 15,
-                  "fame": 1
+                  "fame": 5
                 }
               }
             ]
@@ -9400,7 +9400,7 @@
               {
                 "text": "흉터가 하나도 없는 몸을 보고 다들 의심했다. 칼을 대 보자는 놈까지 나왔다. 칼이 부러졌다.",
                 "effects": {
-                  "fame": 4
+                  "fame": 20
                 }
               }
             ]
@@ -9421,7 +9421,7 @@
                 "text": "객잔이 조용해졌다. 술값은 내지 않았다. 아무도 다음 흉터를 꺼내지 않았다.",
                 "effects": {
                   "silver": 5,
-                  "fame": 1
+                  "fame": 5
                 }
               }
             ]
@@ -9440,7 +9440,7 @@
               {
                 "text": "흉터가 혈맥을 따라 뻗어 있었다. 얼큰한 사내가 슬그머니 옷깃을 놓았다.",
                 "effects": {
-                  "fame": 1,
+                  "fame": 5,
                   "stats": {
                     "mind": 2
                   }
@@ -9463,7 +9463,7 @@
                 "text": "피부 밑으로 검붉은 줄이 올라왔다. 객잔이 조용히 술값을 대신 냈다.",
                 "effects": {
                   "silver": 15,
-                  "fame": 1
+                  "fame": 5
                 }
               }
             ]
@@ -9496,7 +9496,7 @@
                 "mind": 2,
                 "martial": 1
               },
-              "fame": 1
+              "fame": 5
             }
           }
         ]
@@ -9536,27 +9536,27 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "사내가 내 흉터가 대개 앞쪽에 있는 것을 보고 고개를 끄덕인다."
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "사내가 \"등에 칼자국이 있으면 〈형제〉지!\" 하며 웃는다."
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "웃통을 벗던 무인 하나가 내 흉터를 보고 도로 옷을 입는다."
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "사람들이 내 흉터 값을 벌써 쳐 주고 있다."
       }
@@ -9680,7 +9680,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "노인은 내 별호를 모른다. 이 산에는 그런 소문이 오지 않는다."
       }
@@ -9708,7 +9708,7 @@
                 "text": "밖에서 쿵 하는 소리가 났다. 도둑의 품은 두둑했다.",
                 "effects": {
                   "silver": 60,
-                  "fame": 1
+                  "fame": 5
                 }
               }
             ]
@@ -9770,7 +9770,7 @@
               {
                 "text": "창틈 놈이 들어왔을 때 눈을 떴다. 그의 표정이 볼 만했다.",
                 "effects": {
-                  "fame": 1,
+                  "fame": 5,
                   "silver": 20,
                   "stats": {
                     "mind": 2
@@ -9860,9 +9860,9 @@
               {
                 "text": "어디서 나타났는지 거지 백여 명이 수레를 밀었다. 이 일은 강호에 오래 남았다.",
                 "effects": {
-                  "fame": 5,
+                  "fame": 25,
                   "alignment": {
-                    "정도": 40
+                    "정도": 60
                   }
                 }
               }
@@ -9882,7 +9882,7 @@
               {
                 "text": "마교 선봉이 내 기운을 보고 멈칫했다. 피난민들은 나를 더 무서워했다.",
                 "effects": {
-                  "fame": 3,
+                  "fame": 15,
                   "stats": {
                     "mind": 2
                   }
@@ -9906,9 +9906,9 @@
                 "text": "북소리가 등 뒤에 닿을 때까지 걸었다. 끝에 있던 노파가 내 이름을 물었다.",
                 "effects": {
                   "alignment": {
-                    "정도": 40
+                    "정도": 60
                   },
-                  "fame": 3,
+                  "fame": 15,
                   "hp_pct": -10
                 }
               }
@@ -9929,7 +9929,7 @@
                 "text": "내줄 것이 없는 자들은 다른 것을 내주었다. 뒤돌아보는 사람이 없었다.",
                 "effects": {
                   "alignment": {
-                    "마도": 40
+                    "마도": 60
                   },
                   "silver": 40
                 }
@@ -9947,9 +9947,9 @@
             "text": "마지막 사람이 지나갈 때까지 길을 막았다.",
             "effects": {
               "alignment": {
-                "정도": 40
+                "정도": 60
               },
-              "fame": 3,
+              "fame": 15,
               "battle": "혈마대귀",
               "foe": "혈마대 추격장 귀호"
             }
@@ -10162,7 +10162,7 @@
                 "effects": {
                   "style_weapon": 3,
                   "mastery": 20,
-                  "fame": 3,
+                  "fame": 15,
                   "battle": "혈마잔영",
                   "style_skill": {
                     "grade": "신공"
@@ -10185,7 +10185,7 @@
             "text": "그림자가 흩어진 자리에 함이 남았다. 옛 신공의 비급과 병기가 나왔다.",
             "effects": {
               "style_weapon": 3,
-              "fame": 3,
+              "fame": 15,
               "battle": "혈마잔영",
               "style_skill": {
                 "grade": "신공"
@@ -10338,7 +10338,7 @@
             "text": "노인이 웃으며 쓰러졌다. 품에서 나온 종이에 천마의 왼쪽 옆구리 이야기가 적혀 있었다. 그 뒷면에는 협객이 평생 다듬은 심법이 있었다.",
             "effects": {
               "boss_weaken": 10,
-              "fame": 4,
+              "fame": 20,
               "flags": [
                 "협객의유지"
               ],
@@ -10375,7 +10375,7 @@
             "text": "사십 년이 그렇게 끝났다. 종이는 찢어지지 않았다.",
             "effects": {
               "boss_weaken": 10,
-              "fame": 4,
+              "fame": 20,
               "flags": [
                 "협객의유지"
               ],
@@ -10441,7 +10441,7 @@
                     "martial": 14
                   },
                   "mastery": 60,
-                  "fame": 3,
+                  "fame": 15,
                   "spar": true,
                   "grade_item": {
                     "grade": "보물",
@@ -10468,7 +10468,7 @@
                 "martial": 14
               },
               "mastery": 60,
-              "fame": 3,
+              "fame": 15,
               "spar": true,
               "grade_item": {
                 "grade": "보물",
@@ -10527,7 +10527,7 @@
                     "internal": 6
                   },
                   "alignment": {
-                    "마도": 40
+                    "마도": 60
                   },
                   "flags": [
                     "천마_구결"
@@ -10557,7 +10557,7 @@
                   },
                   "injury": 1,
                   "alignment": {
-                    "마도": 60
+                    "마도": 90
                   },
                   "flags": [
                     "천마_구결"
@@ -10598,7 +10598,7 @@
                 "internal": 6
               },
               "alignment": {
-                "마도": 40
+                "마도": 60
               },
               "flags": [
                 "천마_구결"
@@ -10614,9 +10614,9 @@
             "text": "그을음이 절벽을 타고 올랐다. 산 위 누군가 그 연기를 보았을 것이다.",
             "effects": {
               "alignment": {
-                "정도": 40
+                "정도": 60
               },
-              "fame": 3
+              "fame": 15
             }
           }
         ]
@@ -10633,7 +10633,8 @@
         "천마_일지",
         "천마_구결"
       ],
-      "unlocked": "천마의유산"
+      "unlocked": "천마의유산",
+      "not_slain": "전대천마잔영"
     },
     "title": "전대의 잔영",
     "text": "꿈인지 생시인지 눈보라 속에 옛 천마의 잔영이 서 있다. \"지금 위에 앉은 아이는 내 진짜 후계가 아니다. 네가 올라가라. 그 아이를 베든, 그 자리에 앉든.\"",
@@ -10650,7 +10651,7 @@
                 "text": "잔영이 처음으로 흔들렸다. \"그걸 읽었느냐.\" 그는 사라지며 산의 빈틈 하나를 보여 주었다.",
                 "effects": {
                   "boss_weaken": 12,
-                  "fame": 3
+                  "fame": 15
                 }
               }
             ]
@@ -10667,9 +10668,9 @@
             "text": "잔영이 흩어지며 웃었다.",
             "effects": {
               "boss_weaken": 6,
-              "fame": 3,
-              "battle": "마교심판자",
-              "foe": "옛 천마의 잔영"
+              "fame": 15,
+              "battle": "전대천마잔영",
+              "foe_line": "잔영이 손을 들자 눈보라가 멎었다. \"말로 답했으니 손으로도 답해 보아라.\""
             }
           }
         ]
@@ -10681,7 +10682,7 @@
             "text": "\"그럼 이겨라.\" 몸속에서 무언가 깨어났다.",
             "effects": {
               "alignment": {
-                "마도": 60
+                "마도": 90
               },
               "stats": {
                 "external": 8,
@@ -10712,7 +10713,7 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"맑은 피로 여기까지 왔구나. 그래도 묻는다.\""
       }
@@ -10796,7 +10797,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 100
+          "min_fame": 500
         },
         "text": "\"천하가 아는 이름도 이 문 앞에서는 같다.\""
       }
@@ -10919,13 +10920,13 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"손목의 피가 급하구려. 빨리 죽을 맥이오.\" 그래도 손을 놓지는 않는다."
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "약장수는 내 별호를 듣고도 손목만 쥐고 있다."
       }
@@ -10976,7 +10977,7 @@
               "stats": {
                 "martial": 2
               },
-              "fame": 1
+              "fame": 5
             }
           }
         ]
@@ -11031,7 +11032,7 @@
               {
                 "text": "그가 처음 본다는 얼굴을 했다.",
                 "effects": {
-                  "fame": 2,
+                  "fame": 10,
                   "stats": {
                     "martial": 2
                   }
@@ -11056,7 +11057,7 @@
               {
                 "text": "무인이 멍하니 내 뒤에 섰다. \"이건... 물러선 겁니까?\" 서로 웃고 지나갔다.",
                 "effects": {
-                  "fame": 1,
+                  "fame": 5,
                   "stats": {
                     "external": 2
                   }
@@ -11071,33 +11072,33 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "덩치가 협객을 만났다며 오히려 어깨를 편다."
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "덩치가 \"통행세 대신 비켜 드릴까\" 하고 눈을 굴린다."
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "덩치가 뒷걸음질 칠 데를 찾으며 침을 삼킨다."
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "덩치가 내 별호를 듣고도 물러나지 않는다. 그래야 자기 이름이 서니까."
       },
       {
         "requires": {
-          "max_fame": 9
+          "max_fame": 49
         },
         "text": "덩치는 내가 누군지 묻지도 않는다."
       }
@@ -11204,7 +11205,7 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 30
+          "min_fame": 150
         },
         "text": "도공이 내 쪽을 보지 않고 말한다. \"살기는 가마에 들어가면 그릇을 깨오.\""
       }
@@ -11245,7 +11246,7 @@
               "alignment": {
                 "사도": 20
               },
-              "fame": -1
+              "fame": -5
             }
           }
         ]
@@ -11322,9 +11323,9 @@
             "effects": {
               "battle": "사이비도사",
               "alignment": {
-                "정도": 40
+                "정도": 60
               },
-              "fame": 2,
+              "fame": 10,
               "foe": "기우제 올리는 사기꾼"
             },
             "lead": true
@@ -11340,7 +11341,7 @@
               "stats": {
                 "mind": 3
               },
-              "fame": 2
+              "fame": 10
             }
           }
         ]
@@ -11365,7 +11366,7 @@
           {
             "text": "무당은 가라앉았다. 사람들이 처녀 대신 내게 절을 했다. 비는 오지 않았다.",
             "effects": {
-              "fame": 1,
+              "fame": 5,
               "alignment": {
                 "마도": 20
               }
@@ -11390,7 +11391,7 @@
                   "alignment": {
                     "정도": 20
                   },
-                  "fame": 2
+                  "fame": 10
                 }
               }
             ]
@@ -11410,9 +11411,9 @@
                 "text": "강은 허리까지밖에 안 왔다. 무당이 도망쳤고 마을이 멋쩍어했다.",
                 "effects": {
                   "alignment": {
-                    "정도": 40
+                    "정도": 60
                   },
-                  "fame": 2
+                  "fame": 10
                 }
               }
             ]
@@ -11423,7 +11424,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "무당이 내 별호를 듣고 춤이 잠시 흔들린다."
       }
@@ -11529,7 +11530,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 40
+          "min_fame": 200
         },
         "text": "광대가 춤을 추다 내 별호를 듣고 발을 반 박자 늦춘다."
       }
@@ -11553,7 +11554,7 @@
               "stats": {
                 "mind": 3
               },
-              "fame": 2
+              "fame": 10
             }
           }
         ]
@@ -11650,7 +11651,7 @@
     "variants": [
       {
         "requires": {
-          "min_fame": 60,
+          "min_fame": 300,
           "not_dominant": [
             "사도",
             "마도"
@@ -11661,21 +11662,21 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "객잔에 정도와 사도 무인들이 탁자 둘로 갈라 앉았다. 내가 들어서자 양쪽이 동시에 칼을 잡더니 처음으로 같은 쪽을 본다. 내 덕분에 저들이 한편이 되었다."
       },
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "객잔에 정도와 사도 무인들이 탁자 둘로 갈라 앉았다. 정도 쪽에서 내 별호를 부르며 자리를 비운다. 사도 쪽에서 쪽지 하나가 날아온다. '오늘은 그냥 마시자.'"
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "객잔에 정도와 사도 무인들이 탁자 둘로 갈라 앉았다. 사도 쪽 향주가 잔을 들어 보인다. 정도 쪽에서 침 뱉는 소리가 난다. 어디 앉을지는 이미 정해진 것 같다."
       },
@@ -11797,7 +11798,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"이름 좀 났구나. 내 부채 앞에서 죽은 자들도 다 그랬지.\""
       },
@@ -11838,7 +11839,7 @@
             "effects": {
               "battle": "세가공자",
               "silver": 30,
-              "fame": 2,
+              "fame": 10,
               "foe": "토호 아들의 왈패들",
               "foe_line": "\"우리 공자님 말씀 못 들었나! 다리부터 부러뜨려라.\""
             }
@@ -11854,7 +11855,7 @@
               "stats": {
                 "mind": 1
               },
-              "fame": 1
+              "fame": 5
             }
           }
         ]
@@ -11869,7 +11870,7 @@
       },
       {
         "requires": {
-          "min_fame": 60,
+          "min_fame": 300,
           "not_dominant": [
             "사도",
             "마도"
@@ -11911,7 +11912,7 @@
               {
                 "text": "공자의 호위들이 먼저 고개를 숙였다. 불에 탔어도 그 이름은 남아 있다.",
                 "effects": {
-                  "fame": 2,
+                  "fame": 10,
                   "stats": {
                     "mind": 2
                   }
@@ -11958,7 +11959,7 @@
                   "alignment": {
                     "마도": 30
                   },
-                  "fame": 2
+                  "fame": 10
                 }
               }
             ]
@@ -11992,27 +11993,27 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "점소이가 〈협객나리〉는 참아 달라는 눈짓을 보낸다."
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "공자의 호위가 내 병기의 손때를 보고 귀엣말을 한다."
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "공자의 호위들이 칼에 손을 얹고 공자 앞으로 나선다."
       },
       {
         "requires": {
-          "min_fame": 60,
+          "min_fame": 300,
           "not_dominant": [
             "사도",
             "마도"
@@ -12022,7 +12023,7 @@
       },
       {
         "requires": {
-          "max_fame": 9
+          "max_fame": 49
         },
         "text": "공자는 내 이름을 묻지 않는다. 물을 가치도 없다는 것이다."
       }
@@ -12047,7 +12048,7 @@
                 "internal": 8
               },
               "hp_pct": 30,
-              "fame": -1
+              "fame": -5
             }
           }
         ]
@@ -12059,7 +12060,7 @@
             "text": "당연히 싸움이 났다. 그래도 끝나고 다들 내 이름을 물었다.",
             "effects": {
               "battle": "종남검수",
-              "fame": 4,
+              "fame": 20,
               "stats": {
                 "mind": 3
               },
@@ -12140,7 +12141,7 @@
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "눈 덮인 산에 천년설삼이 나왔다는 소문에 강호인 수십이 모였다. 내가 도착하자 모두 나를 먼저 본다. 저 사람이 나서면 끝이라는 얼굴들이다. 몇몇은 슬그머니 내려간다."
       }
@@ -12161,7 +12162,7 @@
             "text": "말석이 상석보다 시끄러워졌다.",
             "effects": {
               "battle": "종남검수",
-              "fame": 4,
+              "fame": 20,
               "mastery": 10,
               "spar": true,
               "foe": "종남파 제자 곧은검 윤태석",
@@ -12207,7 +12208,7 @@
             "effects": {
               "battle": "종남검수",
               "foe": "종남 검수 탁운경",
-              "fame": 3,
+              "fame": 15,
               "alignment": {
                 "마도": 20
               }
@@ -12220,7 +12221,7 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "구파일방 후기지수들이 교류회를 열었다. 내가 들어서자 모두 칼자루에 손을 얹는다. 종남 검수가 소리친다. \"마두가 어디를 감히! 들어왔으면 말석에서 칼부터 받아라.\" 쫓아내지는 못하는 눈치다."
       },
@@ -12242,7 +12243,7 @@
                 "text": "종남 검수가 이를 갈았다. 화산과 종남의 묵은 싸움이 또 한 해 늘었다.",
                 "effects": {
                   "battle": "종남검수",
-                  "fame": 5,
+                  "fame": 25,
                   "mastery": 15,
                   "spar": true,
                   "foe": "종남파 제자 곧은검 윤태석",
@@ -12257,7 +12258,7 @@
       },
       {
         "requires": {
-          "min_fame": 60,
+          "min_fame": 300,
           "not_dominant": [
             "사도",
             "마도"
@@ -12311,7 +12312,7 @@
           {
             "text": "몇몇이 웃었고 몇몇은 칼을 만졌다.",
             "effects": {
-              "fame": 3,
+              "fame": 15,
               "stats": {
                 "external": 2
               }
@@ -12352,7 +12353,7 @@
           {
             "text": "누가 선봉인지는 그날 정해졌다. 아무도 내 옆에 앉지 않았다.",
             "effects": {
-              "fame": 3,
+              "fame": 15,
               "stats": {
                 "external": 2
               },
@@ -12382,7 +12383,7 @@
               {
                 "text": "어른들이 고개를 숙였다. 오대세가 자리 하나가 비어 있다는 걸 다들 안다.",
                 "effects": {
-                  "fame": 5,
+                  "fame": 25,
                   "boss_weaken": 4
                 }
               }
@@ -12403,7 +12404,7 @@
               {
                 "text": "회의장이 조용해졌다. 빈자리가 십 년 만에 찼다.",
                 "effects": {
-                  "fame": 3,
+                  "fame": 15,
                   "stats": {
                     "mind": 2
                   }
@@ -12415,7 +12416,7 @@
       }
     ],
     "requires": {
-      "min_fame": 30,
+      "min_fame": 150,
       "not_sect": [
         "마교",
         "혈교",
@@ -12459,7 +12460,7 @@
             "text": "향주의 호위가 쓰러졌다. 사도련 빚 하나가 늘었다.",
             "effects": {
               "battle": "사도련향주",
-              "fame": 3,
+              "fame": 15,
               "boss_weaken": 4,
               "foe": "사도련 호위대장 철목"
             }
@@ -12540,9 +12541,9 @@
             "effects": {
               "battle": "동창번자",
               "alignment": {
-                "정도": 40
+                "정도": 60
               },
-              "fame": 3,
+              "fame": 15,
               "foe": "동창 첩형 백면 노안",
               "foe_line": "\"황명이라 했다. 저 늙은이들을 내놓아라. 네 이름도 함께 적어 주마.\""
             }
@@ -12635,7 +12636,7 @@
             "text": "벌레들이 먼저 왔다. 끝나고 나서 마을이 깨어났다.",
             "effects": {
               "battle": "남만술사",
-              "fame": 3,
+              "fame": 15,
               "alignment": {
                 "정도": 20
               },
@@ -12688,7 +12689,7 @@
               {
                 "text": "독이 안 듣는 몸은 이럴 때 쓰는 거다.",
                 "effects": {
-                  "fame": 3,
+                  "fame": 15,
                   "stats": {
                     "external": 3
                   }
@@ -12704,13 +12705,13 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "마을 노인이 나를 보더니 술사를 부른 사람인 줄 안다."
       },
       {
         "requires": {
-          "min_fame": 60,
+          "min_fame": 300,
           "not_dominant": [
             "사도",
             "마도"
@@ -12736,7 +12737,7 @@
             "effects": {
               "battle": "북해고수",
               "boss_weaken": 8,
-              "fame": 5,
+              "fame": 25,
               "spar": true,
               "foe": "북해빙궁 사절 대표 한설 모극",
               "foe_line": "사절 대표가 장갑을 벗는다. 손끝에서 서리가 일어난다. \"궁주께 아뢸 말을 고르는 중이네. 어디 보세.\""
@@ -12814,7 +12815,7 @@
                 "text": "추위로는 서로 지지 않았다. 사절단이 곤륜에 예를 차렸다.",
                 "effects": {
                   "boss_weaken": 8,
-                  "fame": 4
+                  "fame": 20
                 }
               }
             ]
@@ -12824,19 +12825,19 @@
       }
     ],
     "requires": {
-      "min_fame": 30
+      "min_fame": 150
     },
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "대표가 내 별호를 궁주께 바로 올리겠다며 붓을 꺼낸다."
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"천마 쪽 사람과 말하는 줄 알았소.\" 대표가 눈을 가늘게 뜬다."
       }
@@ -12889,7 +12890,7 @@
                 "martial": 2,
                 "mind": 2
               },
-              "fame": 1
+              "fame": 5
             }
           }
         ]
@@ -12900,7 +12901,7 @@
           {
             "text": "어른의 손이 찻잔 조각을 피해 멈췄다. 세가가 내 편이 될 일은 없겠지만 덤빌 일도 없다.",
             "effects": {
-              "fame": 1,
+              "fame": 5,
               "alignment": {
                 "마도": 10
               }
@@ -12910,7 +12911,7 @@
       }
     ],
     "requires": {
-      "min_fame": 30,
+      "min_fame": 150,
       "not_sect": [
         "마교",
         "혈교",
@@ -12982,7 +12983,7 @@
             "effects": {
               "battle": "혈교혈승",
               "silver": 60,
-              "fame": 1,
+              "fame": 5,
               "foe": "혈교 잔당주 혈의승"
             }
           }
@@ -12996,7 +12997,7 @@
             "effects": {
               "battle": "혈교혈승",
               "silver": 150,
-              "fame": 2,
+              "fame": 10,
               "foe": "혈교 잔당주 혈의승"
             }
           }
@@ -13044,9 +13045,9 @@
                 "text": "숭산의 이름으로 포박했다. 은자는 맹에 돌렸다.",
                 "effects": {
                   "battle": "혈교혈승",
-                  "fame": 3,
+                  "fame": 15,
                   "alignment": {
-                    "정도": 40
+                    "정도": 60
                   },
                   "foe": "혈교 잔당주 혈의승"
                 }
@@ -13070,7 +13071,7 @@
                 "effects": {
                   "silver": 100,
                   "alignment": {
-                    "사도": 40
+                    "사도": 60
                   }
                 }
               }
@@ -13150,7 +13151,7 @@
                 "text": "대감 아들이 재채기를 하며 일어났다. 의원들이 입을 벌렸고 집사가 은자를 두 손으로 내밀었다.",
                 "effects": {
                   "silver": 60,
-                  "fame": 2
+                  "fame": 10
                 }
               }
             ]
@@ -13160,7 +13161,7 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 20
+          "min_fame": 100
         },
         "text": "대감 집 집사가 말을 몰아왔다가 내 얼굴을 보고 말에서 내려 절을 한다. \"대감 아들이 사흘째 깨지 않습니다. 사파 술수라면 〈성대협〉께서 아실 것 같아서...\" 그는 나를 뭐로 아는 걸까."
       }
@@ -13169,27 +13170,27 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "집사가 협객의 손이면 믿겠다고 재촉한다."
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "집사가 사례금 액수부터 말한다."
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "집사가 \"다른 분이 없어서...\" 하고 말을 흐린다."
       },
       {
         "requires": {
-          "min_fame": 60,
+          "min_fame": 300,
           "not_dominant": [
             "사도",
             "마도"
@@ -13199,7 +13200,7 @@
       },
       {
         "requires": {
-          "max_fame": 9
+          "max_fame": 49
         },
         "text": "집사가 그저 칼 찬 사람이면 된다는 얼굴이다."
       }
@@ -13272,7 +13273,7 @@
               {
                 "text": "산적들이 슬금슬금 물러났다. 표기 하나의 값을 다시 알았다.",
                 "effects": {
-                  "fame": 3,
+                  "fame": 15,
                   "stats": {
                     "mind": 3
                   }
@@ -13296,9 +13297,9 @@
                 "text": "젊은 표사들의 등이 곧아졌다. 표행의 끝까지 내가 표두였다. 내 표기는 없어도 표기 드는 법은 안다.",
                 "effects": {
                   "alignment": {
-                    "정도": 40
+                    "정도": 60
                   },
-                  "fame": 3,
+                  "fame": 15,
                   "silver": 30
                 }
               }
@@ -13319,7 +13320,7 @@
                 "text": "산적들은 빈 고갯길을 지켰다. 표사들이 내 걸음을 외웠다.",
                 "effects": {
                   "silver": 30,
-                  "fame": 2
+                  "fame": 10
                 }
               }
             ]
@@ -13329,7 +13330,7 @@
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "작은 표국 표행이 산적에게 막혔다. 젊은 표사들이 떨면서 나를 본다. 표두가 신음한다. \"저 사람은... 저 사람이 더 위험하다.\" 내 소문을 아는 모양이다."
       }
@@ -13419,7 +13420,7 @@
                 "text": "쌀 스무 섬이 장부에서 사라지고 피난민 앞에 생겼다. 호송병이 씩 웃었다. 전장의 일이다.",
                 "effects": {
                   "alignment": {
-                    "정도": 40
+                    "정도": 60
                   },
                   "stats": {
                     "mind": 2
@@ -13445,7 +13446,7 @@
                   "alignment": {
                     "마도": 30
                   },
-                  "fame": 2
+                  "fame": 10
                 }
               }
             ]
@@ -13479,7 +13480,7 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 30
+          "min_fame": 150
         },
         "text": "호송병 하나가 내 얼굴을 알아보고 눈으로 쌀 쪽을 가리킨다."
       }
@@ -13528,7 +13529,7 @@
             "text": "사자가 소매에서 손을 꺼냈다.",
             "effects": {
               "battle": "마교심판자",
-              "fame": 4,
+              "fame": 20,
               "foe": "신교 사자 적련"
             },
             "lead": true
@@ -13551,7 +13552,7 @@
       }
     ],
     "requires": {
-      "min_fame": 30,
+      "min_fame": 150,
       "not_sect": [
         "마교"
       ]
@@ -13597,7 +13598,7 @@
               {
                 "text": "사자가 찻잔을 내려놓았다. \"그 이야기는 전하지 않겠습니다.\" 그는 아무 말 없이 떠났다.",
                 "effects": {
-                  "fame": 2,
+                  "fame": 10,
                   "stats": {
                     "mind": 2
                   }
@@ -13708,9 +13709,9 @@
             "effects": {
               "battle": "혈마대귀",
               "alignment": {
-                "정도": 40
+                "정도": 60
               },
-              "fame": 3,
+              "fame": 15,
               "flags": [
                 "생환_아이"
               ],
@@ -13754,10 +13755,10 @@
                 "effects": {
                   "battle": "혈교혈승",
                   "alignment": {
-                    "정도": 40
+                    "정도": 60
                   },
                   "boss_weaken": 8,
-                  "fame": 4,
+                  "fame": 20,
                   "foe": "혈승 법오"
                 }
               }
@@ -13794,7 +13795,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "호위 하나가 내 별호를 중얼거리고 고삐를 놓는다."
       }
@@ -13839,7 +13840,7 @@
               },
               "injury": 1,
               "alignment": {
-                "마도": 60
+                "마도": 90
               },
               "skill": "적혈신장"
             }
@@ -13856,7 +13857,7 @@
                 "mind": 6
               },
               "alignment": {
-                "정도": 40
+                "정도": 60
               },
               "hp_pct": -20
             }
@@ -13871,7 +13872,7 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "명의가 내 손을 내려놓는다. \"이미 반쯤 삼켰구려.\""
       }
@@ -13905,7 +13906,7 @@
           {
             "text": "한 번 부딪치고 그쪽이 먼저 사과했다. 사과는 받지 않았다.",
             "effects": {
-              "fame": 2,
+              "fame": 10,
               "battle": "세가공자",
               "stats": {
                 "external": 2
@@ -13952,7 +13953,7 @@
               {
                 "text": "이마에서 피가 흘렀다. 그 자리에서 아무도 더 말하지 않았다. 팽가 사람은 원래 그렇다.",
                 "effects": {
-                  "fame": 2,
+                  "fame": 10,
                   "hp_pct": -5,
                   "stats": {
                     "external": 2
@@ -13967,7 +13968,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"이제 막내라 부르면 안 되겠군. 별호가 있으니.\" 누군가 조심스레 고쳐 말한다."
       }
@@ -13989,7 +13990,7 @@
             "effects": {
               "battle": "천마친위대",
               "mastery": 30,
-              "fame": 4,
+              "fame": 20,
               "flags": [
                 "팽가_넷째"
               ],
@@ -14034,7 +14035,7 @@
                 "effects": {
                   "battle": "천마친위대",
                   "mastery": 35,
-                  "fame": 6,
+                  "fame": 30,
                   "boss_weaken": 5,
                   "flags": [
                     "팽가_넷째"
@@ -14064,7 +14065,7 @@
                     "external": 4
                   },
                   "hp_pct": -10,
-                  "fame": 2
+                  "fame": 10
                 }
               }
             ]
@@ -14087,7 +14088,7 @@
           {
             "text": "거지는 보이지 않는 사람이다. 장부에 개방 매듭 그림이 있었다. 몇 개인지는 찢겨 있었다.",
             "effects": {
-              "fame": 2,
+              "fame": 10,
               "flags": [
                 "개방_칠결",
                 "개방_장부"
@@ -14139,7 +14140,7 @@
               {
                 "text": "장로의 눈빛이 그제야 풀렸다. 밥 나누는 놈은 믿어도 된다고 생각한 모양이다. 어리석은 일이다.",
                 "effects": {
-                  "fame": 1,
+                  "fame": 5,
                   "stats": {
                     "mind": 2
                   }
@@ -14153,7 +14154,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "장로의 눈빛이 묘하다. 내 이름이 커질수록 그 눈빛이 깊어진다."
       }
@@ -14175,7 +14176,7 @@
             "effects": {
               "battle": "개방십걸",
               "skill": "타구봉법",
-              "fame": 5,
+              "fame": 25,
               "alignment": {
                 "정도": 20
               },
@@ -14215,7 +14216,7 @@
               "stats": {
                 "mind": 5
               },
-              "fame": 3,
+              "fame": 15,
               "flags": [
                 "개방_칠결"
               ]
@@ -14240,7 +14241,7 @@
                 "text": "장로회가 조용해졌다. 그 장로가 먼저 곤봉을 들었다.",
                 "effects": {
                   "battle": "개방십걸",
-                  "fame": 6,
+                  "fame": 30,
                   "boss_weaken": 5,
                   "flags": [
                     "개방_칠결",
@@ -14270,7 +14271,7 @@
                   "stats": {
                     "mind": 4
                   },
-                  "fame": 1
+                  "fame": 5
                 }
               }
             ]
@@ -14281,7 +14282,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"이름이 났다고 유언까지 네 것은 아니다.\""
       }
@@ -14304,7 +14305,7 @@
             "effects": {
               "silver": -30,
               "alignment": {
-                "정도": 40
+                "정도": 60
               },
               "stats": {
                 "mind": 3
@@ -14390,7 +14391,7 @@
             "effects": {
               "battle": "사도련향주",
               "boss_weaken": 6,
-              "fame": 4,
+              "fame": 20,
               "alignment": {
                 "정도": 20
               },
@@ -14409,7 +14410,7 @@
               "silver": 150,
               "boss_weaken": 4,
               "alignment": {
-                "사도": 40
+                "사도": 60
               }
             }
           }
@@ -14471,7 +14472,7 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"장부 들고 협객 노릇이라. 그 소문값도 오르겠군.\""
       }
@@ -14496,7 +14497,7 @@
             "text": "밥풀 묻은 글자가 몸에 박혔다. 봉 하나로 사방을 봉쇄하는 타구봉의 끝이었다.",
             "effects": {
               "skill": "타구신봉",
-              "fame": 3
+              "fame": 15
             }
           }
         ]
@@ -14511,7 +14512,7 @@
                 "mind": 6
               },
               "alignment": {
-                "정도": 40
+                "정도": 60
               }
             }
           }
@@ -14591,7 +14592,7 @@
             "text": "무리를 몰아내고 해가 지도록 걸었다. 기둥의 흠과 발이 맞아 들어갈 때, 구름 위를 걷는 듯했다.",
             "effects": {
               "skill": "창궁비운보",
-              "fame": 3,
+              "fame": 15,
               "battle": "혈수인",
               "foe": "혈교 혈수대 잔당",
               "foe_line": "\"남궁의 잔불이 아직 남았나. 기둥째 태워 주마.\""
@@ -14622,7 +14623,7 @@
             "text": "남궁의 유물을 뒤지는 자는 다시 없을 것이다. 마부가 고개를 숙이고 말을 잃었다.",
             "effects": {
               "skill": "창궁비운보",
-              "fame": 3,
+              "fame": 15,
               "battle": "혈수인",
               "alignment": {
                 "마도": 20
@@ -14675,7 +14676,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "마부가 세상에 남궁의 이름이 다시 돈다며 눈물을 훔친다."
       }
@@ -14750,7 +14751,7 @@
             "text": "발자국을 밟아 내려가니 몸이 저절로 덮쳐 갔다. 채주가 칼을 들기 전에 끝났다. 〈둘째형:이/가〉 옳았다.",
             "effects": {
               "skill": "맹호하산보",
-              "fame": 3,
+              "fame": 15,
               "battle": "녹림채주",
               "foe": "호산채주 대도 맹철"
             }
@@ -14791,7 +14792,7 @@
             "text": "호랑이가 산을 내려오는 걸음은 이런 것이다. 산이 조용해졌다.",
             "effects": {
               "skill": "맹호하산보",
-              "fame": 3,
+              "fame": 15,
               "battle": "녹림채주",
               "foe": "호산채주 대도 맹철",
               "alignment": {
@@ -14875,7 +14876,7 @@
             "text": "수적들을 강에 쓸어 넣고 표로 끝까지 걸었다. 걷는 동안 숨이 흐트러지지 않았다. 만 리를 걸은 다리가 비로소 제 법을 찾았다.",
             "effects": {
               "skill": "만리행보",
-              "fame": 3,
+              "fame": 15,
               "alignment": {
                 "정도": 20
               },
@@ -14923,7 +14924,7 @@
             "text": "표로가 다시 열렸다. 객상들은 그 길을 지나며 고개를 숙였다. 표석에 대고 하는 절이 아니었다.",
             "effects": {
               "skill": "만리행보",
-              "fame": 3,
+              "fame": 15,
               "battle": "수적두목",
               "foe": "수적 두령 파삼",
               "alignment": {
@@ -15005,7 +15006,7 @@
             "text": "넘어질 듯 넘어지지 않았다. 공자의 칼이 번번이 허공을 찔렀다. 장로가 호리병을 던져 주며 한마디 했다. \"이제 술만 늘면 되겠다.\"",
             "effects": {
               "skill": "취선보",
-              "fame": 2,
+              "fame": 10,
               "battle": "세가무사",
               "foe": "옥면공자 모용현"
             }
@@ -15033,7 +15034,7 @@
             "text": "장로의 걸음을 따라 하며 판을 돌렸다. 공자의 칼은 허공을 찔렀고 내 쪽박은 무거워졌다.",
             "effects": {
               "skill": "취선보",
-              "fame": 2,
+              "fame": 10,
               "battle": "세가무사",
               "foe": "옥면공자 모용현",
               "silver": 30,
@@ -15116,7 +15117,7 @@
             "text": "한 걸음 디딜 때마다 돌이 갈라졌다. 패인 자리는 피하는 자리가 아니라 받아치는 자리였다.",
             "effects": {
               "skill": "패왕보",
-              "fame": 3,
+              "fame": 15,
               "battle": "비무철권",
               "spar": true,
               "foe": "철권 사범 곡진"
@@ -15144,7 +15145,7 @@
             "text": "이겼고 판돈도 내 것이다. 권마도 내기는 좋아했다는 말이 비록에 있었다.",
             "effects": {
               "skill": "패왕보",
-              "fame": 3,
+              "fame": 15,
               "battle": "비무철권",
               "spar": true,
               "foe": "철권 사범 곡진",
@@ -15161,7 +15162,7 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "권사가 내 기세를 보고 그 자리에서 한 발 물러선다. 말과 다른 발이다."
       }
@@ -15236,7 +15237,7 @@
             "text": "밤새 쫓고 쫓겼다. 새벽녘 승려가 쓰러졌을 때 내 발밑에도 핏빛 그림자가 일었다.",
             "effects": {
               "skill": "혈영신법",
-              "fame": 2,
+              "fame": 10,
               "battle": "혈교혈승",
               "foe": "혈승 법해"
             }
@@ -15263,7 +15264,7 @@
             "text": "새벽녘 연못에 다시 던져 넣었다. 내 발밑의 핏빛 그림자가 그쪽으로 조금 기울었다.",
             "effects": {
               "skill": "혈영신법",
-              "fame": 2,
+              "fame": 10,
               "battle": "혈교혈승",
               "foe": "혈승 법해",
               "alignment": {
@@ -15374,7 +15375,7 @@
             "text": "객잔 문을 열 때 내 소문은 아직 두 고을 뒤에 있었다. 추격하던 문주의 수하들까지 따돌리고 나니 부운보의 끝이 발에 남았다.",
             "effects": {
               "skill": "부운무종보",
-              "fame": 2,
+              "fame": 10,
               "battle": "하오문주",
               "foe": "하오문 추격대 밤고양이 소칠",
               "foe_line": "기와 위에서 사내들이 앞길을 막는다. \"문주께서 오늘 밤은 공짜로 돌아가라 하셨소. 안 돌아가면 값을 받고.\""
@@ -15484,7 +15485,7 @@
             "text": "한가운데쯤에서 알았다. 몸을 옮기는 것이 아니라 자리를 바꾸는 것이었다. 도적들이 제 동료를 베고 있었다.",
             "effects": {
               "skill": "이형환위",
-              "fame": 3,
+              "fame": 15,
               "battle": "녹림채주",
               "foe": "고개 채주 도패"
             }
@@ -15529,7 +15530,7 @@
             "text": "사부처럼 걷지는 않았다. 산길에 다시 도적이 들 일은 없다.",
             "effects": {
               "skill": "이형환위",
-              "fame": 3,
+              "fame": 15,
               "battle": "녹림채주",
               "foe": "고개 채주 도패",
               "alignment": {
@@ -15563,7 +15564,7 @@
               "style_skill": {
                 "grade": "신공"
               },
-              "fame": 4,
+              "fame": 20,
               "battle": "북해고수",
               "foe": "사부의 옛 벗 백산옹"
             }
@@ -15611,7 +15612,7 @@
             "text": "맹의 무사들을 몰아냈다. 노고수는 끝내 손을 씻지 못하고 내 어깨만 두드렸다. \"강호는 놓아주지를 않네.\"",
             "effects": {
               "battle": "무림맹추격대",
-              "fame": 3,
+              "fame": 15,
               "alignment": {
                 "정도": 20
               },
@@ -15660,7 +15661,7 @@
             "effects": {
               "battle": "맹순찰조",
               "foe": "맹 집행조장 곽태",
-              "fame": 3,
+              "fame": 15,
               "alignment": {
                 "마도": 30
               }
@@ -15672,7 +15673,7 @@
     "variants": [
       {
         "requires": {
-          "min_fame": 60,
+          "min_fame": 300,
           "not_dominant": [
             "사도",
             "마도"
@@ -15682,7 +15683,7 @@
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "tag": "명성",
         "choices": [
@@ -15696,7 +15697,7 @@
                     "martial": 3,
                     "mind": 2
                   },
-                  "fame": 2
+                  "fame": 10
                 }
               }
             ]
@@ -15723,7 +15724,7 @@
                 "effects": {
                   "silver": 70,
                   "alignment": {
-                    "사도": 40
+                    "사도": 60
                   }
                 }
               }
@@ -15848,7 +15849,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "점소이가 내 별호를 듣고도 국물 한 방울 흔들리지 않는다."
       }
@@ -15887,7 +15888,7 @@
             "text": "사흘째 되는 밤이었다. 천장에서 떨어진 그림자를 받아 넘겼다. 살막은 다음부터 값을 올린다고 한다.",
             "effects": {
               "battle": "살막살수",
-              "fame": 2,
+              "fame": 10,
               "stats": {
                 "mind": 2
               }
@@ -15930,13 +15931,13 @@
     "variants": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "국수 그릇 밑에 쪽지가 깔려 있다. '살막의 명부에 존함이 올랐습니다. 값은 은자 삼천 냥. 살막이 받은 값 가운데 세 번째로 높습니다. 축하드립니다.'"
       },
       {
         "requires": {
-          "max_fame": 9
+          "max_fame": 49
         },
         "text": "국수 그릇 밑에 쪽지가 깔려 있다. '살막의 명부에 존함이 올랐습니다. 값은 은자 두 냥. 의뢰인이 그만큼밖에 없다고 합니다. 죄송합니다.'"
       },
@@ -15976,7 +15977,7 @@
               {
                 "text": "자객이 자리에 앉기도 전에 내가 맞은편에 앉았다. 그가 쪽지를 찢었다. \"손님은 값이 안 맞습니다.\"",
                 "effects": {
-                  "fame": 3,
+                  "fame": 15,
                   "battle": "살막살수"
                 }
               }
@@ -16013,7 +16014,7 @@
           {
             "text": "돌려줄 게 없어진 공자가 부채를 떨어뜨렸다. \"이건 무공이 아니지 않소!\" 강호에서는 그런 불평을 듣지 않는다.",
             "effects": {
-              "fame": 2,
+              "fame": 10,
               "stats": {
                 "external": 3
               }
@@ -16079,7 +16080,7 @@
                 "text": "돌려받아도 다시 낼 뿐이다. 스무 번째에 공자가 지쳤다. 쉰 번째에 그가 부채를 접었다.",
                 "effects": {
                   "mastery": 18,
-                  "fame": 2
+                  "fame": 10
                 }
               }
             ]
@@ -16146,14 +16147,14 @@
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "공자가 부채로 내 쪽을 가리킨다. \"그 별호를 돌려드리면 강호가 시끄럽겠지요.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "호위가 공자의 소매를 잡아당긴다. 공자는 웃기만 한다."
       }
@@ -16191,7 +16192,7 @@
               "stats": {
                 "external": 3
               },
-              "fame": 1
+              "fame": 5
             }
           }
         ]
@@ -16341,14 +16342,14 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 40
+          "min_fame": 200
         },
         "text": "\"그 이름 아는데요. 숙제에 적어 둘게요.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "소저가 곶감을 멈추고 돌무더기 뒤로 슬쩍 옮겨 앉는다."
       }
@@ -16386,7 +16387,7 @@
               "stats": {
                 "external": 2
               },
-              "fame": 2,
+              "fame": 10,
               "hp_pct": -5
             }
           }
@@ -16515,7 +16516,7 @@
                 "text": "가주가 입을 벌렸다. 맞지 않고 고기 먹은 사람은 내가 처음이다.",
                 "effects": {
                   "hp_pct": 30,
-                  "fame": 1
+                  "fame": 5
                 }
               }
             ]
@@ -16532,14 +16533,14 @@
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "가주가 내 별호를 듣고 주먹을 비빈다. \"이 주먹이 그 이름을 맞혀 보겠소!\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 30
+          "min_fame": 150
         },
         "text": "단 위의 주먹질이 잠시 멎는다. 가주만 끝까지 웃는다."
       }
@@ -16582,7 +16583,7 @@
                 "mind": 3
               },
               "alignment": {
-                "정도": 40
+                "정도": 60
               },
               "qi_pct": 50
             }
@@ -16665,7 +16666,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "늙은 무인이 내 별호를 희미하게 입에 올린다. \"그렇다면... 더 부탁드려야지.\""
       }
@@ -16688,7 +16689,7 @@
             "effects": {
               "hp_pct": -20,
               "alignment": {
-                "정도": 40
+                "정도": 60
               },
               "stats": {
                 "mind": 4
@@ -16803,7 +16804,7 @@
       },
       {
         "requires": {
-          "max_fame": 9
+          "max_fame": 49
         },
         "text": "산사태에 동굴 입구가 막혔다. 함께 갇힌 약초꾼 소년과 나, 품 안의 벽곡단 석 알. 강호에 나와 아직 이름도 없는데 여기서 죽으면 누가 알겠나."
       },
@@ -16833,7 +16834,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "소년이 내 별호를 듣고 눈을 빛낸다. \"그럼 나가겠네요.\""
       }
@@ -16869,7 +16870,7 @@
             "text": "아이의 얼굴이 시뻘게졌다. 곰방대가 날아왔다. 그런데 사탕은 챙겨 갔다.",
             "effects": {
               "hp_pct": -10,
-              "fame": 1,
+              "fame": 5,
               "stats": {
                 "mind": 3
               }
@@ -16940,7 +16941,7 @@
       },
       {
         "requires": {
-          "min_fame": 100
+          "min_fame": 500
         },
         "tag": "명성",
         "choices": [
@@ -16953,7 +16954,7 @@
                   "stats": {
                     "mind": 3
                   },
-                  "fame": 2
+                  "fame": 10
                 }
               }
             ]
@@ -17114,7 +17115,7 @@
                     "internal": 4
                   },
                   "alignment": {
-                    "마도": 40
+                    "마도": 60
                   }
                 }
               }
@@ -17132,7 +17133,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "사내가 내 별호를 듣고 트림을 한 번 더 한다."
       }
@@ -17219,7 +17220,7 @@
               {
                 "text": "\"천마를 벤 뒤에 해도 늦지 않소.\" 노승이 웃으며 돌아갔다. 그 말이 먼저 강호를 돌았다.",
                 "effects": {
-                  "fame": 5,
+                  "fame": 25,
                   "stats": {
                     "mind": 2
                   }
@@ -17231,7 +17232,7 @@
       },
       {
         "requires": {
-          "min_fame": 100,
+          "min_fame": 500,
           "not_dominant": [
             "마도"
           ]
@@ -17245,7 +17246,7 @@
               {
                 "text": "그날로 강호의 눈이 달라졌다. 십대고수의 패는 생각보다 무거웠다.",
                 "effects": {
-                  "fame": 6
+                  "fame": 30
                 }
               }
             ]
@@ -17256,7 +17257,7 @@
               {
                 "text": "노승이 고개를 끄덕였다. 받지 않은 이름이 받은 이름보다 멀리 갔다.",
                 "effects": {
-                  "fame": 4,
+                  "fame": 20,
                   "stats": {
                     "mind": 3
                   }
@@ -17268,8 +17269,8 @@
       },
       {
         "requires": {
-          "min_fame": 60,
-          "max_fame": 99,
+          "min_fame": 300,
+          "max_fame": 499,
           "not_dominant": [
             "마도"
           ]
@@ -17279,7 +17280,7 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "십대고수의 빈자리를 두고 정파 원로들이 모였다고 한다. 내 이름이 오르는 곳은 그런 명부가 아니라 토벌령이다. 그래도 누가 그 자리에 앉는지는 알아 둘 만하다."
       },
@@ -17329,7 +17330,7 @@
       }
     ],
     "requires": {
-      "min_fame": 10
+      "min_fame": 50
     }
   },
   "혈교제단": {
@@ -17348,9 +17349,9 @@
             "effects": {
               "battle": "혈교혈승",
               "alignment": {
-                "정도": 40
+                "정도": 60
               },
-              "fame": 3,
+              "fame": 15,
               "foe": "제단주 혈승 법광"
             }
           }
@@ -17383,7 +17384,7 @@
                 "internal": 3
               },
               "alignment": {
-                "마도": 40
+                "마도": 60
               },
               "hp_pct": -10
             }
@@ -17426,12 +17427,12 @@
                 "effects": {
                   "battle": "혈교혈승",
                   "alignment": {
-                    "정도": 60
+                    "정도": 90
                   },
                   "flags": [
                     "생환_아이"
                   ],
-                  "fame": 3,
+                  "fame": 15,
                   "foe": "제단주 혈승 법광"
                 }
               }
@@ -17453,10 +17454,10 @@
                 "effects": {
                   "battle": "혈교혈승",
                   "alignment": {
-                    "정도": 40
+                    "정도": 60
                   },
                   "qi_pct": -20,
-                  "fame": 3,
+                  "fame": 15,
                   "foe": "제단주 혈승 법광"
                 }
               }
@@ -17478,9 +17479,9 @@
                 "effects": {
                   "battle": "혈교혈승",
                   "alignment": {
-                    "정도": 40
+                    "정도": 60
                   },
-                  "fame": 3,
+                  "fame": 15,
                   "foe": "제단주 혈승 법광"
                 }
               }
@@ -17511,9 +17512,9 @@
             "text": "맹에서 나를 〈미친놈〉 취급했다. 그러다 사흘 뒤 정광 장로가 사라졌다. 강호가 내게 욕을 퍼부었다.",
             "effects": {
               "alignment": {
-                "정도": 40
+                "정도": 60
               },
-              "fame": 2,
+              "fame": 10,
               "stats": {
                 "mind": 2
               },
@@ -17530,7 +17531,7 @@
             "effects": {
               "silver": 150,
               "alignment": {
-                "사도": 40
+                "사도": 60
               }
             }
           }
@@ -17567,13 +17568,13 @@
     "variants": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "강호가 받드는 정파의 원로, 정광 장로. 시주를 받아 굶는 사람을 먹인다는 그의 창고에 들어섰다. 쌀가마 밑에 마교 인장이 찍힌 전표가 빼곡하다. 내 입에서 나온 말이면 강호가 믿을 것이다. 그래서 더 무겁다."
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "tag": "명성",
         "choices": [
@@ -17586,7 +17587,7 @@
                   "alignment": {
                     "정도": 20
                   },
-                  "fame": 4,
+                  "fame": 20,
                   "boss_weaken": 4
                 }
               }
@@ -17608,7 +17609,7 @@
                 "effects": {
                   "silver": 120,
                   "alignment": {
-                    "사도": 40
+                    "사도": 60
                   }
                 }
               }
@@ -17672,7 +17673,7 @@
             "text": "이긴 쪽이 술을 낸다. 녹림왕의 부하가 먼저 나섰다. 끝나고 나니 내가 낼 필요가 없었다.",
             "effects": {
               "battle": "녹림채주",
-              "fame": 2,
+              "fame": 10,
               "silver": 30,
               "spar": true,
               "foe": "녹림 부채주 곽대"
@@ -17714,7 +17715,7 @@
             "text": "칠십이 채의 이름은 그날부터 내게 빚이 되었다. 고갯길에 아무도 앉지 않았다.",
             "effects": {
               "battle": "녹림채주",
-              "fame": 2,
+              "fame": 10,
               "silver": 30,
               "spar": true,
               "foe": "녹림 부채주 곽대",
@@ -17775,9 +17776,9 @@
                 "text": "녹림왕이 한참 웃었다. 다음 달부터 그 고개에서 곡식을 뺏긴 사람이 없다고 한다. 사흘은 갈까.",
                 "effects": {
                   "alignment": {
-                    "정도": 40
+                    "정도": 60
                   },
-                  "fame": 2,
+                  "fame": 10,
                   "stats": {
                     "mind": 2
                   }
@@ -17791,14 +17792,14 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"그 이름이 왔으니 오늘은 내 칼을 풀겠소.\""
       },
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 30
+          "min_fame": 150
         },
         "text": "\"맹의 협객과 술을 마실 줄은 몰랐소.\""
       }
@@ -17842,7 +17843,7 @@
                 "mind": 5
               },
               "alignment": {
-                "정도": 40
+                "정도": 60
               }
             }
           }
@@ -17947,7 +17948,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"그 이름이면 내 초식도 조금 더 살겠구려.\""
       }
@@ -17972,7 +17973,7 @@
               "stats": {
                 "martial": 2
               },
-              "fame": 1,
+              "fame": 5,
               "foe": "여협을 쫓는 호위"
             }
           }
@@ -18081,7 +18082,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "그가 내 별호를 안다. 그래서 털어놓는다고 한다."
       }
@@ -18198,7 +18199,7 @@
                   "stats": {
                     "internal": 3
                   },
-                  "fame": 2
+                  "fame": 10
                 }
               }
             ]
@@ -18217,7 +18218,7 @@
               {
                 "text": "스님이 눈을 동그랗게 떴다. 지나가던 아이들이 내 귀를 만져 보고 갔다.",
                 "effects": {
-                  "fame": 1,
+                  "fame": 5,
                   "stats": {
                     "mind": 2
                   }
@@ -18231,7 +18232,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "스님이 내 별호를 듣고 머쓱하게 합장한다."
       }
@@ -18266,7 +18267,7 @@
             "text": "국수는 포기했다. 셋 다 약했다. 넷째가 있었으면 큰일 날 뻔했다.",
             "effects": {
               "battle": "살막살수",
-              "fame": 2,
+              "fame": 10,
               "foe": "전음객 사무쌍"
             }
           }
@@ -18364,7 +18365,7 @@
       },
       {
         "requires": {
-          "max_fame": 9
+          "max_fame": 49
         },
         "text": "객잔에서 국수를 뜨는데 귓속에 말이 울린다. '일어서지 마시오. 이층 셋이 그대를...' 잠시 끊겼다가 이어진다. '아, 옆 사람이군. 미안하오. 그래도 왼쪽 사발은 드시지 마시오.'"
       },
@@ -18408,7 +18409,7 @@
             "effects": {
               "battle": "마교장로",
               "boss_weaken": 5,
-              "fame": 3,
+              "fame": 15,
               "foe": "신교 호위 장로 혁수"
             }
           }
@@ -18486,7 +18487,7 @@
                 "text": "그가 내 어깨를 쳤다. \"일어나십시오. 본교에선 약한 자가 꿇는 것입니다. 나도 곧 꿇을지 모르지요.\" 교단의 말을 전해 주었다.",
                 "effects": {
                   "alignment": {
-                    "마도": 40
+                    "마도": 60
                   },
                   "stats": {
                     "mind": 3
@@ -18527,19 +18528,19 @@
       }
     ],
     "requires": {
-      "min_fame": 20
+      "min_fame": 100
     },
     "reacts": [
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 30
+          "min_fame": 150
         },
         "text": "\"본교 사람인 줄 알았습니다.\" 그가 조금 웃는다."
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "그는 처음부터 내 이름을 알고 있었다."
       }
@@ -18669,7 +18670,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "대장장이가 내 이름을 듣고 손을 턴다. \"그 이름이 쓸 병기라니 손이 떨리오.\""
       }
@@ -18694,7 +18695,7 @@
               "stats": {
                 "martial": 2
               },
-              "fame": 2,
+              "fame": 10,
               "spar": true
             }
           }
@@ -18719,7 +18720,7 @@
           {
             "text": "저쪽 탁자의 무인이 대신 맞아 주었다. 그가 나중에 나를 찾아왔다.",
             "effects": {
-              "fame": -1,
+              "fame": -5,
               "stats": {
                 "mind": 1
               }
@@ -18731,7 +18732,7 @@
     "variants": [
       {
         "requires": {
-          "min_fame": 60,
+          "min_fame": 300,
           "not_dominant": [
             "사도",
             "마도"
@@ -18741,7 +18742,7 @@
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "tag": "명성",
         "choices": [
@@ -18751,7 +18752,7 @@
               {
                 "text": "소년이 그 자리에 얼어붙었다. 나중에 그는 그걸 평생 자랑하고 다녔다.",
                 "effects": {
-                  "fame": 2,
+                  "fame": 10,
                   "stats": {
                     "mind": 2
                   }
@@ -18763,7 +18764,7 @@
       },
       {
         "requires": {
-          "max_fame": 9
+          "max_fame": 49
         },
         "text": "길가 찻집에서 소년 하나가 일어서 칼자루를 잡는다. 점창파 제자다. \"점창쾌검 열여덟 초를 익혔습니다. 강호의 고수 분들을 차례로 뵙는 중입니다.\" 나를 보더니 고개를 젓고 옆 사람에게 간다. 그러다 다시 돌아온다. \"죄송합니다. 그래도 인사는 드려야 해서요.\""
       },
@@ -18837,7 +18838,7 @@
               "flags": [
                 "창궁_행방"
               ],
-              "fame": 1,
+              "fame": 5,
               "hp_pct": -10
             }
           }
@@ -18860,7 +18861,7 @@
                   "flags": [
                     "창궁_행방"
                   ],
-                  "fame": 2
+                  "fame": 10
                 }
               }
             ]
@@ -18890,7 +18891,7 @@
             "effects": {
               "battle": "세가호위",
               "equip": "창궁고검",
-              "fame": 3,
+              "fame": 15,
               "foe": "세가 창고지기"
             }
           }
@@ -18946,7 +18947,7 @@
             "effects": {
               "battle": "세가호위",
               "equip": "창궁고검",
-              "fame": 3,
+              "fame": 15,
               "foe": "세가 창고지기",
               "alignment": {
                 "마도": 30
@@ -18959,7 +18960,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "호위 대장의 손이 내 이름을 듣고 칼자루 위에서 멈칫한다."
       }
@@ -19094,7 +19095,7 @@
             "effects": {
               "battle": "녹림채주",
               "equip": "오호맹도",
-              "fame": 2,
+              "fame": 10,
               "foe": "녹림 채주 황패"
             }
           }
@@ -19237,7 +19238,7 @@
                   "flags": [
                     "표사_옛동료"
                   ],
-                  "fame": 1
+                  "fame": 5
                 }
               }
             ]
@@ -19248,14 +19249,14 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "표사들도 내 소문을 들었다. 욕이 조금 작아졌다."
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 30
+          "min_fame": 150
         },
         "text": "찾아간 표사 하나가 내 눈을 보고 \"표두님이 맞소?\" 하고 묻는다."
       }
@@ -19282,7 +19283,7 @@
             "effects": {
               "battle": "금의위밀정",
               "equip": "철마장창",
-              "fame": 4,
+              "fame": 20,
               "alignment": {
                 "정도": 20
               },
@@ -19400,7 +19401,7 @@
             "effects": {
               "battle": "사파자객",
               "equip": "녹죽봉",
-              "fame": 2,
+              "fame": 10,
               "alignment": {
                 "정도": 20
               },
@@ -19445,7 +19446,7 @@
             "effects": {
               "battle": "사파자객",
               "equip": "녹죽봉",
-              "fame": 2,
+              "fame": 10,
               "foe": "전당포 뒷배 사파 고수",
               "alignment": {
                 "마도": 20
@@ -19567,7 +19568,7 @@
             "effects": {
               "battle": "권마의그림자",
               "equip": "혈권갑",
-              "fame": 3
+              "fame": 15
             }
           }
         ]
@@ -19593,7 +19594,7 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "잔영이 코웃음을 친다. \"협객 소리 듣는다더니 권갑이 왜 필요하냐.\""
       }
@@ -19813,7 +19814,7 @@
             "effects": {
               "battle": "살막살수",
               "equip": "무흔비도",
-              "fame": 2,
+              "fame": 10,
               "foe": "살막 수상객 곽칠"
             }
           }
@@ -19844,7 +19845,7 @@
             "effects": {
               "battle": "살막살수",
               "equip": "무흔비도",
-              "fame": 2,
+              "fame": 10,
               "foe": "살막 수상객 곽칠",
               "alignment": {
                 "마도": 20
@@ -19857,7 +19858,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "호위가 내 얼굴을 알아보고 칼자루를 고쳐 쥔다."
       }
@@ -19975,7 +19976,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"이름 있는 놈이 바둑을 둘 줄 아나.\""
       }
@@ -20003,7 +20004,7 @@
               "style_skill": {
                 "grade": "일절"
               },
-              "fame": 3,
+              "fame": 15,
               "spar": true,
               "foe": "정자의 은거 기인",
               "foe_line": "노인이 지팡이 끝으로 바둑판을 가리킨다. \"자네가 흑일세. 먼저 두게.\""
@@ -20030,7 +20031,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"이름이 늘었구나. 수도 늘었는지 보자.\""
       }
@@ -20055,7 +20056,7 @@
             "effects": {
               "battle": "혈교혈승",
               "silver": 150,
-              "fame": 3,
+              "fame": 15,
               "flags": [
                 "현상_첫칸"
               ],
@@ -20127,7 +20128,7 @@
                   "flags": [
                     "현상_첫칸"
                   ],
-                  "fame": 1
+                  "fame": 5
                 }
               }
             ]
@@ -20139,14 +20140,14 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 30
+          "min_fame": 150
         },
         "text": "명부 끝쪽에 낯익은 칸이 있다. 내 별호다."
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 30
+          "min_fame": 150
         },
         "text": "주인이 내 칸은 값이 자꾸 오른다며 웃는다."
       }
@@ -20172,7 +20173,7 @@
             "effects": {
               "battle": "십이마장",
               "silver": 400,
-              "fame": 5,
+              "fame": 25,
               "boss_weaken": 10,
               "style_gear": {
                 "grade": "보물"
@@ -20191,7 +20192,7 @@
             "text": "셋이 죽고 값을 나눴다. 마장은 끝내 쓰러졌다. 그래도 칸은 지워졌다.",
             "effects": {
               "silver": 150,
-              "fame": 3,
+              "fame": 15,
               "boss_weaken": 10,
               "hp_pct": -20,
               "style_gear": {
@@ -20212,7 +20213,7 @@
                 "mind": 5
               },
               "alignment": {
-                "정도": 40
+                "정도": 60
               }
             }
           }
@@ -20240,7 +20241,7 @@
             "effects": {
               "battle": "십이마장",
               "silver": 400,
-              "fame": 5,
+              "fame": 25,
               "boss_weaken": 10,
               "style_gear": {
                 "grade": "보물"
@@ -20366,14 +20367,14 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"이름은 들었소. 내 칼 든 자들도 다 그런 이름을 가졌지.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"그 손이면 더더욱 안 벼리오.\""
       }
@@ -20428,7 +20429,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"그 이름에 맞는 쇠를 찾은 셈이오.\""
       }
@@ -20442,7 +20443,7 @@
     ],
     "requires": {
       "dominant": "마도",
-      "min_fame": 10
+      "min_fame": 50
     },
     "title": "정파 소협의 칼",
     "text": "객잔에 들어서자 젊은 소협이 벌떡 일어나 칼을 뽑는다. 손이 떨리는데 눈은 곧다. \"소문의 마두가 그대요? 어머니가 살던 마을을 그대 같은 자가 태웠소. 칼을 받으시오.\"",
@@ -20457,7 +20458,7 @@
               "alignment": {
                 "마도": 20
               },
-              "fame": 2,
+              "fame": 10,
               "foe": "칼을 뽑은 젊은 소협"
             }
           }
@@ -20496,7 +20497,7 @@
     "variants": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "객잔에 들어서자 모두 자리를 비운다. 맨 끝에 앉은 젊은 소협만 일어나 칼을 뽑는다. 손이 떨리는데 눈은 곧다. \"강호가 그대 이름을 두려워하오. 나는 두렵지 않소. 칼을 받으시오.\""
       },
@@ -20546,9 +20547,9 @@
             "text": "사흘째 되는 날 구파의 협객들이 왔다. 그중 하나는 돌아가지 못했다.",
             "effects": {
               "battle": "구파협객",
-              "fame": 4,
+              "fame": 20,
               "alignment": {
-                "마도": 40
+                "마도": 60
               },
               "foe": "구파 토벌대장 백의검"
             }
@@ -20597,10 +20598,10 @@
                 "text": "교단의 북이 울렸다. 초소 셋이 하룻밤에 사라졌다. 토벌령은 이제 쓸모가 없다.",
                 "effects": {
                   "alignment": {
-                    "마도": 40
+                    "마도": 60
                   },
                   "boss_weaken": 3,
-                  "fame": 2
+                  "fame": 10
                 }
               }
             ]
@@ -20609,7 +20610,7 @@
       },
       {
         "requires": {
-          "max_fame": 29
+          "max_fame": 149
         },
         "text": "장터 게시판에 무림맹 토벌령이 붙었다. '이름 모를 마인 하나. 신고 시 은자 다섯 냥.' 그림은 하나도 안 닮았다. 다섯 냥이라니."
       }
@@ -20623,7 +20624,7 @@
     ],
     "requires": {
       "dominant": "마도",
-      "min_fame": 15
+      "min_fame": 75
     },
     "title": "문 닫는 마을",
     "text": "걸어 들어가는 대로 집집마다 문이 닫힌다. 주막 주인이 밥값을 안 받겠다며 무릎을 꿇는다. 어서 떠나 달라는 뜻이다. 내게서 냄새가 나는 모양이다.",
@@ -20706,7 +20707,7 @@
     ],
     "requires": {
       "dominant": "정도",
-      "min_fame": 5
+      "min_fame": 25
     },
     "title": "찾아온 은인",
     "text": "허름한 농부가 무릎을 꿇는다. 내가 구한 마을 사람이라 한다. 나는 기억이 없다. 그가 보자기를 편다. 평생 모았다는 동전 몇 닢과 말린 산삼 한 뿌리. \"〈대협〉, 받아 주십시오.\"",
@@ -20751,7 +20752,7 @@
           {
             "text": "그가 이웃 마을의 위태로운 소식을 말해 주었다. 얼른 일어섰다.",
             "effects": {
-              "fame": 2,
+              "fame": 10,
               "stats": {
                 "martial": 2
               }
@@ -20763,7 +20764,7 @@
     "variants": [
       {
         "requires": {
-          "min_fame": 60,
+          "min_fame": 300,
           "not_dominant": [
             "사도",
             "마도"
@@ -20805,7 +20806,7 @@
     ],
     "requires": {
       "dominant": "정도",
-      "min_fame": 10
+      "min_fame": 50
     },
     "title": "은원의 매복",
     "text": "외진 고갯길에서 화살 한 대가 내 앞에 박힌다. 화살대에 쪽지가 묶여 있다. '네가 벤 흑풍채의 형제들이다. 오늘은 경고다. 다음은 네 벗의 집이다.' 정의를 행한 값은 늘 뒤늦게 온다.",
@@ -20817,7 +20818,7 @@
             "text": "그는 도망치지 않았다. 형의 이름을 끝내 말했다. 나는 그 이름을 기억하기로 했다.",
             "effects": {
               "battle": "사파복수귀",
-              "fame": 3,
+              "fame": 15,
               "alignment": {
                 "정도": 20
               },
@@ -20860,7 +20861,7 @@
     "variants": [
       {
         "requires": {
-          "min_fame": 100
+          "min_fame": 500
         },
         "tag": "명성",
         "choices": [
@@ -20870,7 +20871,7 @@
               {
                 "text": "메아리가 그치자 활 시위 소리도 멈췄다. 그들은 활을 놓고 사라졌다. 이름이 칼보다 멀리 간다.",
                 "effects": {
-                  "fame": 2,
+                  "fame": 10,
                   "stats": {
                     "mind": 2
                   }
@@ -20889,7 +20890,7 @@
     ],
     "requires": {
       "dominant": "정도",
-      "min_fame": 30
+      "min_fame": 150
     },
     "title": "맹 장로의 천거",
     "text": "무림맹 장로가 비단 서찰을 내민다. \"그대를 맹의 협사로 천거하려 하오. 사문은 그대로 두어도 좋소. 이름만 빌려주면 은자와 약이 따를 것이오.\" 장로의 눈이 서찰보다 내 이름에 먼저 간다.",
@@ -20905,7 +20906,7 @@
               "flags": [
                 "무림맹"
               ],
-              "fame": 2
+              "fame": 10
             }
           }
         ]
@@ -20933,9 +20934,9 @@
             "text": "장로는 난처해하다 곡식 수레를 보냈다. 이름은 이렇게 쓰는 것이다.",
             "effects": {
               "alignment": {
-                "정도": 40
+                "정도": 60
               },
-              "fame": 3
+              "fame": 15
             }
           }
         ]
@@ -20950,7 +20951,7 @@
     ],
     "requires": {
       "dominant": "사도",
-      "min_fame": 15
+      "min_fame": 75
     },
     "title": "내 머리 값",
     "text": "객잔 벽 방문에 내 얼굴이 있다. 값이 은자 삼백이다. 생각보다 비싸다. 옆 탁자의 사내 셋이 방문과 나를 번갈아 본다. 점소이가 슬그머니 술을 치운다.",
@@ -20963,7 +20964,7 @@
             "effects": {
               "battle": "현상금꾼",
               "silver": 20,
-              "fame": 2,
+              "fame": 10,
               "alignment": {
                 "사도": 20
               },
@@ -21063,7 +21064,7 @@
     ],
     "requires": {
       "dominant": "사도",
-      "min_fame": 15
+      "min_fame": 75
     },
     "title": "값이 맞으면",
     "text": "비단옷의 거상이 술을 따른다. \"천마 쪽에 쌀을 대고, 맹에도 대고 있지요. 어느 쪽이 이겨도 상관없습니다. 다만 산길을 지켜 줄 사람이 필요합니다.\" 은자 상자가 열린다.",
@@ -21076,7 +21077,7 @@
             "effects": {
               "silver": 200,
               "alignment": {
-                "사도": 40
+                "사도": 60
               }
             }
           }
@@ -21090,7 +21091,7 @@
             "effects": {
               "silver": 250,
               "alignment": {
-                "사도": 40
+                "사도": 60
               },
               "boss_weaken": 2,
               "hp_pct": -5
@@ -21105,11 +21106,11 @@
             "text": "거상이 비명을 질렀다. 값으로 안 움직일 때도 있다는 걸 나도 처음 알았다.",
             "effects": {
               "alignment": {
-                "정도": 40,
-                "사도": -20
+                "정도": 60,
+                "사도": -30
               },
               "boss_weaken": 4,
-              "fame": 2
+              "fame": 10
             }
           }
         ]
@@ -21147,7 +21148,7 @@
       5
     ],
     "requires": {
-      "min_fame": 60
+      "min_fame": 300
     },
     "title": "대문 앞의 아이들",
     "text": "묵는 객잔 앞에 아이들 열이 무릎을 꿇었다. 내 별호를 듣고 제자가 되겠다고 왔다 한다. 부모를 잃은 아이도, 집을 나온 아이도 있다. 맨 앞 아이가 나뭇가지를 쥐고 있다.",
@@ -21161,7 +21162,7 @@
               "stats": {
                 "mind": 3
               },
-              "fame": 2
+              "fame": 10
             }
           }
         ]
@@ -21174,9 +21175,9 @@
             "effects": {
               "silver": -40,
               "alignment": {
-                "정도": 40
+                "정도": 60
               },
-              "fame": 3
+              "fame": 15
             }
           }
         ],
@@ -21252,7 +21253,7 @@
       5
     ],
     "requires": {
-      "min_fame": 60
+      "min_fame": 300
     },
     "title": "도전장",
     "text": "대나무 통에 도전장이 들어 있다. 글씨가 칼 같다. '이름을 꺾으러 왔소. 내일 달 뜰 때 장강 나루. 구경꾼도 불러 두었소.' 벌써 강호 사람들이 나루로 모이는 소리가 들린다.",
@@ -21264,7 +21265,7 @@
             "text": "구경꾼들이 숨을 멈췄다. 끝난 뒤 도전자가 절을 하고 떠났다. 이름이 또 커졌다.",
             "effects": {
               "battle": "천하도전자",
-              "fame": 5,
+              "fame": 25,
               "spar": true,
               "foe": "나루의 도전자 단봉도 여강",
               "foe_line": "사내가 구경꾼들 앞에서 포권한다. \"글로 보낸 말 그대로요. 이름을 꺾으러 왔소.\""
@@ -21292,7 +21293,7 @@
           {
             "text": "다음 날 '겁쟁이'라는 소문이 돌았다. 며칠 그 소문을 듣고 다니니 오히려 마음이 편했다.",
             "effects": {
-              "fame": -3,
+              "fame": -15,
               "stats": {
                 "mind": 4
               }
@@ -21322,7 +21323,7 @@
       3
     ],
     "requires": {
-      "max_fame": 9
+      "max_fame": 49
     },
     "title": "말석의 국수",
     "text": "객잔이 가득 차서 말석에 앉았다. 옆 탁자 칼잡이들이 내 병기를 툭 건드린다. \"그 나이 먹도록 이름도 없나? 그럼 그 병기는 우리가 쓰지. 이름 없는 〈놈〉이 없어져도 찾는 사람이 없을 테니.\"",
@@ -21334,7 +21335,7 @@
             "text": "칼잡이들이 바닥에 뒹굴었다. 객잔 사람들이 처음으로 내 이름을 물었다.",
             "effects": {
               "battle": "무명사냥꾼",
-              "fame": 3,
+              "fame": 15,
               "foe": "옆 탁자의 칼잡이들",
               "foe_line": "\"그 병기를 곱게 내려놓았으면 국수는 먹게 해 줬을 텐데.\""
             }
@@ -21384,7 +21385,7 @@
                 "effects": {
                   "battle": "무명사냥꾼",
                   "silver": -10,
-                  "fame": 4,
+                  "fame": 20,
                   "foe": "옆 탁자의 칼잡이들",
                   "foe_line": "\"그 병기를 곱게 내려놓았으면 국수는 먹게 해 줬을 텐데.\""
                 }
@@ -21401,7 +21402,7 @@
       5
     ],
     "requires": {
-      "min_fame": 100
+      "min_fame": 500
     },
     "title": "값을 안 받는 집",
     "text": "어느 고을이든 내가 들어서면 값을 안 받으려 한다. 오늘 주막 주인은 벽에 내 별호를 써 달라고 조른다. 벽에는 이미 남이 대신 쓴 내 별호가 셋 있다. 글씨가 전부 다르다.",
@@ -21426,7 +21427,7 @@
           {
             "text": "다음 해 그 주막 술값이 두 배가 되었다는 소식을 들었다.",
             "effects": {
-              "fame": 2,
+              "fame": 10,
               "hp_pct": 20
             }
           }
@@ -21466,14 +21467,14 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "어느 고을이든 내가 들어서면 값을 안 받으려 한다. 오늘 주막 주인은 은자까지 내밀며 떨고 있다. 벽에 내 별호 대신 '이 집은 이미 값을 치렀습니다'라고 써 달라고 한다."
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "어느 고을이든 내가 들어서면 값이 먼저 나온다. 오늘 주막 주인은 장부를 내밀며 내 몫을 먼저 계산했다. 벽에 내 별호가 셋 있고 글씨마다 값이 다르다."
       }
@@ -21541,7 +21542,7 @@
                   "flags": [
                     "위패_약속"
                   ],
-                  "fame": 2
+                  "fame": 10
                 }
               }
             ]
@@ -21573,7 +21574,7 @@
               "flags": [
                 "창궁_깃발"
               ],
-              "fame": 4,
+              "fame": 20,
               "foe": "혈승 법오"
             }
           }
@@ -21588,7 +21589,7 @@
               "flags": [
                 "창궁_깃발"
               ],
-              "fame": 2,
+              "fame": 10,
               "hp_pct": -15,
               "stats": {
                 "mind": 3
@@ -21607,7 +21608,7 @@
               "flags": [
                 "창궁_깃발"
               ],
-              "fame": 4,
+              "fame": 20,
               "foe": "혈승 법오",
               "alignment": {
                 "마도": 30
@@ -21620,7 +21621,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "식솔들이 \"〈성대협〉\" 하고 부르다 \"가주님\" 하고 고쳐 부른다."
       }
@@ -21722,7 +21723,7 @@
                 "mind": 10
               },
               "mastery": 60,
-              "fame": 3,
+              "fame": 15,
               "foe": "친위대주 오문",
               "grade_item": {
                 "grade": "보물",
@@ -21746,7 +21747,7 @@
                 "external": 18
               },
               "mastery": 60,
-              "fame": 3,
+              "fame": 15,
               "foe": "친위대주 오문",
               "grade_item": {
                 "grade": "보물",
@@ -21769,7 +21770,7 @@
                 "mind": 10
               },
               "mastery": 60,
-              "fame": 3,
+              "fame": 15,
               "foe": "친위대주 오문",
               "grade_item": {
                 "grade": "보물",
@@ -21822,7 +21823,7 @@
               "flags": [
                 "의뢰_이름"
               ],
-              "fame": 1,
+              "fame": 5,
               "hp_pct": -5
             }
           }
@@ -21875,7 +21876,7 @@
             "effects": {
               "battle": "사도련향주",
               "boss_weaken": 12,
-              "fame": 3,
+              "fame": 15,
               "foe": "대행수 호위장 염복",
               "style_gear": {
                 "grade": "보물",
@@ -21937,7 +21938,7 @@
             "effects": {
               "battle": "사도련향주",
               "boss_weaken": 12,
-              "fame": 3,
+              "fame": 15,
               "foe": "대행수 호위장 염복",
               "style_gear": {
                 "grade": "보물",
@@ -21955,7 +21956,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "대행수가 찻잔을 내려놓는다. \"그 이름이 이 일로 올 줄은 몰랐소.\""
       }
@@ -21982,7 +21983,7 @@
               "flags": [
                 "분타_순회"
               ],
-              "fame": 2,
+              "fame": 10,
               "hp_pct": -10
             }
           }
@@ -22022,7 +22023,7 @@
                   "flags": [
                     "분타_순회"
                   ],
-                  "fame": 3,
+                  "fame": 15,
                   "hp_pct": 15
                 }
               }
@@ -22053,7 +22054,7 @@
             "effects": {
               "battle": "혈수인",
               "boss_weaken": 12,
-              "fame": 3,
+              "fame": 15,
               "foe": "혈교 처형인",
               "item": "신농백초환",
               "full_growth": true
@@ -22097,7 +22098,7 @@
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "밀정이 내게도 눈짓을 보낸다. 값이 통할 사람으로 들은 모양이다."
       }
@@ -22211,7 +22212,7 @@
             "effects": {
               "battle": "사파자객",
               "boss_weaken": 12,
-              "fame": 2,
+              "fame": 10,
               "foe": "밀정 곁의 사내",
               "item": "회천단",
               "full_growth": true
@@ -22223,7 +22224,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "곁의 사내가 내 별호를 중얼거린다. 이름이 커졌으니 더 위험한 일이다."
       }
@@ -22304,7 +22305,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 40
+          "min_fame": 200
         },
         "text": "노파가 내 별호를 듣고 묻는다. \"그래서 이제 그 애들 이름도 찾아 주시는가.\""
       }
@@ -22461,7 +22462,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 30
+          "min_fame": 150
         },
         "text": "\"네 소문 들었다. 내가 먼저 유명해질 줄 알았는데.\""
       }
@@ -22519,13 +22520,13 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"소문이 사납더라. 그래도 약속은 약속이다.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"이름이 많이 컸구나. 손은 그대로겠지.\""
       }
@@ -22578,7 +22579,7 @@
             "effects": {
               "silver": 20,
               "alignment": {
-                "사도": 40
+                "사도": 60
               }
             }
           }
@@ -22642,7 +22643,7 @@
                   "stats": {
                     "martial": 3
                   },
-                  "fame": 1
+                  "fame": 5
                 }
               }
             ]
@@ -22654,33 +22655,33 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "손님들이 〈협객나리〉가 뭐라 하길 바라며 나를 본다."
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "사공이 내 눈을 보더니 \"손님은 원래 삯으로 해 드립죠\" 하고 슬쩍 말한다."
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "사공이 노를 쥔 손을 떨면서 말끝을 흐린다."
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "손님 하나가 내 별호를 부르자 사공 얼굴이 굳는다."
       },
       {
         "requires": {
-          "max_fame": 9
+          "max_fame": 49
         },
         "text": "사공은 내가 제일 만만해 보이는 모양이다."
       }
@@ -22718,7 +22719,7 @@
               "alignment": {
                 "정도": 20
               },
-              "fame": 1
+              "fame": 5
             }
           }
         ]
@@ -22798,27 +22799,27 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "소금 장수가 협객께 부탁드릴 일은 아닌데 하며 말끝을 흐린다."
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "소금 장수가 같은 바닥 분이라 믿고 부탁한다고 한다."
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "소금 장수가 군졸보다 나를 더 무서워하는 눈치다."
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "소금 장수가 내 이름이면 관문이 열린다고 믿는다."
       }
@@ -22839,9 +22840,9 @@
             "text": "훈장이 관아에 가겠다고 소리쳤다. 아이들이 처음으로 소리 내어 웃었다.",
             "effects": {
               "alignment": {
-                "정도": 40
+                "정도": 60
               },
-              "fame": 1
+              "fame": 5
             }
           }
         ]
@@ -22906,7 +22907,7 @@
                   "stats": {
                     "mind": 4
                   },
-                  "fame": 1
+                  "fame": 5
                 }
               }
             ]
@@ -22917,7 +22918,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "훈장이 내 별호를 듣고 회초리를 등 뒤로 감춘다."
       }
@@ -22939,9 +22940,9 @@
             "effects": {
               "battle": "낭인",
               "alignment": {
-                "정도": 40
+                "정도": 60
               },
-              "fame": 2,
+              "fame": 10,
               "foe": "고리대의 왈패 대장"
             }
           }
@@ -22955,9 +22956,9 @@
             "effects": {
               "silver": -30,
               "alignment": {
-                "정도": 40
+                "정도": 60
               },
-              "fame": 1
+              "fame": 5
             }
           }
         ],
@@ -22973,7 +22974,7 @@
             "effects": {
               "silver": -10,
               "alignment": {
-                "사도": 40
+                "사도": 60
               }
             }
           }
@@ -23010,7 +23011,7 @@
               {
                 "text": "이자 칸이 두 번 더해져 있었다. 구경꾼들 앞에서 읽어 주니 업자가 슬그머니 나갔다.",
                 "effects": {
-                  "fame": 2,
+                  "fame": 10,
                   "stats": {
                     "mind": 2
                   }
@@ -23046,27 +23047,27 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "아버지가 나를 알아보고 고개를 든다."
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "고리대금업자가 나를 보고 눈인사를 한다. 장부에 이름이 오간 사이처럼."
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "건달 넷이 문을 막다 내 얼굴을 보고 한 발 물러선다."
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "고리대금업자가 장부를 접으려다 다시 편다. 이름은 안다는 뜻이다."
       }
@@ -23086,7 +23087,7 @@
             "text": "\"번개 손 〈대협〉!\" 내일이면 다들 잊겠지만 오늘 저녁은 흥이 났다.",
             "effects": {
               "silver": -8,
-              "fame": 3
+              "fame": 15
             }
           }
         ],
@@ -23100,7 +23101,7 @@
           {
             "text": "아무도 웃어 주지 않았다. 다음 날 그 이름이 옆 고을까지 갔다. 놀림으로.",
             "effects": {
-              "fame": 2,
+              "fame": 10,
               "stats": {
                 "mind": 1
               }
@@ -23142,7 +23143,7 @@
           {
             "text": "주막이 조용해졌다. 다음 날 그 고을 사람들이 내게 저절로 별호를 붙였다. 좋은 뜻은 아니었다.",
             "effects": {
-              "fame": 1,
+              "fame": 5,
               "alignment": {
                 "마도": 10
               }
@@ -23164,7 +23165,7 @@
               {
                 "text": "이야기가 끝날 무렵 술값은 그쪽에서 냈다. 그 이야기는 지금도 돌아다닌다.",
                 "effects": {
-                  "fame": 5,
+                  "fame": 25,
                   "silver": 6
                 }
               }
@@ -23184,7 +23185,7 @@
               {
                 "text": "술꾼들이 일제히 일어나 절을 했다. 별호는 말술이 되었다. 나쁘지 않다.",
                 "effects": {
-                  "fame": 4,
+                  "fame": 20,
                   "hp_pct": 10
                 }
               }
@@ -23194,7 +23195,7 @@
       }
     ],
     "requires": {
-      "max_fame": 29
+      "max_fame": 149
     }
   },
   "칼가는아이": {
@@ -23330,14 +23331,14 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "아이가 내 병기를 받아 들고 손을 떤다. \"이, 이 병기를 제가요?\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "아이가 날에 묻은 것을 보고도 말없이 숫돌에 물을 붓는다."
       }
@@ -23359,7 +23360,7 @@
             "effects": {
               "battle": "산적",
               "silver": 25,
-              "fame": 1,
+              "fame": 5,
               "foe": "고개의 산적"
             }
           }
@@ -23387,7 +23388,7 @@
             "effects": {
               "silver": 30,
               "alignment": {
-                "사도": 40
+                "사도": 60
               }
             }
           }
@@ -23433,27 +23434,27 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "집사가 협객을 만난 것이 천운이라며 절한다."
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "집사가 은자를 내밀면서 내 전대 크기를 재 본다."
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "집사가 말을 더듬으면서도 고개를 넘겨 달라고 한다."
       },
       {
         "requires": {
-          "min_fame": 60,
+          "min_fame": 300,
           "not_dominant": [
             "사도",
             "마도"
@@ -23479,7 +23480,7 @@
             "effects": {
               "battle": "식인호랑이",
               "silver": 25,
-              "fame": 2,
+              "fame": 10,
               "item": "호골",
               "foe": "마을 뒷산의 호랑이",
               "foe_line": "뒷산의 우는 소리가 뚝 그쳤다. 등 뒤의 나뭇가지가 소리 없이 휜다."
@@ -23587,27 +23588,27 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "마을 사람들이 협객이 왔다며 쌀 자루를 벌써 꺼내 놓는다."
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "촌장이 쌀 값을 먼저 흥정하려 든다."
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "마을 사람들이 호랑이보다 나를 더 오래 쳐다본다."
       },
       {
         "requires": {
-          "min_fame": 60,
+          "min_fame": 300,
           "not_dominant": [
             "사도",
             "마도"
@@ -23617,7 +23618,7 @@
       },
       {
         "requires": {
-          "max_fame": 9
+          "max_fame": 49
         },
         "text": "촌장이 칼 찬 사람이면 누구든 좋다는 얼굴로 방을 가리킨다."
       }
@@ -23705,14 +23706,14 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "사내가 내 얼굴을 알아보고 칼을 조금 내린다."
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "사내가 전대를 풀어 내 앞에 놓는다. \"그쪽 소문은 들었소.\""
       }
@@ -23733,7 +23734,7 @@
             "text": "관장이 달려들었다. 끝나고 문패를 뗀 것은 문하생들이었다.",
             "effects": {
               "battle": "낭인",
-              "fame": 3,
+              "fame": 15,
               "stats": {
                 "martial": 1
               },
@@ -23776,7 +23777,7 @@
           {
             "text": "강호 제일 무관은 하루 만에 문을 닫았다. 수련비는 내가 찾아 주었다. 내 품으로.",
             "effects": {
-              "fame": 2,
+              "fame": 10,
               "alignment": {
                 "마도": 30
               }
@@ -23798,7 +23799,7 @@
               {
                 "text": "벽돌이 소리 없이 가루가 되었다. 관장이 그 자리에 앉아 문패를 고쳐 쓰겠다고 했다.",
                 "effects": {
-                  "fame": 3,
+                  "fame": 15,
                   "alignment": {
                     "정도": 20
                   }
@@ -23813,33 +23814,33 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "관장이 협객 앞에서 벽돌을 한 장 더 올린다."
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "관장이 은근히 수련비 나눠 먹을 이야기를 꺼낸다."
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "문하생들이 내 쪽을 보다 벽돌 깨는 소리에 놀란 척 고개를 돌린다."
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "관장 얼굴이 하얘진다. 내 별호를 아는 모양이다."
       },
       {
         "requires": {
-          "max_fame": 9
+          "max_fame": 49
         },
         "text": "관장이 입문 수련비를 먼저 말한다."
       }
@@ -23874,7 +23875,7 @@
             "text": "술이 돌자 농담이 진짜 웃음이 되었다. 몇은 그날 밤 내 이름을 물었다.",
             "effects": {
               "silver": -30,
-              "fame": 3,
+              "fame": 15,
               "hp_pct": 10
             }
           }
@@ -23992,7 +23993,7 @@
               {
                 "text": "해가 질 때까지 썼다. 천마봉에 오르는 이유가 쉰 가지 늘었다.",
                 "effects": {
-                  "fame": 4,
+                  "fame": 20,
                   "alignment": {
                     "정도": 20
                   },
@@ -24009,7 +24010,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "서생이 내 유언은 값을 더 받아야겠다고 농을 건다."
       }
@@ -24062,7 +24063,7 @@
             "effects": {
               "battle": "천마친위대",
               "alignment": {
-                "마도": 40
+                "마도": 60
               },
               "boss_weaken": 4,
               "foe": "유모 집의 호위 설귀"
@@ -24153,9 +24154,9 @@
               "battle": "천마친위대",
               "boss_weaken": 8,
               "alignment": {
-                "정도": 40
+                "정도": 60
               },
-              "fame": 2,
+              "fame": 10,
               "foe": "신교 보급대장 초량"
             }
           }
@@ -24169,7 +24170,7 @@
             "effects": {
               "boss_weaken": 10,
               "alignment": {
-                "마도": 40
+                "마도": 60
               },
               "stats": {
                 "mind": -1
@@ -24186,7 +24187,7 @@
             "effects": {
               "silver": 120,
               "alignment": {
-                "사도": 40
+                "사도": 60
               }
             }
           }
@@ -24208,9 +24209,9 @@
                 "effects": {
                   "boss_weaken": 10,
                   "alignment": {
-                    "정도": 40
+                    "정도": 60
                   },
-                  "fame": 3
+                  "fame": 15
                 }
               }
             ]
@@ -24231,7 +24232,7 @@
                 "effects": {
                   "boss_weaken": 8,
                   "silver": 60,
-                  "fame": 2
+                  "fame": 10
                 }
               }
             ]
@@ -24254,7 +24255,7 @@
             "text": "사흘이 걸렸다. 품에서 나온 편지 한 통만 챙겼다. 전해 줄 사람이 있는 편지다.",
             "effects": {
               "alignment": {
-                "정도": 40
+                "정도": 60
               },
               "stats": {
                 "mind": 4
@@ -24286,7 +24287,7 @@
             "text": "발자국이 아직 있었다. 사냥개들이 무덤가에서 식사를 하고 있었다.",
             "effects": {
               "battle": "천마사냥개",
-              "fame": 3,
+              "fame": 15,
               "boss_weaken": 4,
               "foe": "천마봉 파수장 혁련철"
             },
@@ -24396,7 +24397,7 @@
             "text": "그는 기쁘게 일어섰다. 흉터 하나가 늘었다.",
             "effects": {
               "battle": "사파복수귀",
-              "fame": 2,
+              "fame": 10,
               "stats": {
                 "martial": 2
               },
@@ -24423,13 +24424,13 @@
       }
     ],
     "requires": {
-      "min_fame": 30
+      "min_fame": 150
     },
     "reacts": [
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 30
+          "min_fame": 150
         },
         "text": "\"협객 소리 듣더니 내 얼굴도 잊었소?\""
       }
@@ -24556,14 +24557,14 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "의원이 이름이 높을수록 흉터가 많다며 투덜거린다."
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 30
+          "min_fame": 150
         },
         "text": "의원이 내 흉터를 보다 손을 멈춘다. \"이건 칼이 아니라 마기가 낸 자국이오.\""
       }
@@ -24583,7 +24584,7 @@
             "text": "사흘 동안 길을 외웠다. 호법들이 말없이 어깨를 쳤다.",
             "effects": {
               "boss_weaken": 8,
-              "fame": 3
+              "fame": 15
             }
           }
         ],
@@ -24600,7 +24601,7 @@
             "effects": {
               "item": "구명단",
               "alignment": {
-                "정도": 40
+                "정도": 60
               },
               "stats": {
                 "mind": 3
@@ -24647,7 +24648,7 @@
           {
             "text": "\"나는 어느 쪽에도 서지 않소. 등 뒤도 앞도 내가 벤다.\" 장로 하나가 칼을 뽑다 말았다.",
             "effects": {
-              "fame": 2,
+              "fame": 10,
               "alignment": {
                 "마도": 30
               }
@@ -24657,7 +24658,7 @@
       }
     ],
     "requires": {
-      "min_fame": 40,
+      "min_fame": 200,
       "not_sect": [
         "마교",
         "혈교",
@@ -24711,9 +24712,9 @@
             "effects": {
               "silver": -25,
               "alignment": {
-                "정도": 40
+                "정도": 60
               },
-              "fame": 2
+              "fame": 10
             }
           }
         ],
@@ -24732,7 +24733,7 @@
                 "정도": 20,
                 "사도": 20
               },
-              "fame": 3,
+              "fame": 15,
               "foe": "고을 포도대장 금조 마흥",
               "foe_line": "\"금붙이 이야기를 들었나 보군. 사흘 뒤 네 목도 함께 걸어 주마.\""
             },
@@ -24748,7 +24749,7 @@
             "effects": {
               "silver": 60,
               "alignment": {
-                "사도": 40
+                "사도": 60
               }
             }
           }
@@ -24760,7 +24761,7 @@
           {
             "text": "사흘 뒤 아들은 풀려났다. 고을은 그 불을 오래 이야기했다.",
             "effects": {
-              "fame": 2,
+              "fame": 10,
               "alignment": {
                 "마도": 30
               }
@@ -24782,9 +24783,9 @@
               {
                 "text": "사흘을 앉아 있었다. 고을 사람들이 하나둘 옆에 앉았다. 넷째 날 문이 열렸다.",
                 "effects": {
-                  "fame": 4,
+                  "fame": 20,
                   "alignment": {
-                    "정도": 40
+                    "정도": 60
                   },
                   "hp_pct": -10
                 }
@@ -24797,7 +24798,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60,
+          "min_fame": 300,
           "not_dominant": [
             "사도",
             "마도"
@@ -24898,7 +24899,7 @@
                   "battle": "낭인",
                   "silver": 110,
                   "alignment": {
-                    "마도": 40
+                    "마도": 60
                   },
                   "foe": "빚에 끌려온 사내"
                 }
@@ -24921,7 +24922,7 @@
                 "effects": {
                   "battle": "귀도객",
                   "silver": 90,
-                  "fame": 3,
+                  "fame": 15,
                   "foe": "지하 판주"
                 }
               }
@@ -24982,7 +24983,7 @@
             "effects": {
               "battle": "살막살수",
               "hp_pct": -10,
-              "fame": 2,
+              "fame": 10,
               "foe": "쌍둥이 자객 사칠"
             }
           }
@@ -25045,7 +25046,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"형 값보다 그쪽 값이 더 올랐소. 덕분에 잘 벌겠소.\""
       }
@@ -25066,9 +25067,9 @@
             "text": "잔이 깨진 자리에서 거품이 일었다. 하객 틈에서 칼이 나왔다.",
             "effects": {
               "battle": "사파자객",
-              "fame": 4,
+              "fame": 20,
               "alignment": {
-                "정도": 40
+                "정도": 60
               },
               "foe": "하객 틈의 자객"
             },
@@ -25102,7 +25103,7 @@
               "stats": {
                 "internal": 4
               },
-              "fame": 2
+              "fame": 10
             }
           }
         ]
@@ -25138,7 +25139,7 @@
               {
                 "text": "당가 독이 아니었다. 그래서 더 화가 났다. 쓰러지는 사람 없이 잔치가 끝났다.",
                 "effects": {
-                  "fame": 5,
+                  "fame": 25,
                   "stats": {
                     "mind": 2
                   }
@@ -25160,7 +25161,7 @@
               {
                 "text": "하나도 쓰지 않았다. 범인이 나를 보고 먼저 도망쳤다. 세가 어른들이 내게 술을 다시 따랐다.",
                 "effects": {
-                  "fame": 5,
+                  "fame": 25,
                   "silver": 50
                 }
               }
@@ -25181,9 +25182,9 @@
                 "text": "한 알로는 모자랐지만 쓰러질 사람이 앓는 사람으로 그쳤다.",
                 "effects": {
                   "consume_item": "해독단",
-                  "fame": 3,
+                  "fame": 15,
                   "alignment": {
-                    "정도": 40
+                    "정도": 60
                   }
                 }
               }
@@ -25195,7 +25196,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "상석의 어른 하나가 내 쪽으로 먼저 잔을 들어 보인다."
       }
@@ -25216,7 +25217,7 @@
             "text": "귀신은 도사의 제자였다. 도사가 놀라 부적 대신 칼을 뽑았다.",
             "effects": {
               "battle": "사이비도사",
-              "fame": 2,
+              "fame": 10,
               "silver": 20,
               "alignment": {
                 "정도": 20
@@ -25234,7 +25235,7 @@
             "effects": {
               "silver": 35,
               "alignment": {
-                "사도": 40
+                "사도": 60
               }
             }
           }
@@ -25260,7 +25261,7 @@
             "text": "그 뒤로 서원에 정말 귀신이 나온다는 말이 돌았다. 마을 사람들이 그 고개를 돌아서 다닌다.",
             "effects": {
               "battle": "사이비도사",
-              "fame": 2,
+              "fame": 10,
               "silver": 20,
               "foe": "귀신 행세 도사",
               "alignment": {
@@ -25298,14 +25299,14 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "도사가 내 별호를 듣고 은자 주머니를 슬쩍 감춘다."
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 30
+          "min_fame": 150
         },
         "text": "도사가 나를 보더니 귀신보다 나를 먼저 쫓아 달라는 표정이다."
       }
@@ -25346,7 +25347,7 @@
             "text": "주인이 코웃음을 치다 소년의 호미를 보고 입을 다물었다. 병기도 한 번 봐 주었다.",
             "effects": {
               "mastery": 8,
-              "fame": 1
+              "fame": 5
             }
           }
         ]
@@ -25379,7 +25380,7 @@
               {
                 "text": "주인과 소년이 함께 숨을 멈췄다. 소년은 그날부터 쇠를 훔치지 않았다. 사러 왔다.",
                 "effects": {
-                  "fame": 2,
+                  "fame": 10,
                   "stats": {
                     "mind": 2
                   }
@@ -25394,7 +25395,7 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 30
+          "min_fame": 150
         },
         "text": "주인이 나를 알아보고 멱살 쥔 손을 조금 늦춘다."
       }
@@ -25429,7 +25430,7 @@
             "text": "순순히 잡혔다. 끌려가며 내 어깨를 쳤다. \"자네 왼쪽이 비었네.\" 맞는 말이었다.",
             "effects": {
               "alignment": {
-                "정도": 40
+                "정도": 60
               },
               "stats": {
                 "martial": 3
@@ -25448,7 +25449,7 @@
               "alignment": {
                 "사도": 20
               },
-              "fame": 2,
+              "fame": 10,
               "silver": -5,
               "foe": "파계승 혜진"
             }
@@ -25517,7 +25518,7 @@
                     "mind": 3
                   },
                   "qi_pct": 25,
-                  "fame": 1
+                  "fame": 5
                 }
               }
             ]
@@ -25534,7 +25535,7 @@
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"그 이름이면 부처님도 술값을 깎아 주시겠소.\""
       }
@@ -25586,7 +25587,7 @@
             "effects": {
               "silver": 40,
               "alignment": {
-                "마도": 40
+                "마도": 60
               }
             }
           }
@@ -25635,7 +25636,7 @@
                 "effects": {
                   "silver": 60,
                   "alignment": {
-                    "마도": 60
+                    "마도": 90
                   },
                   "stats": {
                     "internal": 2
@@ -25651,7 +25652,7 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "여인이 나를 알아보고 멈칫한다. 그래도 뒤의 피리 소리가 더 무서운 모양이다."
       }
@@ -25688,7 +25689,7 @@
               "alignment": {
                 "정도": 20
               },
-              "fame": 2,
+              "fame": 10,
               "foe": "꼭두각시"
             },
             "lead": true
@@ -25732,7 +25733,7 @@
     "variants": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "tag": "명성",
         "text": "장터에 꼭두각시 극단이 들었다. 극 속 인형 하나가 내 별호를 달고 있다. 사람들이 내 얼굴을 알아보지 못하고 웃는다.",
@@ -25743,7 +25744,7 @@
               {
                 "text": "내 인형은 끝에 쓰러졌다. 늙은이가 인사하며 나와 눈이 마주치자 얼굴이 하얘졌다. 다음 고을부터는 내 인형이 이긴다고 들었다.",
                 "effects": {
-                  "fame": 2,
+                  "fame": 10,
                   "stats": {
                     "mind": 3
                   }
@@ -25758,7 +25759,7 @@
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 30
+          "min_fame": 150
         },
         "text": "늙은이가 내 쪽으로 눈짓을 보낸다. 값이 맞으면 내 인형도 만들어 준다는 뜻이다."
       }
@@ -25781,9 +25782,9 @@
             "effects": {
               "battle": "사파복수귀",
               "alignment": {
-                "정도": 40
+                "정도": 60
               },
-              "fame": 3,
+              "fame": 15,
               "foe": "사파 거두 곽양"
             }
           }
@@ -25795,7 +25796,7 @@
           {
             "text": "이름이 쓰였다. 다음 달 어느 고을에서 내 이름을 듣고 사람들이 일어섰다고 한다.",
             "effects": {
-              "fame": 2,
+              "fame": 10,
               "alignment": {
                 "정도": 20
               }
@@ -25826,7 +25827,7 @@
     ],
     "requires": {
       "dominant": "정도",
-      "min_fame": 10
+      "min_fame": 50
     }
   },
   "사도_뒷장부": {
@@ -25880,7 +25881,7 @@
             "text": "원로가 사람을 보내 은자를 놓고 갔다. 양쪽 값을 다 받은 셈이다.",
             "effects": {
               "silver": 50,
-              "fame": 1
+              "fame": 5
             }
           }
         ]
@@ -25888,7 +25889,7 @@
     ],
     "requires": {
       "dominant": "사도",
-      "min_fame": 10
+      "min_fame": 50
     }
   },
   "마도_혈제초대": {
@@ -25908,9 +25909,9 @@
             "effects": {
               "battle": "혈마대귀",
               "alignment": {
-                "마도": 40
+                "마도": 60
               },
-              "fame": 3,
+              "fame": 15,
               "stats": {
                 "internal": 3
               },
@@ -25926,7 +25927,7 @@
             "text": "제물이 무엇이었는지는 적지 않는다. 내력이 끓어올랐다.",
             "effects": {
               "alignment": {
-                "마도": 40
+                "마도": 60
               },
               "qi_pct": 50,
               "stats": {
@@ -25944,7 +25945,7 @@
             "text": "혈제 전에 혈제가 끝났다. 뼛가루가 내 소매에도 남았다.",
             "effects": {
               "battle": "혈교혈승",
-              "fame": 3,
+              "fame": 15,
               "stats": {
                 "martial": 3
               },
@@ -25956,7 +25957,7 @@
     ],
     "requires": {
       "dominant": "마도",
-      "min_fame": 15
+      "min_fame": 75
     }
   },
   "은거명의의제자": {
@@ -26055,7 +26056,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60,
+          "min_fame": 300,
           "not_dominant": [
             "사도",
             "마도"
@@ -26150,7 +26151,7 @@
     "variants": [
       {
         "requires": {
-          "min_fame": 30
+          "min_fame": 150
         },
         "tag": "명성",
         "choices": [
@@ -26160,7 +26161,7 @@
               {
                 "text": "화공이 정말 값을 냈다. 고을마다 내 얼굴 그림이 팔리고 있다는 말을 뒤에 들었다.",
                 "effects": {
-                  "fame": 3,
+                  "fame": 15,
                   "silver": 20
                 }
               }
@@ -26172,7 +26173,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "화공이 이미 이름난 얼굴은 값이 다르다며 붓을 고쳐 잡는다."
       }
@@ -26193,7 +26194,7 @@
           {
             "text": "다리가 끊어지는 줄 알았다. 제때 닿았다. 전령 소식은 듣지 못했다.",
             "effects": {
-              "fame": 3,
+              "fame": 15,
               "alignment": {
                 "정도": 20
               },
@@ -26229,7 +26230,7 @@
             "effects": {
               "silver": 50,
               "alignment": {
-                "사도": 40
+                "사도": 60
               }
             }
           }
@@ -26267,10 +26268,10 @@
                 "text": "그가 말 등에서 눈을 떴다. 둘이 제때 닿았다. 구명단 값은 맹이 갚았다.",
                 "effects": {
                   "consume_item": "구명단",
-                  "fame": 4,
+                  "fame": 20,
                   "silver": 60,
                   "alignment": {
-                    "정도": 40
+                    "정도": 60
                   }
                 }
               }
@@ -26294,7 +26295,7 @@
               {
                 "text": "이틀 만에 닿았다. 돌아와 보니 전령은 숨이 붙어 있었다. 그가 나를 귀신 보듯 했다.",
                 "effects": {
-                  "fame": 4,
+                  "fame": 20,
                   "stats": {
                     "martial": 3
                   }
@@ -26308,7 +26309,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "전령이 내 별호를 희미하게 부른다. 그래서 내게 내민 것이다."
       }
@@ -26325,7 +26326,7 @@
         "정도": 400
       },
       "dominant": "정도",
-      "min_fame": 20
+      "min_fame": 100
     },
     "title": "의병의 깃발",
     "text": "고을 젊은이들이 낫과 몽둥이를 들고 찾아왔다. \"〈대협〉이 어디로 가시든 따르겠습니다.\" 앞줄의 소년은 무릎이 떨린다.",
@@ -26339,7 +26340,7 @@
               "alignment": {
                 "정도": 20
               },
-              "fame": 3,
+              "fame": 15,
               "stats": {
                 "mind": 3
               }
@@ -26354,7 +26355,7 @@
             "text": "가르치다 보니 내 초식의 군더더기가 보였다.",
             "effects": {
               "mastery": 15,
-              "fame": 2
+              "fame": 10
             }
           }
         ]
@@ -26367,7 +26368,7 @@
             "effects": {
               "battle": "마교척살조",
               "boss_weaken": 6,
-              "fame": 3,
+              "fame": 15,
               "foe": "천마신교 초소장 쇠눈 유갑"
             }
           }
@@ -26384,7 +26385,7 @@
         "정도": 700
       },
       "dominant": "정도",
-      "min_fame": 60
+      "min_fame": 300
     },
     "title": "맹의 깃발",
     "text": "구파의 장문인들이 한 객잔에 모여 머리를 숙인다. \"〈성대협〉, 맹주께서 정면을 맡으시면 맹을 이끌 사람이 없소. 천마봉까지만이라도 그 일을 맡아 주시오.\" 내가 일어나면 다들 일어설 얼굴이다.",
@@ -26396,7 +26397,7 @@
             "text": "장문인들이 서로 얼굴을 보았다. 그 깃발 아래로 천 명이 모였다.",
             "effects": {
               "boss_weaken": 10,
-              "fame": 5
+              "fame": 25
             }
           }
         ]
@@ -26442,7 +26443,7 @@
         "사도": 400
       },
       "dominant": "사도",
-      "min_fame": 20
+      "min_fame": 100
     },
     "title": "나루터의 회합",
     "text": "나루터 창고에 사파 우두머리 일곱이 모였다. 내 자리가 맨 위에 비어 있다. \"〈큰형님〉 몫을 정해 주시오. 안 그러면 오늘 일곱이 다 죽습니다.\"",
@@ -26457,7 +26458,7 @@
               "alignment": {
                 "사도": 20
               },
-              "fame": 2
+              "fame": 10
             }
           }
         ]
@@ -26470,7 +26471,7 @@
             "effects": {
               "battle": "수적두목",
               "silver": 120,
-              "fame": 2,
+              "fame": 10,
               "foe": "흑도 거두 염철수"
             }
           }
@@ -26501,7 +26502,7 @@
         "사도": 700
       },
       "dominant": "사도",
-      "min_fame": 40
+      "min_fame": 200
     },
     "title": "천하의 뒷문",
     "text": "천마신교 재무 장로가 밤에 찾아와 무릎을 꿇었다. \"천마봉의 곡식과 은자가 모두 사파 나루를 거칩니다. 나루는 다 〈성명〉 어른 것이지요. 값을 말씀하시오.\"",
@@ -26559,7 +26560,7 @@
         "마도": 400
       },
       "dominant": "마도",
-      "min_fame": 10
+      "min_fame": 50
     },
     "title": "무릎 꿇는 마인들",
     "text": "산길에서 피 묻은 사내 넷이 길을 막더니 무릎을 꿇는다. \"거두어 주시오. 천마신교보다 당신이 무섭소.\" 넷 다 눈빛이 멀쩡하지 않다.",
@@ -26573,7 +26574,7 @@
               "alignment": {
                 "마도": 20
               },
-              "fame": 3,
+              "fame": 15,
               "silver": 60
             }
           }
@@ -26586,7 +26587,7 @@
             "text": "비명은 오래 가지 않았다. 내력이 끓어올랐다.",
             "effects": {
               "alignment": {
-                "마도": 40
+                "마도": 60
               },
               "stats": {
                 "internal": 6
@@ -26603,7 +26604,7 @@
             "text": "넷이 기어서 물러났다. 등에서 비웃는 소리가 들렸다.",
             "effects": {
               "battle": "혈마대귀",
-              "fame": 3,
+              "fame": 15,
               "stats": {
                 "martial": 3
               },
@@ -26623,7 +26624,7 @@
         "마도": 700
       },
       "dominant": "마도",
-      "min_fame": 40
+      "min_fame": 200
     },
     "title": "비어 있는 자리",
     "text": "혈교와 천마신교를 떠난 마인들이 해골 제단을 쌓았다. 머리 없는 자리가 하나 비어 있다. \"천마를 벨 자라면 앉으십시오. 벤 뒤에는 그대가 천마입니다.\"",
@@ -26638,7 +26639,7 @@
               "alignment": {
                 "마도": 20
               },
-              "fame": 4
+              "fame": 20
             }
           }
         ]
@@ -26653,8 +26654,8 @@
                 "mind": 6
               },
               "alignment": {
-                "마도": -60,
-                "정도": 40
+                "마도": -90,
+                "정도": 60
               }
             }
           }
@@ -26693,7 +26694,7 @@
             "text": "새벽에 멧돼지 여럿을 쫓아냈다. 노부부가 삶은 고기 한 덩이와 고구마를 싸 주었다.",
             "effects": {
               "battle": "멧돼지떼",
-              "fame": 1,
+              "fame": 5,
               "alignment": {
                 "정도": 10
               },
@@ -26741,7 +26742,7 @@
             "text": "멧돼지는 다 잡았다. 밭은 더 엉망이 되었다. 할멈은 다음 날 짐을 쌌다.",
             "effects": {
               "battle": "멧돼지떼",
-              "fame": 1,
+              "fame": 5,
               "hp_pct": 10,
               "alignment": {
                 "마도": 20
@@ -26766,7 +26767,7 @@
               {
                 "text": "산에서 오래 지낸 사람은 멧돼지 길을 안다. 싸울 필요도 없이 떼가 다른 골로 넘어갔다.",
                 "effects": {
-                  "fame": 1,
+                  "fame": 5,
                   "stats": {
                     "mind": 2
                   },
@@ -26784,13 +26785,13 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 30
+          "min_fame": 150
         },
         "text": "노부부가 나를 보고 밭보다 나를 먼저 걱정하는 얼굴이다."
       },
       {
         "requires": {
-          "min_fame": 60,
+          "min_fame": 300,
           "not_dominant": [
             "사도",
             "마도"
@@ -26901,7 +26902,7 @@
                     "mind": 3,
                     "internal": 1
                   },
-                  "fame": 1,
+                  "fame": 5,
                   "alignment": {
                     "정도": 20
                   }
@@ -27012,7 +27013,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "노인이 이름 있는 사람은 쓸개값을 깎지 말라며 미리 못을 박는다."
       }
@@ -27033,7 +27034,7 @@
             "text": "어둠 끝에서 지네를 끝장냈다. 간신히 살아남은 광부 둘을 메고 나왔다.",
             "effects": {
               "battle": "왕지네",
-              "fame": 2,
+              "fame": 10,
               "alignment": {
                 "정도": 20
               },
@@ -27081,7 +27082,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60,
+          "min_fame": 300,
           "not_dominant": [
             "사도",
             "마도"
@@ -27092,7 +27093,7 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 30
+          "min_fame": 150
         },
         "text": "광부들이 내 쪽을 보다 말없이 갱도 쪽만 가리킨다."
       }
@@ -27113,7 +27114,7 @@
             "text": "눈이 움직이는 순간을 기다려 맞받았다. 찻집 주인이 그날 값을 받지 않았다.",
             "effects": {
               "battle": "설표",
-              "fame": 3,
+              "fame": 15,
               "alignment": {
                 "정도": 10
               },
@@ -27159,7 +27160,7 @@
             "text": "눈이 붉어졌다. 찻집 주인이 다음 날부터 내 찻잔을 따로 두었다.",
             "effects": {
               "battle": "설표",
-              "fame": 3,
+              "fame": 15,
               "item": "호골",
               "alignment": {
                 "마도": 20
@@ -27174,7 +27175,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "찻집 주인이 내 별호를 듣고 찻값은 다음에 받겠다고 한다."
       }
@@ -27218,7 +27219,7 @@
               "alignment": {
                 "정도": 20
               },
-              "fame": 1
+              "fame": 5
             }
           }
         ]
@@ -27255,14 +27256,14 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "약재상들이 내 얼굴을 알아보고 값을 곱절로 부른다."
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "약초꾼이 나를 보더니 소리치던 입을 다문다."
       }
@@ -27287,7 +27288,7 @@
             "effects": {
               "battle": "은호",
               "item": "호주",
-              "fame": 2,
+              "fame": 10,
               "foe_line": "여인이 웃으며 돌아선다. 치맛자락 밑에서 은빛 꼬리가 아홉 갈래로 갈라진다."
             }
           }
@@ -27381,7 +27382,7 @@
                   "alignment": {
                     "정도": 20
                   },
-                  "fame": 2,
+                  "fame": 10,
                   "stats": {
                     "mind": 1
                   }
@@ -27412,7 +27413,7 @@
             "effects": {
               "battle": "백액호",
               "item": "호골",
-              "fame": 4,
+              "fame": 20,
               "foe_line": "산군이 천천히 일어선다. 소가 아니라 나를 기다린 눈이다."
             }
           }
@@ -27442,7 +27443,7 @@
               "alignment": {
                 "정도": 20
               },
-              "fame": 1
+              "fame": 5
             }
           }
         ]
@@ -27610,7 +27611,7 @@
               "stats": {
                 "mind": 4
               },
-              "fame": 5,
+              "fame": 25,
               "alignment": {
                 "정도": 20
               }
@@ -27665,14 +27666,14 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 100
+          "min_fame": 500
         },
         "text": "사람들이 내 이름을 부르며 입을 열어 달라고 한다. 내 한마디면 된다는 것이다."
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "무릎 꿇은 사람들이 나를 보자 이무기보다 더 겁을 낸다."
       }
@@ -27768,7 +27769,7 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 30
+          "min_fame": 150
         },
         "text": "학이 내 기운을 맡고 날개를 퍼덕이다 주저앉는다."
       }
@@ -27804,7 +27805,7 @@
           {
             "text": "납덩이에 칠을 한 것이었다. 구경꾼들이 사내를 끌고 갔다.",
             "effects": {
-              "fame": 1,
+              "fame": 5,
               "alignment": {
                 "정도": 10
               }
@@ -27878,14 +27879,14 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "사내가 나를 보고 번들거리는 구슬을 슬쩍 덮는다."
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "사내가 눈짓을 보낸다. 같은 바닥 사람이라는 뜻이다."
       }
@@ -27970,7 +27971,7 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "아이가 내 소매를 잡았다가 놓는다. 그래도 약초 쪽을 가리킨다."
       }
@@ -27990,13 +27991,13 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "새끼가 내 기운을 맡고 덫을 물어뜯으며 몸부림친다."
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "사냥꾼이 내 이름을 듣고 슬그머니 값을 낮춘다."
       }
@@ -28104,14 +28105,14 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "새끼가 곁에 앉아 내 손을 핥는다."
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "새끼가 나를 보고 잠시 멈칫한다. 그래도 곁으로 온다."
       }
@@ -28178,20 +28179,20 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"협객이시라. 그래서 더 궁금하오.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"소문이 험하더군. 그래도 칼끝은 멈출 줄 아시겠지.\""
       },
       {
         "requires": {
-          "max_fame": 9
+          "max_fame": 49
         },
         "text": "\"이름 없다고요? 곧 생길 텐데.\""
       }
@@ -28212,7 +28213,7 @@
               "stats": {
                 "martial": 2
               },
-              "fame": 2
+              "fame": 10
             }
           }
         ]
@@ -28243,7 +28244,7 @@
               "stats": {
                 "martial": 2
               },
-              "fame": 2,
+              "fame": 10,
               "alignment": {
                 "마도": 20
               }
@@ -28280,7 +28281,7 @@
                 "martial": 2,
                 "mind": 2
               },
-              "fame": 3
+              "fame": 15
             }
           }
         ]
@@ -28301,7 +28302,7 @@
                 "martial": 2,
                 "mind": 2
               },
-              "fame": 3,
+              "fame": 15,
               "silver": 40,
               "alignment": {
                 "사도": 20
@@ -28315,21 +28316,21 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 20
+          "min_fame": 100
         },
         "text": "\"〈대협〉 소리가 칼을 무디게 했는지 봅시다.\""
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"값 받고 비무하는 사람은 아니겠지.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"길이 많이 어두워졌소. 칼끝도 그렇소?\""
       }
@@ -28361,7 +28362,7 @@
               "style_skill": {
                 "grade": "일절"
               },
-              "fame": 4
+              "fame": 20
             }
           }
         ]
@@ -28396,7 +28397,7 @@
               "style_skill": {
                 "grade": "일절"
               },
-              "fame": 4,
+              "fame": 20,
               "alignment": {
                 "마도": 20
               }
@@ -28408,14 +28409,14 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 100
+          "min_fame": 500
         },
         "text": "\"천하가 다 보고 있소. 그래도 칼끝은 멈춥시다.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"길이 그쪽이어도 칼은 칼이오.\""
       }
@@ -28436,20 +28437,20 @@
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"값을 안 받는다니 이상하죠? 대신 나중에 큰 건 받아요.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "여인이 내 눈을 똑바로 보고 말한다. \"사람 잡는 손도 맥은 뛰어요. 환자는 환자예요.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"이름 높은 분이라도 내상은 똑같아요.\""
       }
@@ -28516,7 +28517,7 @@
               "alignment": {
                 "정도": 20
               },
-              "fame": 2,
+              "fame": 10,
               "foe": "사당의 약 도둑"
             }
           }
@@ -28543,14 +28544,14 @@
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"이번 값은 나중에 크게 받아 가세요.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "여인이 나를 알아보고도 고개를 돌리지 않는다. \"그래도 약은 찾아 줄 거지요?\""
       }
@@ -28570,13 +28571,13 @@
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "주인이 은근히 다른 조각을 가진 자의 이름도 흘린다."
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "주인이 내 이름을 듣고 값을 두 배로 부른다."
       }
@@ -28666,7 +28667,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "두목의 침이 내 별호를 듣고 말라 버린다. 그래도 조각에서 손을 떼지는 않는다."
       }
@@ -28730,20 +28731,20 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "노인이 내 얼굴을 보고 작게 웃는다. \"이런 사람이 올 줄 알았소.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "노인이 나를 한참 보다가 비를 내려놓지 않는다. \"그래도 배우시겠소. 배우는 데 길은 묻지 않소.\""
       },
       {
         "requires": {
-          "max_fame": 9
+          "max_fame": 49
         },
         "text": "\"이름 없는 사람이 낫소. 빚질 일이 없으니.\""
       }
@@ -28854,33 +28855,33 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"협객 이야기가 제일 잘 팔립니다.\""
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"뒷골목 이야기도 값이 나갑니다.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "설서인이 부채를 떨며 웃는다. \"무서운 이야기가 사람을 제일 많이 모으지요.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"이미 다 아는 이름이니 이번엔 숨은 이야기를 씁시다.\""
       },
       {
         "requires": {
-          "max_fame": 9
+          "max_fame": 49
         },
         "text": "\"아무도 모르는 사람 이야기가 제일 쓰기 쉽습니다.\""
       }
@@ -28892,7 +28893,7 @@
           {
             "text": "찻집이 조용해졌다. 몇 사람이 내 이름을 받아 적었다.",
             "effects": {
-              "fame": 3,
+              "fame": 15,
               "silver": 20,
               "flags": [
                 "설서_첫"
@@ -28907,7 +28908,7 @@
           {
             "text": "그날 밤 내가 산 하나를 쪼갰다는 말이 돌았다. 부담스럽지만 은자가 짭짤했다.",
             "effects": {
-              "fame": 5,
+              "fame": 25,
               "silver": 40,
               "flags": [
                 "설서_첫"
@@ -28959,7 +28960,7 @@
               {
                 "text": "맹에 사람이 몰렸다고 한다. 내 어깨가 무거워졌다.",
                 "effects": {
-                  "fame": 12,
+                  "fame": 60,
                   "alignment": {
                     "정도": 30
                   },
@@ -28993,7 +28994,7 @@
               {
                 "text": "찻집이 비었다. 다음 날 찻집 앞에 칼을 든 사람들이 모였다.",
                 "effects": {
-                  "fame": 12,
+                  "fame": 60,
                   "alignment": {
                     "마도": 30
                   },
@@ -29036,7 +29037,7 @@
                     "martial": 8,
                     "mind": 8
                   },
-                  "fame": 12,
+                  "fame": 60,
                   "grade_item": {
                     "grade": "보물",
                     "category": "소비품"
@@ -29056,7 +29057,7 @@
           {
             "text": "\"좋습니다. 그럼 살아서 오세요.\" 설서인이 부채를 접었다.",
             "effects": {
-              "fame": 12,
+              "fame": 60,
               "silver": 60,
               "stats": {
                 "mind": 8,
@@ -29095,21 +29096,21 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "노군졸이 내 병기를 보더니 \"협객이면 한 번만\" 하고 말끝을 흐린다."
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "노군졸이 \"값은 술로 치르겠소\" 하고 먼저 말한다."
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "노군졸이 나를 보고 잠시 말이 없다가 묻는다. \"그래도 사람은 사람이오?\""
       }
@@ -29197,21 +29198,21 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"협객이니 믿고 말하오.\""
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"은자는 없소. 군문의 의리만 있소. 그쪽은 그걸 값으로 쳐 주려나.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"그대가 무서운 사람인 건 아오. 그래서 부탁하오.\""
       }
@@ -29230,7 +29231,7 @@
               "alignment": {
                 "정도": 10
               },
-              "fame": 2,
+              "fame": 10,
               "foe": "탈영병 추포 대장"
             }
           }
@@ -29289,7 +29290,7 @@
               "flags": [
                 "노병_셋째"
               ],
-              "fame": 3,
+              "fame": 15,
               "alignment": {
                 "정도": 20
               },
@@ -29318,7 +29319,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"그 이름이 왔으니 늙은이는 조금 쉬어도 되겠소.\""
       }
@@ -29339,21 +29340,21 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 20
+          "min_fame": 100
         },
         "text": "\"〈성대협〉이 대장이면 군졸은 편하오.\""
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"품삯은 술이면 되오.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"마도를 걷는 대장은 처음이오. 그래도 천마보다는 낫겠지.\""
       }
@@ -29410,20 +29411,20 @@
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "소녀가 내 전대 속 장부 쪽지를 보고 웃는다. \"같은 쪽이시네요.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "소녀가 전대를 흔들다 내 눈을 보고 웃음을 거둔다. \"돌려줄까요? 그렇게 보지 마세요.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"이름 높은 분 전대는 처음이에요! 자랑해야지.\""
       }
@@ -29499,7 +29500,7 @@
                 "묘아_둘째"
               ],
               "silver": -10,
-              "fame": 1,
+              "fame": 5,
               "foe": "객잔의 자객"
             }
           }
@@ -29539,14 +29540,14 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "향주가 코웃음 친다. \"협객이 도둑을 구하러 오나.\""
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "사도련 향주가 내 얼굴을 보고 말한다. \"자네 쪽 아이인가. 값을 맞춰 보지.\""
       }
@@ -29634,7 +29635,7 @@
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"그쪽 전대에서 훔칠 게 이제 별로 없어요. 다 천마봉 값이 됐네요.\""
       }
@@ -29660,14 +29661,14 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"맑은 분이 왜 이런 땡중 곁에 앉으시오.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "스님이 내 기운을 맡고 코를 찡그린다. \"시주는 살생이 많구려. 소승도 고기는 먹으니 할 말은 없소.\""
       }
@@ -29763,7 +29764,7 @@
               "flags": [
                 "무애_둘째"
               ],
-              "fame": 2,
+              "fame": 10,
               "foe": "장터의 칼잡이"
             }
           }
@@ -29789,7 +29790,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"이름 높은 시주가 말리면 소승 체면이 서오.\""
       }
@@ -29810,14 +29811,14 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"시주처럼 맑게 베지는 못했소.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"시주처럼 웃으며 베지는 못했소. 그래서 묻소. 어찌 웃소?\""
       }
@@ -29906,7 +29907,7 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"시주 곁에 서면 소승 업이 줄어들 것 같소. 비교가 되니.\""
       }
@@ -29932,21 +29933,21 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"협객이시구먼. 그럼 저 뒤에 있는 얼굴들부터 보시오.\""
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"같은 바닥이니 말이 쉽겠소.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "도끼 든 손에 힘이 들어간다. \"마도 양반, 저 사람들은 건드리지 마시오.\""
       }
@@ -30034,7 +30035,7 @@
                   "alignment": {
                     "정도": 20
                   },
-                  "fame": 2
+                  "fame": 10
                 }
               }
             ]
@@ -30119,7 +30120,7 @@
               "flags": [
                 "장칠_셋째"
               ],
-              "fame": 3,
+              "fame": 15,
               "foe": "변군 도위 진숭"
             }
           }
@@ -30147,7 +30148,7 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"협객이 도적 산채를 지키는 날도 오는구려.\""
       }
@@ -30168,14 +30169,14 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"〈협객나리〉 곁에 도적이 서도 되겠소?\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"그쪽이 천마보다 나은지는 모르겠소. 그래도 빚은 빚이오.\""
       }
@@ -30236,21 +30237,21 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "여인이 나를 보고 웃는다. \"베셔도 됩니다. 협객이시면 그게 맞지요.\""
       },
       {
         "requires": {
           "dominant": "사도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"값을 치를 것은 교단의 비밀뿐입니다.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "여인이 내 기운을 맡고 고개를 든다. \"같은 곳을 다녀오셨군요.\""
       }
@@ -30296,7 +30297,7 @@
               "alignment": {
                 "정도": 20
               },
-              "fame": 1
+              "fame": 5
             }
           }
         ]
@@ -30399,7 +30400,7 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"협객께서 독을 쓰셔도 되겠습니까. 저는 괜찮습니다만.\""
       }
@@ -30429,7 +30430,7 @@
               "alignment": {
                 "정도": 20
               },
-              "fame": 2,
+              "fame": 10,
               "foe": "혈지 심판자 사갈"
             }
           }
@@ -30476,14 +30477,14 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"협객 곁에 설 자격이 없다는 것은 압니다.\""
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"그쪽 손도 다르지 않지요. 그래서 묻기가 편합니다.\""
       }
@@ -30561,13 +30562,13 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "노인이 내 손을 보고 면을 잠시 멈춘다. \"칼을 많이 잡은 손이구먼. 그래도 국수는 먹어야지.\""
       },
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "노인은 내 별호를 들어도 면만 뽑는다."
       },
@@ -30680,7 +30681,7 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "\"칼 많이 잡은 손은 국물부터 드시오. 사람 되는 데 좋소.\""
       }
@@ -30725,7 +30726,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "\"그 이름값이면 국수값은 비싸게 받아야겠소.\""
       }
@@ -30741,7 +30742,7 @@
         "마도"
       ],
       "not_flag": "맹주의아들",
-      "min_fame": 30,
+      "min_fame": 150,
       "not_slain": "무림맹주"
     },
     "title": "맹주가 직접 오다",
@@ -30768,7 +30769,7 @@
             "text": "강호의 기둥이 무너졌다. 그날 밤 맹의 깃발이 절반으로 내려갔고, 내 이름 앞에 다른 말이 붙었다.",
             "effects": {
               "battle": "무림맹주",
-              "fame": 10
+              "fame": 50
             }
           }
         ]
@@ -30903,7 +30904,7 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "묘지기가 내 손을 보고 지팡이를 고쳐 쥔다."
       }
@@ -30931,7 +30932,7 @@
               "battle": "사도련향주",
               "foe": "도굴왕 곽귀",
               "equip": "금강불괴갑",
-              "fame": 4,
+              "fame": 20,
               "full_growth": true
             }
           }
@@ -30962,7 +30963,7 @@
               "battle": "사도련향주",
               "foe": "도굴왕 곽귀",
               "equip": "금강불괴갑",
-              "fame": 4,
+              "fame": 20,
               "full_growth": true,
               "alignment": {
                 "마도": 20
@@ -30975,14 +30976,14 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "도굴꾼들이 내 별호를 수군거리며 슬금슬금 물러선다."
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 30
+          "min_fame": 150
         },
         "text": "도굴꾼들이 나를 보고 저도 모르게 보갑 뒤로 숨는다."
       }
@@ -31077,7 +31078,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "제자가 내 별호를 듣고 곡주께 먼저 사람을 보낸다."
       }
@@ -31137,7 +31138,7 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "약사가 고개를 젓는다. \"사람 살리는 약을 그 손에 들리다니. 그래도 약은 약이오.\""
       }
@@ -31162,7 +31163,7 @@
               "style_gear": {
                 "grade": "보물"
               },
-              "fame": 3
+              "fame": 15
             }
           }
         ]
@@ -31209,7 +31210,7 @@
               "style_gear": {
                 "grade": "보물"
               },
-              "fame": 3,
+              "fame": 15,
               "alignment": {
                 "마도": 20
               }
@@ -31222,14 +31223,14 @@
       {
         "requires": {
           "dominant": "정도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "사람들이 협객이 왔으니 장수를 묻어 줄 것이라 수군댄다."
       },
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 10
+          "min_fame": 50
         },
         "text": "무리가 내 기운을 맡고 한 걸음씩 물러선다."
       }
@@ -31386,7 +31387,7 @@
     "reacts": [
       {
         "requires": {
-          "min_fame": 60
+          "min_fame": 300
         },
         "text": "명장이 눈을 찌푸린다. \"이름은 안 보이오. 손을 내밀어 보시오.\""
       }
@@ -31469,7 +31470,7 @@
       {
         "requires": {
           "dominant": "마도",
-          "min_fame": 30
+          "min_fame": 150
         },
         "text": "약사가 상자를 조금 뒤로 끌어당긴다."
       }
@@ -31557,7 +31558,7 @@
               "ascend": "공격무공",
               "hp_pct": -20,
               "injury": 1,
-              "fame": 4
+              "fame": 20
             }
           }
         ]
@@ -31600,7 +31601,7 @@
               "ascend": "심공",
               "hp_pct": -20,
               "injury": 1,
-              "fame": 4
+              "fame": 20
             }
           }
         ]
@@ -31643,7 +31644,7 @@
               "ascend": "경공",
               "hp_pct": -20,
               "injury": 1,
-              "fame": 4
+              "fame": 20
             }
           }
         ]

@@ -2,7 +2,7 @@
 import { Battle, enemyPool, Enemy, statureEnemy, useConsumable } from "./battle.js";
 import { GRADE_ORDER, Player, Skill, STAT_NAMES } from "./character.js";
 import { DB } from "./data.js";
-import { equipBestAtStart, grantStartGear, grantStartSkills,
+import { equipBestGear, grantStartGear, grantStartSkills,
   advanceChain, applyEffects, failChain, checkRequires, dueChainEvent, enemyIntro, LAST_CHAIN_TURN, pickFortune, pickRandomEvent, resolveChoice,
   reactiveLine, startChain, storyEventForTurn, dueOriginEvent, pendingOriginEvents,
 } from "./events.js";
@@ -29,9 +29,9 @@ const EXPLORE_EVENT = 0.45;
 const SPARRING_CHANCE = 0.65;
 const TRAIN_BONUS_BASE = 0.05;
 const TRAIN_MASTERY_RATE = 2; // 수련이 주무공에
-const MIND_MASTERY_RATE = 4; // 운기가 심법에
+const MIND_MASTERY_RATE = 5; // 운기가 심법에
 const INSIGHT_MASTERY_RATE = 1.5;
-const ART_TRAIN_RATE = 3; // 수련이 경공에
+const ART_TRAIN_RATE = 4; // 수련이 경공에
 const INSIGHT_CHANCE = 0.3;
 const GAUNTLET_REST = 20;
 const LOG_LIMIT = 40;
@@ -48,7 +48,7 @@ function breakthroughLines(p, next) {
   const lines = [...data.text];
   const side = p.dominantAlignment();
   const category = p.bestSkill()?.category;
-  const fame = p.fame >= 60 ? data.fame?.높음 : p.fame <= 9 ? data.fame?.낮음 : null;
+  const fame = p.fame >= 300 ? data.fame?.높음 : p.fame < 50 ? data.fame?.낮음 : null;
   for (const line of [data.flourish && pick(data.flourish), data.origin?.[p.originKey], p.sect && data.sect?.[p.sect], side && data.side?.[side], category && data.category?.[category], fame]) {
     if (line) lines.push(auraText(line, category));
   }

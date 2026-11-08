@@ -3,7 +3,7 @@ import { DB } from "./data.js";
 import { RENAMED_ORIGINS } from "./meta.js";
 import { randInt, rng } from "./rng.js";
 import {
-  ALIGN_CLASH, ALIGNMENT_CAP, ALIGNMENT_SCALE, alignValue, dominant, FOCUS_GAIN, hasEffect, newAlignment, ORIGIN_SECTS, sectBonus, perkGrowthTraits, perkTrait, realmPerks,
+  ALIGN_CLASH, ALIGN_EASE, MAX_FAME, ALIGNMENT_CAP, ALIGNMENT_SCALE, alignValue, dominant, FOCUS_GAIN, hasEffect, newAlignment, ORIGIN_SECTS, sectBonus, perkGrowthTraits, perkTrait, realmPerks,
   startSkills, sumEffect,
 } from "./rules.js";
 import { josa } from "./josa.js";
@@ -13,7 +13,7 @@ export const GIMMICK_GRADE = "상승"; // 이 품계부터 무공의 묘리가 �
 const SAME_GRADE_TRANSFER = 0.5;  // 같은 품계 무공의 성취를 옮기는 비율
 const LOWER_GRADE_TRANSFER = 0.3; // 낮은 품계 무공의 성취를 옮기는 비율
 const MAX_MASTERY = 100;
-const ATTACK_USE_RATE = 0.6;
+const ATTACK_USE_RATE = 0.5;
 const GRADE_BONUS = 0.25;       // 승급 1단계당 위력 계수 증가
 const MASTERY_BONUS = 0.003;    // 성취 1당 위력 계수 증가
 const EFFECT_GRADE_BONUS = 0.2; // 심공·경공 승급 1단계당 효과 증가율
@@ -223,7 +223,7 @@ export class Player {
     this.seenEvents = [];
     this.kills = 0;
     this.alignMark = null;
-    this.fame = sumEffect(traitKeys, "start_fame", "amount");
+    this.fame = Math.min(MAX_FAME, sumEffect(traitKeys, "start_fame", "amount"));
     this.sect = ORIGIN_SECTS[originKey] || null;
     this.injury = 0;
     this.turn = 1;
@@ -293,7 +293,7 @@ export class Player {
     const extra = amount > 0 ? this.traits.flatMap((k) => DB.traits[k]?.effects || [])
       .filter((e) => e.type === "alignment_gain" && e.side === name).reduce((sum, e) => sum + e.amount, 0) : 0;
     // 앞선 길은 더 쉽게 오른다
-    const focus = amount > 0 && dominant(this.alignment) === name ? FOCUS_GAIN[name] : 1;
+    const focus = (amount > 0 ? ALIGN_EASE : 1) * (amount > 0 && dominant(this.alignment) === name ? FOCUS_GAIN[name] : 1);
     const before = this.alignment[name] || 0;
     this.alignment[name] = Math.max(0, Math.min(ALIGNMENT_CAP, Math.round(before + amount * focus + extra)));
     const change = this.alignment[name] - before;

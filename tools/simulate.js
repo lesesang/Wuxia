@@ -2,6 +2,7 @@ import { pickArts } from "./arts.js";
 // 밸런스 확인 도구: 규칙대로 움직이는 봇이 게임을 여러 번 끝까지 플레이한다.
 //   node tools/simulate.js 300            (조건마다 300판)
 //   node tools/simulate.js 300 시장       (이름에 "시장"이 들어간 조건만)
+import { equipBestGear } from "../www/js/events.js";
 import { readFile } from "node:fs/promises";
 import { loadData } from "../www/js/data.js";
 import { eventView } from "../www/js/events.js";
@@ -69,7 +70,9 @@ function play({ style = "섞어서", useMarket = true, origin = "무림초출", 
   game.start(origin, traits);
   for (let i = 0; i < 3000 && game.player.alive; i++) {
     const p = game.player;
+    if (!game.battle) equipBestGear(game.player); // 사람은 더 좋은 병장기를 얻으면 바꿔 든다
     if (game.event && DB.events[game.event.key].prelude) {
+
       const list = eventView(p, game.event.key).choices;
       game.chooseEvent(choice(list).index);
     } else if (game.event) {
@@ -134,5 +137,9 @@ for (const [name, options] of ROWS) {
   const stats = (p) => [p.external, p.internal, p.martial, p.mind];
   const maxed = results.filter((r) => stats(r.player).every((v) => v >= 999)).length;
   const floor = results.reduce((t, r) => t + Math.min(...stats(r.player)), 0) / count;
+  const mean = (f) => Math.round(results.reduce((t, r) => t + f(r.player), 0) / count);
+  const realms = {};
+  for (const r of results) realms[r.player.realm] = (realms[r.player.realm] || 0) + 1;
+  console.log(`  명성 ${mean((p) => p.fame)}, 실전 ${mean((p) => p.battles)}, 경지 ${JSON.stringify(realms)}`);
   console.log(`${name}: 격파 ${Math.round(wins * 100 / count)}%, 120달 도달 ${Math.round(reached * 100 / count)}%, 평균 능력치 ${avg.toFixed(0)}, 가장 낮은 기량 ${floor.toFixed(0)}, 넷 다 999 ${Math.round(maxed * 100 / count)}%, 은자 ${Math.round(results.reduce((t, r) => t + r.player.silver, 0) / count)}`, JSON.stringify(tally));
 }

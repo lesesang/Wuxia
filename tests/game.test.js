@@ -520,25 +520,25 @@ test("비무대회는 세 번 싸우고 보상을 준다", () => {
   }
   assert.deepEqual(seen, ["비무청성", "비무철권", "비무결승"]);
   assert.ok(game.pendingNext && !game.gauntlet);
-  assert.ok(p.hasFlag("대회우승") && p.fame >= 14);
+  assert.ok(p.hasFlag("대회우승") && p.fame >= 70);
   assert.ok(p.gear.includes("태산신검"), "상품 병기는 행낭에 든다");
 });
 
 test("도망치면 대회가 끝난다", () => {
   const game = newGame();
-  game.gauntlet = { name: "대회", enemies: ["비무철권"], reward: { fame: 9 }, round: 1, total: 2 };
+  game.gauntlet = { name: "대회", enemies: ["비무철권"], reward: { fame: 45 }, round: 1, total: 2 };
   game.startBattle("산적");
   seed(0);
   for (let i = 0; i < 40 && game.battle; i++) game.battleAction("도주");
   assert.equal(game.gauntlet, null);
-  assert.ok(game.player.fame < 9);
+  assert.ok(game.player.fame < 45);
 });
 
 test("별호와 명성", () => {
   const p = new Player();
   assert.equal(byname(p), "이름 없는 무인");
   assert.equal(fameRank(p), "무명소졸");
-  p.fame = 40;
+  p.fame = 200;
   p.alignment.정도 = 100;
   assert.ok(byname(p).endsWith("검협"));
   assert.equal(fameRank(p), "젊은 협객");
@@ -546,7 +546,7 @@ test("별호와 명성", () => {
 
 test("명성의 이름은 성향과 경지를 따르고 천하제일인은 천마를 넘어선 사람뿐이다", () => {
   const p = new Player();
-  p.fame = 500;
+  p.fame = 999;
   assert.equal(fameRank(p), "신진고수", "일류가 아무리 이름나도 일방의 고수는 아니다");
   p.realm = "화경";
   assert.equal(fameRank(p), "당대의 고수");
@@ -566,7 +566,7 @@ test("전투 경험만 모자라면 알려 준다", () => {
   const p = new Player();
   p.external = p.internal = p.martial = p.mind = 400;
   assert.ok(breakthroughBlock(p).includes("실전"));
-  p.battles = 8;
+  p.battles = 12;
   assert.equal(breakthroughBlock(p), null);
 });
 
@@ -791,7 +791,7 @@ test("게임은 120달, 10년이다", () => {
 test("적은 시기가 지나면 강해지고 천마는 그대로다", () => {
   const early = new Enemy("낭인", DB.enemies.낭인.level);
   const late = new Enemy("낭인", 48);
-  assert.equal(early.maxHp, DB.enemies.낭인.hp);
+  assert.equal(early.maxHp, Math.round(DB.enemies.낭인.hp * DB.balance.enemy_scale.hp / 5) * 5);
   assert.ok(late.maxHp > early.maxHp && late.attack > early.attack);
   assert.equal(new Enemy("천마", 120).maxHp, DB.enemies.천마.hp);
 });
@@ -923,7 +923,7 @@ test("상황별 반응: 출신, 무공, 명성, 능력치, 시작 특성이 고�
   assert.ok(uses.trait >= 25, "시작 특성");
   assert.ok(uses.any_skill >= 5, "지닌 무공");
   const p = new Player();
-  p.fame = 150;
+  p.fame = 750;
   assert.ok(eventView(p, "수로채").text.includes("대협"));
   p.fame = 0;
   assert.ok(eventView(p, "살막의명부").text.includes("두 냥"));
@@ -933,7 +933,7 @@ test("상황별 반응: 출신, 무공, 명성, 능력치, 시작 특성이 고�
 
 test("적의 대사가 명성과 경지에 따라 달라진다", () => {
   const p = new Player();
-  p.fame = 150;
+  p.fame = 750;
   assert.ok(enemyIntro(p, "산적").includes("이름은"));
   p.fame = 0;
   assert.ok(/초행길|아무도 없는/.test(enemyIntro(p, "산적")));
@@ -1343,7 +1343,7 @@ test("성향과 명성에 따라 찾아오는 적이 달라진다", () => {
   assert.ok(shady.has("포도대장"));
   const plain = seen(() => {});
   assert.ok(!plain.has("구파협객") && !plain.has("포도대장") && !plain.has("사파복수귀"));
-  const famous = seen((p) => { p.fame = 150; p.realm = "화경"; }, 80);
+  const famous = seen((p) => { p.fame = 750; p.realm = "화경"; }, 80);
   assert.ok(famous.has("십대고수"), "이름이 높으면 고수가 찾아온다");
   const nameless = seen((p) => { p.fame = 0; }, 30);
   assert.ok(nameless.has("무명사냥꾼"), "이름이 없으면 얕보인다");
@@ -1357,7 +1357,7 @@ test("성향과 명성에 따라 찾아오는 적이 달라진다", () => {
 test("성향과 명성에 따라 사건이 달라진다", () => {
   const p = new Player();
   p.alignment.마도 = 200;
-  p.fame = 10;
+  p.fame = 50;
   assert.ok(eventView(p, "쫓기는소녀").text.includes("뒤가 더 무서운지"));
   assert.ok(checkRequires(p, DB.events.마도_토벌령.requires));
   assert.ok(!checkRequires(p, DB.events.정도_은인.requires));
@@ -1366,7 +1366,7 @@ test("성향과 명성에 따라 사건이 달라진다", () => {
     assert.ok(events.filter((e) => e.requires?.dominant === dominant).length >= 2, dominant);
     assert.ok(events.filter((e) => (e.variants || []).some((v) => v.requires?.dominant === dominant)).length >= 4, `${dominant} 반응`);
   }
-  assert.ok(events.filter((e) => e.requires?.min_fame >= 60).length >= 3);
+  assert.ok(events.filter((e) => e.requires?.min_fame >= 300).length >= 3);
 });
 
 test("기량 최대는 999이고 예전 저장은 단위를 맞춘다", () => {
@@ -1652,7 +1652,7 @@ test("성향은 단계마다 혜택이 커지고 한 길에 집중하면 더 잘
   assert.equal(alignTier(high.alignment).name, "정도의 기둥");
   const clash = new Player(); clash.alignment.마도 = 200; clash.alignment.정도 = 10;
   clash.adjustAlignment("정도", 100);
-  assert.equal(clash.alignment.마도, 140);
+  assert.equal(clash.alignment.마도, 134);
   assert.ok(applyEffects(clash, { alignment: { 정도: 20 } }).some((l) => l.startsWith("마도-")));
   const enemy = new Enemy("낭인");
   const damage = (p) => { rng.random = () => 0.5; return new Battle(p, enemy).incoming(1); };
@@ -1663,9 +1663,9 @@ test("성향은 단계마다 혜택이 커지고 한 길에 집중하면 더 잘
   assert.ok(new Battle(dark, enemy).attackScale() > new Battle(new Player(), enemy).attackScale() * 1.2);
   const even = new Player(); even.alignment.정도 = 100; even.alignment.사도 = 90;
   assert.equal(focusedSide(even.alignment), null);
-  assert.equal(even.adjustAlignment("사도", 20), 20);
+  assert.equal(even.adjustAlignment("사도", 20), 22, "성향은 조금 쉽게 오른다");
   const keen = new Player(); keen.alignment.정도 = 100;
-  assert.equal(keen.adjustAlignment("정도", 20), 22);
+  assert.equal(keen.adjustAlignment("정도", 20), 24);
   const game = newGame();
   game.player.alignment = { 정도: 300, 사도: 0, 마도: 0 };
   game.alignmentMonth();
@@ -1684,11 +1684,11 @@ test("출신의 기본 무공은 오래 갈고닦은 성취를 지닌다", () =>
 test("별호는 성향과 출신, 계열, 명성을 따르고 어색한 뒷글자가 없다", () => {
   const p = new Player("남궁세가");
   assert.equal(byname(p), "이름 없는 무인");
-  p.fame = 50;
+  p.fame = 250;
   assert.ok(byname(p).startsWith("창궁"));
   p.alignment.마도 = 900;
   assert.ok(byname(p).endsWith("마검"));
-  p.fame = 200;
+  p.fame = 1000;
   assert.ok(byname(p).endsWith("검마"));
   for (const side of Object.values(DB.flavor.bynames.suffix)) {
     for (const list of Object.values(side)) assert.equal(list.length, 3);
@@ -1776,7 +1776,7 @@ test("성향이 맞서면 도움 대신 적대하는 사건이 온다", () => {
   assert.ok(!checkRequires(dark, DB.events.소림_입문.requires));
   const bright = new Player();
   bright.alignment.정도 = 300;
-  bright.fame = 10;
+  bright.fame = 50;
   assert.ok(checkRequires(bright, DB.events.사도련_적대.requires));
   assert.ok(!checkRequires(bright, DB.events.사도련_입문.requires));
 });
@@ -1841,7 +1841,7 @@ test("끝난 판의 카르마: 천마까지 가면 결과가 장을 대체하고
   assert.equal(legend.karma, 10 + 3);
   const saengsa = finish(120, "현경", true, (p) => {
     p.external = p.internal = p.martial = p.mind = 999;
-    p.battles = 60;
+    p.battles = 80;
     hero(p);
   });
   assert.equal(saengsa.key, "생사경");
@@ -1885,7 +1885,7 @@ test("결말 문장은 상황을 따르고 서로 부딪치지 않는다", () =>
     return buildEpilogue(p, ending).join(" ");
   };
   assert.notEqual(text("남궁세가", () => {}, "사망"), text("하오문", () => {}, "사망"));
-  assert.ok(text("하오문", (p) => { p.fame = 150; p.turn = 100; }, "사망").includes("잔이 하나씩"));
+  assert.ok(text("하오문", (p) => { p.fame = 750; p.turn = 100; }, "사망").includes("잔이 하나씩"));
   assert.ok(text("하오문", (p) => { p.fame = 0; }, "사망").includes("무명"));
   assert.ok(text("하오문", (p) => { p.alignment.마도 = 200; }, "사망").includes("잔치"));
   assert.ok(text("하북팽가", () => {}, "귀순").includes("〈네형"));
@@ -1907,19 +1907,19 @@ test("결말 문장은 상황을 따르고 서로 부딪치지 않는다", () =>
   for (const key of Object.keys(DB.endings.titles)) {
     for (const origin of DB.origins.order) {
       for (const side of [null, "정도", "사도", "마도"]) {
-        for (const fame of [0, 20, 40, 70, 150]) {
+        for (const fame of [0, 100, 200, 350, 750]) {
           const q = new Player(origin);
           q.fame = fame;
           if (side) q.alignment[side] = 500;
           q.turn = 120;
-          for (const flag of ["찬탈", "단목휘_죽음", "단목휘_동맹", "제자_완성", "가문재건"]) if (fame === 150) q.addFlag(flag);
+          for (const flag of ["찬탈", "단목휘_죽음", "단목휘_동맹", "제자_완성", "가문재건"]) if (fame === 750) q.addFlag(flag);
           const lines = buildEpilogue(q, key);
           assert.ok(lines.length >= 2, `${key} ${origin}`);
           assert.equal(new Set(lines).size, lines.length, `${key} 겹친 문장`);
           for (const line of lines) {
             assert.ok(typeof line === "string" && line.length > 3 && !/undefined|null|NaN/.test(line), line);
           }
-          if (fame <= 29) for (const w of famousWords) assert.ok(!lines.join(" ").includes(w), `${key} 무명인데 ${w}`);
+          if (fame <= 149) for (const w of famousWords) assert.ok(!lines.join(" ").includes(w), `${key} 무명인데 ${w}`);
         }
       }
     }
@@ -2339,18 +2339,18 @@ test("이기면 쓰지 않은 무공도 성취가 쌓이고, 심법과 보법이
 
 test("명성이 높아도 마도와 사도의 무인을 대협으로 떠받들지 않고, 낮으면 소문을 말하지 않는다", () => {
   const p = new Player("무림초출");
-  p.fame = 120;
+  p.fame = 600;
   p.alignment = { 정도: 0, 사도: 0, 마도: 500 };
   assert.ok(!eventView(p, "표국호위").text.includes("대협"));
   p.alignment = { 정도: 500, 사도: 0, 마도: 0 };
   assert.ok(eventView(p, "표국호위").text.includes("대협"));
   // 이름이 나기 전에는 나를 알아보는 반응이 나오지 않는다
-  p.fame = 3;
+  p.fame = 15;
   assert.ok(!eventView(p, "화적떼").text.includes("알아보고"));
   assert.ok(!eventView(p, "주막싸움").text.includes("알아보고"));
   // 사건마다 맞지 않는 일반 말투 줄은 붙지 않는다
   assert.equal(DB.flavor.talk.event, undefined);
-  p.fame = 40;
+  p.fame = 200;
   assert.ok(!eventView(p, "도객의술내기").text.includes("상대가"));
 });
 
@@ -2654,13 +2654,13 @@ test("개방 출신은 사문을 지니고 시작한다", () => {
 
 test("생사경은 기록대로 천마를 이긴 순간에만 판정된다", () => {
   const req = DB.realms.saengsa;
-  assert.deepEqual([req.min_stat, req.battles, req.hp_ratio, req.qi_ratio], [950, 50, 0.8, 0.8]);
+  assert.deepEqual([req.min_stat, req.battles, req.hp_ratio, req.qi_ratio], [950, 75, 0.8, 0.8]);
   const hero = () => {
     const g = newGame();
     const p = g.player;
     p.external = p.internal = p.martial = p.mind = 999;
     p.realm = "현경";
-    p.battles = 60;
+    p.battles = 80;
     p.hp = p.maxHp();
     p.qi = p.maxQi();
     return g;
@@ -3077,7 +3077,7 @@ test("소속은 세력마다 입문, 제안, 적대를 갖추고 사파와 마�
 test("경지가 오르면 대사와 특전이 따른다", () => {
   const game = newGame();
   const p = game.player;
-  Object.assign(p, { external: 400, internal: 400, martial: 400, mind: 400, battles: 10 });
+  Object.assign(p, { external: 400, internal: 400, martial: 400, mind: 400, battles: 12 });
   const before = new Battle(p, new Enemy("낭인")).player.traits.length;
   const lines = game.checkRealm();
   assert.equal(p.realm, "절정");
@@ -3224,7 +3224,7 @@ test("짐승은 다양하고 내단을 남기며 삼키면 기량이 오른다",
 
 test("대사가 성향과 명성을 따른다", () => {
   const p = new Player("무림초출");
-  p.fame = 20;
+  p.fame = 100;
   p.alignment.정도 = 300;
   for (const key of ["산적", "낭인", "녹림호걸", "마교장로"]) {
     assert.ok(DB.enemies[key].intros.some((i) => i.requires.dominant === "정도"), key);
@@ -3235,7 +3235,7 @@ test("대사가 성향과 명성을 따른다", () => {
   assert.ok(enemyIntro(p, "산적").includes("피 냄새"));
   assert.ok(eventView(p, "주막싸움").text.includes("말소리"));
   const known = new Player("무림초출");
-  known.fame = 150;
+  known.fame = 750;
   assert.ok(talkLine(known, "month"));
 });
 
@@ -3762,7 +3762,7 @@ test("호칭은 성별과 이름을 따르고 받침에 맞는 조사를 쓴다"
 });
 
 test("데이터의 자리표시는 모두 뜻이 있다", () => {
-  const leftovers = new Set(["별호", "유산", "이름"]);
+  const leftovers = new Set(["별호", "유산", "이름", "기", "강", "기상인"]);
   const person = { gender: "여", surname: "위", given: "서린" };
   const walk = (value) => {
     if (typeof value === "string") {
@@ -3799,7 +3799,7 @@ test("명성이 낮을 때 성향을 아는 듯한 반응을 붙이지 않고 �
   for (const table of ["month", "victory", "market"]) assert.equal(DB.flavor.talk[table].무명, undefined);
   for (const [key, e] of Object.entries(DB.events)) {
     for (const r of e.reacts ?? []) {
-      if (r.requires?.dominant || r.requires?.dominant_in) assert.ok(r.requires.min_fame >= 10, `${key}: ${r.text}`);
+      if (r.requires?.dominant || r.requires?.dominant_in) assert.ok(r.requires.min_fame >= 50, `${key}: ${r.text}`);
     }
   }
 });
@@ -3820,7 +3820,7 @@ test("사도와 마도 선택지가 정도에 크게 뒤지지 않는다", () =>
 test("사문이 있으면 2장 술자리의 본문과 선택지가 그 세력에 맞는다", () => {
   const game = newGame();
   const p = game.player;
-  p.fame = 20;
+  p.fame = 100;
   p.sect = "소림";
   const view = eventView(p, "2장_세력");
   assert.ok(view.text.includes("무림맹"));

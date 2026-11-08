@@ -11,7 +11,7 @@ import {
 } from "./meta.js";
 import {
   ALIGNMENTS, benefitText, byname, fameRank, getChapterInfo, getMonth, getYear, marketTurns, nextSlotThreshold,
-  ORIGIN_SECTS, personalize, fullName, realmProgress, traitSlots, realmPerks, activeCompanions, MAX_COMPANIONS } from "./rules.js";
+  ORIGIN_SECTS, veteranBonus, personalize, fullName, realmProgress, traitSlots, realmPerks, activeCompanions, MAX_COMPANIONS } from "./rules.js";
 import { MAX_TURN } from "./character.js";
 import { storage } from "./storage.js";
 import { halpun, josa } from "./josa.js";
@@ -257,7 +257,7 @@ ${section("일절 너머", ["일절 무공의 성취가 100에 이르면 드물�
     "내상은 전투가 끝나도 남고 주는 피해를 줄입니다. 사건에서 체력이나 내력이 축날 때는 경지와 기량이 높을수록 덜 축납니다.",
     "<b>경공의 끝</b>: 어떤 경공도 9할을 넘겨 피하지 못합니다. 잇달아 펼치면 걸음을 읽혀 회피가 1할 5푼씩 떨어지고, 다른 일을 하면 돌아옵니다. 필살기를 흘렸을 때 다음 공격이 온전히 강해지고, 보통 공격을 흘리면 그 절반입니다.",
     "<b>회복의 끝</b>: 운기 한 번에 체력은 5할, 내력은 7할까지 차고, 잇달아 운기하면 절반이 됩니다. 준 피해를 빨아들이는 힘은 한 합에 최대 체력의 2할 5푼까지이고, 합마다 저절로 차는 기운은 한 싸움에 3할까지입니다.",
-    "강호행마다 한 번, 쓰러지는 순간 마지막 힘을 끌어모을 수 있습니다. 화면 가운데 창에서 고르며, 끌어모으면 체력과 내력이 최대의 절반만큼 차오릅니다."])}
+    "<b>선천진기</b>: 누구나 단전 깊은 곳에 타고난 기운을 한 줌 품고 있습니다. 강호행마다 한 번, 쓰러지는 순간 이것을 일으킬 수 있습니다. 화면 가운데 창에서 고르며, 일으키면 체력과 내력이 최대의 절반만큼 차오르고 그 싸움이 끝날 때까지 위력이 1할 5푼 오르고 받는 피해가 1할 5푼 줍니다.", "<b>실전 경험</b>: 싸울수록 쌓입니다. 경지를 넘는 데 필요하고, 열다섯 번마다 손이 노련해져 주는 피해가 2푼 늘고 받는 피해가 1푼 줍니다. 일흔다섯 번에 백전노장에 이릅니다."])}
 ${section("비무", ["비무에서는 져도 죽지 않습니다. 체력이 1할만 남고 얻는 것이 없으며, 그 비무가 이어지는 일의 한 편이었다면 그 일은 어그러집니다. 기권해도 같습니다. 이겨도 사람을 죽인 것은 아니어서 처치 수와 성향은 오르지 않습니다."])}
 ${section("결전에 달려오는 사람", [`강호에서 자주 마주치는 사람들과 인연을 끝까지 맺으면 천마와의 결전에 달려옵니다. 몇 합마다 대신 공격하거나, 회복시켜 주거나, 천마의 기세를 꺾거나, 함께 있는 것만으로 위력과 방어를 올려 줍니다. 한 번에 ${MAX_COMPANIONS}명까지 옵니다. 대부분 카르마로 인연을 사야 만날 수 있고, 내 성향과 출신에 따라 대하는 태도가 다릅니다.`])}
 ${section("적과 강호의 수준", [
@@ -714,6 +714,7 @@ function statusModal() {
     ${!game.battle && p.alive && !DB.market[key].battle_only ? `<button class="mini-btn" data-act="use-item" data-key="${esc(key)}">사용</button>` : ""}</div></div>`).join("")
     || `<p class="codex-empty">장터에서 산 상비약과 도구가 이곳에 들어옵니다.</p>`;
 
+  const vet = veteranBonus(p);
   const panels = {
     stats: `<div class="modal-section">
         ${statRow("외공", p.external, "체력, 위력")}${statRow("내공", p.internal, "내력, 체력, 비기 위력")}
@@ -724,7 +725,8 @@ function statusModal() {
         ${row("명성", `${p.fame} (${fameRank(p)})`)}
         ${p.injury ? row("내상", `${p.injury}단계, 주는 피해 -${halpun(p.injury * INJURY_PENALTY)}, 요양으로 치료`) : ""}
         ${row("실전 경험", `${p.battles} (${p.kills}명 처치)`)}
-        ${row("끌어모을 마지막 힘", `${p.revives}번`)}
+        ${vet.step ? row(vet.name, `주는 피해 +${halpun(vet.damage)}, 받는 피해 -${halpun(vet.reduce)}${vet.next ? `, 실전 ${vet.next}에 더 깊어짐` : ""}`) : row("실전의 손", `실전 ${vet.next}부터 노련해짐`)}
+        ${row("선천진기", `${p.revives}번`)}
       </div>
       ${progress ? `<div class="modal-section"><h4>다음 경지: ${esc(progress.next)}</h4>
         ${row("평균 기량", `${progress.avg} / ${progress.avgRequired}`)}
@@ -767,8 +769,8 @@ function standBox(p, b) {
   return `<div class="stand-overlay" role="dialog" aria-modal="true"><div class="stand-box">
       <h3>${esc(b.enemy.name)} 앞에서 쓰러진다</h3>
       <p>${esc(line)}</p>
-      <p class="stand-note">끌어모으면 체력과 내력이 최대의 절반만큼 차오릅니다. 남은 기회 ${p.revives}번.</p>
-      <button class="next-btn" data-act="stand" data-gather="1">마지막 힘을 끌어모은다</button>
+      <p class="stand-note">선천진기를 일으키면 체력과 내력이 최대의 절반만큼 차오르고, 이 싸움 동안 위력이 오르고 받는 피해가 줍니다. 남은 선천진기 ${p.revives}번.</p>
+      <button class="next-btn" data-act="stand" data-gather="1">선천진기를 일으킨다</button>
       <button class="danger-btn" data-act="stand" data-gather="">여기서 눈을 감는다</button>
     </div></div>`;
 }
