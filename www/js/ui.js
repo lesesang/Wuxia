@@ -255,6 +255,7 @@ ${section("일절 너머", ["일절 무공의 성취가 100에 이르면 드물�
     "적의 필살기는 한 합 전에 미리 예고됩니다. <b>경공</b>으로 흘려내면 다음 공격이 강해집니다.",
     "<b>심법</b>은 숨을 고르며 회복하고 점혈을 풉니다. 위험하면 <b>도주</b>도 방법입니다.",
     "내상은 전투가 끝나도 남고 주는 피해를 줄입니다. 사건에서 체력이나 내력이 축날 때는 경지와 기량이 높을수록 덜 축납니다.",
+    `<b>경공의 경지</b>: 초상비, 등평도수, 답설무흔, 능공허도, 이형환위는 보법의 이름이 아니라 경공이 이른 경지입니다. 쓰는 경공의 품계가 오를수록 ${Object.values(DB.realms.movement_tiers).map(([name]) => name).join(", ")} 순으로 깊어지고, 무공 칸에 지금의 경지가 나옵니다.`,
     "<b>경공의 끝</b>: 어떤 경공도 9할을 넘겨 피하지 못합니다. 잇달아 펼치면 걸음을 읽혀 회피가 1할 5푼씩 떨어지고, 다른 일을 하면 돌아옵니다. 필살기를 흘렸을 때 다음 공격이 온전히 강해지고, 보통 공격을 흘리면 그 절반입니다.",
     "<b>회복의 끝</b>: 운기 한 번에 체력은 5할, 내력은 7할까지 차고, 잇달아 운기하면 절반이 됩니다. 준 피해를 빨아들이는 힘은 한 합에 최대 체력의 2할 5푼까지이고, 합마다 저절로 차는 기운은 한 싸움에 3할까지입니다.",
     "<b>선천진기</b>: 누구나 단전 깊은 곳에 타고난 기운을 한 줌 품고 있습니다. 강호행마다 한 번, 쓰러지는 순간 이것을 일으킬 수 있습니다. 화면 가운데 창에서 고르며, 일으키면 체력과 내력이 최대의 절반만큼 차오르고 그 싸움이 끝날 때까지 위력이 1할 5푼 오르고 받는 피해가 1할 5푼 줍니다.", "<b>실전 경험</b>: 싸울수록 쌓입니다. 경지를 넘는 데 필요하고, 열다섯 번마다 손이 노련해져 주는 피해가 2푼 늘고 받는 피해가 1푼 줍니다. 일흔다섯 번에 백전노장에 이릅니다."])}
@@ -706,7 +707,7 @@ function statusModal() {
       ? `<div class="skill-meta">비기 ${esc(s.secretName)}: ${s.secretUnlocked ? "터득함" : `${esc(s.secretUnlockGrade)} 품계, 성취 ${s.secretUnlockMastery}에 터득`}</div>` : "";
     return `<div class="skill-row"><div class="skill-head"><span>${esc(s.name)} <span class="skill-meta">${esc(s.type === "심공" ? "심법" : s.type)}, ${esc(s.grade)}</span></span>${button}</div>
       <div class="mastery"><span class="stat-track"><span style="width:${s.mastery}%"></span></span><span class="skill-meta">성취 ${s.mastery}${s.mastery >= 100 ? (s.canEvolve() ? ", 다음 성취에 승급" : ", 더 오르지 않음") : ""}</span></div>
-      ${secret}${s.gimmick ? `<div class="skill-meta">묘리 ${esc(s.gimmick.name)}${s.activeGimmick() ? "" : " (상승 품계에 깨침)"}: ${esc(s.gimmick.text)}</div>` : ""}<div class="skill-meta">${esc(s.desc)}</div>${transfer}</div>`;
+      ${secret}${s.type === "경공" && DB.realms.movement_tiers[s.grade] ? `<div class="skill-meta">경공의 경지 ${esc(DB.realms.movement_tiers[s.grade][0])}: ${esc(DB.realms.movement_tiers[s.grade][1])}</div>` : ""}${s.gimmick ? `<div class="skill-meta">묘리 ${esc(s.gimmick.name)}${s.activeGimmick() ? "" : " (상승 품계에 깨침)"}: ${esc(s.gimmick.text)}</div>` : ""}<div class="skill-meta">${esc(s.desc)}</div>${transfer}</div>`;
   }).join("") || `<p class="codex-empty">아직 익힌 무공이 없습니다.</p>`;
 
   const bag = inventory.map(([key, count]) => `<div class="skill-row"><div class="skill-head">

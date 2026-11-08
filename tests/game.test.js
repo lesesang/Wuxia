@@ -2861,8 +2861,11 @@ test("주무공 계열 신공 보상은 다른 출신의 전용 신공을 주지
   assert.ok(!p.hasSkill("제왕검형"));
   const toNap = p.skills.find((s) => s.type === "심공");
   toNap.grade = "일절";
-  applyEffects(p, { skill: "혼원일기공" });
+  applyEffects(p, { skill: "호체공" });
   assert.equal(p.bestOfType("심공").key, toNap.key, "새로 얻어도 쓰던 심법을 그대로 쓴다");
+  applyEffects(p, { skill: "혼원일기공" });
+  assert.equal(p.bestOfType("심공").key, "혼원일기공", "같은 갈래의 심법은 성취를 이어받는다");
+  assert.equal(p.bestOfType("심공").mastery, toNap.mastery);
 });
 
 test("예전 저장의 신공은 일절로 바뀐다", () => {
@@ -3846,4 +3849,29 @@ test("설정을 처음으로 돌리면 기틀은 산 단계를 모두 쓰고 인
   const after = loadMeta();
   assert.equal(upgradeUse("그릇", after), 2);
   assert.deepEqual(after.content_off, []);
+});
+
+test("새 묘리: 방어 깎기, 겹치는 칼자국, 장단", () => {
+  const game = newGame();
+  const p = game.player;
+  p.learnSkill(new Skill("패왕창법"));
+  const spear = p.getSkill("패왕창법");
+  spear.grade = "상승";
+  const b = new Battle(p, new Enemy("낭인"));
+  b.enemy.armor = 50;
+  b.enemy.hp = b.enemy.maxHp = 99999;
+  for (let i = 0; i < 6; i++) b.strike(100, "시험", spear);
+  assert.equal(b.shred, 40, "방어는 4할까지만 깎인다");
+  const blade = new Skill("칠성도법"); blade.grade = "상승";
+  b.strike(1000, "시험", blade);
+  b.strike(1000, "시험", blade);
+  assert.ok(b.bleed && b.bleed.damage <= Math.trunc(b.enemy.maxHp * 0.06));
+  const fist = new Skill("구궁권"); fist.grade = "상승";
+  p.skills.push(fist);
+  p.qi = 9999;
+  b.beats = 0;
+  b.useSkill(fist); b.useSkill(fist); b.useSkill(fist);
+  assert.ok(b.log.some((l) => l.includes("초식이 맺혔다")));
+  assert.equal(DB.realms.movement_tiers.상승[0], "답설무흔");
+  assert.ok(!Object.values(DB.skills).some((s) => ["초상비", "등평도수", "답설무흔", "능공허도", "이형환위"].includes(s.name)), "경공의 경지는 무공 이름이 아니다");
 });

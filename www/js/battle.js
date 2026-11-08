@@ -22,6 +22,8 @@ const WIN_ART_MASTERY = 5; // 이기면 쓰던 심법과 경공도 깊어진다
 const WIN_MAIN_MASTERY = 1; // 이기면 쓰던 공격 무공도 아주 조금 깊어진다
 const ART_USE_RATE = 2.5; // 심법과 경공은 자주 쓰지 않으므로 한 번에 더 쌓인다
 const REVIVE_RATE = 0.5;
+const MAX_SHRED = 40; // 깎아 낼 수 있는 적 방어의 끝(푼)
+const MAX_BLEED_PCT = 6; // 한 합에 흐르는 피는 적 최대 체력의 이만큼까지
 const MAX_AURA_GUARD = 25; // 호신강기가 줄이는 피해의 끝
 const INNATE_POWER = 15; // 선천진기를 일으킨 싸움에서 오르는 위력과 줄어드는 피해
 const VICTORY_TALK_RATE = 0.3;
@@ -212,6 +214,9 @@ export class Battle {
     this.enemyStun = false;  // 다음 합에 적이 움직이지 못한다
     this.enemyWeaken = null; // 적의 위력 감소
     this.burn = null;        // 적이 입는 지속 피해
+    this.bleed = null;       // 칼자국에서 흐르는 피. 겹쳐 쌓인다
+    this.shred = 0;          // 깎아 낸 적의 방어(푼)
+    this.beats = 0;          // 장단을 타는 무공을 펼친 수
     this.ward = 0;           // 피해를 대신 받는 호신 기운
     this.regen = null;       // 합마다 차오르는 체력과 내력
     this.reflect = null;     // 받은 피해를 되돌림
@@ -361,7 +366,7 @@ export class Battle {
       notes.push("회심의 일격이다.");
     }
     const pierce = Math.min(100, (g.pierce || 0) + sumEffect(p.traits, "pierce_all", "percent"));
-    damage = Math.max(1, Math.trunc(damage) - Math.trunc(this.enemy.armor * (1 - pierce / 100)));
+    damage = Math.max(1, Math.trunc(damage) - Math.trunc(this.enemy.armor * (1 - this.shred / 100) * (1 - pierce / 100)));
     this.enemy.takeDamage(damage);
     const suffix = notes.length ? ` ${notes.join(" ")}` : "";
     this.log.push(`${label}${josa(label, "으로")} ${this.enemy.name}에게 ${damage}의 피해를 입혔다.${suffix}`);
@@ -383,6 +388,16 @@ export class Battle {
     }
     if (g.qi_back) p.healPercent(0, g.qi_back);
     if (g.burn) this.burn = { damage: Math.max(1, Math.trunc(damage * g.burn / 100)), rounds: 2 };
+    if (g.bleed) {
+      // 베인 자리에 또 베이면 피가 더 흐른다. 다만 한 번에 흐르는 양에는 끝이 있다
+      const add = Math.max(1, Math.trunc(damage * g.bleed / 100));
+      const cap = Math.trunc(this.enemy.maxHp * MAX_BLEED_PCT / 100);
+      this.bleed = { damage: Math.min(cap, (this.bleed?.damage || 0) + add), rounds: 3 };
+    }
+    if (g.shatter && this.shred < MAX_SHRED) {
+      this.shred = Math.min(MAX_SHRED, this.shred + g.shatter);
+      this.log.push(`(${this.enemy.name}의 방어가 깎였다. 지금까지 ${halpun(this.shred)})`);
+    }
     if (g.weaken) {
       this.enemyWeaken = { percent: g.weaken.percent, rounds: g.weaken.rounds };
       this.log.push(`(${this.enemy.name}의 기세가 꺾였다.)`);
@@ -440,10 +455,14 @@ export class Battle {
     const g = skill.activeGimmick();
     const count = g?.hits || 1;
     const label = this.skillLabel(skill);
+    // 장단을 타는 무공은 정해진 수마다 초식이 맺혀 크게 터진다
+    this.beats += g?.rhythm ? 1 : 0;
+    const beat = g?.rhythm && this.beats % g.rhythm.every === 0 ? 1 + g.rhythm.percent / 100 : 1;
+    if (beat > 1) this.log.push(`${skill.name}의 초식이 맺혔다.`);
     let damage = 0;
     // 나눠 치는 무공은 한 번마다 명중과 회심을 따로 가린다
     for (let i = 0; i < count && this.enemy.isAlive(); i++) {
-      const power = Math.max(1, Math.trunc(this.attackPower(skill) * (g?.hit_rate || 1)));
+      const power = Math.max(1, Math.trunc(this.attackPower(skill) * (g?.hit_rate || 1) * beat));
       // 나눠 칠 때 초식 이름은 첫 타에만 쓴다
       damage += this.strike(power, count > 1 ? `${i === 0 ? `${label} ` : ""}제${i + 1}타` : label, skill);
     }
@@ -818,6 +837,12 @@ export class Battle {
       this.log.push(`독이 ${this.enemy.name}의 혈맥을 태운다. (${this.enemyPoison.damage} 피해)`);
       this.enemyPoison.rounds -= 1;
       if (this.enemyPoison.rounds <= 0) this.enemyPoison = null;
+    }
+    if (this.bleed) {
+      this.enemy.takeDamage(this.bleed.damage);
+      this.log.push(`${this.enemy.name}의 칼자국에서 피가 흐른다. (${this.bleed.damage} 피해)`);
+      this.bleed.rounds -= 1;
+      if (this.bleed.rounds <= 0) this.bleed = null;
     }
     if (this.burn) {
       this.enemy.takeDamage(this.burn.damage);
