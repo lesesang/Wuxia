@@ -3962,3 +3962,9 @@ test("십이마장 열두 자리와 천마의 일지가 모두 채워져 있다"
   assert.ok(DB.enemies.천마.outros.some((i) => i.requires.flag === "천마_일지"));
   for (const sect of ["소림", "무당", "화산", "아미", "곤륜", "종남", "점창", "청성", "공동", "개방"]) assert.ok(DB.events[`문파대사_${sect}`], sect);
 });
+
+test("개방 방주의 생사는 출신과 상관없이 같다", () => {
+  assert.ok(!DB.events.문파대사_개방.requires);
+  assert.ok(!DB.events.개방_비전.text.startsWith("방주가"));
+  assert.ok(DB.sects.개방.desc.includes("쓰러진 뒤"));
+});
