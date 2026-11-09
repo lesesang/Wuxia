@@ -2775,7 +2775,7 @@ test("같은 계열의 낮거나 같은 품계 무공만 주무공으로 성취�
   p.skills.push(same, low, high, other);
   assert.equal(same.masteryFor(main), 20);
   assert.equal(low.masteryFor(main), 15);
-  assert.equal(high.masteryFor(main), 0, "더 높은 품계는 옮기지 못한다");
+  assert.equal(high.masteryFor(main), 35, "더 높은 품계는 7할을 옮긴다");
   assert.equal(other.masteryFor(main), 0, "다른 계열은 옮기지 못한다");
   assert.equal(main.masteryFor(main), 0);
   p.mainSkill = main.key;
@@ -2783,8 +2783,20 @@ test("같은 계열의 낮거나 같은 품계 무공만 주무공으로 성취�
   assert.equal(main.mastery, 30);
   assert.equal(same.mastery, 0);
   game.transferMastery(high.key);
-  assert.equal(high.mastery, 50);
-  assert.equal(main.mastery, 30);
+  assert.equal(high.mastery, 0);
+  assert.equal(main.mastery, 65);
+  // 심법과 경공도 쓰는 무공으로 옮긴다
+  const mind = p.bestOfType("심공");
+  const spare = Object.keys(DB.skills).find((k) => DB.skills[k].type === "심공" && k !== mind.key && !DB.skills[k].lineage);
+  const extra = new Skill(spare);
+  extra.mastery = 40;
+  p.skills.push(extra);
+  const before = mind.mastery;
+  assert.ok(extra.masteryFor(mind) > 0);
+  assert.equal(extra.masteryFor(main), 0, "공격 무공으로는 옮기지 못한다");
+  game.transferMastery(extra.key);
+  assert.ok(mind.mastery > before || mind.grade !== DB.skills[mind.key].grade);
+  assert.equal(extra.mastery, 0);
 });
 
 test("옮긴 성취로 승급할 수 있고 전투 중에는 옮길 수 없다", () => {

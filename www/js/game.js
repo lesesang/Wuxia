@@ -607,12 +607,12 @@ export class Game {
     }
   }
 
-  /** 같은 계열 무공의 성취 일부를 주무공으로 옮긴다. 옮긴 무공의 성취는 0이 된다. */
+  /** 무공의 성취 일부를 같은 갈래의 쓰는 무공으로 옮긴다. 옮긴 무공의 성취는 0이 된다. */
   transferMastery(key) {
     if (!this.active || this.battle || !this.player.alive) return;
     const p = this.player;
     const from = p.getSkill(key);
-    const main = p.bestSkill();
+    const main = from && (from.type === "공격무공" ? p.bestSkill() : p.bestOfType(from.type));
     const amount = from?.masteryFor(main);
     if (!amount) return;
     from.mastery = 0;
