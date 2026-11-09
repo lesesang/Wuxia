@@ -22,7 +22,7 @@ export function unmetReason(player, requires) {
   if (r.not_dominant?.includes(player.dominantAlignment())) return "그 길에는 어울리지 않는다";
   if (r.dominant_in && !r.dominant_in.includes(player.dominantAlignment())) return "그 길이 아니다";
   if (r.flag && !player.hasFlag(r.flag)) return "아직 인연이 닿지 않았다";
-  if (r.not_flag && player.hasFlag(r.not_flag)) return "이미 지나간 일이다";
+  if (r.not_flag && [].concat(r.not_flag).some((f) => player.hasFlag(f))) return "이미 지나간 일이다";
   if (r.not_slain && player.slain.includes(r.not_slain)) return "이미 지나간 일이다";
   if (r.slain && !player.slain.includes(r.slain)) return "아직 일어나지 않은 일이다";
   if (r.not_chain && player.chains.some((c) => c.id === r.not_chain)) return "다른 일이 한창이다";
@@ -87,19 +87,17 @@ export function ascendTarget(player, type) {
 export const checkRequires = (player, requires) => unmetReason(player, requires) === null;
 
 export function storyEventForTurn(player) {
-  for (const [key, event] of Object.entries(DB.storyEvents)) {
-    if (event.turn_range) {
-      // 여러 달 가운데 어느 달에 찾아온다. 마지막 달에는 반드시 찾아온다
-      const [from, to] = event.turn_range;
-      if (player.turn >= from && player.turn <= to && !player.seenEvents.includes(key) && checkRequires(player, event.requires)
-        && rng.random() < 1 / (to - player.turn + 1)) return key;
-      continue;
-    }
-    if (event.turn === player.turn && !player.seenEvents.includes(key) && checkRequires(player, event.requires)) {
-      return key;
-    }
-  }
-  return null;
+  const open = Object.entries(DB.storyEvents)
+    .filter(([key, event]) => !player.seenEvents.includes(key) && checkRequires(player, event.requires));
+  // 정해진 달의 줄거리가 먼저다
+  const fixed = open.find(([, event]) => event.turn === player.turn);
+  if (fixed) return fixed[0];
+  // 여러 달 가운데 어느 달에 찾아오는 줄거리는 마지막 달에 반드시 찾아온다
+  const ranged = open.filter(([, event]) => event.turn_range && player.turn >= event.turn_range[0] && player.turn <= event.turn_range[1]);
+  const due = ranged.find(([, event]) => event.turn_range[1] === player.turn);
+  if (due) return due[0];
+  const rolled = ranged.find(([, event]) => rng.random() < 1 / (event.turn_range[1] - player.turn + 1));
+  return rolled ? rolled[0] : null;
 }
 
 // ---------- 연계 인카운터 ----------
@@ -378,7 +376,8 @@ export function eventView(player, key) {
   });
   const title = event.chain ? `${event.title} (${event.chain.index + 1}/${event.chain.total})` : event.title;
   const talk = eventTalk(player, key);
-  const text = [eventText(player, key), deeperLine(player, event), talk].filter(Boolean).join(" ");
+  // 지난 일에 따라 같은 사건에 덧붙는 한 줄(lines). 맞는 첫 줄을 쓴다
+  const text = [eventText(player, key), reactiveLine(player, event.lines), deeperLine(player, event), talk].filter(Boolean).join(" ");
   return { key, title, text, choices, chain: event.chain ? DB.chains[event.chain.id].title : null };
 }
 
