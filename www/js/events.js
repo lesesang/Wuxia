@@ -467,12 +467,14 @@ function styleWeaponReward(player, tier) {
 }
 
 /** 그 품계의 병장기를 준다. 병기는 주무공 계열에 맞춘다. 이미 지녔으면 은자로 돌아온다. */
-function gradeGearReward(player, { grade, slot = "weapon" }) {
+function gradeGearReward(player, { grade, slot = "weapon", origin }) {
   const style = player.bestSkill()?.category;
   const pool = Object.keys(DB.market).filter((k) => {
     const item = DB.market[k];
     const e = item.effects.find((x) => x.type === "equip");
-    return e && item.grade === grade && e.slot === slot && (slot !== "weapon" || e.style === style) && !item.origin && !player.ownsGear(k);
+    // 출신의 이야기는 그 출신의 병기를 내 계열에 맞춰 준다
+    const owner = origin ? item.origin === origin : !item.origin;
+    return e && item.grade === grade && e.slot === slot && (slot !== "weapon" || e.style === style) && owner && !player.ownsGear(k);
   });
   if (!pool.length) return [`은자+${player.gainSilver(SPARE_GEAR_SILVER * (ITEM_GRADES.indexOf(grade) + 1))}`];
   return equipReward(player, pick(pool));

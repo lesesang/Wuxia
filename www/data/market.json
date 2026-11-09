@@ -4706,5 +4706,176 @@
     "drop_only": true,
     "grade": "신물",
     "no_drop": true
+  },
+  "무명검": {
+    "name": "무명검",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "사부가 젊은 날 차던 검. 칼집에도 날에도 이름이 없다. 검법에 맞음, 위력 +100",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 100,
+        "style": "검법"
+      }
+    ],
+    "grade": "신물",
+    "gimmick": {
+      "crit": 8,
+      "echo": 10,
+      "name": "이름 없는 날",
+      "text": "회심 확률 +8푼, 1할 확률로 여운이 남아 절반의 힘으로 한 번 더 닿는다."
+    },
+    "origin": "무림초출",
+    "no_drop": true
+  },
+  "무명도": {
+    "name": "무명도",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "사부가 젊은 날 쓰던 도. 등에 수없이 갈아 낸 자국이 있다. 도법에 맞음, 위력 +100",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 100,
+        "style": "도법"
+      }
+    ],
+    "grade": "신물",
+    "gimmick": {
+      "power": 8,
+      "crit_ward": 15,
+      "name": "이름 없는 날",
+      "text": "위력 +8푼, 회심이 터지면 준 피해의 1할 5푼이 호신 기운이 된다."
+    },
+    "origin": "무림초출",
+    "no_drop": true
+  },
+  "무명창": {
+    "name": "무명창",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "사부가 젊은 날 들던 창. 창대가 손에 맞게 닳았다. 창법에 맞음, 위력 +100",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 100,
+        "style": "창법"
+      }
+    ],
+    "grade": "신물",
+    "gimmick": {
+      "pierce": 30,
+      "accuracy": 10,
+      "name": "이름 없는 날",
+      "text": "방어 3할 무시, 명중 +1할."
+    },
+    "origin": "무림초출",
+    "no_drop": true
+  },
+  "무명곤": {
+    "name": "무명곤",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "사부가 젊은 날 짚던 곤. 지팡이로도 썼다고 한다. 봉법에 맞음, 위력 +100",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 100,
+        "style": "봉법"
+      }
+    ],
+    "grade": "신물",
+    "gimmick": {
+      "guard": 8,
+      "stun": 10,
+      "name": "이름 없는 날",
+      "text": "맞힌 합에 받는 피해 -8푼, 맞히면 1할 확률로 적이 다음 합에 손을 쓰지 못한다."
+    },
+    "origin": "무림초출",
+    "no_drop": true
+  },
+  "무명권갑": {
+    "name": "무명권갑",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "사부가 젊은 날 끼던 권갑. 손등 쇠가 반들반들하다. 권법에 맞음, 위력 +100",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 100,
+        "style": "권법"
+      }
+    ],
+    "grade": "신물",
+    "gimmick": {
+      "low_hp": 20,
+      "echo": 10,
+      "name": "이름 없는 날",
+      "text": "체력 절반 이하에서 위력 +2할, 1할 확률로 여운이 남아 절반의 힘으로 한 번 더 닿는다."
+    },
+    "origin": "무림초출",
+    "no_drop": true
+  },
+  "무명장갑": {
+    "name": "무명장갑",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "사부가 젊은 날 끼던 장갑. 손바닥 가죽이 얇게 닳았다. 장법에 맞음, 위력 +100",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 100,
+        "style": "장법"
+      }
+    ],
+    "grade": "신물",
+    "gimmick": {
+      "lifesteal": 4,
+      "shatter": 5,
+      "name": "이름 없는 날",
+      "text": "준 피해의 4푼을 체력으로 흡수, 맞힐 때마다 적의 방어를 5푼씩 무너뜨린다."
+    },
+    "origin": "무림초출",
+    "no_drop": true
+  },
+  "무명비도": {
+    "name": "무명비도",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "사부가 젊은 날 품던 비도 한 벌. 손잡이에 아무것도 새기지 않았다. 암기에 맞음, 위력 +100",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 100,
+        "style": "암기"
+      }
+    ],
+    "grade": "신물",
+    "gimmick": {
+      "accuracy": 15,
+      "mark": {
+        "every": 4,
+        "percent": 40
+      },
+      "name": "이름 없는 날",
+      "text": "명중 +1할 5푼, 네 번 맞힐 때마다 표식이 터져 피해가 4할 더해진다."
+    },
+    "origin": "무림초출",
+    "no_drop": true
   }
 }
