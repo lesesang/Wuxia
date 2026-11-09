@@ -4707,6 +4707,50 @@
     "grade": "신물",
     "no_drop": true
   },
+  "혈해정수": {
+    "name": "혈해의 정수",
+    "category": "영약",
+    "price": 1490,
+    "markets": [],
+    "desc": "혈마가 무너진 자리, 식어 가는 피 연못 바닥에 남은 붉은 구슬. 백 년의 피가 한 점으로 굳었다. 삼키면 네 기량이 90씩 오르고 체력과 내력이 가득 찬다.",
+    "effects": [
+      {
+        "type": "stat",
+        "stat": "external",
+        "amount": 90
+      },
+      {
+        "type": "stat",
+        "stat": "internal",
+        "amount": 90
+      },
+      {
+        "type": "stat",
+        "stat": "martial",
+        "amount": 90
+      },
+      {
+        "type": "stat",
+        "stat": "mind",
+        "amount": 90
+      },
+      {
+        "type": "heal",
+        "stat": "hp",
+        "percent": 100
+      },
+      {
+        "type": "heal",
+        "stat": "qi",
+        "percent": 100
+      }
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "drop_only": true,
+    "grade": "신물",
+    "no_drop": true
+  },
   "무명검": {
     "name": "무명검",
     "category": "무기",
