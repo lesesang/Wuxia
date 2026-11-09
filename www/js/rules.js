@@ -19,10 +19,17 @@ export const ALIGN_CLASH = { 정도: { 마도: 0.6, 사도: 0.3 }, 마도: { 정
 export const KILL_ALIGN = { 사도: 2, 마도: 5 }; // 싸워 이길수록 깊어지는 길
 export const ALIGN_STEPS = [60, 200, 400, 600, 850];
 const ALIGN_TABLE = {
-  정도: { names: ["정파 무인", "협사", "협객", "〈대협〉", "정도의 기둥"], discount: [8, 10, 12, 14, 16], guard: [0, 1, 2, 3, 4] },
-  사도: { names: ["사파 무인", "흑도인", "흑도 고수", "흑도의 거물", "사도의 거두"], silver: [25, 30, 35, 40, 50], crit: [2, 4, 6, 8, 10] },
-  마도: { names: ["마도 무인", "마인", "마두", "대마두", "마도의 거두"], damage: [15, 20, 25, 30, 35], healCut: [3, 5, 6, 8, 10] },
+  정도: { names: ["정파 무인", "협사", "협객", "〈대협〉", "정도의 기둥"], discount: [8, 10, 12, 14, 16], guard: [1, 2, 3, 4, 5], heal: [0, 4, 7, 10, 14] },
+  사도: { names: ["사파 무인", "흑도인", "흑도 고수", "흑도의 거물", "사도의 거두"], silver: [25, 30, 35, 40, 50], crit: [2, 4, 6, 8, 10], evade: [0, 2, 3, 4, 6] },
+  마도: { names: ["마도 무인", "마인", "마두", "대마두", "마도의 거두"], damage: [15, 20, 25, 30, 35], healCut: [3, 5, 6, 8, 10], kill_heal: [0, 3, 5, 7, 10] },
 };
+// 어느 길이든 그 수치가 단계를 넘을 때마다 한 번 얻는 것. 앞선 길이 아니어도 받는다
+export const ALIGN_MILESTONE = {
+  정도: { stats: ["mind", "external"], fame: 5 },
+  사도: { stats: ["martial", "mind"], silver: 25 },
+  마도: { stats: ["internal", "external"], mastery: 5 },
+};
+export const ALIGN_MILESTONE_STATS = [2, 3, 4, 5, 6];
 
 /** 장이 뒤로 갈수록 기량이 더디게 오른다 */
 /** 사건에서 몸이 축나는 정도. 경지와 기량이 높을수록 작다. 현경의 고수가 독버섯으로 죽어 가지는 않는다 */
@@ -109,9 +116,9 @@ export function benefitText(alignment) {
   if (!tier) return "아직 어느 길에도 서지 않았다";
   const at = ALIGN_STEPS[tier.step + 1];
   const next = at ? ` 다음 단계는 ${at}.` : "";
-  if (tier.side === "정도") return `${tier.name}: 장터 가격 ${halpun(tier.discount)} 할인${tier.guard ? `, 받는 피해 ${halpun(tier.guard)} 감소` : ""}.${next}`;
-  if (tier.side === "사도") return `${tier.name}: 얻는 은자 ${halpun(tier.silver)} 증가${tier.crit ? `, 회심의 일격 확률 ${halpun(tier.crit)} 증가` : ""}.${next}`;
-  return `${tier.name}: 주는 피해 ${halpun(tier.damage)} 증가, 회복 효율 ${halpun(tier.healCut)} 감소.${next}`;
+  if (tier.side === "정도") return `${tier.name}: 장터 가격 ${halpun(tier.discount)} 할인, 받는 피해 ${halpun(tier.guard)} 감소${tier.heal ? `, 회복 효율 ${halpun(tier.heal)} 증가` : ""}.${next}`;
+  if (tier.side === "사도") return `${tier.name}: 얻는 은자 ${halpun(tier.silver)} 증가, 회심의 일격 확률 ${halpun(tier.crit)} 증가${tier.evade ? `, 경공의 회피 ${halpun(tier.evade)} 증가` : ""}.${next}`;
+  return `${tier.name}: 주는 피해 ${halpun(tier.damage)} 증가${tier.kill_heal ? `, 적을 쓰러뜨리면 체력 ${halpun(tier.kill_heal)} 회복` : ""}, 회복 효율 ${halpun(tier.healCut)} 감소.${next}`;
 }
 
 // ---------- 챕터와 시장 ----------
@@ -358,7 +365,7 @@ export const DEFAULT_DIFFICULTY = "강호";
 export const difficultyRank = (key) => Math.max(0, DB.difficulty.order.indexOf(key));
 export const difficultyOf = (player) => DB.difficulty.levels[player?.difficulty] || DB.difficulty.levels[DEFAULT_DIFFICULTY];
 
-/** 적의 이능을 설명하는 문장 */
+/** 적의 괴공을 설명하는 문장 */
 export function quirkText(q) {
   const amount = (v) => `${halpun(v)}${josa(halpun(v), "을/를")}`;
   const name = DB.difficulty.quirks[q.type]?.name ?? q.type;

@@ -8,7 +8,7 @@ import { activeCompanions, difficultyOf, quirkText, MAX_FAME, veteranBonus, appl
 import { halpun, josa } from "./josa.js";
 
 const BASE_HIT = 0.88;
-// 깊은 강호의 적이 지닌 이능에도 끝이 있다
+// 깊은 강호의 적이 지닌 괴공에도 끝이 있다
 const MAX_HEAL_CUT = 50;
 const MAX_MIRROR = 15;
 const MAX_BLOODTHIRST = 30;
@@ -96,7 +96,8 @@ export class Enemy {
     this.phases = data.phases || [];
     this.outros = data.outros || [];
     this.drop = data.drop || null;
-    this.quirks = (data.quirks || []).map((q) => ({ ...q })); // 깊은 강호의 적이 지닌 이능
+    this.quirks = (data.quirks || []).map((q) => ({ ...q })); // 깊은 강호의 적이 지닌 괴공
+    this.accuracy = data.accuracy || 0; // 손이 빨라 피할 틈을 좁히는 정도(푼)
     this.barrier = 0;        // 호체강기로 두른 강기
     this.rage = 0;           // 광기로 오른 위력(푼)
     this.risen = false;      // 불사로 한 번 다시 일어섰는가
@@ -296,10 +297,10 @@ export class Battle {
       this.ward = Math.trunc(player.maxHp() * ward / 100);
       this.log.push(`(몸 둘레에 호신 기운이 선다. ${this.ward})`);
     }
-    // 깊은 강호의 적이 지닌 이능
+    // 깊은 강호의 적이 지닌 괴공
     player.healCut = 0;
     for (const q of enemy.quirks || []) {
-      this.log.push(`(이능 ${quirkText(q)})`);
+      this.log.push(`(괴공 ${quirkText(q)})`);
       if (q.type === "sever") player.healCut = Math.min(MAX_HEAL_CUT, q.percent);
     }
     if (enemy.raiseBarrier?.()) this.log.push(`(${enemy.name}${josa(enemy.name, "이/가")} 강기를 두른다. ${enemy.barrier})`);
@@ -767,10 +768,9 @@ export class Battle {
     const g = evadeSkill?.activeGimmick();
     if (evadeSkill) {
       // 잇달아 펼치면 걸음을 읽힌다
-      const read = Math.max(0, this.stepStreak - 1) * STEP_STREAK_PENALTY;
-      const base = Math.min(MAX_EVADE, evadeSkill.effectValue("evade") + sectBonus(this.player, "evade") + this.player.idleBonus("경공"));
-      const chance = Math.max(Math.min(base, MIN_STREAK_EVADE), base - read);
-      if (read > 0) this.log.push(`${this.enemy.name}${josa(this.enemy.name, "이/가")} 걸음을 읽기 시작했다.`);
+      const chance = this.evadeChance(evadeSkill, this.roundNum, this.stepStreak);
+      if (this.stepStreak > 1) this.log.push(`${this.enemy.name}${josa(this.enemy.name, "이/가")} 걸음을 읽기 시작했다.`);
+      if (special?.accuracy) this.log.push(`${name}${josa(name, "은/는")} 피할 틈이 좁다.`);
       if (randInt(1, 100) <= chance) {
         const counter = Math.trunc(evadeSkill.effectValue("counter_pct") * (special ? 1 : NORMAL_COUNTER_RATE));
         this.log.push(`${this.enemy.name}의 ${name}${josa(name, "을/를")} 흘려냈다. (다음 공격 +${halpun(counter)})`);
@@ -948,6 +948,21 @@ export class Battle {
   }
 
   nextSpecialWarning() { return this.enemy.specialForRound(this.roundNum + 1)?.name ?? null; }
+
+  /**
+   * 경공으로 흘릴 확률(푼). 잇달아 펼치면 걸음을 읽히고, 상대의 필살기가 날카로우면 피할 틈이 좁아진다.
+   * 화면에 보이는 회피도 이 값을 쓴다.
+   */
+  evadeChance(evadeSkill, round = this.roundNum + 1, streak = this.stepStreak + 1) {
+    if (!evadeSkill) return 0;
+    const own = evadeSkill.effectValue("evade") + sectBonus(this.player, "evade") + this.player.idleBonus("경공") + alignValue(this.player.alignment, "사도", "evade");
+    const base = Math.min(MAX_EVADE, own);
+    const read = Math.max(0, streak - 1) * STEP_STREAK_PENALTY;
+    const chance = Math.max(Math.min(base, MIN_STREAK_EVADE), base - read);
+    const special = this.enemy.specialForRound(round);
+    const sharp = (special?.accuracy || 0) + (this.enemy.accuracy || 0);
+    return Math.max(0, chance - sharp);
+  }
 
   tickEffects() {
     if (this.poison) {
@@ -1147,7 +1162,7 @@ export class Battle {
     return null;
   }
 
-  /** 이능 가운데 합마다 일어나는 것 */
+  /** 괴공 가운데 합마다 일어나는 것 */
   enemyQuirksRound() {
     const { enemy } = this;
     const frenzy = enemy.quirk("frenzy");
@@ -1185,6 +1200,11 @@ export class Battle {
         if (flag) this.player.addFlag(flag);
         const side = dominant(this.player.alignment);
         if (KILL_ALIGN[side]) this.player.adjustAlignment(side, KILL_ALIGN[side] / 2); // 앞선 길은 두 배로 오른다
+        const drink = alignValue(this.player.alignment, "마도", "kill_heal");
+        if (drink && this.player.hp > 0) {
+          const [hp] = this.player.healPercent(drink, 0);
+          if (hp) this.log.push(`쓰러진 자의 기운을 거두었다. (체력 +${hp})`);
+        }
       }
       const outro = reactiveLine(this.player, this.enemy.outros, this.enemy.outro);
       if (outro) this.log.push(outro);

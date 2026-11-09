@@ -3,7 +3,7 @@ import { DB } from "./data.js";
 import { RENAMED_ORIGINS } from "./meta.js";
 import { randInt, rng } from "./rng.js";
 import {
-  ALIGN_CLASH, ALIGN_EASE, MAX_FAME, ALIGNMENT_CAP, ALIGNMENT_SCALE, alignValue, dominant, FOCUS_GAIN, hasEffect, newAlignment, ORIGIN_SECTS, sectBonus, perkGrowthTraits, perkTrait, realmPerks,
+  ALIGN_CLASH, ALIGN_EASE, ALIGN_STEPS, MAX_FAME, ALIGNMENT_CAP, ALIGNMENT_SCALE, alignValue, dominant, FOCUS_GAIN, hasEffect, newAlignment, ORIGIN_SECTS, sectBonus, perkGrowthTraits, perkTrait, realmPerks,
   startSkills, sumEffect,
 } from "./rules.js";
 import { josa } from "./josa.js";
@@ -238,6 +238,8 @@ export class Player {
     this.healCut = 0; // 싸우는 동안 회복을 끊는 적이 곁에 있다
     this.kills = 0;
     this.alignMark = null;
+    this.alignMilestones = { 정도: 0, 사도: 0, 마도: 0 }; // 길마다 넘은 단계의 수
+    this.rumors = []; // 들은 강호의 오랜 이야기
     this.fame = Math.min(MAX_FAME, sumEffect(traitKeys, "start_fame", "amount"));
     this.sect = ORIGIN_SECTS[originKey] || null;
     this.injury = 0;
@@ -264,7 +266,7 @@ export class Player {
 
   /** 정한 양만큼 회복한다. 마도의 회복 감소를 받는다. [체력 변화, 내력 변화] */
   healAmount(hp = 0, qi = 0) {
-    const penalty = (1 - alignValue(this.alignment, "마도", "healCut") / 100) * (1 - (this.healCut || 0) / 100);
+    const penalty = (1 - alignValue(this.alignment, "마도", "healCut") / 100) * (1 - (this.healCut || 0) / 100) * (1 + alignValue(this.alignment, "정도", "heal") / 100);
     const hpBefore = this.hp;
     const qiBefore = this.qi;
     this.hp = Math.min(this.maxHp(), this.hp + Math.trunc(hp * penalty));
@@ -274,7 +276,7 @@ export class Player {
 
   /** 체력·기력을 최대치 비율로 바꾼다. 체력은 1 아래로 내려가지 않는다. [체력 변화, 기력 변화] */
   healPercent(hpPct = 0, qiPct = 0) {
-    const penalty = (1 - alignValue(this.alignment, "마도", "healCut") / 100) * (1 - (this.healCut || 0) / 100);
+    const penalty = (1 - alignValue(this.alignment, "마도", "healCut") / 100) * (1 - (this.healCut || 0) / 100) * (1 + alignValue(this.alignment, "정도", "heal") / 100);
     const hpChange = Math.trunc(this.maxHp() * hpPct / 100 * (hpPct > 0 ? penalty : 1));
     const qiChange = Math.trunc(this.maxQi() * qiPct / 100 * (qiPct > 0 ? penalty : 1));
     const hpBefore = this.hp;
@@ -482,7 +484,7 @@ export class Player {
       inventory: this.inventory, boss_weaken: this.bossWeaken, alignment: this.alignment,
       flags: this.flags, seen_events: this.seenEvents, origin_turn: this.originTurn, difficulty: this.difficulty, kills: this.kills,
       fame: this.fame, sect: this.sect, injury: this.injury,
-      align_mark: this.alignMark, revives: this.revives, turn: this.turn, max_turn: this.maxTurn, alive: this.alive, chronicle: this.chronicle, content: this.content, chains: this.chains, chains_done: this.chainsDone,
+      align_mark: this.alignMark, align_milestones: this.alignMilestones, rumors: this.rumors, revives: this.revives, turn: this.turn, max_turn: this.maxTurn, alive: this.alive, chronicle: this.chronicle, content: this.content, chains: this.chains, chains_done: this.chainsDone,
     };
   }
 
@@ -543,6 +545,9 @@ export class Player {
     p.seenEvents = [...(d.seen_events || [])];
     p.kills = d.kills ?? 0;
     p.alignMark = d.align_mark ?? null;
+    // 이 기록이 없는 저장은 이미 넘은 단계를 받은 것으로 친다
+    p.rumors = d.rumors ?? [];
+    p.alignMilestones = d.align_milestones ?? Object.fromEntries(Object.keys(p.alignment).map((a) => [a, ALIGN_STEPS.filter((at) => (p.alignment[a] || 0) >= at).length]));
     p.revives = d.revives ?? 1 + sumEffect(d.traits || [], "extra_revive", "amount");
     p.fame = d.fame ?? 0;
     p.sect = d.sect !== undefined ? d.sect : (ORIGIN_SECTS[p.originKey] || null);

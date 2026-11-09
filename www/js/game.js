@@ -17,6 +17,7 @@ import {
   actionLine, ALIGNMENT_CAP, alignTier, applyGrowth, byname, CHAPTER_STARTS, checkBreakthrough, checkGoodEnding, checkSaengsa,
   scaledGrowth, fameRank, FOCUS_DRIFT, focusedSide, getChapter, getChapterInfo, getMonth, getYear, isMarketTurn, monthLine, auraText, isNamed, perkTrait, realmFit, returnedLine, standIn, realmIndex, sumEffect, talkLine, traitSlots,
   personalize, DEFAULT_DIFFICULTY, difficultyOf,
+  ALIGNMENTS, ALIGN_STEPS, ALIGN_MILESTONE, ALIGN_MILESTONE_STATS,
 } from "./rules.js";
 import { halpun, josa } from "./josa.js";
 
@@ -33,6 +34,7 @@ const TRAIN_GROWTH = [12, 16]; // 수련과 운기로 오르는 기량
 const REST_HEAL = [40, 50]; // 요양의 체력과 내력 회복(할푼)
 const ACTION_EVENT_RATE = 0.25; // 수련, 운기, 요양 중에 그 일에 얽힌 사건을 만날 확률
 const DEEP_MONTH_RATE = 0.25; // 깊은 강호의 소식이 달의 문장에 끼는 확률
+const LORE_RATE = 0.2; // 강호의 오랜 내력이 귀에 들어오는 확률
 const TRAIN_MASTERY_RATE = 2; // 수련이 주무공에
 const MIND_MASTERY_RATE = 5; // 운기가 심법에
 const INSIGHT_MASTERY_RATE = 1.5;
@@ -333,8 +335,8 @@ export class Game {
     // 지금 시점(장)이 나올 수 있는 적을 정하고, 그중에서 내 경지와 가까운 적을 더 자주 만난다
     const weightOf = (k) => (mine && DB.enemies[k].side === mine ? SAME_SIDE_WEIGHT : 1) * DB.enemies[k].weight * realmFit(p.realm, DB.enemies[k].realm);
     // 정도를 걷는 무인을 정파가 까닭 없이 치지 않고, 제 소속은 제 사람을 치지 않는다
-    // 혈교와 손잡은 무인은 혈교도 치지 않는다
-    const allies = p.hasFlag("혈해_맹약") ? "혈교" : null;
+    // 혈교와 손잡은 무인은 혈교도 치지 않고, 무너진 혈교는 다시 나오지 않는다
+    const allies = p.hasFlag("혈해_맹약") || p.hasFlag("혈교_멸문") ? "혈교" : null;
     const fitting = pool.filter((k) => !(mine === "정도" && DB.enemies[k].side === "정도") && DB.enemies[k].faction !== p.sect && DB.enemies[k].faction !== allies
       && !(isNamed(k) && p.slain.includes(k))); // 쓰러뜨린 이름 있는 적은 다시 만나지 않는다
     const list = fitting.length ? fitting : pool;
@@ -366,7 +368,7 @@ export class Game {
     this.battle.log = [];
   }
 
-  /** 깊은 강호의 적은 더 강하고, 때로 혈단이나 마단을 삼켜 이능을 지닌다. 그것을 알리는 문장을 돌려준다 */
+  /** 깊은 강호의 적은 더 강하고, 때로 혈교의 혈계나 천마의 겁화를 받아 괴공을 지닌다. 그것을 알리는 문장을 돌려준다 */
   deepen(enemy, spar) {
     const level = difficultyOf(this.player);
     enemy.maxHp = Math.max(1, Math.round(enemy.maxHp * level.enemy.hp));
@@ -374,14 +376,18 @@ export class Game {
     enemy.attack = Math.max(1, Math.round(enemy.attack * level.enemy.attack));
     if (enemy.key === "천마" && level.final_quirks) enemy.quirks = level.final_quirks.map((q) => ({ ...q }));
     const { affix } = level;
-    // 이름 있는 자나 정파의 무인은 저잣거리의 단약을 삼키지 않는다
-    if (!affix || spar || enemy.beast || enemy.tier === "보스" || enemy.title || isNamed(enemy.key) || enemy.side === "정도"
-      || enemy.quirks.length || rng.random() >= affix.chance) return [];
-    const fits = affix.pool.filter((k) => realmIndex(enemy.realm) >= realmIndex(DB.difficulty.affixes[k].realm_min || "이류"));
+    if (!affix || spar || enemy.beast || enemy.tier === "보스" || enemy.side === "정도" || enemy.quirks.length) return [];
+    // 경지가 높을수록 깊은 힘을 받는다. 이름 있는 자는 그 힘을 내리는 세력의 사람일 때만 받는다
+    const named = Boolean(enemy.title || isNamed(enemy.key));
+    const at = realmIndex(enemy.realm);
+    const fits = affix.pool.map((k) => DB.difficulty.affixes[k]).filter((a) => at >= realmIndex(a.realm_min || "이류")
+      && at <= realmIndex(a.realm_max || "생사경") && (a.factions ? a.factions.includes(enemy.faction) : !named)
+      && !a.not_factions?.includes(enemy.faction));
     if (!fits.length) return [];
-    const data = DB.difficulty.affixes[pick(fits)];
+    const data = fits.reduce((best, a) => (realmIndex(a.realm_min || "이류") > realmIndex(best.realm_min || "이류") ? a : best));
+    if (rng.random() >= (data.chance ?? affix.chance)) return [];
     enemy.quirks = data.quirks.map((q) => ({ ...q }));
-    enemy.expReward += 1;
+    enemy.expReward += data.exp ?? 1;
     return [data.text];
   }
 
@@ -640,6 +646,7 @@ export class Game {
     lines.push(monthLine(getMonth(p.turn)));
     const rumors = difficultyOf(p).months;
     if (rumors?.length && rng.random() < DEEP_MONTH_RATE) lines.push(pick(rumors));
+    else if (rng.random() < LORE_RATE) lines.push(...this.loreRumor());
     if (rng.random() < MONTH_TALK_RATE) {
       const talk = talkLine(p, "month");
       if (talk) lines.push(talk);
@@ -650,22 +657,57 @@ export class Game {
     this.notice = this.event && realm.length ? realm : null;
   }
 
+  /** 그 장에 떠도는 강호의 오랜 이야기 가운데 아직 듣지 못한 한 줄 */
+  loreRumor() {
+    const p = this.player;
+    const chapter = String(getChapter(p.turn));
+    const list = (DB.flavor.rumors?.[chapter] || []).map((r, i) => ({ i, r: typeof r === "string" ? { text: r } : r }))
+      .filter(({ i, r }) => !p.rumors.includes(`${chapter}-${i}`) && (!r.flag || p.hasFlag(r.flag)) && (!r.not_flag || !p.hasFlag(r.not_flag)));
+    if (!list.length) return [];
+    const { i, r } = pick(list);
+    p.rumors.push(`${chapter}-${i}`);
+    return [r.text];
+  }
+
   /** 한 길에 집중한 무인은 달마다 그 길이 깊어진다. 단계가 오르면 알린다. */
   alignmentMonth() {
     const p = this.player;
     const side = focusedSide(p.alignment);
     if (side) p.alignment[side] = Math.min(ALIGNMENT_CAP, p.alignment[side] + FOCUS_DRIFT);
+    const gains = this.alignMilestones();
     const tier = alignTier(p.alignment);
     const mark = tier ? `${tier.side}${tier.step}` : null;
     if (!tier || p.alignMark === mark) {
       p.alignMark = mark;
-      return [];
+      return gains;
     }
     p.alignMark = mark;
-    if (tier.step === 0) return [];
+    if (tier.step === 0) return gains;
     const called = personalize(tier.name, p.person);
     p.note(`강호가 ${called}${josa(called, "이라고/라고")} 부르기 시작했다.`);
-    return [`강호가 ${called}${josa(called, "이라고/라고")} 부르기 시작했다.`];
+    return [`강호가 ${called}${josa(called, "이라고/라고")} 부르기 시작했다.`, ...gains];
+  }
+
+  /** 정, 사, 마 어느 길이든 그 수치가 단계를 넘을 때마다 한 번 얻는다 */
+  alignMilestones() {
+    const p = this.player;
+    const lines = [];
+    for (const side of ALIGNMENTS) {
+      const reached = ALIGN_STEPS.filter((at) => (p.alignment[side] || 0) >= at).length;
+      while ((p.alignMilestones[side] ?? 0) < reached) {
+        const step = p.alignMilestones[side] ?? 0;
+        p.alignMilestones[side] = step + 1;
+        const gift = ALIGN_MILESTONE[side];
+        const n = ALIGN_MILESTONE_STATS[step];
+        const effects = { stats: Object.fromEntries(gift.stats.map((stat) => [stat, n])) };
+        if (gift.fame) effects.fame = gift.fame * (step + 1);
+        if (gift.silver) effects.silver = gift.silver * (step + 1);
+        if (gift.mastery) effects.mastery = gift.mastery * (step + 1);
+        const summary = applyEffects(p, effects);
+        lines.push(`${side}의 길에서 한 걸음 더 나아갔다. (${summary.join(", ")})`);
+      }
+    }
+    return lines;
   }
 
   /** 새 장이 열릴 때의 성장 */

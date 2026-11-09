@@ -10,7 +10,7 @@ import {
   toggleContent, unlockOrigin, unlockTrait, upgradeLevel, resetSetupChoices, canLeaveLegacy, sameLegacy, difficultyOpen,
 } from "./meta.js";
 import {
-  ALIGNMENTS, benefitText, byname, fameRank, getChapterInfo, getMonth, getYear, marketTurns, nextSlotThreshold,
+  ALIGNMENTS, ALIGN_STEPS, benefitText, byname, fameRank, getChapterInfo, getMonth, getYear, marketTurns, nextSlotThreshold,
   ORIGIN_SECTS, veteranBonus, personalize, sectWord, fullName, realmProgress, traitSlots, realmPerks, activeCompanions, MAX_COMPANIONS,
   DEFAULT_DIFFICULTY, difficultyOf, quirkText } from "./rules.js";
 import { MAX_TURN } from "./character.js";
@@ -77,7 +77,7 @@ function skillDetail(s) {
 function enemyDetail(e) {
   const lines = [`체력 ${e.hp}, 위력 ${e.attack}${e.armor ? `, 방어 ${e.armor}` : ""}`];
   if (e.specials?.length) lines.push(`필살기: ${e.specials.map((x) => x.name).join(", ")}`);
-  for (const q of e.quirks || []) lines.push(`이능 ${quirkText(q)}`);
+  for (const q of e.quirks || []) lines.push(`괴공 ${quirkText(q)}`);
   if (e.requires?.difficulty_min) lines.push(`${DB.difficulty.levels[e.requires.difficulty_min].name} 이상의 강호에서 나온다`);
   if (e.chapters?.length) lines.push(`나오는 곳: ${e.chapters.join(", ")}장`);
   return lines;
@@ -234,7 +234,7 @@ ${section("매달 하는 일", [
     "<b>운기</b>: 내공과 심경, 심법의 성취가 오르고 내력을 되찾습니다.",
     "<b>요양</b>: 체력과 내력을 채우고 내상을 다스립니다.",
     "수련, 운기, 요양을 하는 동안에도 그 일에 얽힌 사건을 만날 때가 있습니다. 탐색보다 덜 위험하고 자라는 길이 다릅니다."])}
-${section("강호의 깊이", [`처음에는 <b>${esc(DB.difficulty.levels[DB.difficulty.order[0]].name)}</b>에서 시작합니다. 한 강호에서 천마를 쓰러뜨리면 더 깊은 강호가 열립니다.`, ...DB.difficulty.order.slice(1).map((key) => `<b>${esc(DB.difficulty.levels[key].name)}</b>: ${esc(DB.difficulty.levels[key].desc)}`), "깊은 강호는 1년차 1월부터 다른 앞날로 갈라집니다. 그 강호에서만 일어나는 일과 이능을 지닌 적이 나오고, 적은 더 강하고 기량은 조금 더디게 오르며 쓰러진 자의 품에서 나오는 것이 줄어듭니다. 대신 카르마를 더 받고, 천마를 넘으면 그 강호만의 결말이 남습니다."])}
+${section("강호의 깊이", [`처음에는 <b>${esc(DB.difficulty.levels[DB.difficulty.order[0]].name)}</b>에서 시작합니다. 한 강호에서 천마를 쓰러뜨리면 더 깊은 강호가 열립니다.`, ...DB.difficulty.order.slice(1).map((key) => `<b>${esc(DB.difficulty.levels[key].name)}</b>: ${esc(DB.difficulty.levels[key].desc)}`), "깊은 강호는 1년차 1월부터 다른 앞날로 갈라집니다. 그 강호에서만 일어나는 일과 괴공을 지닌 적이 나오고, 적은 더 강하고 기량은 조금 더디게 오르며 쓰러진 자의 품에서 나오는 것이 줄어듭니다. 대신 카르마를 더 받고, 천마를 넘으면 그 강호만의 결말이 남습니다."])}
 ${section("저장", ["달이 시작할 때 저절로 저장됩니다. 다음 달로 넘어가기 전에 끄면 그달의 처음부터 다시 합니다."])}
 ${section("할과 푼", ["비율은 할과 푼으로 적습니다. 1할은 열에 하나, 1푼은 백에 하나입니다. 3할 5푼이면 백에 서른다섯입니다."])}`,
     경지: `${section("경지", ["일류, 절정, 초절정, 화경, 현경 순으로 오릅니다. 기량과 <b>실전 경험</b>이 함께 차야 돌파합니다. 화면 위쪽 띠에 남은 조건이 나옵니다.", "경지가 오르면 주는 피해가 크게 늘고 받는 피해가 줄어듭니다. 심경이 낮으면 돌파할 때 기가 역류해 다칠 수 있습니다.", ...Object.entries(DB.realms.perks).map(([realm, perk]) => `<b>${esc(realm)}의 특전, ${esc(perk.name)}</b>: ${esc(perk.desc)}`), "더 높은 경지에 오르면 지난 경지의 특전도 깊어집니다."])}
@@ -270,12 +270,14 @@ ${section("결전에 달려오는 사람", [`인연을 끝까지 맺은 사람�
     "<b>힘의 기준</b>: 생사경은 천마뿐입니다. 현경은 무림맹주와 십이마장, 혈교의 교주, 화경은 각 세력의 수장과 신교 장로, 혈교의 호법, 초절정은 각 세력의 주력, 절정은 손꼽히는 후기지수와 작은 세력의 수장입니다.",
     "이름 없는 산적이나 자객은 몇 번이고 나오지만, 이름 있는 자는 쓰러뜨리면 다시 나오지 않습니다.",
     "적은 경지에 맞는 비급과 약을 지닙니다. 짐승과 영물에게서는 내단이나 영약의 재료를 얻고, 영약으로 삼키면 기량이 오릅니다. 높은 경지의 영물은 쓰러뜨리면 반드시 내단을 남깁니다.",
-    "<b>이능</b>: 혈교의 교주처럼 몇몇 큰 적과 깊은 강호의 적 가운데에는 흡혈, 광기, 호체강기, 단맥, 불사, 반탄 같은 이능을 지닌 자가 있습니다. 싸움이 시작될 때 무엇을 지녔는지 알려 줍니다."])}
+    "<b>날카로운 필살기</b>: 어떤 필살기는 피할 틈이 좁습니다. 경공 단추에 보이는 회피는 걸음을 읽힌 정도와 상대의 다음 필살기까지 셈한 값입니다.",
+    "<b>괴공</b>: 혈교의 교주처럼 몇몇 큰 적과 깊은 강호의 적 가운데에는 흡혈, 광기, 호체강기, 단맥, 불사, 반탄 같은 괴공을 지닌 자가 있습니다. 싸움이 시작될 때 무엇을 지녔는지 알려 줍니다."])}
 ${section("소속", [
     "문파나 세력을 돕고 나면 제안이 오고, 받아들여야 소속이 됩니다. 소속마다 혜택과 이야기, 비전 무공이 있고, 한번 들어가면 다른 소속을 받지 않습니다. 문파의 상승 이상 무공은 그 소속의 일로만 전해집니다.",
     "소속 없이 3년 차 늦봄에서 여름에 이르면 성향에 맞는 문을 직접 두드릴 수 있습니다.",
     "<b>구파일방</b>: 소림, 무당, 화산, 아미, 곤륜, 종남, 점창, 청성, 공동, 개방. <b>오대세가</b>: 남궁, 하북팽가, 사천당가, 모용, 제갈. 남궁과 팽가는 신교의 손에 멸문했고, 그 마지막 사람을 출신으로 고를 수 있습니다.",
     "<b>사파</b>: 사도련, 녹림맹, 살막, 흑사방, 하오문. <b>마도</b>: 천마신교, 혈교, 귀문교."])}
+${section("성향", ["싸움과 선택에 따라 정도, 사도, 마도의 수치가 쌓이고, 가장 높은 길의 단계에 따라 혜택을 받습니다. 정도는 장터 값과 받는 피해, 회복이 낫고, 사도는 은자와 회심, 회피가 낫고, 마도는 주는 피해가 크고 쓰러뜨린 자의 기운을 거두지만 회복이 더딥니다.", `한 길의 수치가 ${ALIGN_STEPS.join(", ")}을 처음 넘을 때마다 그 길에 맞는 기량을 얻습니다. 정도는 심경과 외공에 명성, 사도는 무리와 심경에 은자, 마도는 내공과 외공에 주무공의 성취가 따릅니다. 깊은 단계일수록 크게 얻습니다.`, "한 길에 마음을 모으면 달마다 그 길이 조금씩 깊어집니다."])}
 ${section("혈해", ["6년차 초부터 9년차 중반까지 혈교의 이야기가 정해진 때에 반드시 찾아옵니다. 혈교는 신교에게 빼앗긴 피 연못을 되찾아 개조 혈마를 다시 부르려 합니다.", "토벌에 나서 혈교를 무너뜨리거나, 혈교와 손잡거나, 한발 물러나 지켜볼 수 있습니다. 8년차 마지막 달에 혈마가 깨어나고, 9년차에 그 끝을 정합니다. 깨어난 혈마는 현경의 고수에게도 버거운 상대입니다.", "혈교와 손잡아도 마지막 상대는 천마입니다. 결전에 혈마가 달려오고, 천마를 넘은 뒤 혈마와의 위아래는 그때의 경지와 지나온 일로 정해집니다."])}
 ${section("출신의 이야기", ["출신마다 전용 이야기가 있고, 그 끝에서 출신만의 신공과 병기를 얻습니다. 조건을 채운 이야기는 탐색에서 자주 찾아오고, 그 장에 든 지 반년이 지나면 달의 처음에 반드시 찾아옵니다. 조건을 채우지 못한 이야기는 나오지 않습니다.", "이어지는 인연은 여러 달을 쓰는 대신 끝을 맺으면 보상이 큽니다."])}`,
     장터: `${section("장터", ["매년 말 장터가 열리고 달을 쓰지 않습니다. 주무공에 맞는 무공, 병기, 도구가 더 자주 나옵니다. 도구는 뒤쪽 장터일수록 좋은 품계가 자주 나옵니다.", "약과 도구, 쓰지 않는 병장기는 값의 4할에 되팔 수 있습니다. 들고 있는 병장기는 먼저 내려놓아야 합니다."])}
@@ -645,7 +647,7 @@ function worldTerms(level) {
   if (level.karma <= 1) return "";
   const terms = [`적의 체력 +${halpun(Math.round((level.enemy.hp - 1) * 100))}, 위력 +${halpun(Math.round((level.enemy.attack - 1) * 100))}`,
     `기량 성장 ${halpun(level.growth)}`, `쓰러진 자의 품에서 나오는 것 ${halpun(Math.round(level.drop * 100))}`, `카르마 ${level.karma}배`];
-  return `<p class="world-terms">${terms.map(esc).join(", ")}. 이 강호에서만 일어나는 일과 이능을 지닌 적이 있다.</p>`;
+  return `<p class="world-terms">${terms.map(esc).join(", ")}. 이 강호에서만 일어나는 일과 괴공을 지닌 적이 있다.</p>`;
 }
 
 function renderSetup() {
@@ -880,7 +882,7 @@ function renderBattle() {
         <div class="hpnum">체력 <b>${b.enemy.hp}</b>/${b.enemy.maxHp}</div>
         ${b.enemy.barrier ? `<div class="hpnum">강기 ${b.enemy.barrier}</div>` : ""}
         <div class="enemy-tier">${esc(b.enemy.realm)}, ${esc(TIER_NAMES[b.enemy.tier] || b.enemy.tier)}${b.enemy.armor ? `, 방어 ${b.enemy.armor}` : ""}</div>
-        ${b.enemy.quirks.length ? `<div class="enemy-tier">이능 ${esc(b.enemy.quirks.map((q) => DB.difficulty.quirks[q.type]?.name ?? q.type).join(", "))}</div>` : ""}</div>
+        ${b.enemy.quirks.length ? `<div class="enemy-tier">괴공 ${esc(b.enemy.quirks.map((q) => DB.difficulty.quirks[q.type]?.name ?? q.type).join(", "))}</div>` : ""}</div>
     </div>
     ${tags.length ? `<div class="battle-tags">${tags.map(([kind, label]) => `<span class="tag ${kind}">${esc(label)}</span>`).join("")}</div>` : ""}
     ${warning ? `<p class="battle-warning">다음 합은 ${esc(warning)}${movement ? ". 경공으로 흘려낼 수 있다" : ""}</p>` : ""}
@@ -891,7 +893,7 @@ function renderBattle() {
       <div class="battle-actions">
         <button class="bt-btn" data-act="battle" data-action="비기" ${secretReady ? "" : "disabled"}>${skill?.secretUnlocked ? esc(skill.secretName) : "비기"}<small>${esc(secretNote)}</small></button>
         <button class="bt-btn${b.sealed ? " suggest" : ""}" data-act="battle" data-action="심법" ${mindset ? "" : "disabled"}>${mindset ? esc(mindset.name) : "심법"}<small>${mindset ? "회복, 점혈 해제" : "익힌 심법 없음"}</small></button>
-        <button class="bt-btn${warning && movement ? " suggest" : ""}" data-act="battle" data-action="경공" ${movement && p.qi >= movement.qiCost ? "" : "disabled"}>${movement ? esc(movement.name) : "경공"}<small>${movement ? `내력 ${movement.qiCost}, 회피 ${halpun(movement.effectValue("evade"))}` : "익힌 경공 없음"}</small></button>
+        <button class="bt-btn${warning && movement ? " suggest" : ""}" data-act="battle" data-action="경공" ${movement && p.qi >= movement.qiCost ? "" : "disabled"}>${movement ? esc(movement.name) : "경공"}<small>${movement ? `내력 ${movement.qiCost}, 회피 ${halpun(b.evadeChance(movement))}` : "익힌 경공 없음"}</small></button>
         ${b.isFinal ? "" : `<button class="bt-btn flee" data-act="battle" data-action="도주">도주<small>실패하면 공격받음</small></button>`}
       </div>
       ${items.length ? `<p class="item-hint">${b.freeItemUsed ? "이번 합에 도구를 썼다. 하나 더 쓰면 합이 지나간다" : "도구 하나는 합을 쓰지 않는다"}</p><div class="battle-items">${items.map(([key, count]) => `<button class="item-btn${lowHp && DB.market[key].effects.some((e) => e.type === "heal") ? " suggest" : ""}" data-act="battle" data-action="소비품" data-key="${esc(key)}">${esc(DB.market[key].name)} ${count}개</button>`).join("")}</div>` : ""}

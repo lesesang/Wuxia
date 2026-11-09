@@ -153,32 +153,32 @@
   "대환단": {
     "name": "대환단",
     "category": "영약",
-    "price": 770,
+    "price": 640,
     "markets": [
       4,
       5
     ],
-    "desc": "소림이 귀하게 여기는 영단. 네 기량이 모두 60 오른다.",
+    "desc": "소림이 귀하게 여기는 영단. 네 기량이 모두 50 오른다.",
     "effects": [
       {
         "type": "stat",
         "stat": "external",
-        "amount": 60
+        "amount": 50
       },
       {
         "type": "stat",
         "stat": "internal",
-        "amount": 60
+        "amount": 50
       },
       {
         "type": "stat",
         "stat": "martial",
-        "amount": 60
+        "amount": 50
       },
       {
         "type": "stat",
         "stat": "mind",
-        "amount": 60
+        "amount": 50
       }
     ],
     "grade": "보물",
@@ -1665,7 +1665,7 @@
     "markets": [
       5
     ],
-    "desc": "죽은 자의 몫을 당겨 쓰는 단약. 체력과 내력이 가득 차고 네 기량이 30씩 오른다.",
+    "desc": "죽은 자의 몫을 당겨 쓰는 단약. 체력과 내력이 가득 차고 네 기량이 65씩 오른다.",
     "effects": [
       {
         "type": "heal",
@@ -1680,22 +1680,22 @@
       {
         "type": "stat",
         "stat": "external",
-        "amount": 30
+        "amount": 65
       },
       {
         "type": "stat",
         "stat": "internal",
-        "amount": 30
+        "amount": 65
       },
       {
         "type": "stat",
         "stat": "martial",
-        "amount": 30
+        "amount": 65
       },
       {
         "type": "stat",
         "stat": "mind",
-        "amount": 30
+        "amount": 65
       }
     ],
     "grade": "신물",
@@ -3098,31 +3098,31 @@
   "천년내단": {
     "name": "천년 내단",
     "category": "영약",
-    "price": 850,
+    "price": 1235,
     "markets": [
       5
     ],
-    "desc": "천 년의 기운이 뭉친 구슬. 삼키면 네 기량이 40씩 오르고 체력과 내력이 가득 찬다.",
+    "desc": "천 년의 기운이 뭉친 구슬. 삼키면 네 기량이 70씩 오르고 체력과 내력이 가득 찬다.",
     "effects": [
       {
         "type": "stat",
         "stat": "external",
-        "amount": 40
+        "amount": 70
       },
       {
         "type": "stat",
         "stat": "internal",
-        "amount": 40
+        "amount": 70
       },
       {
         "type": "stat",
         "stat": "martial",
-        "amount": 40
+        "amount": 70
       },
       {
         "type": "stat",
         "stat": "mind",
-        "amount": 40
+        "amount": 70
       },
       {
         "type": "heal",
@@ -4042,27 +4042,27 @@
     ],
     "always": true,
     "category": "소비품",
-    "desc": "삼키면 단전에 꺼지지 않는 불씨가 남는다. 네 기량이 40씩 오르고 내력이 가득 찬다.",
+    "desc": "삼키면 단전에 꺼지지 않는 불씨가 남는다. 네 기량이 70씩 오르고 내력이 가득 찬다.",
     "effects": [
       {
         "type": "stat",
         "stat": "external",
-        "amount": 40
+        "amount": 70
       },
       {
         "type": "stat",
         "stat": "internal",
-        "amount": 40
+        "amount": 70
       },
       {
         "type": "stat",
         "stat": "martial",
-        "amount": 40
+        "amount": 70
       },
       {
         "type": "stat",
         "stat": "mind",
-        "amount": 40
+        "amount": 70
       },
       {
         "type": "heal",
@@ -4102,27 +4102,27 @@
     ],
     "always": true,
     "category": "서책",
-    "desc": "펼칠 때마다 글자가 바뀌는 책. 네 기량이 60씩 오른다.",
+    "desc": "펼칠 때마다 글자가 바뀌는 책. 네 기량이 75씩 오른다.",
     "effects": [
       {
         "type": "stat",
         "stat": "external",
-        "amount": 60
+        "amount": 75
       },
       {
         "type": "stat",
         "stat": "internal",
-        "amount": 60
+        "amount": 75
       },
       {
         "type": "stat",
         "stat": "martial",
-        "amount": 60
+        "amount": 75
       },
       {
         "type": "stat",
         "stat": "mind",
-        "amount": 60
+        "amount": 75
       }
     ],
     "consumable": true,
@@ -4666,29 +4666,29 @@
   "흑룡여의주": {
     "name": "흑룡의 여의주",
     "category": "영약",
-    "price": 980,
+    "price": 1360,
     "markets": [],
-    "desc": "흑룡이 끝내 물지 못한 구슬. 삼키면 네 기량이 50씩 오르고 체력과 내력이 가득 찬다.",
+    "desc": "흑룡이 끝내 물지 못한 구슬. 삼키면 네 기량이 80씩 오르고 체력과 내력이 가득 찬다.",
     "effects": [
       {
         "type": "stat",
         "stat": "external",
-        "amount": 50
+        "amount": 80
       },
       {
         "type": "stat",
         "stat": "internal",
-        "amount": 50
+        "amount": 80
       },
       {
         "type": "stat",
         "stat": "martial",
-        "amount": 50
+        "amount": 80
       },
       {
         "type": "stat",
         "stat": "mind",
-        "amount": 50
+        "amount": 80
       },
       {
         "type": "heal",
