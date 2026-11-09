@@ -1669,7 +1669,7 @@ test("성향은 단계마다 혜택이 커지고 한 길에 집중하면 더 잘
   game.player.alignment = { 정도: 300, 사도: 0, 마도: 0 };
   game.alignmentMonth();
   assert.equal(game.player.alignment.정도, 301);
-  assert.ok(game.player.chronicle.some((c) => c.text.includes("협사")));
+  assert.ok(game.player.chronicle.some((c) => c.text.includes("협객")));
 });
 
 test("출신의 기본 무공은 오래 갈고닦은 성취를 지닌다", () => {

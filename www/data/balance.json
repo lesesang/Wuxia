@@ -210,6 +210,16 @@
               "hp_pct": 1
             }
           ]
+        },
+        {
+          "name": "대의",
+          "desc": "어떤 칼 앞에서도 물러서지 않는다. 받는 피해가 5푼 준다.",
+          "effects": [
+            {
+              "type": "damage_reduce",
+              "percent": 5
+            }
+          ]
         }
       ]
     },
@@ -270,6 +280,16 @@
               "percent": 30
             }
           ]
+        },
+        {
+          "name": "천하의 셈",
+          "desc": "급소를 노리는 셈이 끝에 이르렀다. 회심의 일격 위력이 4할 오른다.",
+          "effects": [
+            {
+              "type": "crit_power",
+              "percent": 40
+            }
+          ]
         }
       ]
     },
@@ -325,6 +345,16 @@
             {
               "type": "qi_cost_cut",
               "percent": 15
+            }
+          ]
+        },
+        {
+          "name": "패왕의 기세",
+          "desc": "마기가 온몸을 덮는다. 주는 피해가 5푼 더 늘어난다.",
+          "effects": [
+            {
+              "type": "damage_bonus",
+              "percent": 5
             }
           ]
         }

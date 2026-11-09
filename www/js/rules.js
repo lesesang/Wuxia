@@ -7,7 +7,7 @@ import { pick, rng } from "./rng.js";
 export const ALIGNMENTS = ["정도", "사도", "마도"];
 export const ALIGNMENT_CAP = 999;
 export const ALIGNMENT_SCALE = 20; // 성향이 낮은 수로 쌓이던 때의 저장을 옮길 때 쓴다
-const DOMINANT_THRESHOLD = 60;
+const DOMINANT_THRESHOLD = 100;
 export const FOCUS_RATIO = 2;      // 한 길이 둘째 길의 이만큼을 넘으면 그 길에 집중한 것으로 친다
 // 앞선 길은 사건에서 이만큼 더 오른다. 사건이 적은 길일수록 크다
 export const MAX_FAME = 999;
@@ -17,11 +17,11 @@ export const FOCUS_DRIFT = 1;       // 집중한 길은 달마다 저절로 오�
 // 한 길이 오르면 부딪치는 길이 그 비율만큼 깎인다
 export const ALIGN_CLASH = { 정도: { 마도: 0.6, 사도: 0.3 }, 마도: { 정도: 0.6, 사도: 0.2 }, 사도: { 정도: 0.3, 마도: 0.15 } };
 export const KILL_ALIGN = { 사도: 2, 마도: 5 }; // 싸워 이길수록 깊어지는 길
-export const ALIGN_STEPS = [60, 200, 400, 600, 850];
+export const ALIGN_STEPS = [100, 200, 300, 500, 700, 950];
 const ALIGN_TABLE = {
-  정도: { names: ["정파 무인", "협사", "협객", "〈대협〉", "정도의 기둥"], discount: [8, 10, 12, 14, 16], guard: [1, 2, 3, 4, 5], heal: [0, 4, 7, 10, 14] },
-  사도: { names: ["사파 무인", "흑도인", "흑도 고수", "흑도의 거물", "사도의 거두"], silver: [25, 30, 35, 40, 50], crit: [2, 4, 6, 8, 10], evade: [0, 2, 3, 4, 6] },
-  마도: { names: ["마도 무인", "마인", "마두", "대마두", "마도의 거두"], damage: [15, 20, 25, 30, 35], healCut: [3, 5, 6, 8, 10], kill_heal: [0, 3, 5, 7, 10] },
+  정도: { names: ["정파 무인", "협사", "협객", "명협", "〈대협〉", "정도의 기둥"], discount: [8, 10, 11, 13, 15, 16], guard: [1, 2, 3, 3, 4, 5], heal: [0, 4, 6, 8, 11, 14] },
+  사도: { names: ["사파 무인", "흑도인", "흑도 고수", "흑도의 실력자", "흑도의 거물", "사도의 거두"], silver: [25, 30, 33, 37, 42, 50], crit: [2, 4, 5, 7, 8, 10], evade: [0, 2, 3, 3, 4, 6] },
+  마도: { names: ["마도 무인", "마인", "마두", "흉마", "대마두", "마도의 거두"], damage: [15, 20, 23, 27, 30, 35], healCut: [3, 5, 6, 7, 8, 10], kill_heal: [0, 3, 4, 6, 8, 10] },
 };
 
 /** 장이 뒤로 갈수록 기량이 더디게 오른다 */
@@ -341,7 +341,7 @@ function bynameOf(player) {
   const names = DB.flavor.bynames;
   const tier = alignTier(player.alignment);
   const side = tier?.side ?? "중립";
-  const depth = !tier || tier.step < 2 ? 0 : tier.step < 4 ? 1 : 2;
+  const depth = !tier || tier.step < 2 ? 0 : tier.step < 5 ? 1 : 2;
   const category = player.bestSkill()?.category || "맨손";
   const rank = player.fame < 200 ? 0 : player.fame < 500 ? 1 : 2;
   const home = names.origin_prefix[player.originKey];
