@@ -1180,7 +1180,7 @@ test("이벤트에서 만들어 쓰는 인연 표시는 어딘가에서 얻을 �
     if (Array.isArray(node)) return node.forEach(walk);
     if (!node || typeof node !== "object") return undefined;
     for (const f of node.flags || []) given.add(f);
-    for (const name of ["flag", "not_flag"]) if (node[name]) used.add(node[name]);
+    for (const name of ["flag", "not_flag"]) for (const f of [].concat(node[name] || [])) used.add(f);
     for (const f of node.any_flag || []) used.add(f);
     return Object.values(node).forEach(walk);
   };
@@ -2997,7 +2997,7 @@ test("같은 갈래의 더 깊은 무공은 이어받고 같은 무공은 성취
 });
 
 test("적의 경지와 이름, 품은 비급이 세계관에 맞는다", () => {
-  const nameless = ["무명노인", "권마의그림자", "혈마잔영", "옛무인그림자", "생사문지기", "천마", "묘지기"];
+  const nameless = ["무명노인", "권마의그림자", "옛무인그림자", "생사문지기", "천마", "묘지기"];
   const banned = ["멸절", "호연패", "단목휘"];
   for (const [k, e] of Object.entries(DB.enemies)) {
     assert.ok(DB.realms.enemy_order.includes(e.realm), k);
@@ -4292,7 +4292,7 @@ test("깊은 강호의 사건과 적은 그 강호에서만 나오고, 같은 �
     assert.ok(!key || !DB.randomEvents[key].requires?.difficulty_min, key);
   }
   const deepEnemies = Object.keys(DB.enemies).filter((k) => DB.enemies[k].requires?.difficulty_min);
-  assert.ok(deepEnemies.length >= 8);
+  assert.ok(deepEnemies.length >= 7);
   for (const k of deepEnemies) assert.ok(DB.enemies[k].quirks?.length, `${k}에 이능이 있다`);
 });
 
@@ -4390,14 +4390,15 @@ test("깊은 강호에서 천마를 꺾으면 카르마를 더 받고 다음 강
   const game = new Game();
   game.start("무림초출", [], [], {}, "혈풍");
   game.player.turn = 120;
-  game.player.flags.push("혈불_처단");
+  game.player.flags.push("혈교_멸문");
   game.finishGame(true, "기본");
   assert.ok(game.ending.karmaLines.some((l) => l.includes("혈풍의 강호")));
   assert.ok(game.ending.karmaLines.some((l) => l.includes("겁화")), "다음 강호가 열린다");
   assert.ok(loadMeta().difficulty_cleared.includes("혈풍"));
-  assert.ok(game.ending.epilogue.some((l) => l.includes("혈불")));
+  assert.ok(game.ending.epilogue.some((l) => l.includes("혈마")));
+  assert.ok(game.ending.epilogue.some((l) => l.includes("피바람")), "그 강호만의 결말");
   const plain = new Player("무림초출");
-  assert.ok(!buildEpilogue(plain, "기본").some((l) => l.includes("혈불") || l.includes("겁화")));
+  assert.ok(!buildEpilogue(plain, "기본").some((l) => l.includes("혈마") || l.includes("겁화") || l.includes("피바람")));
 });
 
 test("같은 갈래의 무공으로 이어질 때 성취가 이어진다고 굳이 적지 않는다", () => {
@@ -4441,8 +4442,8 @@ test("데이터의 조건과 효과는 모두 코드가 읽는다", () => {
   assert.deepEqual(bad, []);
 });
 
-test("혈마의 잔영은 현경의 무인에게도 버거운 상대다", () => {
-  const blood = DB.enemies.혈마잔영;
+test("깨어난 혈마는 현경의 무인에게도 버거운 상대다", () => {
+  const blood = DB.enemies.혈마;
   assert.equal(blood.realm, "현경");
   for (const k of ["이무기", "흑룡", "무림맹주"]) {
     assert.ok(blood.hp > DB.enemies[k].hp && blood.attack > DB.enemies[k].attack, k);
@@ -4450,6 +4451,81 @@ test("혈마의 잔영은 현경의 무인에게도 버거운 상대다", () => 
   assert.ok(blood.phases.length >= 2);
   // 다른 사건의 그림자는 혈마의 수치를 빌리지 않는다
   for (const name of ["events_jianghu", "events_chains"]) {
-    assert.ok(!readFileSync(new URL(`../www/data/${name}.json`, import.meta.url), "utf-8").includes("\"battle\": \"혈마잔영\""), name);
+    assert.ok(!readFileSync(new URL(`../www/data/${name}.json`, import.meta.url), "utf-8").includes("\"battle\": \"혈마\""), name);
+  }
+});
+
+// ---------- 혈해 ----------
+
+test("혈해 이야기는 6년차 초부터 9년차 중반까지 정해진 때에 반드시 찾아온다", () => {
+  const steps = ["혈해_격문", "혈해_공양", "혈해_호법", "혈해_연못", "혈해_강림", "혈해_끝"];
+  for (const route of ["토벌대에 이름을 올린다", "혈교의 사자를 만난다", "어느 쪽에도 서지 않고 지켜본다"]) {
+    seed(7);
+    const p = new Player("무림초출");
+    const met = {};
+    for (let turn = 2; turn <= 119; turn++) {
+      p.turn = turn;
+      const key = storyEventForTurn(p);
+      if (!key) continue;
+      p.seenEvents.push(key);
+      if (!steps.includes(key)) continue;
+      met[key] = turn;
+      const view = eventView(p, key);
+      const pick = view.choices.find((c) => !c.locked && c.label === route) || view.choices.find((c) => !c.locked && !DB.events[key].choices.concat(...(DB.events[key].variants || []).map((v) => v.choices || []))
+        .find((x) => x.label === c.label)?.outcomes.some((o) => o.effects.battle));
+      const choice = [...(DB.events[key].variants || []).filter((v) => v.choices && checkRequires(p, v.requires)).flatMap((v) => v.choices), ...DB.events[key].choices][pick.index];
+      for (const f of choice.outcomes[0].effects.flags || []) p.flags.push(f);
+    }
+    assert.deepEqual(Object.keys(met), steps, route);
+    assert.ok(met.혈해_격문 >= 61 && met.혈해_격문 <= 64);
+    assert.equal(met.혈해_강림, 96);
+    assert.ok(met.혈해_끝 >= 101 && met.혈해_끝 <= 106);
+  }
+});
+
+test("혈교와 손잡는 길은 정파의 무인과 신교의 교도에게 보이지 않고, 혈교의 교우는 교단의 부름을 받는다", () => {
+  const view = (setup) => {
+    const p = new Player("무림초출");
+    setup(p);
+    p.turn = 62;
+    return eventView(p, "혈해_격문").choices.map((c) => c.label);
+  };
+  assert.ok(view(() => {}).includes("혈교의 사자를 만난다"));
+  assert.ok(!view((p) => { p.sect = "소림"; }).includes("혈교의 사자를 만난다"));
+  assert.ok(!view((p) => { p.sect = "마교"; }).includes("혈교의 사자를 만난다"));
+  assert.ok(view((p) => { p.sect = "마교"; }).includes("교단의 명으로 혈교를 친다"));
+  const blood = view((p) => { p.sect = "혈교"; });
+  assert.ok(blood.includes("피로 맹세하고 교단의 선봉에 선다") && !blood.includes("토벌대에 이름을 올린다"));
+});
+
+test("혈교와 손잡으면 결전에 혈마가 달려오고, 천마를 넘은 뒤의 위아래는 경지와 지난 일로 정해진다", () => {
+  const p = new Player("무림초출");
+  p.flags.push("혈해_1", "혈해_맹약", "혈해_5", "혈마_맹약");
+  assert.equal(new Battle(p, new Enemy("천마"), true).companions[0].key, "혈마");
+  const line = (setup, ending = "기본") => {
+    const q = new Player("무림초출");
+    q.flags.push("혈해_5", "혈마_맹약");
+    setup(q);
+    return buildEpilogue(q, ending).join(" ");
+  };
+  assert.ok(line((q) => { q.realm = "현경"; q.flags.push("혈마_인정"); }).includes("무릎을 꿇었다"), "위");
+  assert.ok(line((q) => { q.realm = "현경"; }).includes("벗이라 불렀다"), "나란히");
+  assert.ok(line((q) => { q.realm = "화경"; }).includes("혈마가 있었다"), "아래");
+  assert.ok(line(() => {}, "생사경").includes("하늘로 받든다"));
+  assert.ok(line(() => {}, "귀순").includes("배신"));
+});
+
+test("여러 달에 걸친 줄거리는 마지막 달이 서로 겹치지 않는다", () => {
+  const ends = {};
+  const fixed = new Set(Object.values(DB.storyEvents).filter((e) => e.turn).map((e) => e.turn));
+  for (const [key, e] of Object.entries(DB.storyEvents)) {
+    if (!e.turn_range) continue;
+    const end = e.turn_range[1];
+    assert.ok(!fixed.has(end), `${key}: 마지막 달이 정해진 줄거리와 겹친다`);
+    ends[end] = [...(ends[end] || []), key];
+  }
+  for (const [end, keys] of Object.entries(ends)) {
+    const diff = new Set(keys.map((k) => DB.storyEvents[k].requires?.difficulty_min || ""));
+    assert.ok(keys.length === 1 || diff.size === keys.length, `${end}: ${keys}`);
   }
 });
