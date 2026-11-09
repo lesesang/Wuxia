@@ -4607,3 +4607,25 @@ test("깊은 강호의 적은 약이 아니라 혈계와 관정으로 강해지�
   assert.equal(affixes.겁화관정.realm_min, "화경");
   assert.ok(affixes.겁화관정.quirks.length >= 2);
 });
+
+test("출신 전용 이야기는 경지가 낮고 앞선 선택을 달리해도 10년 안에 전부 찾아온다", () => {
+  for (const origin of Object.keys(DB.origins.origins)) {
+    const p = new Player(origin);
+    p.content = [...new Set(Object.values(DB.randomEvents).map((e) => e.requires?.unlocked).filter(Boolean))];
+    const met = [];
+    for (p.turn = 1; p.turn <= 119; p.turn++) {
+      const key = dueOriginEvent(p);
+      if (!key) continue;
+      p.seenEvents.push(key);
+      p.originTurn = p.turn;
+      // 가장 소극적인 선택(마지막 선택지)을 했다고 친다
+      const choice = DB.randomEvents[key].choices?.at(-1);
+      for (const o of choice?.outcomes || []) for (const f of o.effects?.flags || []) p.flags.push(f);
+      met.push(key);
+    }
+    const all = Object.keys(DB.randomEvents).filter((k) => DB.randomEvents[k].requires?.origin === origin
+      && !DB.randomEvents[k].requires?.max_kills);
+    const missed = all.filter((k) => !p.seenEvents.includes(k));
+    assert.deepEqual(missed, [], `${origin}: ${missed.join(", ")}`);
+  }
+});
