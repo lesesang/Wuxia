@@ -225,6 +225,7 @@ export class Player {
     }
     this.flags = [];
     this.seenEvents = [];
+    this.originTurn = -99; // 출신의 이야기가 마지막으로 찾아온 달
     this.kills = 0;
     this.alignMark = null;
     this.fame = Math.min(MAX_FAME, sumEffect(traitKeys, "start_fame", "amount"));
@@ -437,7 +438,7 @@ export class Player {
       skills: this.skills.map((s) => s.toDict()), main_skill: this.mainSkill, chosen_arts: this.chosenArts,
       traits: this.traits, slain: this.slain, silver: this.silver, weapon: this.weapon, armor: this.armor, gear: this.gear, pending_legacy: this.pendingLegacy, person: this.person,
       inventory: this.inventory, boss_weaken: this.bossWeaken, alignment: this.alignment,
-      flags: this.flags, seen_events: this.seenEvents, kills: this.kills,
+      flags: this.flags, seen_events: this.seenEvents, origin_turn: this.originTurn, kills: this.kills,
       fame: this.fame, sect: this.sect, injury: this.injury,
       align_mark: this.alignMark, revives: this.revives, turn: this.turn, max_turn: this.maxTurn, alive: this.alive, chronicle: this.chronicle, content: this.content, chains: this.chains, chains_done: this.chainsDone,
     };
@@ -454,6 +455,7 @@ export class Player {
     p.content = d.content ?? [];
     p.chains = (d.chains ?? []).filter((c) => DB.chains[c.id]);
     p.chainsDone = d.chains_done ?? 0;
+    p.originTurn = d.origin_turn ?? -99;
     p.realm = d.realm;
     // 특전이 생기기 전의 기록도 그 경지의 특전을 받는다
     for (const perk of realmPerks(p.realm)) if (!(d.traits || []).includes(perkTrait(perk.realm))) (d.traits ||= []).push(perkTrait(perk.realm));

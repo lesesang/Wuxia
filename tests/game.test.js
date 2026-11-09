@@ -1473,7 +1473,7 @@ test("출신 고유 무공은 장터나 적에게서 얻지 못하고 권마의 
   // 출신마다 전용 인연은 둘이고 값이 같다. 강호초출은 사부의 신공을 주는 인연이 하나 더 있다
   for (const origin of DB.origins.order) {
     const own = Object.values(DB.karma.content).filter((c) => c.origin === origin);
-    assert.equal(own.length, origin === "무림초출" ? 3 : 2, origin);
+    assert.equal(own.length, 2, origin);
     assert.ok(own.every((c) => c.cost === 8), origin);
   }
 });
@@ -2074,7 +2074,7 @@ test("출신마다 전용 자질과 인연이 있고 그 출신만 쓴다", () =
     const traits = Object.keys(DB.traits).filter((t) => DB.traits[t].origin === key);
     assert.equal(traits.length, 2, `${key} 자질`);
     const content = Object.keys(DB.karma.content).filter((c) => DB.karma.content[c].origin === key);
-    assert.equal(content.length, key === "무림초출" ? 3 : 2, `${key} 인연`);
+    assert.equal(content.length, 2, `${key} 인연`);
     for (const c of content) assert.ok(Object.values(DB.events).some((e) => e.requires?.origin === key && e.requires?.unlocked === c), `${key} 인연 사건 ${c}`);
     assert.equal(Object.values(DB.karma.upgrades).filter((u) => u.origin === key).length, 1, `${key} 기틀`);
     for (const trait of traits) {
@@ -3722,8 +3722,12 @@ test("출신의 이야기는 결전 전에 모두 찾아오고 조건을 못 채
   assert.ok(keys.includes("표기_열셋"), "켜 둔 인연");
   assert.ok(!keys.includes("표기_창"), "앞 편을 못 만나면 뒷 편은 나오지 않는다");
   assert.ok(dueOriginEvent(p), "마지막 달에는 반드시 연다");
+  // 조건을 채우면 확정으로 찾아오되, 지난 이야기에서 몇 달 띄운다
   p.turn = 50;
+  p.originTurn = 48;
   assert.equal(dueOriginEvent(p), null);
+  p.turn = 52;
+  assert.ok(dueOriginEvent(p));
   p.seenEvents = [];
   p.content = [];
   p.turn = 118;
@@ -4124,13 +4128,13 @@ test("세가의 무인에게 사문으로서 하는 선택지가 보이지 않�
   }
 });
 
-test("강호초출은 사부의 이름 인연으로 출신 신공 셋을 얻고, 공격 무공은 내 병기에 맞춘다", () => {
+test("강호초출은 사부의 마지막 가르침 인연으로 출신 신공 셋을 얻고, 공격 무공은 내 병기에 맞춘다", () => {
   const p = new Player("무림초출");
   p.skills = p.skills.filter((s) => s.type !== "공격무공");
   p.learnSkill(Skill.fromDict({ key: "기초창법", grade: "기본", mastery: 0 }));
   applyEffects(p, { style_skill: { grade: "신공", origin: "무림초출" } });
   assert.ok(p.hasSkill("무명창결"), p.skills.map((s) => s.key).join(","));
-  for (const k of ["초출_사부숨", "초출_사부걸음", "초출_사부이름"]) assert.equal(DB.events[k].requires.unlocked, "사부의이름");
-  assert.ok(JSON.stringify(DB.events.초출_사부숨).includes("무명청허공"));
-  assert.ok(JSON.stringify(DB.events.초출_사부걸음).includes("무명행운보"));
+  for (const k of ["초출_심법", "초출_보법", "초출_비급"]) assert.equal(DB.events[k].requires.unlocked, "사부의유산");
+  assert.ok(JSON.stringify(DB.events.초출_심법).includes("무명청허공"));
+  assert.ok(JSON.stringify(DB.events.초출_보법).includes("무명행운보"));
 });
