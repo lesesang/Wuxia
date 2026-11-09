@@ -285,7 +285,7 @@ export function realmProgress(player) {
 export function checkSaengsa(player) {
   const req = DB.realms.saengsa;
   return realmIndex(player.realm) >= realmIndex(req.min_realm)
-    && Math.min(...statsOf(player)) >= req.min_stat && player.battles >= battlesNeeded(player, req)
+    && Math.min(...statsOf(player)) >= req.min_stat && player.battles >= Math.max(req.min_battles ?? 0, battlesNeeded(player, req))
     && player.hp >= player.maxHp() * req.hp_ratio && player.qi >= player.maxQi() * req.qi_ratio;
 }
 

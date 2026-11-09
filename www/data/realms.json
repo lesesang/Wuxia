@@ -40,8 +40,9 @@
     "min_realm": "현경",
     "min_stat": 950,
     "battles": 75,
-    "hp_ratio": 0.7,
-    "qi_ratio": 0.7
+    "hp_ratio": 0.75,
+    "qi_ratio": 0.75,
+    "min_battles": 60
   },
   "good_ending": {
     "min_realm": "화경",
