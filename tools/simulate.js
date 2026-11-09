@@ -25,8 +25,12 @@ function unlockAll() {
   data.unlocked_origins = Object.keys(DB.origins.origins);
   data.unlocked_traits = Object.keys(DB.traits);
   data.total_karma = 100;
+  data.difficulty_cleared = [...DB.difficulty.order];
   saveMeta(data);
 }
+
+// 깊은 강호를 잴 때는 WORLD=혈풍 처럼 준다
+const WORLD = process.env.WORLD || "강호";
 
 function buyPriority(key) {
   const item = DB.market[key];
@@ -58,6 +62,7 @@ function setUpgrades(upgrades = {}, total = 0) {
   const data = loadMeta();
   data.upgrades = upgrades;
   data.total_karma = total;
+  data.difficulty_cleared = [...DB.difficulty.order];
   saveMeta(data);
 }
 
@@ -67,7 +72,7 @@ function play({ style = "섞어서", useMarket = true, origin = "무림초출", 
   // 누적 보상이 끼어들므로 그 단계의 누적 카르마에 맞춘다. 정하지 않으면 자질 칸에 필요한 만큼만
   setUpgrades(upgrades, total ?? [0, 0, 30, 90][traits.length]);
   const game = new Game();
-  game.start(origin, traits);
+  game.start(origin, traits, [], {}, WORLD);
   for (let i = 0; i < 3000 && game.player.alive; i++) {
     const p = game.player;
     if (!game.battle) equipBestGear(game.player); // 사람은 더 좋은 병장기를 얻으면 바꿔 든다

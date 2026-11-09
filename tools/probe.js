@@ -10,7 +10,6 @@ import { Game } from "../www/js/game.js";
 import { blockReason, bonusFor, equipmentBonus } from "../www/js/market.js";
 import { loadMeta, saveMeta } from "../www/js/meta.js";
 import { getChapter } from "../www/js/rules.js";
-import { equipmentBonus } from "../www/js/market.js";
 
 await loadData(async (name) => JSON.parse(await readFile(new URL(`../www/data/${name}.json`, import.meta.url), "utf-8")));
 
@@ -18,7 +17,9 @@ const count = Number(process.argv[2] || 200);
 const origin = process.argv[3] || "무림초출";
 const meta = loadMeta();
 meta.unlocked_origins = Object.keys(DB.origins.origins);
+meta.difficulty_cleared = [...DB.difficulty.order];
 saveMeta(meta);
+const WORLD = process.env.WORLD || "강호"; // 깊은 강호를 잴 때는 WORLD=혈풍 처럼 준다
 
 const choice = (l) => l[Math.floor(Math.random() * l.length)];
 const years = Array.from({ length: 11 }, () => ({ n: 0, atk: 0, hp: 0, armor: 0, avg: 0, silver: 0, battles: 0, realm: {} }));
@@ -46,7 +47,7 @@ for (let run = 0; run < count; run++) {
   const fresh = loadMeta();
   fresh.total_karma = 0;
   saveMeta(fresh);
-  game.start(origin);
+  game.start(origin, [], [], {}, WORLD);
   let lastYear = -1; let fight = null;
   for (let i = 0; i < 6000 && game.player.alive; i++) {
     const p = game.player;

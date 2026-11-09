@@ -3,19 +3,20 @@ import { Battle, enemyPool, Enemy, statureEnemy, useConsumable } from "./battle.
 import { GRADE_ORDER, Player, Skill, STAT_NAMES } from "./character.js";
 import { DB } from "./data.js";
 import { equipBestGear, grantStartGear, grantStartSkills,
-  advanceChain, applyEffects, failChain, checkRequires, dueChainEvent, enemyIntro, LAST_CHAIN_TURN, pickFortune, pickRandomEvent, resolveChoice,
+  advanceChain, applyEffects, failChain, checkRequires, dueChainEvent, enemyIntro, LAST_CHAIN_TURN, pickActionEvent, pickFortune, pickRandomEvent, resolveChoice,
   reactiveLine, startChain, storyEventForTurn, dueOriginEvent, pendingOriginEvents,
 } from "./events.js";
 import { bonusFor, buy, equipmentBonus, openMarket, sell } from "./market.js";
 import {
   activeContent, addKarma, claimAchievements, clearCheckpoint, extraSlots, rewardTraits, loadCheckpoint, loadMeta, recordRun, saveCheckpoint,
   legacyPowers, storeLegacy, canLeaveLegacy, sameLegacy, takeProvisions, updateGlobalCodex, updateKnown, upgradeTraits,
+  difficultyOpen, recordDifficultyClear,
 } from "./meta.js";
 import { pick, pickWeighted, randInt, rng } from "./rng.js";
 import {
   actionLine, ALIGNMENT_CAP, alignTier, applyGrowth, byname, CHAPTER_STARTS, checkBreakthrough, checkGoodEnding, checkSaengsa,
   scaledGrowth, fameRank, FOCUS_DRIFT, focusedSide, getChapter, getChapterInfo, getMonth, getYear, isMarketTurn, monthLine, auraText, isNamed, perkTrait, realmFit, returnedLine, standIn, realmIndex, sumEffect, talkLine, traitSlots,
-  personalize,
+  personalize, DEFAULT_DIFFICULTY, difficultyOf,
 } from "./rules.js";
 import { halpun, josa } from "./josa.js";
 
@@ -28,6 +29,10 @@ const EXPLORE_BATTLE = 0.35; // 나머지는 사건과 기연
 const EXPLORE_EVENT = 0.45;
 const SPARRING_CHANCE = 0.65;
 const TRAIN_BONUS_BASE = 0.05;
+const TRAIN_GROWTH = [12, 16]; // 수련과 운기로 오르는 기량
+const REST_HEAL = [40, 50]; // 요양의 체력과 내력 회복(할푼)
+const ACTION_EVENT_RATE = 0.25; // 수련, 운기, 요양 중에 그 일에 얽힌 사건을 만날 확률
+const DEEP_MONTH_RATE = 0.25; // 깊은 강호의 소식이 달의 문장에 끼는 확률
 const TRAIN_MASTERY_RATE = 2; // 수련이 주무공에
 const MIND_MASTERY_RATE = 5; // 운기가 심법에
 const INSIGHT_MASTERY_RATE = 1.5;
@@ -88,16 +93,19 @@ export class Game {
   // ---------- 시작과 복구 ----------
 
   /** 새 강호행 시작. 잠긴 출신이면 false */
-  start(originKey = "무림초출", selectedTraits = [], legacyPicks = [], person = {}) {
+  start(originKey = "무림초출", selectedTraits = [], legacyPicks = [], person = {}, difficulty = DEFAULT_DIFFICULTY) {
     const meta = loadMeta();
     if (!meta.unlocked_origins.includes(originKey) || !DB.origins.origins[originKey]) return false;
+    if (!DB.difficulty.levels[difficulty] || !difficultyOpen(difficulty, meta)) return false;
     const traits = [...new Set(selectedTraits)]
       .filter((t) => meta.unlocked_traits.includes(t) && (!DB.traits[t].origin || DB.traits[t].origin === originKey))
       .slice(0, traitSlots(meta.total_karma) + extraSlots(meta));
 
     this.reset();
     const provisions = takeProvisions();
-    this.player = new Player(originKey, [...traits, ...upgradeTraits(meta, originKey), ...rewardTraits(meta), ...provisions.map((k) => `채비_${k}`)]);
+    const world = DB.traits[`강호_${difficulty}`] ? [`강호_${difficulty}`] : [];
+    this.player = new Player(originKey, [...traits, ...upgradeTraits(meta, originKey), ...rewardTraits(meta), ...provisions.map((k) => `채비_${k}`), ...world]);
+    this.player.difficulty = difficulty;
     this.player.content = activeContent(meta);
     this.player.person = settlePerson(originKey, person);
     const giftLines = DB.origins.origins[originKey].choose_start ? [] : grantStartSkills(this.player);
@@ -108,7 +116,8 @@ export class Game {
     updateKnown(this.player.skills.map((s) => s.key));
     const intro = getChapterInfo(1);
     const provisionLines = provisions.length ? [`챙겨 온 채비: ${provisions.map((k) => DB.karma.provisions[k].name).join(", ")}`] : [];
-    this.enterTurn([`${intro.title}, 1년차. ${intro.desc}`, ...provisionLines, ...giftLines]);
+    const deep = difficultyOf(this.player).chapters?.["1"];
+    this.enterTurn([`${intro.title}, 1년차. ${intro.desc}`, ...(deep ? [deep] : []), ...provisionLines, ...giftLines]);
     return true;
   }
 
@@ -262,7 +271,7 @@ export class Game {
       }
     } else if (name === "휴식") {
       const rate = 1 + sumEffect(p.traits, "heal_rate", "percent") / 100;
-      const [hp, qi] = p.healPercent(35 * rate, 45 * rate);
+      const [hp, qi] = p.healPercent(REST_HEAL[0] * rate, REST_HEAL[1] * rate);
       let result = `체력+${hp}, 내력+${qi}`;
       if (p.injury) {
         p.addInjury(-1);
@@ -276,7 +285,10 @@ export class Game {
       this.explore();
     }
     if (!this.battle && !this.event) {
+      const quiet = name !== "탐색" && rng.random() < ACTION_EVENT_RATE ? pickActionEvent(p, name) : null;
       if (this.legacyFound()) this.event = { key: `유산_${name}`, forced: false };
+      // 수련, 운기, 요양 중에 그 일에 얽힌 사건을 만난다. 그달의 수련 기록은 남긴다
+      else if (quiet) this.event = { key: quiet, forced: false, keep: true };
       else this.finishMonth();
     }
   }
@@ -289,7 +301,7 @@ export class Game {
 
   grow(stat) {
     const p = this.player;
-    let amount = randInt(10, 14);
+    let amount = randInt(...TRAIN_GROWTH);
     if (rng.random() < TRAIN_BONUS_BASE + p.mind / 5000) amount += randInt(8, 13); // 심경이 높으면 두 배 오를 때가 많아진다
     return p.gainStat(stat, applyGrowth(scaledGrowth(amount, p.turn), p.traits, stat));
   }
@@ -341,6 +353,7 @@ export class Game {
     const stature = statureEnemy(key, getChapter(this.player.turn));
     const fitting = spar || foe ? stature : standIn(this.player, stature);
     const enemy = new Enemy(fitting, this.player.turn);
+    const affix = this.deepen(enemy, spar);
     if (!foe) this.player.recordEnemyEncounter(fitting); // 사건만의 상대를 다른 이름의 적으로 도감에 적지 않는다
     this.battle = new Battle(this.player, enemy);
     this.battle.spar = spar;
@@ -354,13 +367,31 @@ export class Game {
     const back = !spar && !foe && isNamed(fitting) && this.player.slain.includes(fitting);
     const intro = foeLine && fitting === stature ? foeLine : foe ? null : back ? returnedLine(fitting) : enemyIntro(this.player, fitting);
     const called = enemy.title ? `${enemy.title} ${enemy.name}` : enemy.name;
-    this.addLog([spar ? `${called}${josa(called, "과/와")} 비무를 겨룬다. (${enemy.realm}, 져도 목숨은 잃지 않는다)` : `${called}${josa(called, "과/와")} 마주쳤다. (${enemy.realm})`, ...(intro ? [intro] : []), ...this.battle.log]);
+    this.addLog([spar ? `${called}${josa(called, "과/와")} 비무를 겨룬다. (${enemy.realm}, 져도 목숨은 잃지 않는다)` : `${called}${josa(called, "과/와")} 마주쳤다. (${enemy.realm})`, ...(intro ? [intro] : []), ...affix, ...this.battle.log]);
     this.battle.log = [];
+  }
+
+  /** 깊은 강호의 적은 더 강하고, 때로 혈단이나 마단을 삼켜 이능을 지닌다. 그것을 알리는 문장을 돌려준다 */
+  deepen(enemy, spar) {
+    const level = difficultyOf(this.player);
+    enemy.maxHp = Math.max(1, Math.round(enemy.maxHp * level.enemy.hp));
+    enemy.hp = enemy.maxHp;
+    enemy.attack = Math.max(1, Math.round(enemy.attack * level.enemy.attack));
+    if (enemy.key === "천마" && level.final_quirks) enemy.quirks = level.final_quirks.map((q) => ({ ...q }));
+    const { affix } = level;
+    if (!affix || spar || enemy.beast || enemy.tier === "보스" || enemy.quirks.length || rng.random() >= affix.chance) return [];
+    const fits = affix.pool.filter((k) => realmIndex(enemy.realm) >= realmIndex(DB.difficulty.affixes[k].realm_min || "이류"));
+    if (!fits.length) return [];
+    const data = DB.difficulty.affixes[pick(fits)];
+    enemy.quirks = data.quirks.map((q) => ({ ...q }));
+    enemy.expReward += 1;
+    return [data.text];
   }
 
   startFinalBattle() {
     const p = this.player;
     const enemy = new Enemy("천마");
+    this.deepen(enemy, false);
     // 천마는 상대의 기량을 보고 숨겨 둔 힘을 꺼낸다
     const mean = (p.external + p.internal + p.martial + p.mind) / 4;
     const unleashed = Math.max(0, (mean - FINAL_UNLEASH_FROM) / 100);
@@ -385,7 +416,8 @@ export class Game {
       p.note(`결전에 ${c.name}${josa(c.name, "이/가")} 달려왔다.`);
     }
     const intro = enemyIntro(p, "천마");
-    this.addLog(["강호행의 마지막 결전이 시작된다. 천마는 생사경의 경지에 있다.", ...(intro ? [intro] : []), ...this.battle.log]);
+    const deep = difficultyOf(p).final_intro;
+    this.addLog(["강호행의 마지막 결전이 시작된다. 천마는 생사경의 경지에 있다.", ...(intro ? [intro] : []), ...(deep ? [deep] : []), ...this.battle.log]);
     this.battle.log = [];
   }
 
@@ -403,7 +435,7 @@ export class Game {
     if (result.deferred) this.afterBattle = { key: state.key, text: result.lead ? null : result.text, effects: result.effects, forced: state.forced };
     if (DB.events[state.key].kind === "story") this.player.note(`${DB.events[state.key].title}: ${result.label}`);
     if (result.summary.length) lines.push(result.summary.join(", "));
-    this.setLog(state.forced ? [...this.log, ...lines] : lines);
+    this.setLog(state.forced || state.keep ? [...this.log, ...lines] : lines);
     this.event = null;
 
     const { effects } = result;
@@ -603,11 +635,14 @@ export class Game {
     lines.push(...this.alignmentMonth());
     if (CHAPTER_STARTS.includes(p.turn)) {
       const info = getChapterInfo(p.turn);
-      lines.push(`${info.title}, ${getYear(p.turn)}년차. ${info.desc}`, ...this.chapterGrowth());
+      const deep = difficultyOf(p).chapters?.[String(getChapter(p.turn))];
+      lines.push(`${info.title}, ${getYear(p.turn)}년차. ${info.desc}`, ...(deep ? [deep] : []), ...this.chapterGrowth());
     }
     if (getMonth(p.turn) === 1) lines.push(...this.yearRest());
     if (p.injury) lines.push(`가슴 안쪽이 욱신거린다. (내상 ${p.injury}단계, 요양으로 낫는다)`);
     lines.push(monthLine(getMonth(p.turn)));
+    const rumors = difficultyOf(p).months;
+    if (rumors?.length && rng.random() < DEEP_MONTH_RATE) lines.push(pick(rumors));
     if (rng.random() < MONTH_TALK_RATE) {
       const talk = talkLine(p, "month");
       if (talk) lines.push(talk);
@@ -740,11 +775,14 @@ export class Game {
           : checkGoodEnding(p) ? "기본" : "배드");
     const { endings } = DB;
     const gain = karmaGain(p, key, victory);
+    // 깊은 강호에서 천마를 꺾으면 다음 강호가 열린다
+    const opened = canLeaveLegacy(key) ? recordDifficultyClear(p.difficulty) : null;
     const fresh = claimAchievements(p, key, victory && key !== "귀순");
     for (const item of fresh) {
       gain.lines.push(`공적 ${item.name}${item.karma ? ` +${item.karma}` : ""}`);
       gain.total += item.karma;
     }
+    if (opened) gain.lines.push(`새 강호 ${DB.difficulty.levels[opened].name}${josa(DB.difficulty.levels[opened].name, "이/가")} 열렸다.`);
     const before = loadMeta().total_karma;
     addKarma(gain.total);
     for (const reward of DB.karma.rewards) {
@@ -759,11 +797,11 @@ export class Game {
     p.alive = false;
     this.ending = {
       key, title: endings.titles[key], seal: endings.seals[key], karma: gain.total, karmaLines: gain.lines,
-      text: endings.text[key], epilogue: buildEpilogue(p, key),
+      text: endings.text[key], epilogue: buildEpilogue(p, key), difficulty: p.difficulty,
     };
     recordRun({
       ending: key, origin: p.origin, realm: p.realm, turn: Math.min(p.turn, p.maxTurn),
-      kills: p.kills, title: byname(p), fame: fameRank(p),
+      kills: p.kills, title: byname(p), fame: fameRank(p), difficulty: p.difficulty,
     });
     this.pendingNext = false;
     this.battle = null;
@@ -790,8 +828,10 @@ function karmaGain(player, key, victory) {
   };
   if (key === "사망") add("도달한 장", getChapter(Math.min(player.turn, player.maxTurn)));
   else add(DB.endings.titles[key], DB.endings.karma[key]);
-  if (key === "생사경") return { total, lines };
-  add("경지", realmIndex(player.realm));
+  if (key !== "생사경") add("경지", realmIndex(player.realm));
+  // 깊은 강호일수록 얻는 카르마가 많다
+  const level = difficultyOf(player);
+  if (level.karma > 1) add(`${level.name}의 강호`, Math.round(total * (level.karma - 1)));
   return { total, lines };
 }
 

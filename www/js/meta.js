@@ -22,7 +22,7 @@ const defaults = () => ({
   endings_seen: [], runs: [], total_runs: 0,
   upgrades: {}, content: [], content_off: [], legacy_open: false, legacy_level: 0, legacies: [], milestones: [],
   known_events: [], achievements: [], origin_wins: [], total_wins: 0, best_turn: 0,
-  provisions: [], upgrade_use: {},
+  provisions: [], upgrade_use: {}, difficulty_cleared: [],
 });
 
 export function loadMeta() {
@@ -348,6 +348,26 @@ function achievementMet(a, p, ending, victory, data) {
     case "events": return data.known_events.length >= a.value;
     default: return false;
   }
+}
+
+// ---------- 강호의 깊이 ----------
+
+/** 그 강호에 들어설 수 있는가. 바로 앞의 강호에서 천마를 꺾어야 열린다 */
+export function difficultyOpen(key, data = loadMeta()) {
+  const { order } = DB.difficulty;
+  const at = order.indexOf(key);
+  return at === 0 || (at > 0 && (data.difficulty_cleared || []).includes(order[at - 1]));
+}
+
+/** 그 강호에서 천마를 꺾었다. 새로 열린 강호가 있으면 그 키를 돌려준다 */
+export function recordDifficultyClear(key) {
+  const data = loadMeta();
+  const { order } = DB.difficulty;
+  if (!order.includes(key) || data.difficulty_cleared.includes(key)) return null;
+  data.difficulty_cleared.push(key);
+  saveMeta(data);
+  const next = order[order.indexOf(key) + 1];
+  return next && difficultyOpen(next, data) ? next : null;
 }
 
 export function recordRun(summary) {

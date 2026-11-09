@@ -4,10 +4,15 @@ import { DB } from "./data.js";
 import { checkRequires, reactiveLine } from "./events.js";
 import { equipmentBonus, gearGimmick } from "./market.js";
 import { pick, pickWeighted, randInt, rng, uniform } from "./rng.js";
-import { activeCompanions, MAX_FAME, veteranBonus, applyGrowth, scaledGrowth, isNamed, battleBuffs, fameRankChanged, hasEffect, alignValue, dominant, KILL_ALIGN, realmBonus, realmIndex, sectBonus, sumEffect, talkLine } from "./rules.js";
+import { activeCompanions, difficultyOf, quirkText, MAX_FAME, veteranBonus, applyGrowth, scaledGrowth, isNamed, battleBuffs, fameRankChanged, hasEffect, alignValue, dominant, KILL_ALIGN, realmBonus, realmIndex, sectBonus, sumEffect, talkLine } from "./rules.js";
 import { halpun, josa } from "./josa.js";
 
 const BASE_HIT = 0.88;
+// 깊은 강호의 적이 지닌 이능에도 끝이 있다
+const MAX_HEAL_CUT = 50;
+const MAX_MIRROR = 15;
+const MAX_BLOODTHIRST = 30;
+const MAX_FRENZY = 40;
 // 위력에 들어가는 네 기량의 비중. 네 기량이 고루 값어치를 하도록 나눈다
 const POWER_RATES = { external: 0.55, martial: 1.15, internal: 0.45, mind: 0.25 };
 const SECRET_INTERNAL_RATE = 1.0;
@@ -91,6 +96,11 @@ export class Enemy {
     this.phases = data.phases || [];
     this.outros = data.outros || [];
     this.drop = data.drop || null;
+    this.quirks = (data.quirks || []).map((q) => ({ ...q })); // 깊은 강호의 적이 지닌 이능
+    this.barrier = 0;        // 호체강기로 두른 강기
+    this.rage = 0;           // 광기로 오른 위력(푼)
+    this.risen = false;      // 불사로 한 번 다시 일어섰는가
+    this.notes = [];         // 피해를 받는 동안 생긴 일
     this.intro = data.intro || null;
     this.outro = data.outro || null;
     this.desc = data.desc || "";
@@ -117,8 +127,34 @@ export class Enemy {
   }
 
   isAlive() { return this.hp > 0; }
-  takeDamage(amount) { this.hp = Math.max(0, this.hp - amount); }
-  attackMultiplier() { return this.phase === 0 ? 1 : this.phases[this.phase - 1].attack_mult; }
+  quirk(type) { return this.quirks.find((q) => q.type === type) || null; }
+
+  takeDamage(amount) {
+    // 두른 강기가 먼저 받아 낸다
+    if (this.barrier > 0 && amount > 0) {
+      const absorbed = Math.min(this.barrier, amount);
+      this.barrier -= absorbed;
+      amount -= absorbed;
+      this.notes.push(`(${this.name}의 강기가 ${absorbed}만큼 막아 냈다.${this.barrier ? "" : " 강기가 깨졌다."})`);
+    }
+    this.hp = Math.max(0, this.hp - amount);
+    const undying = this.quirk("undying");
+    if (this.hp <= 0 && undying && !this.risen) {
+      this.risen = true;
+      this.hp = Math.max(1, Math.trunc(this.maxHp * undying.percent / 100));
+      this.notes.push(`${this.name}${josa(this.name, "이/가")} 쓰러졌다가 다시 일어선다. (체력 ${this.hp})`);
+    }
+  }
+
+  /** 두를 강기를 채운다 */
+  raiseBarrier() {
+    const barrier = this.quirk("barrier");
+    if (!barrier) return 0;
+    this.barrier = Math.max(this.barrier, Math.trunc(this.maxHp * barrier.percent / 100));
+    return this.barrier;
+  }
+
+  attackMultiplier() { return (this.phase === 0 ? 1 : this.phases[this.phase - 1].attack_mult) * (1 + this.rage / 100); }
 
   /** 체력이 다음 단계 기준 아래로 내려가면 단계를 올리고 그 단계를 돌려준다. */
   advancePhase() {
@@ -260,6 +296,13 @@ export class Battle {
       this.ward = Math.trunc(player.maxHp() * ward / 100);
       this.log.push(`(몸 둘레에 호신 기운이 선다. ${this.ward})`);
     }
+    // 깊은 강호의 적이 지닌 이능
+    player.healCut = 0;
+    for (const q of enemy.quirks || []) {
+      this.log.push(`(이능 ${quirkText(q)})`);
+      if (q.type === "sever") player.healCut = Math.min(MAX_HEAL_CUT, q.percent);
+    }
+    if (enemy.raiseBarrier?.()) this.log.push(`(${enemy.name}${josa(enemy.name, "이/가")} 강기를 두른다. ${enemy.barrier})`);
     // 전투 시작 시 발동하는 특성 효과 (한계 무시, 전투가 끝나면 되돌림)
     const raised = new Map();
     for (const buff of battleBuffs(player.traits, "on_battle_start")) {
@@ -404,6 +447,16 @@ export class Battle {
     this.enemy.takeDamage(damage);
     const suffix = notes.length ? ` ${notes.join(" ")}` : "";
     this.log.push(`${label}${josa(label, "으로")} ${this.enemy.name}에게 ${damage}의 피해를 입혔다.${suffix}`);
+    this.flushEnemyNotes();
+    const mirror = this.enemy.quirk("mirror");
+    if (mirror) {
+      // 되돌아온 힘으로는 쓰러지지 않는다
+      const back = Math.min(Math.max(0, p.hp - 1), Math.trunc(damage * Math.min(MAX_MIRROR, mirror.percent) / 100));
+      if (back > 0) {
+        p.hp -= back;
+        this.log.push(`(${this.enemy.name}의 몸이 힘을 되돌려 보냈다. 체력 -${back})`);
+      }
+    }
     this.applyPoisonOnHit(skill, g);
     this.applyGimmickOnHit(g, damage);
     if (crit && g.crit_ward) this.addWard(Math.trunc(damage * g.crit_ward / 100), "회심의 기운이 몸을 두른다");
@@ -761,6 +814,14 @@ export class Battle {
     }
     this.player.hp = Math.max(0, this.player.hp - damage);
     this.log.push(`${this.enemy.name}의 ${name}${josa(name, "에/에")} ${damage}의 피해를 입었다.${special && this.guardedLast ? ` (호신강기가 ${this.guardedLast}을 막았다)` : ""}`);
+    const thirst = this.enemy.quirk("bloodthirst");
+    if (thirst && damage > 0 && this.enemy.hp < this.enemy.maxHp) {
+      const drink = Math.min(this.enemy.maxHp - this.enemy.hp, Math.trunc(damage * Math.min(MAX_BLOODTHIRST, thirst.percent) / 100));
+      if (drink > 0) {
+        this.enemy.hp += drink;
+        this.log.push(`(${this.enemy.name}${josa(this.enemy.name, "이/가")} 흘린 피를 삼켰다. 체력 +${drink})`);
+      }
+    }
     const thorns = Math.min(MAX_THORNS, (this.reflect?.percent || 0) + (this.armorG?.thorns || 0) + (this.mindG?.reflect ? Math.round(this.mindG.reflect.percent / 2) : 0));
     if (thorns && damage > 0) {
       const back = Math.max(1, Math.trunc(damage * thorns / 100));
@@ -1042,6 +1103,7 @@ export class Battle {
     this.roundNum += 1;
     this.stolen = 0;
     this.mindSurge();
+    this.enemyQuirksRound();
     // 다른 일을 하면 잇달아 쓴 것이 끊긴다. 운기는 쓴 뒤에 세어 이번 운기가 앞의 운기를 볼 수 있게 한다
     this.stepStreak = action === "경공" ? this.stepStreak + 1 : 0;
     const mindNow = action === "심법";
@@ -1072,19 +1134,43 @@ export class Battle {
     if (phase && this.openInterlude(phase)) return null;
 
     this.enemyAttack(evadeSkill);
+    this.flushEnemyNotes();
     if (this.standPending) return null;
     if (this.player.hp > 0) this.tickEffects();
     if (this.standPending) return null;
     if (this.player.hp <= 0) return this.finish(false);
     if (!this.enemy.isAlive()) return this.finish(true);
 
+    this.flushEnemyNotes();
     const warning = this.nextSpecialWarning();
     if (warning) this.log.push(`${this.enemy.name}${josa(this.enemy.name, "이/가")} ${warning}의 기세를 끌어올린다.`);
     return null;
   }
 
+  /** 이능 가운데 합마다 일어나는 것 */
+  enemyQuirksRound() {
+    const { enemy } = this;
+    const frenzy = enemy.quirk("frenzy");
+    if (frenzy && this.roundNum > 1 && enemy.rage < Math.min(MAX_FRENZY, frenzy.max)) {
+      enemy.rage = Math.min(MAX_FRENZY, frenzy.max, enemy.rage + frenzy.percent);
+      this.log.push(`(${enemy.name}의 광기가 짙어진다. 위력 +${halpun(enemy.rage)})`);
+    }
+    const barrier = enemy.quirk("barrier");
+    if (barrier && this.roundNum > 1 && (this.roundNum - 1) % barrier.every === 0 && enemy.barrier < enemy.maxHp * barrier.percent / 100) {
+      this.log.push(`(${enemy.name}${josa(enemy.name, "이/가")} 강기를 다시 두른다. ${enemy.raiseBarrier()})`);
+    }
+  }
+
+  flushEnemyNotes() {
+    if (!this.enemy.notes?.length) return;
+    this.log.push(...this.enemy.notes);
+    this.enemy.notes = [];
+  }
+
   finish(victory, fled = false) {
     this.revertTempBuffs();
+    this.player.healCut = 0;
+    this.flushEnemyNotes();
     if (fled) return { victory: false, fled: true, exp: 0 };
 
     const exp = victory ? this.enemy.expReward + sumEffect(this.player.traits, "battle_exp", "amount") : 0;
@@ -1133,6 +1219,9 @@ export class Battle {
     return { victory, fled: false, exp };
   }
 
+  /** 깊은 강호일수록 쓰러진 자의 품에서 나오는 것이 적다 */
+  dropRate() { return difficultyOf(this.player).drop; }
+
   gainSilver() {
     const [low, high] = this.enemy.silverRange;
     const amount = randInt(low, high);
@@ -1143,21 +1232,22 @@ export class Battle {
   rollDrop() {
     if (this.enemy.beast) {
       // 짐승은 비급을 품지 않는다. 쓸개나 내단이 나온다
-      const { loot } = DB.enemies[this.enemy.key];
-      if (loot && rng.random() < loot.chance) {
+      // 고등급 영물은 쓰러뜨리면 반드시 내단을 남긴다
+      const { loot, spirit } = DB.enemies[this.enemy.key];
+      if (loot && (spirit || rng.random() < loot.chance * this.dropRate())) {
         this.player.addItem(loot.item);
         const name = DB.market[loot.item].name;
-        this.log.push(`${name}${josa(name, "을/를")} 거두었다. 행낭에 넣었다.`);
+        this.log.push(`${name}${josa(name, "을/를")} 거두었다.`);
       }
       return;
     }
     const table = DB.balance.drops[this.enemy.realm];
     if (!table || this.enemy.tier === "보스") return;
-    const tierRate = DB.balance.drop_tier_rate[this.enemy.tier] ?? 1;
+    const tierRate = (DB.balance.drop_tier_rate[this.enemy.tier] ?? 1) * this.dropRate();
     if (table.medicine?.length && rng.random() < DROP_MEDICINE_RATE * tierRate) {
       const item = pick(table.medicine);
       this.player.addItem(item);
-      this.log.push(`품에서 ${DB.market[item].name}${josa(DB.market[item].name, "이/가")} 나왔다. 행낭에 넣었다.`);
+      this.log.push(`품에서 ${DB.market[item].name}${josa(DB.market[item].name, "이/가")} 나왔다.`);
     }
     this.rollGearDrop(table, tierRate);
     if (rng.random() >= table.book * tierRate) return;
@@ -1187,7 +1277,7 @@ export class Battle {
     }));
     const { name } = DB.market[key];
     p.gear.push(key);
-    this.log.push(`쓰러진 자의 ${name}${josa(name, "을/를")} 챙겼다. (${DB.market[key].grade}, 행낭에 넣었다)`);
+    this.log.push(`쓰러진 자의 ${name}${josa(name, "을/를")} 챙겼다. (${DB.market[key].grade})`);
   }
 
   /** 승리 시 4개 능력치 중 랜덤 2개가 적 등급 범위만큼 오른다. */

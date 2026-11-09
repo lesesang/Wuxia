@@ -94,6 +94,7 @@ test("출신 개방 비용은 무림초출 0, 나머지 5", () => {
 
 test("달은 다음 버튼으로만 넘어간다", () => {
   const game = newGame();
+  rng.random = () => 0.99; // 수련 중의 사건이 끼지 않게 한다
   game.advanceTurn();
   assert.equal(game.player.turn, 1);
   game.action("수련");
@@ -566,6 +567,7 @@ test("시장은 달을 쓰지 않고 소비품은 가방에 들어간다", () =>
   const game = newGame();
   const p = game.player;
   Object.assign(p, { turn: 12, silver: 200, hp: 50 });
+  rng.random = () => 0.99; // 수련 중의 사건이 끼지 않게 한다
   game.action("수련");
   p.silver = 200;
   game.advanceTurn();
@@ -652,7 +654,9 @@ test("저장은 달 시작 지점으로 복구된다", () => {
   assert.equal(early.pendingNext, false);
   // 그달의 일을 마친 뒤라도 다음 달로 넘어가기 전에 끊기면 그달의 처음이다
   const before = game.player.external;
+  rng.random = () => 0.99; // 수련 중의 사건이 끼지 않게 한다
   game.action("수련");
+  rng.random = Math.random;
   const fresh = new Game();
   assert.ok(fresh.continueFromSave());
   assert.equal(fresh.player.turn, 2);
@@ -3761,6 +3765,7 @@ test("심법과 보법의 성취가 함께 오른다", () => {
   assert.ok(steps.mastery > a);
   game.pendingNext = false;
   game.battle = null;
+  game.event = null; // 수련 중의 사건은 넘긴다
   game.action("명상");
   assert.ok(mind.mastery >= b + 3);
 });
@@ -4250,5 +4255,158 @@ test("출신 이야기에서 출신 전용 자질의 선택지를 골라도 그 
         assert.ok(rewards.some((r) => JSON.stringify(c.outcomes).includes(`"${r}"`)), `${key} ${c.label}`);
       }
     }
+  }
+});
+
+// ---------- 강호의 깊이 ----------
+
+test("깊은 강호는 앞의 강호에서 천마를 꺾어야 열리고, 연 강호로 시작하면 그 강호를 걷는다", () => {
+  const game = new Game();
+  assert.equal(game.start("무림초출", [], [], {}, "혈풍"), false, "잠긴 강호로는 나서지 못한다");
+  const meta = loadMeta();
+  meta.difficulty_cleared = ["강호"];
+  saveMeta(meta);
+  assert.equal(game.start("무림초출", [], [], {}, "겁화"), false);
+  assert.equal(game.start("무림초출", [], [], {}, "혈풍"), true);
+  assert.equal(game.player.difficulty, "혈풍");
+  assert.ok(game.player.traits.includes("강호_혈풍"), "기량이 조금 더디게 오른다");
+  const saved = Player.fromDict(JSON.parse(JSON.stringify(game.player.toDict())));
+  assert.equal(saved.difficulty, "혈풍");
+});
+
+test("깊은 강호의 사건과 적은 그 강호에서만 나오고, 같은 사건에 그 강호의 문장이 붙는다", () => {
+  const base = new Player("무림초출");
+  const deep = new Player("무림초출");
+  deep.difficulty = "겁화";
+  assert.ok(!checkRequires(base, { difficulty_min: "혈풍" }));
+  assert.ok(checkRequires(deep, { difficulty_min: "혈풍" }), "더 깊은 강호에서는 얕은 강호의 일도 일어난다");
+  for (const p of [base, deep]) p.turn = 30;
+  assert.ok(!eventView(base, "3장_격랑").text.includes("검은 핏줄"));
+  assert.ok(eventView(deep, "3장_격랑").text.includes("검은 핏줄"));
+  const deepKeys = Object.keys(DB.randomEvents).filter((k) => DB.randomEvents[k].requires?.difficulty_min);
+  assert.ok(deepKeys.length >= 16);
+  for (let i = 0; i < 200; i++) {
+    const key = pickRandomEvent(base);
+    assert.ok(!key || !DB.randomEvents[key].requires?.difficulty_min, key);
+  }
+  const deepEnemies = Object.keys(DB.enemies).filter((k) => DB.enemies[k].requires?.difficulty_min);
+  assert.ok(deepEnemies.length >= 8);
+  for (const k of deepEnemies) assert.ok(DB.enemies[k].quirks?.length, `${k}에 이능이 있다`);
+});
+
+test("수련, 운기, 요양 중의 사건은 그 일을 할 때만 나오고 탐색에는 나오지 않는다", async () => {
+  const { pickActionEvent } = await import("../www/js/events.js");
+  const p = new Player("무림초출");
+  for (const action of ["수련", "명상", "휴식"]) {
+    const keys = Object.keys(DB.randomEvents).filter((k) => DB.randomEvents[k].action === action && !DB.randomEvents[k].requires?.difficulty_min);
+    assert.ok(keys.length >= 10, `${action} 사건 ${keys.length}`);
+    const key = pickActionEvent(p, action);
+    assert.equal(DB.randomEvents[key].action, action);
+  }
+  for (let i = 0; i < 300; i++) {
+    const key = pickRandomEvent(p);
+    assert.ok(!key || !DB.randomEvents[key].action, key);
+  }
+  seed(5);
+  const game = newGame();
+  let met = 0;
+  for (let i = 0; i < 40; i++) {
+    game.event = null;
+    game.pendingNext = false;
+    game.player.hp = game.player.maxHp();
+    game.action("수련");
+    if (game.event && DB.events[game.event.key].action === "수련") {
+      met += 1;
+      assert.ok(game.log.some((l) => l.includes("외공+")), "수련 기록이 남는다");
+    }
+  }
+  assert.ok(met > 0);
+});
+
+test("깊은 강호의 적은 더 강하고, 이능은 끝이 있다", () => {
+  const p = new Player("무림초출");
+  p.difficulty = "겁화";
+  const game = new Game();
+  game.player = p;
+  const plain = new Enemy("산적", 1);
+  const hard = new Enemy("산적", 1);
+  game.deepen(hard, true);
+  assert.ok(hard.maxHp > plain.maxHp && hard.attack > plain.attack);
+
+  // 호체강기와 불사
+  const lord = new Enemy("연단마군", 60);
+  lord.quirks.push({ type: "barrier", percent: 10, every: 4 });
+  const b = new Battle(p, lord);
+  assert.ok(lord.barrier > 0);
+  const hp = lord.hp;
+  lord.takeDamage(lord.barrier);
+  assert.equal(lord.hp, hp, "강기가 먼저 받아 낸다");
+  lord.takeDamage(lord.maxHp * 2);
+  assert.ok(lord.isAlive(), "불사는 한 번 다시 일어선다");
+  lord.takeDamage(lord.maxHp * 2);
+  assert.ok(!lord.isAlive());
+
+  // 단맥은 싸우는 동안만 회복을 끊는다
+  assert.equal(p.healCut, 40);
+  p.hp = 1;
+  const [cut] = p.healPercent(50, 0);
+  b.finish(false, true);
+  assert.equal(p.healCut, 0);
+  p.hp = 1;
+  const [full] = p.healPercent(50, 0);
+  assert.ok(cut < full);
+
+  // 반탄으로는 쓰러지지 않는다
+  const mirror = new Enemy("겁화대주", 90);
+  const b2 = new Battle(p, mirror);
+  p.hp = 2;
+  b2.strike(5000, "시험");
+  assert.ok(p.hp >= 1);
+
+  // 광기는 끝까지만 오른다
+  const mad = new Enemy("마단장정", 10);
+  const b3 = new Battle(p, mad);
+  for (let i = 0; i < 30; i++) { b3.roundNum = i + 2; b3.enemyQuirksRound(); }
+  assert.ok(mad.rage <= 40);
+});
+
+test("깊은 강호에서는 품에서 나오는 것이 줄지만 높은 영물은 반드시 내단을 남긴다", () => {
+  const p = new Player("무림초출");
+  p.difficulty = "겁화";
+  for (const key of ["이무기", "철갑현귀", "천년백사", "흑룡"]) {
+    const before = p.inventory[DB.enemies[key].loot.item] || 0;
+    const b = new Battle(p, new Enemy(key, 100));
+    b.rollDrop();
+    assert.equal(p.inventory[DB.enemies[key].loot.item], before + 1, key);
+  }
+});
+
+test("깊은 강호에서 천마를 꺾으면 카르마를 더 받고 다음 강호가 열리며 그 강호만의 결말이 붙는다", () => {
+  const meta = loadMeta();
+  meta.difficulty_cleared = ["강호"];
+  saveMeta(meta);
+  const game = new Game();
+  game.start("무림초출", [], [], {}, "혈풍");
+  game.player.turn = 120;
+  game.player.flags.push("혈불_처단");
+  game.finishGame(true, "기본");
+  assert.ok(game.ending.karmaLines.some((l) => l.includes("혈풍의 강호")));
+  assert.ok(game.ending.karmaLines.some((l) => l.includes("겁화")), "다음 강호가 열린다");
+  assert.ok(loadMeta().difficulty_cleared.includes("혈풍"));
+  assert.ok(game.ending.epilogue.some((l) => l.includes("혈불")));
+  const plain = new Player("무림초출");
+  assert.ok(!buildEpilogue(plain, "기본").some((l) => l.includes("혈불") || l.includes("겁화")));
+});
+
+test("같은 갈래의 무공으로 이어질 때 성취가 이어진다고 굳이 적지 않는다", () => {
+  for (const [key, skill] of Object.entries(DB.skills)) {
+    if (!skill.lineage || (skill.lineage_rank ?? 0) < 1) continue;
+    const root = Object.keys(DB.skills).find((k) => DB.skills[k].lineage === skill.lineage && (DB.skills[k].lineage_rank ?? 0) < skill.lineage_rank);
+    if (!root) continue;
+    const p = new Player("무림초출");
+    p.learnSkill(new Skill(root));
+    const notes = p.learnSkill(new Skill(key));
+    assert.ok(!notes.join(" ").includes("성취"), notes.join(" "));
+    return;
   }
 });

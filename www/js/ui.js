@@ -7,18 +7,19 @@ import { Game } from "./game.js";
 import { bonusFor, equipmentBonus, gearGimmick, itemGrade, itemName, sellableView, stockView } from "./market.js";
 import {
   buyContent, buyProvision, buyUpgrade, exportRecords, extraSlots, importRecords, legacyAvailable, legacyPowers, dropLegacy, upgradeLegacy, loadCheckpoint, loadEventLog, loadMeta, nextReward, openLegacy, refundProvision, setUpgradeUse, upgradeUse,
-  toggleContent, unlockOrigin, unlockTrait, upgradeLevel, resetSetupChoices, canLeaveLegacy, sameLegacy,
+  toggleContent, unlockOrigin, unlockTrait, upgradeLevel, resetSetupChoices, canLeaveLegacy, sameLegacy, difficultyOpen,
 } from "./meta.js";
 import {
   ALIGNMENTS, benefitText, byname, fameRank, getChapterInfo, getMonth, getYear, marketTurns, nextSlotThreshold,
-  ORIGIN_SECTS, veteranBonus, personalize, sectWord, fullName, realmProgress, traitSlots, realmPerks, activeCompanions, MAX_COMPANIONS } from "./rules.js";
+  ORIGIN_SECTS, veteranBonus, personalize, sectWord, fullName, realmProgress, traitSlots, realmPerks, activeCompanions, MAX_COMPANIONS,
+  DEFAULT_DIFFICULTY, difficultyOf, quirkText } from "./rules.js";
 import { MAX_TURN } from "./character.js";
 import { storage } from "./storage.js";
 import { halpun, josa } from "./josa.js";
 
 const game = new Game();
 const ui = {
-  screen: "title", setupTab: "origin", origin: loadSetup().origin, traits: new Set(loadSetup().traits),
+  screen: "title", setupTab: "origin", origin: loadSetup().origin, traits: new Set(loadSetup().traits), difficulty: loadSetup().difficulty,
   modals: [], popsToIgnore: 0, traitFilter: "전체", codexQuery: "", codexFilter: "전체", codexRead: null, legacy: new Set(), legacyDrop: null, shopGroup: {}, person: loadPerson(), shopTab: "origin", shopFrom: "title", modal: null, tab: "enemies", statusTab: "stats", notice: null, lastTyped: "", bars: null,
 };
 let installPrompt = null;
@@ -76,6 +77,8 @@ function skillDetail(s) {
 function enemyDetail(e) {
   const lines = [`체력 ${e.hp}, 위력 ${e.attack}${e.armor ? `, 방어 ${e.armor}` : ""}`];
   if (e.specials?.length) lines.push(`필살기: ${e.specials.map((x) => x.name).join(", ")}`);
+  for (const q of e.quirks || []) lines.push(`이능 ${quirkText(q)}`);
+  if (e.requires?.difficulty_min) lines.push(`${DB.difficulty.levels[e.requires.difficulty_min].name} 이상의 강호에서 나온다`);
   if (e.chapters?.length) lines.push(`나오는 곳: ${e.chapters.join(", ")}장`);
   return lines;
 }
@@ -147,7 +150,7 @@ function codexRows(tab, meta) {
   return {
     total: meta.total_runs, filterLabel: "", filters: [], empty: "강호행을 끝내면 이곳에 기록됩니다.",
     note: `끝낸 강호행 ${meta.total_runs}회, 천마 격파 ${meta.total_wins || 0}회, 가장 오래 간 달 ${meta.best_turn || 0}달`,
-    rows: meta.runs.map((r, i) => ({ key: i, name: DB.endings.titles[r.ending] || r.ending, meta: `${r.origin}, ${r.realm}, ${r.title}`, desc: `${r.turn}달까지 진행, ${r.kills}명 처치`, cats: [] })),
+    rows: meta.runs.map((r, i) => ({ key: i, name: DB.endings.titles[r.ending] || r.ending, meta: `${r.difficulty && r.difficulty !== DEFAULT_DIFFICULTY ? `${DB.difficulty.levels[r.difficulty]?.name ?? ""}, ` : ""}${r.origin}, ${r.realm}, ${r.title}`, desc: `${r.turn}달까지 진행, ${r.kills}명 처치`, cats: [] })),
   };
 }
 
@@ -229,7 +232,9 @@ ${section("매달 하는 일", [
     "<b>탐색</b>: 전투, 사건, 기연 가운데 하나를 만납니다. 가장 크게 자라지만 위험합니다.",
     "<b>수련</b>: 외공과 무리, 주무공과 보법의 성취가 오릅니다. 대련으로 실전 경험을 얻기도 합니다.",
     "<b>운기</b>: 내공과 심경, 심법의 성취가 오르고 내력을 되찾습니다.",
-    "<b>요양</b>: 체력과 내력을 채우고 내상을 다스립니다."])}
+    "<b>요양</b>: 체력과 내력을 채우고 내상을 다스립니다.",
+    "수련, 운기, 요양을 하는 동안에도 그 일에 얽힌 사건을 만날 때가 있습니다. 탐색보다 덜 위험하고 자라는 길이 다릅니다."])}
+${section("강호의 깊이", [`처음에는 <b>${esc(DB.difficulty.levels[DB.difficulty.order[0]].name)}</b>에서 시작합니다. 한 강호에서 천마를 쓰러뜨리면 더 깊은 강호가 열립니다.`, ...DB.difficulty.order.slice(1).map((key) => `<b>${esc(DB.difficulty.levels[key].name)}</b>: ${esc(DB.difficulty.levels[key].desc)}`), "깊은 강호는 1년차 1월부터 다른 앞날로 갈라집니다. 그 강호에서만 일어나는 일과 이능을 지닌 적이 나오고, 적은 더 강하고 기량은 조금 더디게 오르며 쓰러진 자의 품에서 나오는 것이 줄어듭니다. 대신 카르마를 더 받고, 천마를 넘으면 그 강호만의 결말이 남습니다."])}
 ${section("저장", ["달이 시작할 때 저절로 저장됩니다. 다음 달로 넘어가기 전에 끄면 그달의 처음부터 다시 합니다."])}
 ${section("할과 푼", ["비율은 할과 푼으로 적습니다. 1할은 열에 하나, 1푼은 백에 하나입니다. 3할 5푼이면 백에 서른다섯입니다."])}`,
     경지: `${section("경지", ["일류, 절정, 초절정, 화경, 현경 순으로 오릅니다. 기량과 <b>실전 경험</b>이 함께 차야 돌파합니다. 화면 위쪽 띠에 남은 조건이 나옵니다.", "경지가 오르면 주는 피해가 크게 늘고 받는 피해가 줄어듭니다. 심경이 낮으면 돌파할 때 기가 역류해 다칠 수 있습니다.", ...Object.entries(DB.realms.perks).map(([realm, perk]) => `<b>${esc(realm)}의 특전, ${esc(perk.name)}</b>: ${esc(perk.desc)}`), "더 높은 경지에 오르면 지난 경지의 특전도 깊어집니다."])}
@@ -264,7 +269,8 @@ ${section("결전에 달려오는 사람", [`인연을 끝까지 맺은 사람�
     "적의 경지는 이류, 일류, 절정, 초절정, 화경, 현경 순입니다. 장마다 만날 수 있는 적이 정해져 있고, 그 가운데 내 경지와 가까운 적을 자주 만납니다. 성향과 명성에 따라 찾아오는 적도 다릅니다.",
     "<b>힘의 기준</b>: 생사경은 천마뿐입니다. 현경은 무림맹주와 십이마장, 화경은 각 세력의 수장과 신교 장로, 초절정은 각 세력의 주력, 절정은 손꼽히는 후기지수와 작은 세력의 수장입니다.",
     "이름 없는 산적이나 자객은 몇 번이고 나오지만, 이름 있는 자는 쓰러뜨리면 다시 나오지 않습니다.",
-    "적은 경지에 맞는 비급과 약을 지닙니다. 짐승과 영물에게서는 내단이나 영약의 재료를 얻고, 영약으로 삼키면 기량이 오릅니다."])}
+    "적은 경지에 맞는 비급과 약을 지닙니다. 짐승과 영물에게서는 내단이나 영약의 재료를 얻고, 영약으로 삼키면 기량이 오릅니다. 높은 경지의 영물은 쓰러뜨리면 반드시 내단을 남깁니다.",
+    "<b>이능</b>: 깊은 강호의 적 가운데에는 흡혈, 광기, 호체강기, 단맥, 불사, 반탄 같은 이능을 지닌 자가 있습니다. 싸움이 시작될 때 무엇을 지녔는지 알려 줍니다."])}
 ${section("소속", [
     "문파나 세력을 돕고 나면 제안이 오고, 받아들여야 소속이 됩니다. 소속마다 혜택과 이야기, 비전 무공이 있고, 한번 들어가면 다른 소속을 받지 않습니다. 문파의 상승 이상 무공은 그 소속의 일로만 전해집니다.",
     "소속 없이 3년 차 늦봄에서 여름에 이르면 성향에 맞는 문을 직접 두드릴 수 있습니다.",
@@ -280,6 +286,7 @@ ${section("도구", ["수련 도구는 언제든, 전투 도구는 싸움 중에
     `<b>결말</b>: 천마까지 가면 장 대신 받습니다. ${Object.entries(DB.endings.karma).filter(([k]) => !["생사경", "사망"].includes(k)).map(([k, v]) => `${esc(DB.endings.titles[k])} +${v}`).join(", ")}`,
     "<b>경지</b>: 오른 경지에 따라 더 받습니다. 절정 +1, 초절정 +2, 화경 +3, 현경 +4",
     "<b>공적</b>: 처음 이룰 때 한 번 더 받습니다.",
+    `<b>깊은 강호</b>: ${DB.difficulty.order.slice(1).map((k) => `${esc(DB.difficulty.levels[k].name)}${josa(DB.difficulty.levels[k].name, "은/는")} ${DB.difficulty.levels[k].karma}배`).join(", ")}를 받습니다.`,
     "카르마는 써도 누적은 줄지 않고, 누적이 늘면 누적 보상을 저절로 받습니다."])}
 ${section("상점", ["<b>출신</b>: 새 출신을 엽니다. <b>자질</b>: 타고난 바탕입니다. 장착할 수 있는 칸에 한이 있습니다. <b>기틀</b>: 늘 적용되는 바탕을 단계별로 올립니다. <b>인연</b>: 새 이야기와 결전에 달려올 사람을 엽니다. <b>채비</b>: 다음 강호행 한 번에만 쓰는 값싼 준비물입니다.", "자질, 기틀, 채비, 누적 보상에서 받는 병기와 갑의는 겹칠수록 좋아지고, 끝을 넘으면 은자가 됩니다. 같은 비급이 겹치면 성취가 됩니다."])}
 ${section("전설의 유산", ["천마를 한 번 쓰러뜨리면 상점에서 열 수 있습니다. 천마를 쓰러뜨린 강호행을 마칠 때 무공이나 병장기, 귀한 물건 하나를 남깁니다. 같은 것은 하나만 보관하고, 보관이 차면 하나를 지워야 새로 남깁니다.", "고른 유산은 첫 해 안에 별호만 남은 고수들의 자취에서 한꺼번에 이어받습니다. 이어받아도 보관함에서 사라지지 않습니다.", "처음에는 무공의 품계가 한 단계 낮아지고(상승까지만), 병장기는 낮은 단계로 돌아옵니다.", ...DB.karma.legacy.upgrades.map((u, i) => `<b>${i + 1}단계 ${esc(u.name)}</b>: ${esc(u.desc)}`)])}`,
@@ -545,9 +552,9 @@ function keepSetup() { return storage.get("wuxia-keep-setup") !== "off"; }
 function loadSetup() {
   try {
     const saved = keepSetup() ? JSON.parse(storage.get("wuxia-setup") || "{}") : {};
-    return { origin: saved.origin || "무림초출", traits: Array.isArray(saved.traits) ? saved.traits : [], legacy: Array.isArray(saved.legacy) ? saved.legacy : [] };
+    return { origin: saved.origin || "무림초출", traits: Array.isArray(saved.traits) ? saved.traits : [], legacy: Array.isArray(saved.legacy) ? saved.legacy : [], difficulty: saved.difficulty || DEFAULT_DIFFICULTY };
   } catch {
-    return { origin: "무림초출", traits: [], legacy: [] };
+    return { origin: "무림초출", traits: [], legacy: [], difficulty: DEFAULT_DIFFICULTY };
   }
 }
 
@@ -556,7 +563,7 @@ function saveSetup() {
   // 유산은 보관함의 자리가 바뀌어도 이어지도록 무엇인지로 적어 둔다
   const legacies = loadMeta().legacies;
   const legacy = [...ui.legacy].map((i) => legacies[i]).filter(Boolean).map((l) => ({ kind: l.kind, key: l.key }));
-  storage.set("wuxia-setup", JSON.stringify({ origin: ui.origin, traits: [...ui.traits], legacy }));
+  storage.set("wuxia-setup", JSON.stringify({ origin: ui.origin, traits: [...ui.traits], legacy, difficulty: ui.difficulty }));
 }
 
 /** 이어 쓰기로 적어 둔 유산을 지금 보관함의 자리로 되살린다 */
@@ -617,6 +624,29 @@ function legacySetup(meta) {
     ${rows || emptyNote("아직 남겨 둔 유산이 없습니다.")}`;
 }
 
+/** 어느 강호로 나설지. 앞의 강호에서 천마를 꺾어야 다음 강호가 열린다 */
+function difficultySetup(meta) {
+  if (!DB.difficulty.levels[ui.difficulty] || !difficultyOpen(ui.difficulty, meta)) ui.difficulty = DEFAULT_DIFFICULTY;
+  const level = DB.difficulty.levels[ui.difficulty];
+  const buttons = DB.difficulty.order.map((key) => {
+    const open = difficultyOpen(key, meta);
+    const cleared = (meta.difficulty_cleared || []).includes(key);
+    return `<button class="world-btn${ui.difficulty === key ? " active" : ""}" data-act="world" data-key="${esc(key)}" ${open ? "" : "disabled"}>${esc(DB.difficulty.levels[key].name)}${cleared ? "<small>천마 격파</small>" : open ? "" : "<small>잠김</small>"}</button>`;
+  }).join("");
+  const next = DB.difficulty.order[DB.difficulty.order.indexOf(ui.difficulty) + 1];
+  const lock = next && !difficultyOpen(next, meta) ? `<p class="world-lock">${esc(DB.difficulty.levels[next].name)}: ${esc(DB.difficulty.levels[next].lock)}</p>` : "";
+  return `<div class="world-setup"><div class="world-row">${buttons}</div>
+    <p class="world-desc">${esc(level.desc)}</p>${worldTerms(level)}${lock}</div>`;
+}
+
+/** 그 강호에서 달라지는 것 */
+function worldTerms(level) {
+  if (level.karma <= 1) return "";
+  const terms = [`적의 체력 +${halpun(Math.round((level.enemy.hp - 1) * 100))}, 위력 +${halpun(Math.round((level.enemy.attack - 1) * 100))}`,
+    `기량 성장 ${halpun(level.growth)}`, `쓰러진 자의 품에서 나오는 것 ${halpun(Math.round(level.drop * 100))}`, `카르마 ${level.karma}배`];
+  return `<p class="world-terms">${terms.map(esc).join(", ")}. 이 강호에서만 일어나는 일과 이능을 지닌 적이 있다.</p>`;
+}
+
 function renderSetup() {
   document.body.className = "home setup-screen";
   setMood("calm");
@@ -642,6 +672,7 @@ function renderSetup() {
       <button class="shop-link" data-act="shop">카르마 ${meta.current_karma}, 상점</button>
     </div>
     ${personSetup()}
+    ${difficultySetup(meta)}
     <div class="setup-tabs">
       <button class="tab-btn${ui.setupTab === "origin" ? " active" : ""}" data-act="setup-tab" data-tab="origin">출신</button>
       <button class="tab-btn${ui.setupTab === "trait" ? " active" : ""}" data-act="setup-tab" data-tab="trait">자질 ${ui.traits.size}/${slots}</button>
@@ -652,7 +683,7 @@ function renderSetup() {
     <div class="home-wrap">
       ${ui.setupTab === "upgrade" ? upgradeSetup(meta) : ui.setupTab === "content" ? contentSetup(meta) : ui.setupTab === "legacy" ? legacySetup(meta) : ui.setupTab === "origin" ? origins : `<p class="section-note">${next ? `자질을 ${slots}개 장착할 수 있습니다. 누적 카르마 ${next}이 되면 하나 더 열립니다. 누적 보상은 상점에서 볼 수 있습니다.` : "자질 칸이 모두 열렸습니다."}</p>${filterRow()}${traits}`}
     </div>
-    <div class="setup-bar"><div class="setup-summary">${esc(originName)}${ui.traits.size ? `, 자질 ${ui.traits.size}개` : ""}${chosenLegacy(meta).length ? `, 유산 ${chosenLegacy(meta).length}개` : ""}${meta.provisions.length ? `, 채비 ${meta.provisions.length}개` : ""}</div>
+    <div class="setup-bar"><div class="setup-summary">${ui.difficulty !== DEFAULT_DIFFICULTY ? `${esc(DB.difficulty.levels[ui.difficulty].name)}, ` : ""}${esc(originName)}${ui.traits.size ? `, 자질 ${ui.traits.size}개` : ""}${chosenLegacy(meta).length ? `, 유산 ${chosenLegacy(meta).length}개` : ""}${meta.provisions.length ? `, 채비 ${meta.provisions.length}개` : ""}</div>
       <button class="start-btn" data-act="${hasSave ? "confirm-start" : "start"}">강호로 나선다</button></div>
     ${modalShell("confirm-start-modal", "새 강호행을 시작할까요?", `
       <p class="modal-text">저장된 진행이 사라집니다. 카르마와 강호록은 남습니다.</p>
@@ -846,7 +877,9 @@ function renderBattle() {
       <div class="combatant" data-side="enemy">${b.enemy.title ? `<div class="enemy-title">${esc(b.enemy.title)}</div>` : ""}<div class="name">${esc(b.enemy.name)}</div>
         <div class="hpbar-outer"><div class="hpbar-inner enemy" data-bar="enemy" style="width:${percent(b.enemy.hp, b.enemy.maxHp)}%"></div></div>
         <div class="hpnum">체력 <b>${b.enemy.hp}</b>/${b.enemy.maxHp}</div>
-        <div class="enemy-tier">${esc(b.enemy.realm)}, ${esc(TIER_NAMES[b.enemy.tier] || b.enemy.tier)}${b.enemy.armor ? `, 방어 ${b.enemy.armor}` : ""}</div></div>
+        ${b.enemy.barrier ? `<div class="hpnum">강기 ${b.enemy.barrier}</div>` : ""}
+        <div class="enemy-tier">${esc(b.enemy.realm)}, ${esc(TIER_NAMES[b.enemy.tier] || b.enemy.tier)}${b.enemy.armor ? `, 방어 ${b.enemy.armor}` : ""}</div>
+        ${b.enemy.quirks.length ? `<div class="enemy-tier">이능 ${esc(b.enemy.quirks.map((q) => DB.difficulty.quirks[q.type]?.name ?? q.type).join(", "))}</div>` : ""}</div>
     </div>
     ${tags.length ? `<div class="battle-tags">${tags.map(([kind, label]) => `<span class="tag ${kind}">${esc(label)}</span>`).join("")}</div>` : ""}
     ${warning ? `<p class="battle-warning">다음 합은 ${esc(warning)}${movement ? ". 경공으로 흘려낼 수 있다" : ""}</p>` : ""}
@@ -912,7 +945,7 @@ function topbar() {
   const turn = Math.min(p.turn, p.maxTurn);
   return `<div class="topbar"><div class="topbar-inner">
     <div class="topbar-row1">
-      <span class="turn-info">${getYear(turn)}년차 ${getMonth(turn)}월<small>${esc(getChapterInfo(turn).title)}, ${p.turn}/${p.maxTurn}달</small></span>
+      <span class="turn-info">${getYear(turn)}년차 ${getMonth(turn)}월<small>${p.difficulty !== DEFAULT_DIFFICULTY ? `${esc(difficultyOf(p).name)}, ` : ""}${esc(getChapterInfo(turn).title)}, ${p.turn}/${p.maxTurn}달</small></span>
       <span class="realm-info">${esc(p.realm)}<small>${esc(fullName(p.person))}${byname(p) === "이름 없는 무인" ? "" : `, ${esc(byname(p))}`}</small></span>
     </div>
     <div class="turn-track"><span style="width:${percent(turn, p.maxTurn)}%"></span></div>
@@ -959,6 +992,7 @@ function renderEnding() {
   return `<div class="stage"><div class="stage-inner ending-sheet">
       <div class="seal seal-${esc(ending.key)}">${esc(ending.seal)}</div>
       <h2 class="ending-title">${esc(ending.title)}</h2>
+      ${ending.difficulty && ending.difficulty !== DEFAULT_DIFFICULTY ? `<p class="ending-world">${esc(DB.difficulty.levels[ending.difficulty]?.title ?? "")}</p>` : ""}
       <p class="ending-name">${esc(fullName(p.person))}</p>
       <p class="ending-text">${esc(ending.text)}</p>
       ${ending.epilogue.map((l) => `<p class="epilogue">${esc(l)}</p>`).join("")}
@@ -1309,6 +1343,7 @@ const actions = {
   "trait-filter": (el) => { ui.traitFilter = el.dataset.key; render(); },
   "shop-group": (el) => { ui.shopGroup[el.dataset.tab] = el.dataset.key; render(); },
   "setup-tab": (el) => { ui.setupTab = el.dataset.tab; render(); window.scrollTo(0, 0); },
+  world: (el) => { if (difficultyOpen(el.dataset.key)) ui.difficulty = el.dataset.key; saveSetup(); render(); },
   setup: () => { if (!keepSetup()) resetSetup(); else ui.legacy = restoreLegacy(); ui.setupTab = "origin"; ui.screen = "setup"; render(); window.scrollTo(0, 0); },
   shop: () => { ui.shopFrom = ui.screen; ui.screen = "shop"; render(); window.scrollTo(0, 0); },
   "shop-back": () => { ui.screen = ui.shopFrom || "title"; render(); window.scrollTo(0, 0); },
@@ -1317,7 +1352,7 @@ const actions = {
   start: () => {
     closeModalQuietly();
     saveSetup();
-    game.start(ui.origin, [...ui.traits], [...ui.legacy], ui.person);
+    game.start(ui.origin, [...ui.traits], [...ui.legacy], ui.person, ui.difficulty);
     ui.legacy = new Set();
     ui.screen = "title";
     render();

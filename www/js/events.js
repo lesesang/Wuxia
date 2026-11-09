@@ -4,7 +4,7 @@ import { DB } from "./data.js";
 import { bonusFor, equipmentBonus, ITEM_GRADES, styleWeight, weightsByStyle } from "./market.js";
 import { legacyPowers, loadMeta, recordEventPick, updateKnown } from "./meta.js";
 import { pick, pickWeighted, rng } from "./rng.js";
-import { ALIGNMENTS, CHAPTER_STARTS, MAX_FAME, applyGrowth, eventToll, scaledGrowth, fameRankChanged, getChapter, realmIndex, sumEffect } from "./rules.js";
+import { ALIGNMENTS, CHAPTER_STARTS, MAX_FAME, applyGrowth, difficultyRank, eventToll, scaledGrowth, fameRankChanged, getChapter, realmIndex, sumEffect } from "./rules.js";
 import { josa } from "./josa.js";
 
 export const EVENT_STAT_SCALE = 3; // 사건과 기연의 기량 상승 배율. 데이터에 적힌 값의 세 배가 오른다
@@ -14,6 +14,9 @@ export function unmetReason(player, requires) {
   if (!requires) return null;
   const r = requires;
   if (r.origin && player.originKey !== r.origin) return "출신이 다르다";
+  // 깊은 강호에서만 일어나는 일이 있다
+  if (r.difficulty_min && difficultyRank(player.difficulty) < difficultyRank(r.difficulty_min)) return "이 강호에서는 일어나지 않는 일이다";
+  if (r.difficulty_max && difficultyRank(player.difficulty) > difficultyRank(r.difficulty_max)) return "이 강호에서는 일어나지 않는 일이다";
   if (r.not_origin?.includes(player.originKey)) return "그곳과는 씻지 못할 원한이 있다";
   if (r.no_dominant && player.dominantAlignment()) return "이미 한 길에 들어섰다";
   if (r.not_dominant?.includes(player.dominantAlignment())) return "그 길에는 어울리지 않는다";
@@ -215,7 +218,7 @@ export function pickRandomEvent(player) {
   const chapter = getChapter(player.turn);
   const options = Object.keys(DB.randomEvents).filter((key) => {
     const event = DB.randomEvents[key];
-    if (event.legacy_find) return false; // 유산의 흔적은 정해진 자리에서만 나온다
+    if (event.legacy_find || event.action) return false; // 유산의 흔적과 수련 중의 사건은 정해진 자리에서만 나온다
     if (event.chain && !canStartChain(player, event.chain.id)) return false;
     return (event.chapters || []).includes(chapter) && !player.seenEvents.includes(key)
       && checkRequires(player, event.requires);
@@ -230,6 +233,19 @@ export function pickRandomEvent(player) {
     // 홀로 가기로 한 무인에게는 문파의 손길이 드물게 닿는다
     return alone && DB.randomEvents[k].sect_gate ? base * ALONE_GATE_RATE : base;
   }));
+}
+
+/** 수련, 운기(명상), 요양(휴식) 중에 만나는 사건 */
+export function pickActionEvent(player, action) {
+  const chapter = getChapter(player.turn);
+  const options = Object.keys(DB.randomEvents).filter((key) => {
+    const event = DB.randomEvents[key];
+    return event.action === action && (event.chapters || [1, 2, 3, 4, 5]).includes(chapter)
+      && !player.seenEvents.includes(key) && checkRequires(player, event.requires);
+  });
+  if (!options.length) return null;
+  // 깊은 강호에서만 만나는 일은 조금 더 자주 찾아온다
+  return pickWeighted(options, options.map((k) => DB.randomEvents[k].weight ?? (DB.randomEvents[k].requires?.difficulty_min ? 3 : 1)));
 }
 
 export function pickFortune(player) {
@@ -335,6 +351,14 @@ function takeOneLegacy(player, entry) {
   return [`${name}${josa(name, "을/를")} 거두었다${worn ? ". 세월에 조금 바랬지만 아직 쓸 만하다" : ""}`];
 }
 
+/** 깊은 강호에서 같은 사건에 덧붙는 문장. 지금 걷는 강호와 같거나 그보다 얕은 강호의 것 가운데 가장 깊은 것을 쓴다 */
+function deeperLine(player, event) {
+  if (!event.deeper) return null;
+  const rank = difficultyRank(player.difficulty);
+  const keys = Object.keys(event.deeper).filter((k) => difficultyRank(k) <= rank).sort((a, b) => difficultyRank(b) - difficultyRank(a));
+  return keys.length ? event.deeper[keys[0]] : null;
+}
+
 /** 사건 끝에 붙는 한 줄. 그 사건에 맞게 쓴 반응만 쓴다. 같은 달의 같은 사건에는 같은 줄이 붙는다. */
 function eventTalk(player, key) {
   const event = DB.events[key];
@@ -354,7 +378,8 @@ export function eventView(player, key) {
   });
   const title = event.chain ? `${event.title} (${event.chain.index + 1}/${event.chain.total})` : event.title;
   const talk = eventTalk(player, key);
-  return { key, title, text: talk ? `${eventText(player, key)} ${talk}` : eventText(player, key), choices, chain: event.chain ? DB.chains[event.chain.id].title : null };
+  const text = [eventText(player, key), deeperLine(player, event), talk].filter(Boolean).join(" ");
+  return { key, title, text, choices, chain: event.chain ? DB.chains[event.chain.id].title : null };
 }
 
 /** 적이 플레이어를 보고 하는 말. 상황에 맞는 대사가 있으면 그것을 쓴다. */
@@ -423,7 +448,7 @@ function equipReward(player, key) {
   // 같은 것을 이미 지녔으면 그 값을 은자로 받는다
   if (player.ownsGear(key)) return [`${name}${josa(name, "은/는")} 이미 지니고 있다. 은자+${player.gainSilver(spareGearSilver(key))}`];
   player.gear.push(key);
-  return [`${name}${josa(name, "을/를")} 행낭에 챙겼다`];
+  return [`${name}${josa(name, "을/를")} 챙겼다`];
 }
 
 /** 겹친 병장기를 은자로 돌릴 때의 값 */
@@ -678,6 +703,12 @@ export function applyEffects(player, effects) {
     }
   }
 
+  // 심법이나 경공처럼 쓰는 무공 하나를 깊게 한다
+  for (const [type, amount] of Object.entries(effects.art_mastery || {})) {
+    const art = player.bestOfType(type);
+    if (art) summary.push(`${art.name} 성취+${amount}`, ...art.gainMastery(amount));
+  }
+
   if (effects.skill) {
     const skill = new Skill(effects.skill);
     const known = player.hasSkill(skill.key);
@@ -757,6 +788,9 @@ export function validateEvents() {
     if (effects.equip && !DB.market[effects.equip]) errors.push(`${where}: 없는 품목 ${effects.equip}`);
     if (effects.join_sect && !DB.sects[effects.join_sect]) errors.push(`${where}: 없는 문파 ${effects.join_sect}`);
     if (effects.sect_offer && !DB.events[`제안_${effects.sect_offer}`]) errors.push(`${where}: 제안 사건이 없다 ${effects.sect_offer}`);
+    for (const type of Object.keys(effects.art_mastery || {})) {
+      if (!["심공", "경공"].includes(type)) errors.push(`${where}: 없는 갈래 ${type}`);
+    }
     for (const stat of Object.keys(effects.stats || {})) {
       if (!STAT_NAMES[stat]) errors.push(`${where}: 없는 기량 ${stat}`);
     }
