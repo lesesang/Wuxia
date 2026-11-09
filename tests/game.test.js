@@ -4410,3 +4410,13 @@ test("같은 갈래의 무공으로 이어질 때 성취가 이어진다고 굳�
     return;
   }
 });
+
+test("천마를 꺾은 기록이 있으면 혈풍이 열려 있다", async () => {
+  const { difficultyOpen } = await import("../www/js/meta.js");
+  const meta = loadMeta();
+  meta.endings_seen = ["기본"];
+  delete meta.difficulty_cleared;
+  saveMeta(meta);
+  assert.ok(difficultyOpen("혈풍"));
+  assert.ok(!difficultyOpen("겁화"));
+});
