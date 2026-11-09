@@ -681,6 +681,8 @@ export function applyEffects(player, effects) {
     const list = Object.keys(DB.skills).filter((k) => {
       const s = DB.skills[k];
       if (s.category !== main || s.grade !== wanted || s.reserved || player.hasSkill(k)) return false;
+      // 출신 이야기는 그 출신의 신공을 내 병기에 맞춰 준다
+      if (effects.style_skill.origin) return s.origin === effects.style_skill.origin;
       // 출신 전용 신공은 그 출신의 이야기에서만 나온다
       return wanted === "신공" ? !s.origin : s.legend;
     });

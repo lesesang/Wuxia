@@ -5240,5 +5240,269 @@
       "text": "위력 +8푼, 준 피해의 2할 2푼이 두 합 동안 더 번진다."
     },
     "legend": true
+  },
+  "무명검결": {
+    "name": "무명검결",
+    "type": "공격무공",
+    "category": "검법",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "이름을 남기지 않은 사부가 제자의 검에 맞춰 풀어 준 검. 초식은 셋뿐인데 끝이 없다.",
+    "forms": [
+      "무명",
+      "무상",
+      "무진"
+    ],
+    "secret_technique": {
+      "name": "무명일검",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "origin": "무림초출",
+    "gimmick": {
+      "power": 15,
+      "crit": 10,
+      "echo": 20,
+      "name": "무명일검",
+      "text": "위력 +1할 5푼, 회심 확률 +1할, 2할 확률로 여운이 남아 절반의 힘으로 한 번 더 닿는다."
+    }
+  },
+  "무명도결": {
+    "name": "무명도결",
+    "type": "공격무공",
+    "category": "도법",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "사부가 도를 든 제자를 위해 다시 짠 도법. 한 번 베면 상처가 닫히지 않는다.",
+    "forms": [
+      "무명",
+      "무상",
+      "무진"
+    ],
+    "secret_technique": {
+      "name": "무명일도",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "origin": "무림초출",
+    "gimmick": {
+      "power": 15,
+      "bleed": {
+        "percent": 4,
+        "rounds": 3
+      },
+      "crit_ward": 25,
+      "name": "무명일도",
+      "text": "위력 +1할 5푼, 맞히면 3합 동안 적 최대 체력의 4푼씩 피가 흐른다, 회심이 터지면 준 피해의 2할 5푼이 호신 기운이 된다."
+    }
+  },
+  "무명창결": {
+    "name": "무명창결",
+    "type": "공격무공",
+    "category": "창법",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "사부가 창을 든 제자를 위해 다시 짠 창법. 같은 곳을 거듭 찔러 끝내 꿰뚫는다.",
+    "forms": [
+      "무명",
+      "무상",
+      "무진"
+    ],
+    "secret_technique": {
+      "name": "무명일창",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "origin": "무림초출",
+    "gimmick": {
+      "pierce": 50,
+      "mark": {
+        "every": 3,
+        "percent": 60
+      },
+      "opening": 40,
+      "name": "무명일창",
+      "text": "방어 5할 무시, 첫 합 위력 +4할, 세 번 맞힐 때마다 쌓인 표식이 터져 그 일격의 피해가 6할 더해진다."
+    }
+  },
+  "무명곤결": {
+    "name": "무명곤결",
+    "type": "공격무공",
+    "category": "봉법",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "사부가 봉을 든 제자를 위해 다시 짠 곤법. 막고 치는 것이 한 몸이다.",
+    "forms": [
+      "무명",
+      "무상",
+      "무진"
+    ],
+    "secret_technique": {
+      "name": "무명일곤",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "origin": "무림초출",
+    "gimmick": {
+      "stun": 20,
+      "guard": 20,
+      "echo": 15,
+      "name": "무명일곤",
+      "text": "맞히면 2할 확률로 적이 다음 합에 손을 쓰지 못한다, 맞힌 합에 받는 피해 -2할, 1할 5푼 확률로 여운이 남아 절반의 힘으로 한 번 더 닿는다."
+    }
+  },
+  "무명권결": {
+    "name": "무명권결",
+    "type": "공격무공",
+    "category": "권법",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "사부가 맨주먹의 제자를 위해 다시 짠 권법. 주먹이 거듭될수록 무거워진다.",
+    "forms": [
+      "무명",
+      "무상",
+      "무진"
+    ],
+    "secret_technique": {
+      "name": "무명일권",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "origin": "무림초출",
+    "gimmick": {
+      "chain": 10,
+      "chain_max": 4,
+      "echo": 20,
+      "power": 10,
+      "name": "무명일권",
+      "text": "위력 +1할, 같은 무공을 잇달아 쓸 때마다 위력 +1할(4번까지), 2할 확률로 여운이 남아 절반의 힘으로 한 번 더 닿는다."
+    }
+  },
+  "무명장결": {
+    "name": "무명장결",
+    "type": "공격무공",
+    "category": "장법",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "사부가 장을 쓰는 제자를 위해 다시 짠 장법. 장력이 몸을 감싸 되돌아온다.",
+    "forms": [
+      "무명",
+      "무상",
+      "무진"
+    ],
+    "secret_technique": {
+      "name": "무명일장",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "origin": "무림초출",
+    "gimmick": {
+      "shatter": 10,
+      "burn": 15,
+      "crit_ward": 30,
+      "name": "무명일장",
+      "text": "맞힐 때마다 적의 방어를 1할씩 무너뜨린다, 준 피해의 1할 5푼이 두 합 동안 더 번진다, 회심이 터지면 준 피해의 3할이 호신 기운이 된다."
+    }
+  },
+  "무명비결": {
+    "name": "무명비결",
+    "type": "공격무공",
+    "category": "암기",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "사부가 암기를 쓰는 제자를 위해 다시 짠 비술. 맞은 줄도 모르는 사이 표식이 쌓인다.",
+    "forms": [
+      "무명",
+      "무상",
+      "무진"
+    ],
+    "secret_technique": {
+      "name": "무명일비",
+      "unlock_grade": "신공",
+      "unlock_mastery": 50,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "origin": "무림초출",
+    "gimmick": {
+      "crit": 15,
+      "accuracy": 20,
+      "mark": {
+        "every": 3,
+        "percent": 50
+      },
+      "name": "무명일비",
+      "text": "명중 +2할, 회심 확률 +1할 5푼, 세 번 맞힐 때마다 쌓인 표식이 터져 그 일격의 피해가 5할 더해진다."
+    }
+  },
+  "무명청허공": {
+    "name": "무명청허공",
+    "type": "심공",
+    "category": "심공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 0,
+    "desc": "사부가 평생 고쳐 쓴 숨. 비우면 비울수록 차오른다.",
+    "effect": {
+      "heal_hp_pct": 25,
+      "heal_qi_pct": 50,
+      "atk_buff_pct": 20,
+      "buff_rounds": 3
+    },
+    "origin": "무림초출",
+    "gimmick": {
+      "regen": {
+        "percent": 8,
+        "rounds": 2
+      },
+      "qi_shield": 15,
+      "second_wind": {
+        "below": 30,
+        "percent": 15
+      },
+      "name": "청허귀일",
+      "text": "합마다 체력 4푼이 저절로 찬다. 맞는 힘의 1할 5푼을 내력으로 대신 받는다. 체력이 3할 아래로 떨어지면 한 싸움에 한 번 숨이 트여 체력 1할 5푼을 채운다."
+    }
+  },
+  "무명행운보": {
+    "name": "무명행운보",
+    "type": "경공",
+    "category": "경공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 10,
+    "desc": "사부가 젊은 날 벼랑길에서 얻었다는 걸음. 구름이 가듯 머물지 않는다.",
+    "effect": {
+      "evade": 88,
+      "counter_pct": 150,
+      "flee_bonus": 60
+    },
+    "origin": "무림초출",
+    "gimmick": {
+      "afterimage": 20,
+      "momentum": 6,
+      "refund": 1,
+      "name": "행운유수",
+      "text": "다 피하면 쓴 내력의 절반을 되찾는다, 다 피하면 잔상이 남아 다음 합에 2할 확률로 몸이 먼저 움직인다, 다 피할 때마다 이 싸움의 위력이 6푼씩 오른다(3할까지)."
+    }
   }
 }
