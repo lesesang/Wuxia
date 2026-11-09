@@ -13,7 +13,7 @@ import {
 } from "./meta.js";
 import { pick, pickWeighted, randInt, rng } from "./rng.js";
 import {
-  actionLine, ALIGNMENT_CAP, alignTier, applyGrowth, breakthroughBlock, byname, CHAPTER_STARTS, checkBreakthrough, checkGoodEnding, checkSaengsa,
+  actionLine, ALIGNMENT_CAP, alignTier, applyGrowth, byname, CHAPTER_STARTS, checkBreakthrough, checkGoodEnding, checkSaengsa,
   scaledGrowth, fameRank, FOCUS_DRIFT, focusedSide, getChapter, getChapterInfo, getMonth, getYear, isMarketTurn, monthLine, auraText, isNamed, perkTrait, realmFit, returnedLine, standIn, realmIndex, sumEffect, talkLine, traitSlots,
   personalize,
 } from "./rules.js";
@@ -606,8 +606,6 @@ export class Game {
       lines.push(`${info.title}, ${getYear(p.turn)}년차. ${info.desc}`, ...this.chapterGrowth());
     }
     if (getMonth(p.turn) === 1) lines.push(...this.yearRest());
-    const hint = breakthroughBlock(p);
-    if (hint) lines.push(hint);
     if (p.injury) lines.push(`가슴 안쪽이 욱신거린다. (내상 ${p.injury}단계, 요양으로 낫는다)`);
     lines.push(monthLine(getMonth(p.turn)));
     if (rng.random() < MONTH_TALK_RATE) {

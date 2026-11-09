@@ -13,7 +13,7 @@ import { blockReason, buy, equipmentBonus, ITEM_GRADES, openMarket, priceOf, sel
 import {
   activeContent, resetSetupChoices, upgradeUse, legacyPowers, upgradeLegacy, setUpgradeUse, upgradeLevel, addKarma, buyContent, buyProvision, refundProvision, upgradeTraits, buyUpgrade, exportRecords, importRecords, extraSlots, loadCheckpoint, legacyAvailable, loadEventLog, loadMeta, nextReward, recordEventPick, openLegacy, saveMeta, toggleContent, unlockOrigin,
 } from "../www/js/meta.js";
-import { personalize, fullName, alignTier, applyGrowth, breakthroughBlock, focusedSide, byname, fameRank, getChapter, getYear, marketTurns, sumEffect, talkLine, traitSlots } from "../www/js/rules.js";
+import { personalize, fullName, alignTier, applyGrowth, checkBreakthrough, focusedSide, byname, fameRank, getChapter, getYear, marketTurns, sumEffect, talkLine, traitSlots } from "../www/js/rules.js";
 import { rng } from "../www/js/rng.js";
 import { storage } from "../www/js/storage.js";
 
@@ -561,16 +561,6 @@ test("명성의 이름은 성향과 경지를 따르고 천하제일인은 천�
   assert.equal(fameRank(p), "천하제일인");
   for (const rank of DB.flavor.fame_ranks) assert.ok(rank.names.기본);
 });
-
-test("전투 경험만 모자라면 알려 준다", () => {
-  const p = new Player();
-  p.external = p.internal = p.martial = p.mind = 400;
-  assert.ok(breakthroughBlock(p).includes("실전"));
-  p.battles = 12;
-  assert.equal(breakthroughBlock(p), null);
-});
-
-// ---------- 시장 ----------
 
 test("시장은 달을 쓰지 않고 소비품은 가방에 들어간다", () => {
   const game = newGame();
@@ -2702,7 +2692,7 @@ test("생사경은 기록대로 천마를 이긴 순간에만 판정된다", () 
   assert.equal(dead.ending.key, "사망");
   const climbing = hero();
   climbing.player.realm = "현경";
-  assert.equal(breakthroughBlock(climbing.player), null, "일반 돌파로는 오르지 못한다");
+  assert.equal(checkBreakthrough(climbing.player), null, "일반 돌파로는 오르지 못한다");
 });
 
 test("어떤 사건이나 인연도 생사경 조건을 건드리지 않는다", () => {

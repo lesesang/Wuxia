@@ -256,19 +256,6 @@ export function checkBreakthrough(player) {
   return ok ? next : null;
 }
 
-/** 능력치는 찼는데 전투 경험만 모자라면 안내 문구 */
-export function breakthroughBlock(player) {
-  const next = nextRealm(player.realm);
-  if (!next) return null;
-  const req = DB.realms.requirements[next];
-  const stats = statsOf(player);
-  const need = battlesNeeded(player, req);
-  if (average(stats) >= req.avg && Math.min(...stats) >= req.min_stat && player.battles < need) {
-    return `${next}의 문턱이 보이지만 실전이 모자라다. (실전 경험 ${player.battles}/${need}, 탐색에서 싸워야 는다)`;
-  }
-  return null;
-}
-
 export function realmProgress(player) {
   const next = nextRealm(player.realm);
   if (!next) return null;
