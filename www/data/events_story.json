@@ -284,7 +284,8 @@
               "stats": {
                 "mind": 1
               },
-              "leave_sect": true
+              "leave_sect": true,
+              "silver": -5
             }
           }
         ]

@@ -1168,7 +1168,10 @@
       }
     ],
     "requires": {
-      "min_fame": 50
+      "min_fame": 50,
+      "not_dominant": [
+        "마도"
+      ]
     }
   },
   "세조각비급": {

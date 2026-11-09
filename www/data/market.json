@@ -3985,11 +3985,11 @@
     ],
     "category": "소비품",
     "consumable": true,
-    "desc": "삼키면 최대 체력 4할 5푼의 호신 기운이 몸을 두른다.",
+    "desc": "삼키면 최대 체력 4할의 호신 기운이 몸을 두른다.",
     "effects": [
       {
         "type": "ward",
-        "percent": 45
+        "percent": 40
       }
     ]
   },

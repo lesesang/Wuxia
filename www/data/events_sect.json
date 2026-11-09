@@ -5919,7 +5919,8 @@
             "effects": {
               "stats": {
                 "mind": 2
-              }
+              },
+              "silver": 30
             }
           }
         ]

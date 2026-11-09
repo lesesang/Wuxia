@@ -221,13 +221,6 @@ export class Game {
     this.reset();
     this.player = Player.fromDict(checkpoint.player);
     this.setLog(checkpoint.log || []);
-    if (checkpoint.pending) {
-      // 그달의 일을 마친 뒤였으면 그 자리로 돌아온다
-      this.giftsDone = true;
-      this.pendingNext = true;
-      this.market = checkpoint.market || null;
-      return true;
-    }
     this.openStoryEvent();
     return true;
   }
@@ -379,7 +372,9 @@ export class Game {
     enemy.attack = Math.max(1, Math.round(enemy.attack * level.enemy.attack));
     if (enemy.key === "천마" && level.final_quirks) enemy.quirks = level.final_quirks.map((q) => ({ ...q }));
     const { affix } = level;
-    if (!affix || spar || enemy.beast || enemy.tier === "보스" || enemy.quirks.length || rng.random() >= affix.chance) return [];
+    // 이름 있는 자나 정파의 무인은 저잣거리의 단약을 삼키지 않는다
+    if (!affix || spar || enemy.beast || enemy.tier === "보스" || enemy.title || isNamed(enemy.key) || enemy.side === "정도"
+      || enemy.quirks.length || rng.random() >= affix.chance) return [];
     const fits = affix.pool.filter((k) => realmIndex(enemy.realm) >= realmIndex(DB.difficulty.affixes[k].realm_min || "이류"));
     if (!fits.length) return [];
     const data = DB.difficulty.affixes[pick(fits)];
@@ -724,7 +719,7 @@ export class Game {
     // 심경이 충분히 높지 않으면 돌파가 거칠어 내상을 입는다
     if (rng.random() < Math.max(0, 600 - p.mind) * 0.001) {
       p.healPercent(-25, -25);
-      lines.push("심경이 흔들려 기가 역류했다. 간신히 돌파했지만 내상을 입었다. (체력과 내력 -2할 5푼)");
+      lines.push("심경이 흔들려 기가 역류했다. 간신히 돌파했지만 기혈이 상했다. (체력과 내력 -2할 5푼)");
     } else {
       p.healPercent(50, 50);
       lines.push("막혀 있던 혈맥이 뚫리며 온몸에 기운이 찬다. (체력과 내력 회복)");
