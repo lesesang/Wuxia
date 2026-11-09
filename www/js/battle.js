@@ -305,6 +305,7 @@ export class Battle {
     for (const c of this.companions) scale *= 1 + (c.help.atk || 0) / 100;
     if (this.atkBuff) scale *= 1 + this.atkBuff.percent / 100;
     if (this.momentum) scale *= 1 + this.momentum / 100;
+    scale *= 1 + p.idleBonus("공격무공") / 100;
     return scale;
   }
 
@@ -714,7 +715,7 @@ export class Battle {
     if (evadeSkill) {
       // 잇달아 펼치면 걸음을 읽힌다
       const read = Math.max(0, this.stepStreak - 1) * STEP_STREAK_PENALTY;
-      const base = Math.min(MAX_EVADE, evadeSkill.effectValue("evade") + sectBonus(this.player, "evade"));
+      const base = Math.min(MAX_EVADE, evadeSkill.effectValue("evade") + sectBonus(this.player, "evade") + this.player.idleBonus("경공"));
       const chance = Math.max(Math.min(base, MIN_STREAK_EVADE), base - read);
       if (read > 0) this.log.push(`${this.enemy.name}${josa(this.enemy.name, "이/가")} 걸음을 읽기 시작했다.`);
       if (randInt(1, 100) <= chance) {

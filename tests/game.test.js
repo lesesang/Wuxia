@@ -4178,3 +4178,22 @@ test("뒤쪽 장터일수록 좋은 품계의 도구가 나온다", () => {
   const early = rank(24), late = rank(96);
   assert.ok(late > early + 0.3, `${early} ${late}`);
 });
+
+test("익혀 둔 무공은 위력, 내력, 회피, 성취 속도, 돌파에 보탬이 되고 끝이 있다", () => {
+  const p = new Player("무림초출");
+  const qi = p.maxQi();
+  const before = { atk: p.idleBonus("공격무공"), relief: p.loreRelief(26) };
+  const main = p.bestSkill();
+  const same = Object.keys(DB.skills).filter((k) => DB.skills[k].type === "공격무공" && DB.skills[k].category === main.category && !DB.skills[k].reserved && !p.hasSkill(k)).slice(0, 3);
+  for (const k of same) p.learnSkill(Skill.fromDict({ key: k, grade: "기본", mastery: 0 }));
+  p.mainSkill = main.key;
+  assert.ok(p.idleBonus("공격무공") > before.atk);
+  assert.ok(p.sameStyleMasteryRate() >= 15);
+  for (const k of Object.keys(DB.skills).filter((k) => DB.skills[k].type === "심공" && !DB.skills[k].reserved).slice(0, 4)) p.learnSkill(Skill.fromDict({ key: k, grade: "일절", mastery: 100 }));
+  assert.ok(p.maxQi() > qi);
+  assert.ok(p.idleBonus("심공") <= 10);
+  for (const k of Object.keys(DB.skills).filter((k) => !DB.skills[k].reserved).slice(0, 60)) if (!p.hasSkill(k)) p.learnSkill(Skill.fromDict({ key: k, grade: "신공", mastery: 100 }));
+  assert.equal(p.idleBonus("공격무공"), 10);
+  assert.ok(p.sameStyleMasteryRate() <= 25);
+  assert.equal(p.loreRelief(60), 15, "실전은 4분의 1까지만 덜어 준다");
+});
