@@ -4,7 +4,7 @@ import { DB } from "./data.js";
 import { checkRequires, reactiveLine } from "./events.js";
 import { equipmentBonus, gearGimmick } from "./market.js";
 import { pick, pickWeighted, randInt, rng, uniform } from "./rng.js";
-import { activeCompanions, difficultyOf, quirkText, MAX_FAME, veteranBonus, applyGrowth, scaledGrowth, isNamed, battleBuffs, fameRankChanged, hasEffect, alignValue, dominant, KILL_ALIGN, realmBonus, realmIndex, sectBonus, sumEffect, talkLine } from "./rules.js";
+import { activeCompanions, difficultyOf, quirkText, MAX_FAME, veteranBonus, applyGrowth, scaledGrowth, isNamed, battleBuffs, fameRankChanged, hasEffect, alignValue, dominant, KILL_ALIGN, realmBonus, realmIndex, sectBonus, sumEffect, talkLine, fameEffect } from "./rules.js";
 import { halpun, josa } from "./josa.js";
 
 const BASE_HIT = 0.88;
@@ -734,7 +734,8 @@ export class Battle {
     base *= 1 - Math.min(MAX_MIND_GUARD, this.player.mind / MIND_GUARD_RATE);
     base *= 1 - sectBonus(this.player, "damage_reduce") / 100;
     base *= 1 - alignValue(this.player.alignment, "정도", "guard") / 100;
-    base *= 1 - Math.min(MAX_DAMAGE_REDUCE, sumEffect(this.player.traits, "damage_reduce", "percent")) / 100;
+    base *= 1 - Math.min(MAX_DAMAGE_REDUCE, sumEffect(this.player.traits, "damage_reduce", "percent") + fameEffect(this.player, "fame_guard")) / 100;
+    base *= 1 - fameEffect(this.player, "fame_dread") / 100;
     if (this.guard) base *= 1 - this.guard.percent / 100;
     if (this.armorG?.guard_pct) base *= 1 - this.armorG.guard_pct / 100;
     for (const c of this.companions) base *= 1 - (c.help.guard || 0) / 100;

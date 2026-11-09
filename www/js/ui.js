@@ -10,7 +10,7 @@ import {
   toggleContent, unlockOrigin, unlockTrait, upgradeLevel, resetSetupChoices, canLeaveLegacy, sameLegacy, difficultyOpen,
 } from "./meta.js";
 import {
-  ALIGNMENTS, ALIGN_STEPS, benefitText, byname, fameRank, getChapterInfo, getMonth, getYear, marketTurns, nextSlotThreshold,
+  ALIGNMENTS, ALIGN_STEPS, benefitText, pathPerks, byname, fameRank, getChapterInfo, getMonth, getYear, marketTurns, nextSlotThreshold,
   ORIGIN_SECTS, veteranBonus, personalize, sectWord, fullName, realmProgress, traitSlots, realmPerks, activeCompanions, MAX_COMPANIONS,
   DEFAULT_DIFFICULTY, difficultyOf, quirkText } from "./rules.js";
 import { MAX_TURN } from "./character.js";
@@ -277,7 +277,7 @@ ${section("소속", [
     "소속 없이 3년 차 늦봄에서 여름에 이르면 성향에 맞는 문을 직접 두드릴 수 있습니다.",
     "<b>구파일방</b>: 소림, 무당, 화산, 아미, 곤륜, 종남, 점창, 청성, 공동, 개방. <b>오대세가</b>: 남궁, 하북팽가, 사천당가, 모용, 제갈. 남궁과 팽가는 신교의 손에 멸문했고, 그 마지막 사람을 출신으로 고를 수 있습니다.",
     "<b>사파</b>: 사도련, 녹림맹, 살막, 흑사방, 하오문. <b>마도</b>: 천마신교, 혈교, 귀문교."])}
-${section("성향", ["싸움과 선택에 따라 정도, 사도, 마도의 수치가 쌓이고, 가장 높은 길의 단계에 따라 혜택을 받습니다. 정도는 장터 값과 받는 피해, 회복이 낫고, 사도는 은자와 회심, 회피가 낫고, 마도는 주는 피해가 크고 쓰러뜨린 자의 기운을 거두지만 회복이 더딥니다.", `한 길의 수치가 ${ALIGN_STEPS.join(", ")}을 처음 넘을 때마다 그 길에 맞는 기량을 얻습니다. 정도는 심경과 외공에 명성, 사도는 무리와 심경에 은자, 마도는 내공과 외공에 주무공의 성취가 따릅니다. 깊은 단계일수록 크게 얻습니다.`, "한 길에 마음을 모으면 달마다 그 길이 조금씩 깊어집니다."])}
+${section("성향", ["싸움과 선택에 따라 정도, 사도, 마도의 수치가 쌓이고, 가장 높은 길의 단계에 따라 혜택을 받습니다. 정도는 장터 값과 받는 피해, 회복이 낫고, 사도는 은자와 회심, 회피가 낫고, 마도는 주는 피해가 크고 쓰러뜨린 자의 기운을 거두지만 회복이 더딥니다.", `한 길의 수치가 ${ALIGN_STEPS.join(", ")}을 처음 넘을 때마다 그 길의 깨달음을 하나씩 얻고, 길이 바뀌어도 잃지 않습니다. ${Object.values(DB.balance.paths).map((path) => `<b>${esc(path.name)}</b>: ${path.steps.map((st) => esc(st.name)).join(", ")}`).join(". ")}.`, "협명, 이름값, 흉명은 명성이 높을수록 커집니다.", "한 길에 마음을 모으면 달마다 그 길이 조금씩 깊어집니다."])}
 ${section("혈해", ["6년차 초부터 9년차 중반까지 혈교의 이야기가 정해진 때에 반드시 찾아옵니다. 혈교는 신교에게 빼앗긴 피 연못을 되찾아 개조 혈마를 다시 부르려 합니다.", "토벌에 나서 혈교를 무너뜨리거나, 혈교와 손잡거나, 한발 물러나 지켜볼 수 있습니다. 8년차 마지막 달에 혈마가 깨어나고, 9년차에 그 끝을 정합니다. 깨어난 혈마는 현경의 고수에게도 버거운 상대입니다.", "혈교와 손잡아도 마지막 상대는 천마입니다. 결전에 혈마가 달려오고, 천마를 넘은 뒤 혈마와의 위아래는 그때의 경지와 지나온 일로 정해집니다."])}
 ${section("출신의 이야기", ["출신마다 전용 이야기가 있고, 그 끝에서 출신만의 신공과 병기를 얻습니다. 조건을 채운 이야기는 탐색에서 자주 찾아오고, 그 장에 든 지 반년이 지나면 달의 처음에 반드시 찾아옵니다. 조건을 채우지 못한 이야기는 나오지 않습니다.", "이어지는 인연은 여러 달을 쓰는 대신 끝을 맺으면 보상이 큽니다."])}`,
     장터: `${section("장터", ["매년 말 장터가 열리고 달을 쓰지 않습니다. 주무공에 맞는 무공, 병기, 도구가 더 자주 나옵니다. 도구는 뒤쪽 장터일수록 좋은 품계가 자주 나옵니다.", "약과 도구, 쓰지 않는 병장기는 값의 4할에 되팔 수 있습니다. 들고 있는 병장기는 먼저 내려놓아야 합니다."])}
@@ -791,6 +791,7 @@ function statusModal() {
       <div class="modal-section"><h4>성향과 별호: ${esc(byname(p))}</h4>
         ${ALIGNMENTS.map((name) => `<div class="align-row"><span>${name}</span><div class="align-track"><div class="a-${name}" style="width:${Math.min(p.alignment[name] / 10, 100)}%"></div></div><span>${p.alignment[name]}</span></div>`).join("")}
         <p class="skill-meta">${esc(benefitText(p.alignment))}</p>
+        ${pathPerks(p).map((k) => `<div class="skill-row">${esc(k.path)}, ${esc(k.name)}<div class="skill-meta">${esc(k.desc)}</div></div>`).join("")}
       </div>
       ${companionList(p)}${realmPerks(p.realm, main?.category).length ? `<div class="modal-section"><h4>경지의 특전</h4>${realmPerks(p.realm, main?.category).map((k) => `<div class="skill-row">${esc(k.realm)}, ${esc(k.name)}<div class="skill-meta">${esc(k.desc)}</div>${k.grown.map((g) => `<div class="skill-meta">${esc(g.realm)}에 올라: ${esc(g.desc)}</div>`).join("")}</div>`).join("")}</div>` : ""}
       ${traits.length ? `<div class="modal-section"><h4>자질</h4>${traits.map((t) => `<div class="skill-row">${esc(t.name)}<div class="skill-meta">${esc(t.desc)}</div></div>`).join("")}</div>` : ""}`,

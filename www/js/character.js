@@ -545,9 +545,12 @@ export class Player {
     p.seenEvents = [...(d.seen_events || [])];
     p.kills = d.kills ?? 0;
     p.alignMark = d.align_mark ?? null;
-    // 이 기록이 없는 저장은 이미 넘은 단계를 받은 것으로 친다
     p.rumors = d.rumors ?? [];
+    // 이 기록이 없는 저장은 이미 넘은 단계를 받은 것으로 친다. 넘은 단계의 깨달음은 늘 지니고 있다
     p.alignMilestones = d.align_milestones ?? Object.fromEntries(Object.keys(p.alignment).map((a) => [a, ALIGN_STEPS.filter((at) => (p.alignment[a] || 0) >= at).length]));
+    for (const [side, count] of Object.entries(p.alignMilestones)) {
+      for (let i = 1; i <= count; i++) if (!p.traits.includes(`길_${side}_${i}`)) p.traits.push(`길_${side}_${i}`);
+    }
     p.revives = d.revives ?? 1 + sumEffect(d.traits || [], "extra_revive", "amount");
     p.fame = d.fame ?? 0;
     p.sect = d.sect !== undefined ? d.sect : (ORIGIN_SECTS[p.originKey] || null);

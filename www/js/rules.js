@@ -23,13 +23,6 @@ const ALIGN_TABLE = {
   사도: { names: ["사파 무인", "흑도인", "흑도 고수", "흑도의 거물", "사도의 거두"], silver: [25, 30, 35, 40, 50], crit: [2, 4, 6, 8, 10], evade: [0, 2, 3, 4, 6] },
   마도: { names: ["마도 무인", "마인", "마두", "대마두", "마도의 거두"], damage: [15, 20, 25, 30, 35], healCut: [3, 5, 6, 8, 10], kill_heal: [0, 3, 5, 7, 10] },
 };
-// 어느 길이든 그 수치가 단계를 넘을 때마다 한 번 얻는 것. 앞선 길이 아니어도 받는다
-export const ALIGN_MILESTONE = {
-  정도: { stats: ["mind", "external"], fame: 5 },
-  사도: { stats: ["martial", "mind"], silver: 25 },
-  마도: { stats: ["internal", "external"], mastery: 5 },
-};
-export const ALIGN_MILESTONE_STATS = [2, 3, 4, 5, 6];
 
 /** 장이 뒤로 갈수록 기량이 더디게 오른다 */
 /** 사건에서 몸이 축나는 정도. 경지와 기량이 높을수록 작다. 현경의 고수가 독버섯으로 죽어 가지는 않는다 */
@@ -152,6 +145,11 @@ function effectsOfType(traits, type) {
 
 export const sumEffect = (traits, type, field) =>
   effectsOfType(traits, type).reduce((total, e) => total + (e[field] || 0), 0);
+/** 이름이 날수록 커지는 효과. 명성 100마다 per_100씩, max까지 */
+export const fameEffect = (player, type) =>
+  effectsOfType(player.traits, type).reduce((total, e) => total + Math.min(e.max, Math.floor(player.fame / 100) * e.per_100), 0);
+/** 한 길의 단계를 처음 넘어 얻은 깨달음들 */
+export const pathPerks = (player) => player.traits.filter((k) => k.startsWith("길_")).map((k) => DB.traits[k]).filter(Boolean);
 export const hasEffect = (traits, type) => effectsOfType(traits, type).length > 0;
 export const startSkills = (traits) => effectsOfType(traits, "start_skill").map((e) => e.skill);
 export const battleBuffs = (traits, trigger) =>

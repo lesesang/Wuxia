@@ -61,6 +61,10 @@ export async function loadData(read) {
     DB.traits[`강호_${key}`] = { name: level.name, desc: level.desc, hidden: true,
       effects: ["external", "internal", "martial", "mind"].map((stat) => ({ type: "growth_rate", stat, percent: level.growth })) };
   }
+  // 한 길의 단계를 처음 넘을 때 얻는 깨달음도 숨은 특성으로 적용한다
+  for (const [side, path] of Object.entries(DB.balance.paths)) {
+    path.steps.forEach((step, i) => { DB.traits[`길_${side}_${i + 1}`] = { ...step, path: path.name, hidden: true }; });
+  }
   for (const reward of DB.karma.rewards) {
     DB.traits[`누적_${reward.at}`] = { name: reward.name, desc: reward.desc, hidden: true, effects: reward.effects };
   }
