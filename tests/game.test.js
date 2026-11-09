@@ -4160,3 +4160,21 @@ test("카르마 값은 10 이상이면 5의 배수다", () => {
   ].filter((c) => c !== undefined);
   for (const c of costs) assert.ok(c < 10 || c % 5 === 0, String(c));
 });
+
+test("뒤쪽 장터일수록 좋은 품계의 도구가 나온다", () => {
+  const p = new Player("무림초출");
+  const rank = (turn) => {
+    let total = 0, n = 0;
+    for (let i = 0; i < 200; i++) {
+      for (const s of openMarket(turn, p).stock) {
+        const item = DB.market[s.key];
+        if (item.category !== "도구") continue;
+        total += ["범품", "양품", "명품", "보물", "신물"].indexOf(item.grade);
+        n += 1;
+      }
+    }
+    return total / n;
+  };
+  const early = rank(24), late = rank(96);
+  assert.ok(late > early + 0.3, `${early} ${late}`);
+});
