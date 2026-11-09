@@ -2006,7 +2006,7 @@ test("이미 강호록에 있는 인물은 다시 알리지 않는다", () => {
   delete loadEventLog().시험사건;
 });
 
-test("대기는 세 번까지 사고 없어진 자질은 값을 돌려준다", () => {
+test("큰 그릇은 세 번까지 사고 없어진 자질은 값을 돌려준다", () => {
   withKarma(500);
   assert.ok(buyUpgrade("그릇"));
   assert.ok(buyUpgrade("그릇"));
