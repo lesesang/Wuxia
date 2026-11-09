@@ -4553,17 +4553,35 @@ test("상대의 날카로운 필살기는 보이는 회피에도 미리 셈한�
   assert.ok(battle.evadeChance(steps, round, 1) < plain || plain === 0);
 });
 
-test("한 길이 단계를 처음 넘을 때마다 한 번씩 그 길의 이득을 받는다", () => {
+test("한 길이 단계를 처음 넘을 때마다 그 길의 깨달음을 얻고, 몇몇은 명성으로 커진다", () => {
   const game = newGame();
   const p = game.player;
-  const before = { mind: p.mind, external: p.external, fame: p.fame };
   p.alignment.정도 = 210;
   const lines = game.alignMilestones();
   assert.equal(lines.length, 2);
-  assert.ok(p.mind > before.mind && p.external > before.external && p.fame > before.fame);
+  assert.ok(p.traits.includes("길_정도_1") && p.traits.includes("길_정도_2"));
   assert.equal(game.alignMilestones().length, 0, "같은 단계는 다시 주지 않는다");
   const again = Player.fromDict(p.toDict());
   assert.equal(again.alignMilestones.정도, 2);
+  assert.ok(again.traits.includes("길_정도_2"));
+  // 협명은 이름이 날수록 받는 피해를 줄인다
+  const enemy = new Enemy("산적");
+  const quiet = new Battle(again, enemy);
+  quiet.enemy.attack = 1000;
+  seed(3); const low = quiet.incoming();
+  again.fame = 900;
+  seed(3); const high = quiet.incoming();
+  assert.ok(high < low);
+  // 길이 바뀌어도 깨달음은 남는다
+  again.alignment.정도 = 0; again.alignment.마도 = 300;
+  assert.ok(again.traits.includes("길_정도_1"));
+  // 이름값은 명성이 높을수록 장터 값을 깎는다
+  const trader = new Player("무림초출");
+  trader.traits.push("길_사도_2");
+  const cheap = priceOf(trader, "대환단");
+  trader.fame = 900;
+  assert.ok(priceOf(trader, "대환단") < cheap);
+  for (const side of ["정도", "사도", "마도"]) for (let i = 1; i <= 5; i++) assert.ok(DB.traits[`길_${side}_${i}`]?.hidden, `${side} ${i}`);
 });
 
 test("강호의 오랜 이야기는 한 번 들으면 다시 나오지 않고, 무너진 혈교의 일은 끝난다", () => {

@@ -3,7 +3,7 @@ import { Skill, STAT_CAP } from "./character.js";
 import { DB } from "./data.js";
 import { loadMeta, spendKarma } from "./meta.js";
 import { pick, pickWeighted } from "./rng.js";
-import { alignValue, getChapter, hasEffect, marketName, sumEffect, talkLine } from "./rules.js";
+import { alignValue, fameEffect, getChapter, hasEffect, marketName, sumEffect, talkLine } from "./rules.js";
 import { josa } from "./josa.js";
 
 export const ITEM_GRADES = ["범품", "양품", "명품", "보물", "신물"];
@@ -165,6 +165,7 @@ export function openMarket(turn, player) {
 export function priceOf(player, key) {
   let percent = sumEffect(player.traits, "market_discount", "percent");
   percent += alignValue(player.alignment, "정도", "discount");
+  percent += fameEffect(player, "fame_discount");
   // 수상한 누군가는 흔한 물건도 비싸게 내놓는다
   const markup = player.turn === LAST_MARKET_TURN && !DB.market[key].always ? LAST_MARKET_MARKUP : 1;
   return Math.max(1, Math.trunc(DB.market[key].price * markup * (100 - Math.min(percent, MAX_DISCOUNT)) / 100));

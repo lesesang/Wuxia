@@ -17,7 +17,7 @@ import {
   actionLine, ALIGNMENT_CAP, alignTier, applyGrowth, byname, CHAPTER_STARTS, checkBreakthrough, checkGoodEnding, checkSaengsa,
   scaledGrowth, fameRank, FOCUS_DRIFT, focusedSide, getChapter, getChapterInfo, getMonth, getYear, isMarketTurn, monthLine, auraText, isNamed, perkTrait, realmFit, returnedLine, standIn, realmIndex, sumEffect, talkLine, traitSlots,
   personalize, DEFAULT_DIFFICULTY, difficultyOf,
-  ALIGNMENTS, ALIGN_STEPS, ALIGN_MILESTONE, ALIGN_MILESTONE_STATS,
+  ALIGNMENTS, ALIGN_STEPS,
 } from "./rules.js";
 import { halpun, josa } from "./josa.js";
 
@@ -695,16 +695,12 @@ export class Game {
     for (const side of ALIGNMENTS) {
       const reached = ALIGN_STEPS.filter((at) => (p.alignment[side] || 0) >= at).length;
       while ((p.alignMilestones[side] ?? 0) < reached) {
-        const step = p.alignMilestones[side] ?? 0;
-        p.alignMilestones[side] = step + 1;
-        const gift = ALIGN_MILESTONE[side];
-        const n = ALIGN_MILESTONE_STATS[step];
-        const effects = { stats: Object.fromEntries(gift.stats.map((stat) => [stat, n])) };
-        if (gift.fame) effects.fame = gift.fame * (step + 1);
-        if (gift.silver) effects.silver = gift.silver * (step + 1);
-        if (gift.mastery) effects.mastery = gift.mastery * (step + 1);
-        const summary = applyEffects(p, effects);
-        lines.push(`${side}의 길에서 한 걸음 더 나아갔다. (${summary.join(", ")})`);
+        const step = (p.alignMilestones[side] ?? 0) + 1;
+        p.alignMilestones[side] = step;
+        const key = `길_${side}_${step}`;
+        if (!p.traits.includes(key)) p.traits.push(key);
+        const perk = DB.traits[key];
+        lines.push(`${perk.path}에서 깨달음을 얻었다. ${perk.name}: ${perk.desc}`);
       }
     }
     return lines;

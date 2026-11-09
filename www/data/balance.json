@@ -155,5 +155,180 @@
     "hp": 1.2,
     "armor": 1.2,
     "attack": 0.87
+  },
+  "paths": {
+    "정도": {
+      "name": "협의의 길",
+      "steps": [
+        {
+          "name": "의기",
+          "desc": "싸움을 시작할 때 최대 체력 5푼의 호신 기운을 두른다.",
+          "effects": [
+            {
+              "type": "battle_start_ward",
+              "percent": 5
+            }
+          ]
+        },
+        {
+          "name": "협명",
+          "desc": "이름을 지키려는 마음이 몸을 다잡는다. 명성 100마다 받는 피해가 1푼 줄고, 5푼까지 준다.",
+          "effects": [
+            {
+              "type": "fame_guard",
+              "per_100": 1,
+              "max": 5
+            }
+          ]
+        },
+        {
+          "name": "민심",
+          "desc": "가는 고을마다 사람들이 먹을 것과 약초를 챙겨 준다. 달마다 체력과 내력이 3푼 더 찬다.",
+          "effects": [
+            {
+              "type": "turn_regen",
+              "hp_pct": 3,
+              "qi_pct": 3
+            }
+          ]
+        },
+        {
+          "name": "호연지기",
+          "desc": "곧은 기운이 혈도를 지켜 점혈에 걸리지 않는다.",
+          "effects": [
+            {
+              "type": "seal_immune"
+            }
+          ]
+        },
+        {
+          "name": "불굴",
+          "desc": "쓰러지지 않겠다는 마음이 숨을 잇는다. 싸우는 동안 합마다 체력이 1푼 찬다.",
+          "effects": [
+            {
+              "type": "round_regen",
+              "hp_pct": 1
+            }
+          ]
+        }
+      ]
+    },
+    "사도": {
+      "name": "실리의 길",
+      "steps": [
+        {
+          "name": "셈속",
+          "desc": "남는 장사만 한다. 얻는 은자가 1할 5푼 늘어난다.",
+          "effects": [
+            {
+              "type": "silver_rate",
+              "percent": 15
+            }
+          ]
+        },
+        {
+          "name": "이름값",
+          "desc": "이름값을 아는 장사꾼은 알아서 값을 깎는다. 명성 100마다 장터 값이 2푼 싸지고, 1할 2푼까지 싸진다.",
+          "effects": [
+            {
+              "type": "fame_discount",
+              "per_100": 2,
+              "max": 12
+            }
+          ]
+        },
+        {
+          "name": "연줄",
+          "desc": "뒷골목의 연줄이 귀한 물건을 끌어온다. 장터에 물건이 둘 더 나온다.",
+          "effects": [
+            {
+              "type": "extra_stock",
+              "amount": 2
+            }
+          ]
+        },
+        {
+          "name": "빈틈 읽기",
+          "desc": "상대의 셈을 먼저 읽는다. 회심의 일격 확률이 5푼 오른다.",
+          "effects": [
+            {
+              "type": "crit",
+              "percent": 5
+            }
+          ]
+        },
+        {
+          "name": "선수",
+          "desc": "먼저 치고 먼저 빠진다. 첫 합의 위력이 3할 오르고, 도주가 3할 쉬워진다.",
+          "effects": [
+            {
+              "type": "first_strike",
+              "percent": 30
+            },
+            {
+              "type": "flee_rate",
+              "percent": 30
+            }
+          ]
+        }
+      ]
+    },
+    "마도": {
+      "name": "패도의 길",
+      "steps": [
+        {
+          "name": "살기",
+          "desc": "손끝에 살기가 서린다. 주는 피해가 3푼 늘어난다.",
+          "effects": [
+            {
+              "type": "damage_bonus",
+              "percent": 3
+            }
+          ]
+        },
+        {
+          "name": "흉명",
+          "desc": "흉명 앞에서 상대의 손끝이 흔들린다. 명성 100마다 적의 위력이 1푼 줄고, 5푼까지 준다.",
+          "effects": [
+            {
+              "type": "fame_dread",
+              "per_100": 1,
+              "max": 5
+            }
+          ]
+        },
+        {
+          "name": "피맛",
+          "desc": "쓰러뜨린 적의 기운이 쌓인다. 쓰러뜨린 적 열마다 위력이 1푼 오른다.",
+          "effects": [
+            {
+              "type": "kill_power",
+              "percent": 0.1
+            }
+          ]
+        },
+        {
+          "name": "마성",
+          "desc": "몰릴수록 사나워진다. 체력이 절반 아래면 위력이 2할 오른다.",
+          "effects": [
+            {
+              "type": "low_hp_power",
+              "below": 50,
+              "percent": 20
+            }
+          ]
+        },
+        {
+          "name": "마공 순환",
+          "desc": "마기가 쉬지 않고 돈다. 무공에 드는 내력이 1할 5푼 준다.",
+          "effects": [
+            {
+              "type": "qi_cost_cut",
+              "percent": 15
+            }
+          ]
+        }
+      ]
+    }
   }
 }
