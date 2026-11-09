@@ -15,7 +15,7 @@ import {
 import { pick, pickWeighted, randInt, rng } from "./rng.js";
 import {
   actionLine, ALIGNMENT_CAP, alignTier, applyGrowth, byname, CHAPTER_STARTS, checkBreakthrough, checkGoodEnding, checkSaengsa,
-  scaledGrowth, fameRank, FOCUS_DRIFT, focusedSide, getChapter, getChapterInfo, getMonth, getYear, isMarketTurn, monthLine, auraText, isNamed, perkTrait, realmFit, returnedLine, standIn, realmIndex, sumEffect, talkLine, traitSlots,
+  scaledGrowth, fameRank, FOCUS_DRIFT, focusedSide, getChapter, getChapterInfo, getMonth, getYear, isMarketTurn, monthLine, auraText, isNamed, perkTrait, realmFit, enemyRealmIndex, returnedLine, standIn, realmIndex, sumEffect, talkLine, traitSlots,
   personalize, DEFAULT_DIFFICULTY, difficultyOf,
   ALIGNMENTS, ALIGN_STEPS,
 } from "./rules.js";
@@ -330,24 +330,35 @@ export class Game {
   pickEnemy() {
     const p = this.player;
     // 성향과 명성에 따라 찾아오는 적이 있다. 같은 편은 덜 덤빈다
-    const pool = enemyPool(getChapter(p.turn)).filter((k) => checkRequires(p, DB.enemies[k].requires));
+    const chapter = getChapter(p.turn);
+    // 깊은 강호에서는 다음 장의 적이 조금 일찍 내려오고, 나보다 높은 경지의 적을 더 자주 만난다
+    const encounter = difficultyOf(p).encounter || {};
+    const here = enemyPool(chapter);
+    const ahead = encounter.ahead && chapter < 5 ? enemyPool(chapter + 1).filter((k) => !here.includes(k)) : [];
+    const pool = [...here, ...ahead].filter((k) => checkRequires(p, DB.enemies[k].requires));
     const mine = p.dominantAlignment() || DB.sects[p.sect]?.alignment;
+    const climb = (k) => (1 + (encounter.realm_up || 0)) ** Math.max(0, enemyRealmIndex(DB.enemies[k].realm) - enemyRealmIndex(p.realm));
     // 지금 시점(장)이 나올 수 있는 적을 정하고, 그중에서 내 경지와 가까운 적을 더 자주 만난다
-    const weightOf = (k) => (mine && DB.enemies[k].side === mine ? SAME_SIDE_WEIGHT : 1) * DB.enemies[k].weight * realmFit(p.realm, DB.enemies[k].realm);
+    const weightOf = (k) => (mine && DB.enemies[k].side === mine ? SAME_SIDE_WEIGHT : 1) * DB.enemies[k].weight * realmFit(p.realm, DB.enemies[k].realm)
+      * climb(k) * (ahead.includes(k) ? encounter.ahead : 1);
     // 정도를 걷는 무인을 정파가 까닭 없이 치지 않고, 제 소속은 제 사람을 치지 않는다
     // 혈교와 손잡은 무인은 혈교도 치지 않고, 무너진 혈교는 다시 나오지 않는다
     const allies = p.hasFlag("혈해_맹약") || p.hasFlag("혈교_멸문") ? "혈교" : null;
     const fitting = pool.filter((k) => !(mine === "정도" && DB.enemies[k].side === "정도") && DB.enemies[k].faction !== p.sect && DB.enemies[k].faction !== allies
       && !(isNamed(k) && p.slain.includes(k))); // 쓰러뜨린 이름 있는 적은 다시 만나지 않는다
     const list = fitting.length ? fitting : pool;
-    return pickWeighted(list, list.map(weightOf));
+    const key = pickWeighted(list, list.map(weightOf));
+    this.reachChapter = ahead.includes(key) ? chapter + 1 : null;
+    return key;
   }
 
   /** foe를 주면 그 사건만의 상대다. 수치는 기존 적을 따르고 이름과 대사는 사건을 따른다. foeLine은 그 사건의 첫 대사다 */
   startBattle(key, spar = false, foe = null, foeLine = null) {
     // 지금 장에 어울리지 않는 적이면 같은 갈래에서 위상이 맞는 적으로 나온다
     // 이미 쓰러뜨린 이름 있는 적의 자리에는 대신할 적이 나온다. 그래도 없으면 그가 돌아온다. 비무 상대는 산 사람이다
-    const stature = statureEnemy(key, getChapter(this.player.turn));
+    // 다음 장에서 일찍 내려온 적은 그 장의 위상 그대로 나온다
+    const stature = statureEnemy(key, Math.max(getChapter(this.player.turn), this.reachChapter ?? 0));
+    this.reachChapter = null;
     const fitting = spar || foe ? stature : standIn(this.player, stature);
     const enemy = new Enemy(fitting, this.player.turn);
     const affix = this.deepen(enemy, spar);
