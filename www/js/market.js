@@ -93,18 +93,31 @@ function weightedSample(list, weightOf, count) {
 }
 
 /** 병기와 호신구는 늘 진열한다. 주무공에 맞는 병기가 먼저고, 이미 지닌 물건은 빠진다. 더 나은 것이 앞선다. */
-function gearForSale(pool, player) {
+function gearForSale(pool, wide, player) {
   const picks = [];
   const slotOf = (k) => DB.market[k].effects.find((e) => e.type === "equip")?.slot;
   const better = (k, slot) => (bonusFor(player, k) > equipmentBonus(player, slot) ? 3 : 1);
   const main = player.bestSkill()?.category;
-  const weapons = pool.filter((k) => slotOf(k) === "weapon");
-  const fitting = weapons.filter((k) => itemStyle(k) === main);
-  picks.push(...weightedSample(fitting, (k) => better(k, "weapon"), 2));
-  const others = weapons.filter((k) => !picks.includes(k) && itemStyle(k) !== main);
-  picks.push(...weightedSample(others, (k) => styleWeight(player, k), 1));
-  picks.push(...weightedSample(pool.filter((k) => slotOf(k) === "armor"), (k) => better(k, "armor"), 2));
+  const fitting = (k) => slotOf(k) === "weapon" && itemStyle(k) === main;
+  const otherWeapon = (k) => slotOf(k) === "weapon" && itemStyle(k) !== main;
+  const armor = (k) => slotOf(k) === "armor";
+  picks.push(...fillShelf(pool, wide, fitting, picks, (k) => better(k, "weapon"), 2));
+  picks.push(...fillShelf(pool, wide, otherWeapon, picks, (k) => styleWeight(player, k), 1));
+  picks.push(...fillShelf(pool, wide, armor, picks, (k) => better(k, "armor"), 2));
   return picks;
+}
+
+/** 한 칸을 정한 수만큼 채운다. 이번 장터에 남은 것이 모자라면 앞선 장터의 같은 갈래에서 채운다.
+ *  지닌 것이 많아도 진열되는 수는 줄지 않는다. */
+function fillShelf(pool, wide, fits, taken, weightOf, size) {
+  const picked = weightedSample(pool.filter((k) => fits(k) && !taken.includes(k)), weightOf, size);
+  // 앞선 장터에서도 모자라면 다음 장터의 것까지 내놓는다
+  for (const spares of wide) {
+    if (picked.length >= size) break;
+    const spare = spares.filter((k) => fits(k) && !taken.includes(k) && !picked.includes(k));
+    picked.push(...weightedSample(spare, weightOf, size - picked.length));
+  }
+  return picked;
 }
 
 /** 수상한 누군가는 누가 오든 같은 얼굴이다 */
@@ -113,22 +126,31 @@ const pickLastMarketLine = () => pick(DB.flavor.talk.last_market);
 export function openMarket(turn, player) {
   const number = marketNumber(turn);
   const top = player.dominantAlignment();
-  const pool = Object.keys(DB.market).filter((k) => {
+  // 이번 장터에 오를 수 있는 것, 그리고 모자랄 때 채워 넣을 앞선 장터와 그 밖의 장터의 것
+  const nearby = number === 5 ? [4, 5] : Array.from({ length: number }, (_, i) => i + 1);
+  const sellable = (k) => {
     const item = DB.market[k];
-    if (!item.markets.includes(number)) return false;
     if (item.dominant && item.dominant !== top) return false;
     // 이미 익힌 무공의 비급과 이미 지닌 병장기는 진열하지 않는다
     if (player.ownsGear(k)) return false;
     return !item.effects.some((e) => e.type === "skill" && player.hasSkill(e.skill));
-  });
+  };
+  const pool = Object.keys(DB.market).filter((k) => DB.market[k].markets.includes(number) && sellable(k));
+  const ordinary = (k) => !DB.market[k].always && DB.market[k].markets.length && sellable(k);
+  const wide = [
+    Object.keys(DB.market).filter((k) => ordinary(k) && DB.market[k].markets.some((m) => nearby.includes(m))),
+    Object.keys(DB.market).filter((k) => ordinary(k) && DB.market[k].markets.some((m) => m !== 5)),
+    // 익힐 비급이 정말 남지 않았으면 이미 익힌 무공의 비급을 내놓는다. 사면 성취가 오른다
+    Object.keys(DB.market).filter((k) => DB.market[k].markets.includes(number) && !DB.market[k].always && !player.ownsGear(k)
+      && DB.market[k].effects.some((e) => e.type === "skill")),
+  ];
   const stock = pool.filter((k) => DB.market[k].always);
-  for (const key of gearForSale(pool, player)) if (!stock.includes(key)) stock.push(key);
+  for (const key of gearForSale(pool, wide, player)) if (!stock.includes(key)) stock.push(key);
   // 무기와 비급이 많아도 약과 심법, 경공이 밀려나지 않도록 칸을 나눠 고른다
   for (const [shelf, size] of SHELVES) {
-    const items = pool.filter((k) => !stock.includes(k) && shelfOf(k) === shelf);
     // 도구는 뒤쪽 장터일수록 좋은 품계가 나온다
     const lift = shelf === "도구" ? (k) => 1 + TOOL_GRADE_LIFT * ITEM_GRADES.indexOf(DB.market[k].grade) * (number - 1) : () => 1;
-    stock.push(...weightedSample(items, (k) => styleWeight(player, k) * lift(k), size));
+    stock.push(...fillShelf(pool, wide, (k) => shelfOf(k) === shelf && !DB.market[k].always, stock, (k) => styleWeight(player, k) * lift(k), size));
   }
   const others = pool.filter((k) => !stock.includes(k));
   stock.push(...weightedSample(others, (k) => styleWeight(player, k), Math.max(0, STOCK_SIZE - stock.length) + sumEffect(player.traits, "extra_stock", "amount")));
@@ -166,7 +188,8 @@ function effectIsUseful(player, effect, key) {
   switch (effect.type) {
     case "heal": case "cure": case "mastery": case "atk_buff": return (effect.percent ?? 1) > 0;
     case "stat": return player[effect.stat] < STAT_CAP;
-    case "skill": return !player.hasSkill(effect.skill);
+    // 이미 익힌 무공의 비급도 사면 성취가 오른다
+    case "skill": return true;
     case "boss_weaken": return player.bossWeaken < MAX_BOSS_WEAKEN;
     default: return false;
   }

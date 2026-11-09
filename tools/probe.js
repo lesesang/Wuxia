@@ -7,7 +7,7 @@ import { Battle } from "../www/js/battle.js";
 import { DB, loadData } from "../www/js/data.js";
 import { eventView } from "../www/js/events.js";
 import { Game } from "../www/js/game.js";
-import { blockReason } from "../www/js/market.js";
+import { blockReason, bonusFor, equipmentBonus } from "../www/js/market.js";
 import { loadMeta, saveMeta } from "../www/js/meta.js";
 import { getChapter } from "../www/js/rules.js";
 import { equipmentBonus } from "../www/js/market.js";
@@ -81,7 +81,9 @@ for (let run = 0; run < count; run++) {
       const top = p.dominantAlignment();
       game.chooseEvent((top && open.find((c) => c.label.startsWith(`(${top})`) && !c.label.includes("무릎")) || choice(open)).index);
     } else if (game.market) {
-      const keys = game.market.stock.filter((s) => s.left > 0 && !blockReason(p, s.key) && DB.market[s.key].category !== "도구" && s.key !== "혈마단").map((s) => s.key);
+      const keys = game.market.stock.filter((s) => s.left > 0 && !blockReason(p, s.key) && DB.market[s.key].category !== "도구" && s.key !== "혈마단"
+          // 지금 든 것보다 못한 병장기는 사지 않는다
+          && !DB.market[s.key].effects.some((e) => e.type === "equip" && bonusFor(p, s.key) <= equipmentBonus(p, e.slot))).map((s) => s.key);
       const rank = (k) => { const it = DB.market[k]; const t = it.effects.map((e) => e.type); return t.includes("equip") ? 0 : t.includes("skill") ? 1 : it.consumable ? 2 : 3; };
       if (keys.length) game.marketBuy(keys.sort((a, b) => rank(a) - rank(b))[0]); else game.marketLeave();
     } else if (game.battle) {

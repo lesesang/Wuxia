@@ -7,7 +7,7 @@ import { readFile } from "node:fs/promises";
 import { loadData } from "../www/js/data.js";
 import { eventView } from "../www/js/events.js";
 import { Game } from "../www/js/game.js";
-import { blockReason, buy } from "../www/js/market.js";
+import { blockReason, buy, bonusFor, equipmentBonus } from "../www/js/market.js";
 import { loadMeta, saveMeta } from "../www/js/meta.js";
 import { DB } from "../www/js/data.js";
 
@@ -90,7 +90,11 @@ function play({ style = "섞어서", useMarket = true, origin = "무림초출", 
       game.chooseEvent((special || choice(open)).index);
     } else if (game.market) {
       const keys = useMarket ? game.market.stock
-        .filter((s) => s.left > 0 && !blockReason(p, s.key) && DB.market[s.key].category !== "도구" && s.key !== "혈마단").map((s) => s.key) : [];
+        .filter((s) => s.left > 0 && !blockReason(p, s.key) && DB.market[s.key].category !== "도구" && s.key !== "혈마단"
+          // 지금 든 것보다 못한 병장기는 사지 않는다
+          && !DB.market[s.key].effects.some((e) => e.type === "equip" && bonusFor(p, s.key) <= equipmentBonus(p, e.slot))
+          // 이미 익힌 무공의 비급은 성취만 오르니 사람도 대개 거른다
+          && !DB.market[s.key].effects.some((e) => e.type === "skill" && p.hasSkill(e.skill))).map((s) => s.key) : [];
       if (keys.length) game.marketBuy(keys.sort((a, b) => buyPriority(a) - buyPriority(b))[0]);
       else game.marketLeave();
     } else if (game.battle) {
