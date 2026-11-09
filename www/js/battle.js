@@ -190,9 +190,6 @@ export function useConsumable(player, key) {
     } else if (effect.type === "mastery") {
       const main = player.bestSkill();
       if (main) notes.push(...main.gainMastery(!effect.style || main.category === effect.style ? effect.amount : Math.floor(effect.amount / 2)));
-    } else if (effect.type === "last_strength") {
-      player.revives += effect.amount ?? 1;
-      notes.push("선천진기를 한 번 더 일으킬 수 있다");
     } else if (effect.type === "cure" && effect.what === "injury") {
       player.addInjury(-(effect.amount ?? 1));
     } else if (effect.type === "stat") {

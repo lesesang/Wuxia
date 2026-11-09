@@ -4148,3 +4148,15 @@ test("사부의 마지막 가르침 끝에서 내 계열에 맞는 사부의 병
   assert.equal(Object.values(DB.karma.content).filter((c) => c.origin === "무림초출").length, 2);
   assert.ok(!DB.karma.content.사부의이름);
 });
+
+test("카르마 값은 10 이상이면 5의 배수다", () => {
+  const costs = [
+    ...Object.values(DB.traits).map((t) => t.cost),
+    ...Object.values(DB.karma.content).map((c) => c.cost),
+    ...Object.values(DB.karma.upgrades).flatMap((u) => u.costs),
+    ...Object.values(DB.karma.provisions).map((p) => p.cost),
+    ...DB.karma.legacy.upgrades.map((u) => u.cost),
+    DB.karma.legacy.cost,
+  ].filter((c) => c !== undefined);
+  for (const c of costs) assert.ok(c < 10 || c % 5 === 0, String(c));
+});
