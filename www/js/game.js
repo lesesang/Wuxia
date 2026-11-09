@@ -608,11 +608,13 @@ export class Game {
   }
 
   /** 무공의 성취 일부를 같은 갈래의 쓰는 무공으로 옮긴다. 옮긴 무공의 성취는 0이 된다. */
-  transferMastery(key) {
+  transferMastery(key, pull = false) {
     if (!this.active || this.battle || !this.player.alive) return;
     const p = this.player;
-    const from = p.getSkill(key);
-    const main = from && (from.type === "공격무공" ? p.bestSkill() : p.bestOfType(from.type));
+    const skill = p.getSkill(key);
+    const inUse = skill && (skill.type === "공격무공" ? p.bestSkill() : p.bestOfType(skill.type));
+    // 쓰지 않는 무공에서 쓰는 무공으로 옮기거나, 쓰는 무공의 성취를 그 무공으로 받아 온다
+    const [from, main] = pull ? [inUse, skill] : [skill, inUse];
     const amount = from?.masteryFor(main);
     if (!amount) return;
     from.mastery = 0;

@@ -111,7 +111,8 @@ export class Skill {
 
   /** 쓰는 무공으로 옮길 수 있는 성취. 공격 무공은 같은 계열끼리, 심법과 경공은 같은 갈래끼리 옮긴다. 없으면 0 */
   masteryFor(target) {
-    if (!target || target === this || target.type !== this.type) return 0;
+    if (!target || target === this || target.type !== this.type || !this.mastery) return 0;
+    if (target.mastery >= MAX_MASTERY && !target.canEvolve()) return 0; // 더 오를 데가 없는 무공에는 옮기지 않는다
     if (this.type === "공격무공" && target.category !== this.category) return 0;
     const gap = GRADE_ORDER.indexOf(target.grade) - GRADE_ORDER.indexOf(this.grade);
     const rate = gap < 0 ? HIGHER_GRADE_TRANSFER : gap === 0 ? SAME_GRADE_TRANSFER : LOWER_GRADE_TRANSFER;
