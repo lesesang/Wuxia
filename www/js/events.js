@@ -22,6 +22,7 @@ export function unmetReason(player, requires) {
   if (r.not_dominant?.includes(player.dominantAlignment())) return "그 길에는 어울리지 않는다";
   if (r.dominant_in && !r.dominant_in.includes(player.dominantAlignment())) return "그 길이 아니다";
   if (r.flag && !player.hasFlag(r.flag)) return "아직 인연이 닿지 않았다";
+  if (r.after && !player.seenEvents.includes(r.after)) return "앞선 일이 아직 없었다";
   if (r.not_flag && [].concat(r.not_flag).some((f) => player.hasFlag(f))) return "이미 지나간 일이다";
   if (r.not_slain && player.slain.includes(r.not_slain)) return "이미 지나간 일이다";
   if (r.slain && !player.slain.includes(r.slain)) return "아직 일어나지 않은 일이다";
@@ -184,8 +185,16 @@ export function pendingOriginEvents(player) {
     const event = DB.randomEvents[key];
     if (event.requires?.origin !== player.originKey || player.seenEvents.includes(key)) return false;
     if (event.chain && !canStartChain(player, event.chain.id)) return false;
-    return checkRequires(player, event.requires);
+    return checkRequires(player, lateRelaxed(player, event.requires));
   });
+}
+
+const ORIGIN_RELAX_TURN = 97; // 마지막 장에 들면 출신의 이야기는 경지가 모자라도 찾아온다
+/** 출신의 이야기는 10년 안에 반드시 만나야 한다. 마지막 장에서는 경지 조건을 묻지 않는다. */
+function lateRelaxed(player, requires) {
+  if (player.turn < ORIGIN_RELAX_TURN || !requires?.realm_min) return requires;
+  const { realm_min, ...rest } = requires;
+  return rest;
 }
 
 const ORIGIN_GAP = 4; // 출신의 이야기가 몰리지 않게 띄우는 달
