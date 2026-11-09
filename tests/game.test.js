@@ -2997,7 +2997,7 @@ test("같은 갈래의 더 깊은 무공은 이어받고 같은 무공은 성취
 });
 
 test("적의 경지와 이름, 품은 비급이 세계관에 맞는다", () => {
-  const nameless = ["무명노인", "권마의그림자", "혈마잔영", "생사문지기", "천마", "묘지기"];
+  const nameless = ["무명노인", "권마의그림자", "혈마잔영", "옛무인그림자", "생사문지기", "천마", "묘지기"];
   const banned = ["멸절", "호연패", "단목휘"];
   for (const [k, e] of Object.entries(DB.enemies)) {
     assert.ok(DB.realms.enemy_order.includes(e.realm), k);
@@ -4439,4 +4439,17 @@ test("데이터의 조건과 효과는 모두 코드가 읽는다", () => {
   };
   for (const name of readdirSync(new URL("../www/data/", import.meta.url))) walk(JSON.parse(readFileSync(new URL(`../www/data/${name}`, import.meta.url), "utf-8")), name);
   assert.deepEqual(bad, []);
+});
+
+test("혈마의 잔영은 현경의 무인에게도 버거운 상대다", () => {
+  const blood = DB.enemies.혈마잔영;
+  assert.equal(blood.realm, "현경");
+  for (const k of ["이무기", "흑룡", "무림맹주"]) {
+    assert.ok(blood.hp > DB.enemies[k].hp && blood.attack > DB.enemies[k].attack, k);
+  }
+  assert.ok(blood.phases.length >= 2);
+  // 다른 사건의 그림자는 혈마의 수치를 빌리지 않는다
+  for (const name of ["events_jianghu", "events_chains"]) {
+    assert.ok(!readFileSync(new URL(`../www/data/${name}.json`, import.meta.url), "utf-8").includes("\"battle\": \"혈마잔영\""), name);
+  }
 });

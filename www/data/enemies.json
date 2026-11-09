@@ -1240,29 +1240,36 @@
   "혈마잔영": {
     "name": "혈마의 잔영",
     "tier": "강적",
-    "realm": "화경",
-    "hp": 1590,
-    "attack": 65,
-    "exp_reward": 3,
+    "realm": "현경",
+    "hp": 18395,
+    "attack": 336,
+    "exp_reward": 5,
     "silver": [
-      42,
-      63
+      90,
+      140
     ],
     "chapters": [],
     "weight": 0,
-    "desc": "혈교의 개조 혈마가 유적에 남긴 의지. 죽은 자의 칼이 산 자보다 무겁다.",
+    "desc": "혈교의 개조 혈마가 유적 깊은 곳에 남긴 의지. 몸은 오래전에 스러졌지만 피로 쌓은 기운은 백 년이 지나도 현경의 고수를 짓누른다.",
     "specials": [
       {
         "name": "혈해만리",
         "every": 3,
-        "mult": 2.0,
-        "qi_drain": 10
+        "mult": 2.1,
+        "qi_drain": 15,
+        "heal_pct": 5
+      },
+      {
+        "name": "혈마강림",
+        "every": 5,
+        "mult": 1.6,
+        "injury": true
       }
     ],
     "intro": "\"먹어라. 아니면 먹혀라.\"",
-    "level": 49,
-    "hp_style": 0.896,
-    "attack_style": 0.85,
+    "level": 97,
+    "hp_style": 2.4,
+    "attack_style": 1.8,
     "intros": [
       {
         "requires": {
@@ -1275,14 +1282,73 @@
       },
       {
         "requires": {
+          "origin": "혈지생환"
+        },
+        "text": "\"연못의 아이로구나. 그 연못은 내가 팠다. 너는 내 피에서 기어 나온 것이다.\""
+      },
+      {
+        "requires": {
+          "sect": "혈교"
+        },
+        "text": "\"교우여, 백 년 만에 경전을 읊는 소리를 들었다. 네 피로 나를 일으켜라.\""
+      },
+      {
+        "requires": {
+          "realm_min": "현경"
+        },
+        "text": "\"현경이라. 백 년 전에도 그만한 놈들이 이 동굴에서 내 경전이 되었다.\""
+      },
+      {
+        "requires": {
           "dominant": "정도",
           "min_fame": 50
         },
         "text": "\"깨끗한 손으로 왔구나. 언제까지 깨끗한지 보자.\""
+      },
+      {
+        "requires": {
+          "dominant": "마도",
+          "min_fame": 50
+        },
+        "text": "\"피 냄새가 짙구나. 천마의 길을 걷는 자인가. 그자도 내 연못을 탐냈다.\""
+      },
+      {
+        "requires": {
+          "min_fame": 300
+        },
+        "text": "\"강호가 부르는 이름이로군. 그 피라면 내가 다시 서기에 모자람이 없다.\""
       }
     ],
     "named": true,
-    "armor": 12
+    "armor": 42,
+    "phases": [
+      {
+        "hp_pct": 55,
+        "attack_mult": 1.2,
+        "text": "혈마의 잔영이 흘린 피를 도로 빨아들인다. 동굴의 핏빛이 한층 짙어진다."
+      },
+      {
+        "hp_pct": 25,
+        "attack_mult": 1.35,
+        "text": "잔영이 사람의 꼴을 버리고 피의 바다가 되어 일어선다. \"이것이 혈마다.\"",
+        "specials": [
+          {
+            "name": "혈해만리",
+            "every": 2,
+            "mult": 2.0,
+            "qi_drain": 15,
+            "heal_pct": 5
+          },
+          {
+            "name": "혈마강림",
+            "every": 4,
+            "mult": 1.7,
+            "injury": true
+          }
+        ]
+      }
+    ],
+    "outro": "잔영이 핏물로 흩어지며 동굴 벽의 경전이 한 줄씩 지워졌다. 마지막 한 줄만 남았다. '피는 거짓말을 하지 않는다.'"
   },
   "무명노인": {
     "name": "무명노인",
@@ -9661,5 +9727,34 @@
     "returned": "허곤이 다시 일어섰다. 녹여 넣은 마단이 아직 남은 모양이다.",
     "hp": 3195,
     "attack": 113
+  },
+  "옛무인그림자": {
+    "tier": "강적",
+    "realm": "화경",
+    "hp": 1590,
+    "attack": 65,
+    "exp_reward": 3,
+    "silver": [
+      42,
+      63
+    ],
+    "chapters": [],
+    "weight": 0,
+    "specials": [
+      {
+        "name": "잔영난무",
+        "every": 3,
+        "mult": 2.0,
+        "qi_drain": 10
+      }
+    ],
+    "level": 49,
+    "hp_style": 0.896,
+    "attack_style": 0.85,
+    "armor": 12,
+    "name": "옛 무인의 그림자",
+    "desc": "석실과 산마루에 남은 옛 고수의 기운. 말이 없고 병기 끝만 든다.",
+    "intro": "그림자는 말이 없다. 병기 끝만 천천히 든다.",
+    "named": false
   }
 }
