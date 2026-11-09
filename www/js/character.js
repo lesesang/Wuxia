@@ -10,6 +10,7 @@ import { josa } from "./josa.js";
 
 export const GRADE_ORDER = ["기본", "명품", "상승", "일절", "신공"];
 export const GIMMICK_GRADE = "상승"; // 이 품계부터 무공의 묘리가 드러난다
+const HIGHER_GRADE_TRANSFER = 0.7; // 높은 품계 무공의 성취를 옮기는 비율
 const SAME_GRADE_TRANSFER = 0.5;  // 같은 품계 무공의 성취를 옮기는 비율
 const LOWER_GRADE_TRANSFER = 0.3; // 낮은 품계 무공의 성취를 옮기는 비율
 const MAX_MASTERY = 100;
@@ -108,12 +109,13 @@ export class Skill {
   /** 승급으로는 최고 품계(신공)에 오르지 못한다. 일절이 승급의 끝이다. */
   canEvolve() { return GRADE_ORDER.indexOf(this.grade) < GRADE_ORDER.length - 2; }
 
-  /** 품계가 같거나 낮은 같은 계열 무공에서 주무공으로 옮길 수 있는 성취. 없으면 0 */
-  masteryFor(main) {
-    if (this.type !== "공격무공" || !main || main === this || main.category !== this.category) return 0;
-    const gap = GRADE_ORDER.indexOf(main.grade) - GRADE_ORDER.indexOf(this.grade);
-    if (gap < 0) return 0;
-    return Math.floor(this.mastery * (gap === 0 ? SAME_GRADE_TRANSFER : LOWER_GRADE_TRANSFER));
+  /** 쓰는 무공으로 옮길 수 있는 성취. 공격 무공은 같은 계열끼리, 심법과 경공은 같은 갈래끼리 옮긴다. 없으면 0 */
+  masteryFor(target) {
+    if (!target || target === this || target.type !== this.type) return 0;
+    if (this.type === "공격무공" && target.category !== this.category) return 0;
+    const gap = GRADE_ORDER.indexOf(target.grade) - GRADE_ORDER.indexOf(this.grade);
+    const rate = gap < 0 ? HIGHER_GRADE_TRANSFER : gap === 0 ? SAME_GRADE_TRANSFER : LOWER_GRADE_TRANSFER;
+    return Math.floor(this.mastery * rate);
   }
 
   evolve() {
