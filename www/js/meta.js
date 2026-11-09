@@ -387,8 +387,7 @@ export function recordRun(summary) {
 
 // ---------- 달 체크포인트 ----------
 
-export const saveCheckpoint = (playerDict, log, extra = {}) =>
-  storage.set(SAVE_KEY, JSON.stringify({ player: playerDict, log, ...extra }));
+export const saveCheckpoint = (playerDict, log) => storage.set(SAVE_KEY, JSON.stringify({ player: playerDict, log }));
 
 export function loadCheckpoint() {
   const raw = storage.get(SAVE_KEY);

@@ -480,7 +480,7 @@ export class Battle {
   /** 맞힌 뒤에 드러나는 무공의 묘리 */
   applyGimmickOnHit(g, damage) {
     const p = this.player;
-    const steal = (g.lifesteal || 0) + (this.lifestealBuff?.percent || 0) + (this.mindG?.lifesteal_buff ? Math.round(this.mindG.lifesteal_buff.percent / 2) : 0);
+    const steal = (g.lifesteal || 0) + (this.lifestealBuff?.percent || 0) + (this.mindG?.lifesteal_buff ? Math.floor(this.mindG.lifesteal_buff.percent / 2) : 0);
     if (steal) {
       // 큰 피해를 주어도 한 합에 빨아들이는 양에는 끝이 있다
       const room = Math.max(0, Math.trunc(p.maxHp() * MAX_LIFESTEAL_PCT / 100) - this.stolen);
@@ -605,7 +605,7 @@ export class Battle {
     }
   }
 
-  /** 주화입마: 마공의 비기는 심경이 70보다 낮을수록 위험하다. */
+  /** 주화입마: 마공의 비기는 심경이 700보다 낮을수록 위험하다. */
   checkQiDeviation(skill) {
     if (!skill.risky) return;
     if (rng.random() < Math.max(0, 700 - this.player.mind) * 0.0015) {
@@ -660,7 +660,7 @@ export class Battle {
   /** 심법이 늘 줄여 주는 피해 */
   mindGuard() {
     const g = this.mindG;
-    return g?.guard ? Math.min(MAX_PASSIVE_GUARD, Math.round(g.guard.percent / 2)) : 0;
+    return g?.guard ? Math.min(MAX_PASSIVE_GUARD, Math.floor(g.guard.percent / 2)) : 0;
   }
 
   useMovement() {
@@ -693,7 +693,7 @@ export class Battle {
       this.atkBuff = { percent: full ? tool.percent : Math.floor(tool.percent / 2), rounds: tool.rounds + extra };
     }
     for (const e of item.effects) {
-      if (e.type === "ward") this.ward = Math.max(this.ward, Math.trunc(this.player.maxHp() * e.percent / 100));
+      if (e.type === "ward") this.ward = Math.max(this.ward, Math.trunc(this.player.maxHp() * Math.min(MAX_WARD, e.percent) / 100));
       if (e.type === "guard_buff") this.guard = { percent: e.percent, rounds: e.rounds + extra };
       if (e.type === "enemy_weaken") this.enemyWeaken = { percent: e.percent, rounds: e.rounds + extra };
       if (e.type === "enemy_stun") this.enemyStun = true;
@@ -822,7 +822,7 @@ export class Battle {
         this.log.push(`(${this.enemy.name}${josa(this.enemy.name, "이/가")} 흘린 피를 삼켰다. 체력 +${drink})`);
       }
     }
-    const thorns = Math.min(MAX_THORNS, (this.reflect?.percent || 0) + (this.armorG?.thorns || 0) + (this.mindG?.reflect ? Math.round(this.mindG.reflect.percent / 2) : 0));
+    const thorns = Math.min(MAX_THORNS, (this.reflect?.percent || 0) + (this.armorG?.thorns || 0) + (this.mindG?.reflect ? Math.floor(this.mindG.reflect.percent / 2) : 0));
     if (thorns && damage > 0) {
       const back = Math.max(1, Math.trunc(damage * thorns / 100));
       this.enemy.takeDamage(back);
@@ -976,8 +976,8 @@ export class Battle {
       if (this.burn.rounds <= 0) this.burn = null;
     }
     // 저절로 차오르는 기운은 한 싸움에 일정한 양까지다
-    const mindHp = this.mindG?.regen ? Math.max(1, Math.round(this.mindG.regen.percent / 2)) : 0;
-    const mindQi = this.mindG?.regen_qi ? Math.max(1, Math.round(this.mindG.regen_qi.percent / 2)) : 0;
+    const mindHp = this.mindG?.regen ? Math.max(1, Math.floor(this.mindG.regen.percent / 2)) : 0;
+    const mindQi = this.mindG?.regen_qi ? Math.max(1, Math.floor(this.mindG.regen_qi.percent / 2)) : 0;
     const regen = Math.min(MAX_PASSIVE_REGEN - this.regenUsedHp, sumEffect(this.player.traits, "round_regen", "hp_pct") + (this.armorG?.regen || 0) + mindHp);
     const regenQi = Math.min(MAX_PASSIVE_REGEN - this.regenUsedQi, sumEffect(this.player.traits, "round_regen", "qi_pct") + mindQi);
     if ((regen > 0 || regenQi > 0) && this.player.hp > 0) {

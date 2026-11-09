@@ -1349,6 +1349,8 @@ test("성향과 명성에 따라 사건이 달라진다", () => {
   p.alignment.마도 = 200;
   p.fame = 50;
   assert.ok(eventView(p, "쫓기는소녀").text.includes("뒤가 더 무서운지"));
+  assert.ok(!checkRequires(p, DB.events.마도_토벌령.requires), "얼굴이 그려진 방은 이름이 난 뒤에 붙는다");
+  p.fame = 100;
   assert.ok(checkRequires(p, DB.events.마도_토벌령.requires));
   assert.ok(!checkRequires(p, DB.events.정도_은인.requires));
   const events = Object.values(DB.events);
@@ -4419,4 +4421,22 @@ test("천마를 꺾은 기록이 있으면 혈풍이 열려 있다", async () =>
   saveMeta(meta);
   assert.ok(difficultyOpen("혈풍"));
   assert.ok(!difficultyOpen("겁화"));
+});
+
+test("데이터의 조건과 효과는 모두 코드가 읽는다", () => {
+  const src = ["events", "battle", "game", "rules"].map((f) => readFileSync(new URL(`../www/js/${f}.js`, import.meta.url), "utf-8")).join("\n");
+  const known = new Set([...src.matchAll(/\br\.(\w+)/g), ...src.matchAll(/requires\??\.(\w+)/g)].map((m) => m[1]));
+  const knownFx = new Set([...src.matchAll(/(?:effects|fx)\??\.(\w+)/g)].map((m) => m[1]));
+  const bad = [];
+  const walk = (o, where) => {
+    if (Array.isArray(o)) return o.forEach((v) => walk(v, where));
+    if (!o || typeof o !== "object") return;
+    for (const [k, v] of Object.entries(o)) {
+      if (k === "requires" && v && typeof v === "object") for (const r of Object.keys(v)) if (!known.has(r)) bad.push(`${where}: 조건 ${r}`);
+      if (k === "effects" && v && !Array.isArray(v) && typeof v === "object") for (const e of Object.keys(v)) if (!knownFx.has(e)) bad.push(`${where}: 효과 ${e}`);
+      walk(v, where);
+    }
+  };
+  for (const name of readdirSync(new URL("../www/data/", import.meta.url))) walk(JSON.parse(readFileSync(new URL(`../www/data/${name}`, import.meta.url), "utf-8")), name);
+  assert.deepEqual(bad, []);
 });
