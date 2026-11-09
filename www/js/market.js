@@ -57,6 +57,8 @@ export function styleWeight(player, key) {
   return player.skillsOfType("공격무공").some((s) => s.category === style) ? KNOWN_STYLE_WEIGHT : 1;
 }
 
+const TOOL_GRADE_LIFT = 0.6; // 장터가 하나 뒤로 갈 때마다 품계 한 단계에 더하는 가중치
+
 const SHELVES = [["약", 3], ["심법", 1], ["보법", 1], ["공격 비급", 3], ["도구", 2]];
 
 function shelfOf(key) {
@@ -124,7 +126,9 @@ export function openMarket(turn, player) {
   // 무기와 비급이 많아도 약과 심법, 경공이 밀려나지 않도록 칸을 나눠 고른다
   for (const [shelf, size] of SHELVES) {
     const items = pool.filter((k) => !stock.includes(k) && shelfOf(k) === shelf);
-    stock.push(...weightedSample(items, (k) => styleWeight(player, k), size));
+    // 도구는 뒤쪽 장터일수록 좋은 품계가 나온다
+    const lift = shelf === "도구" ? (k) => 1 + TOOL_GRADE_LIFT * ITEM_GRADES.indexOf(DB.market[k].grade) * (number - 1) : () => 1;
+    stock.push(...weightedSample(items, (k) => styleWeight(player, k) * lift(k), size));
   }
   const others = pool.filter((k) => !stock.includes(k));
   stock.push(...weightedSample(others, (k) => styleWeight(player, k), Math.max(0, STOCK_SIZE - stock.length) + sumEffect(player.traits, "extra_stock", "amount")));
