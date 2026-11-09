@@ -23,6 +23,14 @@ const EVADE_MASTERY_BONUS = 0.001;
 export const START_SILVER = 30;
 export const HOME_ART_MASTERY = 40; // 출신이 오래 갈고닦은 무공의 처음 성취
 const DUPLICATE_SKILL_MASTERY = 25;
+// 쓰지 않는 무공도 몸에 남아 보탬이 된다
+const IDLE_ART_WEIGHT = { 기본: 0.5, 명품: 1, 상승: 1.5, 일절: 2, 신공: 3 };
+export const MAX_IDLE_BONUS = 10;      // 쓰지 않는 무공이 보태는 끝(위력, 내력, 회피)
+const SAME_STYLE_MASTERY = 5;          // 주무공과 같은 계열의 무공 하나가 주무공 성취를 빠르게 하는 정도
+const MAX_SAME_STYLE_MASTERY = 25;
+const LORE_POINTS = { 기본: 1, 명품: 2, 상승: 3, 일절: 4, 신공: 5 };
+const LORE_PER_BATTLE = 4;             // 익힌 무공의 품계 합이 이만큼마다 돌파에 드는 실전 하나를 덜어 준다
+export const MAX_LORE_RATE = 0.25;     // 덜어 주는 실전의 끝(필요 횟수 대비)
 const START_ARMORS = ["가죽호구", "철사갑의", "금사보의"]; // 겹쳐 받으면 한 단계씩 좋아진다
 const SPARE_ARMOR_SILVER = 40; // 넘치는 갑의는 은자로 돌아온다
 const CHRONICLE_LIMIT = 40;
@@ -238,7 +246,7 @@ export class Player {
   }
 
   maxHp() { return 100 + Math.trunc(this.external * 0.28 + this.internal * 0.17); }
-  maxQi() { return 100 + Math.trunc(this.internal / 2); }
+  maxQi() { return Math.trunc((100 + Math.trunc(this.internal / 2)) * (1 + this.idleBonus("심공") / 100)); }
   dominantAlignment() { return dominant(this.alignment); }
 
   /** 능력치를 올리고 상한 999를 적용한다. 실제로 오른 양을 돌려준다. */
@@ -399,9 +407,41 @@ export class Player {
   ownsGear(key) { return this.weapon === key || this.armor === key || this.gear.includes(key); }
 
   addItem(key, count = 1) { this.inventory[key] = (this.inventory[key] || 0) + count; }
+  /** 쓰는 칸 밖의 무공들. 공격 무공은 주무공을 뺀 것 */
+  idleArts(type) {
+    if (!this.skills) return [];
+    const active = type === "공격무공" ? this.bestSkill() : this.bestOfType(type);
+    return this.skillsOfType(type).filter((s) => s !== active);
+  }
+
+  /** 쓰지 않는 무공이 보태는 몫(백분율). 공격은 위력, 심법은 최대 내력, 경공은 회피에 더한다.
+   *  주무공과 같은 계열의 공격 무공은 검리를 넓혀 두 배로 친다. */
+  idleBonus(type) {
+    if (!this.skills) return 0;
+    const main = this.bestSkill()?.category;
+    const total = this.idleArts(type).reduce((sum, s) => {
+      const same = type === "공격무공" && s.category === main ? 2 : 1;
+      return sum + (IDLE_ART_WEIGHT[s.grade] || 0) * (0.5 + s.mastery / 200) * same;
+    }, 0);
+    return Math.min(MAX_IDLE_BONUS, Math.round(total));
+  }
+
+  /** 주무공과 같은 계열의 다른 무공을 익혀 두면 주무공의 성취가 빨리 쌓인다(백분율) */
+  sameStyleMasteryRate() {
+    const main = this.bestSkill();
+    if (!main) return 0;
+    return Math.min(MAX_SAME_STYLE_MASTERY, this.idleArts("공격무공").filter((s) => s.category === main.category).length * SAME_STYLE_MASTERY);
+  }
+
+  /** 견문이 넓을수록 벽을 넘기 쉽다. 경지를 넘는 데 드는 실전을 덜어 준다 */
+  loreRelief(required) {
+    const points = this.skills.reduce((sum, s) => sum + (LORE_POINTS[s.grade] || 0), 0);
+    return Math.min(Math.floor(required * MAX_LORE_RATE), Math.floor(points / LORE_PER_BATTLE));
+  }
+
   /** 공격 무공은 합마다 쓰므로 한 번에 쌓이는 성취가 적다 */
   attackMasteryGain() {
-    const amount = this.masteryGainAmount() * ATTACK_USE_RATE;
+    const amount = this.masteryGainAmount() * ATTACK_USE_RATE * (1 + this.sameStyleMasteryRate() / 100);
     return Math.floor(amount) + (rng.random() < amount % 1 ? 1 : 0);
   }
 

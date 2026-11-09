@@ -20,7 +20,7 @@ import {
 import { halpun, josa } from "./josa.js";
 
 const FINAL_UNLEASH_FROM = 880; // 평균 기량이 이보다 높으면 천마가 숨긴 힘을 꺼낸다
-const FINAL_UNLEASH_HP = 0.28;
+const FINAL_UNLEASH_HP = 0.36;
 const FINAL_UNLEASH_ATTACK = 0.2;
 const NATURAL_REGEN = 5;
 const MAX_TURN_REGEN = 30;
@@ -245,7 +245,7 @@ export class Game {
         this.addLog([`지나던 무인과 대련을 나누고 사례를 받았다. (실전 경험 +1, 은자 +${silver})`]);
       }
       const skill = p.bestSkill();
-      if (skill) this.addLog(skill.gainMastery(p.masteryGainAmount() * TRAIN_MASTERY_RATE));
+      if (skill) this.addLog(skill.gainMastery(p.masteryGainAmount() * TRAIN_MASTERY_RATE * (1 + p.sameStyleMasteryRate() / 100)));
       // 수련하는 동안 걸음도 함께 닦인다
       const steps = p.bestOfType("경공");
       if (steps) this.addLog(steps.gainMastery(p.masteryGainAmount() * ART_TRAIN_RATE));

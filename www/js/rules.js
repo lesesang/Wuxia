@@ -244,12 +244,15 @@ export function nextRealm(realm) {
 const statsOf = (p) => [p.external, p.internal, p.martial, p.mind];
 const average = (list) => list.reduce((a, b) => a + b, 0) / list.length;
 
+/** 경지를 넘는 데 드는 실전. 익힌 무공이 많고 깊을수록 덜 든다 */
+export const battlesNeeded = (player, req) => req.battles - (player.loreRelief?.(req.battles) ?? 0);
+
 export function checkBreakthrough(player) {
   const next = nextRealm(player.realm);
   if (!next) return null;
   const req = DB.realms.requirements[next];
   const stats = statsOf(player);
-  const ok = average(stats) >= req.avg && Math.min(...stats) >= req.min_stat && player.battles >= req.battles;
+  const ok = average(stats) >= req.avg && Math.min(...stats) >= req.min_stat && player.battles >= battlesNeeded(player, req);
   return ok ? next : null;
 }
 
@@ -259,8 +262,9 @@ export function breakthroughBlock(player) {
   if (!next) return null;
   const req = DB.realms.requirements[next];
   const stats = statsOf(player);
-  if (average(stats) >= req.avg && Math.min(...stats) >= req.min_stat && player.battles < req.battles) {
-    return `${next}의 문턱이 보이지만 실전이 모자라다. (실전 경험 ${player.battles}/${req.battles}, 탐색에서 싸워야 는다)`;
+  const need = battlesNeeded(player, req);
+  if (average(stats) >= req.avg && Math.min(...stats) >= req.min_stat && player.battles < need) {
+    return `${next}의 문턱이 보이지만 실전이 모자라다. (실전 경험 ${player.battles}/${need}, 탐색에서 싸워야 는다)`;
   }
   return null;
 }
@@ -273,7 +277,7 @@ export function realmProgress(player) {
   return {
     next, avg: Math.round(average(stats) * 10) / 10, avgRequired: req.avg,
     min: Math.min(...stats), minRequired: req.min_stat,
-    battles: player.battles, battlesRequired: req.battles,
+    battles: player.battles, battlesRequired: battlesNeeded(player, req),
   };
 }
 

@@ -241,7 +241,7 @@ ${section("생사경", ["현경 너머의 숨은 경지이자 가장 높은 결�
     "<b>상승</b>: 고수의 무공입니다. 화경 이상의 적이나 뒤쪽 장터에서 얻습니다. 이 품계부터 <b>묘리</b>가 드러납니다.",
     "<b>일절</b>: 한 문파의 깊은 비전입니다. 소속의 비전이나 큰 인연에서 얻습니다. 승급으로 오르는 끝입니다.",
     "<b>신공</b>: 전설의 무공입니다. 출신의 이야기와 카르마로 연 인연에서만 나오고, 일절의 끝에서 큰 깨달음으로 오르기도 합니다."])}
-${section("쓰는 무공", ["공격, 심법, 경공 칸마다 쓸 무공 하나를 신상의 무공 칸에서 고릅니다. 새로 얻어도 저절로 바뀌지 않습니다.", "성취가 100을 넘으면 다음 품계로 오르고, 오른 만큼 성취는 줄어듭니다. 같은 무공을 또 얻으면 성취가 오르고, 같은 갈래의 더 깊은 무공을 얻으면 쓰던 무공이 그것으로 이어집니다.", "몇몇 무공은 성취가 차면 <b>비기</b>가 열립니다. 같은 계열 무공의 성취는 주무공으로 옮길 수 있습니다. 품계가 같으면 절반, 낮으면 3할이 옮겨 갑니다."])}
+${section("쓰는 무공", ["공격, 심법, 경공 칸마다 쓸 무공 하나를 신상의 무공 칸에서 고릅니다. 새로 얻어도 저절로 바뀌지 않습니다.", "성취가 100을 넘으면 다음 품계로 오르고, 오른 만큼 성취는 줄어듭니다. 같은 무공을 또 얻으면 성취가 오르고, 같은 갈래의 더 깊은 무공을 얻으면 쓰던 무공이 그것으로 이어집니다.", "<b>익혀 둔 무공</b>: 쓰는 칸 밖의 무공도 품계와 성취만큼 보탬이 됩니다. 공격 무공은 위력, 심법은 최대 내력, 경공은 회피에 더해지고 각각 1할까지입니다. 주무공과 같은 계열의 무공은 두 배로 치고, 하나마다 주무공의 성취가 5푼씩(2할 5푼까지) 빨리 쌓입니다. 익힌 무공의 품계가 쌓일수록 경지를 넘는 데 드는 실전도 줄어듭니다(4분의 1까지).", "몇몇 무공은 성취가 차면 <b>비기</b>가 열립니다. 같은 계열 무공의 성취는 주무공으로 옮길 수 있습니다. 품계가 같으면 절반, 낮으면 3할이 옮겨 갑니다."])}
 ${section("묘리", ["무공마다 고유한 묘리가 있습니다. 공격 무공은 회심, 출혈, 표식, 여운, 적을 굳히는 일격처럼 다르고, 경공은 저절로 피하거나 잔상을 남기거나 피할수록 기세가 오릅니다.", "<b>심법의 묘리</b>는 운기하지 않아도 싸우는 내내 흐릅니다. 호신 기운, 합마다 차는 기운, 내력으로 대신 받기, 숨이 트이는 회복 같은 것입니다."])}
 ${section("위력", ["무공의 <b>위력 N배</b>는 기본 공격력에 곱하는 값입니다. 기본 공격력은 네 기량(무리, 외공, 내공, 심경 순으로 크게 들어감)에 병기의 위력을 더한 값이고, 맨손 공격이 1배입니다.", "경지, 자질, 소속, 성향의 보정이 곱해지고, 품계가 하나 오를 때마다 2할 5푼, 성취 1마다 0.003배가 더해집니다."])}
 ${section("성취 쌓기", ["공격 무공은 수련과 싸움에서, 심법은 운기와 요양, 싸움 중 운기, 기량을 올리는 영약과 서책에서, 보법은 수련과 탐색, 싸움 중 경공에서 오릅니다. 싸움에 이기면 모두 조금씩 쌓입니다.", "일절 무공의 성취가 100에 이르면 드물게 큰 깨달음이 찾아와 신공에 오를 수 있습니다. 그 대가로 몸이 크게 상합니다."])}`,
@@ -760,7 +760,7 @@ function statusModal() {
       </div>
       ${companionList(p)}${realmPerks(p.realm, main?.category).length ? `<div class="modal-section"><h4>경지의 특전</h4>${realmPerks(p.realm, main?.category).map((k) => `<div class="skill-row">${esc(k.realm)}, ${esc(k.name)}<div class="skill-meta">${esc(k.desc)}</div>${k.grown.map((g) => `<div class="skill-meta">${esc(g.realm)}에 올라: ${esc(g.desc)}</div>`).join("")}</div>`).join("")}</div>` : ""}
       ${traits.length ? `<div class="modal-section"><h4>자질</h4>${traits.map((t) => `<div class="skill-row">${esc(t.name)}<div class="skill-meta">${esc(t.desc)}</div></div>`).join("")}</div>` : ""}`,
-    skills: skills,
+    skills: skills + idleArtsNote(p),
     history: chronicleList(p) || `<p class="codex-empty">아직 남길 만한 일이 없습니다.</p>`,
     bag: `<div class="modal-section">
         ${row("은자", p.silver)}
@@ -1133,6 +1133,18 @@ function renderPlay() {
 function followLog() {
   const stage = document.querySelector('.stage[aria-live="polite"]');
   if (stage) stage.scrollTop = stage.scrollHeight;
+}
+
+/** 쓰지 않고 익혀 둔 무공이 보태는 것 */
+function idleArtsNote(p) {
+  const realm = realmProgress(p);
+  const req = realm ? DB.realms.requirements[realm.next].battles : 0;
+  const parts = [
+    ["위력", p.idleBonus("공격무공")], ["최대 내력", p.idleBonus("심공")], ["회피", p.idleBonus("경공")], ["주무공 성취 속도", p.sameStyleMasteryRate()],
+  ].filter(([, v]) => v > 0).map(([label, v]) => `${label} +${halpun(v)}`);
+  const relief = req ? p.loreRelief(req) : 0;
+  if (relief) parts.push(`돌파에 드는 실전 -${relief}`);
+  return parts.length ? `<div class="modal-section"><h4>익혀 둔 무공의 보탬</h4><p class="skill-meta">${parts.join(", ")}</p></div>` : "";
 }
 
 /** 지금 무인의 호칭과 몸담은 곳의 이름 */
