@@ -13,7 +13,7 @@ import { blockReason, buy, equipmentBonus, ITEM_GRADES, openMarket, priceOf, sel
 import {
   activeContent, resetSetupChoices, upgradeUse, legacyPowers, upgradeLegacy, setUpgradeUse, upgradeLevel, addKarma, buyContent, buyProvision, refundProvision, upgradeTraits, buyUpgrade, exportRecords, importRecords, extraSlots, loadCheckpoint, legacyAvailable, loadEventLog, loadMeta, nextReward, recordEventPick, openLegacy, saveMeta, toggleContent, unlockOrigin,
 } from "../www/js/meta.js";
-import { personalize, fullName, alignTier, applyGrowth, checkBreakthrough, focusedSide, byname, fameRank, getChapter, getYear, marketTurns, sumEffect, talkLine, traitSlots } from "../www/js/rules.js";
+import { enemyRealmIndex, personalize, fullName, alignTier, applyGrowth, checkBreakthrough, focusedSide, byname, fameRank, getChapter, getYear, marketTurns, sumEffect, talkLine, traitSlots } from "../www/js/rules.js";
 import { rng } from "../www/js/rng.js";
 import { storage } from "../www/js/storage.js";
 
@@ -4628,4 +4628,22 @@ test("출신 전용 이야기는 경지가 낮고 앞선 선택을 달리해도 
     const missed = all.filter((k) => !p.seenEvents.includes(k));
     assert.deepEqual(missed, [], `${origin}: ${missed.join(", ")}`);
   }
+});
+
+test("깊은 강호일수록 높은 경지의 적을 더 자주 만나고 다음 장의 적이 일찍 내려온다", () => {
+  const average = (difficulty) => {
+    const game = newGame();
+    game.player.difficulty = difficulty;
+    game.player.turn = 30;
+    seed(11);
+    let sum = 0;
+    const keys = new Set();
+    for (let i = 0; i < 400; i++) { const k = game.pickEnemy(); keys.add(k); sum += enemyRealmIndex(DB.enemies[k].realm); }
+    return { avg: sum / 400, keys };
+  };
+  const plain = average("강호");
+  const deep = average("겁화");
+  assert.ok(deep.avg > plain.avg, `${deep.avg} > ${plain.avg}`);
+  assert.ok([...deep.keys].some((k) => !DB.enemies[k].chapters.includes(2)), "다음 장의 적이 섞인다");
+  assert.ok([...plain.keys].every((k) => DB.enemies[k].chapters.includes(2)));
 });
