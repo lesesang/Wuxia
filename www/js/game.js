@@ -181,14 +181,17 @@ export class Game {
       this.event = { key: chainKey, forced: urgent };
       return;
     }
-    // 출신의 이야기는 결전 전에 반드시 찾아온다
-    const originKey = dueOriginEvent(p);
-    if (originKey) {
-      this.event = { key: originKey, forced: true };
+    // 싸움이 이어져 첫 해가 저물도록 못 찾았으면 달이 시작할 때 흔적이 먼저 찾아온다
+    if (p.pendingLegacy.length && p.turn >= LEGACY_LAST_TURN) {
+      this.event = { key: "유산_발길", forced: true };
       return;
     }
-    // 싸움이 이어져 첫 해가 저물도록 못 찾았으면 달이 시작할 때 흔적이 먼저 찾아온다
-    if (p.pendingLegacy.length && p.turn >= LEGACY_LAST_TURN) this.event = { key: "유산_발길", forced: true };
+    // 출신의 이야기는 조건을 채우면 반드시 찾아온다
+    const originKey = dueOriginEvent(p);
+    if (originKey) {
+      p.originTurn = p.turn;
+      this.event = { key: originKey, forced: true };
+    }
   }
 
   settleGifts() {

@@ -4,7 +4,7 @@ import { DB } from "./data.js";
 import { bonusFor, equipmentBonus, ITEM_GRADES, styleWeight, weightsByStyle } from "./market.js";
 import { legacyPowers, loadMeta, recordEventPick, updateKnown } from "./meta.js";
 import { pick, pickWeighted, rng } from "./rng.js";
-import { ALIGNMENTS, MAX_FAME, applyGrowth, eventToll, scaledGrowth, fameRankChanged, getChapter, realmIndex, sumEffect } from "./rules.js";
+import { ALIGNMENTS, CHAPTER_STARTS, MAX_FAME, applyGrowth, eventToll, scaledGrowth, fameRankChanged, getChapter, realmIndex, sumEffect } from "./rules.js";
 import { josa } from "./josa.js";
 
 export const EVENT_STAT_SCALE = 3; // 사건과 기연의 기량 상승 배율. 데이터에 적힌 값의 세 배가 오른다
@@ -175,7 +175,6 @@ export function validateChains() {
 
 // ---------- 출신의 이야기 ----------
 
-const ORIGIN_GATHER_FROM = 97; // 이 달부터 남은 이야기를 달을 쓰지 않고 불러낸다
 const ORIGIN_EVENT_WEIGHT = 8;  // 출신의 이야기는 탐색에서 더 자주 찾아온다
 
 /** 아직 만나지 못한 출신 전용 이야기 가운데 지금 조건을 채운 것. 조건을 못 채웠으면 나오지 않는다. */
@@ -188,13 +187,24 @@ export function pendingOriginEvents(player) {
   });
 }
 
-/** 결전 전에 만나야 할 이야기가 남았으면 이번 달에 연다. 끝이 다가올수록 자주, 마지막 달에는 모두 연다. */
+const ORIGIN_GAP = 4; // 출신의 이야기가 몰리지 않게 띄우는 달
+const ORIGIN_GRACE = 6; // 장에 든 뒤 탐색으로 먼저 만날 수 있게 기다리는 달
+const chapterStart = (chapter) => (chapter <= 1 ? 1 : CHAPTER_STARTS[chapter - 2]);
+
+/** 출신의 이야기는 조건을 채우면 반드시 찾아온다.
+ *  그 장에 들어섰고 조건을 채운 이야기를, 지난 이야기에서 몇 달 띄워 연다. 그 장이 저물어 가면 띄우지 않고 연다. */
 export function dueOriginEvent(player) {
-  if (player.turn < ORIGIN_GATHER_FROM || player.turn > LAST_CHAIN_TURN) return null;
-  const pending = pendingOriginEvents(player);
-  if (!pending.length) return null;
-  const months = LAST_CHAIN_TURN - player.turn + 1;
-  return rng.random() < pending.length / months || months <= 2 ? pending[0] : null;
+  if (player.turn > LAST_CHAIN_TURN) return null;
+  const chapter = getChapter(player.turn);
+  // 그 장에 든 지 몇 달은 탐색으로 만날 틈을 준다
+  const opens = (key) => chapterStart(Math.min(...(DB.randomEvents[key].chapters || [1]))) + ORIGIN_GRACE;
+  const ready = pendingOriginEvents(player).filter((key) => opens(key) <= player.turn);
+  if (!ready.length) return null;
+  const chapterEnd = chapter < 5 ? CHAPTER_STARTS[chapter - 1] - 1 : LAST_CHAIN_TURN;
+  const closing = ready.filter((key) => Math.max(...(DB.randomEvents[key].chapters || [5])) <= chapter);
+  if (closing.length && chapterEnd - player.turn < closing.length * 2) return closing[0];
+  if (closing.length && Math.max(...(DB.randomEvents[closing[0]].chapters || [5])) < chapter) return closing[0];
+  return player.turn - (player.originTurn ?? -99) >= ORIGIN_GAP ? ready[0] : null;
 }
 
 export const ALONE_FLAG = "홀로_간다";
