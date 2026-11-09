@@ -4659,3 +4659,19 @@ test("깊은 강호일수록 높은 경지의 적을 더 자주 만나고 다음
   assert.ok([...deep.keys].some((k) => !DB.enemies[k].chapters.includes(2)), "다음 장의 적이 섞인다");
   assert.ok([...plain.keys].every((k) => DB.enemies[k].chapters.includes(2)));
 });
+
+test("쓰는 경공의 성취를 다른 경공으로 받아 올 수 있다", () => {
+  const game = newGame();
+  const p = game.player;
+  const using = new Skill("초상비"); using.grade = "일절"; using.mastery = 100;
+  const target = new Skill("창궁비운보"); target.mastery = 20;
+  p.skills = p.skills.filter((s) => s.type !== "경공");
+  p.skills.push(using, target);
+  p.chosenArts.경공 = using.key;
+  assert.equal(p.bestOfType("경공"), using);
+  assert.equal(target.masteryFor(using), 0, "성취가 다 찬 일절은 더 받을 데가 없다");
+  assert.equal(using.masteryFor(target), 30);
+  game.transferMastery(target.key, true);
+  assert.equal(target.mastery, 50);
+  assert.equal(using.mastery, 0);
+});
