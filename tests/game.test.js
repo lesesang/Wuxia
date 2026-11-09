@@ -2419,7 +2419,7 @@ test("수상한 누군가에게 카르마로 거래한다", () => {
   assert.equal(game.player.external, before, "영약은 행낭에 넣었다가 원할 때 먹는다");
   assert.equal(game.player.inventory.생사단, 1);
   game.useItem("생사단");
-  assert.equal(game.player.external, before + 30);
+  assert.equal(game.player.external, before + 65);
   assert.equal(loadMeta().current_karma, 0);
   withKarma(0);
 });
@@ -3248,7 +3248,7 @@ test("짐승은 다양하고 내단을 남기며 삼키면 기량이 오른다",
   assert.ok(p.inventory.천년내단 > 0);
   const before = p.external;
   useConsumable(p, "천년내단");
-  assert.equal(p.external, before + 40);
+  assert.equal(p.external, before + 70);
   assert.ok(!p.inventory.천년내단);
 });
 
@@ -4283,8 +4283,8 @@ test("깊은 강호의 사건과 적은 그 강호에서만 나오고, 같은 �
   assert.ok(!checkRequires(base, { difficulty_min: "혈풍" }));
   assert.ok(checkRequires(deep, { difficulty_min: "혈풍" }), "더 깊은 강호에서는 얕은 강호의 일도 일어난다");
   for (const p of [base, deep]) p.turn = 30;
-  assert.ok(!eventView(base, "3장_격랑").text.includes("검은 핏줄"));
-  assert.ok(eventView(deep, "3장_격랑").text.includes("검은 핏줄"));
+  assert.ok(!eventView(base, "3장_격랑").text.includes("검게 타"));
+  assert.ok(eventView(deep, "3장_격랑").text.includes("검게 타"));
   const deepKeys = Object.keys(DB.randomEvents).filter((k) => DB.randomEvents[k].requires?.difficulty_min);
   assert.ok(deepKeys.length >= 16);
   for (let i = 0; i < 200; i++) {
@@ -4293,7 +4293,7 @@ test("깊은 강호의 사건과 적은 그 강호에서만 나오고, 같은 �
   }
   const deepEnemies = Object.keys(DB.enemies).filter((k) => DB.enemies[k].requires?.difficulty_min);
   assert.ok(deepEnemies.length >= 7);
-  for (const k of deepEnemies) assert.ok(DB.enemies[k].quirks?.length, `${k}에 이능이 있다`);
+  for (const k of deepEnemies) assert.ok(DB.enemies[k].quirks?.length, `${k}에 괴공이 있다`);
 });
 
 test("수련, 운기, 요양 중의 사건은 그 일을 할 때만 나오고 탐색에는 나오지 않는다", async () => {
@@ -4325,7 +4325,7 @@ test("수련, 운기, 요양 중의 사건은 그 일을 할 때만 나오고 �
   assert.ok(met > 0);
 });
 
-test("깊은 강호의 적은 더 강하고, 이능은 끝이 있다", () => {
+test("깊은 강호의 적은 더 강하고, 괴공은 끝이 있다", () => {
   const p = new Player("무림초출");
   p.difficulty = "겁화";
   const game = new Game();
@@ -4528,4 +4528,64 @@ test("여러 달에 걸친 줄거리는 마지막 달이 서로 겹치지 않는
     const diff = new Set(keys.map((k) => DB.storyEvents[k].requires?.difficulty_min || ""));
     assert.ok(keys.length === 1 || diff.size === keys.length, `${end}: ${keys}`);
   }
+});
+
+test("대환단은 네 기량을 50씩 올리고, 신물 영약은 그보다 낫다", () => {
+  const stats = (key) => DB.market[key].effects.filter((e) => e.type === "stat");
+  assert.ok(stats("대환단").every((e) => e.amount === 50) && stats("대환단").length === 4);
+  for (const [key, item] of Object.entries(DB.market)) {
+    if (item.grade !== "신물" || !item.consumable) continue;
+    const list = stats(key);
+    if (!list.length) continue;
+    assert.ok(list.reduce((a, e) => a + e.amount, 0) > 200, key);
+  }
+});
+
+test("상대의 날카로운 필살기는 보이는 회피에도 미리 셈한다", () => {
+  const p = new Player("무림초출");
+  const battle = new Battle(p, new Enemy("천마"));
+  const steps = p.bestOfType("경공");
+  const sharp = battle.enemy.specials.find((s) => s.accuracy);
+  assert.ok(sharp, "천마의 필살기 가운데 피할 틈이 좁은 것이 있다");
+  const plain = battle.evadeChance(steps, 1, 1);
+  const round = Array.from({ length: 30 }, (_, i) => i + 1).find((r) => battle.enemy.specialForRound(r)?.accuracy);
+  assert.ok(round);
+  assert.ok(battle.evadeChance(steps, round, 1) < plain || plain === 0);
+});
+
+test("한 길이 단계를 처음 넘을 때마다 한 번씩 그 길의 이득을 받는다", () => {
+  const game = newGame();
+  const p = game.player;
+  const before = { mind: p.mind, external: p.external, fame: p.fame };
+  p.alignment.정도 = 210;
+  const lines = game.alignMilestones();
+  assert.equal(lines.length, 2);
+  assert.ok(p.mind > before.mind && p.external > before.external && p.fame > before.fame);
+  assert.equal(game.alignMilestones().length, 0, "같은 단계는 다시 주지 않는다");
+  const again = Player.fromDict(p.toDict());
+  assert.equal(again.alignMilestones.정도, 2);
+});
+
+test("강호의 오랜 이야기는 한 번 들으면 다시 나오지 않고, 무너진 혈교의 일은 끝난다", () => {
+  const game = newGame();
+  const p = game.player;
+  const seen = new Set();
+  for (let i = 0; i < 10; i++) for (const line of game.loreRumor()) { assert.ok(!seen.has(line)); seen.add(line); }
+  assert.equal(seen.size, DB.flavor.rumors["1"].length);
+  p.turn = 100;
+  p.flags.push("혈교_멸문");
+  const lines = Array.from({ length: 10 }, () => game.loreRumor()).flat();
+  assert.ok(lines.every((l) => !l.includes("다시 같은 다리")));
+  assert.ok(lines.some((l) => l.includes("혈교가 무너진")));
+  for (const key of ["혈교_배교자", "혈풍_혈마대깃발"]) assert.ok(!checkRequires(p, DB.events[key].requires), key);
+});
+
+test("깊은 강호의 적은 약이 아니라 혈계와 관정으로 강해지고, 높은 적일수록 깊은 힘을 받는다", () => {
+  const deepFoes = Object.values(DB.enemies).filter((e) => e.requires?.difficulty_min).map((e) => [e.name, e.desc, e.intro, e.outro, e.intros]);
+  const deepEvents = Object.values(DB.randomEvents).filter((e) => e.requires?.difficulty_min).map((e) => [e.title, e.text, e.choices.map((c) => [c.label, c.outcomes.map((o) => o.text)])]);
+  const text = JSON.stringify([DB.difficulty, deepFoes, deepEvents]);
+  for (const word of ["마단", "혈단", "이능", "단약"]) assert.ok(!text.includes(word), word);
+  const affixes = DB.difficulty.affixes;
+  assert.equal(affixes.겁화관정.realm_min, "화경");
+  assert.ok(affixes.겁화관정.quirks.length >= 2);
 });
