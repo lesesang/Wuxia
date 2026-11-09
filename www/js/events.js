@@ -323,8 +323,13 @@ function takeOneLegacy(player, entry) {
     worn = key !== entry.key;
     name = DB.market[key].name;
     const { slot } = DB.market[key].effects.find((e) => e.type === "equip");
+    if (player.ownsGear(key)) {
+      const silver = player.gainSilver(spareGearSilver(key));
+      player.note(`${entry.from}${josa(entry.from, "이/가")} 남긴 ${name}${josa(name, "은/는")} 이미 지닌 것과 같았다.`);
+      return [`${name}${josa(name, "은/는")} 이미 지니고 있다. 은자+${silver}`];
+    }
     if (!player[slot]) player.equipGear(key);
-    else if (!player.ownsGear(key)) player.gear.push(key);
+    else player.gear.push(key);
   }
   player.note(`${entry.from}${josa(entry.from, "이/가")} 남긴 ${name}${josa(name, "을/를")} 이어받았다.`);
   return [`${name}${josa(name, "을/를")} 거두었다${worn ? ". 세월에 조금 바랬지만 아직 쓸 만하다" : ""}`];
@@ -415,9 +420,14 @@ function equipReward(player, key) {
     player.equipGear(key);
     return [`${name} 장착`];
   }
-  if (!player.ownsGear(key)) player.gear.push(key);
+  // 같은 것을 이미 지녔으면 그 값을 은자로 받는다
+  if (player.ownsGear(key)) return [`${name}${josa(name, "은/는")} 이미 지니고 있다. 은자+${player.gainSilver(spareGearSilver(key))}`];
+  player.gear.push(key);
   return [`${name}${josa(name, "을/를")} 행낭에 챙겼다`];
 }
+
+/** 겹친 병장기를 은자로 돌릴 때의 값 */
+const spareGearSilver = (key) => SPARE_GEAR_SILVER * (ITEM_GRADES.indexOf(DB.market[key].grade ?? "범품") + 1);
 
 const STARTER_WEAPONS = {
   검법: "낡은검", 도법: "낡은도", 창법: "낡은창", 봉법: "낡은곤봉", 권법: "낡은권대", 장법: "낡은장갑", 암기: "낡은비도",

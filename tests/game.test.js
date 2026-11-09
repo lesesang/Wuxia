@@ -4226,3 +4226,13 @@ test("장터의 진열 수는 익힌 무공이나 지닌 병장기와 상관없�
     assert.equal(openMarket(turn, rich).stock.length, openMarket(turn, fresh).stock.length, `${turn} 전체`);
   }
 });
+
+test("이미 지닌 병장기를 사건에서 또 얻으면 은자로 받는다", () => {
+  const p = new Player("남궁세가");
+  p.weapon = "창궁고검";
+  const silver = p.silver;
+  const summary = applyEffects(p, { equip: "창궁고검" });
+  assert.ok(p.silver > silver, JSON.stringify(summary));
+  assert.ok(summary.some((s) => s.includes("이미 지니고 있다")));
+  assert.ok(!p.gear.includes("창궁고검"));
+});
