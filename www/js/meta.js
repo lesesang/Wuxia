@@ -46,6 +46,11 @@ function refundRemoved(data) {
     data.content_off = data.content_off.filter((k) => DB.karma.content[k]);
     data.legacies = data.legacies.filter((l) => (l.kind === "skill" ? DB.skills[l.key] : DB.market[l.key]));
   }
+  // 천마를 꺾은 적이 있으면 첫 강호는 이미 넘은 것이다
+  if (!Array.isArray(data.difficulty_cleared)) data.difficulty_cleared = [];
+  if (DB.difficulty && !data.difficulty_cleared.includes(DB.difficulty.order[0]) && data.endings_seen.some((k) => WIN_ENDINGS.includes(k))) {
+    data.difficulty_cleared.push(DB.difficulty.order[0]);
+  }
   if (!data.upgrades || typeof data.upgrades !== "object" || Array.isArray(data.upgrades)) data.upgrades = {};
   if (!data.upgrade_use || typeof data.upgrade_use !== "object" || Array.isArray(data.upgrade_use)) data.upgrade_use = {};
   for (const [key, cost] of Object.entries(REMOVED_TRAITS)) {
