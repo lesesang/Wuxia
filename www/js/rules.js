@@ -350,3 +350,25 @@ function bynameOf(player) {
   const prefix = (home && depth === 0 && rank >= 1 && clean(home) ? home : rotated.find(clean)) ?? rotated[0];
   return prefix + suffix;
 }
+
+// ---------- 강호의 깊이 ----------
+// 같은 강호가 1년차 1월부터 다른 앞날로 갈라진다. 앞의 강호에서 천마를 꺾어야 다음 강호가 열린다
+
+export const DEFAULT_DIFFICULTY = "강호";
+export const difficultyRank = (key) => Math.max(0, DB.difficulty.order.indexOf(key));
+export const difficultyOf = (player) => DB.difficulty.levels[player?.difficulty] || DB.difficulty.levels[DEFAULT_DIFFICULTY];
+
+/** 적의 이능을 설명하는 문장 */
+export function quirkText(q) {
+  const amount = (v) => `${halpun(v)}${josa(halpun(v), "을/를")}`;
+  const name = DB.difficulty.quirks[q.type]?.name ?? q.type;
+  const body = {
+    bloodthirst: () => `입힌 피해의 ${amount(q.percent)} 제 체력으로 삼킨다`,
+    frenzy: () => `합마다 위력이 ${halpun(q.percent)}씩 오른다(${halpun(q.max)}까지)`,
+    barrier: () => `체력의 ${halpun(q.percent)}만큼 강기를 두르고 ${q.every}합마다 다시 두른다`,
+    sever: () => `곁에서 싸우는 동안 내 회복이 ${halpun(q.percent)} 줄어든다`,
+    undying: () => `한 번 쓰러져도 체력 ${halpun(q.percent)}로 다시 일어선다`,
+    mirror: () => `맞은 힘의 ${amount(q.percent)} 되돌려 보낸다`,
+  }[q.type];
+  return `${name}: ${body ? body() : ""}`;
+}

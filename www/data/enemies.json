@@ -3705,7 +3705,8 @@
       "item": "천년내단",
       "chance": 1
     },
-    "returned": "늪이 다시 일어섰다. 잘린 자리에 새 비늘이 돋아 있다."
+    "returned": "늪이 다시 일어섰다. 잘린 자리에 새 비늘이 돋아 있다.",
+    "spirit": true
   },
   "혈수라": {
     "name": "제삼마장 혈수라",
@@ -4963,7 +4964,7 @@
     "faction": "종남"
   },
   "혈교혈승": {
-    "name": "혈불 무진",
+    "name": "혈승 무진",
     "tier": "난적",
     "realm": "초절정",
     "hp": 2065,
@@ -4981,7 +4982,7 @@
     "level": 58,
     "hp_style": 1.0,
     "attack_style": 1.0,
-    "desc": "붉은 가사를 입고 피를 부르는 혈교의 승려.",
+    "desc": "잿빛 가사를 입고 피를 부르는 혈교의 승려.",
     "intro": "\"피를 보시하시오, 시주. 아프지 않게 해 드리리다. 이건 거짓말이오.\"",
     "specials": [
       {
@@ -7297,7 +7298,7 @@
     "below": "식인호랑이",
     "loot": {
       "item": "호주",
-      "chance": 0.35
+      "chance": 1
     },
     "intros": [
       {
@@ -7325,7 +7326,8 @@
         "text": "\"소문으로 듣던 분이구나. 산속까지 들렸답니다.\""
       }
     ],
-    "stand_in": "설표"
+    "stand_in": "설표",
+    "spirit": true
   },
   "백액호": {
     "name": "백액호",
@@ -7366,7 +7368,7 @@
     "below": "금안조",
     "loot": {
       "item": "호골",
-      "chance": 0.5
+      "chance": 1
     },
     "intros": [
       {
@@ -7390,7 +7392,8 @@
     ],
     "stand_in": "설표",
     "returned": "이마의 흰 줄 위로 칼자국이 난 호랑이가 바위에 앉아 있다. 나를 기억하는 눈이다.",
-    "armor": 12
+    "armor": 12,
+    "spirit": true
   },
   "철갑현귀": {
     "name": "철갑 현귀",
@@ -7432,7 +7435,7 @@
     "below": "금안조",
     "loot": {
       "item": "영물내단",
-      "chance": 0.5
+      "chance": 1
     },
     "intros": [
       {
@@ -7442,7 +7445,8 @@
         "text": "늙은 거북이 눈을 천천히 끔뻑인다. 내 숨소리를 듣는 듯하다."
       }
     ],
-    "stand_in": "설표"
+    "stand_in": "설표",
+    "spirit": true
   },
   "이무기": {
     "name": "천년 이무기",
@@ -7482,7 +7486,7 @@
     "below": "금안조",
     "loot": {
       "item": "천년내단",
-      "chance": 0.6
+      "chance": 1
     },
     "intros": [
       {
@@ -7505,7 +7509,8 @@
       }
     ],
     "stand_in": "백액호",
-    "returned": "황룡담이 다시 끓어오른다. 찢어진 비늘 아래 눈이 나를 알아본다."
+    "returned": "황룡담이 다시 끓어오른다. 찢어진 비늘 아래 눈이 나를 알아본다.",
+    "spirit": true
   },
   "사도련고수": {
     "name": "사도련 흑수대",
@@ -8383,7 +8388,7 @@
     "evasion": 0.05,
     "loot": {
       "item": "빙잠정수",
-      "chance": 0.5
+      "chance": 1
     },
     "intros": [
       {
@@ -8392,7 +8397,8 @@
         },
         "text": "실이 내 몸에 닿기도 전에 녹아내린다. 누에가 처음으로 움찔한다."
       }
-    ]
+    ],
+    "spirit": true
   },
   "금섬": {
     "name": "금섬",
@@ -8435,7 +8441,7 @@
     "evasion": 0,
     "loot": {
       "item": "금섬내단",
-      "chance": 0.5
+      "chance": 1
     },
     "intros": [
       {
@@ -8444,7 +8450,8 @@
         },
         "text": "독안개가 코끝에서 흩어진다. 두꺼비가 목을 부풀린다."
       }
-    ]
+    ],
+    "spirit": true
   },
   "불가사리": {
     "name": "불가사리",
@@ -8482,7 +8489,7 @@
     ],
     "loot": {
       "item": "불가사리뿔",
-      "chance": 0.5
+      "chance": 1
     },
     "armor": 12,
     "intros": [
@@ -8492,7 +8499,8 @@
         },
         "text": "불가사리의 콧구멍이 벌름거린다. 내 병기의 쇠 냄새를 맡은 것이다."
       }
-    ]
+    ],
+    "spirit": true
   },
   "천년백사": {
     "name": "천년 백사",
@@ -8534,10 +8542,11 @@
     ],
     "loot": {
       "item": "백사내단",
-      "chance": 0.6
+      "chance": 1
     },
     "armor": 12,
-    "evasion": 0.1
+    "evasion": 0.1,
+    "spirit": true
   },
   "흑룡": {
     "name": "흑룡",
@@ -8583,7 +8592,8 @@
       "item": "흑룡여의주",
       "chance": 1
     },
-    "named": true
+    "named": true,
+    "spirit": true
   },
   "해치": {
     "name": "해치",
@@ -9032,5 +9042,621 @@
     "faction": "마교",
     "stand_in": "호교대",
     "returned": "웃는 얼굴의 승려가 다시 합장한다. \"막내는 오래 산다 하지 않았소.\""
+  },
+  "혈단중독자": {
+    "name": "혈단에 미친 장정",
+    "tier": "일반",
+    "realm": "이류",
+    "exp_reward": 1,
+    "silver": [
+      5,
+      9
+    ],
+    "chapters": [
+      1,
+      2
+    ],
+    "weight": 3,
+    "desc": "혈교가 저잣거리에 푼 혈단을 삼키고 눈이 뒤집힌 장정. 제 피가 끓는 줄도 모른다.",
+    "intro": "\"피, 피가 모자라. 한 알만 더 있으면 되는데.\"",
+    "specials": [
+      {
+        "name": "핏발 선 주먹",
+        "every": 3,
+        "mult": 1.5
+      }
+    ],
+    "quirks": [
+      {
+        "type": "bloodthirst",
+        "percent": 20
+      }
+    ],
+    "level": 6,
+    "hp_style": 0.9,
+    "attack_style": 0.9,
+    "ranks": [
+      1,
+      2
+    ],
+    "requires": {
+      "difficulty_min": "혈풍"
+    },
+    "intros": [
+      {
+        "requires": {
+          "origin": "혈지생환"
+        },
+        "text": "\"그 눈. 너도 피 맛을 아는구나. 한 알 나눠 주면 살려 주지.\""
+      },
+      {
+        "requires": {
+          "min_fame": 300
+        },
+        "text": "\"이름 높은 자의 피는 혈단 열 알보다 낫다더라.\""
+      }
+    ],
+    "outro": "장정이 쓰러지며 웃었다. 입가에 붉은 가루가 묻어 있었다.",
+    "hp": 220,
+    "attack": 28,
+    "above": "혈교혈사"
+  },
+  "혈교혈사": {
+    "name": "잿빛 가사의 혈사",
+    "tier": "일반",
+    "realm": "일류",
+    "exp_reward": 1,
+    "silver": [
+      12,
+      20
+    ],
+    "chapters": [
+      2,
+      3
+    ],
+    "weight": 4,
+    "desc": "혈교가 산을 내려오며 앞세운 혈사. 피의 경전을 읊으며 싸울수록 사나워진다.",
+    "intro": "\"혈마께서 돌아오신다. 네 피로 길을 닦아라.\"",
+    "specials": [
+      {
+        "name": "혈경 낭송",
+        "every": 4,
+        "mult": 1.6,
+        "heal_pct": 6
+      }
+    ],
+    "quirks": [
+      {
+        "type": "frenzy",
+        "percent": 5,
+        "max": 25
+      }
+    ],
+    "level": 30,
+    "hp_style": 1.0,
+    "attack_style": 1.0,
+    "ranks": [
+      2,
+      3
+    ],
+    "side": "마도",
+    "faction": "혈교",
+    "requires": {
+      "difficulty_min": "혈풍"
+    },
+    "intros": [
+      {
+        "requires": {
+          "dominant": "정도",
+          "min_fame": 50
+        },
+        "text": "\"맑은 피는 경전에 쓰기 좋다. 맹의 개는 피가 맑더구나.\""
+      },
+      {
+        "requires": {
+          "dominant": "사도",
+          "min_fame": 50
+        },
+        "text": "\"은자로 산 목숨은 피도 묽다. 그래도 받아 두지.\""
+      },
+      {
+        "requires": {
+          "dominant": "마도",
+          "min_fame": 50
+        },
+        "text": "\"신교의 개냐, 혈교의 종이 되려 하느냐. 피 연못은 본디 우리 것이다.\""
+      },
+      {
+        "requires": {
+          "min_fame": 300
+        },
+        "text": "\"그 이름의 피라면 경전 한 장이 다 찬다.\""
+      },
+      {
+        "requires": {
+          "origin": "혈지생환"
+        },
+        "text": "\"연못에서 살아 나온 아이로구나. 그 연못을 판 것이 누구인지는 아느냐.\""
+      }
+    ],
+    "outro": "혈사가 쓰러지며 피의 경전 마지막 구절을 끝내 다 읊지 못했다.",
+    "hp": 520,
+    "attack": 46,
+    "below": "혈단중독자",
+    "above": "혈교수련자"
+  },
+  "혈교우호법": {
+    "name": "침혈수 반량",
+    "title": "혈교 우호법",
+    "tier": "난적",
+    "realm": "초절정",
+    "exp_reward": 2,
+    "silver": [
+      42,
+      63
+    ],
+    "chapters": [
+      4,
+      5
+    ],
+    "weight": 2,
+    "armor": 6,
+    "desc": "혈교의 우호법. 피를 굳혀 만든 바늘을 쓰고, 그 바늘이 박힌 자리는 아물지 않는다.",
+    "intro": "\"상처가 아물지 않을 게다. 피는 흘러야 경전이 된다.\"",
+    "specials": [
+      {
+        "name": "혈침비우",
+        "every": 3,
+        "mult": 1.7,
+        "poison": {
+          "damage": 16,
+          "rounds": 3
+        }
+      }
+    ],
+    "quirks": [
+      {
+        "type": "bloodthirst",
+        "percent": 20
+      },
+      {
+        "type": "sever",
+        "percent": 40
+      }
+    ],
+    "level": 82,
+    "hp_style": 1.0,
+    "attack_style": 1.0,
+    "ranks": [
+      4,
+      5
+    ],
+    "side": "마도",
+    "faction": "혈교",
+    "requires": {
+      "difficulty_min": "혈풍"
+    },
+    "stand_in": "혈마대귀",
+    "intros": [
+      {
+        "requires": {
+          "dominant": "정도",
+          "min_fame": 50
+        },
+        "text": "\"맹의 무인은 피를 아끼더군. 아끼는 만큼 맛이 짙다.\""
+      },
+      {
+        "requires": {
+          "dominant": "사도",
+          "min_fame": 50
+        },
+        "text": "\"사도련이 값을 매긴 목이로구나. 우리는 값 대신 피를 받는다.\""
+      },
+      {
+        "requires": {
+          "dominant": "마도",
+          "min_fame": 50
+        },
+        "text": "\"천마를 섬기느냐. 그자는 백 년 전에도 우리 연못을 탐냈다.\""
+      },
+      {
+        "requires": {
+          "min_fame": 300
+        },
+        "text": "\"이름 높은 자여, 교주께서 네 피로 혈마를 부르실 게다.\""
+      },
+      {
+        "requires": {
+          "origin": "혈지생환"
+        },
+        "text": "\"신교가 빼앗은 연못에서 기어 나온 아이. 너는 본디 우리 것이었다.\""
+      }
+    ],
+    "outro": "우호법이 무릎을 꿇었다. \"교주께서... 연못을... 되찾으실...\" 말은 거기서 끊겼다.",
+    "hp": 4365,
+    "attack": 158
+  },
+  "혈불사도명": {
+    "name": "혈불 사도명",
+    "title": "혈교 교주",
+    "tier": "강적",
+    "realm": "화경",
+    "exp_reward": 4,
+    "silver": [
+      80,
+      120
+    ],
+    "chapters": [],
+    "weight": 0,
+    "armor": 18,
+    "desc": "혈교의 교주. 피 연못을 빼앗긴 지 백 년, 혈교는 산속에서 이날만 기다려 왔다. 잿빛 가사 위로 핏물이 마르지 않는다.",
+    "intro": "\"우리 교는 백 년을 산속에서 기다렸다. 천마가 돌아온다니 우리도 돌아갈 때가 되었지.\"",
+    "specials": [
+      {
+        "name": "혈해무변",
+        "every": 3,
+        "mult": 2.0,
+        "heal_pct": 6
+      }
+    ],
+    "quirks": [
+      {
+        "type": "bloodthirst",
+        "percent": 25
+      },
+      {
+        "type": "undying",
+        "percent": 30
+      }
+    ],
+    "level": 92,
+    "hp_style": 1.15,
+    "attack_style": 1.1,
+    "side": "마도",
+    "faction": "혈교",
+    "requires": {
+      "difficulty_min": "혈풍"
+    },
+    "stand_in": "혈교우호법",
+    "intros": [
+      {
+        "requires": {
+          "dominant": "정도",
+          "min_fame": 50
+        },
+        "text": "\"정파의 피라. 혈마께서 가장 아끼시던 공양이다.\""
+      },
+      {
+        "requires": {
+          "dominant": "사도",
+          "min_fame": 50
+        },
+        "text": "\"사도련의 장부에 내 목값이 얼마로 적혔느냐.\""
+      },
+      {
+        "requires": {
+          "dominant": "마도",
+          "min_fame": 50
+        },
+        "text": "\"천마의 길을 걷는 자로구나. 그자가 무엇을 빼앗았는지 모르고 걷겠지.\""
+      },
+      {
+        "requires": {
+          "min_fame": 300
+        },
+        "text": "\"강호가 다 아는 이름이로군. 그 피라면 혈마께서 눈을 뜨시리라.\""
+      },
+      {
+        "requires": {
+          "origin": "혈지생환"
+        },
+        "text": "\"연못의 아이. 너를 빠뜨린 것은 신교지만, 그 연못을 판 것은 우리다. 그러니 너는 우리에게 돌아온 것이다.\""
+      }
+    ],
+    "outro": "혈불이 쓰러진 자리에 피가 고였다. 그는 끝까지 그 피를 경전처럼 내려다보았다.",
+    "returned": "쓰러졌던 혈불이 피 웅덩이에서 다시 몸을 일으켰다. 잿빛 가사가 검붉게 젖어 있다.",
+    "hp": 7885,
+    "attack": 192
+  },
+  "마단장정": {
+    "name": "마단을 삼킨 장정",
+    "tier": "일반",
+    "realm": "일류",
+    "exp_reward": 1,
+    "silver": [
+      6,
+      11
+    ],
+    "chapters": [
+      1,
+      2
+    ],
+    "weight": 3,
+    "desc": "신교가 푼 마단을 삼킨 장정. 살갗 아래로 검은 기운이 흐르고, 싸울수록 사람의 꼴을 잃는다.",
+    "intro": "장정이 말 대신 검은 숨을 토했다. 눈동자가 보이지 않는다.",
+    "specials": [
+      {
+        "name": "검은 숨",
+        "every": 3,
+        "mult": 1.6
+      }
+    ],
+    "quirks": [
+      {
+        "type": "frenzy",
+        "percent": 6,
+        "max": 30
+      }
+    ],
+    "level": 10,
+    "hp_style": 1.0,
+    "attack_style": 0.95,
+    "ranks": [
+      1,
+      2
+    ],
+    "requires": {
+      "difficulty_min": "겁화"
+    },
+    "intros": [
+      {
+        "requires": {
+          "origin": "권마계승"
+        },
+        "text": "장정이 주먹을 쥐었다. 권법도 무엇도 아닌, 짐승이 발톱을 세우는 꼴이다. 권마의 주먹을 이은 손이 저절로 떨렸다."
+      }
+    ],
+    "outro": "장정이 쓰러지자 검은 기운이 연기처럼 빠져나갔다. 남은 얼굴은 스물도 안 된 젊은이였다.",
+    "hp": 275,
+    "attack": 32,
+    "above": "겁화대마졸"
+  },
+  "겁화대마졸": {
+    "name": "겁화대 마졸",
+    "tier": "일반",
+    "realm": "절정",
+    "exp_reward": 1,
+    "silver": [
+      20,
+      30
+    ],
+    "chapters": [
+      3,
+      4
+    ],
+    "weight": 4,
+    "armor": 4,
+    "desc": "신교의 겁화대. 마단을 삼키고도 미치지 않은 자들만 골라 엮었다. 몸에 두른 검은 강기가 칼을 받아 낸다.",
+    "intro": "\"마단을 견딘 몸이다. 네 칼로는 껍질도 못 벗긴다.\"",
+    "specials": [
+      {
+        "name": "흑염장",
+        "every": 3,
+        "mult": 1.7
+      }
+    ],
+    "quirks": [
+      {
+        "type": "barrier",
+        "percent": 15,
+        "every": 4
+      }
+    ],
+    "level": 55,
+    "hp_style": 1.0,
+    "attack_style": 1.0,
+    "ranks": [
+      3,
+      4
+    ],
+    "side": "마도",
+    "faction": "마교",
+    "requires": {
+      "difficulty_min": "겁화"
+    },
+    "intros": [
+      {
+        "requires": {
+          "dominant": "정도",
+          "min_fame": 50
+        },
+        "text": "\"맹의 칼이 무디어졌더군. 마단 한 알만큼도 못 하다.\""
+      },
+      {
+        "requires": {
+          "dominant": "사도",
+          "min_fame": 50
+        },
+        "text": "\"은자로 우리를 살 수 있다고 여기느냐.\""
+      },
+      {
+        "requires": {
+          "dominant": "마도",
+          "min_fame": 50
+        },
+        "text": "\"마단도 없이 그 길을 걷는다고. 미련하구나.\""
+      },
+      {
+        "requires": {
+          "min_fame": 300
+        },
+        "text": "\"그 이름, 겁화대의 첫 공으로 삼겠다.\""
+      },
+      {
+        "requires": {
+          "sect": "마교"
+        },
+        "text": "\"교도여, 아직 마단을 받지 못했느냐. 교주께서 아끼시는 것은 견디는 몸뿐이다.\""
+      }
+    ],
+    "outro": "마졸이 쓰러지자 검은 강기가 흩어지며 살 타는 냄새가 났다.",
+    "hp": 1240,
+    "attack": 79,
+    "below": "마단장정"
+  },
+  "겁화대주": {
+    "name": "흑염수 단구",
+    "title": "신교 겁화대주",
+    "tier": "난적",
+    "realm": "초절정",
+    "exp_reward": 2,
+    "silver": [
+      45,
+      66
+    ],
+    "chapters": [
+      4,
+      5
+    ],
+    "weight": 2,
+    "armor": 8,
+    "desc": "신교 겁화대의 대주. 마단을 세 알 삼키고도 제정신인 단 한 사람. 맞은 힘을 그대로 되돌려 보낸다.",
+    "intro": "\"세 알을 삼켰다. 하나는 피로, 하나는 뼈로, 하나는 이 강기로 갔다.\"",
+    "specials": [
+      {
+        "name": "겁화연소",
+        "every": 3,
+        "mult": 1.8,
+        "qi_drain": 15
+      }
+    ],
+    "quirks": [
+      {
+        "type": "barrier",
+        "percent": 15,
+        "every": 4
+      },
+      {
+        "type": "mirror",
+        "percent": 10
+      }
+    ],
+    "level": 86,
+    "hp_style": 1.0,
+    "attack_style": 1.0,
+    "ranks": [
+      4,
+      5
+    ],
+    "side": "마도",
+    "faction": "마교",
+    "requires": {
+      "difficulty_min": "겁화"
+    },
+    "stand_in": "겁화대마졸",
+    "intros": [
+      {
+        "requires": {
+          "dominant": "정도",
+          "min_fame": 50
+        },
+        "text": "\"정파의 검은 맞으면 되돌아간다. 네 칼이 네 몸을 벨 것이다.\""
+      },
+      {
+        "requires": {
+          "dominant": "사도",
+          "min_fame": 50
+        },
+        "text": "\"장사꾼의 칼은 계산이 빠르지. 되돌아올 몫도 계산했느냐.\""
+      },
+      {
+        "requires": {
+          "dominant": "마도",
+          "min_fame": 50
+        },
+        "text": "\"마단 없이 마도를 걷는 자로군. 교주께서 보시면 웃으시겠다.\""
+      },
+      {
+        "requires": {
+          "min_fame": 300
+        },
+        "text": "\"그 이름을 태우면 겁화가 한 자 더 높아지겠지.\""
+      },
+      {
+        "requires": {
+          "origin": "하북팽가"
+        },
+        "text": "\"팽가의 칼이로군. 너희 본가를 태운 불에 나도 장작을 넣었다.\""
+      }
+    ],
+    "outro": "겁화대주가 무릎을 꿇었다. 몸에서 검은 기운이 세 갈래로 빠져나갔다. \"한 알만... 더 먹었더라면.\"",
+    "hp": 4840,
+    "attack": 167
+  },
+  "연단마군": {
+    "name": "연단마군 허곤",
+    "title": "신교 단로장로",
+    "tier": "강적",
+    "realm": "화경",
+    "exp_reward": 4,
+    "silver": [
+      70,
+      110
+    ],
+    "chapters": [],
+    "weight": 0,
+    "armor": 15,
+    "desc": "신교의 단로를 맡은 장로. 천마가 거두어 온 영물의 내단을 마단으로 빚는다. 제 몸에도 마단을 녹여 넣어, 쓰러져도 한 번은 다시 일어선다.",
+    "intro": "\"좋은 몸이다. 마단 한 알이면 너도 교주의 칼이 되었을 텐데.\"",
+    "specials": [
+      {
+        "name": "마단폭렬",
+        "every": 3,
+        "mult": 1.9,
+        "injury": true
+      }
+    ],
+    "quirks": [
+      {
+        "type": "undying",
+        "percent": 25
+      },
+      {
+        "type": "sever",
+        "percent": 40
+      }
+    ],
+    "level": 62,
+    "hp_style": 1.1,
+    "attack_style": 1.05,
+    "side": "마도",
+    "faction": "마교",
+    "requires": {
+      "difficulty_min": "겁화"
+    },
+    "stand_in": "겁화대마졸",
+    "intros": [
+      {
+        "requires": {
+          "dominant": "정도",
+          "min_fame": 50
+        },
+        "text": "\"정파의 몸은 마단을 잘 못 견디지. 그래서 더 궁금하다.\""
+      },
+      {
+        "requires": {
+          "dominant": "사도",
+          "min_fame": 50
+        },
+        "text": "\"값을 묻는 얼굴이로군. 마단 한 알은 고을 하나 값이다.\""
+      },
+      {
+        "requires": {
+          "dominant": "마도",
+          "min_fame": 50
+        },
+        "text": "\"마도를 걷는다면 내 단로로 와라. 백에 하나라도 견디면 천하를 쥔다.\""
+      },
+      {
+        "requires": {
+          "min_fame": 300
+        },
+        "text": "\"이름 높은 몸이로구나. 단로에 넣으면 좋은 약이 나오겠다.\""
+      }
+    ],
+    "outro": "허곤이 쓰러지며 품에서 검은 구슬 하나를 굴려 떨어뜨렸다. 구슬은 땅에 닿자 재가 되었다.",
+    "returned": "허곤이 다시 일어섰다. 녹여 넣은 마단이 아직 남은 모양이다.",
+    "hp": 3195,
+    "attack": 113
   }
 }

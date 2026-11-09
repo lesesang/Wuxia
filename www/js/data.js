@@ -2,14 +2,16 @@
 export const DB = {};
 
 const FILES = ["skills", "enemies", "market", "traits", "sects", "flavor", "fortunes", "origins",
-  "chapters", "realms", "endings", "balance", "karma", "companions", "events_chains", "events_story", "events_random", "events_sect", "events_jianghu"];
+  "chapters", "realms", "endings", "balance", "karma", "companions", "difficulty", "events_chains", "events_story", "events_random", "events_sect", "events_jianghu",
+  "events_action", "events_deep"];
 
 /** read(파일이름)은 해당 JSON 내용을 돌려주는 비동기 함수 */
 export async function loadData(read) {
   const results = await Promise.all(FILES.map((name) => read(name)));
   FILES.forEach((name, i) => { DB[name] = results[i]; });
   DB.storyEvents = DB.events_story;
-  DB.randomEvents = { ...DB.events_random, ...DB.events_sect, ...DB.events_jianghu };
+  // 수련, 운기, 요양 중의 사건(action)과 깊은 강호의 사건도 여기에 함께 둔다. 탐색에는 action 사건이 나오지 않는다
+  DB.randomEvents = { ...DB.events_random, ...DB.events_sect, ...DB.events_jianghu, ...DB.events_action, ...DB.events_deep };
   DB.events = { ...DB.storyEvents, ...DB.randomEvents };
   // 연계 인카운터: 첫 편만 탐색에 나오고 나머지는 정해진 달에 찾아온다
   DB.chains = {};
@@ -52,6 +54,12 @@ export async function loadData(read) {
   }
   for (const [key, item] of Object.entries(DB.karma.provisions)) {
     DB.traits[`채비_${key}`] = { name: item.name, desc: item.desc, hidden: true, effects: item.effects };
+  }
+  // 깊은 강호에서는 기량이 조금 더디게 오른다. 숨은 특성으로 적용한다
+  for (const [key, level] of Object.entries(DB.difficulty.levels)) {
+    if (!level.growth) continue;
+    DB.traits[`강호_${key}`] = { name: level.name, desc: level.desc, hidden: true,
+      effects: ["external", "internal", "martial", "mind"].map((stat) => ({ type: "growth_rate", stat, percent: level.growth })) };
   }
   for (const reward of DB.karma.rewards) {
     DB.traits[`누적_${reward.at}`] = { name: reward.name, desc: reward.desc, hidden: true, effects: reward.effects };

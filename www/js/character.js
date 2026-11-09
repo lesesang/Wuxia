@@ -234,6 +234,8 @@ export class Player {
     this.flags = [];
     this.seenEvents = [];
     this.originTurn = -99; // 출신의 이야기가 마지막으로 찾아온 달
+    this.difficulty = "강호"; // 이 강호행이 걷는 강호
+    this.healCut = 0; // 싸우는 동안 회복을 끊는 적이 곁에 있다
     this.kills = 0;
     this.alignMark = null;
     this.fame = Math.min(MAX_FAME, sumEffect(traitKeys, "start_fame", "amount"));
@@ -262,7 +264,7 @@ export class Player {
 
   /** 정한 양만큼 회복한다. 마도의 회복 감소를 받는다. [체력 변화, 내력 변화] */
   healAmount(hp = 0, qi = 0) {
-    const penalty = 1 - alignValue(this.alignment, "마도", "healCut") / 100;
+    const penalty = (1 - alignValue(this.alignment, "마도", "healCut") / 100) * (1 - (this.healCut || 0) / 100);
     const hpBefore = this.hp;
     const qiBefore = this.qi;
     this.hp = Math.min(this.maxHp(), this.hp + Math.trunc(hp * penalty));
@@ -272,7 +274,7 @@ export class Player {
 
   /** 체력·기력을 최대치 비율로 바꾼다. 체력은 1 아래로 내려가지 않는다. [체력 변화, 기력 변화] */
   healPercent(hpPct = 0, qiPct = 0) {
-    const penalty = 1 - alignValue(this.alignment, "마도", "healCut") / 100;
+    const penalty = (1 - alignValue(this.alignment, "마도", "healCut") / 100) * (1 - (this.healCut || 0) / 100);
     const hpChange = Math.trunc(this.maxHp() * hpPct / 100 * (hpPct > 0 ? penalty : 1));
     const qiChange = Math.trunc(this.maxQi() * qiPct / 100 * (qiPct > 0 ? penalty : 1));
     const hpBefore = this.hp;
@@ -361,7 +363,7 @@ export class Player {
     if (this.mainSkill === root.key) this.mainSkill = skill.key;
     for (const [type, key] of Object.entries(this.chosenArts)) if (key === root.key) this.chosenArts[type] = skill.key;
     this.applyEvolveTrait(skill);
-    return [`${root.name}${josa(root.name, "이/가")} ${skill.name}${josa(skill.name, "으로")} 이어졌다. 쌓은 성취는 그대로다.`];
+    return [`${root.name}${josa(root.name, "이/가")} ${skill.name}${josa(skill.name, "으로")} 이어졌다.`];
   }
 
   /** 승급 뒤 성취를 높여 주는 자질을 무공에 적어 둔다. */
@@ -478,7 +480,7 @@ export class Player {
       skills: this.skills.map((s) => s.toDict()), main_skill: this.mainSkill, chosen_arts: this.chosenArts,
       traits: this.traits, slain: this.slain, silver: this.silver, weapon: this.weapon, armor: this.armor, gear: this.gear, pending_legacy: this.pendingLegacy, person: this.person,
       inventory: this.inventory, boss_weaken: this.bossWeaken, alignment: this.alignment,
-      flags: this.flags, seen_events: this.seenEvents, origin_turn: this.originTurn, kills: this.kills,
+      flags: this.flags, seen_events: this.seenEvents, origin_turn: this.originTurn, difficulty: this.difficulty, kills: this.kills,
       fame: this.fame, sect: this.sect, injury: this.injury,
       align_mark: this.alignMark, revives: this.revives, turn: this.turn, max_turn: this.maxTurn, alive: this.alive, chronicle: this.chronicle, content: this.content, chains: this.chains, chains_done: this.chainsDone,
     };
@@ -496,6 +498,8 @@ export class Player {
     p.chains = (d.chains ?? []).filter((c) => DB.chains[c.id]);
     p.chainsDone = d.chains_done ?? 0;
     p.originTurn = d.origin_turn ?? -99;
+    p.difficulty = DB.difficulty?.levels[d.difficulty] ? d.difficulty : "강호";
+    p.healCut = 0;
     p.realm = d.realm;
     // 특전이 생기기 전의 기록도 그 경지의 특전을 받는다
     for (const perk of realmPerks(p.realm)) if (!(d.traits || []).includes(perkTrait(perk.realm))) (d.traits ||= []).push(perkTrait(perk.realm));

@@ -444,3 +444,14 @@ body { word-break: keep-all; overflow-wrap: anywhere; }
 .item-hint { margin: .2rem 0; font-size: .72rem; color: var(--paper-dim); text-align: center; }
 .help-tabs { position: sticky; top: 0; background: var(--ink-1, #14181c); z-index: 1; }
 .saengsa-stats b { color: var(--gold); }
+
+/* 어느 강호로 나설지 */
+.world-setup { margin: 0 auto .6rem; padding: 0 1rem; max-width: 40rem; }
+.world-row { display: flex; gap: .4rem; }
+.world-btn { flex: 1; min-height: 44px; background: none; border: 1px solid var(--line); border-radius: 4px; color: var(--paper-dim); font-size: .95rem; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .1rem; }
+.world-btn small { font-size: .7rem; color: var(--paper-dim); }
+.world-btn.active { color: var(--gold); border-color: var(--gold); }
+.world-btn:disabled { opacity: .45; }
+.world-desc, .world-terms, .world-lock { font-size: .82rem; color: var(--paper-dim); margin: .45rem 0 0; overflow-wrap: anywhere; }
+.world-terms { color: var(--paper); }
+.ending-world { text-align: center; color: var(--gold); font-size: .9rem; margin: -.2rem 0 .5rem; }
