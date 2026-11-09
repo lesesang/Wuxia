@@ -4138,3 +4138,13 @@ test("강호초출은 사부의 마지막 가르침 인연으로 출신 신공 �
   assert.ok(JSON.stringify(DB.events.초출_심법).includes("무명청허공"));
   assert.ok(JSON.stringify(DB.events.초출_보법).includes("무명행운보"));
 });
+
+test("사부의 마지막 가르침 끝에서 내 계열에 맞는 사부의 병기를 받는다", () => {
+  const p = new Player("무림초출");
+  p.skills = p.skills.filter((s) => s.type !== "공격무공");
+  p.learnSkill(Skill.fromDict({ key: "기초창법", grade: "기본", mastery: 0 }));
+  applyEffects(p, { style_gear: { grade: "신물", origin: "무림초출" } });
+  assert.ok(p.weapon === "무명창" || p.gear.includes("무명창"));
+  assert.equal(Object.values(DB.karma.content).filter((c) => c.origin === "무림초출").length, 2);
+  assert.ok(!DB.karma.content.사부의이름);
+});
