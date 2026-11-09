@@ -4236,3 +4236,19 @@ test("이미 지닌 병장기를 사건에서 또 얻으면 은자로 받는다"
   assert.ok(summary.some((s) => s.includes("이미 지니고 있다")));
   assert.ok(!p.gear.includes("창궁고검"));
 });
+
+test("출신 이야기에서 출신 전용 자질의 선택지를 골라도 그 출신의 무공과 병기를 얻는다", () => {
+  const own = new Set([...Object.keys(DB.skills).filter((k) => DB.skills[k].origin), ...Object.keys(DB.market).filter((k) => DB.market[k].origin)]);
+  const originTraits = new Set(Object.keys(DB.traits).filter((k) => DB.traits[k].origin));
+  for (const [key, e] of Object.entries(DB.events)) {
+    if (!e.requires?.origin) continue;
+    const rewards = [...own].filter((r) => (e.choices || []).some((c) => JSON.stringify(c.outcomes).includes(`"${r}"`)));
+    if (!rewards.length) continue;
+    for (const v of e.variants || []) {
+      if (!originTraits.has(v.requires?.trait)) continue;
+      for (const c of v.choices || []) {
+        assert.ok(rewards.some((r) => JSON.stringify(c.outcomes).includes(`"${r}"`)), `${key} ${c.label}`);
+      }
+    }
+  }
+});
