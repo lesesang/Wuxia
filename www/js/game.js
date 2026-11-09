@@ -20,7 +20,7 @@ import {
 import { halpun, josa } from "./josa.js";
 
 const FINAL_UNLEASH_FROM = 880; // 평균 기량이 이보다 높으면 천마가 숨긴 힘을 꺼낸다
-const FINAL_UNLEASH_HP = 0.36;
+const FINAL_UNLEASH_HP = 0.42;
 const FINAL_UNLEASH_ATTACK = 0.2;
 const NATURAL_REGEN = 5;
 const MAX_TURN_REGEN = 30;

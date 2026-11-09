@@ -4202,3 +4202,27 @@ test("익혀 둔 무공은 위력, 내력, 회피, 성취 속도, 돌파에 보�
   assert.ok(p.sameStyleMasteryRate() <= 25);
   assert.equal(p.loreRelief(60), 15, "실전은 4분의 1까지만 덜어 준다");
 });
+
+test("장터의 진열 수는 익힌 무공이나 지닌 병장기와 상관없이 같다", () => {
+  const kind = (item) => {
+    const skill = item.effects.find((e) => e.type === "skill");
+    return skill ? DB.skills[skill.skill].type : item.category;
+  };
+  const shelfCount = (p, turn) => openMarket(turn, p).stock.map((s) => DB.market[s.key])
+    .reduce((c, item) => ({ ...c, [kind(item)]: (c[kind(item)] || 0) + 1 }), {});
+  for (const [turn, number] of [[36, 2], [60, 3], [84, 4]]) {
+    const fresh = new Player("무림초출");
+    const rich = new Player("무림초출");
+    // 이번 장터에 나올 경공과 심법 비급을 모두 익히고 병장기도 모두 지녔다
+    for (const [k, item] of Object.entries(DB.market)) {
+      if (!item.markets.includes(number)) continue;
+      for (const e of item.effects) if (e.type === "skill" && DB.skills[e.skill].type !== "공격무공" && !rich.hasSkill(e.skill)) rich.learnSkill(new Skill(e.skill));
+      if (item.effects.some((e) => e.type === "equip")) rich.gear.push(k);
+    }
+    const a = shelfCount(fresh, turn), b = shelfCount(rich, turn);
+    assert.equal(a.경공, 1, `${turn} 경공`);
+    assert.equal(b.경공, 1, `${turn} 경공`);
+    assert.equal(b.심공, a.심공, `${turn} 심법`);
+    assert.equal(openMarket(turn, rich).stock.length, openMarket(turn, fresh).stock.length, `${turn} 전체`);
+  }
+});
