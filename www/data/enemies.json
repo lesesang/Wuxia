@@ -9692,12 +9692,12 @@
     "name": "혈마",
     "tier": "강적",
     "realm": "현경",
-    "hp": 18395,
-    "attack": 336,
-    "exp_reward": 5,
+    "hp": 22995,
+    "attack": 373,
+    "exp_reward": 10,
     "silver": [
-      90,
-      140
+      300,
+      420
     ],
     "chapters": [],
     "weight": 0,
@@ -9720,8 +9720,8 @@
     ],
     "intro": "\"백 년 만의 숨이다. 먹어라. 아니면 먹혀라.\"",
     "level": 97,
-    "hp_style": 2.4,
-    "attack_style": 1.8,
+    "hp_style": 3.0,
+    "attack_style": 2.0,
     "intros": [
       {
         "requires": {
@@ -9772,7 +9772,7 @@
       }
     ],
     "named": true,
-    "armor": 42,
+    "armor": 46,
     "phases": [
       {
         "hp_pct": 55,
@@ -9808,12 +9808,12 @@
     "name": "혈마",
     "tier": "강적",
     "realm": "현경",
-    "hp": 14560,
-    "attack": 271,
-    "exp_reward": 5,
+    "hp": 19925,
+    "attack": 318,
+    "exp_reward": 8,
     "silver": [
-      90,
-      140
+      220,
+      300
     ],
     "chapters": [],
     "weight": 0,
@@ -9836,8 +9836,8 @@
     ],
     "intro": "\"백 년 만의 숨이다. 먹어라. 아니면 먹혀라.\"",
     "level": 97,
-    "hp_style": 1.9,
-    "attack_style": 1.45,
+    "hp_style": 2.6,
+    "attack_style": 1.7,
     "intros": [
       {
         "requires": {
@@ -9888,7 +9888,7 @@
       }
     ],
     "named": false,
-    "armor": 34,
+    "armor": 40,
     "phases": [
       {
         "hp_pct": 40,
