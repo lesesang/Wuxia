@@ -159,7 +159,6 @@ function effectIsUseful(player, effect, key) {
     const target = gearFromToken(player, effect);
     return !!target && !player.ownsGear(target);
   }
-  if (effect.type === "last_strength") return true;
   switch (effect.type) {
     case "heal": case "cure": case "mastery": case "atk_buff": return (effect.percent ?? 1) > 0;
     case "stat": return player[effect.stat] < STAT_CAP;
@@ -191,7 +190,6 @@ function applyEffect(player, key, effect) {
       break;
     case "skill": player.learnSkill(new Skill(effect.skill)); break;
     case "boss_weaken": player.bossWeaken += effect.percent; break;
-    case "last_strength": player.revives += effect.amount ?? 1; break;
     case "main_gear": {
       const target = gearFromToken(player, effect);
       if (target && !player.ownsGear(target)) {

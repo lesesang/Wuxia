@@ -15,11 +15,3 @@ export function pickWeighted(list, weights) {
   return list[list.length - 1];
 }
 
-export function shuffled(list) {
-  const copy = [...list];
-  for (let i = copy.length - 1; i > 0; i--) {
-    const j = Math.floor(rng.random() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-  return copy;
-}

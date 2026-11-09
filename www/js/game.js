@@ -155,9 +155,6 @@ export class Game {
     this.pendingNext = true;
   }
 
-  /** 달 중간에는 저장하지 않는다 */
-  saveMonthEnd() {}
-
   /** 그달의 줄거리와 연계 인카운터를 연다. 천마봉 전에는 남은 연계를 먼저 끝낸다. */
   openStoryEvent() {
     const p = this.player;
@@ -561,7 +558,6 @@ export class Game {
       updateKnown([], [key]);
       const notes = useConsumable(this.player, key);
       this.addLog([`${name}${josa(name, "을/를")} 썼다.`, ...notes]);
-      if (this.pendingNext) this.saveMonthEnd();
     }
   }
 
@@ -590,7 +586,6 @@ export class Game {
     if (!this.active || !this.pendingNext || this.market) return;
     if (isMarketTurn(this.player.turn)) {
       this.market = openMarket(this.player.turn, this.player);
-      this.saveMonthEnd();
       return;
     }
     this.startNextTurn();
@@ -709,14 +704,12 @@ export class Game {
     const [success, message] = buy(this.player, this.market, key);
     this.market.message = message;
     if (success) updateKnown([], [key]);
-    this.saveMonthEnd();
   }
 
   marketSell(key) {
     if (!this.market) return;
     const [, message] = sell(this.player, key);
     this.market.message = message;
-    this.saveMonthEnd();
   }
 
   /** 지닌 병장기로 바꿔 든다. 싸우는 중에는 못 바꾼다. */
@@ -724,14 +717,12 @@ export class Game {
     if (!this.active || this.battle || !this.player.gear.includes(key)) return;
     this.player.equipGear(key);
     if (this.market) this.market.message = `${DB.market[key].name}${josa(DB.market[key].name, "을/를")} 들었다.`;
-    if (this.pendingNext) this.saveMonthEnd();
   }
 
   /** 든 병장기를 내려놓는다. 싸우는 중에는 못 한다. */
   unequipGear(slot) {
     if (!this.active || this.battle || !this.player.unequipGear(slot)) return;
     if (this.market) this.market.message = "병장기를 내려놓았다.";
-    if (this.pendingNext) this.saveMonthEnd();
   }
 
   marketLeave() {

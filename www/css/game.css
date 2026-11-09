@@ -23,7 +23,6 @@ body { overscroll-behavior: none; }
 .boot-message { text-align: center; padding: 30vh 1.5rem 0; color: var(--paper-dim); }
 .modal-text { font-size: .9rem; margin-top: 0; }
 .hint.flush { margin: 0; }
-.slot-count { font-size: .9rem; }
 .setting-buttons { display: flex; gap: .4rem; flex-shrink: 0; }
 .file-btn { display: inline-flex; align-items: center; cursor: pointer; }
 .file-btn input { position: absolute; width: 1px; height: 1px; opacity: 0; }
@@ -114,9 +113,7 @@ body.play { height: 100vh; height: 100dvh; display: flex; flex-direction: column
 
 /* ===== 전투: 완전히 다른 화면 ===== */
 body.in-battle { background: radial-gradient(ellipse at top, #3f1411 0%, #170706 72%); color: #f2e6da; min-height: 100vh; min-height: 100dvh; }
-.battle-screen { max-width: 600px; margin: 0 auto; padding: calc(1.2rem + var(--safe-top)) 1rem calc(1rem + var(--safe-bottom)); }
 .battle-title { text-align: center; font-family: var(--display); font-weight: 400; font-size: 1.6rem; color: #ff8b7d; margin: 0 0 1rem; letter-spacing: .3em; }
-.battle-final-tag { display: block; font-size: .85rem; color: var(--gold); letter-spacing: .05em; }
 .vs-row { display: flex; justify-content: space-between; align-items: center; gap: .6rem; margin-bottom: .4rem; }
 .combatant { flex: 1; min-width: 0; text-align: center; }
 .combatant .name { font-size: 1rem; }
@@ -129,7 +126,6 @@ body.in-battle { background: radial-gradient(ellipse at top, #3f1411 0%, #170706
 .qibar div { height: 100%; background: #5c8fb3; }
 .vs-mark { color: #9b8078; font-style: italic; }
 .enemy-desc { text-align: center; font-size: .8rem; color: #b49f94; margin: .3rem 0; }
-.battle-state { text-align: center; font-size: .8rem; color: #cdb9ad; margin: .2rem 0 .6rem; min-height: 1.2em; }
 .battle-warning { text-align: center; color: #ffcf6e; font-size: .9rem; font-weight: 700; margin: 0 0 .6rem; }
 .battle-log { background: rgba(0,0,0,.28); border: 1px solid #55302b; padding: .6rem .8rem; margin-bottom: .8rem; height: 11.5rem; overflow-y: auto; }
 .battle-log p { margin: .15rem 0; font-size: .85rem; color: #dccdc0; }
@@ -198,12 +194,10 @@ body.home { padding-bottom: calc(4.5rem + var(--safe-bottom)); }
 .home-wrap { max-width: 760px; margin: 0 auto; padding: calc(2.5rem + var(--safe-top)) 1.25rem 2rem; }
 .hero { display: flex; gap: 1.5rem; align-items: flex-start; margin-bottom: 2rem; }
 .hero h1 { writing-mode: vertical-rl; font-family: var(--display); font-weight: 400; font-size: clamp(2.2rem, 6vw, 2.9rem); letter-spacing: .08em; line-height: 1.25; margin: 0; color: var(--paper); flex-shrink: 0; border-right: 3px solid var(--seal); padding-right: .35rem; }
-.hero-side { padding-top: .4rem; min-width: 0; }
 .hero-line { font-size: 1.15rem; margin: 0 0 .8rem; line-height: 1.8; }
 .karma-display { color: var(--celadon); font-weight: 700; margin: 0 0 1rem; }
 .continue-btn { padding: .7rem 1.1rem; background: var(--celadon-deep); border: 1px solid var(--celadon); font-size: .98rem; }
 .continue-btn:hover { background: var(--celadon-hover); }
-.section-title { font-family: var(--display); font-weight: 400; font-size: 1.3rem; color: var(--celadon); margin: 2rem 0 .5rem; }
 .section-note { font-size: .84rem; color: var(--paper-dim); margin: 0 0 .6rem; }
 .pick-row { display: flex; gap: .8rem; align-items: flex-start; padding: .75rem .4rem; border-top: 1px solid var(--ink-3); }
 .pick-row:has(input:checked) { background: var(--ink-2); box-shadow: inset 3px 0 0 var(--celadon); }
@@ -222,9 +216,6 @@ body.home { padding-bottom: calc(4.5rem + var(--safe-bottom)); }
 .unlock-btn:disabled { border-color: var(--line); color: var(--paper-faint); }
 .start-btn { display: block; width: 100%; margin-top: 1.8rem; padding: 1rem; font-family: var(--display); font-size: 1.3rem; background: var(--seal); border: 0; color: #f6e7dc; }
 .start-btn:hover { background: #c7443a; }
-.main-sidebar { position: fixed; bottom: 0; left: 0; right: 0; background: #12161a; display: flex; justify-content: center; gap: 1.5rem; padding: .25rem 0 calc(.25rem + var(--safe-bottom)); z-index: 10; }
-.main-sidebar button { background: none; border: 0; color: var(--paper-dim); font-size: 1.1rem; padding: .3rem .8rem; line-height: 1.2; min-width: 44px; min-height: 44px; }
-.main-sidebar button:hover { color: var(--gold); }
 
 @media (max-width: 420px) {
     .actions { grid-template-columns: 1fr 1fr; }

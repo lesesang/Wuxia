@@ -719,10 +719,6 @@ export function applyEffects(player, effects) {
   if (effects.take_legacy) summary.push(...takeFoundLegacy(player));
   if (effects.style_gear) summary.push(...gradeGearReward(player, effects.style_gear));
   if (effects.grade_item) summary.push(...gradeItemReward(player, effects.grade_item));
-  if (effects.last_strength) {
-    player.revives += effects.last_strength;
-    summary.push("선천진기를 한 번 더 일으킬 수 있다");
-  }
 
   if (effects.start_weapon) summary.push(...takeStartWeapon(player, effects.start_weapon));
   if (effects.start_mindset) summary.push(...takeStartMindset(player, effects.start_mindset));
