@@ -2663,7 +2663,7 @@ test("개방 출신은 사문을 지니고 시작한다", () => {
 
 test("생사경은 기록대로 천마를 이긴 순간에만 판정된다", () => {
   const req = DB.realms.saengsa;
-  assert.deepEqual([req.min_stat, req.battles, req.hp_ratio, req.qi_ratio], [950, 75, 0.8, 0.8]);
+  assert.deepEqual([req.min_stat, req.battles, req.hp_ratio, req.qi_ratio], [950, 75, 0.7, 0.7]);
   const hero = () => {
     const g = newGame();
     const p = g.player;
@@ -2682,6 +2682,14 @@ test("생사경은 기록대로 천마를 이긴 순간에만 판정된다", () 
   hurt.player.qi = Math.floor(hurt.player.maxQi() * 0.5);
   hurt.finishGame(true);
   assert.notEqual(hurt.ending.key, "생사경", "기력이 모자라면 아니다");
+  // 익혀 둔 무공이 많으면 실전이 덜 든다
+  const learned = hero();
+  learned.player.battles = 60;
+  for (const k of Object.keys(DB.skills).filter((k) => !DB.skills[k].reserved).slice(0, 30)) if (!learned.player.hasSkill(k)) learned.player.learnSkill(Skill.fromDict({ key: k, grade: "일절", mastery: 0 }));
+  learned.player.hp = learned.player.maxHp();
+  learned.player.qi = learned.player.maxQi();
+  learned.finishGame(true);
+  assert.equal(learned.ending.key, "생사경");
   const dead = hero();
   dead.finishGame(false);
   assert.equal(dead.ending.key, "사망");
