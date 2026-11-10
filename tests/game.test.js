@@ -2227,6 +2227,15 @@ test("유산은 천마를 쓰러뜨린 뒤 열리고, 이어받아도 남으며,
   late.pickingArts = false;
   late.openStoryEvent();
   assert.equal(late.event?.key, "유산_발길");
+  // 연계가 걸린 달이라도 첫 해의 끝 무렵에는 유산이 먼저 찾아온다
+  const busy = new Game();
+  busy.start("무림초출", [], [0]);
+  busy.player.turn = 11;
+  busy.player.chains.push({ id: Object.keys(DB.chains)[0], step: 1, next: 11 });
+  busy.event = null;
+  busy.pickingArts = false;
+  busy.openStoryEvent();
+  assert.equal(busy.event?.key, "유산_발길");
 
   // 보관이 차면 지울 것을 골라야 한다
   withKarma(0, { endings_seen: ["기본"], legacy_open: true, legacies: [1, 2, 3].map((n) => ({ kind: "skill", key: "양가창법", grade: "명품", label: `유산${n}`, from: "무명객", origin: "무림초출" })) });

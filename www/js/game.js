@@ -184,15 +184,15 @@ export class Game {
       this.event = { key: story, forced: true };
       return;
     }
+    // 첫 해가 저물도록 못 찾았으면 달이 시작할 때 흔적이 먼저 찾아온다. 연계보다 앞서고, 늦어도 첫 해의 끝 달에는 찾는다
+    if (p.pendingLegacy.length && p.turn >= LEGACY_LAST_TURN - 1) {
+      this.event = { key: "유산_발길", forced: true };
+      return;
+    }
     const chainKey = dueChainEvent(p);
     // 연계 한 편은 그달을 쓴다. 다만 마지막 달에 몰리면 달을 쓰지 않는다.
     if (chainKey) {
       this.event = { key: chainKey, forced: urgent };
-      return;
-    }
-    // 싸움이 이어져 첫 해가 저물도록 못 찾았으면 달이 시작할 때 흔적이 먼저 찾아온다
-    if (p.pendingLegacy.length && p.turn >= LEGACY_LAST_TURN) {
-      this.event = { key: "유산_발길", forced: true };
       return;
     }
     // 출신의 이야기는 조건을 채우면 반드시 찾아온다
@@ -292,7 +292,7 @@ export class Game {
   /** 이어받기로 한 유산의 흔적을 이번 달에 찾아내는가. 첫 해가 끝나기 전에는 반드시 찾는다 */
   legacyFound() {
     if (!this.player.pendingLegacy.length) return false;
-    return this.player.turn >= LEGACY_LAST_TURN - 1 || rng.random() < LEGACY_FIND_RATE;
+    return this.player.turn >= LEGACY_LAST_TURN - 2 || rng.random() < LEGACY_FIND_RATE;
   }
 
   grow(stat) {
