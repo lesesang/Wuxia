@@ -4686,3 +4686,26 @@ test("쓰는 경공의 성취를 다른 경공으로 받아 올 수 있다", () 
   assert.equal(target.mastery, 50);
   assert.equal(using.mastery, 0);
 });
+
+test("싸움이 끝나면 합의 기록은 지우고 뒷이야기만 남기며, 이름 있는 적은 먼저 마주 선다", () => {
+  const game = newGame();
+  game.addLog(["산길을 걸었다."]);
+  game.startBattle("산적");
+  assert.ok(!game.battle.prelude, "이름 없는 적은 바로 싸운다");
+  game.battle.enemy.hp = 1;
+  for (let i = 0; i < 20 && game.battle; i++) game.battleAction("기본공격");
+  assert.ok(!game.battle);
+  assert.ok(game.log.includes("산길을 걸었다."));
+  assert.ok(game.log.some((l) => l.includes("쓰러뜨렸다")));
+  assert.ok(!game.log.some((l) => /마주쳤다|피해|합/.test(l) && !l.includes("쓰러뜨렸다")), game.log.join(" / "));
+  game.pendingNext = false;
+  const named = Object.keys(DB.enemies).find((k) => DB.enemies[k].title && !DB.enemies[k].beast && DB.enemies[k].chapters?.includes(1));
+  game.startBattle(named);
+  assert.ok(game.battle.prelude, named);
+  game.beginBattle();
+  assert.ok(!game.battle.prelude);
+  assert.equal(game.battle.roundNum, 0, "마주 서는 동안 합은 지나지 않는다");
+  game.battle = null;
+  game.startBattle(named, false, null, null, true);
+  assert.ok(!game.battle.prelude, "사건의 싸움은 사건이 대사를 맡는다");
+});

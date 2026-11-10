@@ -1185,6 +1185,7 @@ export class Battle {
   }
 
   finish(victory, fled = false) {
+    this.resultFrom = this.log.length; // 여기서부터가 싸움의 뒷이야기다
     this.revertTempBuffs();
     this.player.healCut = 0;
     this.flushEnemyNotes();
