@@ -835,10 +835,28 @@ function standBox(p, b) {
     </div></div>`;
 }
 
+/** 이름 있는 적과 칼을 섞기 전에 마주 서는 자리 */
+function renderBattlePrelude() {
+  const b = game.battle;
+  const { called, intro, affix } = b.prelude;
+  const lines = [b.enemy.desc, intro, ...(affix || [])].filter(Boolean);
+  return `<div class="stage"><div class="stage-inner"><div class="event-sheet">
+      <h2 class="event-title">${esc(called)}</h2>
+      <div class="event-body">${lines.map((l) => `<p class="event-text">${esc(l)}</p>`).join("")}
+        <p class="section-note">${esc(b.enemy.realm)}${b.spar ? ", 비무" : ""}</p>
+        <button class="choice-btn" data-act="battle" data-action="기본공격" data-begin="1">맞선다</button>
+        ${b.isFinal ? "" : `<button class="choice-btn" data-act="battle" data-action="도주">물러선다<small> 실패하면 공격받음</small></button>`}
+      </div></div></div></div>`;
+}
+
 function renderBattle() {
   document.body.className = "in-battle";
   setMood("battle");
   const { player: p, battle: b, gauntlet } = game;
+  if (b.prelude) {
+    app().innerHTML = `${topbar()}${renderBattlePrelude()}${sidebar()}${gameModals()}`;
+    return;
+  }
   const skill = p.bestSkill();
   const mindset = p.bestOfType("심공");
   const movement = p.bestOfType("경공");
@@ -1383,7 +1401,11 @@ const actions = {
   action: (el) => { game.action(el.dataset.action); render(); },
   next: () => { game.advanceTurn(); render(); },
   choose: (el) => { game.chooseEvent(Number(el.dataset.index)); render(); },
-  battle: (el) => { game.battleAction(el.dataset.action, el.dataset.key ?? null); render(); },
+  battle: (el) => {
+    if (el.dataset.begin) game.beginBattle();
+    else game.battleAction(el.dataset.action, el.dataset.key ?? null);
+    render();
+  },
   interlude: (el) => { game.battleInterlude(Number(el.dataset.key)); render(); },
   buy: (el) => { game.marketBuy(el.dataset.key); render(); },
   sell: (el) => { game.marketSell(el.dataset.key); render(); },

@@ -354,7 +354,8 @@ export class Game {
   }
 
   /** foe를 주면 그 사건만의 상대다. 수치는 기존 적을 따르고 이름과 대사는 사건을 따른다. foeLine은 그 사건의 첫 대사다 */
-  startBattle(key, spar = false, foe = null, foeLine = null) {
+  startBattle(key, spar = false, foe = null, foeLine = null, fromEvent = false) {
+    this.preBattleLog = [...this.log]; // 싸움이 끝나면 싸움의 합은 지우고 뒷이야기만 남긴다
     // 지금 장에 어울리지 않는 적이면 같은 갈래에서 위상이 맞는 적으로 나온다
     // 이미 쓰러뜨린 이름 있는 적의 자리에는 대신할 적이 나온다. 그래도 없으면 그가 돌아온다. 비무 상대는 산 사람이다
     // 다음 장에서 일찍 내려온 적은 그 장의 위상 그대로 나온다
@@ -378,6 +379,10 @@ export class Game {
     const back = !spar && !foe && isNamed(fitting) && this.player.slain.includes(fitting);
     const intro = foeLine && fitting === stature ? foeLine : foe ? null : back ? returnedLine(fitting) : enemyIntro(this.player, fitting);
     const called = enemy.title ? `${enemy.title} ${enemy.name}` : enemy.name;
+    // 이름 있는 적은 사건이 아니어도 칼을 섞기 전에 먼저 마주 선다
+    if (!fromEvent && !this.gauntlet && !foe && (enemy.title || isNamed(fitting))) {
+      this.battle.prelude = { called, intro, affix };
+    }
     this.addLog([spar ? `${called}${josa(called, "과/와")} 비무를 겨룬다. (${enemy.realm}, 져도 목숨은 잃지 않는다)` : `${called}${josa(called, "과/와")} 마주쳤다. (${enemy.realm})`, ...(intro ? [intro] : []), ...affix, ...this.battle.log]);
     this.battle.log = [];
   }
@@ -409,6 +414,7 @@ export class Game {
 
   startFinalBattle() {
     const p = this.player;
+    this.preBattleLog = [...this.log];
     const enemy = new Enemy("천마");
     this.deepen(enemy, false);
     // 천마는 상대의 기량을 보고 숨겨 둔 힘을 꺼낸다
@@ -482,11 +488,11 @@ export class Game {
     if (effects.final_battle) {
       this.startFinalBattle();
     } else if (effects.battle) {
-      this.startBattle(effects.battle, !!effects.spar, effects.foe, effects.foe_line);
+      this.startBattle(effects.battle, !!effects.spar, effects.foe, effects.foe_line, true);
     } else if (effects.gauntlet) {
       const { enemies, reward, name, spar } = effects.gauntlet;
       this.gauntlet = { name, enemies: enemies.slice(1), reward, round: 1, total: enemies.length, spar: !!spar };
-      this.startBattle(enemies[0], !!spar);
+      this.startBattle(enemies[0], !!spar, null, null, true);
     }
     if (this.battle) return;
     // 달을 쓰지 않는 사건 뒤에는 그달의 다음 사건으로 바로 이어진다
@@ -504,6 +510,11 @@ export class Game {
     this.battle.log = [];
   }
 
+  /** 마주 선 자리에서 칼을 뽑는다. 합은 지나지 않는다 */
+  beginBattle() {
+    if (this.battle) this.battle.prelude = null;
+  }
+
   battleAction(action = "기본공격", itemKey = null) {
     if (!this.battle || !VALID_BATTLE_ACTIONS.includes(action)) return;
     const { battle, player } = this;
@@ -517,10 +528,17 @@ export class Game {
       return;
     }
 
+    battle.prelude = null;
     const result = battle.runRound(action, player.bestSkill(), itemKey);
-    this.addLog(battle.log);
-    battle.log = [];
+    this.takeBattleLog(battle, result);
     if (result) this.closeBattle(battle, result);
+  }
+
+  /** 싸우는 동안은 합의 기록을 쌓고, 싸움이 끝나면 합은 지우고 뒷이야기만 남긴다 */
+  takeBattleLog(battle, result) {
+    if (result) this.setLog([...(this.preBattleLog || []), ...battle.log.slice(battle.resultFrom ?? battle.log.length)]);
+    else this.addLog(battle.log);
+    battle.log = [];
   }
 
   /** 쓰러지는 순간의 선택. 선천진기를 일으킬지, 여기서 눈을 감을지 */
@@ -528,8 +546,7 @@ export class Game {
     const { battle } = this;
     if (!battle?.standPending) return;
     const result = battle.answerStand(gather);
-    this.addLog(battle.log);
-    battle.log = [];
+    this.takeBattleLog(battle, result);
     if (result) this.closeBattle(battle, result);
   }
 
