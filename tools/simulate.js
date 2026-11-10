@@ -51,6 +51,8 @@ function battleChoice(game) {
     for (const key of ["구명단", "금창약"]) if (player.inventory[key]) return ["소비품", key];
   }
   const movement = player.bestOfType("경공");
+  // 꺾을 수 있는 필살기는 비기로 꺾으려 든다
+  if (battle.nextBreakNeed() && skill?.secretUnlocked && player.qi >= skill.secretQiCost && !battle.sealed) return ["비기"];
   if (battle.enemy.specialForRound(battle.roundNum + 1) && movement && player.qi >= movement.qiCost) return ["경공"];
   if (skill?.secretUnlocked && player.qi >= skill.secretQiCost) return ["비기"];
   if (skill && player.qi < skill.qiCost && player.bestOfType("심공")) return ["심법"];

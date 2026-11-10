@@ -53,6 +53,7 @@ const ECHO_RATE = 0.5; // 여운으로 한 번 더 닿는 힘
 const ITEM_MIND_MASTERY_RATE = 8; // 영약과 서책으로 오른 기량 이만큼마다 심법 성취 1
 const STEP_STREAK_PENALTY = 15; // 경공을 잇달아 펼치면 걸음을 읽혀 회피가 이만큼씩 떨어진다
 const MIN_STREAK_EVADE = 30;
+const BROKEN_CHARGE_MULT = 0.5; // 기세가 꺾인 필살기는 보통 공격의 절반 힘으로 닿는다
 const NORMAL_COUNTER_RATE = 0.5; // 필살기가 아닌 공격을 흘리면 되갚는 힘이 절반이다
 const REFUND_RATE = 0.5; // 다 피했을 때 되찾는 내력의 비율
 const MAX_FLEE = 0.9;
@@ -143,8 +144,9 @@ export class Enemy {
     const undying = this.quirk("undying");
     if (this.hp <= 0 && undying && !this.risen) {
       this.risen = true;
+      this.rising = Boolean(undying.stagger); // 몸을 일으키느라 한 합을 쉬는가
       this.hp = Math.max(1, Math.trunc(this.maxHp * undying.percent / 100));
-      this.notes.push(`${this.name}${josa(this.name, "이/가")} 쓰러졌다가 다시 일어선다. (체력 ${this.hp})`);
+      this.notes.push(`${undying.rise || `${this.name}${josa(this.name, "이/가")} 쓰러졌다가 다시 일어선다.`} (체력 ${this.hp})`);
     }
   }
 
@@ -165,11 +167,18 @@ export class Enemy {
       if (this.hp <= this.maxHp * next.hp_pct / 100) {
         this.phase += 1;
         if (next.specials) this.specials = next.specials;
+        // 단계가 바뀌면 숨겨 둔 괴공을 꺼낸다. 같은 괴공은 새것으로 바꾼다
+        for (const q of next.quirks || []) {
+          this.quirks = [...this.quirks.filter((own) => own.type !== q.type), { ...q }];
+        }
         return next;
       }
     }
     return null;
   }
+
+  /** 기세를 꺾으려면 그 합에 깎아야 하는 체력. 꺾을 수 없는 필살기면 0 */
+  breakNeed(special) { return special?.break_pct ? Math.max(1, Math.trunc(this.maxHp * special.break_pct / 100)) : 0; }
 
   /** 이 합의 필살기. 주기가 긴 것을 우선한다. */
   specialForRound(round) {
@@ -293,6 +302,7 @@ export class Battle {
     this.momentum = 0;       // 피할 때마다 쌓인 기세(푼)
     this.afterimage = 0;     // 잔상이 남아 다음 합에 저절로 피할 몫
     this.secondWind = false; // 한 싸움에 한 번 숨이 트였는가
+    this.dealt = 0;          // 이번 합에 적에게 쏟은 힘
     const ward = Math.min(MAX_START_WARD, sumEffect(player.traits, "battle_start_ward", "percent") + (this.armorG?.start_ward || 0) + (this.mindG?.ward || 0));
     if (ward) {
       this.ward = Math.trunc(player.maxHp() * ward / 100);
@@ -756,8 +766,20 @@ export class Battle {
   }
 
   enemyAttack(evadeSkill = null) {
-    const special = this.enemy.specialForRound(this.roundNum);
-    const multiplier = special ? special.mult : 1;
+    if (this.enemy.rising) {
+      this.enemy.rising = false;
+      this.log.push(`${this.enemy.name}${josa(this.enemy.name, "이/가")} 몸을 일으키느라 이번 합에 손을 쓰지 못했다.`);
+      return 0;
+    }
+    let special = this.enemy.specialForRound(this.roundNum);
+    const need = this.enemy.breakNeed(special);
+    let multiplier = special ? special.mult : 1;
+    if (need && this.dealt > need && !this.enemyStun) {
+      // 끌어올리던 기세가 쏟아진 힘에 꺾였다
+      this.log.push(`쏟아부은 ${this.dealt}의 힘에 ${special.name}의 기세가 꺾였다.`);
+      multiplier = special.break_mult ?? BROKEN_CHARGE_MULT;
+      special = null;
+    }
     const name = special ? `${special.name}` : "공격";
     if (this.enemyStun) {
       this.enemyStun = false;
@@ -950,6 +972,8 @@ export class Battle {
   }
 
   nextSpecialWarning() { return this.enemy.specialForRound(this.roundNum + 1)?.name ?? null; }
+  /** 다음 합의 필살기를 꺾는 데 드는 힘. 꺾을 수 없으면 0 */
+  nextBreakNeed() { return this.enemy.breakNeed(this.enemy.specialForRound(this.roundNum + 1)); }
 
   /**
    * 경공으로 흘릴 확률(푼). 잇달아 펼치면 걸음을 읽히고, 상대의 필살기가 날카로우면 피할 틈이 좁아진다.
@@ -1121,6 +1145,8 @@ export class Battle {
     this.stolen = 0;
     this.mindSurge();
     this.enemyQuirksRound();
+    // 이 합에 쏟은 힘을 잰다. 큰 초식은 그 힘으로 기세를 꺾을 수 있다
+    const force = this.enemy.hp + this.enemy.barrier;
     // 다른 일을 하면 잇달아 쓴 것이 끊긴다. 운기는 쓴 뒤에 세어 이번 운기가 앞의 운기를 볼 수 있게 한다
     this.stepStreak = action === "경공" ? this.stepStreak + 1 : 0;
     const mindNow = action === "심법";
@@ -1145,8 +1171,12 @@ export class Battle {
     this.mindStreak = mindNow ? this.mindStreak + 1 : 0;
     if (!this.enemy.isAlive()) return this.finish(true);
 
+    this.dealt = Math.max(0, force - this.enemy.hp - this.enemy.barrier);
     const phase = this.enemy.advancePhase();
-    if (phase) this.log.push(`${reactiveLine(this.player, phase.texts, phase.text)}`);
+    if (phase) {
+      this.log.push(`${reactiveLine(this.player, phase.texts, phase.text)}`);
+      this.phaseQuirks(phase);
+    }
     // 막간이 열리는 합에는 적도 기세를 고른다
     if (phase && this.openInterlude(phase)) return null;
 
@@ -1160,8 +1190,21 @@ export class Battle {
 
     this.flushEnemyNotes();
     const warning = this.nextSpecialWarning();
-    if (warning) this.log.push(`${this.enemy.name}${josa(this.enemy.name, "이/가")} ${warning}의 기세를 끌어올린다.`);
+    if (warning) {
+      const need = this.enemy.breakNeed(this.enemy.specialForRound(this.roundNum + 1));
+      this.log.push(`${this.enemy.name}${josa(this.enemy.name, "이/가")} ${warning}의 기세를 끌어올린다.${need ? ` 다음 합에 ${need} 넘게 깎으면 꺾을 수 있다.` : ""}`);
+    }
     return null;
+  }
+
+  /** 단계가 바뀌며 꺼낸 괴공을 알리고 곧바로 몸에 두른다 */
+  phaseQuirks(phase) {
+    const { enemy, player } = this;
+    for (const q of phase.quirks || []) {
+      this.log.push(`(괴공 ${quirkText(q)})`);
+      if (q.type === "sever") player.healCut = Math.max(player.healCut || 0, Math.min(MAX_HEAL_CUT, q.percent));
+      if (q.type === "barrier") this.log.push(`(${enemy.name}${josa(enemy.name, "이/가")} 강기를 두른다. ${enemy.raiseBarrier()})`);
+    }
   }
 
   /** 괴공 가운데 합마다 일어나는 것 */

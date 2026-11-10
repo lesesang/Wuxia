@@ -76,8 +76,12 @@ function skillDetail(s) {
 
 function enemyDetail(e) {
   const lines = [`체력 ${e.hp}, 위력 ${e.attack}${e.armor ? `, 방어 ${e.armor}` : ""}`];
-  if (e.specials?.length) lines.push(`필살기: ${e.specials.map((x) => x.name).join(", ")}`);
+  const arts = [...new Set([...(e.specials || []), ...(e.phases || []).flatMap((ph) => ph.specials || [])].map((x) => x.name))];
+  if (arts.length) lines.push(`필살기: ${arts.join(", ")}`);
   for (const q of e.quirks || []) lines.push(`괴공 ${quirkText(q)}`);
+  for (const ph of e.phases || []) {
+    for (const q of ph.quirks || []) lines.push(`괴공 ${quirkText(q)} (체력 ${halpun(ph.hp_pct)} 아래부터)`);
+  }
   if (e.requires?.difficulty_min) lines.push(`${DB.difficulty.levels[e.requires.difficulty_min].name} 이상의 강호에서 나온다`);
   if (e.chapters?.length) lines.push(`나오는 곳: ${e.chapters.join(", ")}장`);
   return lines;
@@ -921,10 +925,10 @@ function renderBattle() {
         <div class="hpnum">체력 <b>${b.enemy.hp}</b>/${b.enemy.maxHp}</div>
         ${b.enemy.barrier ? `<div class="hpnum">강기 ${b.enemy.barrier}</div>` : ""}
         <div class="enemy-tier">${esc(b.enemy.realm)}, ${esc(TIER_NAMES[b.enemy.tier] || b.enemy.tier)}${b.enemy.armor ? `, 방어 ${b.enemy.armor}` : ""}</div>
-        ${b.enemy.quirks.length ? `<div class="enemy-tier">괴공 ${esc(b.enemy.quirks.map((q) => DB.difficulty.quirks[q.type]?.name ?? q.type).join(", "))}</div>` : ""}</div>
+        ${b.enemy.quirks.length ? `<div class="enemy-tier">괴공 ${esc(b.enemy.quirks.map((q) => q.name ?? DB.difficulty.quirks[q.type]?.name ?? q.type).join(", "))}${b.enemy.rage ? `, 위력 +${halpun(b.enemy.rage)}` : ""}</div>` : ""}</div>
     </div>
     ${tags.length ? `<div class="battle-tags">${tags.map(([kind, label]) => `<span class="tag ${kind}">${esc(label)}</span>`).join("")}</div>` : ""}
-    ${warning ? `<p class="battle-warning">다음 합은 ${esc(warning)}${movement ? ". 경공으로 흘려낼 수 있다" : ""}</p>` : ""}
+    ${warning ? `<p class="battle-warning">다음 합은 ${esc(warning)}${b.nextBreakNeed() ? `. 이번 합에 ${b.nextBreakNeed()} 넘게 깎으면 꺾인다` : ""}${movement ? ". 경공으로 흘려낼 수 있다" : ""}</p>` : ""}
     ${b.standPending ? standBox(p, b) : ""}
     <div class="battle-log" aria-live="polite">${b.roundNum === 0 ? `<p class="enemy-desc">${esc(b.enemy.desc)}</p>` : ""}${game.log.slice(-12).map((l) => `<p>${esc(l)}</p>`).join("")}</div>
     ${interlude ?? `<div class="battle-panel">

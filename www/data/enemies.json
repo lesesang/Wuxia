@@ -1434,8 +1434,8 @@
     "name": "천마",
     "tier": "보스",
     "realm": "생사경",
-    "hp": 73000,
-    "attack": 407,
+    "hp": 76000,
+    "attack": 415,
     "exp_reward": 5,
     "silver": [
       0,
@@ -2168,11 +2168,27 @@
             "heal_pct": 3
           },
           {
+            "name": "천마파천",
+            "every": 6,
+            "mult": 3.8,
+            "accuracy": 20,
+            "injury": true,
+            "break_pct": 5
+          },
+          {
             "name": "마안 봉혈",
             "every": 7,
             "mult": 1.2,
             "seal": 1,
             "injury": true
+          }
+        ],
+        "quirks": [
+          {
+            "type": "barrier",
+            "percent": 3,
+            "every": 5,
+            "name": "천마강기"
           }
         ]
       },
@@ -2863,15 +2879,31 @@
           {
             "name": "천마멸겁",
             "every": 5,
-            "mult": 3.2,
+            "mult": 3.6,
             "injury": true,
-            "accuracy": 15
+            "accuracy": 20,
+            "break_pct": 5
           },
           {
             "name": "마안 봉혈",
             "every": 7,
             "mult": 1.3,
             "seal": 1
+          }
+        ],
+        "quirks": [
+          {
+            "type": "frenzy",
+            "percent": 4,
+            "max": 16,
+            "name": "마혼연소"
+          },
+          {
+            "type": "undying",
+            "percent": 8,
+            "stagger": true,
+            "name": "불멸마체",
+            "rise": "천마의 심장이 다시 뛴다. 백 년을 버틴 몸이 쓰러지기를 거부한다."
           }
         ]
       }
@@ -10166,8 +10198,8 @@
     "name": "혈마",
     "tier": "강적",
     "realm": "현경",
-    "hp": 22995,
-    "attack": 373,
+    "hp": 24985,
+    "attack": 385,
     "exp_reward": 10,
     "silver": [
       300,
@@ -10194,8 +10226,8 @@
     ],
     "intro": "\"백 년 만의 숨이다. 먹어라. 아니면 먹혀라.\"",
     "level": 97,
-    "hp_style": 3.0,
-    "attack_style": 2.0,
+    "hp_style": 3.26,
+    "attack_style": 2.06,
     "intros": [
       {
         "requires": {
@@ -10251,12 +10283,49 @@
       {
         "hp_pct": 55,
         "attack_mult": 1.2,
-        "text": "혈마의 잔영이 흘린 피를 도로 빨아들인다. 동굴의 핏빛이 한층 짙어진다."
+        "text": "혈마가 흘린 피를 도로 빨아들인다. 연못에서 붉은 안개가 피어올라 그의 상처를 덮는다.",
+        "quirks": [
+          {
+            "type": "barrier",
+            "percent": 6,
+            "every": 4,
+            "name": "혈강"
+          },
+          {
+            "type": "sever",
+            "percent": 30,
+            "name": "혈무"
+          }
+        ],
+        "specials": [
+          {
+            "name": "혈해만리",
+            "every": 3,
+            "mult": 2.1,
+            "qi_drain": 15,
+            "heal_pct": 5
+          },
+          {
+            "name": "혈마강림",
+            "every": 5,
+            "mult": 1.6,
+            "injury": true,
+            "accuracy": 15
+          },
+          {
+            "name": "혈해도천",
+            "every": 6,
+            "mult": 3.6,
+            "accuracy": 20,
+            "heal_pct": 6,
+            "break_pct": 6
+          }
+        ]
       },
       {
         "hp_pct": 25,
         "attack_mult": 1.35,
-        "text": "잔영이 사람의 꼴을 버리고 피의 바다가 되어 일어선다. \"이것이 혈마다.\"",
+        "text": "혈마가 사람의 꼴을 버리고 피의 바다가 되어 일어선다. \"이것이 혈마다.\"",
         "specials": [
           {
             "name": "혈해만리",
@@ -10271,20 +10340,55 @@
             "mult": 1.7,
             "injury": true,
             "accuracy": 15
+          },
+          {
+            "name": "혈해도천",
+            "every": 6,
+            "mult": 3.8,
+            "accuracy": 20,
+            "heal_pct": 6,
+            "break_pct": 6
+          }
+        ],
+        "quirks": [
+          {
+            "type": "bloodthirst",
+            "percent": 30,
+            "name": "혈해흡정"
+          },
+          {
+            "type": "frenzy",
+            "percent": 6,
+            "max": 36,
+            "name": "혈광"
+          },
+          {
+            "type": "undying",
+            "percent": 15,
+            "name": "연못의 부름",
+            "rise": "피 연못이 끓어오르며 무너진 혈마를 다시 빚어 올린다.",
+            "stagger": true
           }
         ]
       }
     ],
     "outro": "혈마가 핏물로 무너지며 연못이 끓다가 식었다. 경전 마지막 한 줄만 물 위에 떠올랐다. '피는 거짓말을 하지 않는다.'",
     "title": "혈교의 개조",
-    "spar_outro": "혈마가 손을 거두며 길게 숨을 내쉬었다. 연못의 물결이 그제야 가라앉았다."
+    "spar_outro": "혈마가 손을 거두며 길게 숨을 내쉬었다. 연못의 물결이 그제야 가라앉았다.",
+    "quirks": [
+      {
+        "type": "bloodthirst",
+        "percent": 20,
+        "name": "혈해흡정"
+      }
+    ]
   },
   "혈마미완": {
     "name": "고혈마",
     "tier": "강적",
     "realm": "현경",
-    "hp": 19925,
-    "attack": 318,
+    "hp": 21535,
+    "attack": 333,
     "exp_reward": 8,
     "silver": [
       220,
@@ -10311,8 +10415,8 @@
     ],
     "intro": "\"백 년 만의 숨이다. 먹어라. 아니면 먹혀라.\"",
     "level": 97,
-    "hp_style": 2.6,
-    "attack_style": 1.7,
+    "hp_style": 2.81,
+    "attack_style": 1.78,
     "intros": [
       {
         "requires": {
@@ -10366,13 +10470,99 @@
     "armor": 40,
     "phases": [
       {
-        "hp_pct": 40,
+        "hp_pct": 65,
+        "attack_mult": 1.15,
+        "text": "고혈마가 갈라진 살갗으로 연못의 피를 끌어올려 몸에 두른다. 마른 나무껍질 같던 몸이 붉게 젖는다.",
+        "quirks": [
+          {
+            "type": "barrier",
+            "percent": 4,
+            "every": 5,
+            "name": "혈강"
+          },
+          {
+            "type": "sever",
+            "percent": 10,
+            "name": "혈무"
+          }
+        ],
+        "specials": [
+          {
+            "name": "혈해만리",
+            "every": 3,
+            "mult": 2.1,
+            "qi_drain": 15,
+            "heal_pct": 5
+          },
+          {
+            "name": "혈마강림",
+            "every": 5,
+            "mult": 1.6,
+            "injury": true,
+            "accuracy": 15
+          },
+          {
+            "name": "혈해도천",
+            "every": 6,
+            "mult": 3.2,
+            "accuracy": 20,
+            "heal_pct": 6,
+            "break_pct": 6
+          }
+        ]
+      },
+      {
+        "hp_pct": 30,
         "attack_mult": 1.3,
-        "text": "고혈마의 갈라진 살갗 틈으로 핏물이 흘러내린다. \"피가 모자라... 네 것으로 채우마.\""
+        "text": "고혈마의 갈라진 살갗 틈으로 핏물이 흘러내린다. \"피가 모자라... 네 것으로 채우마.\"",
+        "quirks": [
+          {
+            "type": "frenzy",
+            "percent": 5,
+            "max": 25,
+            "name": "혈광"
+          },
+          {
+            "type": "bloodthirst",
+            "percent": 25,
+            "name": "마른 갈증"
+          }
+        ],
+        "specials": [
+          {
+            "name": "혈해만리",
+            "every": 2,
+            "mult": 1.9,
+            "qi_drain": 15,
+            "heal_pct": 5
+          },
+          {
+            "name": "혈마강림",
+            "every": 4,
+            "mult": 1.6,
+            "injury": true,
+            "accuracy": 15
+          },
+          {
+            "name": "혈해도천",
+            "every": 6,
+            "mult": 3.4,
+            "accuracy": 20,
+            "heal_pct": 6,
+            "break_pct": 6
+          }
+        ]
       }
     ],
     "outro": "고혈마가 마른 흙처럼 부서지며 연못이 끓다가 식었다. 경전 마지막 한 줄만 물 위에 떠올랐다. '피는 거짓말을 하지 않는다.'",
-    "title": "혈교의 개조"
+    "title": "혈교의 개조",
+    "quirks": [
+      {
+        "type": "bloodthirst",
+        "percent": 15,
+        "name": "마른 갈증"
+      }
+    ]
   },
   "혈교혈위대": {
     "name": "혈위대 무리",
