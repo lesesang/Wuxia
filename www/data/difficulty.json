@@ -25,7 +25,7 @@
       "enemy": {
         "hp": 1.33,
         "attack": 1.24,
-        "boss_hp": 1.12,
+        "boss_hp": 1.06,
         "boss_attack": 1.07
       },
       "growth": -8,
@@ -67,7 +67,7 @@
       "enemy": {
         "hp": 1.41,
         "attack": 1.31,
-        "boss_hp": 1.14,
+        "boss_hp": 1.08,
         "boss_attack": 1.07
       },
       "growth": -14,

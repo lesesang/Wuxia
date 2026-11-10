@@ -206,6 +206,48 @@ test("천마는 체력이 줄면 강해진다", () => {
   assert.ok(enemy.attackMultiplier() > 1.2);
 });
 
+test("천마와 혈마는 단계가 바뀔 때 괴공을 꺼내고, 크게 쳐서 필살기의 기세를 꺾을 수 있다", () => {
+  const p = new Player("무림초출");
+  for (const key of ["천마", "혈마", "혈마미완"]) {
+    const kinds = new Set(DB.enemies[key].phases.flatMap((ph) => (ph.quirks || []).map((q) => q.type)));
+    assert.ok(kinds.size >= 2, `${key}는 단계마다 괴공을 꺼낸다`);
+    assert.ok(DB.enemies[key].phases.some((ph) => ph.specials?.some((s) => s.break_pct)), `${key}에게 꺾을 수 있는 필살기가 있다`);
+  }
+  // 단계가 바뀌면 괴공이 붙고 곧바로 강기를 두른다
+  const lord = new Enemy("천마");
+  const battle = new Battle(p, lord);
+  assert.equal(lord.quirks.length, 0);
+  lord.hp = Math.trunc(lord.maxHp * 0.5);
+  const phase = lord.advancePhase();
+  battle.phaseQuirks(phase);
+  assert.ok(lord.quirk("barrier") && lord.barrier > 0);
+  assert.ok(battle.log.some((l) => l.includes("천마강기")), "괴공의 이름이 보인다");
+  // 예고된 필살기는 그 합에 정해진 만큼 넘게 깎으면 꺾인다
+  const round = Array.from({ length: 30 }, (_, i) => i + 1).find((r) => lord.specialForRound(r)?.break_pct);
+  const need = lord.breakNeed(lord.specialForRound(round));
+  assert.ok(need > 0);
+  battle.roundNum = round - 1;
+  assert.equal(battle.nextBreakNeed(), need);
+  battle.roundNum = round;
+  lord.attack = 1000;
+  seed(5); battle.dealt = 0; p.hp = p.maxHp(); battle.ward = 0;
+  const full = battle.enemyAttack();
+  seed(5); battle.dealt = need + 1; p.hp = p.maxHp(); battle.ward = 0;
+  const broken = battle.enemyAttack();
+  assert.ok(broken < full, "꺾인 필살기는 덜 아프다");
+  assert.ok(battle.log.some((l) => l.includes("기세가 꺾였다")));
+  // 일어서는 합에는 손을 쓰지 못하는 불사
+  lord.hp = Math.trunc(lord.maxHp * 0.1);
+  battle.phaseQuirks(lord.advancePhase());
+  assert.ok(lord.quirk("frenzy") && lord.quirk("undying"));
+  lord.barrier = 0;
+  lord.takeDamage(lord.maxHp);
+  assert.ok(lord.isAlive() && lord.rising);
+  p.hp = p.maxHp();
+  assert.equal(battle.enemyAttack(), 0);
+  assert.ok(!lord.rising);
+});
+
 test("방어구가 있어도 피해는 최소 1", () => {
   const p = new Player();
   p.armor = "천잠보의";

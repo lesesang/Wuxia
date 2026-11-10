@@ -34,7 +34,7 @@ const TRAIN_GROWTH = [12, 16]; // 수련과 운기로 오르는 기량
 const REST_HEAL = [40, 50]; // 요양의 체력과 내력 회복(할푼)
 const ACTION_EVENT_RATE = 0.25; // 수련, 운기, 요양 중에 그 일에 얽힌 사건을 만날 확률
 const DEEP_MONTH_RATE = 0.25; // 깊은 강호의 소식이 달의 문장에 끼는 확률
-const DEEP_BOSSES = ["천마", "혈마", "혈마미완"];
+const DEEP_BOSSES = ["천마"];
 const LORE_RATE = 0.2; // 강호의 오랜 내력이 귀에 들어오는 확률
 const TRAIN_MASTERY_RATE = 2; // 수련이 주무공에
 const MIND_MASTERY_RATE = 5; // 운기가 심법에
@@ -390,12 +390,15 @@ export class Game {
   /** 깊은 강호의 적은 더 강하고, 때로 혈교의 혈계나 천마의 겁화를 받아 괴공을 지닌다. 그것을 알리는 문장을 돌려준다 */
   deepen(enemy, spar) {
     const level = difficultyOf(this.player);
-    // 천마와 혈마는 깊은 강호에서 한층 더 강해진다
+    // 천마는 깊은 강호에서 한층 더 강해진다. 혈마는 단계마다 꺼내는 괴공이 그 몫을 한다
     const boss = DEEP_BOSSES.includes(enemy.key);
     enemy.maxHp = Math.max(1, Math.round(enemy.maxHp * level.enemy.hp * (boss ? level.enemy.boss_hp ?? 1 : 1)));
     enemy.hp = enemy.maxHp;
     enemy.attack = Math.max(1, Math.round(enemy.attack * level.enemy.attack * (boss ? level.enemy.boss_attack ?? 1 : 1)));
-    if (enemy.key === "천마" && level.final_quirks) enemy.quirks = level.final_quirks.map((q) => ({ ...q }));
+    // 깊은 강호의 천마가 더 지닌 괴공. 같은 괴공은 깊은 쪽으로 바꾼다
+    for (const q of enemy.key === "천마" ? level.final_quirks || [] : []) {
+      enemy.quirks = [...enemy.quirks.filter((own) => own.type !== q.type), { ...q }];
+    }
     const { affix } = level;
     if (!affix || spar || enemy.beast || enemy.tier === "보스" || enemy.side === "정도" || enemy.quirks.length) return [];
     // 경지가 높을수록 깊은 힘을 받는다. 이름 있는 자는 그 힘을 내리는 세력의 사람일 때만 받는다
