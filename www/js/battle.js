@@ -104,6 +104,7 @@ export class Enemy {
     this.notes = [];         // 피해를 받는 동안 생긴 일
     this.intro = data.intro || null;
     this.outro = data.outro || null;
+    this.sparOutro = data.spar_outro || null; // 비무에서 꺾였을 때의 말
     this.desc = data.desc || "";
     this.growthRange = STAT_GROWTH_RANGE[this.tier] || [1, 3];
     this.silverRange = data.silver || [0, 0];
@@ -407,7 +408,7 @@ export class Battle {
     if (g.vs_side && g.vs_side[this.enemy.side]) damage *= 1 + g.vs_side[this.enemy.side] / 100;
     if (g.execute && this.enemy.hp <= this.enemy.maxHp * g.execute.below / 100) {
       damage *= 1 + g.execute.percent / 100;
-      notes.push("숨통을 노렸다.");
+      notes.push(this.spar ? "흔들린 빈틈을 파고들었다." : "숨통을 노렸다.");
     }
     if (g.chain) {
       damage *= 1 + Math.min(g.chain_max, this.chainStacks * g.chain) / 100;
@@ -1207,7 +1208,8 @@ export class Battle {
           if (hp) this.log.push(`쓰러진 자의 기운을 거두었다. (체력 +${hp})`);
         }
       }
-      const outro = reactiveLine(this.player, this.enemy.outros, this.enemy.outro);
+      // 비무는 칼끝을 멈추는 싸움이라 쓰러지는 문장을 쓰지 않는다
+      const outro = this.spar ? this.enemy.sparOutro : reactiveLine(this.player, this.enemy.outros, this.enemy.outro);
       if (outro) this.log.push(outro);
       else if (!this.enemy.beast && !this.spar && rng.random() < VICTORY_TALK_RATE) {
         const talk = talkLine(this.player, "victory");

@@ -3978,12 +3978,14 @@ test("유산으로 귀한 물건도 남기고, 출신마다 결전의 조력이 
   assert.ok(!DB.enemies.궁기 && DB.enemies.불가사리);
 });
 
-test("천마는 한 사람이고 맹주 사건은 맹주의 아들 이야기 중에 나오지 않는다", () => {
+test("천마는 한 사람이고 맹주의 자식 이야기는 없으며 봉마진이 그 자리를 채운다", () => {
   const p = new Player();
-  assert.equal(checkRequires(p, { not_chain: "맹주의아들" }), true);
-  p.chains.push({ id: "맹주의아들", step: 0 });
-  assert.equal(checkRequires(p, { not_chain: "맹주의아들" }), false);
-  assert.equal(DB.events.무림맹회의.requires.not_chain, "맹주의아들");
+  assert.equal(checkRequires(p, { not_chain: "봉마진" }), true);
+  p.chains.push({ id: "봉마진", step: 0 });
+  assert.equal(checkRequires(p, { not_chain: "봉마진" }), false);
+  assert.ok(!DB.chains.맹주의아들 && DB.chains.봉마진);
+  assert.ok(!JSON.stringify([DB.events, DB.enemies, DB.endings]).includes("어린 맹주"));
+  assert.ok(DB.enemies.천마.phases[0].interlude.allies.some((a) => a.requires?.flag === "봉마진"));
   const all = JSON.stringify([DB.events, DB.enemies, DB.karma, DB.companions]);
   assert.ok(!all.includes("첫 천마") && !all.includes("전대 천마"));
   assert.ok(!DB.companions.은비 && DB.companions.설백);

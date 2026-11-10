@@ -23,6 +23,7 @@ export function unmetReason(player, requires) {
   if (r.dominant_in && !r.dominant_in.includes(player.dominantAlignment())) return "그 길이 아니다";
   if (r.flag && !player.hasFlag(r.flag)) return "아직 인연이 닿지 않았다";
   if (r.after && !player.seenEvents.includes(r.after)) return "앞선 일이 아직 없었다";
+  if (r.flag_any && !r.flag_any.some((f) => player.hasFlag(f))) return "아직 그런 일이 없었다";
   if (r.not_flag && [].concat(r.not_flag).some((f) => player.hasFlag(f))) return "이미 지나간 일이다";
   if (r.not_slain && player.slain.includes(r.not_slain)) return "이미 지나간 일이다";
   if (r.slain && !player.slain.includes(r.slain)) return "아직 일어나지 않은 일이다";

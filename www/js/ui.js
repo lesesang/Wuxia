@@ -646,6 +646,7 @@ function difficultySetup(meta) {
 function worldTerms(level) {
   if (level.karma <= 1) return "";
   const terms = [`적의 체력 +${halpun(Math.round((level.enemy.hp - 1) * 100))}, 위력 +${halpun(Math.round((level.enemy.attack - 1) * 100))}`,
+    ...(level.enemy.boss_hp ? [`천마와 혈마는 체력이 ${halpun(Math.round((level.enemy.boss_hp - 1) * 100))}, 위력이 ${halpun(Math.round((level.enemy.boss_attack - 1) * 100))} 더 오름`] : []),
     `기량 성장 ${halpun(level.growth)}`, `쓰러진 자의 품에서 나오는 것 ${halpun(Math.round(level.drop * 100))}`, `카르마 ${level.karma}배`];
   return `<p class="world-terms">${terms.map(esc).join(", ")}. 이 강호에서만 일어나는 일과 괴공을 지닌 적이 있다.</p>`;
 }
