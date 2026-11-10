@@ -2265,7 +2265,7 @@ test("유산 강화: 이어받을 수와 보관 수가 늘고, 단계와 품계�
     stages.push(legacyPowers());
   }
   assert.ok(!upgradeLegacy(), "다섯 단계가 끝이다");
-  assert.deepEqual(stages.map((p) => [p.take, p.shelf]), [[2, 4], [2, 4], [3, 5], [3, 5], [3, 5]]);
+  assert.deepEqual(stages.map((p) => [p.take, p.shelf]), [[2, 4], [2, 4], [3, 5], [3, 5], [5, 5]]);
   assert.ok(stages[1].keepGear && !stages[0].keepGear);
   assert.ok(stages[3].keepGrade && !stages[2].keepGrade);
   assert.ok(stages[4].divine && !stages[3].divine);
@@ -4708,4 +4708,44 @@ test("싸움이 끝나면 합의 기록은 지우고 뒷이야기만 남기며, 
   game.battle = null;
   game.startBattle(named, false, null, null, true);
   assert.ok(!game.battle.prelude, "사건의 싸움은 사건이 대사를 맡는다");
+});
+
+test("천마와 혈마 앞에서는 말을 여러 번 주고받은 뒤에 싸우고, 바로 칠 수도 있다", () => {
+  const game = newGame();
+  const p = game.player;
+  p.turn = 120;
+  const pickBy = (label) => {
+    const list = eventView(p, game.event.key).choices;
+    const c = list.find((x) => x.label.startsWith(label));
+    assert.ok(c, `${game.event.key}: ${label}`);
+    game.chooseEvent(c.index);
+  };
+  game.event = { key: "결전_천마봉" };
+  pickBy("백 년 전에 왜");
+  assert.equal(game.event.key, "결전_천마봉:백년");
+  pickBy("끝이 두려웠느냐");
+  assert.equal(game.event.key, "결전_천마봉:끝");
+  pickBy("오늘이 그 끝");
+  assert.ok(game.battle?.isFinal);
+  const again = newGame();
+  again.player.turn = 120;
+  again.event = { key: "결전_천마봉" };
+  const direct = eventView(again.player, "결전_천마봉").choices.find((c) => c.label.startsWith("말은 필요 없다"));
+  again.chooseEvent(direct.index);
+  assert.ok(again.battle?.isFinal, "바로 싸울 수도 있다");
+  const blood = newGame();
+  blood.player.turn = 103;
+  blood.event = { key: "혈해_끝" };
+  const q = eventView(blood.player, "혈해_끝").choices.find((c) => c.label.startsWith("연못을 판 까닭"));
+  blood.chooseEvent(q.index);
+  assert.equal(blood.event.key, "혈해_끝:까닭");
+  const fight = eventView(blood.player, "혈해_끝:까닭").choices.find((c) => c.label.startsWith("말을 거두고"));
+  blood.chooseEvent(fight.index);
+  assert.equal(blood.battle?.enemy.key, "혈마");
+});
+
+test("유산 5단계에는 보관한 다섯을 모두 이어받고, 소교주는 강호에 없다", () => {
+  assert.equal(legacyPowers({ legacy_level: 5 }).take, 5);
+  const text = JSON.stringify([DB.events, DB.enemies, DB.endings, DB.companions, DB.flavor]);
+  assert.ok(!text.includes("소교주"));
 });

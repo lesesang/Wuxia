@@ -169,18 +169,38 @@ function codexListHtml(data) {
   return `<p class="codex-count">${rows.length}개</p>${rows.map(codexRowHtml).join("")}`;
 }
 
+/** 사건이 다른 모습을 보이는 때를 짧게 적는다 */
+function whenText(r = {}) {
+  const parts = [];
+  if (r.origin) parts.push(`${DB.origins.origins[r.origin]?.name ?? r.origin} 출신일 때`);
+  if (r.sect) parts.push(`${DB.sects[r.sect]?.name ?? r.sect}에 몸담았을 때`);
+  if (r.dominant) parts.push(`${[].concat(r.dominant).join(", ")}의 길을 걸을 때`);
+  if (r.min_fame) parts.push("이름이 알려진 뒤");
+  if (r.max_fame !== undefined) parts.push("이름이 나기 전");
+  if (r.realm_min) parts.push(`${r.realm_min}에 오른 뒤`);
+  if (r.gender === "여") parts.push("여인일 때");
+  if (r.trait) parts.push(`${DB.traits[r.trait]?.name ?? r.trait} 자질이 있을 때`);
+  if (r.item) parts.push(`${DB.market[r.item]?.name ?? r.item}을 지녔을 때`);
+  if (r.main_category) parts.push(`${r.main_category}을 쓸 때`);
+  if (r.difficulty_min) parts.push(`${DB.difficulty.levels[r.difficulty_min]?.name ?? r.difficulty_min} 강호에서`);
+  return parts.length ? parts.join(", ") : "다른 때에는";
+}
+
 /** 한 사건에서 본 모든 문장과 고른 선택의 결과를 다시 읽는다. */
 function codexReader(key) {
   const e = DB.events[key];
   const log = loadEventLog()[key];
-  const texts = log?.texts?.length ? log.texts : [e.text];
+  // 사건의 기본 모습을 먼저 보이고, 겪은 다른 모습은 어떤 때였는지와 함께 덧붙인다. 그 판의 출신이나 명성으로 굳지 않는다
+  const seen = log?.texts || [];
+  const others = (e.variants || []).filter((v) => v.text && v.text !== e.text && seen.includes(v.text));
   const picks = log ? Object.entries(log.picks) : [];
   const allChoices = new Set([...e.choices, ...(e.variants || []).flatMap((v) => v.choices || [])].map((c) => c.label));
   const left = [...allChoices].filter((l) => !log?.picks[l]).length;
   return `<button class="mini-btn" data-act="codex-back">← 목록으로</button>
     <h4 class="codex-title">${esc(e.title)}</h4>
     <p class="codex-meta">${esc(eventKind(e))}${e.chain ? `, ${esc(DB.chains[e.chain.id].title)} ${e.chain.index + 1}/${e.chain.total}편` : ""}</p>
-    ${texts.map((t) => `<p class="codex-body-text">${esc(t)}</p>`).join("")}
+    <p class="codex-body-text">${esc(e.text)}</p>
+    ${others.map((v) => `<p class="codex-meta">${esc(whenText(v.requires))}</p><p class="codex-body-text">${esc(v.text)}</p>`).join("")}
     ${picks.length ? picks.map(([label, results]) => `<div class="codex-pick"><div class="codex-pick-label">${esc(label)}</div>${results.map((r) => `<p>${esc(r)}</p>`).join("")}</div>`).join("") : `<p class="codex-empty">이 사건의 선택은 아직 기록되지 않았습니다. 다시 겪으면 이곳에 남습니다.</p>`}
     ${left ? `<p class="codex-meta">아직 고르지 않은 선택 ${left}가지가 더 있습니다.</p>` : `<p class="codex-meta">이 사건의 선택을 모두 보았습니다.</p>`}`;
 }
@@ -642,13 +662,10 @@ function difficultySetup(meta) {
     <p class="world-desc">${esc(level.desc)}</p>${worldTerms(level)}${lock}</div>`;
 }
 
-/** 그 강호에서 달라지는 것 */
+/** 그 강호가 얼마나 가혹한지와 카르마만 짧게 */
 function worldTerms(level) {
   if (level.karma <= 1) return "";
-  const terms = [`적의 체력 +${halpun(Math.round((level.enemy.hp - 1) * 100))}, 위력 +${halpun(Math.round((level.enemy.attack - 1) * 100))}`,
-    ...(level.enemy.boss_hp ? [`천마와 혈마는 체력이 ${halpun(Math.round((level.enemy.boss_hp - 1) * 100))}, 위력이 ${halpun(Math.round((level.enemy.boss_attack - 1) * 100))} 더 오름`] : []),
-    `기량 성장 ${halpun(level.growth)}`, `쓰러진 자의 품에서 나오는 것 ${halpun(Math.round(level.drop * 100))}`, `카르마 ${level.karma}배`];
-  return `<p class="world-terms">${terms.map(esc).join(", ")}. 이 강호에서만 일어나는 일과 괴공을 지닌 적이 있다.</p>`;
+  return `<p class="world-terms">${esc(level.harsh || "더 가혹한 강호")}, 카르마 ${level.karma}배.</p>`;
 }
 
 function renderSetup() {
@@ -1208,14 +1225,16 @@ function idleArtsNote(p) {
 
 /** 지금 무인의 호칭과 몸담은 곳의 이름 */
 const currentPerson = () => (game.player ? { ...game.player.person, sectWord: sectWord(game.player.sect) } : ui.person);
+/** 강호록은 어느 판의 무인도 아닌 사람으로 읽는다 */
+const CODEX_PERSON = { gender: "남", surname: "○", given: "○○" };
+const personFor = (node) => ((node.nodeType === 1 ? node : node.parentElement)?.closest?.(".codex-body") ? CODEX_PERSON : currentPerson());
 
 /** 화면에 나온 글의 호칭 자리표시를 지금 무인의 성별과 이름으로 바꾼다 */
 function personalizeDom(root) {
   if (!root) return;
-  const person = currentPerson();
   const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
   for (let node = walker.nextNode(); node; node = walker.nextNode()) {
-    if (node.nodeValue.includes("〈")) node.nodeValue = personalize(node.nodeValue, person);
+    if (node.nodeValue.includes("〈")) node.nodeValue = personalize(node.nodeValue, personFor(node));
   }
 }
 
@@ -1224,7 +1243,7 @@ export function watchPerson() {
   new MutationObserver((records) => {
     for (const record of records) for (const node of record.addedNodes) {
       if (node.nodeType === 1) personalizeDom(node);
-      else if (node.nodeType === 3 && node.nodeValue.includes("〈")) node.nodeValue = personalize(node.nodeValue, currentPerson());
+      else if (node.nodeType === 3 && node.nodeValue.includes("〈")) node.nodeValue = personalize(node.nodeValue, personFor(node));
     }
   }).observe(document.body, { childList: true, subtree: true });
 }

@@ -238,11 +238,12 @@ export function openLegacy() {
   return true;
 }
 
-/** 강화 단계에 따른 유산의 힘. 1단계와 3단계에 이어받을 수와 보관 수가 하나씩 는다 */
+/** 강화 단계에 따른 유산의 힘. 1단계와 3단계에 이어받을 수와 보관 수가 하나씩 늘고, 5단계에는 보관한 유산을 모두 이어받는다 */
 export function legacyPowers(data = loadMeta()) {
   const level = data.legacy_level || 0;
   const more = (level >= 1 ? 1 : 0) + (level >= 3 ? 1 : 0);
-  return { level, take: 1 + more, shelf: DB.karma.legacy.shelf + more, keepGear: level >= 2, keepGrade: level >= 4, divine: level >= 5 };
+  const shelf = DB.karma.legacy.shelf + more;
+  return { level, take: level >= 5 ? shelf : 1 + more, shelf, keepGear: level >= 2, keepGrade: level >= 4, divine: level >= 5 };
 }
 
 /** 유산을 한 단계 강화한다. 다음 단계의 항목이 없거나 카르마가 모자라면 false */
