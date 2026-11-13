@@ -358,6 +358,23 @@ test("천마는 엔딩 때 도감에 기록된다", () => {
   assert.ok(loadMeta().global_codex.includes("천마"));
 });
 
+test("태산 사당의 상대는 내 주무공 계열의 무인이고, 나눠 읽어도 같은 비급을 얻는다", () => {
+  const game = newGame();
+  const key = "연계_세조각비급_2";
+  assert.deepEqual(DB.events_chains.세조각비급.chapters, [1, 2]);
+  assert.ok(eventView(game.player, key).text.includes("검객"), "검을 쓰면 검객을 만난다");
+  const view = eventView(game.player, key);
+  game.event = { key };
+  game.chooseEvent(view.choices.find((c) => c.label.startsWith("도객을 꺾고 비급") || c.label.startsWith("상대를 꺾고 비급")).index);
+  assert.equal(game.battle.enemy.name, "셋째 조각의 검객");
+  const reader = newGame();
+  const before = reader.player.battles;
+  reader.event = { key };
+  reader.chooseEvent(eventView(reader.player, key).choices.find((c) => c.label === "함께 나눠 읽자고 한다").index);
+  assert.equal(reader.player.battles, before + 3);
+  assert.ok(reader.player.skills.some((s) => s.grade === "일절" && s.category === "검법"), "나눠 읽어도 온전한 일절");
+});
+
 test("최종전에서는 도망칠 수 없다", () => {
   const game = newGame();
   toTurnEnd(game, 119);
