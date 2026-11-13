@@ -712,6 +712,11 @@ export function applyEffects(player, effects) {
     }
   }
 
+  if (effects.battles) {
+    player.battles += effects.battles;
+    summary.push(`실전 경험+${effects.battles}`);
+  }
+
   // 심법이나 경공처럼 쓰는 무공 하나를 깊게 한다
   for (const [type, amount] of Object.entries(effects.art_mastery || {})) {
     const art = player.bestOfType(type);

@@ -491,7 +491,9 @@ export class Game {
     if (effects.final_battle) {
       this.startFinalBattle();
     } else if (effects.battle) {
-      this.startBattle(effects.battle, !!effects.spar, effects.foe, effects.foe_line, true);
+      // 상대의 이름과 첫 대사는 내 주무공 계열에 맞춰 고를 수 있다
+      const style = (v) => (v && typeof v === "object" ? v[this.player.bestSkill()?.category] ?? v.기본 ?? null : v);
+      this.startBattle(effects.battle, !!effects.spar, style(effects.foe), style(effects.foe_line), true);
     } else if (effects.gauntlet) {
       const { enemies, reward, name, spar } = effects.gauntlet;
       this.gauntlet = { name, enemies: enemies.slice(1), reward, round: 1, total: enemies.length, spar: !!spar };
