@@ -9,13 +9,13 @@ import { equipBestGear, grantStartGear, grantStartSkills,
 import { bonusFor, buy, equipmentBonus, openMarket, sell } from "./market.js";
 import {
   activeContent, addKarma, claimAchievements, clearCheckpoint, extraSlots, rewardTraits, loadCheckpoint, loadMeta, recordRun, saveCheckpoint,
-  legacyPowers, storeLegacy, canLeaveLegacy, sameLegacy, takeProvisions, updateGlobalCodex, updateKnown, upgradeTraits,
+  legacyPowers, storeLegacy, canLeaveLegacy, beatFinal, sideEnding, sameLegacy, takeProvisions, takeOmens, updateGlobalCodex, updateKnown, upgradeTraits,
   difficultyOpen, recordDifficultyClear,
 } from "./meta.js";
 import { pick, pickWeighted, randInt, rng } from "./rng.js";
 import {
   actionLine, ALIGNMENT_CAP, alignTier, applyGrowth, byname, CHAPTER_STARTS, checkBreakthrough, checkGoodEnding, checkSaengsa,
-  scaledGrowth, fameRank, FOCUS_DRIFT, focusedSide, getChapter, getChapterInfo, getMonth, getYear, isMarketTurn, monthLine, auraText, isNamed, perkTrait, realmFit, enemyRealmIndex, returnedLine, standIn, realmIndex, sumEffect, talkLine, traitSlots,
+  scaledGrowth, fameRank, FOCUS_DRIFT, focusedSide, getChapter, getChapterInfo, getMonth, getYear, isMarketTurn, monthLine, auraText, isNamed, perkTrait, realmFit, enemyRealmIndex, returnedLine, standIn, realmIndex, sideOrigin, sumEffect, talkLine, traitSlots,
   personalize, DEFAULT_DIFFICULTY, difficultyOf,
   ALIGNMENTS, ALIGN_STEPS,
 } from "./rules.js";
@@ -106,10 +106,14 @@ export class Game {
 
     this.reset();
     const provisions = takeProvisions();
+    const omens = takeOmens();
+    const side = DB.origins.origins[originKey].side ? DB.origins.origins[originKey] : null;
     const world = DB.traits[`강호_${difficulty}`] ? [`강호_${difficulty}`] : [];
-    this.player = new Player(originKey, [...traits, ...upgradeTraits(meta, originKey), ...rewardTraits(meta), ...provisions.map((k) => `채비_${k}`), ...world]);
+    this.player = new Player(originKey, [...traits, ...upgradeTraits(meta, originKey), ...rewardTraits(meta), ...provisions.map((k) => `채비_${k}`), ...omens.map((k) => `천기_${k}`), ...world]);
     this.player.difficulty = difficulty;
-    this.player.content = activeContent(meta);
+    // 카르마로 산 인연은 본편의 것이다. 외전은 그 출신의 이야기가 끝나는 달에 끝난다
+    this.player.content = side ? [] : activeContent(meta);
+    if (side) this.player.maxTurn = side.end_turn;
     this.player.person = settlePerson(originKey, person);
     const giftLines = DB.origins.origins[originKey].choose_start ? [] : grantStartSkills(this.player);
     // 고른 유산은 바로 받지 않는다. 첫 해 안에 한 자리에서 한꺼번에 찾아낸다
@@ -117,9 +121,12 @@ export class Game {
       .filter((e, i, all) => e && (e.kind === "skill" ? DB.skills[e.key] : DB.market[e.key]) && all.findIndex((x) => x && sameLegacy(x, e)) === i)
       .slice(0, legacyPowers(meta).take);
     updateKnown(this.player.skills.map((s) => s.key));
-    const intro = getChapterInfo(1);
-    const provisionLines = provisions.length ? [`챙겨 온 채비: ${provisions.map((k) => DB.karma.provisions[k].name).join(", ")}`] : [];
-    const deep = difficultyOf(this.player).chapters?.["1"];
+    const intro = getChapterInfo(1, this.player);
+    const provisionLines = [
+      ...(provisions.length ? [`챙겨 온 채비: ${provisions.map((k) => DB.karma.provisions[k].name).join(", ")}`] : []),
+      ...(omens.length ? [`이번 강호행에 드리운 천기: ${omens.map((k) => DB.karma.omens.pool[k].name).join(", ")}`] : []),
+    ];
+    const deep = side ? null : difficultyOf(this.player).chapters?.["1"];
     this.enterTurn([`${intro.title}, 1년차. ${intro.desc}`, ...(deep ? [deep] : []), ...provisionLines, ...giftLines]);
     return true;
   }
@@ -595,6 +602,9 @@ export class Game {
       this.addLog([...(after.text ? [after.text] : []), ...(summary.length ? [summary.join(", ")] : [])]);
       if (after.effects.next) this.offerAfterBattle = sceneKey(after.key, after.effects.next);
       else if (after.effects.sect_offer && player.sect === null) this.offerAfterBattle = `제안_${after.effects.sect_offer}`;
+    } else if (after.effects.lose_next && player.hp > 0) {
+      // 져도 이야기가 이어지는 겨룸
+      this.offerAfterBattle = sceneKey(after.key, after.effects.lose_next);
     } else if (result.fled && !DB.events[after.key].chain && !DB.events[after.key].turn) {
       player.seenEvents = player.seenEvents.filter((k) => k !== after.key);
     }
@@ -671,14 +681,20 @@ export class Game {
     const realm = this.checkRealm();
     const lines = [...this.commitCodex(), ...realm];
     p.turn += 1;
+    // 외전은 마지막 고비를 넘긴 달에 끝난다. 끝을 고르지 못하고 달이 넘어가면 그 출신의 담담한 끝으로 맺는다
+    if (sideOrigin(p) && p.turn > p.maxTurn) {
+      this.addLog(lines);
+      this.finishGame(true, sideOrigin(p).fallback_ending);
+      return;
+    }
     // 달마다 저절로 차는 양에도 끝이 있어 요양할 일이 남는다
     const hp = Math.min(MAX_TURN_REGEN, NATURAL_REGEN + sumEffect(p.traits, "turn_regen", "hp_pct"));
     const qi = Math.min(MAX_TURN_REGEN, NATURAL_REGEN + sumEffect(p.traits, "turn_regen", "qi_pct"));
     p.healPercent(hp, qi);
     lines.push(...this.alignmentMonth());
     if (CHAPTER_STARTS.includes(p.turn)) {
-      const info = getChapterInfo(p.turn);
-      const deep = difficultyOf(p).chapters?.[String(getChapter(p.turn))];
+      const info = getChapterInfo(p.turn, p);
+      const deep = sideOrigin(p) ? null : difficultyOf(p).chapters?.[String(getChapter(p.turn))];
       lines.push(`${info.title}, ${getYear(p.turn)}년차. ${info.desc}`, ...(deep ? [deep] : []), ...this.chapterGrowth());
     }
     if (getMonth(p.turn) === 1) lines.push(...this.yearRest());
@@ -851,8 +867,8 @@ export class Game {
     const { endings } = DB;
     const gain = karmaGain(p, key, victory);
     // 깊은 강호에서 천마를 꺾으면 다음 강호가 열린다
-    const opened = canLeaveLegacy(key) ? recordDifficultyClear(p.difficulty) : null;
-    const fresh = claimAchievements(p, key, victory && key !== "귀순");
+    const opened = beatFinal(key) ? recordDifficultyClear(p.difficulty) : null;
+    const fresh = claimAchievements(p, key, victory && key !== "귀순" && !sideEnding(key));
     for (const item of fresh) {
       gain.lines.push(`공적 ${item.name}${item.karma ? ` +${item.karma}` : ""}`);
       gain.total += item.karma;

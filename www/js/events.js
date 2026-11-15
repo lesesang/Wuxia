@@ -4,7 +4,8 @@ import { DB } from "./data.js";
 import { bonusFor, equipmentBonus, ITEM_GRADES, styleWeight, weightsByStyle } from "./market.js";
 import { legacyPowers, loadMeta, recordEventPick, updateKnown } from "./meta.js";
 import { pick, pickWeighted, rng } from "./rng.js";
-import { ALIGNMENTS, CHAPTER_STARTS, MAX_FAME, applyGrowth, difficultyRank, eventToll, scaledGrowth, fameRankChanged, getChapter, realmIndex, sumEffect } from "./rules.js";
+import { ALIGNMENTS, CHAPTER_STARTS, MAX_FAME, applyGrowth, difficultyRank, eventToll, scaledGrowth, fameRankChanged, getChapter, realmIndex, sumEffect, fitsStory, sideOrigin,
+} from "./rules.js";
 import { josa } from "./josa.js";
 
 export const EVENT_STAT_SCALE = 3; // 사건과 기연의 기량 상승 배율. 데이터에 적힌 값의 세 배가 오른다
@@ -14,6 +15,7 @@ export function unmetReason(player, requires) {
   if (!requires) return null;
   const r = requires;
   if (r.origin && player.originKey !== r.origin) return "출신이 다르다";
+  if (r.side !== undefined && !!r.side !== !!sideOrigin(player)) return "다른 이야기의 일이다";
   // 깊은 강호에서만 일어나는 일이 있다
   if (r.difficulty_min && difficultyRank(player.difficulty) < difficultyRank(r.difficulty_min)) return "이 강호에서는 일어나지 않는 일이다";
   if (r.difficulty_max && difficultyRank(player.difficulty) > difficultyRank(r.difficulty_max)) return "이 강호에서는 일어나지 않는 일이다";
@@ -34,7 +36,7 @@ export function unmetReason(player, requires) {
   if (r.skill && !player.hasSkill(r.skill)) return "필요한 무공이 없다";
   if (r.no_skill && player.hasSkill(r.no_skill)) return "이미 익혔다";
   if (r.sect && player.sect !== r.sect) return "다른 문파의 일이다";
-  if (r.no_sect && player.sect) return "이미 몸담은 곳이 있다";
+  if (r.no_sect && (player.sect || sideOrigin(player)?.bound)) return "이미 몸담은 곳이 있다";
   if (r.gender && player.person?.gender !== r.gender) return "해당하지 않는다";
   if (r.not_sect?.includes(player.sect)) return "사문과 맞지 않는 일이다";
   if (r.has_sect && !player.sect) return "몸담은 곳이 없다";
@@ -90,7 +92,9 @@ export const checkRequires = (player, requires) => unmetReason(player, requires)
 
 export function storyEventForTurn(player) {
   const open = Object.entries(DB.storyEvents)
-    .filter(([key, event]) => !player.seenEvents.includes(key) && checkRequires(player, event.requires));
+    .filter(([key, event]) => !player.seenEvents.includes(key) && checkRequires(player, event.requires))
+    // 외전의 무인에게는 그 출신의 줄거리만 찾아온다
+    .filter(([, event]) => !sideOrigin(player) || event.requires?.origin === player.originKey);
   // 정해진 달의 줄거리가 먼저다
   const fixed = open.find(([, event]) => event.turn === player.turn);
   if (fixed) return fixed[0];
@@ -228,6 +232,7 @@ export function pickRandomEvent(player) {
     const event = DB.randomEvents[key];
     if (event.legacy_find || event.action) return false; // 유산의 흔적과 수련 중의 사건은 정해진 자리에서만 나온다
     if (event.chain && !canStartChain(player, event.chain.id)) return false;
+    if (!fitsStory(player, event)) return false;
     return (event.chapters || []).includes(chapter) && !player.seenEvents.includes(key)
       && checkRequires(player, event.requires);
   });
@@ -248,7 +253,7 @@ export function pickActionEvent(player, action) {
   const chapter = getChapter(player.turn);
   const options = Object.keys(DB.randomEvents).filter((key) => {
     const event = DB.randomEvents[key];
-    return event.action === action && (event.chapters || [1, 2, 3, 4, 5]).includes(chapter)
+    return event.action === action && fitsStory(player, event) && (event.chapters || [1, 2, 3, 4, 5]).includes(chapter)
       && !player.seenEvents.includes(key) && checkRequires(player, event.requires);
   });
   if (!options.length) return null;

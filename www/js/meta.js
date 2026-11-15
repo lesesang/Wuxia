@@ -23,6 +23,7 @@ const defaults = () => ({
   upgrades: {}, content: [], content_off: [], legacy_open: false, legacy_level: 0, legacies: [], milestones: [],
   known_events: [], achievements: [], origin_wins: [], total_wins: 0, best_turn: 0,
   provisions: [], upgrade_use: {}, difficulty_cleared: [],
+  omens: [], omen_offer: [], omen_rerolls: 0, side_done: [],
 });
 
 export function loadMeta() {
@@ -185,6 +186,66 @@ export function takeProvisions() {
   return keys;
 }
 
+// ---------- 천기 ----------
+
+/** 이미 산 것을 빼고 천기 셋을 뽑는다 */
+function drawOmens(owned = []) {
+  const pool = Object.keys(DB.karma.omens.pool).filter((k) => !owned.includes(k));
+  const drawn = [];
+  while (drawn.length < DB.karma.omens.show && pool.length) drawn.push(pool.splice(Math.floor(Math.random() * pool.length), 1)[0]);
+  return drawn;
+}
+
+/** 지금 떠 있는 천기. 처음 열면 그 자리에서 뽑는다 */
+export function omenOffer() {
+  const data = loadMeta();
+  const valid = data.omen_offer.filter((k) => DB.karma.omens.pool[k]);
+  if (valid.length || data.omens.length >= Object.keys(DB.karma.omens.pool).length) return valid;
+  data.omen_offer = drawOmens(data.omens);
+  saveMeta(data);
+  return data.omen_offer;
+}
+
+export const omenRerollCost = (data = loadMeta()) => DB.karma.omens.reroll + DB.karma.omens.reroll_step * (data.omen_rerolls || 0);
+
+export function buyOmen(key) {
+  const data = loadMeta();
+  const cost = DB.karma.omens.pool[key]?.cost;
+  if (cost === undefined || !data.omen_offer.includes(key) || data.omens.includes(key) || data.current_karma < cost) return false;
+  data.current_karma -= cost;
+  data.omens.push(key);
+  saveMeta(data);
+  return true;
+}
+
+/** 사지 않은 천기를 카르마를 내고 다시 뽑는다. 뽑을수록 값이 오르고 강호행을 마치면 처음 값으로 돌아간다 */
+export function rerollOmens() {
+  const data = loadMeta();
+  const cost = omenRerollCost(data);
+  if (data.current_karma < cost) return false;
+  const kept = data.omen_offer.filter((k) => data.omens.includes(k));
+  const pool = Object.keys(DB.karma.omens.pool).filter((k) => !data.omens.includes(k) && !data.omen_offer.includes(k));
+  if (!pool.length) return false;
+  const fresh = [];
+  while (kept.length + fresh.length < DB.karma.omens.show && pool.length) fresh.push(pool.splice(Math.floor(Math.random() * pool.length), 1)[0]);
+  data.current_karma -= cost;
+  data.omen_rerolls = (data.omen_rerolls || 0) + 1;
+  data.omen_offer = [...kept, ...fresh];
+  saveMeta(data);
+  return true;
+}
+
+/** 강호행을 시작하며 사 둔 천기를 쓴다 */
+export function takeOmens() {
+  const data = loadMeta();
+  const keys = data.omens.filter((k) => DB.karma.omens.pool[k]);
+  if (data.omens.length) {
+    data.omens = [];
+    saveMeta(data);
+  }
+  return keys;
+}
+
 export const extraSlots = (data = loadMeta()) => upgradeUse("그릇", data);
 
 /** 누적 카르마로 받은 보상의 숨은 특성 목록 */
@@ -225,7 +286,11 @@ export const activeContent = (data = loadMeta()) => data.content.filter((k) => !
 const WIN_ENDINGS = ["기본", "배드", "생사경"];
 export const legacyAvailable = (data = loadMeta()) => data.endings_seen.some((k) => WIN_ENDINGS.includes(k));
 /** 유산은 천마를 쓰러뜨린 사람만 남긴다 */
-export const canLeaveLegacy = (endingKey) => WIN_ENDINGS.includes(endingKey);
+/** 천마를 넘어선 결말인가 */
+export const beatFinal = (endingKey) => WIN_ENDINGS.includes(endingKey);
+/** 외전을 끝맺은 결말인가 */
+export const sideEnding = (endingKey) => !!DB.endings.side?.[endingKey];
+export const canLeaveLegacy = (endingKey) => beatFinal(endingKey) || sideEnding(endingKey);
 export const sameLegacy = (a, b) => a.kind === b.kind && a.key === b.key;
 
 export function openLegacy() {
@@ -329,6 +394,7 @@ export function recordEventPick(key, text, label, outcome) {
 export function claimAchievements(player, ending, victory) {
   const data = loadMeta();
   if (victory && !data.origin_wins.includes(player.originKey)) data.origin_wins.push(player.originKey);
+  if (sideEnding(ending) && !data.side_done.includes(player.originKey)) data.side_done.push(player.originKey);
   const fresh = DB.karma.achievements.filter((a) => !data.achievements.includes(a.key) && achievementMet(a, player, ending, victory, data));
   data.achievements.push(...fresh.map((a) => a.key));
   saveMeta(data);
@@ -349,6 +415,7 @@ function achievementMet(a, p, ending, victory, data) {
     case "attacks": return attacks >= a.value;
     case "legend": return p.skills.some((s) => DB.skills[s.key].legend || s.grade === "신공");
     case "origins": return data.origin_wins.length >= a.value;
+    case "sides": return data.side_done.length >= a.value;
     case "runs": return data.total_runs + 1 >= a.value;
     case "silver": return p.silver >= a.value;
     case "events": return data.known_events.length >= a.value;
@@ -383,6 +450,9 @@ export function recordRun(summary) {
   data.best_turn = Math.max(data.best_turn || 0, summary.turn || 0);
   data.runs = [summary, ...data.runs].slice(0, RUN_HISTORY_LIMIT);
   if (!data.endings_seen.includes(summary.ending)) data.endings_seen.push(summary.ending);
+  // 강호행을 마칠 때마다 새 천기가 뜬다
+  data.omen_offer = drawOmens(data.omens);
+  data.omen_rerolls = 0;
   saveMeta(data);
 }
 

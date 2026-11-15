@@ -234,6 +234,8 @@ export class Player {
         if (effect.type === "start_alignment") this.alignment[effect.side] += effect.amount;
       }
     }
+    // 외전의 출신은 걸어온 길이 이미 한쪽으로 기울어 있다
+    for (const [side, amount] of Object.entries(data.alignment || {})) this.alignment[side] += amount;
     this.flags = [];
     this.seenEvents = [];
     this.originTurn = -99; // 출신의 이야기가 마지막으로 찾아온 달

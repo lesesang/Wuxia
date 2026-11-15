@@ -1052,6 +1052,30 @@
       "type": "events",
       "value": 120,
       "karma": 6
+    },
+    {
+      "key": "외전1",
+      "name": "곁길의 끝",
+      "desc": "외전 하나를 끝맺는다.",
+      "type": "sides",
+      "value": 1,
+      "karma": 5
+    },
+    {
+      "key": "외전3",
+      "name": "세 갈래 곁길",
+      "desc": "외전 셋을 끝맺는다.",
+      "type": "sides",
+      "value": 3,
+      "karma": 8
+    },
+    {
+      "key": "외전7",
+      "name": "강호의 일곱 변두리",
+      "desc": "외전 일곱을 모두 끝맺는다.",
+      "type": "sides",
+      "value": 7,
+      "karma": 15
     }
   ],
   "rewards": [
@@ -1596,6 +1620,224 @@
           "grade": "명품"
         }
       ]
+    }
+  },
+  "omens": {
+    "show": 3,
+    "reroll": 3,
+    "reroll_step": 2,
+    "pool": {
+      "무곡": {
+        "name": "무곡성이 밝다",
+        "cost": 15,
+        "desc": "네 기량이 5푼 더 빨리 오른다.",
+        "effects": [
+          {
+            "type": "growth_rate",
+            "stat": "external",
+            "percent": 5
+          },
+          {
+            "type": "growth_rate",
+            "stat": "internal",
+            "percent": 5
+          },
+          {
+            "type": "growth_rate",
+            "stat": "martial",
+            "percent": 5
+          },
+          {
+            "type": "growth_rate",
+            "stat": "mind",
+            "percent": 5
+          }
+        ]
+      },
+      "문창": {
+        "name": "문창성이 밝다",
+        "cost": 10,
+        "desc": "무공 성취를 2할 더 빠르게 얻는다.",
+        "effects": [
+          {
+            "type": "mastery_rate",
+            "percent": 20
+          }
+        ]
+      },
+      "역마": {
+        "name": "역마가 낀다",
+        "cost": 10,
+        "desc": "사건과 기연에서 오르는 기량이 3할 늘어난다.",
+        "effects": [
+          {
+            "type": "event_growth",
+            "percent": 30
+          }
+        ]
+      },
+      "귀인": {
+        "name": "천을귀인이 든다",
+        "cost": 8,
+        "desc": "기연을 만날 확률이 4할 오른다.",
+        "effects": [
+          {
+            "type": "fortune_rate",
+            "percent": 40
+          }
+        ]
+      },
+      "화개": {
+        "name": "화개가 덮는다",
+        "cost": 12,
+        "desc": "새 장이 열릴 때마다 모든 기량이 20 오른다.",
+        "effects": [
+          {
+            "type": "chapter_growth",
+            "amount": 20
+          }
+        ]
+      },
+      "재백": {
+        "name": "재백궁에 볕이 든다",
+        "cost": 6,
+        "desc": "은자 100을 더 들고 시작하고 얻는 은자가 2할 5푼 늘어난다.",
+        "effects": [
+          {
+            "type": "start_silver",
+            "amount": 100
+          },
+          {
+            "type": "silver_rate",
+            "percent": 25
+          }
+        ]
+      },
+      "녹존": {
+        "name": "녹존이 든다",
+        "cost": 6,
+        "desc": "장터에 물건이 2개 더 진열되고 가격이 1할 싸다.",
+        "effects": [
+          {
+            "type": "extra_stock",
+            "amount": 2
+          },
+          {
+            "type": "market_discount",
+            "percent": 10
+          }
+        ]
+      },
+      "천의": {
+        "name": "천의성이 비춘다",
+        "cost": 6,
+        "desc": "요양으로 되찾는 체력과 내력이 3할 늘어나고 매달 체력과 내력을 5푼씩 더 회복한다.",
+        "effects": [
+          {
+            "type": "heal_rate",
+            "percent": 30
+          },
+          {
+            "type": "turn_regen",
+            "hp_pct": 5,
+            "qi_pct": 5
+          }
+        ]
+      },
+      "태음": {
+        "name": "달이 차오른다",
+        "cost": 8,
+        "desc": "심법 회복이 1할 늘고 매달 내력을 8푼 더 회복한다.",
+        "effects": [
+          {
+            "type": "mindset_power",
+            "percent": 10
+          },
+          {
+            "type": "turn_regen",
+            "hp_pct": 0,
+            "qi_pct": 8
+          }
+        ]
+      },
+      "장성": {
+        "name": "장성이 선다",
+        "cost": 8,
+        "desc": "실전 경험 8을 쌓은 채로 시작하고 회심의 일격 확률이 4푼 오른다.",
+        "effects": [
+          {
+            "type": "start_battles",
+            "amount": 8
+          },
+          {
+            "type": "crit",
+            "percent": 4
+          }
+        ]
+      },
+      "파군": {
+        "name": "파군성이 뜬다",
+        "cost": 10,
+        "desc": "주는 피해가 4푼, 회심의 일격 피해가 1할 5푼 늘어난다.",
+        "effects": [
+          {
+            "type": "damage_bonus",
+            "percent": 4
+          },
+          {
+            "type": "crit_power",
+            "percent": 15
+          }
+        ]
+      },
+      "천상": {
+        "name": "천상성이 지킨다",
+        "cost": 8,
+        "desc": "받는 피해가 4푼 줄어든다.",
+        "effects": [
+          {
+            "type": "damage_reduce",
+            "percent": 4
+          }
+        ]
+      },
+      "금여": {
+        "name": "금여를 탄다",
+        "cost": 6,
+        "desc": "주무공 계열의 좋은 병기와 철사 갑의를 갖추고 시작한다.",
+        "effects": [
+          {
+            "type": "start_style_weapon",
+            "tier": 2
+          },
+          {
+            "type": "start_armor",
+            "tier": 2
+          }
+        ]
+      },
+      "문곡": {
+        "name": "문곡성이 밝다",
+        "cost": 12,
+        "desc": "주무공 계열의 상승 공격무공 하나를 더 익히고 시작한다.",
+        "effects": [
+          {
+            "type": "start_style_skill",
+            "grade": "상승"
+          }
+        ]
+      },
+      "천복": {
+        "name": "천복이 내린다",
+        "cost": 15,
+        "desc": "단전 깊이 아껴 둔 선천진기를 한 강호행에 한 번 더 꺼내 쓸 수 있다.",
+        "effects": [
+          {
+            "type": "extra_revive",
+            "amount": 1
+          }
+        ]
+      }
     }
   }
 }

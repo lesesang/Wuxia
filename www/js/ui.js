@@ -6,7 +6,7 @@ import { eventView } from "./events.js";
 import { Game } from "./game.js";
 import { bonusFor, equipmentBonus, gearGimmick, itemGrade, itemName, sellableView, stockView } from "./market.js";
 import {
-  buyContent, buyProvision, buyUpgrade, exportRecords, extraSlots, importRecords, legacyAvailable, legacyPowers, dropLegacy, upgradeLegacy, loadCheckpoint, loadEventLog, loadMeta, nextReward, openLegacy, refundProvision, setUpgradeUse, upgradeUse,
+  buyContent, buyOmen, omenOffer, omenRerollCost, rerollOmens, buyProvision, buyUpgrade, exportRecords, extraSlots, importRecords, legacyAvailable, legacyPowers, dropLegacy, upgradeLegacy, loadCheckpoint, loadEventLog, loadMeta, nextReward, openLegacy, refundProvision, setUpgradeUse, upgradeUse,
   toggleContent, unlockOrigin, unlockTrait, upgradeLevel, resetSetupChoices, canLeaveLegacy, sameLegacy, difficultyOpen,
 } from "./meta.js";
 import {
@@ -143,11 +143,15 @@ function codexRows(tab, meta) {
     };
   }
   if (tab === "endings") {
+    // 외전의 결말은 그 외전을 연 뒤에 목록에 오른다
+    const sideOf = (k) => DB.endings.side?.[k];
+    const keys = Object.keys(DB.endings.titles).filter((k) => (k !== "생사경" || meta.endings_seen.includes(k)) && (!sideOf(k) || meta.unlocked_origins.includes(sideOf(k))));
     return {
-      total: Object.keys(DB.endings.titles).length - 1, filterLabel: "", filters: [], empty: "",
-      rows: Object.keys(DB.endings.titles).filter((k) => k !== "생사경" || meta.endings_seen.includes(k)).map((k) => {
+      total: keys.length - (meta.endings_seen.includes("생사경") ? 1 : 0), filterLabel: "", filters: [], empty: "",
+      rows: keys.map((k) => {
         const seen = meta.endings_seen.includes(k);
-        return { key: k, name: seen ? DB.endings.titles[k] : "아직 보지 못한 결말", meta: k === "사망" ? "도달한 장만큼 카르마" : `카르마 +${DB.endings.karma[k]}`, desc: seen ? DB.endings.text[k] : "", cats: [] };
+        const from = sideOf(k) ? `외전 ${DB.origins.origins[sideOf(k)].name}, ` : "";
+        return { key: k, name: seen ? DB.endings.titles[k] : "아직 보지 못한 결말", meta: k === "사망" ? "도달한 장만큼 카르마" : `${from}카르마 +${DB.endings.karma[k]}`, desc: seen ? DB.endings.text[k] : "", cats: [] };
       }),
     };
   }
@@ -310,7 +314,7 @@ ${section("수상한 누군가", ["결전 직전 마지막 달에는 장터 대�
 ${section("도구", ["수련 도구는 언제든, 전투 도구는 싸움 중에 씁니다. 계열이 정해진 도구는 맞으면 제 효과를 내고 맞지 않으면 절반입니다."])}`,
     카르마: `${section("얻는 길", [
     "<b>도달한 장</b>: 천마까지 가지 못하면 1장 +1부터 5장 +5까지 받습니다. 천마에게 져도 +5입니다.",
-    `<b>결말</b>: 천마까지 가면 장 대신 받습니다. ${Object.entries(DB.endings.karma).filter(([k]) => !["생사경", "사망"].includes(k)).map(([k, v]) => `${esc(DB.endings.titles[k])} +${v}`).join(", ")}`,
+    `<b>결말</b>: 천마까지 가면 장 대신 받습니다. ${Object.entries(DB.endings.karma).filter(([k]) => !["생사경", "사망"].includes(k) && !DB.endings.side?.[k]).map(([k, v]) => `${esc(DB.endings.titles[k])} +${v}`).join(", ")}`,
     "<b>경지</b>: 오른 경지에 따라 더 받습니다. 절정 +1, 초절정 +2, 화경 +3, 현경 +4",
     "<b>공적</b>: 처음 이룰 때 한 번 더 받습니다.",
     `<b>깊은 강호</b>: ${DB.difficulty.order.slice(1).map((k) => `${esc(DB.difficulty.levels[k].name)}${josa(DB.difficulty.levels[k].name, "은/는")} ${DB.difficulty.levels[k].karma}배`).join(", ")}를 받습니다.`,
@@ -385,7 +389,8 @@ function originDetail(key) {
   const sect = ORIGIN_SECTS[key] ? DB.sects[ORIGIN_SECTS[key]] : null;
   return `<span class="pick-desc block">${esc(o.desc)}</span>${statBars(o)}
     <span class="pick-stats block">시작 무공: ${esc(skillNames)}</span>
-    ${sect ? `<span class="pick-stats block">${sectWord(ORIGIN_SECTS[key])}: ${esc(sect.name)} (${esc(sect.bonus_text)})</span>` : ""}`;
+    ${sect ? `<span class="pick-stats block">${sectWord(ORIGIN_SECTS[key])}: ${esc(sect.name)} (${esc(sect.bonus_text)})</span>` : ""}
+    ${o.side ? `<span class="pick-stats block">목표: ${esc(o.goal)}</span><span class="pick-stats block">${o.end_turn}달에 끝나는 외전</span>` : ""}`;
 }
 
 const traitName = (t) => `${esc(t.name)}<span class="rarity rarity-${esc(t.rarity)}">${esc(t.rarity)}</span>`;
@@ -446,6 +451,22 @@ const emptyNote = (text) => `<p class="codex-empty">${text}</p>`;
 function shopPanels(meta) {
   const origins = DB.origins.order.filter((k) => !meta.unlocked_origins.includes(k))
     .map((k) => shopRow(esc(DB.origins.origins[k].name), originDetail(k), "unlock-origin", k, DB.origins.origins[k].cost, meta)).join("");
+  const sideRows = DB.origins.side_order.filter((k) => !meta.unlocked_origins.includes(k))
+    .map((k) => shopRow(esc(DB.origins.origins[k].name), originDetail(k), "unlock-origin", k, DB.origins.origins[k].cost, meta)).join("");
+  const sides = `<h4 class="shop-group">외전</h4><p class="section-note">외전의 출신은 천마봉으로 가지 않습니다. 같은 강호의 같은 십 년을 저마다의 목표로 걷고, 그 출신만의 줄거리와 결말이 있습니다. 카르마로 산 인연은 외전에 나오지 않습니다.</p>${sideRows || emptyNote("모든 외전을 해금했습니다.")}`;
+  const offer = omenOffer();
+  const omenRow = (key) => {
+    const o = DB.karma.omens.pool[key];
+    const desc = `<p class="pick-desc">${esc(o.desc)}</p>`;
+    if (!meta.omens.includes(key)) return shopRow(esc(o.name), desc, "buy-omen", key, o.cost, meta, "받기");
+    return `<div class="pick-row"><div class="pick-main"><div class="pick-name">${esc(o.name)} <span class="rarity">받아 둠</span></div>${desc}</div></div>`;
+  };
+  const held = meta.omens.filter((k) => !offer.includes(k) && DB.karma.omens.pool[k]);
+  const rerollCost = omenRerollCost(meta);
+  const omens = `<p class="section-note">천기는 강호행을 마칠 때마다 새로 셋이 뜹니다. 받아 둔 천기는 다음 강호행 한 번에만 쓰이고 물릴 수 없습니다. 뜬 것이 마음에 들지 않으면 카르마를 내고 받지 않은 것을 다시 뽑습니다. 다시 뽑을수록 값이 오르고, 강호행을 마치면 처음 값으로 돌아갑니다.</p>
+    ${[...held, ...offer].map(omenRow).join("") || emptyNote("뜬 천기가 없습니다.")}
+    <div class="pick-row locked"><div class="pick-main"><div class="pick-name">천기 다시 뽑기</div><p class="pick-desc">받지 않은 천기를 물리고 새로 뽑는다.</p></div>
+      <button class="unlock-btn" data-act="reroll-omen" ${meta.current_karma < rerollCost ? "disabled" : ""}>카르마 ${rerollCost}<br>다시 뽑기</button></div>`;
   const traits = byRarity(visibleTraits().filter((k) => !meta.unlocked_traits.includes(k)),
     (k) => shopRow(traitName(DB.traits[k]), `<p class="pick-desc">${esc(DB.traits[k].desc)}</p>${originOnly(DB.traits[k].origin)}`, "unlock-trait", k, DB.traits[k].cost, meta));
   const groups = [...new Set(Object.values(DB.karma.upgrades).map((u) => u.group))];
@@ -486,7 +507,8 @@ function shopPanels(meta) {
   const provisions = provisionFilter.row + provisionGroups.filter((g) => provisionFilter.on === "전체" || provisionFilter.on === g).map((g) => `<h4 class="shop-group">${esc(g)}</h4>${Object.entries(DB.karma.provisions).filter(([, p]) => p.group === g).map(provisionRow).join("")}`).join("");
   return {
     provision: `<p class="section-note">채비는 다음 강호행 한 번에만 쓰입니다. 시작할 때 저절로 꺼내 쓰고, 그 전에는 물릴 수 있습니다.</p>${provisions}`,
-    origin: origins || emptyNote("모든 출신을 해금했습니다."),
+    origin: (origins || emptyNote("모든 출신을 해금했습니다.")) + sides,
+    omen: omens,
     trait: filterRow() + (traits || emptyNote("이 갈래의 자질을 모두 해금했습니다.")),
     upgrade: `<p class="section-note">기틀은 장착하지 않아도 모든 강호행에 적용됩니다.</p>${upgrades}`,
     content: `${content || emptyNote("모든 인연을 해금했습니다.")}`,
@@ -530,7 +552,7 @@ function rewardPanel(meta) {
 
 function affordableCount(meta) {
   const k = meta.current_karma;
-  const origins = DB.origins.order.filter((o) => !meta.unlocked_origins.includes(o) && DB.origins.origins[o].cost <= k).length;
+  const origins = [...DB.origins.order, ...DB.origins.side_order].filter((o) => !meta.unlocked_origins.includes(o) && DB.origins.origins[o].cost <= k).length;
   const traits = Object.keys(DB.traits).filter((t) => !DB.traits[t].hidden && !meta.unlocked_traits.includes(t) && DB.traits[t].cost <= k).length;
   const ups = Object.entries(DB.karma.upgrades).filter(([key, u]) => u.costs[upgradeLevel(key, meta)] <= k).length;
   const content = Object.entries(DB.karma.content).filter(([key, c]) => !meta.content.includes(key) && c.cost <= k).length;
@@ -541,7 +563,7 @@ function renderShop() {
   document.body.className = "home setup-screen";
   setMood("calm");
   const meta = loadMeta();
-  const tabs = [["origin", "출신"], ["trait", "자질"], ["upgrade", "기틀"], ["content", "인연"], ["provision", "채비"], ["legacy", "유산"], ["reward", "누적"]];
+  const tabs = [["origin", "출신"], ["trait", "자질"], ["upgrade", "기틀"], ["content", "인연"], ["provision", "채비"], ["omen", "천기"], ["legacy", "유산"], ["reward", "누적"]];
   app().innerHTML = `<div class="setup-head">
       <button class="back-btn" data-act="shop-back" aria-label="뒤로">←</button>
       <h2>카르마 상점</h2>
@@ -683,7 +705,9 @@ function renderSetup() {
   if (!meta.unlocked_origins.includes(ui.origin)) ui.origin = "무림초출";
 
   const origins = DB.origins.order.filter((key) => meta.unlocked_origins.includes(key)).map((key) => `<div class="pick-row"><label class="pick-label"><input type="radio" name="origin" value="${esc(key)}" ${ui.origin === key ? "checked" : ""}>
-      <span class="pick-main"><span class="pick-name">${esc(DB.origins.origins[key].name)}${meta.origin_wins.includes(key) ? ` <span class="rarity">천마 격파</span>` : ""}</span>${originDetail(key)}</span></label></div>`).join("");
+      <span class="pick-main"><span class="pick-name">${esc(DB.origins.origins[key].name)}${meta.origin_wins.includes(key) ? ` <span class="rarity">천마 격파</span>` : ""}</span>${originDetail(key)}</span></label></div>`).join("")
+    + (DB.origins.side_order.some((key) => meta.unlocked_origins.includes(key)) ? `<h4 class="shop-group">외전</h4>${DB.origins.side_order.filter((key) => meta.unlocked_origins.includes(key)).map((key) => `<div class="pick-row"><label class="pick-label"><input type="radio" name="origin" value="${esc(key)}" ${ui.origin === key ? "checked" : ""}>
+      <span class="pick-main"><span class="pick-name">${esc(DB.origins.origins[key].name)}${meta.side_done.includes(key) ? ` <span class="rarity">끝맺음</span>` : ""}</span>${originDetail(key)}</span></label></div>`).join("")}` : "");
 
   const ownedTraits = byRarity(visibleTraits(ui.origin).filter((key) => meta.unlocked_traits.includes(key)),
     (key) => `<div class="pick-row"><label class="pick-label"><input type="checkbox" name="trait" value="${esc(key)}" ${ui.traits.has(key) ? "checked" : ""} ${!ui.traits.has(key) && ui.traits.size >= slots ? "disabled" : ""}>
@@ -708,7 +732,7 @@ function renderSetup() {
     <div class="home-wrap">
       ${ui.setupTab === "upgrade" ? upgradeSetup(meta) : ui.setupTab === "content" ? contentSetup(meta) : ui.setupTab === "legacy" ? legacySetup(meta) : ui.setupTab === "origin" ? origins : `<p class="section-note">${next ? `자질을 ${slots}개 장착할 수 있습니다. 누적 카르마 ${next}이 되면 하나 더 열립니다. 누적 보상은 상점에서 볼 수 있습니다.` : "자질 칸이 모두 열렸습니다."}</p>${filterRow()}${traits}`}
     </div>
-    <div class="setup-bar"><div class="setup-summary">${ui.difficulty !== DEFAULT_DIFFICULTY ? `${esc(DB.difficulty.levels[ui.difficulty].name)}, ` : ""}${esc(originName)}${ui.traits.size ? `, 자질 ${ui.traits.size}개` : ""}${chosenLegacy(meta).length ? `, 유산 ${chosenLegacy(meta).length}개` : ""}${meta.provisions.length ? `, 채비 ${meta.provisions.length}개` : ""}</div>
+    <div class="setup-bar"><div class="setup-summary">${ui.difficulty !== DEFAULT_DIFFICULTY ? `${esc(DB.difficulty.levels[ui.difficulty].name)}, ` : ""}${esc(originName)}${ui.traits.size ? `, 자질 ${ui.traits.size}개` : ""}${chosenLegacy(meta).length ? `, 유산 ${chosenLegacy(meta).length}개` : ""}${meta.provisions.length ? `, 채비 ${meta.provisions.length}개` : ""}${meta.omens.length ? `, 천기 ${meta.omens.length}개` : ""}</div>
       <button class="start-btn" data-act="${hasSave ? "confirm-start" : "start"}">강호로 나선다</button></div>
     ${modalShell("confirm-start-modal", "새 강호행을 시작할까요?", `
       <p class="modal-text">저장된 진행이 사라집니다. 카르마와 강호록은 남습니다.</p>
@@ -980,7 +1004,8 @@ function chainStrip(p) {
 function goalStrip() {
   const p = game.player;
   const progress = realmProgress(p);
-  if (!progress) return `<div class="goal">천마봉까지 ${Math.max(0, p.maxTurn - p.turn)}개월</div>`;
+  const side = DB.origins.origins[p.originKey]?.side ? DB.origins.origins[p.originKey] : null;
+  if (!progress) return `<div class="goal">${side ? esc(side.goal_short) : "천마봉"}까지 ${Math.max(0, p.maxTurn - p.turn)}개월</div>`;
   const part = (label, now, need) => `<span class="${now >= need ? "done" : ""}">${label} ${now}/${need}</span>`;
   return `<div class="goal"><b>${esc(progress.next)}까지</b>
     ${part("평균", progress.avg, progress.avgRequired)}${part("최저", progress.min, progress.minRequired)}${part("실전 경험", progress.battles, progress.battlesRequired)}</div>`;
@@ -991,7 +1016,7 @@ function topbar() {
   const turn = Math.min(p.turn, p.maxTurn);
   return `<div class="topbar"><div class="topbar-inner">
     <div class="topbar-row1">
-      <span class="turn-info">${getYear(turn)}년차 ${getMonth(turn)}월<small>${p.difficulty !== DEFAULT_DIFFICULTY ? `${esc(difficultyOf(p).name)}, ` : ""}${esc(getChapterInfo(turn).title)}, ${p.turn}/${p.maxTurn}달</small></span>
+      <span class="turn-info">${getYear(turn)}년차 ${getMonth(turn)}월<small>${p.difficulty !== DEFAULT_DIFFICULTY ? `${esc(difficultyOf(p).name)}, ` : ""}${esc(getChapterInfo(turn, p).title)}, ${p.turn}/${p.maxTurn}달</small></span>
       <span class="realm-info">${esc(p.realm)}<small>${esc(fullName(p.person))}${byname(p) === "이름 없는 무인" ? "" : `, ${esc(byname(p))}`}</small></span>
     </div>
     <div class="turn-track"><span style="width:${percent(turn, p.maxTurn)}%"></span></div>
@@ -1413,6 +1438,8 @@ const actions = {
   "buy-upgrade": (el) => { buyUpgrade(el.dataset.key); render(); },
   "buy-content": (el) => { buyContent(el.dataset.key); render(); },
   "buy-provision": (el) => { buyProvision(el.dataset.key); render(); },
+  "buy-omen": (el) => { buyOmen(el.dataset.key); render(); },
+  "reroll-omen": () => { rerollOmens(); render(); },
   "refund-provision": (el) => { refundProvision(el.dataset.key); render(); },
   "open-legacy": () => { openLegacy(); render(); },
   "upgrade-legacy": () => { upgradeLegacy(); render(); },
