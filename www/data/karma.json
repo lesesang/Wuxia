@@ -610,6 +610,155 @@
         }
       ],
       "origin": "하오문"
+    },
+    "당문침통": {
+      "group": "출신 전용",
+      "name": "당문의 침통",
+      "desc": "회심의 일격 확률이 단계마다 2푼 오르고 상비약 회복이 8푼 늘어난다.",
+      "costs": [
+        3,
+        5,
+        9
+      ],
+      "effects": [
+        {
+          "type": "crit",
+          "percent": 2
+        },
+        {
+          "type": "consumable_rate",
+          "percent": 8
+        }
+      ],
+      "origin": "외전당가"
+    },
+    "빙백의결": {
+      "group": "출신 전용",
+      "name": "빙백의 결",
+      "desc": "받는 피해가 단계마다 1푼 줄고 심법 회복이 6푼 늘어난다.",
+      "costs": [
+        3,
+        5,
+        9
+      ],
+      "effects": [
+        {
+          "type": "damage_reduce",
+          "percent": 1
+        },
+        {
+          "type": "mindset_power",
+          "percent": 6
+        }
+      ],
+      "origin": "외전빙궁"
+    },
+    "빈검집": {
+      "group": "출신 전용",
+      "name": "빈 검집",
+      "desc": "무공 성취를 단계마다 4푼 더 빠르게 얻고 회심의 일격 피해가 6푼 늘어난다.",
+      "costs": [
+        3,
+        5,
+        9
+      ],
+      "effects": [
+        {
+          "type": "mastery_rate",
+          "percent": 4
+        },
+        {
+          "type": "crit_power",
+          "percent": 6
+        }
+      ],
+      "origin": "외전매화"
+    },
+    "검은패": {
+      "group": "출신 전용",
+      "name": "검은 패",
+      "desc": "전투의 첫 합에서 주는 피해가 단계마다 5푼, 얻는 은자가 4푼 늘어난다.",
+      "costs": [
+        3,
+        5,
+        9
+      ],
+      "effects": [
+        {
+          "type": "first_strike",
+          "percent": 5
+        },
+        {
+          "type": "silver_rate",
+          "percent": 4
+        }
+      ],
+      "origin": "외전살막"
+    },
+    "청교깃발": {
+      "group": "출신 전용",
+      "name": "청교채의 깃발",
+      "desc": "은자를 단계마다 30 더 들고 시작하고 받는 피해가 1푼 줄어든다.",
+      "costs": [
+        3,
+        5,
+        9
+      ],
+      "effects": [
+        {
+          "type": "start_silver",
+          "amount": 30
+        },
+        {
+          "type": "damage_reduce",
+          "percent": 1
+        }
+      ],
+      "origin": "외전수로"
+    },
+    "잿빛가사": {
+      "group": "출신 전용",
+      "name": "잿빛 가사",
+      "desc": "매달 체력과 내력을 단계마다 2푼씩 더 회복하고 주는 피해가 1푼 늘어난다.",
+      "costs": [
+        3,
+        5,
+        9
+      ],
+      "effects": [
+        {
+          "type": "turn_regen",
+          "hp_pct": 2,
+          "qi_pct": 2
+        },
+        {
+          "type": "damage_bonus",
+          "percent": 1
+        }
+      ],
+      "origin": "외전혈승"
+    },
+    "손등표식": {
+      "group": "출신 전용",
+      "name": "손등의 표식",
+      "desc": "회심의 일격 피해가 단계마다 5푼 늘어나고 매달 체력을 2푼 더 회복한다.",
+      "costs": [
+        3,
+        5,
+        9
+      ],
+      "effects": [
+        {
+          "type": "crit_power",
+          "percent": 5
+        },
+        {
+          "type": "turn_regen",
+          "hp_pct": 2,
+          "qi_pct": 0
+        }
+      ],
+      "origin": "외전야수"
     }
   },
   "content": {
@@ -1622,220 +1771,67 @@
       ]
     }
   },
-  "omens": {
-    "show": 3,
-    "reroll": 3,
-    "reroll_step": 2,
-    "pool": {
-      "무곡": {
-        "name": "무곡성이 밝다",
-        "cost": 15,
-        "desc": "네 기량이 5푼 더 빨리 오른다.",
-        "effects": [
-          {
-            "type": "growth_rate",
-            "stat": "external",
-            "percent": 5
-          },
-          {
-            "type": "growth_rate",
-            "stat": "internal",
-            "percent": 5
-          },
-          {
-            "type": "growth_rate",
-            "stat": "martial",
-            "percent": 5
-          },
-          {
-            "type": "growth_rate",
-            "stat": "mind",
-            "percent": 5
-          }
+  "manor": {
+    "note": "강호 어느 산자락에 주인 없는 장원이 하나 있습니다. 문패를 지닌 사람을 주인으로 모시는 집입니다. 카르마로 채를 올리면 장원이 커집니다. 문패를 챙긴 강호행에만 장원이 길 위에 나타나고, 그 강호행에서는 장원의 일이 때맞춰 찾아오며 길에서 만나는 일을 장원으로 풀 길이 열립니다. 본편과 외전 어디에서나 같습니다.",
+    "gate": {
+      "base": 2,
+      "per_level": 1
+    },
+    "wings": {
+      "객사": {
+        "name": "객사",
+        "desc": "길손이 묵어가는 채. 쫓기는 사람과 갈 곳 없는 사람을 길에서 장원으로 보낼 수 있다.",
+        "costs": [
+          8,
+          14,
+          20
+        ],
+        "levels": [
+          "비를 긋는 길손이 든다",
+          "전란의 피난민을 받을 만큼 넓어진다",
+          "이름을 감춘 큰 손님이 묵는다"
         ]
       },
-      "문창": {
-        "name": "문창성이 밝다",
-        "cost": 10,
-        "desc": "무공 성취를 2할 더 빠르게 얻는다.",
-        "effects": [
-          {
-            "type": "mastery_rate",
-            "percent": 20
-          }
+      "연무장": {
+        "name": "연무장",
+        "desc": "무인들이 병기를 맞대는 마당. 배우려는 아이와 가르칠 사람을 길에서 장원으로 들일 수 있다.",
+        "costs": [
+          8,
+          14,
+          20
+        ],
+        "levels": [
+          "떠돌이 무인이 한 수를 청한다",
+          "현판을 노리는 자들이 온다",
+          "식객들이 장원의 이름으로 일을 청한다"
         ]
       },
-      "역마": {
-        "name": "역마가 낀다",
-        "cost": 10,
-        "desc": "사건과 기연에서 오르는 기량이 3할 늘어난다.",
-        "effects": [
-          {
-            "type": "event_growth",
-            "percent": 30
-          }
+      "약방": {
+        "name": "약방",
+        "desc": "약초밭과 약탕기를 둔 채. 병든 마을과 다친 사람을 장원의 약으로 돌볼 수 있다.",
+        "costs": [
+          8,
+          14,
+          20
+        ],
+        "levels": [
+          "떠돌이 의원이 약방을 맡는다",
+          "돌림병 든 고을에 약을 댄다",
+          "약왕곡에서 사람이 온다"
         ]
       },
-      "귀인": {
-        "name": "천을귀인이 든다",
-        "cost": 8,
-        "desc": "기연을 만날 확률이 4할 오른다.",
-        "effects": [
-          {
-            "type": "fortune_rate",
-            "percent": 40
-          }
-        ]
-      },
-      "화개": {
-        "name": "화개가 덮는다",
-        "cost": 12,
-        "desc": "새 장이 열릴 때마다 모든 기량이 20 오른다.",
-        "effects": [
-          {
-            "type": "chapter_growth",
-            "amount": 20
-          }
-        ]
-      },
-      "재백": {
-        "name": "재백궁에 볕이 든다",
-        "cost": 6,
-        "desc": "은자 100을 더 들고 시작하고 얻는 은자가 2할 5푼 늘어난다.",
-        "effects": [
-          {
-            "type": "start_silver",
-            "amount": 100
-          },
-          {
-            "type": "silver_rate",
-            "percent": 25
-          }
-        ]
-      },
-      "녹존": {
-        "name": "녹존이 든다",
-        "cost": 6,
-        "desc": "장터에 물건이 2개 더 진열되고 가격이 1할 싸다.",
-        "effects": [
-          {
-            "type": "extra_stock",
-            "amount": 2
-          },
-          {
-            "type": "market_discount",
-            "percent": 10
-          }
-        ]
-      },
-      "천의": {
-        "name": "천의성이 비춘다",
-        "cost": 6,
-        "desc": "요양으로 되찾는 체력과 내력이 3할 늘어나고 매달 체력과 내력을 5푼씩 더 회복한다.",
-        "effects": [
-          {
-            "type": "heal_rate",
-            "percent": 30
-          },
-          {
-            "type": "turn_regen",
-            "hp_pct": 5,
-            "qi_pct": 5
-          }
-        ]
-      },
-      "태음": {
-        "name": "달이 차오른다",
-        "cost": 8,
-        "desc": "심법 회복이 1할 늘고 매달 내력을 8푼 더 회복한다.",
-        "effects": [
-          {
-            "type": "mindset_power",
-            "percent": 10
-          },
-          {
-            "type": "turn_regen",
-            "hp_pct": 0,
-            "qi_pct": 8
-          }
-        ]
-      },
-      "장성": {
-        "name": "장성이 선다",
-        "cost": 8,
-        "desc": "실전 경험 8을 쌓은 채로 시작하고 회심의 일격 확률이 4푼 오른다.",
-        "effects": [
-          {
-            "type": "start_battles",
-            "amount": 8
-          },
-          {
-            "type": "crit",
-            "percent": 4
-          }
-        ]
-      },
-      "파군": {
-        "name": "파군성이 뜬다",
-        "cost": 10,
-        "desc": "주는 피해가 4푼, 회심의 일격 피해가 1할 5푼 늘어난다.",
-        "effects": [
-          {
-            "type": "damage_bonus",
-            "percent": 4
-          },
-          {
-            "type": "crit_power",
-            "percent": 15
-          }
-        ]
-      },
-      "천상": {
-        "name": "천상성이 지킨다",
-        "cost": 8,
-        "desc": "받는 피해가 4푼 줄어든다.",
-        "effects": [
-          {
-            "type": "damage_reduce",
-            "percent": 4
-          }
-        ]
-      },
-      "금여": {
-        "name": "금여를 탄다",
-        "cost": 6,
-        "desc": "주무공 계열의 좋은 병기와 철사 갑의를 갖추고 시작한다.",
-        "effects": [
-          {
-            "type": "start_style_weapon",
-            "tier": 2
-          },
-          {
-            "type": "start_armor",
-            "tier": 2
-          }
-        ]
-      },
-      "문곡": {
-        "name": "문곡성이 밝다",
-        "cost": 12,
-        "desc": "주무공 계열의 상승 공격무공 하나를 더 익히고 시작한다.",
-        "effects": [
-          {
-            "type": "start_style_skill",
-            "grade": "상승"
-          }
-        ]
-      },
-      "천복": {
-        "name": "천복이 내린다",
-        "cost": 15,
-        "desc": "단전 깊이 아껴 둔 선천진기를 한 강호행에 한 번 더 꺼내 쓸 수 있다.",
-        "effects": [
-          {
-            "type": "extra_revive",
-            "amount": 1
-          }
+      "서고": {
+        "name": "서고",
+        "desc": "흩어진 책을 모아 두는 채. 길에서 찾은 책과 사람을 장원에 들일 수 있다.",
+        "costs": [
+          8,
+          14,
+          20
+        ],
+        "levels": [
+          "벽 속에 묻힌 책 궤가 나온다",
+          "책을 베끼러 온 사람들이 모인다",
+          "장서를 탐내는 사람들이 온다"
         ]
       }
     }

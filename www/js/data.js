@@ -3,7 +3,7 @@ export const DB = {};
 
 const FILES = ["skills", "enemies", "market", "traits", "sects", "flavor", "fortunes", "origins",
   "chapters", "realms", "endings", "balance", "karma", "companions", "difficulty", "events_chains", "events_story", "events_random", "events_sect", "events_jianghu",
-  "events_action", "events_deep", "events_side"];
+  "events_action", "events_deep", "events_side", "events_manor"];
 
 /** read(파일이름)은 해당 JSON 내용을 돌려주는 비동기 함수 */
 export async function loadData(read) {
@@ -13,7 +13,8 @@ export async function loadData(read) {
   DB.storyEvents = { ...DB.events_story, ...DB.events_side.story };
   for (const event of Object.values(DB.events_side.random)) if (!event.requires?.origin) event.side = true;
   // 수련, 운기, 요양 중의 사건(action)과 깊은 강호의 사건도 여기에 함께 둔다. 탐색에는 action 사건이 나오지 않는다
-  DB.randomEvents = { ...DB.events_random, ...DB.events_sect, ...DB.events_jianghu, ...DB.events_action, ...DB.events_deep, ...DB.events_side.random };
+  DB.randomEvents = { ...DB.events_random, ...DB.events_sect, ...DB.events_jianghu, ...DB.events_action, ...DB.events_deep, ...DB.events_side.random, ...DB.events_manor };
+  for (const event of Object.values(DB.events_manor)) event.manor_event = true;
   // 천마봉의 결전을 준비하는 일은 본편에서만 일어난다
   const MAIN_ONLY = /boss_weaken|천마봉|초대장|결전/;
   for (const event of Object.values(DB.randomEvents)) if (!event.side && MAIN_ONLY.test(JSON.stringify(event))) event.main_only = true;
@@ -57,9 +58,6 @@ export async function loadData(read) {
     upgrade.costs.forEach((_, i) => {
       DB.traits[`환생_${key}_${i + 1}`] = { name: upgrade.name, desc: upgrade.desc, hidden: true, effects: upgrade.effects };
     });
-  }
-  for (const [key, item] of Object.entries(DB.karma.omens.pool)) {
-    DB.traits[`천기_${key}`] = { name: item.name, desc: item.desc, hidden: true, effects: item.effects };
   }
   for (const [key, item] of Object.entries(DB.karma.provisions)) {
     DB.traits[`채비_${key}`] = { name: item.name, desc: item.desc, hidden: true, effects: item.effects };

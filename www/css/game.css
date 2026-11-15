@@ -455,3 +455,10 @@ body { word-break: keep-all; overflow-wrap: anywhere; }
 .world-desc, .world-terms, .world-lock { font-size: .82rem; color: var(--paper-dim); margin: .45rem 0 0; overflow-wrap: anywhere; }
 .world-terms { color: var(--paper); }
 .ending-world { text-align: center; color: var(--gold); font-size: .9rem; margin: -.2rem 0 .5rem; }
+.pick-stats.dim { opacity: .5; }
+.pips { display: inline-flex; gap: 3px; margin-left: .35rem; vertical-align: middle; }
+.pips i { width: 7px; height: 7px; border-radius: 50%; border: 1px solid var(--paper-dim); }
+.pips i.on { background: var(--gold); border-color: var(--gold); }
+.group-count { font-size: .75rem; color: var(--paper-dim); font-weight: normal; margin-left: .3rem; }
+.pick-row.done { opacity: .55; }
+.pick-row.done .pick-desc { display: none; }

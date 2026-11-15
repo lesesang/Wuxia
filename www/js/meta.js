@@ -23,7 +23,7 @@ const defaults = () => ({
   upgrades: {}, content: [], content_off: [], legacy_open: false, legacy_level: 0, legacies: [], milestones: [],
   known_events: [], achievements: [], origin_wins: [], total_wins: 0, best_turn: 0,
   provisions: [], upgrade_use: {}, difficulty_cleared: [],
-  omens: [], omen_offer: [], omen_rerolls: 0, side_done: [],
+  manor: {}, manor_gate: 0, side_done: [],
 });
 
 export function loadMeta() {
@@ -186,64 +186,57 @@ export function takeProvisions() {
   return keys;
 }
 
-// ---------- 천기 ----------
+// ---------- 장원 ----------
 
-/** 이미 산 것을 빼고 천기 셋을 뽑는다 */
-function drawOmens(owned = []) {
-  const pool = Object.keys(DB.karma.omens.pool).filter((k) => !owned.includes(k));
-  const drawn = [];
-  while (drawn.length < DB.karma.omens.show && pool.length) drawn.push(pool.splice(Math.floor(Math.random() * pool.length), 1)[0]);
-  return drawn;
-}
+/** 지은 채의 단계. 채마다 0부터 그 채의 끝 단계까지 */
+export const manorLevels = (data = loadMeta()) => Object.fromEntries(
+  Object.entries(DB.karma.manor.wings).map(([key, wing]) => [key, Math.min(wing.costs.length, data.manor?.[key] || 0)]));
+export const manorSize = (data = loadMeta()) => Object.values(manorLevels(data)).reduce((a, b) => a + b, 0);
+/** 다음 강호행에 장원을 나타나게 하는 문패의 값. 장원이 클수록 비싸다 */
+export const gateCost = (data = loadMeta()) => DB.karma.manor.gate.base + DB.karma.manor.gate.per_level * manorSize(data);
 
-/** 지금 떠 있는 천기. 처음 열면 그 자리에서 뽑는다 */
-export function omenOffer() {
+/** 채를 한 단계 올린다 */
+export function buildWing(key) {
   const data = loadMeta();
-  const valid = data.omen_offer.filter((k) => DB.karma.omens.pool[k]);
-  if (valid.length || data.omens.length >= Object.keys(DB.karma.omens.pool).length) return valid;
-  data.omen_offer = drawOmens(data.omens);
-  saveMeta(data);
-  return data.omen_offer;
-}
-
-export const omenRerollCost = (data = loadMeta()) => DB.karma.omens.reroll + DB.karma.omens.reroll_step * (data.omen_rerolls || 0);
-
-export function buyOmen(key) {
-  const data = loadMeta();
-  const cost = DB.karma.omens.pool[key]?.cost;
-  if (cost === undefined || !data.omen_offer.includes(key) || data.omens.includes(key) || data.current_karma < cost) return false;
+  const wing = DB.karma.manor.wings[key];
+  const level = manorLevels(data)[key];
+  const cost = wing?.costs[level];
+  if (cost === undefined || data.current_karma < cost) return false;
   data.current_karma -= cost;
-  data.omens.push(key);
+  data.manor = { ...data.manor, [key]: level + 1 };
+  // 챙겨 둔 문패는 장원이 커져도 치른 값 그대로 쓴다
   saveMeta(data);
   return true;
 }
 
-/** 사지 않은 천기를 카르마를 내고 다시 뽑는다. 뽑을수록 값이 오르고 강호행을 마치면 처음 값으로 돌아간다 */
-export function rerollOmens() {
+/** 다음 강호행에 쓸 문패를 챙긴다. 지은 채가 하나도 없으면 챙길 것이 없다 */
+export function buyGate() {
   const data = loadMeta();
-  const cost = omenRerollCost(data);
-  if (data.current_karma < cost) return false;
-  const kept = data.omen_offer.filter((k) => data.omens.includes(k));
-  const pool = Object.keys(DB.karma.omens.pool).filter((k) => !data.omens.includes(k) && !data.omen_offer.includes(k));
-  if (!pool.length) return false;
-  const fresh = [];
-  while (kept.length + fresh.length < DB.karma.omens.show && pool.length) fresh.push(pool.splice(Math.floor(Math.random() * pool.length), 1)[0]);
+  const cost = gateCost(data);
+  if (data.manor_gate || !manorSize(data) || data.current_karma < cost) return false;
   data.current_karma -= cost;
-  data.omen_rerolls = (data.omen_rerolls || 0) + 1;
-  data.omen_offer = [...kept, ...fresh];
+  data.manor_gate = cost;
   saveMeta(data);
   return true;
 }
 
-/** 강호행을 시작하며 사 둔 천기를 쓴다 */
-export function takeOmens() {
+/** 아직 쓰지 않은 문패를 물린다. 치른 값을 그대로 돌려준다 */
+export function refundGate() {
   const data = loadMeta();
-  const keys = data.omens.filter((k) => DB.karma.omens.pool[k]);
-  if (data.omens.length) {
-    data.omens = [];
-    saveMeta(data);
-  }
-  return keys;
+  if (!data.manor_gate) return false;
+  data.current_karma += data.manor_gate;
+  data.manor_gate = 0;
+  saveMeta(data);
+  return true;
+}
+
+/** 강호행을 시작하며 문패를 쓴다. 챙겨 두었으면 장원의 채 단계를, 아니면 null을 돌려준다 */
+export function takeGate() {
+  const data = loadMeta();
+  if (!data.manor_gate) return null;
+  data.manor_gate = 0;
+  saveMeta(data);
+  return manorSize(data) ? manorLevels(data) : null;
 }
 
 export const extraSlots = (data = loadMeta()) => upgradeUse("그릇", data);
@@ -450,9 +443,6 @@ export function recordRun(summary) {
   data.best_turn = Math.max(data.best_turn || 0, summary.turn || 0);
   data.runs = [summary, ...data.runs].slice(0, RUN_HISTORY_LIMIT);
   if (!data.endings_seen.includes(summary.ending)) data.endings_seen.push(summary.ending);
-  // 강호행을 마칠 때마다 새 천기가 뜬다
-  data.omen_offer = drawOmens(data.omens);
-  data.omen_rerolls = 0;
   saveMeta(data);
 }
 

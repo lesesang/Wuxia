@@ -4,12 +4,12 @@ import { GRADE_ORDER, Player, Skill, STAT_NAMES } from "./character.js";
 import { DB } from "./data.js";
 import { equipBestGear, grantStartGear, grantStartSkills,
   advanceChain, applyEffects, failChain, checkRequires, dueChainEvent, enemyIntro, LAST_CHAIN_TURN, pickActionEvent, pickFortune, pickRandomEvent, resolveChoice,
-  reactiveLine, startChain, storyEventForTurn, dueOriginEvent, pendingOriginEvents,
+  reactiveLine, startChain, storyEventForTurn, dueOriginEvent, dueManorEvent, pendingOriginEvents,
 } from "./events.js";
 import { bonusFor, buy, equipmentBonus, openMarket, sell } from "./market.js";
 import {
   activeContent, addKarma, claimAchievements, clearCheckpoint, extraSlots, rewardTraits, loadCheckpoint, loadMeta, recordRun, saveCheckpoint,
-  legacyPowers, storeLegacy, canLeaveLegacy, beatFinal, sideEnding, sameLegacy, takeProvisions, takeOmens, updateGlobalCodex, updateKnown, upgradeTraits,
+  legacyPowers, storeLegacy, canLeaveLegacy, beatFinal, sideEnding, sameLegacy, takeProvisions, takeGate, updateGlobalCodex, updateKnown, upgradeTraits,
   difficultyOpen, recordDifficultyClear,
 } from "./meta.js";
 import { pick, pickWeighted, randInt, rng } from "./rng.js";
@@ -106,14 +106,16 @@ export class Game {
 
     this.reset();
     const provisions = takeProvisions();
-    const omens = takeOmens();
+    const manor = takeGate();
     const side = DB.origins.origins[originKey].side ? DB.origins.origins[originKey] : null;
     const world = DB.traits[`강호_${difficulty}`] ? [`강호_${difficulty}`] : [];
-    this.player = new Player(originKey, [...traits, ...upgradeTraits(meta, originKey), ...rewardTraits(meta), ...provisions.map((k) => `채비_${k}`), ...omens.map((k) => `천기_${k}`), ...world]);
+    this.player = new Player(originKey, [...traits, ...upgradeTraits(meta, originKey), ...rewardTraits(meta), ...provisions.map((k) => `채비_${k}`), ...world]);
     this.player.difficulty = difficulty;
     // 카르마로 산 인연은 본편의 것이다. 외전은 그 출신의 이야기가 끝나는 달에 끝난다
     this.player.content = side ? [] : activeContent(meta);
     if (side) this.player.maxTurn = side.end_turn;
+    // 문패를 챙긴 강호행에만 장원이 길 위에 나타난다
+    this.player.manor = manor;
     this.player.person = settlePerson(originKey, person);
     const giftLines = DB.origins.origins[originKey].choose_start ? [] : grantStartSkills(this.player);
     // 고른 유산은 바로 받지 않는다. 첫 해 안에 한 자리에서 한꺼번에 찾아낸다
@@ -124,7 +126,7 @@ export class Game {
     const intro = getChapterInfo(1, this.player);
     const provisionLines = [
       ...(provisions.length ? [`챙겨 온 채비: ${provisions.map((k) => DB.karma.provisions[k].name).join(", ")}`] : []),
-      ...(omens.length ? [`이번 강호행에 드리운 천기: ${omens.map((k) => DB.karma.omens.pool[k].name).join(", ")}`] : []),
+      ...(manor ? ["품에 장원의 문패가 있다."] : []),
     ];
     const deep = side ? null : difficultyOf(this.player).chapters?.["1"];
     this.enterTurn([`${intro.title}, 1년차. ${intro.desc}`, ...(deep ? [deep] : []), ...provisionLines, ...giftLines]);
@@ -207,6 +209,13 @@ export class Game {
     if (originKey) {
       p.originTurn = p.turn;
       this.event = { key: originKey, forced: true };
+      return;
+    }
+    // 문패를 챙긴 강호행에는 장원의 일이 때맞춰 찾아온다
+    const manorKey = dueManorEvent(p);
+    if (manorKey) {
+      p.manorTurn = p.turn;
+      this.event = { key: manorKey, forced: true };
     }
   }
 

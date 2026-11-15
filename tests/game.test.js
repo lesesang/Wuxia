@@ -6,12 +6,12 @@ import { listAssets } from "../tools/build_asset_list.js";
 import { Battle, dropSkill, Enemy, statureEnemy, useConsumable } from "../www/js/battle.js";
 import { GRADE_ORDER, Player, Skill } from "../www/js/character.js";
 import { DB } from "../www/js/data.js";
-import { applyEffects, dueOriginEvent, pendingOriginEvents, grantStartGear, grantStartGifts, canStartChain, checkRequires, enemyIntro, eventView, LAST_CHAIN_TURN, pickRandomEvent, resolveChoice, storyEventForTurn, validateChains, validateEvents } from "../www/js/events.js";
+import { applyEffects, dueManorEvent, hasManor, dueOriginEvent, pendingOriginEvents, grantStartGear, grantStartGifts, canStartChain, checkRequires, enemyIntro, eventView, LAST_CHAIN_TURN, pickRandomEvent, resolveChoice, storyEventForTurn, validateChains, validateEvents } from "../www/js/events.js";
 import { buildEpilogue, Game, settlePerson } from "../www/js/game.js";
 import { halpun, josa } from "../www/js/josa.js";
 import { blockReason, buy, equipmentBonus, ITEM_GRADES, openMarket, priceOf, sell } from "../www/js/market.js";
 import {
-  activeContent, resetSetupChoices, upgradeUse, legacyPowers, upgradeLegacy, setUpgradeUse, upgradeLevel, addKarma, buyContent, buyProvision, refundProvision, upgradeTraits, buyUpgrade, exportRecords, importRecords, extraSlots, loadCheckpoint, legacyAvailable, loadEventLog, loadMeta, nextReward, recordEventPick, openLegacy, saveMeta, toggleContent, unlockOrigin, buyOmen, omenOffer, omenRerollCost, rerollOmens,
+  activeContent, resetSetupChoices, upgradeUse, legacyPowers, upgradeLegacy, setUpgradeUse, upgradeLevel, addKarma, buyContent, buyProvision, refundProvision, upgradeTraits, buyUpgrade, exportRecords, importRecords, extraSlots, loadCheckpoint, legacyAvailable, loadEventLog, loadMeta, nextReward, recordEventPick, openLegacy, saveMeta, toggleContent, unlockOrigin, buildWing, buyGate, refundGate, gateCost, manorLevels, manorSize,
 } from "../www/js/meta.js";
 import { enemyRealmIndex, personalize, fullName, alignTier, applyGrowth, checkBreakthrough, focusedSide, byname, fameRank, getChapter, getYear, marketTurns, sumEffect, talkLine, traitSlots } from "../www/js/rules.js";
 import { rng } from "../www/js/rng.js";
@@ -2609,28 +2609,82 @@ test("외전은 처음부터 끝까지 걸어 그 출신의 결말로 끝난다"
   assert.ok(loadMeta().achievements.includes("외전7"));
 });
 
-test("천기는 강호행을 마칠 때마다 새로 뜨고 다음 강호행 한 번에 쓰인다", () => {
-  addKarma(200);
-  const offer = omenOffer();
-  assert.equal(offer.length, DB.karma.omens.show);
-  assert.deepEqual(omenOffer(), offer, "다시 열어도 그대로다");
+test("장원은 카르마로 채를 올리고, 문패를 챙긴 강호행에만 나타난다", () => {
+  const start = loadMeta();
+  start.manor = {}; start.manor_gate = 0; start.current_karma = 0;
+  saveMeta(start);
+  assert.ok(!buyGate(), "지은 채가 없으면 문패를 챙길 수 없다");
+  addKarma(300);
+  assert.ok(!buildWing("없는채"));
+  const wing = DB.karma.manor.wings.객사;
   const before = loadMeta().current_karma;
-  assert.ok(buyOmen(offer[0]));
-  assert.ok(!buyOmen(offer[0]), "같은 것은 하나만");
-  assert.ok(!buyOmen(Object.keys(DB.karma.omens.pool).find((k) => !offer.includes(k))), "뜨지 않은 천기는 받을 수 없다");
-  assert.equal(loadMeta().current_karma, before - DB.karma.omens.pool[offer[0]].cost);
-  const first = omenRerollCost();
-  assert.ok(rerollOmens());
-  assert.ok(omenRerollCost() > first, "다시 뽑을수록 값이 오른다");
-  const next = omenOffer();
-  assert.ok(next.includes(offer[0]) && next.length === DB.karma.omens.show, "받아 둔 것은 남는다");
-  assert.ok(!next.includes(offer[1]) && !next.includes(offer[2]));
-  const game = newGame();
-  assert.ok(game.player.traits.includes(`천기_${offer[0]}`));
-  assert.deepEqual(loadMeta().omens, [], "한 번 쓰면 사라진다");
-  game.finishGame(false);
-  assert.equal(omenRerollCost(), first, "강호행을 마치면 처음 값으로 돌아간다");
-  for (const o of Object.values(DB.karma.omens.pool)) assert.ok(o.cost >= 5 && (o.cost < 10 || o.cost % 5 === 0 || o.cost % 2 === 0), o.name);
+  assert.ok(buildWing("객사"));
+  assert.equal(loadMeta().current_karma, before - wing.costs[0]);
+  assert.ok(buildWing("객사") && buildWing("객사"));
+  assert.ok(!buildWing("객사"), "끝 단계를 넘지 않는다");
+  assert.ok(buildWing("약방"));
+  assert.deepEqual(manorLevels(), { 객사: 3, 연무장: 0, 약방: 1, 서고: 0 });
+  assert.equal(gateCost(), DB.karma.manor.gate.base + 4 * DB.karma.manor.gate.per_level);
+  // 문패를 챙기지 않은 강호행에는 장원이 없다
+  const without = newGame();
+  assert.equal(without.player.manor, null);
+  assert.ok(!hasManor(without.player, true) && dueManorEvent(without.player) === null);
+  // 챙기면 값을 치르고, 물리면 그대로 돌려받는다
+  const karma = loadMeta().current_karma;
+  assert.ok(buyGate() && !buyGate());
+  assert.equal(loadMeta().current_karma, karma - gateCost());
+  assert.ok(refundGate());
+  assert.equal(loadMeta().current_karma, karma);
+  assert.ok(buyGate());
+  for (const origin of ["무림초출", "외전빙궁"]) {
+    const meta = loadMeta();
+    if (!meta.unlocked_origins.includes(origin)) meta.unlocked_origins.push(origin);
+    if (!meta.manor_gate) { meta.manor_gate = 1; }
+    saveMeta(meta);
+    const game = newGame(origin);
+    const p = game.player;
+    assert.deepEqual(p.manor, { 객사: 3, 연무장: 0, 약방: 1, 서고: 0 }, origin);
+    assert.equal(loadMeta().manor_gate, 0, "문패는 한 강호행에 쓰인다");
+    assert.ok(hasManor(p, "객사") && hasManor(p, { 객사: 3 }) && hasManor(p, { size: 4 }));
+    assert.ok(!hasManor(p, "서고") && !hasManor(p, { 약방: 2 }) && !hasManor(p, { size: 5 }));
+    // 장원의 일은 때맞춰 찾아오고, 채가 없는 일은 오지 않는다
+    const seen = [];
+    runToEnd(game, { onEvent: (g) => { if (DB.events[g.event.key].manor_event) seen.push(g.event.key); } });
+    assert.equal(seen[0], "장원_문패", origin);
+    assert.ok(seen.includes("장원_비오는밤") && seen.includes("장원_약초밭") && seen.includes("장원_큰손님"), `${origin} ${seen}`);
+    assert.ok(!seen.some((k) => ["장원_식객", "장원_책궤", "장원_돌림병"].includes(k)), `${origin} ${seen}`);
+    assert.equal(new Set(seen).size, seen.length);
+    // 저장하고 다시 열어도 장원은 남는다
+    assert.deepEqual(Player.fromDict(p.toDict()).manor, p.manor);
+  }
+  // 길에서 만나는 일에 장원으로 풀 길이 열린다
+  const p = new Player();
+  const labels = () => eventView(p, "난민행렬").choices.map((c) => c.label);
+  assert.ok(!labels().some((l) => l.includes("장원")), "장원이 없으면 보이지 않는다");
+  p.manor = { 객사: 1 };
+  assert.ok(labels().some((l) => l.includes("장원")));
+  const hooks = Object.entries(DB.events).filter(([, e]) => !e.manor_event && (e.choices || []).some((c) => c.requires?.manor));
+  assert.ok(hooks.length >= 8, `장원으로 푸는 길 ${hooks.length}`);
+  for (const [key, e] of hooks) for (const c of e.choices.filter((x) => x.requires?.manor)) assert.ok(c.hidden, `${key} ${c.label}`);
+  // 장원의 일은 본편과 외전 어디에서나 일어날 수 있는 글이다
+  for (const [key, e] of Object.entries(DB.events_manor)) {
+    assert.ok(e.manor_event && e.requires.manor && !e.main_only && !e.side, key);
+    assert.ok(Object.keys(DB.karma.manor.wings).concat("size").some((w) => e.requires.manor === true || e.requires.manor === w || e.requires.manor[w]), key);
+  }
+  for (const wing of Object.values(DB.karma.manor.wings)) assert.equal(wing.levels.length, wing.costs.length);
+});
+
+test("외전의 출신에게도 전용 자질 둘과 기틀 하나가 있고 사건이 그 자질에 반응한다", () => {
+  for (const key of DB.origins.side_order) {
+    const traits = Object.keys(DB.traits).filter((t) => DB.traits[t].origin === key);
+    assert.equal(traits.length, 2, `${key} 자질`);
+    assert.equal(Object.values(DB.karma.upgrades).filter((u) => u.origin === key).length, 1, `${key} 기틀`);
+    const own = Object.values(DB.randomEvents).filter((e) => e.requires?.origin === key);
+    assert.ok(own.length >= 4, `${key} 전용 사건 ${own.length}`);
+    for (const trait of traits) {
+      assert.ok(own.some((e) => e.choices.some((c) => c.requires?.trait === trait && c.hidden)), `${trait} 반응`);
+    }
+  }
 });
 
 test("연계 데이터가 규칙을 지킨다", () => {

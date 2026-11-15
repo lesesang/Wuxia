@@ -16,6 +16,7 @@ export function unmetReason(player, requires) {
   const r = requires;
   if (r.origin && player.originKey !== r.origin) return "출신이 다르다";
   if (r.side !== undefined && !!r.side !== !!sideOrigin(player)) return "다른 이야기의 일이다";
+  if (r.manor !== undefined && !hasManor(player, r.manor)) return "장원에 그만한 채가 없다";
   // 깊은 강호에서만 일어나는 일이 있다
   if (r.difficulty_min && difficultyRank(player.difficulty) < difficultyRank(r.difficulty_min)) return "이 강호에서는 일어나지 않는 일이다";
   if (r.difficulty_max && difficultyRank(player.difficulty) > difficultyRank(r.difficulty_max)) return "이 강호에서는 일어나지 않는 일이다";
@@ -222,6 +223,29 @@ export function dueOriginEvent(player) {
   return player.turn - (player.originTurn ?? -99) >= ORIGIN_GAP ? ready[0] : null;
 }
 
+/** 장원의 채가 조건만큼 섰는가. true는 문패만, 이름은 그 채 1단계, 묶음은 채마다의 단계와 모두 더한 크기(size) */
+export function hasManor(player, need) {
+  const m = player.manor;
+  if (!m) return false;
+  if (need === true) return true;
+  const wants = typeof need === "string" ? { [need]: 1 } : need;
+  const size = Object.values(m).reduce((a, b) => a + b, 0);
+  return Object.entries(wants).every(([wing, level]) => (wing === "size" ? size : m[wing] || 0) >= level);
+}
+
+const MANOR_FIRST = 3; // 장원의 첫 일이 찾아오는 달
+const MANOR_GAP = 7;   // 장원의 일이 몰리지 않게 띄우는 달
+/** 문패를 챙긴 강호행에는 장원의 일이 차례로 찾아온다. 그 장의 일 가운데 채가 갖춰진 것을 띄엄띄엄 연다 */
+export function dueManorEvent(player) {
+  if (!player.manor || player.turn < MANOR_FIRST || player.turn >= Math.min(player.maxTurn, LAST_CHAIN_TURN)) return null;
+  if (player.turn - (player.manorTurn ?? -99) < MANOR_GAP) return null;
+  const chapter = getChapter(player.turn);
+  return Object.keys(DB.events_manor).find((key) => {
+    const event = DB.events_manor[key];
+    return !player.seenEvents.includes(key) && (event.chapters || [1, 2, 3, 4, 5]).includes(chapter) && checkRequires(player, event.requires);
+  }) ?? null;
+}
+
 export const ALONE_FLAG = "홀로_간다";
 const ALONE_GATE_RATE = 0.15;
 const BOUGHT_EVENT_WEIGHT = 5;
@@ -232,7 +256,7 @@ export function pickRandomEvent(player) {
     const event = DB.randomEvents[key];
     if (event.legacy_find || event.action) return false; // 유산의 흔적과 수련 중의 사건은 정해진 자리에서만 나온다
     if (event.chain && !canStartChain(player, event.chain.id)) return false;
-    if (!fitsStory(player, event)) return false;
+    if (!fitsStory(player, event) || event.manor_event) return false;
     return (event.chapters || []).includes(chapter) && !player.seenEvents.includes(key)
       && checkRequires(player, event.requires);
   });
