@@ -10672,8 +10672,8 @@
     "name": "천주독모 섭홍",
     "tier": "강적",
     "realm": "화경",
-    "hp": 17000,
-    "attack": 246,
+    "hp": 14500,
+    "attack": 224,
     "exp_reward": 3,
     "silver": [
       63,
@@ -10792,8 +10792,8 @@
     "name": "매화노검 백송",
     "tier": "강적",
     "realm": "화경",
-    "hp": 24000,
-    "attack": 282,
+    "hp": 20500,
+    "attack": 260,
     "exp_reward": 3,
     "silver": [
       63,
@@ -10850,8 +10850,8 @@
     "name": "무흔 조일",
     "tier": "강적",
     "realm": "화경",
-    "hp": 24500,
-    "attack": 292,
+    "hp": 20000,
+    "attack": 262,
     "exp_reward": 3,
     "silver": [
       63,
@@ -10930,8 +10930,8 @@
     "name": "물귀신 우대강",
     "tier": "강적",
     "realm": "화경",
-    "hp": 24500,
-    "attack": 288,
+    "hp": 25500,
+    "attack": 294,
     "exp_reward": 3,
     "silver": [
       63,
@@ -11066,8 +11066,8 @@
     "name": "설령수 하란",
     "tier": "강적",
     "realm": "화경",
-    "hp": 24500,
-    "attack": 296,
+    "hp": 28000,
+    "attack": 318,
     "exp_reward": 5,
     "silver": [
       90,
@@ -11244,5 +11244,74 @@
         ]
       }
     }
+  },
+  "외전_염철": {
+    "name": "적발마두 염철",
+    "tier": "강적",
+    "realm": "화경",
+    "hp": 24500,
+    "attack": 296,
+    "exp_reward": 4,
+    "silver": [
+      80,
+      120
+    ],
+    "armor": 22,
+    "level": 97,
+    "hp_style": 1.366,
+    "attack_style": 1.19,
+    "chapters": [],
+    "weight": 0,
+    "named": true,
+    "title": "혈마신교 좌호법",
+    "desc": "붉은 머리를 풀어 헤친 혈교의 좌호법. 깨어난 혈마의 몫을 챙기는 손이다. 교주가 놓아준 것도 그는 놓지 않는다.",
+    "intro": "\"깨어나신 분의 몫이다. 누구도 덜어 내지 못한다.\"",
+    "outro": "염철이 무릎을 꿇었다. 붉은 머리가 바닥에 흩어졌다.",
+    "spar_outro": "염철이 손을 거두고 붉은 머리를 쓸어 넘겼다. \"네 뜻이 내 손보다 무겁다.\"",
+    "specials": [
+      {
+        "name": "혈염장",
+        "every": 3,
+        "mult": 2.1,
+        "poison": {
+          "damage": 22,
+          "rounds": 3
+        }
+      },
+      {
+        "name": "적발난무",
+        "every": 5,
+        "mult": 1.6,
+        "accuracy": 10
+      }
+    ],
+    "quirks": [
+      {
+        "type": "bloodthirst",
+        "percent": 20
+      }
+    ],
+    "phases": [
+      {
+        "hp_pct": 50,
+        "attack_mult": 1.2,
+        "text": "염철의 붉은 머리가 핏물처럼 일어선다. 깨어난 것의 기운이 그의 등 뒤에 선다.",
+        "quirks": [
+          {
+            "type": "frenzy",
+            "percent": 5,
+            "max": 20,
+            "name": "깨어난 것의 그림자"
+          },
+          {
+            "type": "undying",
+            "percent": 25,
+            "name": "혈마의 몫",
+            "rise": "염철이 쓰러졌다가 핏물을 딛고 다시 일어선다. 깨어난 것이 제 몫을 챙기는 손을 놓아주지 않는다.",
+            "stagger": true
+          }
+        ]
+      }
+    ]
   }
 }

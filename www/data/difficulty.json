@@ -198,5 +198,15 @@
     "mirror": {
       "name": "반탄"
     }
+  },
+  "side": {
+    "enemy": {
+      "hp": 1.6,
+      "attack": 1.4
+    },
+    "final": {
+      "hp": 2.8,
+      "attack": 1.7
+    }
   }
 }

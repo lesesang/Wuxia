@@ -6,7 +6,7 @@ import { eventView } from "./events.js";
 import { Game } from "./game.js";
 import { bonusFor, equipmentBonus, gearGimmick, itemGrade, itemName, sellableView, stockView } from "./market.js";
 import {
-  buyContent, buildWing, buyGate, refundGate, gateCost, manorLevels, manorSize, buyProvision, buyUpgrade, exportRecords, extraSlots, importRecords, legacyAvailable, legacyPowers, dropLegacy, upgradeLegacy, loadCheckpoint, loadEventLog, loadMeta, nextReward, openLegacy, refundProvision, setUpgradeUse, upgradeUse,
+  buyContent, buildWing, buyGate, sideOpen, manorOpen, refundGate, gateCost, manorLevels, manorSize, buyProvision, buyUpgrade, exportRecords, extraSlots, importRecords, legacyAvailable, legacyPowers, dropLegacy, upgradeLegacy, loadCheckpoint, loadEventLog, loadMeta, nextReward, openLegacy, refundProvision, setUpgradeUse, upgradeUse,
   toggleContent, unlockOrigin, unlockTrait, upgradeLevel, resetSetupChoices, canLeaveLegacy, sameLegacy, difficultyOpen,
 } from "./meta.js";
 import {
@@ -320,8 +320,8 @@ ${section("도구", ["수련 도구는 언제든, 전투 도구는 싸움 중에
     `<b>깊은 강호</b>: ${DB.difficulty.order.slice(1).map((k) => `${esc(DB.difficulty.levels[k].name)}${josa(DB.difficulty.levels[k].name, "은/는")} ${DB.difficulty.levels[k].karma}배`).join(", ")}를 받습니다.`,
     "카르마는 써도 누적은 줄지 않고, 누적이 늘면 누적 보상을 저절로 받습니다."])}
 ${section("상점", ["<b>출신</b>: 새 출신을 엽니다. <b>자질</b>: 타고난 바탕입니다. 장착할 수 있는 칸에 한이 있습니다. <b>기틀</b>: 늘 적용되는 바탕을 단계별로 올립니다. <b>인연</b>: 새 이야기와 결전에 달려올 사람을 엽니다. <b>채비</b>: 다음 강호행 한 번에만 쓰는 값싼 준비물입니다. <b>장원</b>: 채를 올려 키우는 거점입니다.", "잠긴 출신의 전용 자질, 기틀, 인연은 그 출신을 해금하면 상점에 보입니다.", "자질, 기틀, 채비, 누적 보상에서 받는 병기와 갑의는 겹칠수록 좋아지고, 끝을 넘으면 은자가 됩니다. 같은 비급이 겹치면 성취가 됩니다."])}
-${section("외전", ["외전의 출신은 상점에서 따로 엽니다. 천마봉으로 가지 않고, 같은 강호의 같은 십 년을 저마다의 목표로 걷습니다. 그 출신만의 서장과 고비, 마지막 고비, 결말 셋이 있습니다.", "본편의 줄거리와 결전을 준비하는 일, 카르마로 산 인연은 외전에 나오지 않습니다. 대신 외전에서만 만나는 변경과 새외의 일이 있습니다.", "외전을 끝맺으면 그 결말의 카르마를 받고 유산도 남길 수 있습니다. 깊은 강호는 천마를 꺾어야 열립니다."])}
-${section("장원", ["상점에서 카르마로 장원의 채(객사, 연무장, 약방, 서고)를 단계별로 올립니다. 올린 채는 사라지지 않습니다.", "장원은 문패를 챙긴 강호행에만 나타납니다. 문패는 강호행 한 번에 쓰이고, 장원이 클수록 값이 오릅니다. 시작하기 전에는 물릴 수 있습니다.", "문패를 챙긴 강호행에서는 올린 채에 맞는 장원의 일이 몇 달에 한 번씩 찾아오고, 길에서 만나는 일에 장원으로 푸는 선택지가 열립니다. 본편과 외전 모두 같습니다."])}
+${section("외전", ["외전의 출신은 생사경에 오른 뒤 상점에서 따로 엽니다. 천마봉으로 가지 않고, 같은 강호의 같은 십 년을 저마다의 목표로 걷습니다. 그 출신만의 서장과 고비, 마지막 고비, 결말 셋이 있습니다.", "본편의 줄거리와 결전을 준비하는 일, 카르마로 산 인연은 외전에 나오지 않습니다. 대신 외전에서만 만나는 변경과 새외의 일이 있습니다. 외전의 길에서 만나는 적은 본편보다 강하고, 마지막 고비의 상대는 그보다 훨씬 강합니다.", "외전을 끝맺으면 그 결말의 카르마를 받고 유산도 남길 수 있습니다. 깊은 강호는 천마를 꺾어야 열립니다."])}
+${section("장원", [`쌓은 카르마가 ${DB.karma.manor.need_total}에 이르면 열립니다. 상점에서 카르마로 장원의 채(객사, 연무장, 약방, 서고)를 단계별로 올립니다. 올린 채는 사라지지 않습니다.`, "장원은 문패를 챙긴 강호행에만 나타납니다. 문패는 강호행 한 번에 쓰이고, 장원이 클수록 값이 오릅니다. 시작하기 전에는 물릴 수 있습니다.", "문패를 챙긴 강호행에서는 올린 채에 맞는 장원의 일이 몇 달에 한 번씩 찾아오고, 길에서 만나는 일에 장원으로 푸는 선택지가 열립니다. 본편과 외전 모두 같습니다."])}
 ${section("전설의 유산", ["천마를 한 번 쓰러뜨리면 상점에서 열 수 있습니다. 천마를 쓰러뜨리거나 외전을 끝맺은 강호행을 마칠 때 무공이나 병장기, 귀한 물건 하나를 남깁니다. 같은 것은 하나만 보관하고, 보관이 차면 하나를 지워야 새로 남깁니다.", "고른 유산은 첫 해 안에 별호만 남은 고수들의 자취에서 한꺼번에 이어받습니다. 이어받아도 보관함에서 사라지지 않습니다.", "처음에는 무공의 품계가 한 단계 낮아지고(상승까지만), 병장기는 낮은 단계로 돌아옵니다.", ...DB.karma.legacy.upgrades.map((u, i) => `<b>${i + 1}단계 ${esc(u.name)}</b>: ${esc(u.desc)}`)])}`,
   };
   const page = pages[ui.helpPage] ? ui.helpPage : "처음";
@@ -444,9 +444,9 @@ const visibleTraits = (origin = null) => Object.keys(DB.traits).filter((key) => 
 
 const originOnly = (key) => (key ? `<span class="pick-stats block">${esc(DB.origins.origins[key].name)} 전용</span>` : "");
 
-function shopRow(name, desc, act, key, cost, meta, label = "해금") {
+function shopRow(name, desc, act, key, cost, meta, label = "해금", shut = false) {
   return `<div class="pick-row locked"><div class="pick-main"><div class="pick-name">${name}</div>${desc}</div>
-    <button class="unlock-btn" data-act="${act}" data-key="${esc(key)}" ${meta.current_karma < cost ? "disabled" : ""}>카르마 ${cost}<br>${label}</button></div>`;
+    <button class="unlock-btn" data-act="${act}" data-key="${esc(key)}" ${shut || meta.current_karma < cost ? "disabled" : ""}>카르마 ${cost}<br>${label}</button></div>`;
 }
 
 const emptyNote = (text) => `<p class="codex-empty">${text}</p>`;
@@ -460,7 +460,7 @@ function shopPanels(meta) {
   const origins = DB.origins.order.filter((k) => !meta.unlocked_origins.includes(k))
     .map((k) => shopRow(esc(DB.origins.origins[k].name), originDetail(k), "unlock-origin", k, DB.origins.origins[k].cost, meta)).join("");
   const sideRows = DB.origins.side_order.filter((k) => !meta.unlocked_origins.includes(k))
-    .map((k) => shopRow(esc(DB.origins.origins[k].name), originDetail(k), "unlock-origin", k, DB.origins.origins[k].cost, meta)).join("");
+    .map((k) => shopRow(esc(DB.origins.origins[k].name), originDetail(k), "unlock-origin", k, DB.origins.origins[k].cost, meta, "해금", !sideOpen(meta))).join("");
   // 해금한 외전은 본 결말의 수와 함께 보여 준다
   const ownedSides = DB.origins.side_order.filter((k) => meta.unlocked_origins.includes(k)).map((k) => {
     const o = DB.origins.origins[k];
@@ -468,7 +468,7 @@ function shopPanels(meta) {
     const seen = endings.filter((e) => meta.endings_seen.includes(e)).length;
     return `<div class="pick-row"><div class="pick-main"><div class="pick-name">${esc(o.name)} <span class="rarity">결말 ${seen}/${endings.length}</span></div><p class="pick-desc">${esc(o.goal)}</p></div></div>`;
   }).join("");
-  const sides = `<p class="section-note">외전의 출신은 천마봉으로 가지 않습니다. 같은 강호의 같은 십 년을 저마다의 목표로 걷고, 그 출신만의 줄거리와 결말이 있습니다. 카르마로 산 인연은 외전에 나오지 않습니다. 깊은 강호에서는 외전의 이야기도 그 강호에 맞게 달라집니다.</p>${sideRows || emptyNote("모든 외전을 해금했습니다.")}${ownedSides ? `<h4 class="shop-group">해금한 외전</h4>${ownedSides}` : ""}`;
+  const sides = `<p class="section-note">외전의 출신은 천마봉으로 가지 않습니다. 같은 강호의 같은 십 년을 저마다의 목표로 걷고, 그 출신만의 줄거리와 결말이 있습니다. 카르마로 산 인연은 외전에 나오지 않습니다. 깊은 강호에서는 외전의 이야기도 그 강호에 맞게 달라집니다. 외전의 길은 본편보다 거칩니다.</p>${sideOpen(meta) ? "" : `<p class="section-note">외전은 생사경에 오른 무인에게 열립니다. 천마를 쓰러뜨리는 순간 생사의 경계를 넘어야 합니다.</p>`}${sideRows || emptyNote("모든 외전을 해금했습니다.")}${ownedSides ? `<h4 class="shop-group">해금한 외전</h4>${ownedSides}` : ""}`;
   const levels = manorLevels(meta);
   const gate = gateCost(meta);
   const gateRow = meta.manor_gate
@@ -484,9 +484,9 @@ function shopPanels(meta) {
     const body = `<p class="pick-desc">${esc(w.desc)}</p>${steps}`;
     return cost === undefined
       ? `<div class="pick-row"><div class="pick-main"><div class="pick-name">${name}</div>${body}</div></div>`
-      : shopRow(name, body, "build-wing", key, cost, meta, "올리기");
+      : shopRow(name, body, "build-wing", key, cost, meta, "올리기", !manorOpen(meta));
   };
-  const manor = `<p class="section-note">${esc(DB.karma.manor.note)}</p>${gateRow}<h4 class="shop-group">장원의 채</h4>${Object.entries(DB.karma.manor.wings).map(wingRow).join("")}`;
+  const manor = `<p class="section-note">${esc(DB.karma.manor.note)}</p>${manorOpen(meta) ? "" : `<p class="section-note">장원은 쌓은 카르마가 ${DB.karma.manor.need_total}에 이른 무인에게 문패를 내줍니다. 지금까지 쌓은 카르마는 ${meta.total_karma}입니다.</p>`}${gateRow}<h4 class="shop-group">장원의 채</h4>${Object.entries(DB.karma.manor.wings).map(wingRow).join("")}`;
   const traits = byRarity(visibleTraits().filter((k) => !meta.unlocked_traits.includes(k) && open(DB.traits[k].origin)),
     (k) => shopRow(traitName(DB.traits[k]), `<p class="pick-desc">${esc(DB.traits[k].desc)}</p>${originOnly(DB.traits[k].origin)}`, "unlock-trait", k, DB.traits[k].cost, meta));
   const groups = [...new Set(Object.values(DB.karma.upgrades).map((u) => u.group))];
@@ -583,7 +583,7 @@ function rewardPanel(meta) {
 
 function affordableCount(meta) {
   const k = meta.current_karma;
-  const origins = [...DB.origins.order, ...DB.origins.side_order].filter((o) => !meta.unlocked_origins.includes(o) && DB.origins.origins[o].cost <= k).length;
+  const origins = [...DB.origins.order, ...(sideOpen(meta) ? DB.origins.side_order : [])].filter((o) => !meta.unlocked_origins.includes(o) && DB.origins.origins[o].cost <= k).length;
   const traits = Object.keys(DB.traits).filter((t) => !DB.traits[t].hidden && !meta.unlocked_traits.includes(t) && DB.traits[t].cost <= k).length;
   const ups = Object.entries(DB.karma.upgrades).filter(([key, u]) => u.costs[upgradeLevel(key, meta)] <= k).length;
   const content = Object.entries(DB.karma.content).filter(([key, c]) => !meta.content.includes(key) && c.cost <= k).length;

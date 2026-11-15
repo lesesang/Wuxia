@@ -409,6 +409,14 @@ export class Game {
     enemy.maxHp = Math.max(1, Math.round(enemy.maxHp * level.enemy.hp * (boss ? level.enemy.boss_hp ?? 1 : 1)));
     enemy.hp = enemy.maxHp;
     enemy.attack = Math.max(1, Math.round(enemy.attack * level.enemy.attack * (boss ? level.enemy.boss_attack ?? 1 : 1)));
+    // 외전의 길은 생사경을 본 무인이 걷는 길이라 본편보다 거칠다
+    if (sideOrigin(this.player)) {
+      // 그 이야기만의 상대는 그보다도 한층 강하다
+      const rough = enemy.key.startsWith("외전_") ? DB.difficulty.side.final : DB.difficulty.side.enemy;
+      enemy.maxHp = Math.max(1, Math.round(enemy.maxHp * rough.hp));
+      enemy.hp = enemy.maxHp;
+      enemy.attack = Math.max(1, Math.round(enemy.attack * rough.attack));
+    }
     // 깊은 강호의 천마가 더 지닌 괴공. 같은 괴공은 깊은 쪽으로 바꾼다
     for (const q of enemy.key === "천마" ? level.final_quirks || [] : []) {
       enemy.quirks = [...enemy.quirks.filter((own) => own.type !== q.type), { ...q }];
