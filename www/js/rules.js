@@ -368,6 +368,13 @@ function bynameOf(player) {
 
 export const DEFAULT_DIFFICULTY = "강호";
 export const difficultyRank = (key) => Math.max(0, DB.difficulty.order.indexOf(key));
+/** 깊은 강호에서 외전의 장이 열릴 때 붙는 그 출신의 문장. 지금 강호와 같거나 얕은 것 가운데 가장 깊은 것을 쓴다 */
+export function sideDeepLine(player, chapter) {
+  const deep = sideOrigin(player)?.deep || {};
+  const key = Object.keys(deep).filter((k) => difficultyRank(k) <= difficultyRank(player.difficulty) && difficultyRank(k) > 0 && deep[k][String(chapter)])
+    .sort((a, b) => difficultyRank(b) - difficultyRank(a))[0];
+  return key ? deep[key][String(chapter)] : null;
+}
 export const difficultyOf = (player) => DB.difficulty.levels[player?.difficulty] || DB.difficulty.levels[DEFAULT_DIFFICULTY];
 
 /** 적의 괴공을 설명하는 문장 */

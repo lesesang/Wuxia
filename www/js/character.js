@@ -565,7 +565,8 @@ export class Player {
     p.sect = d.sect !== undefined ? d.sect : (ORIGIN_SECTS[p.originKey] || null);
     p.injury = d.injury ?? 0;
     p.turn = d.turn;
-    p.maxTurn = MAX_TURN;
+    // 외전은 출신마다 끝나는 달이 다르다
+    p.maxTurn = DB.origins.origins[p.originKey]?.side ? DB.origins.origins[p.originKey].end_turn : MAX_TURN;
     p.alive = d.alive;
     // 60달 시절의 저장은 시간표를 두 배로 늘려 이어 간다
     if (d.max_turn === 60) {

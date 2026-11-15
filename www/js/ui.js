@@ -461,7 +461,14 @@ function shopPanels(meta) {
     .map((k) => shopRow(esc(DB.origins.origins[k].name), originDetail(k), "unlock-origin", k, DB.origins.origins[k].cost, meta)).join("");
   const sideRows = DB.origins.side_order.filter((k) => !meta.unlocked_origins.includes(k))
     .map((k) => shopRow(esc(DB.origins.origins[k].name), originDetail(k), "unlock-origin", k, DB.origins.origins[k].cost, meta)).join("");
-  const sides = `<h4 class="shop-group">외전</h4><p class="section-note">외전의 출신은 천마봉으로 가지 않습니다. 같은 강호의 같은 십 년을 저마다의 목표로 걷고, 그 출신만의 줄거리와 결말이 있습니다. 카르마로 산 인연은 외전에 나오지 않습니다.</p>${sideRows || emptyNote("모든 외전을 해금했습니다.")}`;
+  // 해금한 외전은 본 결말의 수와 함께 보여 준다
+  const ownedSides = DB.origins.side_order.filter((k) => meta.unlocked_origins.includes(k)).map((k) => {
+    const o = DB.origins.origins[k];
+    const endings = Object.keys(DB.endings.side).filter((e) => DB.endings.side[e] === k);
+    const seen = endings.filter((e) => meta.endings_seen.includes(e)).length;
+    return `<div class="pick-row"><div class="pick-main"><div class="pick-name">${esc(o.name)} <span class="rarity">결말 ${seen}/${endings.length}</span></div><p class="pick-desc">${esc(o.goal)}</p></div></div>`;
+  }).join("");
+  const sides = `<p class="section-note">외전의 출신은 천마봉으로 가지 않습니다. 같은 강호의 같은 십 년을 저마다의 목표로 걷고, 그 출신만의 줄거리와 결말이 있습니다. 카르마로 산 인연은 외전에 나오지 않습니다. 깊은 강호에서는 외전의 이야기도 그 강호에 맞게 달라집니다.</p>${sideRows || emptyNote("모든 외전을 해금했습니다.")}${ownedSides ? `<h4 class="shop-group">해금한 외전</h4>${ownedSides}` : ""}`;
   const levels = manorLevels(meta);
   const gate = gateCost(meta);
   const gateRow = meta.manor_gate
@@ -530,7 +537,8 @@ function shopPanels(meta) {
   const provisions = provisionFilter.row + provisionGroups.filter((g) => provisionFilter.on === "전체" || provisionFilter.on === g).map((g) => `<h4 class="shop-group">${esc(g)}</h4>${Object.entries(DB.karma.provisions).filter(([, p]) => p.group === g).map(provisionRow).join("")}`).join("");
   return {
     provision: `<p class="section-note">채비는 다음 강호행 한 번에만 쓰입니다. 시작할 때 저절로 꺼내 쓰고, 그 전에는 물릴 수 있습니다.</p>${provisions}`,
-    origin: (origins || emptyNote("모든 출신을 해금했습니다.")) + sides,
+    origin: origins || emptyNote("모든 출신을 해금했습니다."),
+    side: sides,
     manor,
     trait: filterRow() + (traits || emptyNote("이 갈래의 자질을 모두 해금했습니다.")) + lockedNote,
     upgrade: `<p class="section-note">기틀은 장착하지 않아도 모든 강호행에 적용됩니다.</p>${upgrades}${lockedNote}`,
@@ -586,7 +594,7 @@ function renderShop() {
   document.body.className = "home setup-screen";
   setMood("calm");
   const meta = loadMeta();
-  const tabs = [["origin", "출신"], ["trait", "자질"], ["upgrade", "기틀"], ["content", "인연"], ["provision", "채비"], ["manor", "장원"], ["legacy", "유산"], ["reward", "누적"]];
+  const tabs = [["origin", "출신"], ["side", "외전"], ["trait", "자질"], ["upgrade", "기틀"], ["content", "인연"], ["provision", "채비"], ["manor", "장원"], ["legacy", "유산"], ["reward", "누적"]];
   app().innerHTML = `<div class="setup-head">
       <button class="back-btn" data-act="shop-back" aria-label="뒤로">←</button>
       <h2>카르마 상점</h2>

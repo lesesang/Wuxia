@@ -2,20 +2,17 @@
 import { Battle, enemyPool, Enemy, statureEnemy, useConsumable } from "./battle.js";
 import { GRADE_ORDER, Player, Skill, STAT_NAMES } from "./character.js";
 import { DB } from "./data.js";
-import { equipBestGear, grantStartGear, grantStartSkills,
-  advanceChain, applyEffects, failChain, checkRequires, dueChainEvent, enemyIntro, LAST_CHAIN_TURN, pickActionEvent, pickFortune, pickRandomEvent, resolveChoice,
-  reactiveLine, startChain, storyEventForTurn, dueOriginEvent, dueManorEvent, pendingOriginEvents,
-} from "./events.js";
-import { bonusFor, buy, equipmentBonus, openMarket, sell } from "./market.js";
 import {
-  activeContent, addKarma, claimAchievements, clearCheckpoint, extraSlots, rewardTraits, loadCheckpoint, loadMeta, recordRun, saveCheckpoint,
-  legacyPowers, storeLegacy, canLeaveLegacy, beatFinal, sideEnding, sameLegacy, takeProvisions, takeGate, updateGlobalCodex, updateKnown, upgradeTraits,
-  difficultyOpen, recordDifficultyClear,
+  grantStartGear, grantStartSkills, advanceChain, applyEffects, failChain, checkRequires, dueChainEvent, enemyIntro, LAST_CHAIN_TURN, pickActionEvent, pickFortune, pickRandomEvent, resolveChoice, reactiveLine, startChain, storyEventForTurn, dueOriginEvent, dueManorEvent, pendingOriginEvents,
+} from "./events.js";
+import { buy, openMarket, sell } from "./market.js";
+import {
+  activeContent, addKarma, claimAchievements, clearCheckpoint, extraSlots, loadCheckpoint, loadMeta, recordRun, saveCheckpoint, legacyPowers, storeLegacy, canLeaveLegacy, beatFinal, sideEnding, rewardTraits, upgradeTraits, sameLegacy, takeProvisions, takeGate, updateGlobalCodex, updateKnown, difficultyOpen, recordDifficultyClear,
 } from "./meta.js";
 import { pick, pickWeighted, randInt, rng } from "./rng.js";
 import {
   actionLine, ALIGNMENT_CAP, alignTier, applyGrowth, byname, CHAPTER_STARTS, checkBreakthrough, checkGoodEnding, checkSaengsa,
-  scaledGrowth, fameRank, FOCUS_DRIFT, focusedSide, getChapter, getChapterInfo, getMonth, getYear, isMarketTurn, monthLine, auraText, isNamed, perkTrait, realmFit, enemyRealmIndex, returnedLine, standIn, realmIndex, sideOrigin, sumEffect, talkLine, traitSlots,
+  scaledGrowth, fameRank, FOCUS_DRIFT, focusedSide, getChapter, getChapterInfo, getMonth, getYear, isMarketTurn, monthLine, auraText, isNamed, perkTrait, realmFit, enemyRealmIndex, returnedLine, standIn, realmIndex, sideOrigin, sideDeepLine, difficultyRank, sumEffect, talkLine, traitSlots,
   personalize, DEFAULT_DIFFICULTY, difficultyOf,
   ALIGNMENTS, ALIGN_STEPS,
 } from "./rules.js";
@@ -128,7 +125,7 @@ export class Game {
       ...(provisions.length ? [`챙겨 온 채비: ${provisions.map((k) => DB.karma.provisions[k].name).join(", ")}`] : []),
       ...(manor ? ["품에 장원의 문패가 있다."] : []),
     ];
-    const deep = side ? null : difficultyOf(this.player).chapters?.["1"];
+    const deep = side ? sideDeepLine(this.player, 1) : difficultyOf(this.player).chapters?.["1"];
     this.enterTurn([`${intro.title}, 1년차. ${intro.desc}`, ...(deep ? [deep] : []), ...provisionLines, ...giftLines]);
     return true;
   }
@@ -362,7 +359,8 @@ export class Game {
     // 혈교와 손잡은 무인은 혈교도 치지 않고, 무너진 혈교는 다시 나오지 않는다
     const allies = p.hasFlag("혈해_맹약") || p.hasFlag("혈교_멸문") ? "혈교" : null;
     const fitting = pool.filter((k) => !(mine === "정도" && DB.enemies[k].side === "정도") && DB.enemies[k].faction !== p.sect && DB.enemies[k].faction !== allies
-      && !(isNamed(k) && p.slain.includes(k))); // 쓰러뜨린 이름 있는 적은 다시 만나지 않는다
+      && !(isNamed(k) && p.slain.includes(k)) // 쓰러뜨린 이름 있는 적은 다시 만나지 않는다
+      && !sideOrigin(p)?.shun?.includes(k)); // 외전의 줄거리에서 만날 사람은 길에서 먼저 마주치지 않는다
     const list = fitting.length ? fitting : pool;
     const key = pickWeighted(list, list.map(weightOf));
     this.reachChapter = ahead.includes(key) ? chapter + 1 : null;
@@ -414,6 +412,13 @@ export class Game {
     // 깊은 강호의 천마가 더 지닌 괴공. 같은 괴공은 깊은 쪽으로 바꾼다
     for (const q of enemy.key === "천마" ? level.final_quirks || [] : []) {
       enemy.quirks = [...enemy.quirks.filter((own) => own.type !== q.type), { ...q }];
+    }
+    // 그 강호에서만 지니는 괴공. 지금 강호와 같거나 얕은 것 가운데 가장 깊은 것을 지닌다
+    const own = Object.keys(DB.enemies[enemy.key].deep_quirks || {}).filter((k) => difficultyRank(k) <= difficultyRank(this.player.difficulty))
+      .sort((a, b) => difficultyRank(b) - difficultyRank(a))[0];
+    if (own && !spar) {
+      for (const q of DB.enemies[enemy.key].deep_quirks[own].quirks) enemy.quirks = [...enemy.quirks.filter((x) => x.type !== q.type), { ...q }];
+      return [DB.enemies[enemy.key].deep_quirks[own].text];
     }
     const { affix } = level;
     if (!affix || spar || enemy.beast || enemy.tier === "보스" || enemy.side === "정도" || enemy.quirks.length) return [];
@@ -703,7 +708,7 @@ export class Game {
     lines.push(...this.alignmentMonth());
     if (CHAPTER_STARTS.includes(p.turn)) {
       const info = getChapterInfo(p.turn, p);
-      const deep = sideOrigin(p) ? null : difficultyOf(p).chapters?.[String(getChapter(p.turn))];
+      const deep = sideOrigin(p) ? sideDeepLine(p, getChapter(p.turn)) : difficultyOf(p).chapters?.[String(getChapter(p.turn))];
       lines.push(`${info.title}, ${getYear(p.turn)}년차. ${info.desc}`, ...(deep ? [deep] : []), ...this.chapterGrowth());
     }
     if (getMonth(p.turn) === 1) lines.push(...this.yearRest());

@@ -193,7 +193,11 @@ export const manorLevels = (data = loadMeta()) => Object.fromEntries(
   Object.entries(DB.karma.manor.wings).map(([key, wing]) => [key, Math.min(wing.costs.length, data.manor?.[key] || 0)]));
 export const manorSize = (data = loadMeta()) => Object.values(manorLevels(data)).reduce((a, b) => a + b, 0);
 /** 다음 강호행에 장원을 나타나게 하는 문패의 값. 장원이 클수록 비싸다 */
-export const gateCost = (data = loadMeta()) => DB.karma.manor.gate.base + DB.karma.manor.gate.per_level * manorSize(data);
+/** 문패 값은 장원이 클수록 오른다. 올린 단계 셋마다 한 계단이다 */
+export const gateCost = (data = loadMeta()) => {
+  const costs = DB.karma.manor.gate.costs;
+  return costs[Math.min(costs.length - 1, Math.max(0, Math.ceil(manorSize(data) / 3) - 1))];
+};
 
 /** 채를 한 단계 올린다 */
 export function buildWing(key) {

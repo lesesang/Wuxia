@@ -1,7 +1,7 @@
 // 이벤트. 정해진 달의 줄거리와 탐색 중 사건을 JSON으로 관리한다. 형식은 docs/콘텐츠-가이드.md 참고.
 import { GRADE_ORDER, HOME_ART_MASTERY, Skill, STAT_NAMES, STAT_SCALE } from "./character.js";
 import { DB } from "./data.js";
-import { bonusFor, equipmentBonus, ITEM_GRADES, styleWeight, weightsByStyle } from "./market.js";
+import { bonusFor, ITEM_GRADES, styleWeight, weightsByStyle } from "./market.js";
 import { legacyPowers, loadMeta, recordEventPick, updateKnown } from "./meta.js";
 import { pick, pickWeighted, rng } from "./rng.js";
 import { ALIGNMENTS, CHAPTER_STARTS, MAX_FAME, applyGrowth, difficultyRank, eventToll, scaledGrowth, fameRankChanged, getChapter, realmIndex, sumEffect, fitsStory, sideOrigin,

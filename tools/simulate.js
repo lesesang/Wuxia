@@ -7,7 +7,7 @@ import { readFile } from "node:fs/promises";
 import { loadData } from "../www/js/data.js";
 import { eventView } from "../www/js/events.js";
 import { Game } from "../www/js/game.js";
-import { blockReason, buy, bonusFor, equipmentBonus } from "../www/js/market.js";
+import { blockReason, bonusFor, equipmentBonus } from "../www/js/market.js";
 import { loadMeta, saveMeta } from "../www/js/meta.js";
 import { DB } from "../www/js/data.js";
 
