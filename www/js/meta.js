@@ -103,6 +103,7 @@ export function addKarma(amount) {
 
 function unlock(listName, key, cost) {
   const data = loadMeta();
+  if (listName === "unlocked_origins" && DB.origins.origins[key]?.side && !sideOpen(data)) return false;
   if (data[listName].includes(key) || data.current_karma < cost) return false;
   data.current_karma -= cost;
   data[listName].push(key);
@@ -199,13 +200,19 @@ export const gateCost = (data = loadMeta()) => {
   return costs[Math.min(costs.length - 1, Math.max(0, Math.ceil(manorSize(data) / 3) - 1))];
 };
 
+/** 외전은 생사경에 올라 본 사람에게 열린다. 이미 연 외전이 있으면 그대로 열려 있다 */
+export const sideOpen = (data = loadMeta()) => data.endings_seen.includes("생사경") || DB.origins.side_order.some((k) => data.unlocked_origins.includes(k));
+
+/** 장원은 쌓은 카르마가 넉넉해야 문패를 내준다. 이미 지은 채가 있으면 그대로 열려 있다 */
+export const manorOpen = (data = loadMeta()) => data.total_karma >= DB.karma.manor.need_total || manorSize(data) > 0;
+
 /** 채를 한 단계 올린다 */
 export function buildWing(key) {
   const data = loadMeta();
   const wing = DB.karma.manor.wings[key];
   const level = manorLevels(data)[key];
   const cost = wing?.costs[level];
-  if (cost === undefined || data.current_karma < cost) return false;
+  if (cost === undefined || data.current_karma < cost || !manorOpen(data)) return false;
   data.current_karma -= cost;
   data.manor = { ...data.manor, [key]: level + 1 };
   // 챙겨 둔 문패는 장원이 커져도 치른 값 그대로 쓴다

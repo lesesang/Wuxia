@@ -11,7 +11,7 @@ import { buildEpilogue, Game, settlePerson } from "../www/js/game.js";
 import { halpun, josa } from "../www/js/josa.js";
 import { blockReason, buy, equipmentBonus, ITEM_GRADES, openMarket, priceOf, sell } from "../www/js/market.js";
 import {
-  activeContent, resetSetupChoices, upgradeUse, legacyPowers, upgradeLegacy, setUpgradeUse, upgradeLevel, addKarma, buyContent, buyProvision, refundProvision, upgradeTraits, buyUpgrade, exportRecords, importRecords, extraSlots, loadCheckpoint, legacyAvailable, loadEventLog, loadMeta, nextReward, recordEventPick, openLegacy, saveMeta, toggleContent, unlockOrigin, buildWing, buyGate, refundGate, gateCost, manorLevels,
+  activeContent, resetSetupChoices, upgradeUse, legacyPowers, upgradeLegacy, setUpgradeUse, upgradeLevel, addKarma, buyContent, buyProvision, refundProvision, upgradeTraits, buyUpgrade, exportRecords, importRecords, extraSlots, loadCheckpoint, legacyAvailable, loadEventLog, loadMeta, nextReward, recordEventPick, openLegacy, saveMeta, toggleContent, unlockOrigin, sideOpen, manorOpen, buildWing, buyGate, refundGate, gateCost, manorLevels,
 } from "../www/js/meta.js";
 import { sideDeepLine, enemyRealmIndex, personalize, fullName, alignTier, applyGrowth, checkBreakthrough, focusedSide, byname, fameRank, getChapter, getYear, marketTurns, sumEffect, talkLine, traitSlots } from "../www/js/rules.js";
 import { rng } from "../www/js/rng.js";
@@ -90,7 +90,7 @@ test("능력치 상한은 999", () => {
 
 test("출신 개방 비용은 무림초출 0, 나머지 5", () => {
   for (const key of DB.origins.order) assert.equal(DB.origins.origins[key].cost, key === "무림초출" ? 0 : 5);
-  for (const key of DB.origins.side_order) assert.equal(DB.origins.origins[key].cost, 15);
+  for (const key of DB.origins.side_order) assert.equal(DB.origins.origins[key].cost, 60);
 });
 
 test("달은 다음 버튼으로만 넘어간다", () => {
@@ -2637,14 +2637,28 @@ test("외전의 마지막 고비는 그 이야기만의 상대가 지키고 길�
       const enemy = DB.enemies[foe];
       assert.ok(foe.startsWith("외전_") && enemy.named && !enemy.weight, `${foe}: 길에서는 나오지 않는 그 이야기의 상대다`);
       assert.ok(enemy.title && enemy.name, foe);
-      assert.ok(enemy.hp >= road.hp * 1.5 && enemy.attack > road.attack, `${foe}: 길의 화경보다 버티고 세게 친다`);
-      assert.ok(enemy.hp < DB.enemies["혈마"].hp && enemy.attack < DB.enemies["혈마"].attack, `${foe}: 깨어난 혈마에는 미치지 못한다`);
+      const rough = DB.difficulty.side;
+      assert.ok(enemy.hp * rough.final.hp >= road.hp * rough.enemy.hp * 2 && enemy.attack * rough.final.attack > road.attack * rough.enemy.attack, `${foe}: 길의 화경보다 훨씬 버티고 세게 친다`);
     }
     for (const shunned of origin.shun || []) assert.ok(DB.enemies[shunned], `${key}: ${shunned}`);
   }
   // 같은 사람을 길에서 먼저 쓰러뜨리지 않게 한다
   assert.ok(DB.origins.origins["외전빙궁"].shun.includes("북해고수"));
   assert.ok(DB.origins.origins["외전혈승"].shun.includes("혈교우호법"));
+});
+
+test("외전은 생사경에 오른 뒤에야 열리고 길의 적이 본편보다 강하다", () => {
+  const meta = loadMeta();
+  meta.unlocked_origins = ["무림초출"]; meta.endings_seen = ["기본"]; meta.current_karma = 500;
+  saveMeta(meta);
+  assert.ok(!sideOpen() && !unlockOrigin("외전당가", DB.origins.origins["외전당가"].cost), "천마를 꺾은 것만으로는 열리지 않는다");
+  const seen = loadMeta(); seen.endings_seen.push("생사경"); saveMeta(seen);
+  assert.ok(sideOpen() && unlockOrigin("외전당가", DB.origins.origins["외전당가"].cost));
+  assert.equal(loadMeta().current_karma, 500 - DB.origins.origins["외전당가"].cost);
+  for (const key of DB.origins.side_order) assert.ok(DB.origins.origins[key].cost >= 50 && DB.origins.origins[key].end_turn === 120, key);
+  const hp = (origin) => { const game = newGame(origin); game.startBattle("산적"); return game.battle.enemy.maxHp; };
+  const main = hp("무림초출"), side = hp("외전당가");
+  assert.ok(side > main * 1.3, `${main} ${side}`);
 });
 
 test("외전의 저장을 다시 열어도 그 출신의 끝나는 달이 그대로다", () => {
@@ -2682,10 +2696,13 @@ test("외전은 처음부터 끝까지 걸어 그 출신의 결말로 끝난다"
 
 test("장원은 카르마로 채를 올리고, 문패를 챙긴 강호행에만 나타난다", () => {
   const start = loadMeta();
-  start.manor = {}; start.manor_gate = 0; start.current_karma = 0;
+  start.manor = {}; start.manor_gate = 0; start.current_karma = 0; start.total_karma = 0;
   saveMeta(start);
   assert.ok(!buyGate(), "지은 채가 없으면 문패를 챙길 수 없다");
+  addKarma(DB.karma.manor.need_total - 100);
+  assert.ok(!manorOpen() && !buildWing("객사"), "쌓은 카르마가 모자라면 장원이 열리지 않는다");
   addKarma(300);
+  assert.ok(manorOpen());
   assert.ok(!buildWing("없는채"));
   const wing = DB.karma.manor.wings.객사;
   const before = loadMeta().current_karma;
@@ -2735,11 +2752,14 @@ test("장원은 카르마로 채를 올리고, 문패를 챙긴 강호행에만 
   p.manor = { 객사: 1 };
   assert.ok(labels().some((l) => l.includes("장원")));
   const hooks = Object.entries(DB.events).filter(([, e]) => !e.manor_event && (e.choices || []).some((c) => c.requires?.manor));
-  assert.ok(hooks.length >= 8, `장원으로 푸는 길 ${hooks.length}`);
+  assert.ok(hooks.length >= 40, `장원으로 푸는 길 ${hooks.length}`);
+  // 산에 오르는 주인을 배웅하는 일은 본편에만 찾아온다
+  assert.ok(DB.events["장원_산을보는마당"].main_only);
+  assert.ok(Object.keys(DB.events_manor).length >= 20);
   for (const [key, e] of hooks) for (const c of e.choices.filter((x) => x.requires?.manor)) assert.ok(c.hidden, `${key} ${c.label}`);
   // 장원의 일은 본편과 외전 어디에서나 일어날 수 있는 글이다
   for (const [key, e] of Object.entries(DB.events_manor)) {
-    assert.ok(e.manor_event && e.requires.manor && !e.main_only && !e.side, key);
+    assert.ok(e.manor_event && e.requires.manor && !e.side, key);
     assert.ok(Object.keys(DB.karma.manor.wings).concat("size").some((w) => e.requires.manor === true || e.requires.manor === w || e.requires.manor[w]), key);
   }
   for (const wing of Object.values(DB.karma.manor.wings)) assert.equal(wing.levels.length, wing.costs.length);

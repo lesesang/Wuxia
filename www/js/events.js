@@ -242,7 +242,7 @@ export function dueManorEvent(player) {
   const chapter = getChapter(player.turn);
   return Object.keys(DB.events_manor).find((key) => {
     const event = DB.events_manor[key];
-    return !player.seenEvents.includes(key) && (event.chapters || [1, 2, 3, 4, 5]).includes(chapter) && checkRequires(player, event.requires);
+    return !player.seenEvents.includes(key) && fitsStory(player, event) && (event.chapters || [1, 2, 3, 4, 5]).includes(chapter) && checkRequires(player, event.requires);
   }) ?? null;
 }
 
