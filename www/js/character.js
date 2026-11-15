@@ -234,9 +234,13 @@ export class Player {
         if (effect.type === "start_alignment") this.alignment[effect.side] += effect.amount;
       }
     }
+    // 외전의 출신은 걸어온 길이 이미 한쪽으로 기울어 있다
+    for (const [side, amount] of Object.entries(data.alignment || {})) this.alignment[side] += amount;
     this.flags = [];
     this.seenEvents = [];
     this.originTurn = -99; // 출신의 이야기가 마지막으로 찾아온 달
+    this.manor = null;     // 문패를 챙긴 강호행이면 장원의 채 단계
+    this.manorTurn = -99;  // 장원의 일이 마지막으로 찾아온 달
     this.difficulty = "강호"; // 이 강호행이 걷는 강호
     this.healCut = 0; // 싸우는 동안 회복을 끊는 적이 곁에 있다
     this.kills = 0;
@@ -485,7 +489,7 @@ export class Player {
       skills: this.skills.map((s) => s.toDict()), main_skill: this.mainSkill, chosen_arts: this.chosenArts,
       traits: this.traits, slain: this.slain, silver: this.silver, weapon: this.weapon, armor: this.armor, gear: this.gear, pending_legacy: this.pendingLegacy, person: this.person,
       inventory: this.inventory, boss_weaken: this.bossWeaken, alignment: this.alignment,
-      flags: this.flags, seen_events: this.seenEvents, origin_turn: this.originTurn, difficulty: this.difficulty, kills: this.kills,
+      flags: this.flags, seen_events: this.seenEvents, origin_turn: this.originTurn, manor: this.manor, manor_turn: this.manorTurn, difficulty: this.difficulty, kills: this.kills,
       fame: this.fame, sect: this.sect, injury: this.injury,
       align_mark: this.alignMark, align_milestones: this.alignMilestones, rumors: this.rumors, revives: this.revives, turn: this.turn, max_turn: this.maxTurn, alive: this.alive, chronicle: this.chronicle, content: this.content, chains: this.chains, chains_done: this.chainsDone,
     };
@@ -503,6 +507,8 @@ export class Player {
     p.chains = (d.chains ?? []).filter((c) => DB.chains[c.id]);
     p.chainsDone = d.chains_done ?? 0;
     p.originTurn = d.origin_turn ?? -99;
+    p.manor = d.manor ?? null;
+    p.manorTurn = d.manor_turn ?? -99;
     p.difficulty = DB.difficulty?.levels[d.difficulty] ? d.difficulty : "강호";
     p.healCut = 0;
     p.realm = d.realm;
@@ -559,7 +565,8 @@ export class Player {
     p.sect = d.sect !== undefined ? d.sect : (ORIGIN_SECTS[p.originKey] || null);
     p.injury = d.injury ?? 0;
     p.turn = d.turn;
-    p.maxTurn = MAX_TURN;
+    // 외전은 출신마다 끝나는 달이 다르다
+    p.maxTurn = DB.origins.origins[p.originKey]?.side ? DB.origins.origins[p.originKey].end_turn : MAX_TURN;
     p.alive = d.alive;
     // 60달 시절의 저장은 시간표를 두 배로 늘려 이어 간다
     if (d.max_turn === 60) {

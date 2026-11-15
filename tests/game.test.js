@@ -6,14 +6,14 @@ import { listAssets } from "../tools/build_asset_list.js";
 import { Battle, dropSkill, Enemy, statureEnemy, useConsumable } from "../www/js/battle.js";
 import { GRADE_ORDER, Player, Skill } from "../www/js/character.js";
 import { DB } from "../www/js/data.js";
-import { applyEffects, dueOriginEvent, pendingOriginEvents, grantStartGear, grantStartGifts, canStartChain, checkRequires, enemyIntro, eventView, LAST_CHAIN_TURN, pickRandomEvent, resolveChoice, storyEventForTurn, validateChains, validateEvents } from "../www/js/events.js";
+import { applyEffects, dueManorEvent, hasManor, dueOriginEvent, pendingOriginEvents, grantStartGear, grantStartGifts, canStartChain, checkRequires, enemyIntro, eventView, LAST_CHAIN_TURN, pickRandomEvent, resolveChoice, storyEventForTurn, validateChains, validateEvents } from "../www/js/events.js";
 import { buildEpilogue, Game, settlePerson } from "../www/js/game.js";
 import { halpun, josa } from "../www/js/josa.js";
 import { blockReason, buy, equipmentBonus, ITEM_GRADES, openMarket, priceOf, sell } from "../www/js/market.js";
 import {
-  activeContent, resetSetupChoices, upgradeUse, legacyPowers, upgradeLegacy, setUpgradeUse, upgradeLevel, addKarma, buyContent, buyProvision, refundProvision, upgradeTraits, buyUpgrade, exportRecords, importRecords, extraSlots, loadCheckpoint, legacyAvailable, loadEventLog, loadMeta, nextReward, recordEventPick, openLegacy, saveMeta, toggleContent, unlockOrigin,
+  activeContent, resetSetupChoices, upgradeUse, legacyPowers, upgradeLegacy, setUpgradeUse, upgradeLevel, addKarma, buyContent, buyProvision, refundProvision, upgradeTraits, buyUpgrade, exportRecords, importRecords, extraSlots, loadCheckpoint, legacyAvailable, loadEventLog, loadMeta, nextReward, recordEventPick, openLegacy, saveMeta, toggleContent, unlockOrigin, buildWing, buyGate, refundGate, gateCost, manorLevels,
 } from "../www/js/meta.js";
-import { enemyRealmIndex, personalize, fullName, alignTier, applyGrowth, checkBreakthrough, focusedSide, byname, fameRank, getChapter, getYear, marketTurns, sumEffect, talkLine, traitSlots } from "../www/js/rules.js";
+import { sideDeepLine, enemyRealmIndex, personalize, fullName, alignTier, applyGrowth, checkBreakthrough, focusedSide, byname, fameRank, getChapter, getYear, marketTurns, sumEffect, talkLine, traitSlots } from "../www/js/rules.js";
 import { rng } from "../www/js/rng.js";
 import { storage } from "../www/js/storage.js";
 
@@ -89,7 +89,8 @@ test("능력치 상한은 999", () => {
 });
 
 test("출신 개방 비용은 무림초출 0, 나머지 5", () => {
-  for (const [key, o] of Object.entries(DB.origins.origins)) assert.equal(o.cost, key === "무림초출" ? 0 : 5);
+  for (const key of DB.origins.order) assert.equal(DB.origins.origins[key].cost, key === "무림초출" ? 0 : 5);
+  for (const key of DB.origins.side_order) assert.equal(DB.origins.origins[key].cost, 15);
 });
 
 test("달은 다음 버튼으로만 넘어간다", () => {
@@ -1298,7 +1299,7 @@ test("없어진 출신은 카르마를 돌려주고 저장도 이어 갈 수 있
 
 test("모든 출신은 시작 경지가 일류인 까닭을 설명하고 맺음말이 있다", () => {
   for (const [key, origin] of Object.entries(DB.origins.origins)) {
-    assert.ok(DB.endings.frames.기본.flat().some((r) => r.requires?.origin === key), key);
+    if (!origin.side) assert.ok(DB.endings.frames.기본.flat().some((r) => r.requires?.origin === key), key);
     assert.ok(new Player(key).realm === "일류", key);
     if (!["남궁세가", "곤륜파", "하오문", "권마계승"].includes(key)) assert.ok(origin.desc.includes("일류"), key);
   }
@@ -1919,8 +1920,8 @@ test("첫 천마 격파의 카르마는 공적으로 받는다", () => {
 const endingRows = (key) => DB.endings.frames[key].flatMap((g) => (Array.isArray(g) ? g : g.rows));
 
 test("결말은 출신, 성향, 명성, 쓰던 무공마다 문장이 있다", () => {
-  assert.deepEqual(Object.keys(DB.endings.titles).sort(), ["귀순", "기본", "배드", "사망", "생사경"].sort());
-  for (const key of Object.keys(DB.endings.titles)) {
+  assert.deepEqual(Object.keys(DB.endings.titles).filter((k) => !DB.endings.side[k]).sort(), ["귀순", "기본", "배드", "사망", "생사경"].sort());
+  for (const key of Object.keys(DB.endings.titles).filter((k) => !DB.endings.side[k])) {
     const rows = endingRows(key);
     for (const origin of DB.origins.order) assert.ok(rows.some((r) => r.requires.origin === origin), `${key} ${origin}`);
     for (const style of ["검법", "도법", "창법", "봉법", "권법", "장법", "암기"]) {
@@ -2503,6 +2504,9 @@ function runToEnd(game, { accept = true, giveUp = false, onEvent = () => {} } = 
       // 연계 일정만 보는 시험이라 약한 몸으로 강적에게 죽지 않게 한다
       game.battle.enemy.hp = 1;
       game.battle.enemy.attack = 0;
+      // 강기를 두르거나 다시 일어서는 괴공에 싸움이 끝나지 않는 일이 없게 한다
+      game.battle.enemy.quirks = [];
+      game.battle.enemy.barrier = 0;
       game.battleAction("기본공격");
       continue;
     }
@@ -2529,6 +2533,230 @@ function runToEnd(game, { accept = true, giveUp = false, onEvent = () => {} } = 
     game.action("탐색");
   }
 }
+
+test("외전의 출신은 천마봉이 아니라 저마다의 끝으로 간다", () => {
+  assert.equal(DB.origins.side_order.length, 7);
+  const styles = new Set();
+  const lean = { 정도: 0, 사도: 0, 마도: 0 };
+  for (const key of DB.origins.side_order) {
+    const o = DB.origins.origins[key];
+    const p = new Player(key);
+    assert.ok(o.side && o.locked && o.desc.includes("일류") && p.realm === "일류", key);
+    styles.add(p.bestSkill().category);
+    lean[p.dominantAlignment() || Object.keys(o.alignment)[0]] += 1;
+    assert.equal(p.skills.filter((s) => DB.skills[s.key].origin === key).length, 2, `${key} 전용 무공과 심법`);
+    assert.ok(DB.endings.side[o.fallback_ending] === key, `${key} 담담한 끝`);
+    assert.equal(Object.values(DB.endings.side).filter((x) => x === key).length, 3, `${key} 결말 셋`);
+    for (const chapter of ["1", "2", "3", "4", "5"]) assert.ok(o.chapters[chapter].title && o.chapters[chapter].desc, `${key} ${chapter}장`);
+    // 줄거리는 그 출신의 것만 찾아온다
+    const own = Object.entries(DB.storyEvents).filter(([, e]) => e.requires?.origin === key);
+    assert.ok(own.length >= 6, `${key} 줄거리`);
+    assert.ok(own.some(([, e]) => e.turn === 1) && own.some(([, e]) => e.turn === o.end_turn), `${key} 서장과 마지막 고비`);
+    for (let turn = 1; turn <= o.end_turn; turn++) {
+      p.turn = turn;
+      const story = storyEventForTurn(p);
+      if (story) assert.equal(DB.storyEvents[story].requires?.origin, key, `${key} ${turn}달 ${story}`);
+    }
+    // 마지막 고비의 모든 길은 그 출신의 결말로 닿는다
+    const [, last] = own.find(([, e]) => e.turn === o.end_turn);
+    const scenes = [last, ...Object.values(last.parts || {})];
+    for (const scene of scenes) for (const choice of scene.choices) for (const out of choice.outcomes) {
+      const e = out.effects;
+      assert.ok(e.ending ? DB.endings.side[e.ending] === key : e.next && last.parts[e.next], `${key} ${choice.label}`);
+      if (e.spar && e.battle) assert.ok(e.lose_next && last.parts[e.lose_next], `${key} ${choice.label} 진 뒤`);
+    }
+  }
+  assert.deepEqual([...styles].sort(), ["검법", "권법", "도법", "봉법", "암기", "장법", "창법"].sort());
+  assert.ok(lean.정도 >= 2 && lean.사도 >= 2 && lean.마도 >= 2, JSON.stringify(lean));
+  for (const [key, origin] of Object.entries(DB.endings.side)) {
+    assert.ok(DB.endings.titles[key] && DB.endings.seals[key] && DB.endings.text[key] && DB.endings.frames[key].length >= 2, key);
+    assert.ok(DB.origins.origins[origin].side, key);
+  }
+  // 본편의 무인에게 외전의 일은 일어나지 않고, 외전의 무인에게 결전을 준비하는 일은 일어나지 않는다
+  const main = new Player();
+  const side = new Player("외전빙궁");
+  for (const [key, event] of Object.entries(DB.randomEvents)) {
+    if (event.side) assert.ok(!checkRequires(main, { ...event.requires, side: true }), key);
+  }
+  for (let i = 0; i < 300; i++) {
+    main.turn = side.turn = 1 + (i % 110);
+    const a = pickRandomEvent(main);
+    const b = pickRandomEvent(side);
+    if (a) assert.ok(!DB.events[a].side, a);
+    if (b) assert.ok(!DB.events[b].main_only && !DB.events[b].requires?.unlocked, b);
+  }
+  assert.ok(!checkRequires(side, { no_sect: true }), "외전의 무인은 다른 문을 두드리지 않는다");
+});
+
+test("깊은 강호의 외전은 그 강호의 문장과 길과 상대를 따로 갖는다", () => {
+  for (const key of DB.origins.side_order) {
+    const o = DB.origins.origins[key];
+    for (const depth of ["혈풍", "겁화"]) assert.ok(o.deep[depth]["1"] && o.deep[depth]["4"], `${key} ${depth}`);
+    const own = Object.entries(DB.storyEvents).filter(([, e]) => e.requires?.origin === key);
+    assert.ok(own.filter(([, e]) => e.deeper?.혈풍 && e.deeper?.겁화).length >= 2, `${key} 깊은 강호의 문장`);
+    assert.ok(own.some(([, e]) => e.choices.some((c) => c.requires?.difficulty_min && c.hidden)), `${key} 깊은 강호의 길`);
+    const p = new Player(key);
+    assert.equal(sideDeepLine(p, 1), null, "얕은 강호에는 붙지 않는다");
+    p.difficulty = "혈풍";
+    assert.equal(sideDeepLine(p, 1), o.deep.혈풍["1"]);
+    p.difficulty = "겁화";
+    assert.equal(sideDeepLine(p, 4), o.deep.겁화["4"]);
+    assert.equal(sideDeepLine(p, 2), null);
+  }
+  // 얕은 강호에서는 깊은 강호의 길이 보이지 않고, 깊은 강호에서는 얕은 강호의 길도 보인다
+  const p = new Player("외전빙궁");
+  const labels = () => eventView(p, "외전빙궁_2").choices.map((c) => c.label);
+  assert.ok(!labels().some((l) => l.startsWith("혈교라 적는다")));
+  p.difficulty = "겁화";
+  assert.ok(labels().some((l) => l.startsWith("혈교라 적는다")));
+  assert.ok(eventView(p, "외전빙궁_2").text.includes(DB.storyEvents.외전빙궁_2.deeper.겁화));
+  // 마지막 상대는 깊은 강호에서 그 강호의 괴공을 지닌다
+  const game = newGame();
+  for (const [depth, types] of [["강호", []], ["혈풍", ["bloodthirst"]], ["겁화", ["barrier", "bloodthirst"]]]) {
+    game.player.difficulty = depth;
+    const foe = new Enemy("외전_총채주", 120);
+    const notes = game.deepen(foe, false);
+    assert.deepEqual(foe.quirks.map((q) => q.type).sort(), types, depth);
+    assert.equal(notes.length, types.length ? 1 : 0);
+  }
+  game.player.difficulty = "겁화";
+  const spar = new Enemy("외전_총채주", 120);
+  game.deepen(spar, true);
+  assert.equal(spar.quirks.length, 0, "칼끝을 멈추는 겨룸에는 괴공을 쓰지 않는다");
+});
+
+test("외전의 마지막 고비는 그 이야기만의 상대가 지키고 길에서 만나는 화경보다 버틴다", () => {
+  const road = DB.enemies["십대고수"];
+  for (const key of DB.origins.side_order) {
+    const origin = DB.origins.origins[key];
+    const last = Object.values(DB.events).find((e) => e.requires?.origin === key && e.turn === origin.end_turn);
+    assert.ok(last, key);
+    const foes = [...JSON.stringify(last).matchAll(/"battle":"([^"]+)"/g)].map((m) => m[1]);
+    assert.ok(foes.length, `${key}: 마지막 고비에 맞설 상대가 있다`);
+    for (const foe of foes) {
+      const enemy = DB.enemies[foe];
+      assert.ok(foe.startsWith("외전_") && enemy.named && !enemy.weight, `${foe}: 길에서는 나오지 않는 그 이야기의 상대다`);
+      assert.ok(enemy.title && enemy.name, foe);
+      assert.ok(enemy.hp >= road.hp * 1.5 && enemy.attack > road.attack, `${foe}: 길의 화경보다 버티고 세게 친다`);
+      assert.ok(enemy.hp < DB.enemies["혈마"].hp && enemy.attack < DB.enemies["혈마"].attack, `${foe}: 깨어난 혈마에는 미치지 못한다`);
+    }
+    for (const shunned of origin.shun || []) assert.ok(DB.enemies[shunned], `${key}: ${shunned}`);
+  }
+  // 같은 사람을 길에서 먼저 쓰러뜨리지 않게 한다
+  assert.ok(DB.origins.origins["외전빙궁"].shun.includes("북해고수"));
+  assert.ok(DB.origins.origins["외전혈승"].shun.includes("혈교우호법"));
+});
+
+test("외전의 저장을 다시 열어도 그 출신의 끝나는 달이 그대로다", () => {
+  const meta = loadMeta();
+  meta.unlocked_origins.push(...DB.origins.side_order);
+  saveMeta(meta);
+  for (const key of DB.origins.side_order) {
+    const game = newGame(key);
+    const end = DB.origins.origins[key].end_turn;
+    assert.equal(game.player.maxTurn, end, key);
+    assert.equal(Player.fromDict(JSON.parse(JSON.stringify(game.player.toDict()))).maxTurn, end, `${key}: 다시 연 저장`);
+  }
+});
+
+test("외전은 처음부터 끝까지 걸어 그 출신의 결말로 끝난다", () => {
+  const meta = loadMeta();
+  meta.unlocked_origins.push(...DB.origins.side_order);
+  meta.content.push(...Object.keys(DB.karma.content));
+  saveMeta(meta);
+  for (const key of DB.origins.side_order) {
+    const game = newGame(key);
+    assert.deepEqual(game.player.content, [], "카르마로 산 인연은 외전에 나오지 않는다");
+    assert.equal(game.player.maxTurn, DB.origins.origins[key].end_turn);
+    const seen = [];
+    runToEnd(game, { onEvent: (g) => seen.push(g.event.key) });
+    assert.ok(game.ending, `${key} ${game.player.turn}달에 멈춤`);
+    assert.equal(DB.endings.side[game.ending.key], key, `${key} ${game.ending.key}`);
+    assert.ok(game.player.turn <= DB.origins.origins[key].end_turn, key);
+    assert.ok(!seen.some((k) => DB.events[k].kind === "final" || DB.events[k].main_only), key);
+    assert.ok(loadMeta().side_done.includes(key));
+  }
+  assert.ok(!loadMeta().origin_wins.some((k) => DB.origins.origins[k].side), "외전은 천마를 쓰러뜨린 출신으로 세지 않는다");
+  assert.ok(loadMeta().achievements.includes("외전7"));
+});
+
+test("장원은 카르마로 채를 올리고, 문패를 챙긴 강호행에만 나타난다", () => {
+  const start = loadMeta();
+  start.manor = {}; start.manor_gate = 0; start.current_karma = 0;
+  saveMeta(start);
+  assert.ok(!buyGate(), "지은 채가 없으면 문패를 챙길 수 없다");
+  addKarma(300);
+  assert.ok(!buildWing("없는채"));
+  const wing = DB.karma.manor.wings.객사;
+  const before = loadMeta().current_karma;
+  assert.ok(buildWing("객사"));
+  assert.equal(loadMeta().current_karma, before - wing.costs[0]);
+  assert.ok(buildWing("객사") && buildWing("객사"));
+  assert.ok(!buildWing("객사"), "끝 단계를 넘지 않는다");
+  assert.ok(buildWing("약방"));
+  assert.deepEqual(manorLevels(), { 객사: 3, 연무장: 0, 약방: 1, 서고: 0 });
+  assert.equal(gateCost(), DB.karma.manor.gate.costs[1], "올린 단계 넷이면 둘째 계단의 값이다");
+  // 문패를 챙기지 않은 강호행에는 장원이 없다
+  const without = newGame();
+  assert.equal(without.player.manor, null);
+  assert.ok(!hasManor(without.player, true) && dueManorEvent(without.player) === null);
+  // 챙기면 값을 치르고, 물리면 그대로 돌려받는다
+  const karma = loadMeta().current_karma;
+  assert.ok(buyGate() && !buyGate());
+  assert.equal(loadMeta().current_karma, karma - gateCost());
+  assert.ok(refundGate());
+  assert.equal(loadMeta().current_karma, karma);
+  assert.ok(buyGate());
+  for (const origin of ["무림초출", "외전빙궁"]) {
+    const meta = loadMeta();
+    if (!meta.unlocked_origins.includes(origin)) meta.unlocked_origins.push(origin);
+    if (!meta.manor_gate) { meta.manor_gate = 1; }
+    saveMeta(meta);
+    const game = newGame(origin);
+    const p = game.player;
+    assert.deepEqual(p.manor, { 객사: 3, 연무장: 0, 약방: 1, 서고: 0 }, origin);
+    assert.equal(loadMeta().manor_gate, 0, "문패는 한 강호행에 쓰인다");
+    assert.ok(hasManor(p, "객사") && hasManor(p, { 객사: 3 }) && hasManor(p, { size: 4 }));
+    assert.ok(!hasManor(p, "서고") && !hasManor(p, { 약방: 2 }) && !hasManor(p, { size: 5 }));
+    // 장원의 일은 때맞춰 찾아오고, 채가 없는 일은 오지 않는다
+    const seen = [];
+    runToEnd(game, { onEvent: (g) => { if (DB.events[g.event.key].manor_event) seen.push(g.event.key); } });
+    assert.equal(seen[0], "장원_문패", origin);
+    assert.ok(seen.includes("장원_비오는밤") && seen.includes("장원_약초밭") && seen.includes("장원_큰손님"), `${origin} ${seen}`);
+    assert.ok(!seen.some((k) => ["장원_식객", "장원_책궤", "장원_돌림병"].includes(k)), `${origin} ${seen}`);
+    assert.equal(new Set(seen).size, seen.length);
+    // 저장하고 다시 열어도 장원은 남는다
+    assert.deepEqual(Player.fromDict(p.toDict()).manor, p.manor);
+  }
+  // 길에서 만나는 일에 장원으로 풀 길이 열린다
+  const p = new Player();
+  const labels = () => eventView(p, "난민행렬").choices.map((c) => c.label);
+  assert.ok(!labels().some((l) => l.includes("장원")), "장원이 없으면 보이지 않는다");
+  p.manor = { 객사: 1 };
+  assert.ok(labels().some((l) => l.includes("장원")));
+  const hooks = Object.entries(DB.events).filter(([, e]) => !e.manor_event && (e.choices || []).some((c) => c.requires?.manor));
+  assert.ok(hooks.length >= 8, `장원으로 푸는 길 ${hooks.length}`);
+  for (const [key, e] of hooks) for (const c of e.choices.filter((x) => x.requires?.manor)) assert.ok(c.hidden, `${key} ${c.label}`);
+  // 장원의 일은 본편과 외전 어디에서나 일어날 수 있는 글이다
+  for (const [key, e] of Object.entries(DB.events_manor)) {
+    assert.ok(e.manor_event && e.requires.manor && !e.main_only && !e.side, key);
+    assert.ok(Object.keys(DB.karma.manor.wings).concat("size").some((w) => e.requires.manor === true || e.requires.manor === w || e.requires.manor[w]), key);
+  }
+  for (const wing of Object.values(DB.karma.manor.wings)) assert.equal(wing.levels.length, wing.costs.length);
+});
+
+test("외전의 출신에게도 전용 자질 둘과 기틀 하나가 있고 사건이 그 자질에 반응한다", () => {
+  for (const key of DB.origins.side_order) {
+    const traits = Object.keys(DB.traits).filter((t) => DB.traits[t].origin === key);
+    assert.equal(traits.length, 2, `${key} 자질`);
+    assert.equal(Object.values(DB.karma.upgrades).filter((u) => u.origin === key).length, 1, `${key} 기틀`);
+    const own = Object.values(DB.randomEvents).filter((e) => e.requires?.origin === key);
+    assert.ok(own.length >= 4, `${key} 전용 사건 ${own.length}`);
+    for (const trait of traits) {
+      assert.ok(own.some((e) => e.choices.some((c) => c.requires?.trait === trait && c.hidden)), `${trait} 반응`);
+    }
+  }
+});
 
 test("연계 데이터가 규칙을 지킨다", () => {
   assert.deepEqual(validateChains(), []);
@@ -2623,7 +2851,7 @@ test("무기 계열마다 무공 수가 같고 등급이 고르다", () => {
   const attacks = Object.values(DB.skills).filter((s) => s.type === "공격무공" && !s.reserved);
   for (const style of styles) {
     const list = attacks.filter((s) => s.category === style);
-    assert.equal(list.length, 19, style);
+    assert.equal(list.length, 20, style);
     for (const [grade, min] of [["기본", 2], ["명품", 3], ["상승", 3], ["일절", 1], ["신공", 2]]) {
       assert.ok(list.filter((s) => s.grade === grade).length >= min, `${style} ${grade}`);
     }
@@ -3881,7 +4109,7 @@ test("데이터의 자리표시는 모두 뜻이 있다", () => {
   const person = { gender: "여", surname: "위", given: "서린" };
   const walk = (value) => {
     if (typeof value === "string") {
-      for (const m of personalize(value, person).matchAll(/〈([^〉]*)〉/g)) assert.ok(leftovers.has(m[1]), `${m[0]}: ${value}`);
+      for (const m of personalize(value, person).matchAll(/〈([^〉:]*)(?::[^〉]*)?〉/g)) assert.ok(leftovers.has(m[1]), `${m[0]}: ${value}`);
     } else if (value && typeof value === "object") Object.values(value).forEach(walk);
   };
   Object.values(DB).forEach(walk);
@@ -4251,6 +4479,9 @@ test("카르마 값은 10 이상이면 5의 배수다", () => {
     ...Object.values(DB.karma.provisions).map((p) => p.cost),
     ...DB.karma.legacy.upgrades.map((u) => u.cost),
     DB.karma.legacy.cost,
+    ...Object.values(DB.origins.origins).map((o) => o.cost),
+    ...Object.values(DB.karma.manor.wings).flatMap((w) => w.costs),
+    ...DB.karma.manor.gate.costs,
   ].filter((c) => c !== undefined);
   for (const c of costs) assert.ok(c < 10 || c % 5 === 0, String(c));
 });

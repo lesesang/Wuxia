@@ -5504,5 +5504,364 @@
       "name": "행운유수",
       "text": "다 피하면 쓴 내력의 절반을 되찾는다, 다 피하면 잔상이 남아 다음 합에 2할 확률로 몸이 먼저 움직인다, 다 피할 때마다 이 싸움의 위력이 6푼씩 오른다(3할까지)."
     }
+  },
+  "추혼침": {
+    "name": "추혼침",
+    "type": "공격무공",
+    "category": "암기",
+    "grade": "명품",
+    "base_multiplier": 1.25,
+    "qi_cost": 5,
+    "desc": "당가 직계에게만 전하는 침술. 독은 바늘 끝이 아니라 바늘이 지나간 자리에 남는다.",
+    "forms": [
+      "탈명",
+      "추혼",
+      "만천성우"
+    ],
+    "secret_technique": {
+      "name": "추혼탈명",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 38
+    },
+    "origin": "외전당가",
+    "gimmick": {
+      "crit": 8,
+      "poison": 10,
+      "name": "추혼독",
+      "text": "회심 확률 8푼 증가, 적을 중독시킨다(독 위력 10)."
+    }
+  },
+  "당문심법": {
+    "name": "당문심법",
+    "type": "심공",
+    "category": "심공",
+    "grade": "기본",
+    "base_multiplier": 1.0,
+    "qi_cost": 0,
+    "desc": "독을 다루는 손이 먼저 익히는 당가의 호흡. 몸에 든 독을 숨결로 밀어낸다.",
+    "effect": {
+      "heal_hp_pct": 4,
+      "heal_qi_pct": 16,
+      "atk_buff_pct": 0,
+      "buff_rounds": 0
+    },
+    "origin": "외전당가",
+    "gimmick": {
+      "cleanse": 1,
+      "name": "백독불침",
+      "text": "독이 한 합을 넘기지 못한다."
+    }
+  },
+  "빙백장": {
+    "name": "빙백장",
+    "type": "공격무공",
+    "category": "장법",
+    "grade": "명품",
+    "base_multiplier": 1.25,
+    "qi_cost": 5,
+    "desc": "북해빙궁의 장법. 손바닥이 닿은 자리부터 얼어 들어간다.",
+    "forms": [
+      "설화",
+      "빙하",
+      "백야"
+    ],
+    "secret_technique": {
+      "name": "빙백천리",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 38
+    },
+    "origin": "외전빙궁",
+    "gimmick": {
+      "weaken": {
+        "percent": 10,
+        "rounds": 2
+      },
+      "guard": 10,
+      "name": "빙백한기",
+      "text": "맞히면 2합 동안 적 위력 -1할, 맞힌 합에 받는 피해 -1할."
+    }
+  },
+  "빙심결": {
+    "name": "빙심결",
+    "type": "심공",
+    "category": "심공",
+    "grade": "기본",
+    "base_multiplier": 1.0,
+    "qi_cost": 0,
+    "desc": "얼음 밑의 물처럼 고요히 도는 빙궁의 심결. 싸움이 시작되면 찬 기운이 먼저 몸을 감싼다.",
+    "effect": {
+      "heal_hp_pct": 6,
+      "heal_qi_pct": 16,
+      "atk_buff_pct": 0,
+      "buff_rounds": 0
+    },
+    "origin": "외전빙궁",
+    "gimmick": {
+      "ward": 10,
+      "name": "빙갑",
+      "text": "싸움을 시작할 때 최대 체력 1할의 호신 기운을 두른다."
+    }
+  },
+  "낙매검": {
+    "name": "낙매검",
+    "type": "공격무공",
+    "category": "검법",
+    "grade": "명품",
+    "base_multiplier": 1.24,
+    "qi_cost": 6,
+    "desc": "매화노검이 산문 밖 초막에서 홀로 다듬은 검. 꽃이 지듯 두 번 떨어진다.",
+    "forms": [
+      "낙매",
+      "설중매",
+      "잔향"
+    ],
+    "secret_technique": {
+      "name": "낙매무성",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 38
+    },
+    "origin": "외전매화",
+    "gimmick": {
+      "hits": 2,
+      "hit_rate": 0.6,
+      "bleed": 6,
+      "name": "낙매쌍영",
+      "text": "두 번 휘둘러 베고(한 번에 6할), 맞힌 피해의 6푼이 꽃잎 같은 상처로 흐른다."
+    }
+  },
+  "송백심법": {
+    "name": "송백심법",
+    "type": "심공",
+    "category": "심공",
+    "grade": "기본",
+    "base_multiplier": 1.0,
+    "qi_cost": 0,
+    "desc": "겨울에도 푸른 솔과 잣나무의 숨. 스승은 검보다 이 숨을 먼저 가르쳤다.",
+    "effect": {
+      "heal_hp_pct": 4,
+      "heal_qi_pct": 13,
+      "atk_buff_pct": 8,
+      "buff_rounds": 2
+    },
+    "origin": "외전매화",
+    "gimmick": {
+      "next_crit": 1,
+      "name": "세한",
+      "text": "네 합마다 그 합의 공격이 반드시 회심이 된다."
+    }
+  },
+  "무성도": {
+    "name": "무성도",
+    "type": "공격무공",
+    "category": "도법",
+    "grade": "명품",
+    "base_multiplier": 1.25,
+    "qi_cost": 5,
+    "desc": "살막이 아이들에게 처음 쥐여 주는 칼. 소리가 나면 실패한 것이다.",
+    "forms": [
+      "무성",
+      "일각",
+      "단식"
+    ],
+    "secret_technique": {
+      "name": "무성절명",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 38
+    },
+    "origin": "외전살막",
+    "gimmick": {
+      "opening": 25,
+      "execute": {
+        "below": 30,
+        "percent": 40
+      },
+      "name": "한 칼",
+      "text": "첫 합 위력 +2할 5푼, 적 체력 3할 이하에서 위력 +4할."
+    }
+  },
+  "무영식": {
+    "name": "무영식",
+    "type": "심공",
+    "category": "심공",
+    "grade": "기본",
+    "base_multiplier": 1.0,
+    "qi_cost": 0,
+    "desc": "그림자처럼 숨을 죽이는 살막의 호흡. 기다리는 동안 내력이 찬다.",
+    "effect": {
+      "heal_hp_pct": 3,
+      "heal_qi_pct": 20,
+      "atk_buff_pct": 0,
+      "buff_rounds": 0
+    },
+    "origin": "외전살막",
+    "gimmick": {
+      "regen_qi": {
+        "percent": 5,
+        "rounds": 3
+      },
+      "name": "그림자 숨",
+      "text": "합마다 내력 2푼이 저절로 찬다."
+    }
+  },
+  "분수창": {
+    "name": "분수창",
+    "type": "공격무공",
+    "category": "창법",
+    "grade": "명품",
+    "base_multiplier": 1.25,
+    "qi_cost": 5,
+    "desc": "물살을 가르듯 찌르는 수채의 작살 창법. 박힌 미늘은 쉽게 빠지지 않는다.",
+    "forms": [
+      "분수",
+      "역류",
+      "번강"
+    ],
+    "secret_technique": {
+      "name": "번강일창",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 38
+    },
+    "origin": "외전수로",
+    "gimmick": {
+      "pierce": 20,
+      "bleed": 6,
+      "name": "미늘",
+      "text": "적의 방어 2할 무시, 맞힌 피해의 6푼이 미늘 자국으로 흐른다."
+    }
+  },
+  "잠룡식": {
+    "name": "잠룡식",
+    "type": "심공",
+    "category": "심공",
+    "grade": "기본",
+    "base_multiplier": 1.0,
+    "qi_cost": 0,
+    "desc": "물속에서 오래 버티려 익힌 수채의 호흡. 숨이 길어 몸이 천천히 추슬러진다.",
+    "effect": {
+      "heal_hp_pct": 10,
+      "heal_qi_pct": 12,
+      "atk_buff_pct": 0,
+      "buff_rounds": 0
+    },
+    "origin": "외전수로",
+    "gimmick": {
+      "regen": {
+        "percent": 3,
+        "rounds": 2
+      },
+      "name": "긴 숨",
+      "text": "합마다 체력 2푼이 저절로 찬다."
+    }
+  },
+  "도혈장": {
+    "name": "도혈장",
+    "type": "공격무공",
+    "category": "봉법",
+    "grade": "명품",
+    "base_multiplier": 1.25,
+    "qi_cost": 5,
+    "desc": "혈교의 순례승이 짚고 다니는 선장의 법. 맞은 자의 피가 장대를 타고 오른다.",
+    "forms": [
+      "도혈",
+      "혈라",
+      "피안"
+    ],
+    "secret_technique": {
+      "name": "혈하도강",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 38
+    },
+    "origin": "외전혈승",
+    "gimmick": {
+      "lifesteal": 8,
+      "stun": 8,
+      "name": "도혈",
+      "text": "준 피해의 8푼을 체력으로 흡수, 맞히면 8푼 확률로 적이 다음 합에 손을 쓰지 못한다."
+    }
+  },
+  "혈경초결": {
+    "name": "혈경초결",
+    "type": "심공",
+    "category": "심공",
+    "grade": "기본",
+    "base_multiplier": 1.0,
+    "qi_cost": 0,
+    "desc": "피의 경전 첫 권의 호흡. 몸을 조금 태워 위력을 얻고, 벤 자리에서 돌려받는다.",
+    "effect": {
+      "heal_hp_pct": -2,
+      "heal_qi_pct": 18,
+      "atk_buff_pct": 10,
+      "buff_rounds": 2
+    },
+    "origin": "외전혈승",
+    "gimmick": {
+      "lifesteal_buff": {
+        "percent": 15,
+        "rounds": 3
+      },
+      "name": "혈경 암송",
+      "text": "준 피해의 8푼을 흡수한다."
+    }
+  },
+  "백수권": {
+    "name": "백수권",
+    "type": "공격무공",
+    "category": "권법",
+    "grade": "명품",
+    "base_multiplier": 1.25,
+    "qi_cost": 5,
+    "desc": "범의 앞발과 원숭이의 팔을 흉내 낸 야수궁의 주먹. 손끝이 발톱처럼 굽는다.",
+    "forms": [
+      "호조",
+      "원비",
+      "웅박"
+    ],
+    "secret_technique": {
+      "name": "백수진산",
+      "unlock_grade": "상승",
+      "unlock_mastery": 50,
+      "multiplier": 2.2,
+      "qi_cost": 38
+    },
+    "origin": "외전야수",
+    "gimmick": {
+      "crit": 8,
+      "bleed": 8,
+      "name": "발톱",
+      "text": "회심 확률 8푼 증가, 맞힌 피해의 8푼이 발톱 자국으로 흐른다."
+    }
+  },
+  "만수심결": {
+    "name": "만수심결",
+    "type": "심공",
+    "category": "심공",
+    "grade": "기본",
+    "base_multiplier": 1.0,
+    "qi_cost": 0,
+    "desc": "짐승의 숨에 맞춰 도는 야수궁의 심결. 웅크렸다 뛰는 한 번에 힘을 모은다.",
+    "effect": {
+      "heal_hp_pct": 3,
+      "heal_qi_pct": 11,
+      "atk_buff_pct": 12,
+      "buff_rounds": 2
+    },
+    "origin": "외전야수",
+    "gimmick": {
+      "next_power": 40,
+      "name": "웅크린 범",
+      "text": "네 합마다 모은 숨으로 그 합의 공격 위력이 4할 오른다."
+    }
   }
 }

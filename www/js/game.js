@@ -2,20 +2,17 @@
 import { Battle, enemyPool, Enemy, statureEnemy, useConsumable } from "./battle.js";
 import { GRADE_ORDER, Player, Skill, STAT_NAMES } from "./character.js";
 import { DB } from "./data.js";
-import { equipBestGear, grantStartGear, grantStartSkills,
-  advanceChain, applyEffects, failChain, checkRequires, dueChainEvent, enemyIntro, LAST_CHAIN_TURN, pickActionEvent, pickFortune, pickRandomEvent, resolveChoice,
-  reactiveLine, startChain, storyEventForTurn, dueOriginEvent, pendingOriginEvents,
-} from "./events.js";
-import { bonusFor, buy, equipmentBonus, openMarket, sell } from "./market.js";
 import {
-  activeContent, addKarma, claimAchievements, clearCheckpoint, extraSlots, rewardTraits, loadCheckpoint, loadMeta, recordRun, saveCheckpoint,
-  legacyPowers, storeLegacy, canLeaveLegacy, sameLegacy, takeProvisions, updateGlobalCodex, updateKnown, upgradeTraits,
-  difficultyOpen, recordDifficultyClear,
+  grantStartGear, grantStartSkills, advanceChain, applyEffects, failChain, checkRequires, dueChainEvent, enemyIntro, LAST_CHAIN_TURN, pickActionEvent, pickFortune, pickRandomEvent, resolveChoice, reactiveLine, startChain, storyEventForTurn, dueOriginEvent, dueManorEvent, pendingOriginEvents,
+} from "./events.js";
+import { buy, openMarket, sell } from "./market.js";
+import {
+  activeContent, addKarma, claimAchievements, clearCheckpoint, extraSlots, loadCheckpoint, loadMeta, recordRun, saveCheckpoint, legacyPowers, storeLegacy, canLeaveLegacy, beatFinal, sideEnding, rewardTraits, upgradeTraits, sameLegacy, takeProvisions, takeGate, updateGlobalCodex, updateKnown, difficultyOpen, recordDifficultyClear,
 } from "./meta.js";
 import { pick, pickWeighted, randInt, rng } from "./rng.js";
 import {
   actionLine, ALIGNMENT_CAP, alignTier, applyGrowth, byname, CHAPTER_STARTS, checkBreakthrough, checkGoodEnding, checkSaengsa,
-  scaledGrowth, fameRank, FOCUS_DRIFT, focusedSide, getChapter, getChapterInfo, getMonth, getYear, isMarketTurn, monthLine, auraText, isNamed, perkTrait, realmFit, enemyRealmIndex, returnedLine, standIn, realmIndex, sumEffect, talkLine, traitSlots,
+  scaledGrowth, fameRank, FOCUS_DRIFT, focusedSide, getChapter, getChapterInfo, getMonth, getYear, isMarketTurn, monthLine, auraText, isNamed, perkTrait, realmFit, enemyRealmIndex, returnedLine, standIn, realmIndex, sideOrigin, sideDeepLine, difficultyRank, sumEffect, talkLine, traitSlots,
   personalize, DEFAULT_DIFFICULTY, difficultyOf,
   ALIGNMENTS, ALIGN_STEPS,
 } from "./rules.js";
@@ -106,10 +103,16 @@ export class Game {
 
     this.reset();
     const provisions = takeProvisions();
+    const manor = takeGate();
+    const side = DB.origins.origins[originKey].side ? DB.origins.origins[originKey] : null;
     const world = DB.traits[`강호_${difficulty}`] ? [`강호_${difficulty}`] : [];
     this.player = new Player(originKey, [...traits, ...upgradeTraits(meta, originKey), ...rewardTraits(meta), ...provisions.map((k) => `채비_${k}`), ...world]);
     this.player.difficulty = difficulty;
-    this.player.content = activeContent(meta);
+    // 카르마로 산 인연은 본편의 것이다. 외전은 그 출신의 이야기가 끝나는 달에 끝난다
+    this.player.content = side ? [] : activeContent(meta);
+    if (side) this.player.maxTurn = side.end_turn;
+    // 문패를 챙긴 강호행에만 장원이 길 위에 나타난다
+    this.player.manor = manor;
     this.player.person = settlePerson(originKey, person);
     const giftLines = DB.origins.origins[originKey].choose_start ? [] : grantStartSkills(this.player);
     // 고른 유산은 바로 받지 않는다. 첫 해 안에 한 자리에서 한꺼번에 찾아낸다
@@ -117,9 +120,12 @@ export class Game {
       .filter((e, i, all) => e && (e.kind === "skill" ? DB.skills[e.key] : DB.market[e.key]) && all.findIndex((x) => x && sameLegacy(x, e)) === i)
       .slice(0, legacyPowers(meta).take);
     updateKnown(this.player.skills.map((s) => s.key));
-    const intro = getChapterInfo(1);
-    const provisionLines = provisions.length ? [`챙겨 온 채비: ${provisions.map((k) => DB.karma.provisions[k].name).join(", ")}`] : [];
-    const deep = difficultyOf(this.player).chapters?.["1"];
+    const intro = getChapterInfo(1, this.player);
+    const provisionLines = [
+      ...(provisions.length ? [`챙겨 온 채비: ${provisions.map((k) => DB.karma.provisions[k].name).join(", ")}`] : []),
+      ...(manor ? ["품에 장원의 문패가 있다."] : []),
+    ];
+    const deep = side ? sideDeepLine(this.player, 1) : difficultyOf(this.player).chapters?.["1"];
     this.enterTurn([`${intro.title}, 1년차. ${intro.desc}`, ...(deep ? [deep] : []), ...provisionLines, ...giftLines]);
     return true;
   }
@@ -200,6 +206,13 @@ export class Game {
     if (originKey) {
       p.originTurn = p.turn;
       this.event = { key: originKey, forced: true };
+      return;
+    }
+    // 문패를 챙긴 강호행에는 장원의 일이 때맞춰 찾아온다
+    const manorKey = dueManorEvent(p);
+    if (manorKey) {
+      p.manorTurn = p.turn;
+      this.event = { key: manorKey, forced: true };
     }
   }
 
@@ -346,7 +359,8 @@ export class Game {
     // 혈교와 손잡은 무인은 혈교도 치지 않고, 무너진 혈교는 다시 나오지 않는다
     const allies = p.hasFlag("혈해_맹약") || p.hasFlag("혈교_멸문") ? "혈교" : null;
     const fitting = pool.filter((k) => !(mine === "정도" && DB.enemies[k].side === "정도") && DB.enemies[k].faction !== p.sect && DB.enemies[k].faction !== allies
-      && !(isNamed(k) && p.slain.includes(k))); // 쓰러뜨린 이름 있는 적은 다시 만나지 않는다
+      && !(isNamed(k) && p.slain.includes(k)) // 쓰러뜨린 이름 있는 적은 다시 만나지 않는다
+      && !sideOrigin(p)?.shun?.includes(k)); // 외전의 줄거리에서 만날 사람은 길에서 먼저 마주치지 않는다
     const list = fitting.length ? fitting : pool;
     const key = pickWeighted(list, list.map(weightOf));
     this.reachChapter = ahead.includes(key) ? chapter + 1 : null;
@@ -398,6 +412,13 @@ export class Game {
     // 깊은 강호의 천마가 더 지닌 괴공. 같은 괴공은 깊은 쪽으로 바꾼다
     for (const q of enemy.key === "천마" ? level.final_quirks || [] : []) {
       enemy.quirks = [...enemy.quirks.filter((own) => own.type !== q.type), { ...q }];
+    }
+    // 그 강호에서만 지니는 괴공. 지금 강호와 같거나 얕은 것 가운데 가장 깊은 것을 지닌다
+    const own = Object.keys(DB.enemies[enemy.key].deep_quirks || {}).filter((k) => difficultyRank(k) <= difficultyRank(this.player.difficulty))
+      .sort((a, b) => difficultyRank(b) - difficultyRank(a))[0];
+    if (own && !spar) {
+      for (const q of DB.enemies[enemy.key].deep_quirks[own].quirks) enemy.quirks = [...enemy.quirks.filter((x) => x.type !== q.type), { ...q }];
+      return [DB.enemies[enemy.key].deep_quirks[own].text];
     }
     const { affix } = level;
     if (!affix || spar || enemy.beast || enemy.tier === "보스" || enemy.side === "정도" || enemy.quirks.length) return [];
@@ -595,6 +616,9 @@ export class Game {
       this.addLog([...(after.text ? [after.text] : []), ...(summary.length ? [summary.join(", ")] : [])]);
       if (after.effects.next) this.offerAfterBattle = sceneKey(after.key, after.effects.next);
       else if (after.effects.sect_offer && player.sect === null) this.offerAfterBattle = `제안_${after.effects.sect_offer}`;
+    } else if (after.effects.lose_next && player.hp > 0) {
+      // 져도 이야기가 이어지는 겨룸
+      this.offerAfterBattle = sceneKey(after.key, after.effects.lose_next);
     } else if (result.fled && !DB.events[after.key].chain && !DB.events[after.key].turn) {
       player.seenEvents = player.seenEvents.filter((k) => k !== after.key);
     }
@@ -671,14 +695,20 @@ export class Game {
     const realm = this.checkRealm();
     const lines = [...this.commitCodex(), ...realm];
     p.turn += 1;
+    // 외전은 마지막 고비를 넘긴 달에 끝난다. 끝을 고르지 못하고 달이 넘어가면 그 출신의 담담한 끝으로 맺는다
+    if (sideOrigin(p) && p.turn > p.maxTurn) {
+      this.addLog(lines);
+      this.finishGame(true, sideOrigin(p).fallback_ending);
+      return;
+    }
     // 달마다 저절로 차는 양에도 끝이 있어 요양할 일이 남는다
     const hp = Math.min(MAX_TURN_REGEN, NATURAL_REGEN + sumEffect(p.traits, "turn_regen", "hp_pct"));
     const qi = Math.min(MAX_TURN_REGEN, NATURAL_REGEN + sumEffect(p.traits, "turn_regen", "qi_pct"));
     p.healPercent(hp, qi);
     lines.push(...this.alignmentMonth());
     if (CHAPTER_STARTS.includes(p.turn)) {
-      const info = getChapterInfo(p.turn);
-      const deep = difficultyOf(p).chapters?.[String(getChapter(p.turn))];
+      const info = getChapterInfo(p.turn, p);
+      const deep = sideOrigin(p) ? sideDeepLine(p, getChapter(p.turn)) : difficultyOf(p).chapters?.[String(getChapter(p.turn))];
       lines.push(`${info.title}, ${getYear(p.turn)}년차. ${info.desc}`, ...(deep ? [deep] : []), ...this.chapterGrowth());
     }
     if (getMonth(p.turn) === 1) lines.push(...this.yearRest());
@@ -851,8 +881,8 @@ export class Game {
     const { endings } = DB;
     const gain = karmaGain(p, key, victory);
     // 깊은 강호에서 천마를 꺾으면 다음 강호가 열린다
-    const opened = canLeaveLegacy(key) ? recordDifficultyClear(p.difficulty) : null;
-    const fresh = claimAchievements(p, key, victory && key !== "귀순");
+    const opened = beatFinal(key) ? recordDifficultyClear(p.difficulty) : null;
+    const fresh = claimAchievements(p, key, victory && key !== "귀순" && !sideEnding(key));
     for (const item of fresh) {
       gain.lines.push(`공적 ${item.name}${item.karma ? ` +${item.karma}` : ""}`);
       gain.total += item.karma;

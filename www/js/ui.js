@@ -6,7 +6,7 @@ import { eventView } from "./events.js";
 import { Game } from "./game.js";
 import { bonusFor, equipmentBonus, gearGimmick, itemGrade, itemName, sellableView, stockView } from "./market.js";
 import {
-  buyContent, buyProvision, buyUpgrade, exportRecords, extraSlots, importRecords, legacyAvailable, legacyPowers, dropLegacy, upgradeLegacy, loadCheckpoint, loadEventLog, loadMeta, nextReward, openLegacy, refundProvision, setUpgradeUse, upgradeUse,
+  buyContent, buildWing, buyGate, refundGate, gateCost, manorLevels, manorSize, buyProvision, buyUpgrade, exportRecords, extraSlots, importRecords, legacyAvailable, legacyPowers, dropLegacy, upgradeLegacy, loadCheckpoint, loadEventLog, loadMeta, nextReward, openLegacy, refundProvision, setUpgradeUse, upgradeUse,
   toggleContent, unlockOrigin, unlockTrait, upgradeLevel, resetSetupChoices, canLeaveLegacy, sameLegacy, difficultyOpen,
 } from "./meta.js";
 import {
@@ -143,11 +143,15 @@ function codexRows(tab, meta) {
     };
   }
   if (tab === "endings") {
+    // 외전의 결말은 그 외전을 연 뒤에 목록에 오른다
+    const sideOf = (k) => DB.endings.side?.[k];
+    const keys = Object.keys(DB.endings.titles).filter((k) => (k !== "생사경" || meta.endings_seen.includes(k)) && (!sideOf(k) || meta.unlocked_origins.includes(sideOf(k))));
     return {
-      total: Object.keys(DB.endings.titles).length - 1, filterLabel: "", filters: [], empty: "",
-      rows: Object.keys(DB.endings.titles).filter((k) => k !== "생사경" || meta.endings_seen.includes(k)).map((k) => {
+      total: keys.length - (meta.endings_seen.includes("생사경") ? 1 : 0), filterLabel: "", filters: [], empty: "",
+      rows: keys.map((k) => {
         const seen = meta.endings_seen.includes(k);
-        return { key: k, name: seen ? DB.endings.titles[k] : "아직 보지 못한 결말", meta: k === "사망" ? "도달한 장만큼 카르마" : `카르마 +${DB.endings.karma[k]}`, desc: seen ? DB.endings.text[k] : "", cats: [] };
+        const from = sideOf(k) ? `외전 ${DB.origins.origins[sideOf(k)].name}, ` : "";
+        return { key: k, name: seen ? DB.endings.titles[k] : "아직 보지 못한 결말", meta: k === "사망" ? "도달한 장만큼 카르마" : `${from}카르마 +${DB.endings.karma[k]}`, desc: seen ? DB.endings.text[k] : "", cats: [] };
       }),
     };
   }
@@ -310,13 +314,15 @@ ${section("수상한 누군가", ["결전 직전 마지막 달에는 장터 대�
 ${section("도구", ["수련 도구는 언제든, 전투 도구는 싸움 중에 씁니다. 계열이 정해진 도구는 맞으면 제 효과를 내고 맞지 않으면 절반입니다."])}`,
     카르마: `${section("얻는 길", [
     "<b>도달한 장</b>: 천마까지 가지 못하면 1장 +1부터 5장 +5까지 받습니다. 천마에게 져도 +5입니다.",
-    `<b>결말</b>: 천마까지 가면 장 대신 받습니다. ${Object.entries(DB.endings.karma).filter(([k]) => !["생사경", "사망"].includes(k)).map(([k, v]) => `${esc(DB.endings.titles[k])} +${v}`).join(", ")}`,
+    `<b>결말</b>: 천마까지 가면 장 대신 받습니다. ${Object.entries(DB.endings.karma).filter(([k]) => !["생사경", "사망"].includes(k) && !DB.endings.side?.[k]).map(([k, v]) => `${esc(DB.endings.titles[k])} +${v}`).join(", ")}`,
     "<b>경지</b>: 오른 경지에 따라 더 받습니다. 절정 +1, 초절정 +2, 화경 +3, 현경 +4",
     "<b>공적</b>: 처음 이룰 때 한 번 더 받습니다.",
     `<b>깊은 강호</b>: ${DB.difficulty.order.slice(1).map((k) => `${esc(DB.difficulty.levels[k].name)}${josa(DB.difficulty.levels[k].name, "은/는")} ${DB.difficulty.levels[k].karma}배`).join(", ")}를 받습니다.`,
     "카르마는 써도 누적은 줄지 않고, 누적이 늘면 누적 보상을 저절로 받습니다."])}
-${section("상점", ["<b>출신</b>: 새 출신을 엽니다. <b>자질</b>: 타고난 바탕입니다. 장착할 수 있는 칸에 한이 있습니다. <b>기틀</b>: 늘 적용되는 바탕을 단계별로 올립니다. <b>인연</b>: 새 이야기와 결전에 달려올 사람을 엽니다. <b>채비</b>: 다음 강호행 한 번에만 쓰는 값싼 준비물입니다.", "자질, 기틀, 채비, 누적 보상에서 받는 병기와 갑의는 겹칠수록 좋아지고, 끝을 넘으면 은자가 됩니다. 같은 비급이 겹치면 성취가 됩니다."])}
-${section("전설의 유산", ["천마를 한 번 쓰러뜨리면 상점에서 열 수 있습니다. 천마를 쓰러뜨린 강호행을 마칠 때 무공이나 병장기, 귀한 물건 하나를 남깁니다. 같은 것은 하나만 보관하고, 보관이 차면 하나를 지워야 새로 남깁니다.", "고른 유산은 첫 해 안에 별호만 남은 고수들의 자취에서 한꺼번에 이어받습니다. 이어받아도 보관함에서 사라지지 않습니다.", "처음에는 무공의 품계가 한 단계 낮아지고(상승까지만), 병장기는 낮은 단계로 돌아옵니다.", ...DB.karma.legacy.upgrades.map((u, i) => `<b>${i + 1}단계 ${esc(u.name)}</b>: ${esc(u.desc)}`)])}`,
+${section("상점", ["<b>출신</b>: 새 출신을 엽니다. <b>자질</b>: 타고난 바탕입니다. 장착할 수 있는 칸에 한이 있습니다. <b>기틀</b>: 늘 적용되는 바탕을 단계별로 올립니다. <b>인연</b>: 새 이야기와 결전에 달려올 사람을 엽니다. <b>채비</b>: 다음 강호행 한 번에만 쓰는 값싼 준비물입니다. <b>장원</b>: 채를 올려 키우는 거점입니다.", "잠긴 출신의 전용 자질, 기틀, 인연은 그 출신을 해금하면 상점에 보입니다.", "자질, 기틀, 채비, 누적 보상에서 받는 병기와 갑의는 겹칠수록 좋아지고, 끝을 넘으면 은자가 됩니다. 같은 비급이 겹치면 성취가 됩니다."])}
+${section("외전", ["외전의 출신은 상점에서 따로 엽니다. 천마봉으로 가지 않고, 같은 강호의 같은 십 년을 저마다의 목표로 걷습니다. 그 출신만의 서장과 고비, 마지막 고비, 결말 셋이 있습니다.", "본편의 줄거리와 결전을 준비하는 일, 카르마로 산 인연은 외전에 나오지 않습니다. 대신 외전에서만 만나는 변경과 새외의 일이 있습니다.", "외전을 끝맺으면 그 결말의 카르마를 받고 유산도 남길 수 있습니다. 깊은 강호는 천마를 꺾어야 열립니다."])}
+${section("장원", ["상점에서 카르마로 장원의 채(객사, 연무장, 약방, 서고)를 단계별로 올립니다. 올린 채는 사라지지 않습니다.", "장원은 문패를 챙긴 강호행에만 나타납니다. 문패는 강호행 한 번에 쓰이고, 장원이 클수록 값이 오릅니다. 시작하기 전에는 물릴 수 있습니다.", "문패를 챙긴 강호행에서는 올린 채에 맞는 장원의 일이 몇 달에 한 번씩 찾아오고, 길에서 만나는 일에 장원으로 푸는 선택지가 열립니다. 본편과 외전 모두 같습니다."])}
+${section("전설의 유산", ["천마를 한 번 쓰러뜨리면 상점에서 열 수 있습니다. 천마를 쓰러뜨리거나 외전을 끝맺은 강호행을 마칠 때 무공이나 병장기, 귀한 물건 하나를 남깁니다. 같은 것은 하나만 보관하고, 보관이 차면 하나를 지워야 새로 남깁니다.", "고른 유산은 첫 해 안에 별호만 남은 고수들의 자취에서 한꺼번에 이어받습니다. 이어받아도 보관함에서 사라지지 않습니다.", "처음에는 무공의 품계가 한 단계 낮아지고(상승까지만), 병장기는 낮은 단계로 돌아옵니다.", ...DB.karma.legacy.upgrades.map((u, i) => `<b>${i + 1}단계 ${esc(u.name)}</b>: ${esc(u.desc)}`)])}`,
   };
   const page = pages[ui.helpPage] ? ui.helpPage : "처음";
   return modalShell("help-modal", "강호 입문서", `<div class="tabs help-tabs">${Object.keys(pages).map((name) => `<button class="tab-btn${page === name ? " active" : ""}" data-act="help-page" data-key="${name}">${name}</button>`).join("")}</div>
@@ -385,7 +391,8 @@ function originDetail(key) {
   const sect = ORIGIN_SECTS[key] ? DB.sects[ORIGIN_SECTS[key]] : null;
   return `<span class="pick-desc block">${esc(o.desc)}</span>${statBars(o)}
     <span class="pick-stats block">시작 무공: ${esc(skillNames)}</span>
-    ${sect ? `<span class="pick-stats block">${sectWord(ORIGIN_SECTS[key])}: ${esc(sect.name)} (${esc(sect.bonus_text)})</span>` : ""}`;
+    ${sect ? `<span class="pick-stats block">${sectWord(ORIGIN_SECTS[key])}: ${esc(sect.name)} (${esc(sect.bonus_text)})</span>` : ""}
+    ${o.side ? `<span class="pick-stats block">목표: ${esc(o.goal)}</span><span class="pick-stats block">${o.end_turn}달에 끝나는 외전</span>` : ""}`;
 }
 
 const traitName = (t) => `${esc(t.name)}<span class="rarity rarity-${esc(t.rarity)}">${esc(t.rarity)}</span>`;
@@ -404,7 +411,8 @@ function byRarity(keys, row) {
 
 /** 출신 전용 항목은 출신 차례대로 모은다. 같은 출신끼리는 원래 순서를 지킨다. */
 function byOrigin(keys, originOf) {
-  const rank = (key) => DB.origins.order.indexOf(originOf(key));
+  const all = [...DB.origins.order, ...DB.origins.side_order];
+  const rank = (key) => all.indexOf(originOf(key));
   return [...keys].sort((a, b) => rank(a) - rank(b));
 }
 
@@ -444,28 +452,71 @@ function shopRow(name, desc, act, key, cost, meta, label = "해금") {
 const emptyNote = (text) => `<p class="codex-empty">${text}</p>`;
 
 function shopPanels(meta) {
+  // 잠긴 출신의 전용 항목은 그 출신을 해금한 뒤에 보인다
+  const open = (origin) => !origin || meta.unlocked_origins.includes(origin);
+  const hidden = [...Object.values(DB.traits).filter((t) => !t.hidden), ...Object.values(DB.karma.upgrades), ...Object.values(DB.karma.content)].some((x) => !open(x.origin));
+  const lockedNote = hidden ? `<p class="section-note">잠긴 출신의 전용 항목은 그 출신을 해금하면 보입니다.</p>` : "";
+  const pips = (level, max) => `<span class="pips">${Array.from({ length: max }, (_, i) => `<i class="${i < level ? "on" : ""}"></i>`).join("")}</span>`;
   const origins = DB.origins.order.filter((k) => !meta.unlocked_origins.includes(k))
     .map((k) => shopRow(esc(DB.origins.origins[k].name), originDetail(k), "unlock-origin", k, DB.origins.origins[k].cost, meta)).join("");
-  const traits = byRarity(visibleTraits().filter((k) => !meta.unlocked_traits.includes(k)),
+  const sideRows = DB.origins.side_order.filter((k) => !meta.unlocked_origins.includes(k))
+    .map((k) => shopRow(esc(DB.origins.origins[k].name), originDetail(k), "unlock-origin", k, DB.origins.origins[k].cost, meta)).join("");
+  // 해금한 외전은 본 결말의 수와 함께 보여 준다
+  const ownedSides = DB.origins.side_order.filter((k) => meta.unlocked_origins.includes(k)).map((k) => {
+    const o = DB.origins.origins[k];
+    const endings = Object.keys(DB.endings.side).filter((e) => DB.endings.side[e] === k);
+    const seen = endings.filter((e) => meta.endings_seen.includes(e)).length;
+    return `<div class="pick-row"><div class="pick-main"><div class="pick-name">${esc(o.name)} <span class="rarity">결말 ${seen}/${endings.length}</span></div><p class="pick-desc">${esc(o.goal)}</p></div></div>`;
+  }).join("");
+  const sides = `<p class="section-note">외전의 출신은 천마봉으로 가지 않습니다. 같은 강호의 같은 십 년을 저마다의 목표로 걷고, 그 출신만의 줄거리와 결말이 있습니다. 카르마로 산 인연은 외전에 나오지 않습니다. 깊은 강호에서는 외전의 이야기도 그 강호에 맞게 달라집니다.</p>${sideRows || emptyNote("모든 외전을 해금했습니다.")}${ownedSides ? `<h4 class="shop-group">해금한 외전</h4>${ownedSides}` : ""}`;
+  const levels = manorLevels(meta);
+  const gate = gateCost(meta);
+  const gateRow = meta.manor_gate
+    ? `<div class="pick-row"><div class="pick-main"><div class="pick-name">장원의 문패 <span class="rarity">챙겨 둠</span></div><p class="pick-desc">다음 강호행에 장원이 나타난다.</p></div>
+      <button class="unlock-btn" data-act="refund-gate">카르마 ${meta.manor_gate}<br>물리기</button></div>`
+    : `<div class="pick-row ${manorSize(meta) ? "locked" : ""}"><div class="pick-main"><div class="pick-name">장원의 문패</div><p class="pick-desc">${manorSize(meta) ? "챙기면 다음 강호행 한 번에 장원이 나타난다. 장원이 클수록 값이 오른다." : "채를 하나라도 올려야 문패를 챙길 수 있다."}</p></div>
+      <button class="unlock-btn" data-act="buy-gate" ${!manorSize(meta) || meta.current_karma < gate ? "disabled" : ""}>카르마 ${gate}<br>챙기기</button></div>`;
+  const wingRow = ([key, w]) => {
+    const level = levels[key];
+    const cost = w.costs[level];
+    const steps = w.levels.map((text, i) => `<span class="pick-stats block${i < level ? "" : " dim"}">${i + 1}단계: ${esc(text)}</span>`).join("");
+    const name = `${esc(w.name)} ${pips(level, w.costs.length)}`;
+    const body = `<p class="pick-desc">${esc(w.desc)}</p>${steps}`;
+    return cost === undefined
+      ? `<div class="pick-row"><div class="pick-main"><div class="pick-name">${name}</div>${body}</div></div>`
+      : shopRow(name, body, "build-wing", key, cost, meta, "올리기");
+  };
+  const manor = `<p class="section-note">${esc(DB.karma.manor.note)}</p>${gateRow}<h4 class="shop-group">장원의 채</h4>${Object.entries(DB.karma.manor.wings).map(wingRow).join("")}`;
+  const traits = byRarity(visibleTraits().filter((k) => !meta.unlocked_traits.includes(k) && open(DB.traits[k].origin)),
     (k) => shopRow(traitName(DB.traits[k]), `<p class="pick-desc">${esc(DB.traits[k].desc)}</p>${originOnly(DB.traits[k].origin)}`, "unlock-trait", k, DB.traits[k].cost, meta));
   const groups = [...new Set(Object.values(DB.karma.upgrades).map((u) => u.group))];
   const upgradeEntries = (g) => {
-    const entries = Object.entries(DB.karma.upgrades).filter(([, u]) => u.group === g);
-    return g === "출신 전용" ? byOrigin(entries, ([, u]) => u.origin) : entries;
+    const entries = Object.entries(DB.karma.upgrades).filter(([, u]) => u.group === g && open(u.origin));
+    const sorted = g === "출신 전용" ? byOrigin(entries, ([, u]) => u.origin) : entries;
+    // 다 올린 것은 아래로 내린다
+    const done = ([key, u]) => upgradeLevel(key, meta) >= u.costs.length;
+    return [...sorted.filter((e) => !done(e)), ...sorted.filter(done)];
+  };
+  const groupHead = (g) => {
+    const entries = Object.entries(DB.karma.upgrades).filter(([, u]) => u.group === g && open(u.origin));
+    const have = entries.reduce((n, [key]) => n + upgradeLevel(key, meta), 0);
+    const all = entries.reduce((n, [, u]) => n + u.costs.length, 0);
+    return `<h4 class="shop-group">${esc(g)} <span class="group-count">${have}/${all}</span></h4>`;
   };
   const upgradeRow = ([key, u]) => {
     const level = upgradeLevel(key, meta);
     const cost = u.costs[level];
-    const name = `${esc(u.name)} <span class="rarity">${level}/${u.costs.length}단계</span>`;
+    const name = `${esc(u.name)} ${pips(level, u.costs.length)}`;
     const desc = `<p class="pick-desc">${esc(u.desc)}</p>${originOnly(u.origin)}`;
-    if (cost === undefined) return `<div class="pick-row"><div class="pick-main"><div class="pick-name">${name}</div>${desc}</div><span class="pick-stats">다 올림</span></div>`;
+    if (cost === undefined) return `<div class="pick-row done"><div class="pick-main"><div class="pick-name">${name}</div>${desc}</div><span class="pick-stats">다 올림</span></div>`;
     return shopRow(name, desc, "buy-upgrade", key, cost, meta, "올리기");
   };
   const upgradeFilter = groupFilter("upgrade", groups);
   const upgrades = upgradeFilter.row + groups.filter((g) => upgradeFilter.on === "전체" || upgradeFilter.on === g)
-    .map((g) => `<h4 class="shop-group">${esc(g)}</h4>${upgradeEntries(g).map(upgradeRow).join("")}`).join("");
+    .filter((g) => upgradeEntries(g).length)
+    .map((g) => `${groupHead(g)}${upgradeEntries(g).map(upgradeRow).join("")}`).join("");
   const contentRow = ([k, c]) => shopRow(esc(c.name), `<p class="pick-desc">${esc(c.desc)}</p>${originOnly(c.origin)}`, "buy-content", k, c.cost, meta);
-  const contentLeft = Object.entries(DB.karma.content).filter(([k]) => !meta.content.includes(k));
+  const contentLeft = Object.entries(DB.karma.content).filter(([k, c]) => !meta.content.includes(k) && open(c.origin));
   const contentGroups = [...new Set(Object.values(DB.karma.content).map((c) => c.group))];
   const contentFilter = groupFilter("content", contentGroups);
   const contentList = contentGroups.filter((g) => contentFilter.on === "전체" || contentFilter.on === g).map((g) => {
@@ -487,9 +538,11 @@ function shopPanels(meta) {
   return {
     provision: `<p class="section-note">채비는 다음 강호행 한 번에만 쓰입니다. 시작할 때 저절로 꺼내 쓰고, 그 전에는 물릴 수 있습니다.</p>${provisions}`,
     origin: origins || emptyNote("모든 출신을 해금했습니다."),
-    trait: filterRow() + (traits || emptyNote("이 갈래의 자질을 모두 해금했습니다.")),
-    upgrade: `<p class="section-note">기틀은 장착하지 않아도 모든 강호행에 적용됩니다.</p>${upgrades}`,
-    content: `${content || emptyNote("모든 인연을 해금했습니다.")}`,
+    side: sides,
+    manor,
+    trait: filterRow() + (traits || emptyNote("이 갈래의 자질을 모두 해금했습니다.")) + lockedNote,
+    upgrade: `<p class="section-note">기틀은 장착하지 않아도 모든 강호행에 적용됩니다.</p>${upgrades}${lockedNote}`,
+    content: `<p class="section-note">인연은 본편의 강호행에서 찾아옵니다.</p>${content || emptyNote("모든 인연을 해금했습니다.")}${lockedNote}`,
     legacy,
     reward: rewardPanel(meta),
   };
@@ -498,7 +551,7 @@ function shopPanels(meta) {
 /** 상점의 유산 칸: 여는 값, 강화 단계, 보관한 유산 */
 function legacyShop(meta) {
   const { cost, upgrades } = DB.karma.legacy;
-  const note = `<p class="section-note">천마를 쓰러뜨린 강호행을 마칠 때 무공이나 병장기, 귀한 물건(명품 이상의 도구, 영약, 서책) 하나를 남깁니다. 다음 강호행의 첫 해 안에 한꺼번에 이어받고, 이어받아도 사라지지 않습니다.</p>`;
+  const note = `<p class="section-note">천마를 쓰러뜨리거나 외전을 끝맺은 강호행을 마칠 때 무공이나 병장기, 귀한 물건(명품 이상의 도구, 영약, 서책) 하나를 남깁니다. 다음 강호행의 첫 해 안에 한꺼번에 이어받고, 이어받아도 사라지지 않습니다.</p>`;
   if (!meta.legacy_open) {
     return note + (legacyAvailable(meta) ? shopRow("전설의 유산", `<p class="pick-desc">유산을 남기고 이어받을 수 있게 됩니다.</p>`, "open-legacy", "", cost, meta) : emptyNote("천마를 한 번 쓰러뜨리면 살 수 있습니다."));
   }
@@ -530,7 +583,7 @@ function rewardPanel(meta) {
 
 function affordableCount(meta) {
   const k = meta.current_karma;
-  const origins = DB.origins.order.filter((o) => !meta.unlocked_origins.includes(o) && DB.origins.origins[o].cost <= k).length;
+  const origins = [...DB.origins.order, ...DB.origins.side_order].filter((o) => !meta.unlocked_origins.includes(o) && DB.origins.origins[o].cost <= k).length;
   const traits = Object.keys(DB.traits).filter((t) => !DB.traits[t].hidden && !meta.unlocked_traits.includes(t) && DB.traits[t].cost <= k).length;
   const ups = Object.entries(DB.karma.upgrades).filter(([key, u]) => u.costs[upgradeLevel(key, meta)] <= k).length;
   const content = Object.entries(DB.karma.content).filter(([key, c]) => !meta.content.includes(key) && c.cost <= k).length;
@@ -541,7 +594,7 @@ function renderShop() {
   document.body.className = "home setup-screen";
   setMood("calm");
   const meta = loadMeta();
-  const tabs = [["origin", "출신"], ["trait", "자질"], ["upgrade", "기틀"], ["content", "인연"], ["provision", "채비"], ["legacy", "유산"], ["reward", "누적"]];
+  const tabs = [["origin", "출신"], ["side", "외전"], ["trait", "자질"], ["upgrade", "기틀"], ["content", "인연"], ["provision", "채비"], ["manor", "장원"], ["legacy", "유산"], ["reward", "누적"]];
   app().innerHTML = `<div class="setup-head">
       <button class="back-btn" data-act="shop-back" aria-label="뒤로">←</button>
       <h2>카르마 상점</h2>
@@ -683,7 +736,9 @@ function renderSetup() {
   if (!meta.unlocked_origins.includes(ui.origin)) ui.origin = "무림초출";
 
   const origins = DB.origins.order.filter((key) => meta.unlocked_origins.includes(key)).map((key) => `<div class="pick-row"><label class="pick-label"><input type="radio" name="origin" value="${esc(key)}" ${ui.origin === key ? "checked" : ""}>
-      <span class="pick-main"><span class="pick-name">${esc(DB.origins.origins[key].name)}${meta.origin_wins.includes(key) ? ` <span class="rarity">천마 격파</span>` : ""}</span>${originDetail(key)}</span></label></div>`).join("");
+      <span class="pick-main"><span class="pick-name">${esc(DB.origins.origins[key].name)}${meta.origin_wins.includes(key) ? ` <span class="rarity">천마 격파</span>` : ""}</span>${originDetail(key)}</span></label></div>`).join("")
+    + (DB.origins.side_order.some((key) => meta.unlocked_origins.includes(key)) ? `<h4 class="shop-group">외전</h4>${DB.origins.side_order.filter((key) => meta.unlocked_origins.includes(key)).map((key) => `<div class="pick-row"><label class="pick-label"><input type="radio" name="origin" value="${esc(key)}" ${ui.origin === key ? "checked" : ""}>
+      <span class="pick-main"><span class="pick-name">${esc(DB.origins.origins[key].name)}${meta.side_done.includes(key) ? ` <span class="rarity">끝맺음</span>` : ""}</span>${originDetail(key)}</span></label></div>`).join("")}` : "");
 
   const ownedTraits = byRarity(visibleTraits(ui.origin).filter((key) => meta.unlocked_traits.includes(key)),
     (key) => `<div class="pick-row"><label class="pick-label"><input type="checkbox" name="trait" value="${esc(key)}" ${ui.traits.has(key) ? "checked" : ""} ${!ui.traits.has(key) && ui.traits.size >= slots ? "disabled" : ""}>
@@ -708,7 +763,7 @@ function renderSetup() {
     <div class="home-wrap">
       ${ui.setupTab === "upgrade" ? upgradeSetup(meta) : ui.setupTab === "content" ? contentSetup(meta) : ui.setupTab === "legacy" ? legacySetup(meta) : ui.setupTab === "origin" ? origins : `<p class="section-note">${next ? `자질을 ${slots}개 장착할 수 있습니다. 누적 카르마 ${next}이 되면 하나 더 열립니다. 누적 보상은 상점에서 볼 수 있습니다.` : "자질 칸이 모두 열렸습니다."}</p>${filterRow()}${traits}`}
     </div>
-    <div class="setup-bar"><div class="setup-summary">${ui.difficulty !== DEFAULT_DIFFICULTY ? `${esc(DB.difficulty.levels[ui.difficulty].name)}, ` : ""}${esc(originName)}${ui.traits.size ? `, 자질 ${ui.traits.size}개` : ""}${chosenLegacy(meta).length ? `, 유산 ${chosenLegacy(meta).length}개` : ""}${meta.provisions.length ? `, 채비 ${meta.provisions.length}개` : ""}</div>
+    <div class="setup-bar"><div class="setup-summary">${ui.difficulty !== DEFAULT_DIFFICULTY ? `${esc(DB.difficulty.levels[ui.difficulty].name)}, ` : ""}${esc(originName)}${ui.traits.size ? `, 자질 ${ui.traits.size}개` : ""}${chosenLegacy(meta).length ? `, 유산 ${chosenLegacy(meta).length}개` : ""}${meta.provisions.length ? `, 채비 ${meta.provisions.length}개` : ""}${meta.manor_gate ? ", 장원의 문패" : ""}</div>
       <button class="start-btn" data-act="${hasSave ? "confirm-start" : "start"}">강호로 나선다</button></div>
     ${modalShell("confirm-start-modal", "새 강호행을 시작할까요?", `
       <p class="modal-text">저장된 진행이 사라집니다. 카르마와 강호록은 남습니다.</p>
@@ -980,7 +1035,8 @@ function chainStrip(p) {
 function goalStrip() {
   const p = game.player;
   const progress = realmProgress(p);
-  if (!progress) return `<div class="goal">천마봉까지 ${Math.max(0, p.maxTurn - p.turn)}개월</div>`;
+  const side = DB.origins.origins[p.originKey]?.side ? DB.origins.origins[p.originKey] : null;
+  if (!progress) return `<div class="goal">${side ? esc(side.goal_short) : "천마봉"}까지 ${Math.max(0, p.maxTurn - p.turn)}개월</div>`;
   const part = (label, now, need) => `<span class="${now >= need ? "done" : ""}">${label} ${now}/${need}</span>`;
   return `<div class="goal"><b>${esc(progress.next)}까지</b>
     ${part("평균", progress.avg, progress.avgRequired)}${part("최저", progress.min, progress.minRequired)}${part("실전 경험", progress.battles, progress.battlesRequired)}</div>`;
@@ -991,7 +1047,7 @@ function topbar() {
   const turn = Math.min(p.turn, p.maxTurn);
   return `<div class="topbar"><div class="topbar-inner">
     <div class="topbar-row1">
-      <span class="turn-info">${getYear(turn)}년차 ${getMonth(turn)}월<small>${p.difficulty !== DEFAULT_DIFFICULTY ? `${esc(difficultyOf(p).name)}, ` : ""}${esc(getChapterInfo(turn).title)}, ${p.turn}/${p.maxTurn}달</small></span>
+      <span class="turn-info">${getYear(turn)}년차 ${getMonth(turn)}월<small>${p.difficulty !== DEFAULT_DIFFICULTY ? `${esc(difficultyOf(p).name)}, ` : ""}${esc(getChapterInfo(turn, p).title)}, ${p.turn}/${p.maxTurn}달</small></span>
       <span class="realm-info">${esc(p.realm)}<small>${esc(fullName(p.person))}${byname(p) === "이름 없는 무인" ? "" : `, ${esc(byname(p))}`}</small></span>
     </div>
     <div class="turn-track"><span style="width:${percent(turn, p.maxTurn)}%"></span></div>
@@ -1016,7 +1072,7 @@ function legacyPanel() {
   const meta = loadMeta();
   if (!meta.legacy_open) return "";
   if (ending.legacyLeft) return `<p class="legacy-note">${esc(ending.legacyLeft)}${josa(esc(ending.legacyLeft), "을/를")} 남겼습니다. 다음 강호행에서 이어받을 수 있습니다.</p>`;
-  if (!canLeaveLegacy(ending.key)) return `<p class="legacy-note">전설의 유산은 천마를 쓰러뜨린 사람만 남길 수 있습니다.</p>`;
+  if (!canLeaveLegacy(ending.key)) return `<p class="legacy-note">전설의 유산은 천마를 쓰러뜨리거나 외전을 끝맺은 사람만 남길 수 있습니다.</p>`;
   const options = game.legacyOptions();
   if (!options.length) return `<p class="legacy-note">남길 만한 것이 없습니다. 이미 보관한 무공과 물건은 다시 남기지 않습니다.</p>`;
   const { shelf } = legacyPowers(meta);
@@ -1413,6 +1469,9 @@ const actions = {
   "buy-upgrade": (el) => { buyUpgrade(el.dataset.key); render(); },
   "buy-content": (el) => { buyContent(el.dataset.key); render(); },
   "buy-provision": (el) => { buyProvision(el.dataset.key); render(); },
+  "build-wing": (el) => { buildWing(el.dataset.key); render(); },
+  "buy-gate": () => { buyGate(); render(); },
+  "refund-gate": () => { refundGate(); render(); },
   "refund-provision": (el) => { refundProvision(el.dataset.key); render(); },
   "open-legacy": () => { openLegacy(); render(); },
   "upgrade-legacy": () => { upgradeLegacy(); render(); },

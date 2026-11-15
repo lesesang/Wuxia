@@ -23,6 +23,7 @@ const defaults = () => ({
   upgrades: {}, content: [], content_off: [], legacy_open: false, legacy_level: 0, legacies: [], milestones: [],
   known_events: [], achievements: [], origin_wins: [], total_wins: 0, best_turn: 0,
   provisions: [], upgrade_use: {}, difficulty_cleared: [],
+  manor: {}, manor_gate: 0, side_done: [],
 });
 
 export function loadMeta() {
@@ -185,6 +186,63 @@ export function takeProvisions() {
   return keys;
 }
 
+// ---------- 장원 ----------
+
+/** 지은 채의 단계. 채마다 0부터 그 채의 끝 단계까지 */
+export const manorLevels = (data = loadMeta()) => Object.fromEntries(
+  Object.entries(DB.karma.manor.wings).map(([key, wing]) => [key, Math.min(wing.costs.length, data.manor?.[key] || 0)]));
+export const manorSize = (data = loadMeta()) => Object.values(manorLevels(data)).reduce((a, b) => a + b, 0);
+/** 다음 강호행에 장원을 나타나게 하는 문패의 값. 장원이 클수록 비싸다 */
+/** 문패 값은 장원이 클수록 오른다. 올린 단계 셋마다 한 계단이다 */
+export const gateCost = (data = loadMeta()) => {
+  const costs = DB.karma.manor.gate.costs;
+  return costs[Math.min(costs.length - 1, Math.max(0, Math.ceil(manorSize(data) / 3) - 1))];
+};
+
+/** 채를 한 단계 올린다 */
+export function buildWing(key) {
+  const data = loadMeta();
+  const wing = DB.karma.manor.wings[key];
+  const level = manorLevels(data)[key];
+  const cost = wing?.costs[level];
+  if (cost === undefined || data.current_karma < cost) return false;
+  data.current_karma -= cost;
+  data.manor = { ...data.manor, [key]: level + 1 };
+  // 챙겨 둔 문패는 장원이 커져도 치른 값 그대로 쓴다
+  saveMeta(data);
+  return true;
+}
+
+/** 다음 강호행에 쓸 문패를 챙긴다. 지은 채가 하나도 없으면 챙길 것이 없다 */
+export function buyGate() {
+  const data = loadMeta();
+  const cost = gateCost(data);
+  if (data.manor_gate || !manorSize(data) || data.current_karma < cost) return false;
+  data.current_karma -= cost;
+  data.manor_gate = cost;
+  saveMeta(data);
+  return true;
+}
+
+/** 아직 쓰지 않은 문패를 물린다. 치른 값을 그대로 돌려준다 */
+export function refundGate() {
+  const data = loadMeta();
+  if (!data.manor_gate) return false;
+  data.current_karma += data.manor_gate;
+  data.manor_gate = 0;
+  saveMeta(data);
+  return true;
+}
+
+/** 강호행을 시작하며 문패를 쓴다. 챙겨 두었으면 장원의 채 단계를, 아니면 null을 돌려준다 */
+export function takeGate() {
+  const data = loadMeta();
+  if (!data.manor_gate) return null;
+  data.manor_gate = 0;
+  saveMeta(data);
+  return manorSize(data) ? manorLevels(data) : null;
+}
+
 export const extraSlots = (data = loadMeta()) => upgradeUse("그릇", data);
 
 /** 누적 카르마로 받은 보상의 숨은 특성 목록 */
@@ -225,7 +283,11 @@ export const activeContent = (data = loadMeta()) => data.content.filter((k) => !
 const WIN_ENDINGS = ["기본", "배드", "생사경"];
 export const legacyAvailable = (data = loadMeta()) => data.endings_seen.some((k) => WIN_ENDINGS.includes(k));
 /** 유산은 천마를 쓰러뜨린 사람만 남긴다 */
-export const canLeaveLegacy = (endingKey) => WIN_ENDINGS.includes(endingKey);
+/** 천마를 넘어선 결말인가 */
+export const beatFinal = (endingKey) => WIN_ENDINGS.includes(endingKey);
+/** 외전을 끝맺은 결말인가 */
+export const sideEnding = (endingKey) => !!DB.endings.side?.[endingKey];
+export const canLeaveLegacy = (endingKey) => beatFinal(endingKey) || sideEnding(endingKey);
 export const sameLegacy = (a, b) => a.kind === b.kind && a.key === b.key;
 
 export function openLegacy() {
@@ -329,6 +391,7 @@ export function recordEventPick(key, text, label, outcome) {
 export function claimAchievements(player, ending, victory) {
   const data = loadMeta();
   if (victory && !data.origin_wins.includes(player.originKey)) data.origin_wins.push(player.originKey);
+  if (sideEnding(ending) && !data.side_done.includes(player.originKey)) data.side_done.push(player.originKey);
   const fresh = DB.karma.achievements.filter((a) => !data.achievements.includes(a.key) && achievementMet(a, player, ending, victory, data));
   data.achievements.push(...fresh.map((a) => a.key));
   saveMeta(data);
@@ -349,6 +412,7 @@ function achievementMet(a, p, ending, victory, data) {
     case "attacks": return attacks >= a.value;
     case "legend": return p.skills.some((s) => DB.skills[s.key].legend || s.grade === "신공");
     case "origins": return data.origin_wins.length >= a.value;
+    case "sides": return data.side_done.length >= a.value;
     case "runs": return data.total_runs + 1 >= a.value;
     case "silver": return p.silver >= a.value;
     case "events": return data.known_events.length >= a.value;

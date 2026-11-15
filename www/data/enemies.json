@@ -10667,5 +10667,582 @@
     "level": 25,
     "hp_style": 1.06,
     "attack_style": 1.07
+  },
+  "외전_오독문주": {
+    "name": "천주독모 섭홍",
+    "tier": "강적",
+    "realm": "화경",
+    "hp": 17000,
+    "attack": 246,
+    "exp_reward": 3,
+    "silver": [
+      63,
+      91
+    ],
+    "armor": 24,
+    "level": 97,
+    "hp_style": 1.366,
+    "attack_style": 1.19,
+    "chapters": [],
+    "weight": 0,
+    "named": true,
+    "title": "오독문주",
+    "desc": "삼십 년 전 당가의 독경 하권을 들고 남만으로 내려간 방계의 여인. 오독문을 손에 넣고 당가도 모르는 독을 빚었다.",
+    "intro": "\"상권만 읽은 손이 하권을 이길 수 있는지 보자.\"",
+    "outro": "섭홍이 흰 실 위로 쓰러졌다. \"삼십 년을 기다린 답장이... 이거였구나.\"",
+    "specials": [
+      {
+        "name": "천주만화",
+        "every": 3,
+        "mult": 2.1,
+        "poison": {
+          "damage": 18,
+          "rounds": 3
+        }
+      },
+      {
+        "name": "본명고",
+        "every": 5,
+        "mult": 1.4,
+        "qi_drain": 15
+      }
+    ],
+    "phases": [
+      {
+        "hp_pct": 45,
+        "attack_mult": 1.2,
+        "text": "섭홍이 소매를 걷자 팔뚝의 검은 무늬가 살아 움직인다. \"하권의 마지막 장은 내 몸에 적었다.\"",
+        "quirks": [
+          {
+            "type": "sever",
+            "percent": 25,
+            "name": "무음독"
+          }
+        ]
+      }
+    ],
+    "deep_quirks": {
+      "혈풍": {
+        "text": "(섭홍의 손바닥에 붉은 인이 박혀 있다. 혈교와 피의 계를 맺었다.)",
+        "quirks": [
+          {
+            "type": "bloodthirst",
+            "percent": 15,
+            "name": "혈계"
+          }
+        ]
+      },
+      "겁화": {
+        "text": "(섭홍의 정수리에 검은 불길의 흉터가 있다. 신교 장로의 곁불을 받았다.)",
+        "quirks": [
+          {
+            "type": "bloodthirst",
+            "percent": 15,
+            "name": "혈계"
+          },
+          {
+            "type": "barrier",
+            "percent": 4,
+            "every": 5,
+            "name": "곁불의 열기"
+          }
+        ]
+      }
+    }
+  },
+  "외전_철필": {
+    "name": "철필 제갈염",
+    "tier": "난적",
+    "realm": "화경",
+    "hp": 14000,
+    "attack": 235,
+    "exp_reward": 2,
+    "silver": [
+      56,
+      77
+    ],
+    "armor": 22,
+    "level": 97,
+    "hp_style": 1.12,
+    "attack_style": 1.0,
+    "chapters": [],
+    "weight": 0,
+    "named": true,
+    "title": "명부의 붓을 쥔 제갈세가 원로",
+    "desc": "천하십대고수의 명부를 제 손으로 적는 제갈세가의 원로. 붓으로 이름을 올리고 판관필로 그 이름을 잰다.",
+    "intro": "\"이름 석 자가 얼마나 무거운지 붓으로 달아 보세.\"",
+    "outro": "제갈염이 부러진 판관필을 내려다보았다. \"삼십 년 쓴 붓인데.\"",
+    "spar_outro": "제갈염이 부러진 판관필을 내려다보다 웃었다. \"좋네. 이름은 써 두지.\"",
+    "specials": [
+      {
+        "name": "판관점혈",
+        "every": 3,
+        "mult": 2.0,
+        "accuracy": 10
+      },
+      {
+        "name": "일필휘지",
+        "every": 5,
+        "mult": 1.7,
+        "seal": 1
+      }
+    ]
+  },
+  "외전_백송": {
+    "name": "매화노검 백송",
+    "tier": "강적",
+    "realm": "화경",
+    "hp": 24000,
+    "attack": 282,
+    "exp_reward": 3,
+    "silver": [
+      63,
+      91
+    ],
+    "armor": 24,
+    "level": 97,
+    "hp_style": 1.366,
+    "attack_style": 1.19,
+    "chapters": [],
+    "weight": 0,
+    "named": true,
+    "title": "명부를 떠난 옛 천하십대고수",
+    "desc": "제자 둘을 명부의 자리에 잃고 열째 자리를 비운 채 떠난 검객. 마지막 제자에게 가르치다 만 한 수가 남았다.",
+    "intro": "\"십 년을 가르쳤는데 한 수가 남았다. 받아라.\"",
+    "outro": "백송이 검을 내렸다. \"되었다.\"",
+    "spar_outro": "백송이 먼저 검을 내렸다. \"되었다. 이제 네 것이다.\"",
+    "specials": [
+      {
+        "name": "낙매",
+        "every": 3,
+        "mult": 2.2
+      },
+      {
+        "name": "세한",
+        "every": 5,
+        "mult": 1.5,
+        "accuracy": 15
+      }
+    ],
+    "phases": [
+      {
+        "hp_pct": 50,
+        "attack_mult": 1.2,
+        "text": "스승의 검이 느려진다. 느린데 피할 길이 보이지 않는다. 옛 산문의 벽에 뭉개져 있던 마지막 한 획이다.",
+        "specials": [
+          {
+            "name": "낙매",
+            "every": 3,
+            "mult": 2.2
+          },
+          {
+            "name": "뭉개진 한 획",
+            "every": 4,
+            "mult": 2.8,
+            "accuracy": 20,
+            "break_pct": 5
+          }
+        ]
+      }
+    ]
+  },
+  "외전_추살수좌": {
+    "name": "무흔 조일",
+    "tier": "강적",
+    "realm": "화경",
+    "hp": 24500,
+    "attack": 292,
+    "exp_reward": 3,
+    "silver": [
+      63,
+      91
+    ],
+    "armor": 22,
+    "level": 97,
+    "hp_style": 1.366,
+    "attack_style": 1.19,
+    "chapters": [],
+    "weight": 0,
+    "named": true,
+    "title": "살막 추살조 수좌",
+    "desc": "살막을 나가려는 살수를 지우는 살수. 장부에서 이름이 지워진 서른 명은 모두 그의 칼로 지워졌다.",
+    "intro": "\"나가는 문은 내가 지킨다. 스무 해 동안 열린 적이 없다.\"",
+    "outro": "조일이 갑판에 무릎을 꿇었다. \"서른하나째는... 못 지웠군.\"",
+    "specials": [
+      {
+        "name": "무흔",
+        "every": 3,
+        "mult": 2.2,
+        "accuracy": 15
+      },
+      {
+        "name": "그림자 밟기",
+        "every": 5,
+        "mult": 1.6,
+        "injury": true
+      }
+    ],
+    "phases": [
+      {
+        "hp_pct": 40,
+        "attack_mult": 1.25,
+        "text": "조일이 등롱을 발로 차 끈다. 안개 속에서 칼만 온다.",
+        "quirks": [
+          {
+            "type": "frenzy",
+            "percent": 4,
+            "max": 16,
+            "name": "어둠에 익은 칼"
+          }
+        ]
+      }
+    ],
+    "deep_quirks": {
+      "혈풍": {
+        "text": "(조일의 손바닥에 붉은 인이 박혀 있다. 혈교와 피의 계를 맺었다.)",
+        "quirks": [
+          {
+            "type": "bloodthirst",
+            "percent": 15,
+            "name": "혈계"
+          }
+        ]
+      },
+      "겁화": {
+        "text": "(조일의 정수리에 검은 불길의 흉터가 있다. 신교 장로의 곁불을 받았다.)",
+        "quirks": [
+          {
+            "type": "bloodthirst",
+            "percent": 15,
+            "name": "혈계"
+          },
+          {
+            "type": "barrier",
+            "percent": 4,
+            "every": 5,
+            "name": "곁불의 열기"
+          }
+        ]
+      }
+    }
+  },
+  "외전_총채주": {
+    "name": "물귀신 우대강",
+    "tier": "강적",
+    "realm": "화경",
+    "hp": 24500,
+    "attack": 288,
+    "exp_reward": 3,
+    "silver": [
+      63,
+      91
+    ],
+    "armor": 24,
+    "level": 97,
+    "hp_style": 1.366,
+    "attack_style": 1.19,
+    "chapters": [],
+    "weight": 0,
+    "named": true,
+    "title": "장강수로채 총채주",
+    "desc": "세 물길의 우두머리 위에 앉은 장강의 주인. 관아에 은자를 바치고, 말 안 듣는 수채는 관선을 불러 태운다.",
+    "intro": "\"강은 쥐는 놈의 것이다.\"",
+    "outro": "우대강이 닻줄에 걸려 강으로 떨어졌다. 물 위로 올라온 것은 깃발뿐이다.",
+    "specials": [
+      {
+        "name": "번강도해",
+        "every": 3,
+        "mult": 2.1
+      },
+      {
+        "name": "닻줄 걸기",
+        "every": 5,
+        "mult": 1.5,
+        "seal": 1
+      }
+    ],
+    "phases": [
+      {
+        "hp_pct": 50,
+        "attack_mult": 1.2,
+        "text": "우대강이 갑판을 구르자 큰 배가 기운다. 발밑이 강이 된다.",
+        "quirks": [
+          {
+            "type": "barrier",
+            "percent": 4,
+            "every": 5,
+            "name": "물막이"
+          }
+        ]
+      }
+    ],
+    "deep_quirks": {
+      "혈풍": {
+        "text": "(우대강의 손바닥에 붉은 인이 박혀 있다. 혈교와 피의 계를 맺었다.)",
+        "quirks": [
+          {
+            "type": "bloodthirst",
+            "percent": 15,
+            "name": "혈계"
+          }
+        ]
+      },
+      "겁화": {
+        "text": "(우대강의 정수리에 검은 불길의 흉터가 있다. 신교 장로의 곁불을 받았다.)",
+        "quirks": [
+          {
+            "type": "bloodthirst",
+            "percent": 15,
+            "name": "혈계"
+          },
+          {
+            "type": "barrier",
+            "percent": 4,
+            "every": 5,
+            "name": "곁불의 열기"
+          }
+        ]
+      }
+    }
+  },
+  "외전_백공": {
+    "name": "백공",
+    "tier": "강적",
+    "realm": "화경",
+    "hp": 24500,
+    "attack": 298,
+    "exp_reward": 3,
+    "silver": [
+      63,
+      91
+    ],
+    "armor": 24,
+    "level": 97,
+    "hp_style": 1.366,
+    "attack_style": 1.19,
+    "chapters": [],
+    "weight": 0,
+    "named": true,
+    "title": "만수전을 지키는 흰 원숭이",
+    "desc": "야수궁의 왕좌를 지키는 영물. 다섯 맹약의 표식을 알아보고, 표식의 주인이 왕의 몸을 갖추었는지 긴 팔로 잰다.",
+    "intro": "흰 원숭이가 손등의 표식을 하나씩 짚어 세더니 긴 팔을 늘어뜨린다.",
+    "outro": "백공이 돌문 앞에 쓰러졌다. 들보 위의 먼지가 한꺼번에 내려앉았다.",
+    "spar_outro": "백공이 긴 팔을 거두고 돌문 옆으로 비켜 앉았다.",
+    "specials": [
+      {
+        "name": "통비권",
+        "every": 3,
+        "mult": 2.2
+      },
+      {
+        "name": "포효",
+        "every": 5,
+        "mult": 1.5,
+        "seal": 1
+      }
+    ],
+    "phases": [
+      {
+        "hp_pct": 45,
+        "attack_mult": 1.2,
+        "text": "백공의 흰 털이 곤두선다. 들보와 기둥을 차며 사방에서 팔이 날아온다.",
+        "specials": [
+          {
+            "name": "통비권",
+            "every": 2,
+            "mult": 1.9
+          },
+          {
+            "name": "포효",
+            "every": 5,
+            "mult": 1.5,
+            "seal": 1
+          }
+        ]
+      }
+    ]
+  },
+  "외전_하란": {
+    "name": "설령수 하란",
+    "tier": "강적",
+    "realm": "화경",
+    "hp": 24500,
+    "attack": 296,
+    "exp_reward": 5,
+    "silver": [
+      90,
+      130
+    ],
+    "armor": 22,
+    "level": 97,
+    "hp_style": 1.366,
+    "attack_style": 1.19,
+    "chapters": [],
+    "weight": 0,
+    "named": true,
+    "title": "북해빙궁 소궁주",
+    "desc": "얼음 문 앞에서 궁의 법을 맡은 소궁주. 궁에 답을 올린 자가 그 답을 지킬 만한지 손으로 잰다.",
+    "intro": "\"답은 들었다. 이제 그 답의 무게를 보자.\"",
+    "outro": "하란의 몸에서 서리가 걷혔다. \"되었다. 네 답이 내 손보다 무겁다.\"",
+    "spar_outro": "하란이 손을 거두고 한 걸음 물러섰다. \"되었다. 네 답이 내 손보다 무겁다.\"",
+    "specials": [
+      {
+        "name": "빙백신장",
+        "every": 3,
+        "mult": 2.0,
+        "qi_drain": 25
+      },
+      {
+        "name": "설령",
+        "every": 5,
+        "mult": 1.5,
+        "seal": 1
+      }
+    ],
+    "phases": [
+      {
+        "hp_pct": 50,
+        "attack_mult": 1.2,
+        "text": "하란이 얼음 문에 등을 댄다. 문의 냉기가 그녀의 두 손으로 흘러든다.",
+        "quirks": [
+          {
+            "type": "barrier",
+            "percent": 4,
+            "every": 5,
+            "name": "얼음 문의 냉기"
+          }
+        ]
+      }
+    ]
+  },
+  "외전_반량": {
+    "name": "침혈수 반량",
+    "tier": "강적",
+    "realm": "화경",
+    "hp": 16500,
+    "attack": 250,
+    "exp_reward": 2,
+    "silver": [
+      42,
+      63
+    ],
+    "armor": 20,
+    "level": 97,
+    "hp_style": 1.366,
+    "attack_style": 1.19,
+    "chapters": [],
+    "weight": 0,
+    "named": true,
+    "title": "혈교 우호법",
+    "desc": "혈교의 우호법. 피를 굳혀 만든 바늘을 쓰고, 그 바늘이 박힌 자리는 아물지 않는다. 강림의 밤에 연못가의 그릇을 지킨다.",
+    "intro": "\"그릇에 든 것에 손대지 말라 했다, 순례승.\"",
+    "outro": "반량이 연못가에 쓰러졌다. \"교주께서... 보고 계신다...\"",
+    "specials": [
+      {
+        "name": "혈침비우",
+        "every": 3,
+        "mult": 1.9,
+        "poison": {
+          "damage": 20,
+          "rounds": 3
+        }
+      },
+      {
+        "name": "응혈침",
+        "every": 5,
+        "mult": 1.5,
+        "injury": true
+      }
+    ],
+    "quirks": [
+      {
+        "type": "bloodthirst",
+        "percent": 20
+      },
+      {
+        "type": "sever",
+        "percent": 40
+      }
+    ],
+    "phases": [
+      {
+        "hp_pct": 45,
+        "attack_mult": 1.2,
+        "text": "반량이 제 손목을 그어 연못에 피를 떨군다. 끓는 핏물이 그의 바늘로 모인다.",
+        "quirks": [
+          {
+            "type": "frenzy",
+            "percent": 4,
+            "max": 16,
+            "name": "끓는 연못"
+          }
+        ]
+      }
+    ]
+  },
+  "외전_곽승": {
+    "name": "적미 곽승",
+    "tier": "강적",
+    "realm": "화경",
+    "hp": 22000,
+    "attack": 286,
+    "exp_reward": 2,
+    "silver": [
+      49,
+      70
+    ],
+    "armor": 22,
+    "level": 97,
+    "hp_style": 1.366,
+    "attack_style": 1.19,
+    "chapters": [],
+    "weight": 0,
+    "named": true,
+    "title": "천마신교 장로, 연못 탈환대주",
+    "desc": "피 연못을 백 년 지켜 온 신교의 장로. 혈교가 연못을 되찾은 밤에 탈환대를 이끌고 골짜기를 오른다.",
+    "intro": "\"그릇은 백 년 동안 우리 것이었다. 도로 내놓아라.\"",
+    "outro": "곽승이 횃불 위로 쓰러졌다. \"교주께서... 이 골짜기를 그냥 두실 줄 아느냐.\"",
+    "specials": [
+      {
+        "name": "적미참",
+        "every": 3,
+        "mult": 2.0,
+        "accuracy": 10
+      },
+      {
+        "name": "탈혼수",
+        "every": 5,
+        "mult": 1.4,
+        "qi_drain": 20
+      }
+    ],
+    "phases": [
+      {
+        "hp_pct": 40,
+        "attack_mult": 1.2,
+        "text": "곽승이 붉은 눈썹을 치켜든다. 탈환대의 횃불이 그의 등 뒤로 모여든다.",
+        "quirks": [
+          {
+            "type": "frenzy",
+            "percent": 4,
+            "max": 16,
+            "name": "물러설 곳 없는 칼"
+          }
+        ]
+      }
+    ],
+    "deep_quirks": {
+      "겁화": {
+        "text": "(곽승의 정수리에 검은 불길의 흉터가 있다. 겁화관정을 받았다.)",
+        "quirks": [
+          {
+            "type": "barrier",
+            "percent": 4,
+            "every": 5,
+            "name": "관정의 열기"
+          }
+        ]
+      }
+    }
   }
 }

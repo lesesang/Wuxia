@@ -118,7 +118,10 @@ export function benefitText(alignment) {
 export const CHAPTER_LENGTH = 24;
 export const CHAPTER_STARTS = [25, 49, 73, 97];
 export const getChapter = (turn) => Math.min(5, Math.floor((turn - 1) / CHAPTER_LENGTH) + 1);
-export const getChapterInfo = (turn) => DB.chapters.chapters[String(getChapter(turn))];
+export const getChapterInfo = (turn, player = null) => {
+  const own = player && sideOrigin(player)?.chapters?.[String(getChapter(turn))];
+  return own || DB.chapters.chapters[String(getChapter(turn))];
+};
 export const getYear = (turn) => Math.ceil(turn / 12);
 export const getMonth = (turn) => ((turn - 1) % 12) + 1;
 export const marketTurns = () => Object.keys(DB.chapters.market_turns).map(Number).sort((a, b) => a - b);
@@ -166,7 +169,11 @@ export function applyGrowth(amount, traits, stat) {
 }
 
 // ---------- 문파 ----------
-export const ORIGIN_SECTS = { 남궁세가: "남궁", 하오문: "하오문", 개방제자: "개방" };
+export const ORIGIN_SECTS = { 남궁세가: "남궁", 하오문: "하오문", 개방제자: "개방", 외전당가: "당가", 외전살막: "살막", 외전혈승: "혈교" };
+/** 외전의 출신이면 그 출신의 데이터, 아니면 null */
+export const sideOrigin = (player) => (DB.origins.origins[player.originKey]?.side ? DB.origins.origins[player.originKey] : null);
+/** 본편에서만, 또는 외전에서만 일어나는 일을 가린다 */
+export const fitsStory = (player, event) => (sideOrigin(player) ? !event.main_only : !event.side);
 export const sectBonus = (player, field) => DB.sects[player.sect]?.bonus?.[field] || 0;
 
 // ---------- 경지 ----------
@@ -361,6 +368,13 @@ function bynameOf(player) {
 
 export const DEFAULT_DIFFICULTY = "강호";
 export const difficultyRank = (key) => Math.max(0, DB.difficulty.order.indexOf(key));
+/** 깊은 강호에서 외전의 장이 열릴 때 붙는 그 출신의 문장. 지금 강호와 같거나 얕은 것 가운데 가장 깊은 것을 쓴다 */
+export function sideDeepLine(player, chapter) {
+  const deep = sideOrigin(player)?.deep || {};
+  const key = Object.keys(deep).filter((k) => difficultyRank(k) <= difficultyRank(player.difficulty) && difficultyRank(k) > 0 && deep[k][String(chapter)])
+    .sort((a, b) => difficultyRank(b) - difficultyRank(a))[0];
+  return key ? deep[key][String(chapter)] : null;
+}
 export const difficultyOf = (player) => DB.difficulty.levels[player?.difficulty] || DB.difficulty.levels[DEFAULT_DIFFICULTY];
 
 /** 적의 괴공을 설명하는 문장 */
