@@ -526,7 +526,8 @@ export class Player {
     p.battles = d.battles ?? 0;
     p.encounteredEnemies = [...(d.encountered_enemies || [])];
     p.pendingEncounters = [...(d.pending_encounters || [])];
-    p.skills = (d.skills || []).filter((s) => DB.skills[s.key]).map((s) => Skill.fromDict(s));
+    // 이름을 고친 무공은 새 이름으로 잇는다
+    p.skills = (d.skills || []).map((s) => (s.key === "당문심법" ? { ...s, key: "당가심법" } : s)).filter((s) => DB.skills[s.key]).map((s) => Skill.fromDict(s));
     p.mainSkill = d.main_skill ?? null;
     p.chosenArts = { ...(d.chosen_arts || {}) };
     if (!d.chosen_arts) {

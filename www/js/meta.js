@@ -13,7 +13,7 @@ const REMOVED_ORIGINS = { 곤륜파: 5, 금군교두: 5, 낙방서생: 5, 녹림
 
 // 없어진 자질은 산 값을 돌려준다
 const REMOVED_TRAITS = { 무골: 5, 기재: 5, 넓은단전: 5, 맑은마음: 5, 맷집: 7, 경공의재능: 4, 줄행랑: 2, 손에익은병기: 6, 약손: 3, 구음절맥: 8, 순양지체: 8 };
-const SPLIT_UPGRADES = { 근골: ["강골", "혜안"], 심지: ["원기", "명경"] };
+const SPLIT_UPGRADES = { 근골: ["강골", "혜안"], 심지: ["원기", "명경"], 당문침통: ["당가침통"] };
 
 const defaults = () => ({
   current_karma: 0, total_karma: 0,
