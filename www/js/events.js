@@ -323,7 +323,8 @@ function legacyScene(player, event) {
   entries.forEach((entry, i) => {
     const list = finds[entry.kind];
     const name = entry.kind === "skill" ? DB.skills[entry.key].name : DB.market[entry.key].name;
-    lines.push(list[(seed + i) % list.length].replaceAll("〈유산〉", name));
+    // 유산의 이름에 받침이 있고 없음에 따라 조사를 맞춘다
+    lines.push(list[(seed + i) % list.length].replace(/〈유산(?::([^〉]+))?〉/g, (_, particle) => name + (particle ? josa(name, particle) : "")));
   });
   if (entries.some((e) => e.origin === player.origin)) lines.push(finds.same_origin);
   return lines.join(" ");

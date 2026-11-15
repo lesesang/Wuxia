@@ -130,6 +130,10 @@ const ROWS = [
   ["탐색 위주 / 시장 이용", { style: "탐색 위주" }],
   ["수련 위주 / 시장 이용", { style: "수련 위주" }],
   ["섞어서 / 시장 안 씀", { useMarket: false }],
+  ...["외전당가", "외전빙궁", "외전매화", "외전살막", "외전수로", "외전혈승", "외전야수"].flatMap((origin) => [
+    [`외전 첫 판 / ${origin}`, { origin }],
+    [`외전 완성 / ${origin}`, { origin, total: 400, traits: ["천하제일기재", "천생근골", "오성"], upgrades: ALL_UPGRADES }],
+  ]),
   ["섞어서 / 남궁세가", { origin: "남궁세가" }],
   ["섞어서 / 하북팽가", { origin: "하북팽가" }],
   ["섞어서 / 표두", { origin: "표국표사" }],
@@ -149,8 +153,9 @@ for (const [name, options] of ROWS) {
   const results = Array.from({ length: count }, () => play(options));
   const tally = {};
   for (const r of results) tally[r.ending] = (tally[r.ending] || 0) + 1;
-  const wins = results.filter((r) => ["배드", "기본", "생사경"].includes(r.ending)).length;
-  const reached = results.filter((r) => r.player.turn >= 120).length;
+  // 외전은 그 출신의 결말로 끝맺은 판을 센다
+  const wins = results.filter((r) => ["배드", "기본", "생사경"].includes(r.ending) || DB.endings.side[r.ending]).length;
+  const reached = results.filter((r) => r.player.turn >= r.player.maxTurn).length;
   const avg = results.reduce((t, r) => t + (r.player.external + r.player.internal + r.player.martial + r.player.mind) / 4, 0) / count;
   const stats = (p) => [p.external, p.internal, p.martial, p.mind];
   const maxed = results.filter((r) => stats(r.player).every((v) => v >= 999)).length;

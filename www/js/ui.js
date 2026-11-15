@@ -319,8 +319,10 @@ ${section("도구", ["수련 도구는 언제든, 전투 도구는 싸움 중에
     "<b>공적</b>: 처음 이룰 때 한 번 더 받습니다.",
     `<b>깊은 강호</b>: ${DB.difficulty.order.slice(1).map((k) => `${esc(DB.difficulty.levels[k].name)}${josa(DB.difficulty.levels[k].name, "은/는")} ${DB.difficulty.levels[k].karma}배`).join(", ")}를 받습니다.`,
     "카르마는 써도 누적은 줄지 않고, 누적이 늘면 누적 보상을 저절로 받습니다."])}
-${section("상점", ["<b>출신</b>: 새 출신을 엽니다. <b>자질</b>: 타고난 바탕입니다. 장착할 수 있는 칸에 한이 있습니다. <b>기틀</b>: 늘 적용되는 바탕을 단계별로 올립니다. <b>인연</b>: 새 이야기와 결전에 달려올 사람을 엽니다. <b>채비</b>: 다음 강호행 한 번에만 쓰는 값싼 준비물입니다.", "자질, 기틀, 채비, 누적 보상에서 받는 병기와 갑의는 겹칠수록 좋아지고, 끝을 넘으면 은자가 됩니다. 같은 비급이 겹치면 성취가 됩니다."])}
-${section("전설의 유산", ["천마를 한 번 쓰러뜨리면 상점에서 열 수 있습니다. 천마를 쓰러뜨린 강호행을 마칠 때 무공이나 병장기, 귀한 물건 하나를 남깁니다. 같은 것은 하나만 보관하고, 보관이 차면 하나를 지워야 새로 남깁니다.", "고른 유산은 첫 해 안에 별호만 남은 고수들의 자취에서 한꺼번에 이어받습니다. 이어받아도 보관함에서 사라지지 않습니다.", "처음에는 무공의 품계가 한 단계 낮아지고(상승까지만), 병장기는 낮은 단계로 돌아옵니다.", ...DB.karma.legacy.upgrades.map((u, i) => `<b>${i + 1}단계 ${esc(u.name)}</b>: ${esc(u.desc)}`)])}`,
+${section("상점", ["<b>출신</b>: 새 출신을 엽니다. <b>자질</b>: 타고난 바탕입니다. 장착할 수 있는 칸에 한이 있습니다. <b>기틀</b>: 늘 적용되는 바탕을 단계별로 올립니다. <b>인연</b>: 새 이야기와 결전에 달려올 사람을 엽니다. <b>채비</b>: 다음 강호행 한 번에만 쓰는 값싼 준비물입니다. <b>장원</b>: 채를 올려 키우는 거점입니다.", "잠긴 출신의 전용 자질, 기틀, 인연은 그 출신을 해금하면 상점에 보입니다.", "자질, 기틀, 채비, 누적 보상에서 받는 병기와 갑의는 겹칠수록 좋아지고, 끝을 넘으면 은자가 됩니다. 같은 비급이 겹치면 성취가 됩니다."])}
+${section("외전", ["외전의 출신은 상점에서 따로 엽니다. 천마봉으로 가지 않고, 같은 강호의 같은 십 년을 저마다의 목표로 걷습니다. 그 출신만의 서장과 고비, 마지막 고비, 결말 셋이 있습니다.", "본편의 줄거리와 결전을 준비하는 일, 카르마로 산 인연은 외전에 나오지 않습니다. 대신 외전에서만 만나는 변경과 새외의 일이 있습니다.", "외전을 끝맺으면 그 결말의 카르마를 받고 유산도 남길 수 있습니다. 깊은 강호는 천마를 꺾어야 열립니다."])}
+${section("장원", ["상점에서 카르마로 장원의 채(객사, 연무장, 약방, 서고)를 단계별로 올립니다. 올린 채는 사라지지 않습니다.", "장원은 문패를 챙긴 강호행에만 나타납니다. 문패는 강호행 한 번에 쓰이고, 장원이 클수록 값이 오릅니다. 시작하기 전에는 물릴 수 있습니다.", "문패를 챙긴 강호행에서는 올린 채에 맞는 장원의 일이 몇 달에 한 번씩 찾아오고, 길에서 만나는 일에 장원으로 푸는 선택지가 열립니다. 본편과 외전 모두 같습니다."])}
+${section("전설의 유산", ["천마를 한 번 쓰러뜨리면 상점에서 열 수 있습니다. 천마를 쓰러뜨리거나 외전을 끝맺은 강호행을 마칠 때 무공이나 병장기, 귀한 물건 하나를 남깁니다. 같은 것은 하나만 보관하고, 보관이 차면 하나를 지워야 새로 남깁니다.", "고른 유산은 첫 해 안에 별호만 남은 고수들의 자취에서 한꺼번에 이어받습니다. 이어받아도 보관함에서 사라지지 않습니다.", "처음에는 무공의 품계가 한 단계 낮아지고(상승까지만), 병장기는 낮은 단계로 돌아옵니다.", ...DB.karma.legacy.upgrades.map((u, i) => `<b>${i + 1}단계 ${esc(u.name)}</b>: ${esc(u.desc)}`)])}`,
   };
   const page = pages[ui.helpPage] ? ui.helpPage : "처음";
   return modalShell("help-modal", "강호 입문서", `<div class="tabs help-tabs">${Object.keys(pages).map((name) => `<button class="tab-btn${page === name ? " active" : ""}" data-act="help-page" data-key="${name}">${name}</button>`).join("")}</div>
@@ -450,6 +452,11 @@ function shopRow(name, desc, act, key, cost, meta, label = "해금") {
 const emptyNote = (text) => `<p class="codex-empty">${text}</p>`;
 
 function shopPanels(meta) {
+  // 잠긴 출신의 전용 항목은 그 출신을 해금한 뒤에 보인다
+  const open = (origin) => !origin || meta.unlocked_origins.includes(origin);
+  const hidden = [...Object.values(DB.traits).filter((t) => !t.hidden), ...Object.values(DB.karma.upgrades), ...Object.values(DB.karma.content)].some((x) => !open(x.origin));
+  const lockedNote = hidden ? `<p class="section-note">잠긴 출신의 전용 항목은 그 출신을 해금하면 보입니다.</p>` : "";
+  const pips = (level, max) => `<span class="pips">${Array.from({ length: max }, (_, i) => `<i class="${i < level ? "on" : ""}"></i>`).join("")}</span>`;
   const origins = DB.origins.order.filter((k) => !meta.unlocked_origins.includes(k))
     .map((k) => shopRow(esc(DB.origins.origins[k].name), originDetail(k), "unlock-origin", k, DB.origins.origins[k].cost, meta)).join("");
   const sideRows = DB.origins.side_order.filter((k) => !meta.unlocked_origins.includes(k))
@@ -473,11 +480,6 @@ function shopPanels(meta) {
       : shopRow(name, body, "build-wing", key, cost, meta, "올리기");
   };
   const manor = `<p class="section-note">${esc(DB.karma.manor.note)}</p>${gateRow}<h4 class="shop-group">장원의 채</h4>${Object.entries(DB.karma.manor.wings).map(wingRow).join("")}`;
-  // 잠긴 출신의 전용 항목은 그 출신을 해금한 뒤에 보인다
-  const open = (origin) => !origin || meta.unlocked_origins.includes(origin);
-  const hidden = [...Object.values(DB.traits).filter((t) => !t.hidden), ...Object.values(DB.karma.upgrades), ...Object.values(DB.karma.content)].some((x) => !open(x.origin));
-  const lockedNote = hidden ? `<p class="section-note">잠긴 출신의 전용 항목은 그 출신을 해금하면 보입니다.</p>` : "";
-  const pips = (level, max) => `<span class="pips">${Array.from({ length: max }, (_, i) => `<i class="${i < level ? "on" : ""}"></i>`).join("")}</span>`;
   const traits = byRarity(visibleTraits().filter((k) => !meta.unlocked_traits.includes(k) && open(DB.traits[k].origin)),
     (k) => shopRow(traitName(DB.traits[k]), `<p class="pick-desc">${esc(DB.traits[k].desc)}</p>${originOnly(DB.traits[k].origin)}`, "unlock-trait", k, DB.traits[k].cost, meta));
   const groups = [...new Set(Object.values(DB.karma.upgrades).map((u) => u.group))];
@@ -1062,7 +1064,7 @@ function legacyPanel() {
   const meta = loadMeta();
   if (!meta.legacy_open) return "";
   if (ending.legacyLeft) return `<p class="legacy-note">${esc(ending.legacyLeft)}${josa(esc(ending.legacyLeft), "을/를")} 남겼습니다. 다음 강호행에서 이어받을 수 있습니다.</p>`;
-  if (!canLeaveLegacy(ending.key)) return `<p class="legacy-note">전설의 유산은 천마를 쓰러뜨린 사람만 남길 수 있습니다.</p>`;
+  if (!canLeaveLegacy(ending.key)) return `<p class="legacy-note">전설의 유산은 천마를 쓰러뜨리거나 외전을 끝맺은 사람만 남길 수 있습니다.</p>`;
   const options = game.legacyOptions();
   if (!options.length) return `<p class="legacy-note">남길 만한 것이 없습니다. 이미 보관한 무공과 물건은 다시 남기지 않습니다.</p>`;
   const { shelf } = legacyPowers(meta);

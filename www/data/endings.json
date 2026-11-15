@@ -116,13 +116,22 @@
       [
         {
           "requires": {
-            "min_turn": 120
+            "min_turn": 120,
+            "side": false
           },
           "text": "천마봉의 눈이 〈그〉를 덮었다. 봄에 눈이 녹자 병기 하나만 남아 있었다."
         },
         {
           "requires": {
+            "side": true,
             "min_chapter": 5
+          },
+          "text": "십 년의 끝이 눈앞에 보이는 곳이었다. 몇 걸음이 모자랐다."
+        },
+        {
+          "requires": {
+            "min_chapter": 5,
+            "side": false
           },
           "text": "천마봉이 눈앞에 보이는 곳이었다. 몇 걸음이 모자랐다."
         },
@@ -229,7 +238,8 @@
         },
         {
           "requires": {
-            "min_fame": 500
+            "min_fame": 500,
+            "side": false
           },
           "text": "소식이 퍼지자 강호의 객잔마다 잔이 하나씩 비었다. 천마가 한숨 돌렸다는 말이 돌았다."
         },
