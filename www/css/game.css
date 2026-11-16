@@ -192,8 +192,6 @@ body.in-battle { background: radial-gradient(ellipse at top, #3f1411 0%, #170706
 /* ===== 메인 화면 ===== */
 body.home { padding-bottom: calc(4.5rem + var(--safe-bottom)); }
 .home-wrap { max-width: 760px; margin: 0 auto; padding: calc(2.5rem + var(--safe-top)) 1.25rem 2rem; }
-.hero { display: flex; gap: 1.5rem; align-items: flex-start; margin-bottom: 2rem; }
-.hero h1 { writing-mode: vertical-rl; font-family: var(--display); font-weight: 400; font-size: clamp(2.2rem, 6vw, 2.9rem); letter-spacing: .08em; line-height: 1.25; margin: 0; color: var(--paper); flex-shrink: 0; border-right: 3px solid var(--seal); padding-right: .35rem; }
 .hero-line { font-size: 1.15rem; margin: 0 0 .8rem; line-height: 1.8; }
 .karma-display { color: var(--celadon); font-weight: 700; margin: 0 0 1rem; }
 .continue-btn { padding: .7rem 1.1rem; background: var(--celadon-deep); border: 1px solid var(--celadon); font-size: .98rem; }

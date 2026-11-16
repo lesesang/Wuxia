@@ -2980,7 +2980,6 @@
     ],
     "consumable": true,
     "stock_qty": 1,
-    "drop_only": false,
     "grade": "양품"
   },
   "사담": {
@@ -3001,7 +3000,6 @@
     ],
     "consumable": true,
     "stock_qty": 1,
-    "drop_only": false,
     "grade": "양품"
   },
   "호골": {
@@ -3024,7 +3022,6 @@
     ],
     "consumable": true,
     "stock_qty": 1,
-    "drop_only": true,
     "grade": "명품"
   },
   "금안": {
@@ -3042,7 +3039,6 @@
     ],
     "consumable": true,
     "stock_qty": 1,
-    "drop_only": true,
     "grade": "명품"
   },
   "호주": {
@@ -3060,7 +3056,6 @@
     ],
     "consumable": true,
     "stock_qty": 1,
-    "drop_only": true,
     "grade": "명품"
   },
   "영물내단": {
@@ -3092,7 +3087,6 @@
     ],
     "consumable": true,
     "stock_qty": 1,
-    "drop_only": false,
     "grade": "보물"
   },
   "천년내단": {
@@ -3137,7 +3131,6 @@
     ],
     "consumable": true,
     "stock_qty": 1,
-    "drop_only": true,
     "grade": "신물"
   },
   "유성검법비급": {
@@ -4472,7 +4465,6 @@
     ],
     "consumable": true,
     "stock_qty": 1,
-    "drop_only": false,
     "grade": "양품"
   },
   "설삼": {
@@ -4494,7 +4486,6 @@
     ],
     "consumable": true,
     "stock_qty": 1,
-    "drop_only": false,
     "grade": "명품"
   },
   "주과": {
@@ -4530,7 +4521,6 @@
     ],
     "consumable": true,
     "stock_qty": 1,
-    "drop_only": false,
     "grade": "명품"
   },
   "빙잠정수": {
@@ -4558,7 +4548,6 @@
     ],
     "consumable": true,
     "stock_qty": 1,
-    "drop_only": true,
     "grade": "보물",
     "no_drop": true
   },
@@ -4586,7 +4575,6 @@
     ],
     "consumable": true,
     "stock_qty": 1,
-    "drop_only": true,
     "grade": "보물",
     "no_drop": true
   },
@@ -4635,7 +4623,6 @@
     ],
     "consumable": true,
     "stock_qty": 1,
-    "drop_only": true,
     "grade": "보물",
     "no_drop": true
   },
@@ -4659,7 +4646,6 @@
     ],
     "consumable": true,
     "stock_qty": 1,
-    "drop_only": true,
     "grade": "보물",
     "no_drop": true
   },
@@ -4703,7 +4689,6 @@
     ],
     "consumable": true,
     "stock_qty": 1,
-    "drop_only": true,
     "grade": "신물",
     "no_drop": true
   },
@@ -4747,7 +4732,6 @@
     ],
     "consumable": true,
     "stock_qty": 1,
-    "drop_only": true,
     "grade": "신물",
     "no_drop": true
   },

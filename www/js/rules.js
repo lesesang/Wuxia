@@ -6,7 +6,6 @@ import { pick, rng } from "./rng.js";
 // ---------- 성향 ----------
 export const ALIGNMENTS = ["정도", "사도", "마도"];
 export const ALIGNMENT_CAP = 999;
-export const ALIGNMENT_SCALE = 20; // 성향이 낮은 수로 쌓이던 때의 저장을 옮길 때 쓴다
 const DOMINANT_THRESHOLD = 100;
 export const FOCUS_RATIO = 2;      // 한 길이 둘째 길의 이만큼을 넘으면 그 길에 집중한 것으로 친다
 // 앞선 길은 사건에서 이만큼 더 오른다. 사건이 적은 길일수록 크다
@@ -201,13 +200,6 @@ export function realmPerks(realm, category = "검법") {
     const grown = Object.entries(perk.growth || {}).filter(([next]) => realmIndex(next) <= reached);
     return { realm: name, ...perk, name: auraText(perk.name, category), desc: auraText(perk.desc, category), grown: grown.map(([next, g]) => ({ realm: next, desc: auraText(g.desc, category) })) };
   });
-}
-
-/** 그 경지까지 깊어진 특전의 숨은 특성 */
-export function perkGrowthTraits(realm) {
-  const reached = realmIndex(realm);
-  return Object.entries(DB.realms.perks).flatMap(([name, perk]) => Object.keys(perk.growth || {})
-    .filter((next) => realmIndex(next) <= reached).map((next) => `${perkTrait(name)}_${next}`));
 }
 
 /** 결전에 달려올 인연. 조건을 채운 사람 가운데 앞에서부터 정해진 수만 온다 */

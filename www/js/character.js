@@ -1,9 +1,8 @@
 // 무공과 플레이어
 import { DB } from "./data.js";
-import { RENAMED_ORIGINS } from "./meta.js";
 import { randInt, rng } from "./rng.js";
 import {
-  ALIGN_CLASH, ALIGN_EASE, ALIGN_STEPS, MAX_FAME, ALIGNMENT_CAP, ALIGNMENT_SCALE, alignValue, dominant, FOCUS_GAIN, hasEffect, newAlignment, ORIGIN_SECTS, sectBonus, perkGrowthTraits, perkTrait, realmPerks,
+  ALIGN_CLASH, ALIGN_EASE, MAX_FAME, ALIGNMENT_CAP, alignValue, dominant, FOCUS_GAIN, hasEffect, newAlignment, ORIGIN_SECTS, sectBonus,
   startSkills, sumEffect,
 } from "./rules.js";
 import { josa } from "./josa.js";
@@ -36,13 +35,10 @@ const START_ARMORS = ["가죽호구", "철사갑의", "금사보의"]; // 겹쳐
 const SPARE_ARMOR_SILVER = 40; // 넘치는 갑의는 은자로 돌아온다
 const CHRONICLE_LIMIT = 40;
 export const STAT_CAP = 999;
-// 이름을 고친 물건. 예전 저장의 물건을 새 이름으로 읽는다
-const RENAMED_ITEMS = { 귀두도: "귀면도", 참마도: "항마대도", 적련수갑: "적련장갑", 빙화천수갑: "빙화장갑" };
-const renamedItem = (key) => RENAMED_ITEMS[key] || key;
 
 const STAT_SOFT_CAP = 850;  // 기량이 이 값을 넘으면 더디게 오른다
 const STAT_SOFT_RATE = 0.5;
-export const STAT_SCALE = 10; // 기량 10이 예전 기량 1에 해당한다. 공식은 이 값으로 나누어 쓴다
+export const STAT_SCALE = 10; // 전투와 성장 공식은 기량을 이 값으로 나누어 쓴다
 export const MAX_INJURY = 3;
 export const MAX_TURN = 120;
 const SILVER_EASE = 1.1; // 얻는 은자의 기본 배율
@@ -158,8 +154,6 @@ export class Skill {
   static fromDict(d) {
     const skill = new Skill(d.key);
     skill.grade = d.grade ?? skill.grade;
-    // 예전 저장: 옛 신공은 이제 일절이고, 신공 품계는 정해진 무공만 갖는다
-    if (skill.grade === "천상" || (skill.grade === "신공" && DB.skills[d.key].grade !== "신공" && !d.ascended)) skill.grade = "일절";
     skill.ascended = !!d.ascended;
     skill.mastery = d.mastery ?? 0;
     skill.secretUnlocked = !!d.secret_unlocked;
@@ -483,7 +477,7 @@ export class Player {
   toDict() {
     return {
       origin: this.origin, origin_key: this.originKey, realm: this.realm,
-      stat_scale: STAT_SCALE, alignment_scale: ALIGNMENT_SCALE, external: this.external, internal: this.internal, martial: this.martial, mind: this.mind,
+      external: this.external, internal: this.internal, martial: this.martial, mind: this.mind,
       hp: this.hp, qi: this.qi, battles: this.battles,
       encountered_enemies: this.encounteredEnemies, pending_encounters: this.pendingEncounters,
       skills: this.skills.map((s) => s.toDict()), main_skill: this.mainSkill, chosen_arts: this.chosenArts,
@@ -495,13 +489,11 @@ export class Player {
     };
   }
 
-  /** 없는 값은 기본값으로 채워 이전 저장도 읽는다. */
+  /** 저장한 기록에서 무인을 되살린다 */
   static fromDict(d) {
     const p = Object.create(Player.prototype);
-    p.origin = DB.origins.origins[RENAMED_ORIGINS[d.origin_key] || d.origin_key]?.name ?? DB.origins.origins.무림초출.name;
-    // 이름이 바뀐 출신은 새 이름으로, 없어진 출신은 무림초출로 이어 간다
-    const key = RENAMED_ORIGINS[d.origin_key] || d.origin_key;
-    p.originKey = DB.origins.origins[key] ? key : "무림초출";
+    p.originKey = DB.origins.origins[d.origin_key] ? d.origin_key : "무림초출";
+    p.origin = DB.origins.origins[p.originKey].name;
     p.chronicle = d.chronicle ?? [];
     p.content = d.content ?? [];
     p.chains = (d.chains ?? []).filter((c) => DB.chains[c.id]);
@@ -512,55 +504,36 @@ export class Player {
     p.difficulty = DB.difficulty?.levels[d.difficulty] ? d.difficulty : "강호";
     p.healCut = 0;
     p.realm = d.realm;
-    // 특전이 생기기 전의 기록도 그 경지의 특전을 받는다
-    for (const perk of realmPerks(p.realm)) if (!(d.traits || []).includes(perkTrait(perk.realm))) (d.traits ||= []).push(perkTrait(perk.realm));
-    for (const key of perkGrowthTraits(p.realm)) if (!(d.traits || []).includes(key)) (d.traits ||= []).push(key);
     p.external = d.external;
     p.internal = d.internal;
     p.martial = d.martial;
     p.mind = d.mind;
-    // 기량 최대가 99이던 때의 저장은 단위를 맞춘다
-    if (!d.stat_scale) for (const stat of ["external", "internal", "martial", "mind"]) p[stat] *= STAT_SCALE;
     p.hp = d.hp;
     p.qi = d.qi;
     p.battles = d.battles ?? 0;
     p.encounteredEnemies = [...(d.encountered_enemies || [])];
     p.pendingEncounters = [...(d.pending_encounters || [])];
-    // 이름을 고친 무공은 새 이름으로 잇는다
-    p.skills = (d.skills || []).map((s) => (s.key === "당문심법" ? { ...s, key: "당가심법" } : s)).filter((s) => DB.skills[s.key]).map((s) => Skill.fromDict(s));
+    p.skills = (d.skills || []).filter((s) => DB.skills[s.key]).map((s) => Skill.fromDict(s));
     p.mainSkill = d.main_skill ?? null;
     p.chosenArts = { ...(d.chosen_arts || {}) };
-    if (!d.chosen_arts) {
-      // 예전 저장은 쓰던 대로 품계가 가장 높은 것을 고른 것으로 친다
-      const score = (s) => GRADE_ORDER.indexOf(s.grade) * 1000 + Object.values(s.effect).reduce((t, v) => t + Math.max(v, 0), 0);
-      for (const type of ["심공", "경공"]) {
-        const options = p.skillsOfType(type);
-        if (options.length) p.chosenArts[type] = options.reduce((a, b) => (score(b) > score(a) ? b : a)).key;
-      }
-    }
     p.traits = (d.traits || []).filter((k) => DB.traits[k]);
     p.slain = d.slain || [];
     p.skills.forEach((s) => p.applyEvolveTrait(s));
     p.silver = d.silver ?? 0;
-    p.weapon = DB.market[renamedItem(d.weapon)] ? renamedItem(d.weapon) : null;
+    p.weapon = DB.market[d.weapon] ? d.weapon : null;
     p.armor = DB.market[d.armor] ? d.armor : null;
-    p.gear = (d.gear || []).map(renamedItem).filter((k) => DB.market[k]);
+    p.gear = (d.gear || []).filter((k) => DB.market[k]);
     p.pendingLegacy = d.pending_legacy ?? [];
     p.person = d.person ?? { gender: "남", surname: "", given: "" };
     p.inventory = Object.fromEntries(Object.entries(d.inventory || {}).filter(([k]) => DB.market[k]));
     p.bossWeaken = d.boss_weaken ?? 0;
     p.alignment = { ...newAlignment(), ...(d.alignment || {}) };
-    if (!d.alignment_scale) for (const name of Object.keys(p.alignment)) p.alignment[name] = Math.min(ALIGNMENT_CAP, p.alignment[name] * ALIGNMENT_SCALE);
     p.flags = [...(d.flags || [])];
     p.seenEvents = [...(d.seen_events || [])];
     p.kills = d.kills ?? 0;
     p.alignMark = d.align_mark ?? null;
     p.rumors = d.rumors ?? [];
-    // 이 기록이 없는 저장은 이미 넘은 단계를 받은 것으로 친다. 넘은 단계의 깨달음은 늘 지니고 있다
-    p.alignMilestones = d.align_milestones ?? Object.fromEntries(Object.keys(p.alignment).map((a) => [a, ALIGN_STEPS.filter((at) => (p.alignment[a] || 0) >= at).length]));
-    for (const [side, count] of Object.entries(p.alignMilestones)) {
-      for (let i = 1; i <= count; i++) if (!p.traits.includes(`길_${side}_${i}`)) p.traits.push(`길_${side}_${i}`);
-    }
+    p.alignMilestones = d.align_milestones ?? {};
     p.revives = d.revives ?? 1 + sumEffect(d.traits || [], "extra_revive", "amount");
     p.fame = d.fame ?? 0;
     p.sect = d.sect !== undefined ? d.sect : (ORIGIN_SECTS[p.originKey] || null);
@@ -569,11 +542,6 @@ export class Player {
     // 외전은 출신마다 끝나는 달이 다르다
     p.maxTurn = DB.origins.origins[p.originKey]?.side ? DB.origins.origins[p.originKey].end_turn : MAX_TURN;
     p.alive = d.alive;
-    // 60달 시절의 저장은 시간표를 두 배로 늘려 이어 간다
-    if (d.max_turn === 60) {
-      p.turn = d.turn * 2 - 1;
-      p.battles *= 2;
-    }
     return p;
   }
 }
