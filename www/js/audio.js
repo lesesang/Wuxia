@@ -47,7 +47,7 @@ function nextNote() {
 
 function applyVolume() { if (master) master.gain.value = getVolume() / 100 * 0.7; }
 
-export function startMusic() {
+function startMusic() {
   if (playing || !getVolume()) return;
   const AudioCtx = window.AudioContext || window.webkitAudioContext;
   if (!AudioCtx) return;
@@ -62,7 +62,7 @@ export function startMusic() {
   nextNote();
 }
 
-export function stopMusic() {
+function stopMusic() {
   playing = false;
   clearTimeout(timer);
 }

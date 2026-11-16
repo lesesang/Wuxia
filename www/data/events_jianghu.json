@@ -1703,13 +1703,17 @@
                 "정도": 50
               },
               "stats": {
-                "internal": 3,
-                "mind": 2
+                "internal": 5,
+                "mind": 4
               },
               "flags": [
                 "장원_식구",
                 "장원_식객"
-              ]
+              ],
+              "manor_scale": true,
+              "art_mastery": {
+                "심공": 4
+              }
             }
           }
         ],
@@ -1729,7 +1733,8 @@
               "alignment": {
                 "사도": 60
               },
-              "silver": 240
+              "silver": 360,
+              "manor_scale": true
             }
           }
         ],
@@ -2415,12 +2420,16 @@
               },
               "silver": -15,
               "stats": {
-                "martial": 4,
-                "mind": 3
+                "martial": 7,
+                "mind": 5
               },
               "flags": [
                 "장원_장서"
-              ]
+              ],
+              "manor_scale": true,
+              "art_mastery": {
+                "심공": 4
+              }
             }
           }
         ],
@@ -5071,13 +5080,17 @@
                 "마도": 40
               },
               "stats": {
-                "external": 4,
-                "mind": 3
+                "external": 7,
+                "mind": 5
               },
               "flags": [
                 "장원_사범",
                 "장원_식객"
-              ]
+              ],
+              "manor_scale": true,
+              "art_mastery": {
+                "심공": 4
+              }
             }
           }
         ],
@@ -5371,7 +5384,11 @@
               },
               "fame": 15,
               "stats": {
-                "mind": 5
+                "mind": 9
+              },
+              "manor_scale": true,
+              "art_mastery": {
+                "심공": 4
               }
             }
           }
@@ -5553,11 +5570,15 @@
                 "사도": 40
               },
               "stats": {
-                "mind": 5
+                "mind": 9
               },
               "flags": [
                 "장원_장서"
-              ]
+              ],
+              "manor_scale": true,
+              "art_mastery": {
+                "심공": 4
+              }
             }
           }
         ],
@@ -5866,12 +5887,15 @@
                 "정도": 50
               },
               "stats": {
-                "mind": 5
+                "mind": 9
               },
-              "art_mastery": 2,
+              "art_mastery": {
+                "심공": 5
+              },
               "flags": [
                 "장원_장서"
-              ]
+              ],
+              "manor_scale": true
             }
           }
         ],
@@ -6107,11 +6131,15 @@
                 "마도": 40
               },
               "stats": {
-                "mind": 3
+                "mind": 5
               },
               "flags": [
                 "장원_식구"
-              ]
+              ],
+              "manor_scale": true,
+              "art_mastery": {
+                "심공": 4
+              }
             }
           }
         ],
@@ -6814,11 +6842,12 @@
                 "마도": 50
               },
               "stats": {
-                "internal": 4
+                "internal": 7
               },
               "flags": [
                 "장원_식객"
-              ]
+              ],
+              "manor_scale": true
             }
           }
         ],
@@ -6960,13 +6989,14 @@
               "alignment": {
                 "마도": 50
               },
-              "silver": 50,
+              "silver": 80,
               "stats": {
-                "martial": 4
+                "martial": 7
               },
               "flags": [
                 "장원_제자"
-              ]
+              ],
+              "manor_scale": true
             }
           }
         ],
@@ -7250,11 +7280,15 @@
                 "정도": 50
               },
               "stats": {
-                "mind": 5
+                "mind": 9
               },
               "flags": [
                 "장원_식구"
-              ]
+              ],
+              "manor_scale": true,
+              "art_mastery": {
+                "심공": 4
+              }
             }
           }
         ],
@@ -7272,7 +7306,8 @@
               "alignment": {
                 "사도": 60
               },
-              "silver": 90
+              "silver": 140,
+              "manor_scale": true
             }
           }
         ],
@@ -7899,12 +7934,16 @@
                 "마도": 60
               },
               "stats": {
-                "mind": 5
+                "mind": 9
               },
               "fame": 10,
               "flags": [
                 "장원_장서"
-              ]
+              ],
+              "manor_scale": true,
+              "art_mastery": {
+                "심공": 4
+              }
             }
           }
         ],
@@ -8036,12 +8075,16 @@
             "text": "노인은 한 수 끝에 지팡이를 거두었다. \"소리가 많은 집이군. 가 보지.\" 연무장 마루에 앉은 노인은 발소리만 듣고 아이들의 자세를 고친다. 틀린 발소리가 날마다 줄어든다.",
             "effects": {
               "stats": {
-                "martial": 6,
-                "mind": 2
+                "martial": 11,
+                "mind": 4
               },
               "flags": [
                 "장원_사범"
-              ]
+              ],
+              "manor_scale": true,
+              "art_mastery": {
+                "심공": 4
+              }
             }
           }
         ],
@@ -8233,7 +8276,11 @@
               },
               "fame": 30,
               "stats": {
-                "mind": 4
+                "mind": 7
+              },
+              "manor_scale": true,
+              "art_mastery": {
+                "심공": 4
               }
             }
           }
@@ -8252,7 +8299,8 @@
               "alignment": {
                 "사도": 70
               },
-              "silver": 260
+              "silver": 390,
+              "manor_scale": true
             }
           }
         ],
@@ -9614,7 +9662,11 @@
               },
               "fame": 15,
               "stats": {
-                "mind": 4
+                "mind": 7
+              },
+              "manor_scale": true,
+              "art_mastery": {
+                "심공": 4
               }
             }
           }
@@ -9877,12 +9929,16 @@
             "text": "늙은 협객은 지도를 내 손에 쥐여 주고도 한참 손을 놓지 않았다. \"스무 해 만에 지붕 밑에서 자 보겠군.\" 문패의 탁본을 받아 든 그가 지팡이를 짚고 산자락 쪽으로 떠났다. 내려오면 그 방에서 산 이야기를 듣기로 했다.",
             "effects": {
               "stats": {
-                "mind": 4,
-                "martial": 3
+                "mind": 7,
+                "martial": 5
               },
               "flags": [
                 "장원_식객"
-              ]
+              ],
+              "manor_scale": true,
+              "art_mastery": {
+                "심공": 4
+              }
             }
           }
         ],
@@ -10486,10 +10542,11 @@
               "alignment": {
                 "사도": 40
               },
-              "silver": 30,
+              "silver": 40,
               "stats": {
-                "internal": 3
-              }
+                "internal": 5
+              },
+              "manor_scale": true
             }
           }
         ],
@@ -10836,12 +10893,16 @@
               },
               "fame": 25,
               "stats": {
-                "mind": 4
+                "mind": 7
               },
               "flags": [
                 "장원_식구",
                 "장원_마을"
-              ]
+              ],
+              "manor_scale": true,
+              "art_mastery": {
+                "심공": 4
+              }
             }
           }
         ],
@@ -11731,11 +11792,12 @@
             "text": "약장수는 내 손목을 놓지 않고 웃었다. \"쉴 줄 모르는 사람이 쉴 집은 지어 놓았구려.\" 약방 마루에 앉은 그는 문턱을 넘는 발소리만으로 병을 반쯤 맞힌다.",
             "effects": {
               "stats": {
-                "internal": 4
+                "internal": 7
               },
               "flags": [
                 "장원_의원"
-              ]
+              ],
+              "manor_scale": true
             }
           }
         ],
@@ -12160,9 +12222,13 @@
               "alignment": {
                 "사도": 60
               },
-              "silver": 70,
+              "silver": 100,
               "stats": {
-                "mind": 3
+                "mind": 5
+              },
+              "manor_scale": true,
+              "art_mastery": {
+                "심공": 4
               }
             }
           }
@@ -12399,11 +12465,12 @@
                 "사도": 40
               },
               "stats": {
-                "martial": 5
+                "martial": 9
               },
               "flags": [
                 "장원_사범"
-              ]
+              ],
+              "manor_scale": true
             }
           }
         ],
@@ -12694,12 +12761,16 @@
             "text": "무희는 부채로 입을 가리고 한참 웃었다. \"이 나이에 거둬 가겠다는 사내가 다 있네.\" 이튿날 보따리 하나를 들고 산자락을 올랐다. 객사 마루에서 부채가 펴질 때마다 식객들이 숨을 죽인다.",
             "effects": {
               "stats": {
-                "martial": 4,
-                "mind": 2
+                "martial": 7,
+                "mind": 4
               },
               "flags": [
                 "장원_식객"
-              ]
+              ],
+              "manor_scale": true,
+              "art_mastery": {
+                "심공": 4
+              }
             }
           }
         ],
@@ -14085,12 +14156,16 @@
                 "마도": 50
               },
               "stats": {
-                "mind": 4
+                "mind": 7
               },
               "fame": 10,
               "flags": [
                 "장원_마을"
-              ]
+              ],
+              "manor_scale": true,
+              "art_mastery": {
+                "심공": 4
+              }
             }
           }
         ],
@@ -18115,13 +18190,14 @@
                 "정도": 50
               },
               "stats": {
-                "martial": 4
+                "martial": 7
               },
               "mastery": 15,
               "flags": [
                 "장원_식구",
                 "장원_사범"
-              ]
+              ],
+              "manor_scale": true
             }
           }
         ],
@@ -18142,12 +18218,13 @@
                 "마도": 60
               },
               "stats": {
-                "martial": 5
+                "martial": 9
               },
               "mastery": 20,
               "flags": [
                 "장원_장서"
-              ]
+              ],
+              "manor_scale": true
             }
           }
         ],
@@ -19085,11 +19162,12 @@
               },
               "fame": 15,
               "stats": {
-                "martial": 5
+                "martial": 9
               },
               "flags": [
                 "장원_사범"
-              ]
+              ],
+              "manor_scale": true
             }
           }
         ],
@@ -21779,9 +21857,13 @@
                 "마도": 40
               },
               "stats": {
-                "mind": 5
+                "mind": 9
               },
-              "hp_pct": 15
+              "hp_pct": 15,
+              "manor_scale": true,
+              "art_mastery": {
+                "심공": 4
+              }
             }
           }
         ],
@@ -22348,12 +22430,16 @@
               },
               "fame": 25,
               "stats": {
-                "mind": 3
+                "mind": 5
               },
               "flags": [
                 "장원_식구",
                 "장원_제자"
-              ]
+              ],
+              "manor_scale": true,
+              "art_mastery": {
+                "심공": 4
+              }
             }
           }
         ],
@@ -22373,11 +22459,12 @@
               },
               "fame": 10,
               "stats": {
-                "martial": 3
+                "martial": 5
               },
               "flags": [
                 "장원_제자"
-              ]
+              ],
+              "manor_scale": true
             }
           }
         ],
@@ -24129,12 +24216,16 @@
               },
               "fame": 15,
               "stats": {
-                "mind": 4
+                "mind": 7
               },
               "flags": [
                 "장원_식구",
                 "장원_장서"
-              ]
+              ],
+              "manor_scale": true,
+              "art_mastery": {
+                "심공": 4
+              }
             }
           }
         ],
@@ -24261,11 +24352,15 @@
               },
               "silver": -40,
               "stats": {
-                "mind": 3
+                "mind": 5
               },
               "flags": [
                 "장원_식구"
-              ]
+              ],
+              "manor_scale": true,
+              "art_mastery": {
+                "심공": 4
+              }
             }
           }
         ],
@@ -24548,12 +24643,16 @@
                 "정도": 50
               },
               "stats": {
-                "mind": 3
+                "mind": 5
               },
               "flags": [
                 "장원_식구",
                 "장원_제자"
-              ]
+              ],
+              "manor_scale": true,
+              "art_mastery": {
+                "심공": 4
+              }
             }
           }
         ],
@@ -25095,10 +25194,11 @@
               "alignment": {
                 "사도": 50
               },
-              "silver": 60,
+              "silver": 90,
               "flags": [
                 "장원_제자"
-              ]
+              ],
+              "manor_scale": true
             }
           }
         ],
@@ -25244,11 +25344,15 @@
               },
               "fame": 25,
               "stats": {
-                "mind": 5
+                "mind": 9
               },
               "flags": [
                 "장원_장서"
-              ]
+              ],
+              "manor_scale": true,
+              "art_mastery": {
+                "심공": 4
+              }
             }
           }
         ],
@@ -25666,11 +25770,15 @@
               },
               "fame": 20,
               "stats": {
-                "mind": 6
+                "mind": 11
               },
               "flags": [
                 "장원_장서"
-              ]
+              ],
+              "manor_scale": true,
+              "art_mastery": {
+                "심공": 4
+              }
             }
           }
         ],
@@ -26652,12 +26760,16 @@
                 "정도": 40
               },
               "stats": {
-                "mind": 6
+                "mind": 11
               },
               "flags": [
                 "장원_식구",
                 "장원_장서"
-              ]
+              ],
+              "manor_scale": true,
+              "art_mastery": {
+                "심공": 4
+              }
             }
           }
         ],
@@ -26676,11 +26788,15 @@
                 "마도": 50
               },
               "stats": {
-                "mind": 5
+                "mind": 9
               },
               "flags": [
                 "장원_장서"
-              ]
+              ],
+              "manor_scale": true,
+              "art_mastery": {
+                "심공": 4
+              }
             }
           }
         ],
@@ -26902,11 +27018,12 @@
                 "마도": 40
               },
               "stats": {
-                "external": 5
+                "external": 9
               },
               "flags": [
                 "장원_사범"
-              ]
+              ],
+              "manor_scale": true
             }
           }
         ],
@@ -27048,12 +27165,16 @@
               },
               "fame": 20,
               "stats": {
-                "mind": 4,
-                "martial": 2
+                "mind": 7,
+                "martial": 4
               },
               "flags": [
                 "장원_식구"
-              ]
+              ],
+              "manor_scale": true,
+              "art_mastery": {
+                "심공": 4
+              }
             }
           }
         ],
@@ -27508,11 +27629,15 @@
                 "사도": 50
               },
               "stats": {
-                "mind": 3
+                "mind": 5
               },
               "flags": [
                 "장원_의원"
-              ]
+              ],
+              "manor_scale": true,
+              "art_mastery": {
+                "심공": 4
+              }
             }
           }
         ],
@@ -34287,11 +34412,15 @@
               },
               "fame": 35,
               "stats": {
-                "mind": 5
+                "mind": 9
               },
               "flags": [
                 "장원_마을"
-              ]
+              ],
+              "manor_scale": true,
+              "art_mastery": {
+                "심공": 4
+              }
             }
           }
         ],

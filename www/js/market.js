@@ -282,7 +282,7 @@ export function stockView(player, market) {
 export const itemGrade = (key) => DB.market[key]?.grade ?? "범품";
 
 /** 장터에 되팔 때 받는 은자 */
-export function sellPrice(key) {
+function sellPrice(key) {
   const item = DB.market[key];
   if (!item) return 0;
   if (item.price > 0) return Math.max(1, Math.floor(item.price * SELL_RATE));
