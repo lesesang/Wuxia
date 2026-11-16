@@ -1933,7 +1933,8 @@ test("결말은 출신, 성향, 명성, 쓰던 무공마다 문장이 있다", (
   for (const key of ["사망", "배드", "기본", "생사경"]) {
     for (const side of ["정도", "사도", "마도"]) assert.ok(endingRows(key).some((r) => r.requires.dominant === side), `${key} ${side}`);
   }
-  const attacks = Object.keys(DB.skills).filter((k) => DB.skills[k].grade === "신공" && DB.skills[k].type === "공격무공" && !DB.skills[k].reserved);
+  // 외전의 출신은 천마봉의 결말에 닿지 않는다
+  const attacks = Object.keys(DB.skills).filter((k) => DB.skills[k].grade === "신공" && DB.skills[k].type === "공격무공" && !DB.skills[k].reserved && !DB.origins.origins[DB.skills[k].origin]?.side);
   for (const k of attacks) assert.ok(endingRows("기본").some((r) => r.requires.main_skill === k), k);
 });
 
@@ -2544,7 +2545,7 @@ test("외전의 출신은 천마봉이 아니라 저마다의 끝으로 간다",
     assert.ok(o.side && o.locked && o.desc.includes("일류") && p.realm === "일류", key);
     styles.add(p.bestSkill().category);
     lean[p.dominantAlignment() || Object.keys(o.alignment)[0]] += 1;
-    assert.equal(p.skills.filter((s) => DB.skills[s.key].origin === key).length, 2, `${key} 전용 무공과 심법`);
+    assert.equal(p.skills.filter((s) => DB.skills[s.key].origin === key).length, 3, `${key} 전용 무공과 심법과 보법`);
     assert.ok(DB.endings.side[o.fallback_ending] === key, `${key} 담담한 끝`);
     assert.equal(Object.values(DB.endings.side).filter((x) => x === key).length, 3, `${key} 결말 셋`);
     for (const chapter of ["1", "2", "3", "4", "5"]) assert.ok(o.chapters[chapter].title && o.chapters[chapter].desc, `${key} ${chapter}장`);
@@ -2659,6 +2660,34 @@ test("외전은 생사경에 오른 뒤에야 열리고 길의 적이 본편보�
   const hp = (origin) => { const game = newGame(origin); game.startBattle("산적"); return game.battle.enemy.maxHp; };
   const main = hp("무림초출"), side = hp("외전당가");
   assert.ok(side > main * 1.3, `${main} ${side}`);
+});
+
+test("외전 출신은 본편보다 한 품계 높은 공격 무공과 심법, 그리고 보법을 지니고 시작하며 신공은 그 출신의 이야기에서 얻는다", () => {
+  const rank = (k) => GRADE_ORDER.indexOf(DB.skills[k].grade);
+  const mainTop = { 공격무공: 0, 심공: 0 };
+  for (const o of DB.origins.order) for (const k of DB.origins.origins[o].skills) {
+    const t = DB.skills[k].type;
+    if (t in mainTop) mainTop[t] = Math.max(mainTop[t], rank(k));
+  }
+  for (const o of DB.origins.side_order) {
+    const ks = DB.origins.origins[o].skills;
+    for (const t of ["공격무공", "심공", "경공"]) assert.equal(ks.filter((k) => DB.skills[k].type === t).length, 1, `${o} ${t}`);
+    const attack = ks.find((k) => DB.skills[k].type === "공격무공");
+    const mind = ks.find((k) => DB.skills[k].type === "심공");
+    assert.equal(rank(attack), mainTop.공격무공 + 1, `${o} 공격`);
+    assert.equal(rank(mind), mainTop.심공 + 1, `${o} 심법`);
+    assert.ok(DB.skills[attack].gimmick && DB.skills[mind].gimmick, o);
+    const meta = loadMeta(); meta.unlocked_origins.push(o); saveMeta(meta);
+    const game = newGame(o);
+    assert.ok(ks.every((k) => game.player.skills.some((s) => s.key === k)), `${o} 시작 무공`);
+    // 신공을 주는 이야기는 그 출신에게 반드시 찾아오는 전용 사건이다
+    for (const t of ["공격무공", "심공", "경공"]) {
+      const top = Object.keys(DB.skills).find((k) => DB.skills[k].origin === o && DB.skills[k].grade === "신공" && DB.skills[k].type === t);
+      const events = Object.values(DB.randomEvents).filter((e) => e.requires?.origin === o && JSON.stringify(e).includes(`"skill":"${top}"`));
+      assert.equal(events.length, 1, `${o} ${top}`);
+      for (const c of events[0].choices) assert.ok(c.outcomes.every((x) => x.effects.skill === top), `${o} ${c.label}`);
+    }
+  }
 });
 
 test("외전의 저장을 다시 열어도 그 출신의 끝나는 달이 그대로다", () => {
@@ -2871,7 +2900,7 @@ test("무기 계열마다 무공 수가 같고 등급이 고르다", () => {
   const attacks = Object.values(DB.skills).filter((s) => s.type === "공격무공" && !s.reserved);
   for (const style of styles) {
     const list = attacks.filter((s) => s.category === style);
-    assert.equal(list.length, 20, style);
+    assert.equal(list.length, 21, style);
     for (const [grade, min] of [["기본", 2], ["명품", 3], ["상승", 3], ["일절", 1], ["신공", 2]]) {
       assert.ok(list.filter((s) => s.grade === grade).length >= min, `${style} ${grade}`);
     }
@@ -3166,7 +3195,7 @@ test("성취 100을 넘겨 더 쌓아야 승급하고, 승급은 일절까지다
 
 test("신공은 공격, 심법, 보법에 있고 출신이나 카르마 인연으로만 얻는다", () => {
   const tops = Object.keys(DB.skills).filter((k) => DB.skills[k].grade === "신공" && !DB.skills[k].reserved);
-  const origins = DB.origins.order.filter((o) => o !== "무림초출");
+  const origins = [...DB.origins.order, ...DB.origins.side_order].filter((o) => o !== "무림초출");
   for (const type of ["공격무공", "심공", "경공"]) {
     for (const o of origins) {
       assert.equal(tops.filter((k) => DB.skills[k].type === type && DB.skills[k].origin === o).length, 1, `${o} ${type}`);

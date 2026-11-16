@@ -201,12 +201,12 @@
   },
   "side": {
     "enemy": {
-      "hp": 1.6,
-      "attack": 1.4
+      "hp": 2.0,
+      "attack": 1.7
     },
     "final": {
-      "hp": 2.8,
-      "attack": 1.7
+      "hp": 3.2,
+      "attack": 2.0
     }
   }
 }
