@@ -83,6 +83,7 @@ test("챕터마다 사건, 적이 충분하다", () => {
 
 test("능력치 상한은 999", () => {
   const p = new Player();
+  p.realm = "현경";
   p.external = 998;
   assert.equal(p.gainStat("external", 5), 1);
   assert.equal(p.external, 999);
@@ -141,6 +142,100 @@ test("무공 승급과 비기 터득", () => {
   assert.ok(messages.some((m) => m.includes("승급")));
   assert.ok(skill.effectiveMultiplier() > multiplier);
   assert.ok(skill.gainMastery(20).some((m) => m.includes("터득")));
+});
+
+test("장원에서 얻는 것은 장원이 클수록 크고, 무공을 깊게 하는 결과는 갈래를 적는다", () => {
+  const gain = (manor) => {
+    seed(5);
+    const p = new Player();
+    p.manor = manor;
+    const before = p.silver;
+    applyEffects(p, { silver: 100, manor_scale: true });
+    return p.silver - before;
+  };
+  assert.ok(gain({ 객사: 3, 연무장: 3, 약방: 3, 서고: 3 }) > gain({ 객사: 1 }) * 1.5);
+  const bad = [];
+  for (const [key, e] of Object.entries(DB.events)) {
+    const walk = (node) => {
+      if (Array.isArray(node)) node.forEach(walk);
+      else if (node && typeof node === "object") {
+        if ("art_mastery" in node && (typeof node.art_mastery !== "object" || !Object.keys(node.art_mastery).every((t) => ["심공", "경공"].includes(t)))) bad.push(key);
+        Object.values(node).forEach(walk);
+      }
+    };
+    walk(e);
+  }
+  assert.deepEqual(bad, []);
+  const manorChoices = Object.values(DB.events_manor).flatMap((e) => e.choices.flatMap((c) => c.outcomes));
+  assert.ok(manorChoices.filter((o) => o.effects.manor_scale).length >= manorChoices.length * 0.7);
+});
+
+test("새 묘리: 한기, 초식 흐트러뜨리기, 독 터뜨리기, 중수, 연환, 넘치는 기운, 끓는 피, 걸음 놓치기, 필살기 막기", () => {
+  seed(3);
+  const fresh = () => {
+    const p = new Player();
+    p.realm = "현경";
+    const enemy = new Enemy("산적");
+    enemy.hp = enemy.maxHp = 100000;
+    const battle = new Battle(p, enemy);
+    battle.hits = () => true;
+    return battle;
+  };
+  // 한기가 쌓이면 얼어붙는다
+  let b = fresh();
+  for (let i = 0; i < 3; i++) b.strike(10, "시험", null) && b.applyGimmickOnHit({ frost: 3 }, 10);
+  assert.ok(b.enemyStun && b.frost === 0);
+  // 흐트러진 필살기는 보통 공격이 된다
+  b = fresh();
+  b.enemy.specials = [{ name: "큰 초식", every: 1, mult: 5 }];
+  b.roundNum = 1;
+  b.applyGimmickOnHit({ disrupt: 100 }, 10);
+  assert.ok(b.disrupted);
+  b.enemyAttack();
+  assert.ok(b.log.some((l) => l.includes("흐트러진 큰 초식")) && !b.disrupted);
+  // 회심에 독과 상처가 한꺼번에 터진다
+  b = fresh();
+  b.weaponG = null;
+  b.enemyPoison = { damage: 50, rounds: 3 };
+  b.bleed = { damage: 20, rounds: 2 };
+  b.forceCrit = true;
+  const skill = new Skill("오독침");
+  skill.grade = "상승";
+  const before = b.enemy.hp;
+  b.strike(10, "시험", skill);
+  assert.ok(b.log.some((l) => l.includes("한꺼번에 터졌다")) && before - b.enemy.hp > Math.trunc(190 * 0.7) - 1);
+  // 중수는 성한 적에게, 넘치는 기운은 내력이 찼을 때 실린다
+  const avg = (fn) => { let t = 0; for (let i = 0; i < 300; i++) t += fn(); return t / 300; };
+  const hit = (g, setup = () => {}) => avg(() => { const x = fresh(); x.enemy.armor = 0; x.critChance = () => 0; x.strikeGimmick = () => g; setup(x); return x.strike(1000, "시험", null); });
+  const base = hit({});
+  assert.ok(hit({ heavy: 40 }) > base * 1.3);
+  assert.ok(Math.abs(hit({ heavy: 40 }, (x) => { x.enemy.hp = x.enemy.maxHp * 0.5; }) - base) < base * 0.05);
+  assert.ok(hit({ full_qi: 30 }) > base * 1.2);
+  assert.ok(Math.abs(hit({ full_qi: 30 }, (x) => { x.player.qi = 0; }) - base) < base * 0.05);
+  // 잃은 체력만큼 피가 끓되 끝이 있다
+  assert.ok(hit({}, (x) => { x.mindG = { rage: { per: 5, max: 30 } }; x.player.hp = Math.trunc(x.player.maxHp() * 0.1); }) > base * 1.25);
+  assert.ok(hit({}, (x) => { x.mindG = { rage: { per: 50, max: 100 } }; x.player.hp = 1; }) < base * 1.35);
+  // 회심 뒤에 이어 치는 연환
+  b = fresh();
+  b.critChance = () => 1;
+  b.strikeGimmick = () => ({ combo: 50 });
+  b.strike(100, "시험", null);
+  assert.ok(b.log.some((l) => l.startsWith("이어지는 연환")));
+  // 다 피하면 적이 걸음을 놓쳐 더 피한다
+  b = fresh();
+  const steps = new Skill("표운보");
+  steps.grade = "상승";
+  const plain = b.evadeChance(steps);
+  b.afterEvade(steps, { dazzle: 8 });
+  assert.equal(b.evadeChance(steps), Math.min(90, plain + 8));
+  b.tickEffects(); b.tickEffects();
+  assert.equal(b.dazzle, null);
+  // 필살기로 받는 피해를 갑의가 더 막는다
+  b = fresh();
+  b.enemy.attack = 1000;
+  const normal = avg(() => { b.incomingSpecial = true; b.armorG = null; return b.incoming(); });
+  const guarded = avg(() => { b.incomingSpecial = true; b.armorG = { special_guard: 15 }; return b.incoming(); });
+  assert.ok(guarded < normal * 0.9);
 });
 
 test("무공은 기력을 쓰고 모자라면 맨손", () => {
@@ -1389,8 +1484,33 @@ test("성향과 명성에 따라 사건이 달라진다", () => {
   assert.ok(events.filter((e) => e.requires?.min_fame >= 300).length >= 3);
 });
 
+test("경지마다 기량의 끝이 있고, 막힌 몫은 쌓였다가 경지가 오르면 풀리며 막힌 동안 다른 기량이 빨리 오른다", () => {
+  const p = new Player();
+  const cap = DB.realms.stat_cap;
+  assert.ok(cap.일류 < cap.절정 && cap.절정 < cap.초절정 && cap.초절정 < cap.화경 && cap.화경 < cap.현경);
+  for (const [realm, req] of Object.entries(DB.realms.requirements)) assert.ok(cap[DB.realms.order[DB.realms.order.indexOf(realm) - 1]] > req.avg, `${realm}로 가는 길이 끝에 막히지 않는다`);
+  p.external = cap.일류 - 10;
+  assert.equal(p.gainStat("external", 30), 10);
+  assert.equal(p.external, cap.일류);
+  assert.equal(p.pent.external, 20);
+  assert.equal(p.gainStat("external", 5), 0);
+  assert.equal(p.pent.external, 25);
+  // 막힌 기량 하나마다 나머지는 더 빨리 오른다
+  let total = 0;
+  for (let i = 0; i < 400; i++) { const q = new Player(); q.external = cap.일류; q.internal = 100; total += q.gainStat("internal", 10); }
+  assert.ok(total / 400 > 11.5 && total / 400 < 13, String(total / 400));
+  // 경지가 오르면 쌓인 몫이 풀린다
+  p.realm = "절정";
+  const saved = Player.fromDict(JSON.parse(JSON.stringify(p.toDict())));
+  assert.equal(saved.pent.external, 25);
+  assert.deepEqual(saved.releasePent(), { external: 25 });
+  assert.equal(saved.external, cap.일류 + 25);
+  assert.equal(saved.pent.external, 0);
+});
+
 test("기량 최대는 999이고 저장해도 그대로다", () => {
   const p = new Player();
+  p.realm = "현경";
   p.external = 995;
   assert.equal(p.gainStat("external", 50), 4);
   assert.equal(p.external, 999);

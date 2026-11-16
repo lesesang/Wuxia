@@ -8,10 +8,10 @@ import { ALIGNMENTS, CHAPTER_STARTS, MAX_FAME, applyGrowth, difficultyRank, even
 } from "./rules.js";
 import { josa } from "./josa.js";
 
-export const EVENT_STAT_SCALE = 3; // 사건과 기연의 기량 상승 배율. 데이터에 적힌 값의 세 배가 오른다
+const EVENT_STAT_SCALE = 3; // 사건과 기연의 기량 상승 배율. 데이터에 적힌 값의 세 배가 오른다
 
 /** 만족하지 못한 첫 조건의 설명. 모두 만족하면 null */
-export function unmetReason(player, requires) {
+function unmetReason(player, requires) {
   if (!requires) return null;
   const r = requires;
   if (r.origin && player.originKey !== r.origin) return "출신이 다르다";
@@ -84,7 +84,7 @@ export function unmetReason(player, requires) {
 }
 
 /** 일절의 끝(성취 100)에 이른 그 갈래의 쓰는 무공 */
-export function ascendTarget(player, type) {
+function ascendTarget(player, type) {
   const skill = type === "공격무공" ? player.bestSkill() : player.bestOfType(type);
   return skill && skill.grade === "일절" && skill.mastery >= 100 ? skill : null;
 }
@@ -234,6 +234,7 @@ export function hasManor(player, need) {
 }
 
 const MANOR_FIRST = 3; // 장원의 첫 일이 찾아오는 달
+const MANOR_REWARD_STEP = 0.08; // 채를 한 단계 올릴 때마다 장원에서 얻는 것이 이만큼 커진다
 const MANOR_GAP = 7;   // 장원의 일이 몰리지 않게 띄우는 달
 /** 문패를 챙긴 강호행에는 장원의 일이 차례로 찾아온다. 그 장의 일 가운데 채가 갖춰진 것을 띄엄띄엄 연다 */
 export function dueManorEvent(player) {
@@ -246,7 +247,7 @@ export function dueManorEvent(player) {
   }) ?? null;
 }
 
-export const ALONE_FLAG = "홀로_간다";
+const ALONE_FLAG = "홀로_간다";
 const ALONE_GATE_RATE = 0.15;
 const BOUGHT_EVENT_WEIGHT = 5;
 
@@ -649,10 +650,12 @@ const signed = (n) => (n >= 0 ? `+${n}` : `${n}`);
 /** 전투·엔딩을 제외한 효과를 적용하고 요약 문구 목록을 돌려준다. */
 export function applyEffects(player, effects) {
   const summary = [];
+  // 장원에서 얻는 것은 장원이 클수록 크다
+  const manorRate = effects.manor_scale && player.manor ? 1 + MANOR_REWARD_STEP * Object.values(player.manor).reduce((a, b) => a + b, 0) : 1;
 
   for (const [stat, amount] of Object.entries(effects.stats || {})) {
     if (amount >= 0) {
-      const rate = EVENT_STAT_SCALE * (100 + sumEffect(player.traits, "event_growth", "percent")) / 100;
+      const rate = EVENT_STAT_SCALE * manorRate * (100 + sumEffect(player.traits, "event_growth", "percent")) / 100;
       const scaled = Math.max(1, Math.round(amount * rate));
       const amountNow = effects.full_growth ? scaled : Math.max(1, scaledGrowth(scaled, player.turn));
       summary.push(`${STAT_NAMES[stat]}+${player.gainStat(stat, applyGrowth(amountNow, player.traits, stat))}`);
@@ -681,7 +684,7 @@ export function applyEffects(player, effects) {
 
   if ("silver" in effects) {
     if (effects.silver >= 0) {
-      summary.push(`은자+${player.gainSilver(effects.silver)}`);
+      summary.push(`은자+${player.gainSilver(Math.round(effects.silver * manorRate))}`);
     } else {
       const spent = Math.min(player.silver, -effects.silver);
       player.silver -= spent;

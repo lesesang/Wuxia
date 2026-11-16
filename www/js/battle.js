@@ -46,6 +46,11 @@ const MAX_QI_SHIELD = 30; // 내력으로 대신 받는 피해의 끝
 const MAX_SECOND_WIND = 25; // 한 싸움에 한 번 숨이 트일 때 채우는 체력의 끝
 const MAX_LAST_GUARD = 20; // 몰렸을 때 갑의가 더 막아 주는 끝
 const MAX_STEP_MOMENTUM = 30; // 피할수록 오르는 위력의 끝
+const MAX_DETONATE_PCT = 15; // 쌓인 독과 상처를 한 번에 터뜨리는 피해의 끝(적 최대 체력 대비)
+const MAX_RAGE = 30; // 잃은 체력만큼 오르는 위력의 끝
+const MAX_SPECIAL_GUARD = 25; // 필살기에 맞서 갑의가 더 막아 주는 끝
+const HEAVY_ABOVE = 70; // 중수는 적의 체력이 이만큼 넘게 남았을 때 실린다
+const FULL_QI_AT = 70; // 기운이 이만큼 넘게 차 있으면 넘치는 기운이 실린다
 const MIN_TAKEN = 0.2; // 피해를 줄이는 효과를 겹쳐도 호신구에 닿기 전의 힘은 이만큼 남는다
 const MIN_FINAL_TAKEN = 0.1; // 호신구까지 겹쳐도 몸에 닿는 힘
 const MIND_SURGE_EVERY = 4; // 심법이 숨을 모아 터뜨리는 주기(합)
@@ -299,6 +304,9 @@ export class Battle {
     // 심법의 묘리는 운기하지 않아도 늘 몸에 흐른다
     this.mindG = player.bestOfType("심공")?.activeGimmick() || null;
     this.marks = 0;          // 표식을 새긴 수
+    this.frost = 0;          // 쌓인 한기
+    this.disrupted = false;  // 이번 합의 필살기를 흐트러뜨렸다
+    this.dazzle = null;      // 걸음을 놓친 적에게서 더 피하는 동안
     this.momentum = 0;       // 피할 때마다 쌓인 기세(푼)
     this.afterimage = 0;     // 잔상이 남아 다음 합에 저절로 피할 몫
     this.secondWind = false; // 한 싸움에 한 번 숨이 트였는가
@@ -415,6 +423,11 @@ export class Battle {
     if (g.power) damage *= 1 + g.power / 100;
     if (g.opening && this.roundNum <= 1) damage *= 1 + g.opening / 100;
     if (g.low_hp && p.hp <= p.maxHp() / 2) damage *= 1 + g.low_hp / 100;
+    if (g.heavy && this.enemy.hp >= this.enemy.maxHp * HEAVY_ABOVE / 100) damage *= 1 + g.heavy / 100;
+    if (g.full_qi && p.qi >= p.maxQi() * FULL_QI_AT / 100) damage *= 1 + g.full_qi / 100;
+    // 잃은 체력만큼 피가 끓는 심법
+    const rage = this.mindG?.rage;
+    if (rage) damage *= 1 + Math.min(MAX_RAGE, rage.max ?? MAX_RAGE, Math.floor((1 - p.hp / p.maxHp()) * 10) * rage.per) / 100;
     if (g.vs_side && g.vs_side[this.enemy.side]) damage *= 1 + g.vs_side[this.enemy.side] / 100;
     if (g.execute && this.enemy.hp <= this.enemy.maxHp * g.execute.below / 100) {
       damage *= 1 + g.execute.percent / 100;
@@ -469,9 +482,28 @@ export class Battle {
         this.log.push(`(${this.enemy.name}의 몸이 힘을 되돌려 보냈다. 체력 -${back})`);
       }
     }
+    // 회심이 터지면 앞서 스며든 독과 상처를 한꺼번에 터뜨린다
+    if (crit && g.detonate) {
+      const left = [this.enemyPoison, this.bleed, this.burn].filter(Boolean).reduce((sum, d) => sum + d.damage * d.rounds, 0);
+      if (left && this.enemy.isAlive()) {
+        const burst = Math.max(1, Math.min(Math.trunc(this.enemy.maxHp * MAX_DETONATE_PCT / 100), Math.trunc(left * g.detonate / 100)));
+        this.enemyPoison = null;
+        this.bleed = null;
+        this.burn = null;
+        this.enemy.takeDamage(burst);
+        damage += burst;
+        this.log.push(`(스며든 독과 상처가 한꺼번에 터졌다. ${burst}의 피해)`);
+      }
+    }
     this.applyPoisonOnHit(skill, g);
     this.applyGimmickOnHit(g, damage);
     if (crit && g.crit_ward) this.addWard(Math.trunc(damage * g.crit_ward / 100), "회심의 기운이 몸을 두른다");
+    // 회심 뒤에 이어 치는 연환. 연환은 다시 연환을 낳지 않는다
+    if (crit && g.combo && !this.comboing && this.enemy.isAlive()) {
+      this.comboing = true;
+      damage += this.strike(Math.max(1, Math.trunc(power * g.combo / 100)), "이어지는 연환", skill);
+      this.comboing = false;
+    }
     // 여운이 남는 초식은 때로 한 번 더 닿는다. 여운은 다시 여운을 낳지 않는다
     if (g.echo && !this.echoing && this.enemy.isAlive() && rng.random() * 100 < g.echo) {
       this.echoing = true;
@@ -520,6 +552,21 @@ export class Battle {
     if (g.stun && !this.enemyStun && !this.stunRest && rng.random() * 100 < (this.isFinal ? g.stun / 2 : g.stun)) {
       this.enemyStun = true;
       this.log.push(`(${this.enemy.name}의 몸이 굳었다.)`);
+    }
+    // 한기가 쌓이면 얼어붙는다. 천마는 한 번 더 쌓여야 언다
+    if (g.frost) {
+      this.frost += 1;
+      const need = g.frost + (this.isFinal ? 1 : 0);
+      if (this.frost >= need && !this.enemyStun && !this.stunRest) {
+        this.frost = 0;
+        this.enemyStun = true;
+        this.log.push(`(쌓인 한기에 ${this.enemy.name}의 몸이 얼어붙었다.)`);
+      } else if (this.frost < need) this.log.push(`(한기가 스민다. ${this.frost}/${need})`);
+    }
+    // 예고된 필살기를 흐트러뜨린다
+    if (g.disrupt && !this.disrupted && this.enemy.specialForRound(this.roundNum) && rng.random() * 100 < (this.isFinal ? g.disrupt / 2 : g.disrupt)) {
+      this.disrupted = true;
+      this.log.push(`(${this.enemy.name}의 초식이 흐트러졌다.)`);
     }
   }
 
@@ -753,6 +800,7 @@ export class Battle {
     base *= 1 - this.mindGuard() / 100;
     const last = this.armorG?.last_guard;
     if (last && this.player.hp <= this.player.maxHp() * last.below / 100) base *= 1 - Math.min(MAX_LAST_GUARD, last.percent) / 100;
+    if (this.incomingSpecial && this.armorG?.special_guard) base *= 1 - Math.min(MAX_SPECIAL_GUARD, this.armorG.special_guard) / 100;
     // 무엇을 겹쳐도 무적이 되지는 않는다
     base = Math.max(base, full * MIN_TAKEN);
     const blow = Math.trunc(base * uniform(0.9, 1.1));
@@ -780,6 +828,13 @@ export class Battle {
       multiplier = special.break_mult ?? BROKEN_CHARGE_MULT;
       special = null;
     }
+    if (special && this.disrupted) {
+      this.log.push(`흐트러진 ${special.name}${josa(special.name, "은/는")} 제 힘을 내지 못했다.`);
+      special = null;
+      multiplier = 1;
+    }
+    this.disrupted = false;
+    this.incomingSpecial = Boolean(special);
     const name = special ? `${special.name}` : "공격";
     if (this.enemyStun) {
       this.enemyStun = false;
@@ -872,6 +927,10 @@ export class Battle {
       this.log.push("(힘을 들이지 않았다. 쓴 내력의 절반을 되찾았다.)");
     }
     if (g.next_crit) this.forceCrit = true;
+    if (g.dazzle) {
+      this.dazzle = { percent: g.dazzle, rounds: 2 };
+      this.log.push(`(${this.enemy.name}${josa(this.enemy.name, "이/가")} 걸음을 놓쳤다. 2합 동안 회피 +${halpun(g.dazzle)})`);
+    }
     if (g.afterimage) {
       this.afterimage = g.afterimage;
       this.log.push("(잔상이 남았다. 다음 합에는 몸이 먼저 움직일 수 있다.)");
@@ -981,7 +1040,7 @@ export class Battle {
    */
   evadeChance(evadeSkill, round = this.roundNum + 1, streak = this.stepStreak + 1) {
     if (!evadeSkill) return 0;
-    const own = evadeSkill.effectValue("evade") + sectBonus(this.player, "evade") + this.player.idleBonus("경공") + alignValue(this.player.alignment, "사도", "evade");
+    const own = evadeSkill.effectValue("evade") + sectBonus(this.player, "evade") + this.player.idleBonus("경공") + alignValue(this.player.alignment, "사도", "evade") + (this.dazzle?.percent || 0);
     const base = Math.min(MAX_EVADE, own);
     const read = Math.max(0, streak - 1) * STEP_STREAK_PENALTY;
     const chance = Math.max(Math.min(base, MIN_STREAK_EVADE), base - read);
@@ -991,6 +1050,7 @@ export class Battle {
   }
 
   tickEffects() {
+    if (this.dazzle && --this.dazzle.rounds <= 0) this.dazzle = null;
     if (this.poison) {
       this.player.hp = Math.max(0, this.player.hp - this.poison.damage);
       this.log.push(`독이 살을 태운다. (${this.poison.damage} 피해)`);

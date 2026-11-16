@@ -7,7 +7,7 @@ import { pick, rng } from "./rng.js";
 export const ALIGNMENTS = ["정도", "사도", "마도"];
 export const ALIGNMENT_CAP = 999;
 const DOMINANT_THRESHOLD = 100;
-export const FOCUS_RATIO = 2;      // 한 길이 둘째 길의 이만큼을 넘으면 그 길에 집중한 것으로 친다
+const FOCUS_RATIO = 2;      // 한 길이 둘째 길의 이만큼을 넘으면 그 길에 집중한 것으로 친다
 // 앞선 길은 사건에서 이만큼 더 오른다. 사건이 적은 길일수록 크다
 export const MAX_FAME = 999;
 export const ALIGN_EASE = 1.1; // 성향은 조금 쉽게 오른다
@@ -63,7 +63,7 @@ export const sectWord = (sect) => (DB.sects[sect]?.house ? "가문" : "사문");
 /** 두 글자 성은 띄어 적는다. 지난 저장에는 이름이 없어 무명으로 부른다 */
 export const fullName = (person) => (person?.given ? `${person.surname || ""}${person.surname?.length > 1 ? " " : ""}${person.given}` : "무명");
 
-export const growthScale = (turn) => DB.balance.growth_by_chapter[getChapter(turn) - 1];
+const growthScale = (turn) => DB.balance.growth_by_chapter[getChapter(turn) - 1];
 /** 양을 성장 배율대로 줄인다. 소수점 아래는 그 확률로 1이 더 오른다. */
 export function scaledGrowth(amount, turn) {
   const exact = amount * growthScale(turn);
@@ -114,7 +114,7 @@ export function benefitText(alignment) {
 }
 
 // ---------- 챕터와 시장 ----------
-export const CHAPTER_LENGTH = 24;
+const CHAPTER_LENGTH = 24;
 export const CHAPTER_STARTS = [25, 49, 73, 97];
 export const getChapter = (turn) => Math.min(5, Math.floor((turn - 1) / CHAPTER_LENGTH) + 1);
 export const getChapterInfo = (turn, player = null) => {
@@ -240,7 +240,7 @@ export function veteranBonus(player) {
 
 export const perkTrait = (realm) => `경지_${realm}`;
 
-export function nextRealm(realm) {
+function nextRealm(realm) {
   if (realm === "현경" || realm === "생사경") return null;
   return DB.realms.order[realmIndex(realm) + 1];
 }
@@ -249,7 +249,7 @@ const statsOf = (p) => [p.external, p.internal, p.martial, p.mind];
 const average = (list) => list.reduce((a, b) => a + b, 0) / list.length;
 
 /** 경지를 넘는 데 드는 실전. 익힌 무공이 많고 깊을수록 덜 든다 */
-export const battlesNeeded = (player, req) => req.battles - (player.loreRelief?.(req.battles) ?? 0);
+const battlesNeeded = (player, req) => req.battles - (player.loreRelief?.(req.battles) ?? 0);
 
 export function checkBreakthrough(player) {
   const next = nextRealm(player.realm);
@@ -290,7 +290,7 @@ export function checkGoodEnding(player) {
 const DEEP_STEP = 2; // 이 단계부터 그 길이 깊어진 무인으로 대접받는다
 
 /** 성향과 명성에 맞는 말투 표의 칸들. 깊을수록, 이름이 높을수록 앞에 온다 */
-export function talkKeys(player) {
+function talkKeys(player) {
   const keys = [];
   const tier = alignTier(player.alignment);
   if (player.fame >= 500) keys.push("천하");

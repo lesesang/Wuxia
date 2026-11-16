@@ -8,7 +8,7 @@ import {
 import { josa } from "./josa.js";
 
 export const GRADE_ORDER = ["기본", "명품", "상승", "일절", "신공"];
-export const GIMMICK_GRADE = "상승"; // 이 품계부터 무공의 묘리가 드러난다
+const GIMMICK_GRADE = "상승"; // 이 품계부터 무공의 묘리가 드러난다
 const HIGHER_GRADE_TRANSFER = 0.7; // 높은 품계 무공의 성취를 옮기는 비율
 const SAME_GRADE_TRANSFER = 0.5;  // 같은 품계 무공의 성취를 옮기는 비율
 const LOWER_GRADE_TRANSFER = 0.3; // 낮은 품계 무공의 성취를 옮기는 비율
@@ -20,21 +20,22 @@ const EFFECT_GRADE_BONUS = 0.2; // 심공·경공 승급 1단계당 효과 증�
 const EVADE_GRADE_BONUS = 0.1;
 const EVADE_MASTERY_BONUS = 0.001;
 
-export const START_SILVER = 30;
+const START_SILVER = 30;
 export const HOME_ART_MASTERY = 40; // 출신이 오래 갈고닦은 무공의 처음 성취
 const DUPLICATE_SKILL_MASTERY = 25;
 // 쓰지 않는 무공도 몸에 남아 보탬이 된다
 const IDLE_ART_WEIGHT = { 기본: 0.5, 명품: 1, 상승: 1.5, 일절: 2, 신공: 3 };
-export const MAX_IDLE_BONUS = 10;      // 쓰지 않는 무공이 보태는 끝(위력, 내력, 회피)
+const MAX_IDLE_BONUS = 10;      // 쓰지 않는 무공이 보태는 끝(위력, 내력, 회피)
 const SAME_STYLE_MASTERY = 5;          // 주무공과 같은 계열의 무공 하나가 주무공 성취를 빠르게 하는 정도
 const MAX_SAME_STYLE_MASTERY = 25;
 const LORE_POINTS = { 기본: 1, 명품: 2, 상승: 3, 일절: 4, 신공: 5 };
 const LORE_PER_BATTLE = 4;             // 익힌 무공의 품계 합이 이만큼마다 돌파에 드는 실전 하나를 덜어 준다
-export const MAX_LORE_RATE = 0.25;     // 덜어 주는 실전의 끝(필요 횟수 대비)
+const MAX_LORE_RATE = 0.25;     // 덜어 주는 실전의 끝(필요 횟수 대비)
 const START_ARMORS = ["가죽호구", "철사갑의", "금사보의"]; // 겹쳐 받으면 한 단계씩 좋아진다
 const SPARE_ARMOR_SILVER = 40; // 넘치는 갑의는 은자로 돌아온다
 const CHRONICLE_LIMIT = 40;
 export const STAT_CAP = 999;
+const STAT_KEYS = ["external", "internal", "martial", "mind"];
 
 const STAT_SOFT_CAP = 850;  // 기량이 이 값을 넘으면 더디게 오른다
 const STAT_SOFT_RATE = 0.5;
@@ -244,6 +245,7 @@ export class Player {
     this.fame = Math.min(MAX_FAME, sumEffect(traitKeys, "start_fame", "amount"));
     this.sect = ORIGIN_SECTS[originKey] || null;
     this.injury = 0;
+    this.pent = {}; // 경지의 끝에 막혀 쌓아 둔 기량
     this.turn = 1;
     this.maxTurn = MAX_TURN;
     this.alive = true;
@@ -254,15 +256,58 @@ export class Player {
   maxQi() { return Math.trunc((100 + Math.trunc(this.internal / 2)) * (1 + this.idleBonus("심공") / 100)); }
   dominantAlignment() { return dominant(this.alignment); }
 
-  /** 능력치를 올리고 상한 999를 적용한다. 실제로 오른 양을 돌려준다. */
+  /** 지금 경지가 허락하는 기량의 끝 */
+  statCap() { return DB.realms.stat_cap?.[this.realm] ?? STAT_CAP; }
+  /** 경지의 끝에 막힌 기량들 */
+  cappedStats() { return STAT_KEYS.filter((s) => this[s] >= this.statCap()); }
+
+  /** 기량을 올린다. 경지의 끝에 막히면 그 몫을 쌓아 두고, 막힌 기량이 있으면 나머지가 더 빨리 오른다. 실제로 오른 양을 돌려준다 */
   gainStat(stat, amount) {
+    const cap = this.statCap();
+    if (amount > 0 && this[stat] >= cap) {
+      if (cap < STAT_CAP) this.pent[stat] = (this.pent[stat] || 0) + amount;
+      return 0;
+    }
+    if (amount > 0) {
+      const boost = this.cappedStats().length * (DB.realms.cap_boost?.per_capped || 0);
+      if (boost) {
+        const exact = amount * (1 + boost / 100);
+        amount = Math.floor(exact) + (rng.random() < exact - Math.floor(exact) ? 1 : 0);
+      }
+    }
+    return this.raiseStat(stat, amount, cap);
+  }
+
+  /** 끝을 지켜 기량을 올리고, 끝을 넘는 몫은 쌓아 둔다 */
+  raiseStat(stat, amount, cap = this.statCap()) {
     const before = this[stat];
-    // 끝에 가까울수록 더디게 오른다. 넘는 몫의 절반만 붙는다
-    const raised = before + amount;
-    const eased = raised > STAT_SOFT_CAP ? Math.max(before, STAT_SOFT_CAP) + Math.ceil((raised - Math.max(before, STAT_SOFT_CAP)) * STAT_SOFT_RATE) : raised;
-    const after = Math.max(before, Math.min(STAT_CAP, eased));
+    const top = Math.min(cap, STAT_CAP);
+    // 850을 넘으면 넘는 몫의 절반만 붙는다
+    const eased = (from, raw) => (from + raw > STAT_SOFT_CAP ? Math.max(from, STAT_SOFT_CAP) + Math.ceil((from + raw - Math.max(from, STAT_SOFT_CAP)) * STAT_SOFT_RATE) : from + raw);
+    let after = eased(before, amount);
+    if (amount > 0 && after > top) {
+      // 끝까지 오르는 데 든 몫을 빼고 남은 것은 다음 경지를 기다린다
+      const spent = before >= STAT_SOFT_CAP ? Math.ceil((top - before) / STAT_SOFT_RATE)
+        : top <= STAT_SOFT_CAP ? top - before : STAT_SOFT_CAP - before + Math.ceil((top - STAT_SOFT_CAP) / STAT_SOFT_RATE);
+      if (cap < STAT_CAP) this.pent[stat] = (this.pent[stat] || 0) + Math.max(0, amount - spent);
+      after = top;
+    }
+    after = Math.max(before, after);
     this[stat] = after;
     return after - before;
+  }
+
+  /** 경지가 올라 끝이 풀리면 쌓아 둔 몫이 오른다. 오른 양을 기량마다 돌려준다 */
+  releasePent() {
+    const gained = {};
+    for (const stat of STAT_KEYS) {
+      const stored = this.pent[stat] || 0;
+      if (!stored || this[stat] >= this.statCap()) continue;
+      this.pent[stat] = 0;
+      const up = this.raiseStat(stat, stored);
+      if (up) gained[stat] = up;
+    }
+    return gained;
   }
 
   /** 정한 양만큼 회복한다. 마도의 회복 감소를 받는다. [체력 변화, 내력 변화] */
@@ -477,7 +522,7 @@ export class Player {
   toDict() {
     return {
       origin: this.origin, origin_key: this.originKey, realm: this.realm,
-      external: this.external, internal: this.internal, martial: this.martial, mind: this.mind,
+      external: this.external, internal: this.internal, martial: this.martial, mind: this.mind, pent: { ...this.pent },
       hp: this.hp, qi: this.qi, battles: this.battles,
       encountered_enemies: this.encounteredEnemies, pending_encounters: this.pendingEncounters,
       skills: this.skills.map((s) => s.toDict()), main_skill: this.mainSkill, chosen_arts: this.chosenArts,
@@ -538,6 +583,7 @@ export class Player {
     p.fame = d.fame ?? 0;
     p.sect = d.sect !== undefined ? d.sect : (ORIGIN_SECTS[p.originKey] || null);
     p.injury = d.injury ?? 0;
+    p.pent = { ...(d.pent || {}) };
     p.turn = d.turn;
     // 외전은 출신마다 끝나는 달이 다르다
     p.maxTurn = DB.origins.origins[p.originKey]?.side ? DB.origins.origins[p.originKey].end_turn : MAX_TURN;

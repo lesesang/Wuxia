@@ -32,6 +32,7 @@ const REST_HEAL = [40, 50]; // 요양의 체력과 내력 회복(할푼)
 const ACTION_EVENT_RATE = 0.25; // 수련, 운기, 요양 중에 그 일에 얽힌 사건을 만날 확률
 const DEEP_MONTH_RATE = 0.25; // 깊은 강호의 소식이 달의 문장에 끼는 확률
 const DEEP_BOSSES = ["천마"];
+const OWN_SCALE = ["천마", "혈마", "혈마미완"];
 const LORE_RATE = 0.2; // 강호의 오랜 내력이 귀에 들어오는 확률
 const TRAIN_MASTERY_RATE = 2; // 수련이 주무공에
 const MIND_MASTERY_RATE = 5; // 운기가 심법에
@@ -409,6 +410,13 @@ export class Game {
     enemy.maxHp = Math.max(1, Math.round(enemy.maxHp * level.enemy.hp * (boss ? level.enemy.boss_hp ?? 1 : 1)));
     enemy.hp = enemy.maxHp;
     enemy.attack = Math.max(1, Math.round(enemy.attack * level.enemy.attack * (boss ? level.enemy.boss_attack ?? 1 : 1)));
+    // 초절정 이상의 고수는 깊은 강호일수록 더 단단하다. 천마와 혈마, 외전의 마지막 상대는 그만의 수치를 따른다
+    const tough = !OWN_SCALE.includes(enemy.key) && !enemy.key.startsWith("외전_") && level.enemy.realm?.[enemy.realm];
+    if (tough) {
+      enemy.maxHp = Math.max(1, Math.round(enemy.maxHp * tough.hp));
+      enemy.hp = enemy.maxHp;
+      enemy.armor = Math.round(enemy.armor * tough.armor);
+    }
     // 외전의 길은 생사경을 본 무인이 걷는 길이라 본편보다 거칠다
     if (sideOrigin(this.player)) {
       // 그 이야기만의 상대는 그보다도 한층 강하다
@@ -821,6 +829,8 @@ export class Game {
     const lines = [`경지 돌파. ${p.realm} → ${next}`, ...breakthroughLines(p, next)];
     p.realm = next;
     p.note(`${next}의 경지에 올랐다.`);
+    const released = p.releasePent();
+    if (Object.keys(released).length) lines.push(`막혀 있던 기량이 풀렸다. ${Object.entries(released).map(([k, v]) => `${STAT_NAMES[k]}+${v}`).join(", ")}`);
     const perk = DB.realms.perks[next];
     if (perk) {
       if (!p.traits.includes(perkTrait(next))) p.traits.push(perkTrait(next));
@@ -950,7 +960,7 @@ function karmaGain(player, key, victory) {
 
 /** 성별과 이름을 정한다. 가문의 성씨는 고정이고 비워 둔 칸은 저절로 정한다 */
 /** 다음 장면의 키. 같은 사건의 장면 이름이면 그 사건 아래에서 찾는다 */
-export function sceneKey(from, next) {
+function sceneKey(from, next) {
   if (DB.events[next]) return next;
   const root = DB.events[from]?.scene_of || from;
   return `${root}:${next}`;

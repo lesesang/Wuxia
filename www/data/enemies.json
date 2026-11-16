@@ -10672,7 +10672,7 @@
     "name": "천주독모 섭홍",
     "tier": "강적",
     "realm": "화경",
-    "hp": 19500,
+    "hp": 22000,
     "attack": 245,
     "exp_reward": 3,
     "silver": [
@@ -11009,8 +11009,8 @@
     "name": "백공",
     "tier": "강적",
     "realm": "화경",
-    "hp": 22000,
-    "attack": 285,
+    "hp": 25000,
+    "attack": 292,
     "exp_reward": 3,
     "silver": [
       63,
@@ -11066,8 +11066,8 @@
     "name": "설령수 하란",
     "tier": "강적",
     "realm": "화경",
-    "hp": 41000,
-    "attack": 365,
+    "hp": 46000,
+    "attack": 410,
     "exp_reward": 5,
     "silver": [
       90,

@@ -1277,12 +1277,16 @@
                 "정도": 50
               },
               "stats": {
-                "mind": 3
+                "mind": 5
               },
               "fame": 10,
               "flags": [
                 "장원_식구"
-              ]
+              ],
+              "manor_scale": true,
+              "art_mastery": {
+                "심공": 4
+              }
             }
           }
         ],
@@ -1300,7 +1304,8 @@
               "alignment": {
                 "마도": 70
               },
-              "silver": 220
+              "silver": 330,
+              "manor_scale": true
             }
           }
         ],
@@ -2875,11 +2880,15 @@
               },
               "fame": 15,
               "stats": {
-                "mind": 3
+                "mind": 5
               },
               "flags": [
                 "장원_식구"
-              ]
+              ],
+              "manor_scale": true,
+              "art_mastery": {
+                "심공": 4
+              }
             }
           }
         ],
@@ -2897,9 +2906,13 @@
               "alignment": {
                 "사도": 60
               },
-              "silver": 60,
+              "silver": 90,
               "stats": {
-                "mind": 2
+                "mind": 4
+              },
+              "manor_scale": true,
+              "art_mastery": {
+                "심공": 4
               }
             }
           }
