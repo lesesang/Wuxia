@@ -6,15 +6,6 @@ const LEGEND_KEY = "wuxia-legend";
 const SAVE_KEY = "wuxia-save";
 const EVENT_LOG_KEY = "wuxia-event-log";
 const RUN_HISTORY_LIMIT = 10;
-// 게임에서 빠진 출신을 해금했던 기록은 지우고 카르마를 돌려준다
-// 이름이 바뀐 출신은 해금을 그대로 옮겨 준다
-export const RENAMED_ORIGINS = { 마교탈주: "혈지생환", 소교주: "혈지생환", 신교사자: "혈지생환", 개방후개: "개방제자" };
-const REMOVED_ORIGINS = { 곤륜파: 5, 금군교두: 5, 낙방서생: 5, 녹림소채주: 5, 녹림채주: 5, 녹림후계: 5, 당가무사: 5, 당가방계: 5, 당가소주: 5, 대장간자식: 5, 백호대장: 5, 백호무관: 5, 살막살수: 5, 살막탈주: 5, 살문탈주: 5, 세외도객: 5, 소림속가: 5, 소림수제자: 5, 소막주: 5, 악가서자: 5, 악가소장주: 5, 악가전인: 5, 양가서자: 5, 육선문포두: 5, 의원제자: 5, 점소이: 5, 탈영병: 5, 황보막내: 5, 회귀자: 5 };
-
-// 없어진 자질은 산 값을 돌려준다
-const REMOVED_TRAITS = { 무골: 5, 기재: 5, 넓은단전: 5, 맑은마음: 5, 맷집: 7, 경공의재능: 4, 줄행랑: 2, 손에익은병기: 6, 약손: 3, 구음절맥: 8, 순양지체: 8 };
-const SPLIT_UPGRADES = { 근골: ["강골", "혜안"], 심지: ["원기", "명경"], 당문침통: ["당가침통"] };
-
 const defaults = () => ({
   current_karma: 0, total_karma: 0,
   unlocked_origins: ["무림초출"], unlocked_traits: [],
@@ -31,7 +22,7 @@ export function loadMeta() {
   if (raw) {
     try {
       const data = JSON.parse(raw);
-      if (data && typeof data === "object") return refundRemoved({ ...defaults(), ...data });
+      if (data && typeof data === "object") return cleanRecord({ ...defaults(), ...data });
     } catch {
       // 손상된 기록은 지우지 않고 옆에 남겨 둔다
       storage.set(`${LEGEND_KEY}-broken`, raw);
@@ -40,55 +31,15 @@ export function loadMeta() {
   return defaults();
 }
 
-function refundRemoved(data) {
-  // 데이터에서 빠진 항목이 기록에 남아 있어도 화면이 깨지지 않게 걸러 낸다
+function cleanRecord(data) {
+  // 데이터에 없는 항목이 기록에 남아 있어도 화면이 깨지지 않게 걸러 낸다
   if (DB.karma) {
     data.content = data.content.filter((k) => DB.karma.content[k]);
     data.content_off = data.content_off.filter((k) => DB.karma.content[k]);
     data.legacies = data.legacies.filter((l) => (l.kind === "skill" ? DB.skills[l.key] : DB.market[l.key]));
   }
-  // 천마를 꺾은 적이 있으면 첫 강호는 이미 넘은 것이다
-  if (!Array.isArray(data.difficulty_cleared)) data.difficulty_cleared = [];
-  if (DB.difficulty && !data.difficulty_cleared.includes(DB.difficulty.order[0]) && data.endings_seen.some((k) => WIN_ENDINGS.includes(k))) {
-    data.difficulty_cleared.push(DB.difficulty.order[0]);
-  }
-  if (!data.upgrades || typeof data.upgrades !== "object" || Array.isArray(data.upgrades)) data.upgrades = {};
-  if (!data.upgrade_use || typeof data.upgrade_use !== "object" || Array.isArray(data.upgrade_use)) data.upgrade_use = {};
-  for (const [key, cost] of Object.entries(REMOVED_TRAITS)) {
-    if (data.unlocked_traits.includes(key)) {
-      data.unlocked_traits = data.unlocked_traits.filter((k) => k !== key);
-      data.current_karma += cost;
-      storage.set(LEGEND_KEY, JSON.stringify(data));
-    }
-  }
-  // 둘씩 묶여 있던 시작 능력치 강화는 같은 단계의 낱개 강화로 옮긴다
-  let moved = false;
-  for (const [oldKey, parts] of Object.entries(SPLIT_UPGRADES)) {
-    const level = data.upgrades[oldKey];
-    if (level) {
-      for (const part of parts) data.upgrades[part] = Math.max(data.upgrades[part] || 0, level);
-      moved = true;
-    }
-    if (oldKey in data.upgrades) delete data.upgrades[oldKey];
-  }
-  if (moved) storage.set(LEGEND_KEY, JSON.stringify(data));
-  // 없어진 강화(윤회의 고리)에 쓴 카르마를 돌려준다
-  if (data.upgrades.윤회) {
-    data.current_karma += [5, 10, 18].slice(0, data.upgrades.윤회).reduce((a, b) => a + b, 0);
-    delete data.upgrades.윤회;
-    storage.set(LEGEND_KEY, JSON.stringify(data));
-  }
-  if (data.unlocked_origins.some((k) => RENAMED_ORIGINS[k])) {
-    data.unlocked_origins = [...new Set(data.unlocked_origins.map((k) => RENAMED_ORIGINS[k] || k))];
-    storage.set(LEGEND_KEY, JSON.stringify(data));
-  }
-  for (const [key, cost] of Object.entries(REMOVED_ORIGINS)) {
-    if (data.unlocked_origins.includes(key)) {
-      data.unlocked_origins = data.unlocked_origins.filter((k) => k !== key);
-      data.current_karma += cost;
-      storage.set(LEGEND_KEY, JSON.stringify(data));
-    }
-  }
+  if (DB.origins) data.unlocked_origins = data.unlocked_origins.filter((k) => DB.origins.origins[k]);
+  if (DB.traits) data.unlocked_traits = data.unlocked_traits.filter((k) => DB.traits[k]);
   return data;
 }
 
@@ -480,11 +431,12 @@ export function exportRecords() {
   return JSON.stringify({ format: "wuxia-records", version: 1, legend: loadMeta(), save: loadCheckpoint(), event_log: loadEventLog() }, null, 2);
 }
 
-/** 내보낸 파일과 예전 PC 버전의 legend_data.json을 모두 받는다. 성공하면 true */
+/** 내보낸 기록 파일을 받는다. 성공하면 true */
 export function importRecords(text) {
   let data;
   try { data = JSON.parse(text); } catch { return false; }
-  const legend = data?.format === "wuxia-records" ? data.legend : data;
+  if (data?.format !== "wuxia-records") return false;
+  const legend = data.legend;
   if (!legend || typeof legend.current_karma !== "number" || typeof legend.total_karma !== "number") return false;
   const merged = { ...defaults(), ...legend };
   for (const key of ["unlocked_origins", "unlocked_traits", "global_codex", "known_skills", "known_items", "endings_seen", "runs", "content", "content_off", "provisions", "legacies", "milestones", "known_events", "achievements", "origin_wins"]) {
@@ -494,6 +446,6 @@ export function importRecords(text) {
   const log = data?.event_log;
   eventLogCache = log && typeof log === "object" && !Array.isArray(log) ? log : {};
   storage.set(EVENT_LOG_KEY, JSON.stringify(eventLogCache));
-  if (data?.format === "wuxia-records" && data.save?.player) storage.set(SAVE_KEY, JSON.stringify(data.save));
+  if (data.save?.player) storage.set(SAVE_KEY, JSON.stringify(data.save));
   return true;
 }

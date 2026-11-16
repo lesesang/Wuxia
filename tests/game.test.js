@@ -786,14 +786,6 @@ test("기록 내보내기와 가져오기", () => {
   assert.equal(loadCheckpoint().player.silver, 123);
 });
 
-test("예전 PC 버전 legend_data.json도 가져온다", () => {
-  assert.ok(importRecords(JSON.stringify({ current_karma: 3, total_karma: 9, unlocked_origins: ["무림초출", "남궁세가"], unlocked_traits: [] })));
-  const data = loadMeta();
-  assert.equal(data.total_karma, 9);
-  assert.deepEqual(data.runs, []);
-  assert.ok(data.unlocked_origins.includes("남궁세가"));
-});
-
 test("엉뚱한 파일은 거절한다", () => {
   assert.ok(!importRecords("안녕"));
   assert.ok(!importRecords(JSON.stringify({ a: 1 })));
@@ -858,15 +850,6 @@ test("모든 적이 기준 시기를 가진다", () => {
   for (const [key, enemy] of Object.entries(DB.enemies)) {
     if (enemy.tier !== "보스") assert.ok(enemy.level >= 1 && enemy.level <= 120, key);
   }
-});
-
-test("60달 시절의 저장은 시간표를 늘려 이어 간다", () => {
-  const p = new Player();
-  const old = { ...p.toDict(), turn: 30, max_turn: 60, battles: 10 };
-  const moved = Player.fromDict(old);
-  assert.equal(moved.maxTurn, 120);
-  assert.equal(moved.turn, 59);
-  assert.equal(moved.battles, 20);
 });
 
 test("성장 특성은 작은 수에서 두 배가 되지 않는다", () => {
@@ -1282,21 +1265,6 @@ test("특성에 따라 사건 선택지가 늘어난다", () => {
   assert.equal(eventView(new Player("무림초출", ["주당"]), "밀주꾼").choices.length, plain + 1);
 });
 
-test("없어진 출신은 카르마를 돌려주고 저장도 이어 갈 수 있다", () => {
-  const meta = loadMeta();
-  meta.unlocked_origins = ["무림초출", "낙방서생"];
-  meta.current_karma = 2;
-  saveMeta(meta);
-  const after = loadMeta();
-  assert.ok(!after.unlocked_origins.includes("낙방서생"));
-  assert.equal(after.current_karma, 7);
-  const dict = new Player().toDict();
-  dict.origin_key = "낙방서생";
-  dict.origin = "낙방한 서생";
-  assert.equal(Player.fromDict(dict).originKey, "무림초출");
-  assert.ok(!DB.origins.origins.낙방서생);
-});
-
 test("모든 출신은 시작 경지가 일류인 까닭을 설명하고 맺음말이 있다", () => {
   for (const [key, origin] of Object.entries(DB.origins.origins)) {
     if (!origin.side) assert.ok(DB.endings.frames.기본.flat().some((r) => r.requires?.origin === key), key);
@@ -1421,16 +1389,12 @@ test("성향과 명성에 따라 사건이 달라진다", () => {
   assert.ok(events.filter((e) => e.requires?.min_fame >= 300).length >= 3);
 });
 
-test("기량 최대는 999이고 예전 저장은 단위를 맞춘다", () => {
+test("기량 최대는 999이고 저장해도 그대로다", () => {
   const p = new Player();
   p.external = 995;
   assert.equal(p.gainStat("external", 50), 4);
   assert.equal(p.external, 999);
-  const old = { ...new Player().toDict(), external: 30, internal: 28, martial: 28, mind: 28 };
-  delete old.stat_scale;
-  const loaded = Player.fromDict(old);
-  assert.equal(loaded.external, 300);
-  assert.equal(Player.fromDict(loaded.toDict()).external, 300);
+  assert.equal(Player.fromDict(p.toDict()).external, 999);
   assert.equal(DB.realms.saengsa.min_stat, 950);
 });
 
@@ -2063,7 +2027,7 @@ test("이미 강호록에 있는 인물은 다시 알리지 않는다", () => {
   delete loadEventLog().시험사건;
 });
 
-test("큰 그릇은 세 번까지 사고 없어진 자질은 값을 돌려준다", () => {
+test("큰 그릇은 세 번까지 사고 데이터에 없는 자질은 기록에서 걸러 낸다", () => {
   withKarma(500);
   assert.ok(buyUpgrade("그릇"));
   assert.ok(buyUpgrade("그릇"));
@@ -2076,7 +2040,6 @@ test("큰 그릇은 세 번까지 사고 없어진 자질은 값을 돌려준다
   saveMeta(data);
   const after = loadMeta();
   assert.deepEqual(after.unlocked_traits, ["외길"]);
-  assert.equal(after.current_karma, 5);
   after.unlocked_traits = [];
   saveMeta(after);
   withKarma(0);
@@ -2102,17 +2065,6 @@ test("자질의 새 효과가 동작한다", () => {
   const b2 = new Battle(poison, new Enemy("산적"));
   b2.applyPoisonOnHit(poison.bestSkill());
   assert.ok(b2.enemyPoison);
-});
-
-test("예전 묶음 강화는 낱개 기틀로 옮겨진다", () => {
-  withKarma(0);
-  const data = loadMeta();
-  data.upgrades = { 근골: 2, 심지: 1 };
-  saveMeta(data);
-  const after = loadMeta();
-  assert.deepEqual(after.upgrades, { 강골: 2, 혜안: 2, 원기: 1, 명경: 1 });
-  data.upgrades = {};
-  saveMeta(data);
 });
 
 test("카르마 상점에 전생과 회차 표현이 없다. 유산만 예외다", () => {
@@ -2986,16 +2938,6 @@ test("업적이 기록되고 카르마를 주며 한 번만 받는다", () => {
   assert.deepEqual(loadMeta().origin_wins, ["무림초출"]);
 });
 
-test("없어진 출신을 샀던 기록은 카르마로 돌려준다", () => {
-  const data = loadMeta();
-  data.unlocked_origins = ["무림초출", "세외도객", "살문탈주"];
-  data.current_karma = 0;
-  saveMeta(data);
-  const after = loadMeta();
-  assert.equal(after.current_karma, 10);
-  assert.deepEqual(after.unlocked_origins, ["무림초출"]);
-});
-
 test("개방 출신은 사문을 지니고 시작한다", () => {
   assert.equal(new Player("개방제자").sect, "개방");
 });
@@ -3056,34 +2998,6 @@ test("어떤 사건이나 인연도 생사경 조건을 건드리지 않는다",
 test("출신은 너무 낮지도 높지도 않은 어엿한 위치의 인물이다", () => {
   const text = JSON.stringify(Object.values(DB.origins.origins).map((o) => [o.name, o.desc]));
   for (const word of ["방계", "서자", "탈주", "도망자", "탈영", "점소이", "파문", "소가주", "소장주", "소막주", "소교주", "소표두", "수제자", "후개", "후계"]) assert.ok(!text.includes(word), word);
-});
-
-test("이름이 바뀐 출신은 해금과 저장을 잃지 않고, 없어진 출신은 카르마로 돌려준다", () => {
-  const data = loadMeta();
-  data.unlocked_origins = ["무림초출", "소교주", "곤륜파"];
-  data.current_karma = 0;
-  saveMeta(data);
-  const after = loadMeta();
-  assert.deepEqual(after.unlocked_origins, ["무림초출", "혈지생환"]);
-  assert.equal(after.current_karma, 5);
-  const dict = new Player("혈지생환").toDict();
-  dict.origin_key = "소교주";
-  const p = Player.fromDict(dict);
-  assert.equal(p.originKey, "혈지생환");
-  assert.equal(p.origin, "피 연못의 생환자");
-});
-
-test("카르마를 늘리는 강화는 없고, 샀던 것은 돌려준다", () => {
-  assert.ok(!DB.karma.upgrades.윤회);
-  const data = loadMeta();
-  data.upgrades = { 윤회: 2, 강골: 1 };
-  data.current_karma = 1;
-  saveMeta(data);
-  const after = loadMeta();
-  assert.equal(after.current_karma, 16);
-  assert.deepEqual(after.upgrades, { 강골: 1 });
-  data.upgrades = {};
-  saveMeta(after);
 });
 
 test("격파 기록과 가장 오래 간 달이 남는다", () => {
@@ -3248,12 +3162,6 @@ test("주무공 계열 신공 보상은 다른 출신의 전용 신공을 주지
   applyEffects(p, { skill: "혼원일기공" });
   assert.equal(p.bestOfType("심공").key, "혼원일기공", "같은 갈래의 심법은 성취를 이어받는다");
   assert.equal(p.bestOfType("심공").mastery, toNap.mastery);
-});
-
-test("예전 저장의 신공은 일절로 바뀐다", () => {
-  assert.equal(Skill.fromDict({ key: "무상도결", grade: "신공", mastery: 10 }).grade, "일절");
-  assert.equal(Skill.fromDict({ key: "기초검법", grade: "천상", mastery: 10 }).grade, "일절");
-  assert.equal(Skill.fromDict({ key: "제왕검형", grade: "신공", mastery: 10 }).grade, "신공");
 });
 
 test("카르마 인연의 신공은 주무공 계열로 받고, 이미 익혔으면 대신 무리가 오른다", () => {
@@ -3654,9 +3562,9 @@ test("경지가 오르면 지난 경지의 특전도 깊어지고 저장해도 �
   const damage = () => sumEffect(p.traits, "damage_bonus", "percent");
   p.traits.push("경지_절정");
   const before = damage();
-  p.realm = "초절정";
+  p.traits.push("경지_절정_초절정");
   const saved = Player.fromDict(p.toDict());
-  assert.ok(saved.traits.includes("경지_절정_초절정"), "예전 저장도 받는다");
+  assert.ok(saved.traits.includes("경지_절정_초절정"));
   assert.ok(sumEffect(saved.traits, "damage_bonus", "percent") > before);
   const game = newGame();
   const g = game.player;
@@ -4774,16 +4682,6 @@ test("같은 갈래의 무공으로 이어질 때 성취가 이어진다고 굳�
     assert.ok(!notes.join(" ").includes("성취"), notes.join(" "));
     return;
   }
-});
-
-test("천마를 꺾은 기록이 있으면 혈풍이 열려 있다", async () => {
-  const { difficultyOpen } = await import("../www/js/meta.js");
-  const meta = loadMeta();
-  meta.endings_seen = ["기본"];
-  delete meta.difficulty_cleared;
-  saveMeta(meta);
-  assert.ok(difficultyOpen("혈풍"));
-  assert.ok(!difficultyOpen("겁화"));
 });
 
 test("데이터의 조건과 효과는 모두 코드가 읽는다", () => {
