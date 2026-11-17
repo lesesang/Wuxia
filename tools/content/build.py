@@ -12,7 +12,7 @@ import s11
 import s12
 import side
 # 새 외전 출신. 한 파일에 하나씩
-NEW_SIDE=['o_sorim','o_mudang','o_ami','o_gongdong','o_moyong','o_sadoryeon','o_jegal','o_dark']
+NEW_SIDE=['o_sorim','o_mudang','o_ami','o_gongdong','o_moyong','o_sadoryeon','o_jegal','o_dark','o_gwimun','o_nokrim','o_heuksa','o_mangnani','o_hwasan','o_cheongseong','o_jongnam']
 for _m in NEW_SIDE: __import__(_m)
 D=os.path.join(ROOT,'www','data','')
 def load(n): return json.load(open(D+n+'.json'))

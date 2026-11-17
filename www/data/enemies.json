@@ -12441,5 +12441,838 @@
         ]
       }
     ]
+  },
+  "외전_무령": {
+    "name": "백골승 무령",
+    "tier": "난적",
+    "realm": "초절정",
+    "hp": 14000,
+    "attack": 232,
+    "exp_reward": 3,
+    "silver": [
+      50,
+      80
+    ],
+    "level": 49,
+    "hp_style": 0.95,
+    "attack_style": 1.0,
+    "chapters": [],
+    "weight": 0,
+    "named": true,
+    "armor": 16,
+    "title": "귀문교 등각의 장로",
+    "desc": "귀문교의 장로. 해골을 엮은 창대를 쓴다. 교단의 등각을 지키며 거둔 혼의 수를 센다.",
+    "intro": "\"교단의 뜻을 따를 자인지 보겠다.\"",
+    "outro": "무령이 창을 거두었다. \"막지는 않겠다.\"",
+    "spar_outro": "무령이 해골 창대를 세웠다. \"어미가 먼저인 자로구나.\"",
+    "specials": [
+      {
+        "name": "백골창",
+        "every": 3,
+        "mult": 2.0,
+        "accuracy": 10
+      },
+      {
+        "name": "해골의 울음",
+        "every": 5,
+        "mult": 1.6,
+        "seal": 1
+      }
+    ]
+  },
+  "외전_육허": {
+    "name": "벽사진인 육허",
+    "tier": "강적",
+    "realm": "화경",
+    "hp": 18300,
+    "attack": 252,
+    "exp_reward": 3,
+    "silver": [
+      63,
+      91
+    ],
+    "armor": 24,
+    "level": 73,
+    "hp_style": 1.366,
+    "attack_style": 1.19,
+    "chapters": [],
+    "weight": 0,
+    "named": true,
+    "title": "청운관 관주",
+    "desc": "귀문교를 쫓는 퇴마 도관 청운관의 관주. 부적을 흩뿌리며 검을 쓴다. 쉬어야 할 혼을 깨우는 자를 용서하지 않는다.",
+    "intro": "\"오늘 이 산의 등을 다 깨겠다.\"",
+    "outro": "육허가 검을 내렸다. \"등을 지키는 창이 이토록 깊을 줄은.\"",
+    "specials": [
+      {
+        "name": "벽사검",
+        "every": 3,
+        "mult": 2.1,
+        "accuracy": 10
+      },
+      {
+        "name": "부적 비",
+        "every": 5,
+        "mult": 1.5,
+        "seal": 1
+      }
+    ],
+    "phases": [
+      {
+        "hp_pct": 50,
+        "attack_mult": 1.2,
+        "text": "육허의 부적이 불타며 등불 사이를 날아다닌다. 평생 귀문교를 쫓은 검이다.",
+        "specials": [
+          {
+            "name": "벽사검",
+            "every": 3,
+            "mult": 2.1,
+            "accuracy": 10
+          },
+          {
+            "name": "천 장의 부적",
+            "every": 4,
+            "mult": 2.75,
+            "accuracy": 20,
+            "break_pct": 5
+          }
+        ]
+      }
+    ]
+  },
+  "외전_엄대웅": {
+    "name": "산중호 엄대웅",
+    "tier": "강적",
+    "realm": "초절정",
+    "hp": 14600,
+    "attack": 236,
+    "exp_reward": 3,
+    "silver": [
+      63,
+      91
+    ],
+    "armor": 18,
+    "level": 73,
+    "hp_style": 1.366,
+    "attack_style": 1.19,
+    "chapters": [],
+    "weight": 0,
+    "named": true,
+    "title": "녹림왕",
+    "desc": "녹림 칠십이채를 거느리는 녹림왕. 늙었지만 쇠몽둥이는 아직 산을 내리친다.",
+    "intro": "\"네 몽둥이를 한 번 맞아 보겠다.\"",
+    "outro": "엄대웅이 쇠몽둥이를 내렸다. \"흘렸구나.\"",
+    "spar_outro": "엄대웅이 크게 웃었다. \"내 몽둥이를 흘린 채주는 처음이다.\"",
+    "specials": [
+      {
+        "name": "산중호",
+        "every": 3,
+        "mult": 2.05,
+        "accuracy": 10
+      },
+      {
+        "name": "산을 내리치는 몽둥이",
+        "every": 5,
+        "mult": 1.6,
+        "seal": 1
+      }
+    ]
+  },
+  "외전_단철웅": {
+    "name": "개산부 단철웅",
+    "tier": "강적",
+    "realm": "초절정",
+    "hp": 18600,
+    "attack": 252,
+    "exp_reward": 3,
+    "silver": [
+      63,
+      91
+    ],
+    "armor": 24,
+    "level": 97,
+    "hp_style": 1.366,
+    "attack_style": 1.19,
+    "chapters": [],
+    "weight": 0,
+    "named": true,
+    "title": "녹림 칠십이채의 순찰 대채주",
+    "desc": "녹림의 순찰을 맡은 대채주. 약한 산채를 거두어 칼 든 자만 남긴다. 산을 쪼갠다는 도끼를 쓴다.",
+    "intro": "\"녹림의 법은 힘이다.\"",
+    "outro": "단철웅이 도끼를 놓았다. \"작은 산채의 몽둥이가.\"",
+    "specials": [
+      {
+        "name": "개산부",
+        "every": 3,
+        "mult": 2.15
+      },
+      {
+        "name": "순찰의 도끼",
+        "every": 5,
+        "mult": 1.5,
+        "accuracy": 15
+      }
+    ],
+    "phases": [
+      {
+        "hp_pct": 50,
+        "attack_mult": 1.2,
+        "text": "단철웅이 도끼를 두 손으로 든다. 거둔 산채가 스물이 넘는 손이다.",
+        "specials": [
+          {
+            "name": "개산부",
+            "every": 3,
+            "mult": 2.15
+          },
+          {
+            "name": "산 쪼개기",
+            "every": 4,
+            "mult": 2.75,
+            "accuracy": 20,
+            "break_pct": 5
+          }
+        ]
+      }
+    ],
+    "deep_quirks": {
+      "혈풍": {
+        "text": "(단철웅의 손바닥에 붉은 인이 박혀 있다. 혈교와 피의 계를 맺었다.)",
+        "quirks": [
+          {
+            "type": "bloodthirst",
+            "percent": 15,
+            "name": "혈계"
+          }
+        ]
+      },
+      "겁화": {
+        "text": "(단철웅의 정수리에 검은 불길의 흉터가 있다. 신교 장로의 곁불을 받았다.)",
+        "quirks": [
+          {
+            "type": "bloodthirst",
+            "percent": 15,
+            "name": "혈계"
+          },
+          {
+            "type": "barrier",
+            "percent": 4,
+            "every": 5,
+            "name": "곁불의 열기"
+          }
+        ]
+      },
+      "천붕": {
+        "text": "(단철웅의 단전께에서 이따금 검은 연기가 실처럼 샌다. 천마가 숨겨 넣은 불, 잠화를 품었다. 그 불이 맞선 자의 맥을 태운다.)",
+        "quirks": [
+          {
+            "type": "bloodthirst",
+            "percent": 12,
+            "name": "혈계"
+          },
+          {
+            "type": "sever",
+            "percent": 25,
+            "name": "숨은 불"
+          }
+        ]
+      }
+    }
+  },
+  "외전_염칠": {
+    "name": "귀주사 염칠",
+    "tier": "난적",
+    "realm": "초절정",
+    "hp": 14000,
+    "attack": 232,
+    "exp_reward": 2,
+    "silver": [
+      42,
+      56
+    ],
+    "level": 37,
+    "hp_style": 1.21,
+    "attack_style": 1.2,
+    "chapters": [],
+    "weight": 0,
+    "named": true,
+    "armor": 14,
+    "title": "흑사방 둘째 판주",
+    "desc": "흑사방의 둘째 판주. 주사위 세 알을 손에서 놓지 않는다. 던지면 쇠도 뚫는다.",
+    "intro": "\"내 손에서 주사위를 떨어뜨려 보아라.\"",
+    "outro": "염칠이 손을 털었다. \"판을 지킬 손이구나.\"",
+    "spar_outro": "염칠이 주사위를 거두며 웃었다. \"방주께 그리 아뢰마.\"",
+    "specials": [
+      {
+        "name": "귀주사",
+        "every": 3,
+        "mult": 2.0,
+        "accuracy": 15
+      },
+      {
+        "name": "주사위 셋",
+        "every": 5,
+        "mult": 1.6,
+        "seal": 1
+      }
+    ]
+  },
+  "외전_하백": {
+    "name": "천금수 하백",
+    "tier": "강적",
+    "realm": "초절정",
+    "hp": 18200,
+    "attack": 252,
+    "exp_reward": 3,
+    "silver": [
+      63,
+      91
+    ],
+    "armor": 22,
+    "level": 97,
+    "hp_style": 1.366,
+    "attack_style": 1.19,
+    "chapters": [],
+    "weight": 0,
+    "named": true,
+    "title": "흑사방 첫째 판주",
+    "desc": "흑사방의 첫째 판주. 손가락마다 금반지를 끼고 그 반지로 암기를 튕겨 낸다. 흑사방 판돈의 절반이 그의 판에서 돈다.",
+    "intro": "\"동전 대 금반지다.\"",
+    "outro": "하백이 금반지를 빼 탁자에 놓았다. \"판을 열어라.\"",
+    "specials": [
+      {
+        "name": "금반지 튕기기",
+        "every": 3,
+        "mult": 2.1,
+        "accuracy": 15
+      },
+      {
+        "name": "판엎기",
+        "every": 5,
+        "mult": 1.5,
+        "seal": 1
+      }
+    ],
+    "phases": [
+      {
+        "hp_pct": 50,
+        "attack_mult": 1.2,
+        "text": "하백이 반지 열 개를 한꺼번에 날린다. 흑사방 판돈의 절반을 쥔 손이다.",
+        "specials": [
+          {
+            "name": "금반지 튕기기",
+            "every": 3,
+            "mult": 2.1,
+            "accuracy": 15
+          },
+          {
+            "name": "천금의 판",
+            "every": 4,
+            "mult": 2.75,
+            "accuracy": 20,
+            "break_pct": 5
+          }
+        ]
+      }
+    ],
+    "deep_quirks": {
+      "혈풍": {
+        "text": "(하백의 손바닥에 붉은 인이 박혀 있다. 혈교와 피의 계를 맺었다.)",
+        "quirks": [
+          {
+            "type": "bloodthirst",
+            "percent": 15,
+            "name": "혈계"
+          }
+        ]
+      },
+      "겁화": {
+        "text": "(하백의 정수리에 검은 불길의 흉터가 있다. 신교 장로의 곁불을 받았다.)",
+        "quirks": [
+          {
+            "type": "bloodthirst",
+            "percent": 15,
+            "name": "혈계"
+          },
+          {
+            "type": "barrier",
+            "percent": 4,
+            "every": 5,
+            "name": "곁불의 열기"
+          }
+        ]
+      },
+      "천붕": {
+        "text": "(하백의 단전께에서 이따금 검은 연기가 실처럼 샌다. 천마가 숨겨 넣은 불, 잠화를 품었다. 그 불이 맞선 자의 맥을 태운다.)",
+        "quirks": [
+          {
+            "type": "bloodthirst",
+            "percent": 12,
+            "name": "혈계"
+          },
+          {
+            "type": "sever",
+            "percent": 25,
+            "name": "숨은 불"
+          }
+        ]
+      }
+    }
+  },
+  "외전_육종": {
+    "name": "철면 육종",
+    "tier": "강적",
+    "realm": "초절정",
+    "hp": 14200,
+    "attack": 234,
+    "exp_reward": 3,
+    "silver": [
+      63,
+      91
+    ],
+    "armor": 18,
+    "level": 97,
+    "hp_style": 1.366,
+    "attack_style": 1.19,
+    "chapters": [],
+    "weight": 0,
+    "named": true,
+    "title": "금의위 천호",
+    "desc": "금의위에서 칼을 가장 잘 쓴다는 천호. 동창을 미워하지만 조정의 문을 두드리는 자를 그냥 두지 않는다.",
+    "intro": "\"넘지 못하면 형장에 서라.\"",
+    "outro": "육종이 칼을 거두었다. \"금의위는 모른 척하겠다.\"",
+    "spar_outro": "육종이 칼집에 칼을 넣었다. \"망나니의 칼이 이렇구나.\"",
+    "specials": [
+      {
+        "name": "철면참",
+        "every": 3,
+        "mult": 2.05,
+        "accuracy": 10
+      },
+      {
+        "name": "금의위의 포승",
+        "every": 5,
+        "mult": 1.6,
+        "seal": 1
+      }
+    ]
+  },
+  "외전_위소경": {
+    "name": "백면 위소경",
+    "tier": "강적",
+    "realm": "초절정",
+    "hp": 18100,
+    "attack": 254,
+    "exp_reward": 3,
+    "silver": [
+      63,
+      91
+    ],
+    "armor": 22,
+    "level": 97,
+    "hp_style": 1.366,
+    "attack_style": 1.19,
+    "chapters": [],
+    "weight": 0,
+    "named": true,
+    "title": "동창의 첩형",
+    "desc": "동창의 첩형. 사십 년 전 스승이 빼돌린 소금 값의 장부를 지우려고 서생 하나를 역모로 엮었다. 비단 소매 속의 가는 칼이 바람처럼 목을 노린다.",
+    "intro": "\"서생 하나의 목으로 늙은이 몇을 살렸다. 셈이 맞지 않느냐.\"",
+    "outro": "위소경이 휘장 앞에 무릎을 꿇었다. \"망나니가... 셈을 하는구나.\"",
+    "specials": [
+      {
+        "name": "소매 속의 칼",
+        "every": 3,
+        "mult": 2.1,
+        "accuracy": 15
+      },
+      {
+        "name": "판결",
+        "every": 5,
+        "mult": 1.5,
+        "qi_drain": 12
+      }
+    ],
+    "phases": [
+      {
+        "hp_pct": 50,
+        "attack_mult": 1.2,
+        "text": "위소경의 가는 칼이 셋으로 갈라진다. 동창의 별원에서 수많은 판결에 도장을 찍은 손이다.",
+        "specials": [
+          {
+            "name": "소매 속의 칼",
+            "every": 3,
+            "mult": 2.1,
+            "accuracy": 15
+          },
+          {
+            "name": "마지막 도장",
+            "every": 4,
+            "mult": 2.75,
+            "accuracy": 20,
+            "break_pct": 5
+          }
+        ]
+      }
+    ],
+    "deep_quirks": {
+      "혈풍": {
+        "text": "(위소경의 손바닥에 붉은 인이 박혀 있다. 혈교와 피의 계를 맺었다.)",
+        "quirks": [
+          {
+            "type": "bloodthirst",
+            "percent": 15,
+            "name": "혈계"
+          }
+        ]
+      },
+      "겁화": {
+        "text": "(위소경의 정수리에 검은 불길의 흉터가 있다. 신교 장로의 곁불을 받았다.)",
+        "quirks": [
+          {
+            "type": "bloodthirst",
+            "percent": 15,
+            "name": "혈계"
+          },
+          {
+            "type": "barrier",
+            "percent": 4,
+            "every": 5,
+            "name": "곁불의 열기"
+          }
+        ]
+      },
+      "천붕": {
+        "text": "(위소경의 단전께에서 이따금 검은 연기가 실처럼 샌다. 천마가 숨겨 넣은 불, 잠화를 품었다. 그 불이 맞선 자의 맥을 태운다.)",
+        "quirks": [
+          {
+            "type": "bloodthirst",
+            "percent": 12,
+            "name": "혈계"
+          },
+          {
+            "type": "sever",
+            "percent": 25,
+            "name": "숨은 불"
+          }
+        ]
+      }
+    }
+  },
+  "외전_육청": {
+    "name": "매화검수 수좌 육청",
+    "tier": "난적",
+    "realm": "초절정",
+    "hp": 14200,
+    "attack": 234,
+    "exp_reward": 2,
+    "silver": [
+      0,
+      0
+    ],
+    "level": 49,
+    "hp_style": 0.8,
+    "attack_style": 0.85,
+    "chapters": [],
+    "weight": 0,
+    "named": true,
+    "armor": 18,
+    "title": "화산 매화검수의 수좌",
+    "desc": "화산 매화검수의 수좌. 처음부터 서신을 의심했다. 검이 스물네 번 매화를 피운다.",
+    "intro": "\"말이 아니라 매화로 보여라.\"",
+    "outro": "육청이 검을 거두었다. \"미안하다.\"",
+    "spar_outro": "육청이 검을 내리며 고개를 숙였다. \"장문인께 그리 아뢰마.\"",
+    "specials": [
+      {
+        "name": "이십사매",
+        "every": 3,
+        "mult": 2.05,
+        "accuracy": 10
+      },
+      {
+        "name": "수좌의 검",
+        "every": 5,
+        "mult": 1.6,
+        "seal": 1
+      }
+    ]
+  },
+  "외전_반여휴": {
+    "name": "천필마수 반여휴",
+    "tier": "난적",
+    "realm": "화경",
+    "hp": 18100,
+    "attack": 252,
+    "exp_reward": 2,
+    "silver": [
+      49,
+      70
+    ],
+    "armor": 22,
+    "level": 73,
+    "hp_style": 1.12,
+    "attack_style": 1.0,
+    "chapters": [],
+    "weight": 0,
+    "named": true,
+    "title": "신교 서각의 장로",
+    "desc": "신교의 장로. 남의 글씨를 흉내 내어 정파의 문파들이 서로를, 그리고 제 제자를 의심하게 만든다. 붓대 속에 가는 검을 숨겼다.",
+    "intro": "\"사람은 반만 믿으면 금방 무너진다.\"",
+    "outro": "반여휴가 붓을 떨어뜨렸다. \"반듯한 글씨였는데.\"",
+    "specials": [
+      {
+        "name": "천필",
+        "every": 3,
+        "mult": 2.1,
+        "accuracy": 15
+      },
+      {
+        "name": "꾸민 서신",
+        "every": 5,
+        "mult": 1.5,
+        "seal": 1
+      }
+    ],
+    "phases": [
+      {
+        "hp_pct": 50,
+        "attack_mult": 1.2,
+        "text": "반여휴의 검끝이 허공에 글자를 쓴다. 쓰인 글자마다 검기가 남는다. 정파 열 문파의 글씨를 흉내 낸 손이다.",
+        "specials": [
+          {
+            "name": "천필",
+            "every": 3,
+            "mult": 2.1,
+            "accuracy": 15
+          },
+          {
+            "name": "마지막 획",
+            "every": 4,
+            "mult": 2.75,
+            "accuracy": 20,
+            "break_pct": 5
+          }
+        ]
+      }
+    ],
+    "deep_quirks": {
+      "혈풍": {
+        "text": "(반여휴의 손바닥에 붉은 인이 박혀 있다. 혈교와 피의 계를 맺었다.)",
+        "quirks": [
+          {
+            "type": "bloodthirst",
+            "percent": 15,
+            "name": "혈계"
+          }
+        ]
+      },
+      "겁화": {
+        "text": "(반여휴의 정수리에 검은 불길의 흉터가 있다. 신교 장로의 곁불을 받았다.)",
+        "quirks": [
+          {
+            "type": "bloodthirst",
+            "percent": 15,
+            "name": "혈계"
+          },
+          {
+            "type": "barrier",
+            "percent": 4,
+            "every": 5,
+            "name": "곁불의 열기"
+          }
+        ]
+      },
+      "천붕": {
+        "text": "(반여휴의 단전께에서 이따금 검은 연기가 실처럼 샌다. 천마가 숨겨 넣은 불, 잠화를 품었다. 그 불이 맞선 자의 맥을 태운다.)",
+        "quirks": [
+          {
+            "type": "bloodthirst",
+            "percent": 12,
+            "name": "혈계"
+          },
+          {
+            "type": "sever",
+            "percent": 25,
+            "name": "숨은 불"
+          }
+        ]
+      }
+    }
+  },
+  "외전_당한": {
+    "name": "독룡수 당한",
+    "tier": "난적",
+    "realm": "초절정",
+    "hp": 14100,
+    "attack": 232,
+    "exp_reward": 2,
+    "silver": [
+      35,
+      56
+    ],
+    "level": 49,
+    "hp_style": 1.1,
+    "attack_style": 1.04,
+    "chapters": [],
+    "weight": 0,
+    "named": true,
+    "armor": 16,
+    "title": "사천당가 장로",
+    "desc": "사천당가의 장로. 소매를 털면 독안개가 일어난다. 신부를 다시 청성에 보내기 전에 청성의 사람을 시험하러 왔다.",
+    "intro": "\"당가의 독을 받아 보시오.\"",
+    "outro": "당한이 소매를 거두었다. \"독을 흩는구려.\"",
+    "spar_outro": "당한이 해독단을 내밀며 웃었다. \"가주께 그리 아뢰겠소.\"",
+    "specials": [
+      {
+        "name": "독룡무",
+        "every": 3,
+        "mult": 2.0,
+        "accuracy": 10
+      },
+      {
+        "name": "소매의 독안개",
+        "every": 5,
+        "mult": 1.6,
+        "seal": 1
+      }
+    ]
+  },
+  "외전_연비": {
+    "name": "홍사객 연비",
+    "tier": "난적",
+    "realm": "화경",
+    "hp": 18000,
+    "attack": 253,
+    "exp_reward": 2,
+    "silver": [
+      49,
+      70
+    ],
+    "armor": 22,
+    "level": 73,
+    "hp_style": 1.12,
+    "attack_style": 1.0,
+    "chapters": [],
+    "weight": 0,
+    "named": true,
+    "title": "신교 암혼대주",
+    "desc": "신교 암혼대의 대주. 혼례와 장례에 숨어들어 정파의 문파들을 서로 의심하게 만든다. 손에 감은 붉은 실이 칼보다 깊게 벤다.",
+    "intro": "\"오늘은 둘 다 데려가겠다.\"",
+    "outro": "연비가 붉은 실을 놓았다. \"호위가... 실보다 질기구나.\"",
+    "specials": [
+      {
+        "name": "홍사",
+        "every": 3,
+        "mult": 2.1,
+        "accuracy": 15
+      },
+      {
+        "name": "혼례장의 거미줄",
+        "every": 5,
+        "mult": 1.5,
+        "seal": 1
+      }
+    ],
+    "phases": [
+      {
+        "hp_pct": 50,
+        "attack_mult": 1.2,
+        "text": "붉은 실이 혼례장 기둥마다 감긴다. 정파 열 문파의 혼례와 장례를 깨뜨린 손이다.",
+        "specials": [
+          {
+            "name": "홍사",
+            "every": 3,
+            "mult": 2.1,
+            "accuracy": 15
+          },
+          {
+            "name": "끊어지지 않는 실",
+            "every": 4,
+            "mult": 2.75,
+            "accuracy": 20,
+            "break_pct": 5
+          }
+        ]
+      }
+    ],
+    "deep_quirks": {
+      "혈풍": {
+        "text": "(연비의 손바닥에 붉은 인이 박혀 있다. 혈교와 피의 계를 맺었다.)",
+        "quirks": [
+          {
+            "type": "bloodthirst",
+            "percent": 15,
+            "name": "혈계"
+          }
+        ]
+      },
+      "겁화": {
+        "text": "(연비의 정수리에 검은 불길의 흉터가 있다. 신교 장로의 곁불을 받았다.)",
+        "quirks": [
+          {
+            "type": "bloodthirst",
+            "percent": 15,
+            "name": "혈계"
+          },
+          {
+            "type": "barrier",
+            "percent": 4,
+            "every": 5,
+            "name": "곁불의 열기"
+          }
+        ]
+      },
+      "천붕": {
+        "text": "(연비의 단전께에서 이따금 검은 연기가 실처럼 샌다. 천마가 숨겨 넣은 불, 잠화를 품었다. 그 불이 맞선 자의 맥을 태운다.)",
+        "quirks": [
+          {
+            "type": "bloodthirst",
+            "percent": 12,
+            "name": "혈계"
+          },
+          {
+            "type": "sever",
+            "percent": 25,
+            "name": "숨은 불"
+          }
+        ]
+      }
+    }
+  },
+  "외전_하문겸": {
+    "name": "직검 하문겸",
+    "tier": "난적",
+    "realm": "초절정",
+    "hp": 14400,
+    "attack": 235,
+    "exp_reward": 2,
+    "silver": [
+      0,
+      0
+    ],
+    "level": 37,
+    "hp_style": 0.93,
+    "attack_style": 0.85,
+    "chapters": [],
+    "weight": 0,
+    "named": true,
+    "armor": 18,
+    "title": "종남 장문인",
+    "desc": "종남의 장문인. 흉년에 산 아래 마을을 먹이려 사도련에 빚을 졌다. 검이 굽지 않고 곧게만 나간다.",
+    "intro": "\"종남의 검 앞에 서 보지 않은 주먹을 보낼 수는 없다.\"",
+    "outro": "하문겸이 검을 거두었다. \"주먹이 검이 되었구나.\"",
+    "spar_outro": "하문겸이 웃으며 검을 내렸다. \"결산회에는 네가 가라.\"",
+    "specials": [
+      {
+        "name": "직검",
+        "every": 3,
+        "mult": 2.05,
+        "accuracy": 10
+      },
+      {
+        "name": "곧은 길",
+        "every": 5,
+        "mult": 1.6,
+        "seal": 1
+      }
+    ]
   }
 }
