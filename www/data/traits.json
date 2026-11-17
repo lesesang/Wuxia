@@ -1296,24 +1296,6 @@
     "origin": "혈지생환",
     "reacts": true
   },
-  "귀동냥": {
-    "name": "귀동냥",
-    "desc": "기연을 만날 확률이 1할 5푼 오르고 장터에 물건이 2개 더 진열된다. 찻집 구석에 앉으면 소문 길이 들린다.",
-    "rarity": "희귀",
-    "cost": 7,
-    "effects": [
-      {
-        "type": "fortune_rate",
-        "percent": 15
-      },
-      {
-        "type": "extra_stock",
-        "amount": 2
-      }
-    ],
-    "origin": "하오문",
-    "reacts": true
-  },
   "외상장부": {
     "name": "외상 장부",
     "desc": "장터 가격이 1할 싸고 얻는 은자가 1할 늘어난다. 거래와 비밀이 얽힌 사건에서 값을 먼저 안다.",
@@ -1327,6 +1309,24 @@
       {
         "type": "silver_rate",
         "percent": 10
+      }
+    ],
+    "origin": "하오문",
+    "reacts": true
+  },
+  "귀동냥": {
+    "name": "귀동냥",
+    "desc": "기연을 만날 확률이 1할 5푼 오르고 장터에 물건이 2개 더 진열된다. 찻집 구석에 앉으면 소문 길이 들린다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "fortune_rate",
+        "percent": 15
+      },
+      {
+        "type": "extra_stock",
+        "amount": 2
       }
     ],
     "origin": "하오문",
@@ -2012,7 +2012,7 @@
     "origin": "외전청성"
   },
   "외당의주먹": {
-    "name": "외당의 주먹",
+    "name": "외당의 검",
     "desc": "주는 피해가 3푼 늘고 받는 피해가 2푼 줄어든다. 맞서는 일에서 굽지 않는다.",
     "rarity": "희귀",
     "cost": 7,
@@ -2283,6 +2283,41 @@
       }
     ],
     "origin": "외전위소"
+  },
+  "천리발": {
+    "name": "천 리 발",
+    "desc": "매달 체력과 내력이 4푼씩 더 차고 달아날 확률이 2할 오른다. 길을 걷는 일에서 발이 먼저 길을 안다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "turn_regen",
+        "hp_pct": 4,
+        "qi_pct": 4
+      },
+      {
+        "type": "flee_rate",
+        "percent": 20
+      }
+    ],
+    "origin": "외전개방"
+  },
+  "다리밑귀": {
+    "name": "다리 밑의 귀",
+    "desc": "얻는 은자가 1할 늘고 장터의 값이 5푼 싸다. 소문이 오가는 일에서 먼저 듣는다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "silver_rate",
+        "percent": 10
+      },
+      {
+        "type": "market_discount",
+        "percent": 5
+      }
+    ],
+    "origin": "외전개방"
   },
   "불굴": {
     "name": "불사지체",

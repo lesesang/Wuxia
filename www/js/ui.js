@@ -458,7 +458,7 @@ function shopPanels(meta) {
   // 외전의 출신은 문파와 세가의 것과 그 밖의 것으로 나누어 보인다
   const sideRow = (k) => shopRow(esc(DB.origins.origins[k].name), originDetail(k), "unlock-origin", k, DB.origins.origins[k].cost, meta, "해금", !sideOpen(meta));
   const lockedSides = DB.origins.side_order.filter((k) => !meta.unlocked_origins.includes(k));
-  const isSchool = (k) => DB.sects[DB.origins.origins[k].sect]?.school || ["소림", "무당", "화산", "아미", "곤륜", "종남", "점창", "청성", "공동", "당가", "모용", "제갈"].includes(originSect(k));
+  const isSchool = (k) => DB.sects[DB.origins.origins[k].sect]?.school || ["소림", "무당", "화산", "아미", "곤륜", "종남", "점창", "청성", "공동", "개방", "당가", "모용", "제갈"].includes(originSect(k));
   const schoolRows = lockedSides.filter(isSchool).map(sideRow).join("");
   const otherRows = lockedSides.filter((k) => !isSchool(k)).map(sideRow).join("");
   const sideRows = (schoolRows ? `<h4 class="shop-group">구파일방과 세가</h4>${schoolRows}` : "") + (otherRows ? `<h4 class="shop-group">강호의 다른 자리</h4>${otherRows}` : "");

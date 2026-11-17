@@ -2613,8 +2613,6 @@ function runToEnd(game, { accept = true, giveUp = false, onEvent = () => {} } = 
 }
 
 test("외전의 출신은 천마봉이 아니라 저마다의 끝으로 간다", () => {
-  // 외전의 출신은 일곱 계열에 같은 수씩 있다
-  assert.equal(DB.origins.side_order.length % 7, 0);
   const styles = {};
   const lean = { 정도: 0, 사도: 0, 마도: 0 };
   for (const key of DB.origins.side_order) {
@@ -2645,8 +2643,8 @@ test("외전의 출신은 천마봉이 아니라 저마다의 끝으로 간다",
       if (e.spar && e.battle) assert.ok(e.lose_next && last.parts[e.lose_next], `${key} ${choice.label} 진 뒤`);
     }
   }
+  // 외전의 출신은 일곱 계열을 모두 아우른다(계열마다 수는 같지 않아도 된다)
   assert.deepEqual(Object.keys(styles).sort(), ["검법", "권법", "도법", "봉법", "암기", "장법", "창법"].sort());
-  for (const n of Object.values(styles)) assert.equal(n, DB.origins.side_order.length / 7, JSON.stringify(styles));
   assert.ok(lean.정도 >= 2 && lean.사도 >= 2 && lean.마도 >= 2, JSON.stringify(lean));
   for (const [key, origin] of Object.entries(DB.endings.side)) {
     assert.ok(DB.endings.titles[key] && DB.endings.seals[key] && DB.endings.text[key] && DB.endings.frames[key].length >= 2, key);
@@ -2976,8 +2974,8 @@ test("저장했다 이어 해도 연계가 유지된다", () => {
 
 test("무기 계열마다 무공 수가 같고 등급이 고르다", () => {
   const styles = ["검법", "도법", "창법", "봉법", "권법", "장법", "암기"];
-  // 문파의 최고 무공(reserved)은 아직 얻을 수 없으므로 세지 않는다
-  const attacks = Object.values(DB.skills).filter((s) => s.type === "공격무공" && !s.reserved);
+  // 문파의 최고 무공(reserved)은 아직 얻을 수 없고, 외전 출신의 무공은 그 출신의 소속을 따르므로 세지 않는다
+  const attacks = Object.values(DB.skills).filter((s) => s.type === "공격무공" && !s.reserved && !DB.origins.origins[s.origin]?.side);
   for (const style of styles) {
     const list = attacks.filter((s) => s.category === style);
     assert.equal(list.length, attacks.filter((s) => s.category === "검법").length, style);

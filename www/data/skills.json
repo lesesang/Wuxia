@@ -8568,34 +8568,6 @@
       "text": "다 피하지 못해도 위력을 7할 줄인다, 다 피하면 쓴 내력의 절반을 되찾는다, 다 피하면 잔상이 남아 다음 합에 1할 5푼 확률로 몸이 먼저 움직인다."
     }
   },
-  "직심권": {
-    "name": "직심권",
-    "type": "공격무공",
-    "category": "권법",
-    "grade": "상승",
-    "base_multiplier": 1.5,
-    "qi_cost": 9,
-    "desc": "종남의 곧은 검을 주먹으로 옮긴 외당의 권. 굽지 않고 곧게만 나간다. 곧은 만큼 막기 어렵다.",
-    "forms": [
-      "직심",
-      "정권",
-      "관통"
-    ],
-    "secret_technique": {
-      "name": "직심일권",
-      "unlock_grade": "상승",
-      "unlock_mastery": 60,
-      "multiplier": 2.4,
-      "qi_cost": 50
-    },
-    "origin": "외전종남",
-    "gimmick": {
-      "pierce": 35,
-      "opening": 25,
-      "name": "곧은 주먹",
-      "text": "방어 3할 5푼 무시, 첫 합 위력 +2할 5푼."
-    }
-  },
   "곡우심법": {
     "name": "곡우심법",
     "type": "심공",
@@ -8640,35 +8612,6 @@
       "step_heal": 2,
       "name": "앞으로 비키기",
       "text": "다 피하면 곧바로 위력 3할로 되받아친다, 다 피하면 체력 2푼 회복."
-    }
-  },
-  "태을직권": {
-    "name": "태을직권",
-    "category": "권법",
-    "type": "공격무공",
-    "grade": "신공",
-    "base_multiplier": 2.2,
-    "qi_cost": 16,
-    "desc": "종남의 태을검을 처음으로 주먹에 옮긴 외당의 끝. 곧게 나가 막는 것을 다 꿰뚫고 뒤에 선 것까지 친다.",
-    "forms": [
-      "태을",
-      "직권",
-      "관산"
-    ],
-    "secret_technique": {
-      "name": "태을관산",
-      "unlock_grade": "신공",
-      "unlock_mastery": 40,
-      "multiplier": 3.0,
-      "qi_cost": 80
-    },
-    "origin": "외전종남",
-    "gimmick": {
-      "pierce": 70,
-      "power": 15,
-      "heavy": 20,
-      "name": "산을 꿰뚫는 주먹",
-      "text": "방어 7할 무시, 위력 +1할 5푼, 적의 체력이 7할 넘게 남았으면 위력 +2할."
     }
   },
   "직도귀원공": {
@@ -9179,34 +9122,6 @@
       "text": "다 피하면 다음 공격은 반드시 회심, 경공을 쓰지 않아도 1할 확률로 저절로 공격을 피한다, 다 피하면 곧바로 위력 5할로 되받아친다."
     }
   },
-  "설봉장": {
-    "name": "설봉장",
-    "type": "공격무공",
-    "category": "장법",
-    "grade": "상승",
-    "base_multiplier": 1.5,
-    "qi_cost": 9,
-    "desc": "곤륜의 설산 외문에서 내려오는 장. 눈사태처럼 무겁게 밀려와 막는 손을 얼린다.",
-    "forms": [
-      "설봉",
-      "눈사태",
-      "빙하"
-    ],
-    "secret_technique": {
-      "name": "설봉일장",
-      "unlock_grade": "상승",
-      "unlock_mastery": 60,
-      "multiplier": 2.4,
-      "qi_cost": 50
-    },
-    "origin": "외전곤륜",
-    "gimmick": {
-      "frost": 3,
-      "heavy": 25,
-      "name": "눈사태",
-      "text": "맞힐 때마다 한기가 스며 세 번 쌓이면 적이 한 합 얼어붙는다, 적의 체력이 7할 넘게 남았으면 위력 +2할 5푼."
-    }
-  },
   "설산심법": {
     "name": "설산심법",
     "type": "심공",
@@ -9248,35 +9163,6 @@
       "auto_evade": 5,
       "name": "얕은 발자국",
       "text": "다 피하지 못해도 위력을 5할 5푼 줄인다, 경공을 쓰지 않아도 5푼 확률로 저절로 공격을 피한다."
-    }
-  },
-  "만년설붕장": {
-    "name": "만년설붕장",
-    "category": "장법",
-    "type": "공격무공",
-    "grade": "신공",
-    "base_multiplier": 2.2,
-    "qi_cost": 16,
-    "desc": "곤륜 설산 외문의 끝. 만년 묵은 눈이 한꺼번에 무너지듯 손바닥이 쏟아진다. 막은 자는 눈 속에 묻힌 것처럼 움직이지 못한다.",
-    "forms": [
-      "설붕",
-      "만년",
-      "빙하천리"
-    ],
-    "secret_technique": {
-      "name": "만년설붕",
-      "unlock_grade": "신공",
-      "unlock_mastery": 40,
-      "multiplier": 3.0,
-      "qi_cost": 80
-    },
-    "origin": "외전곤륜",
-    "gimmick": {
-      "frost": 2,
-      "heavy": 40,
-      "guard": 15,
-      "name": "무너지는 만년설",
-      "text": "맞힐 때마다 한기가 스며 두 번 쌓이면 적이 한 합 얼어붙는다, 적의 체력이 7할 넘게 남았으면 위력 +4할, 맞힌 합에 받는 피해 -1할 5푼."
     }
   },
   "현기귀원공": {
@@ -9788,6 +9674,284 @@
       "next_power": 20,
       "name": "성난 파도",
       "text": "다 피할 때마다 이 싸움의 위력이 6푼씩 오른다(3할까지), 다 피하면 곧바로 위력 5할로 되받아친다, 다 피하면 다음 공격 위력이 2할 오른다."
+    }
+  },
+  "직심검": {
+    "name": "직심검",
+    "type": "공격무공",
+    "category": "검법",
+    "grade": "상승",
+    "base_multiplier": 1.5,
+    "qi_cost": 9,
+    "desc": "종남의 곧은 검을 외당의 무딘 날로 옮긴 검. 굽지 않고 곧게만 나간다. 곧은 만큼 막기 어렵다.",
+    "forms": [
+      "직심",
+      "정검",
+      "관통"
+    ],
+    "secret_technique": {
+      "name": "직심일검",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    },
+    "origin": "외전종남",
+    "gimmick": {
+      "pierce": 35,
+      "opening": 25,
+      "name": "곧은 날",
+      "text": "방어 3할 5푼 무시, 첫 합 위력 +2할 5푼."
+    }
+  },
+  "태을직검": {
+    "name": "태을직검",
+    "category": "검법",
+    "type": "공격무공",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "종남의 태을검을 처음으로 외당의 무딘 검에 옮긴 외당의 끝. 곧게 나가 막는 것을 다 꿰뚫고 뒤에 선 것까지 친다.",
+    "forms": [
+      "태을",
+      "직검",
+      "관산"
+    ],
+    "secret_technique": {
+      "name": "태을관산",
+      "unlock_grade": "신공",
+      "unlock_mastery": 40,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "origin": "외전종남",
+    "gimmick": {
+      "pierce": 70,
+      "power": 15,
+      "heavy": 20,
+      "name": "산을 꿰뚫는 검",
+      "text": "방어 7할 무시, 위력 +1할 5푼, 적의 체력이 7할 넘게 남았으면 위력 +2할."
+    }
+  },
+  "설봉검": {
+    "name": "설봉검",
+    "type": "공격무공",
+    "category": "검법",
+    "grade": "상승",
+    "base_multiplier": 1.5,
+    "qi_cost": 9,
+    "desc": "곤륜의 설산 외문에서 내려오는 검. 눈사태처럼 무겁게 밀려와 막는 칼을 얼린다.",
+    "forms": [
+      "설봉",
+      "눈사태",
+      "빙하"
+    ],
+    "secret_technique": {
+      "name": "설봉일검",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    },
+    "origin": "외전곤륜",
+    "gimmick": {
+      "frost": 3,
+      "heavy": 25,
+      "name": "눈사태",
+      "text": "맞힐 때마다 한기가 스며 세 번 쌓이면 적이 한 합 얼어붙는다, 적의 체력이 7할 넘게 남았으면 위력 +2할 5푼."
+    }
+  },
+  "만년설붕검": {
+    "name": "만년설붕검",
+    "category": "검법",
+    "type": "공격무공",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "곤륜 설산 외문의 끝. 만년 묵은 눈이 한꺼번에 무너지듯 검이 쏟아진다. 막은 자는 눈 속에 묻힌 것처럼 움직이지 못한다.",
+    "forms": [
+      "설붕",
+      "만년",
+      "빙하천리"
+    ],
+    "secret_technique": {
+      "name": "만년설붕",
+      "unlock_grade": "신공",
+      "unlock_mastery": 40,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "origin": "외전곤륜",
+    "gimmick": {
+      "frost": 2,
+      "heavy": 40,
+      "guard": 15,
+      "name": "무너지는 만년설",
+      "text": "맞힐 때마다 한기가 스며 두 번 쌓이면 적이 한 합 얼어붙는다, 적의 체력이 7할 넘게 남았으면 위력 +4할, 맞힌 합에 받는 피해 -1할 5푼."
+    }
+  },
+  "소식봉법": {
+    "name": "소식봉법",
+    "type": "공격무공",
+    "category": "봉법",
+    "grade": "상승",
+    "base_multiplier": 1.5,
+    "qi_cost": 9,
+    "desc": "소식길의 거지들이 다리에서 다리로 걸으며 익히는 봉. 길의 개를 쫓던 봉이 일류의 손에서는 길을 막는 자를 쫓는다. 짧게 여러 번 치고 빠진다.",
+    "forms": [
+      "타견",
+      "보로",
+      "회전"
+    ],
+    "secret_technique": {
+      "name": "천리일봉",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    },
+    "origin": "외전개방",
+    "gimmick": {
+      "hits": 2,
+      "hit_rate": 0.6,
+      "weaken": {
+        "percent": 8,
+        "rounds": 2
+      },
+      "name": "길 막는 개 쫓기",
+      "text": "2번 나눠 치며(한 번마다 위력 6할) 번번이 명중과 회심을 따로 가린다, 맞히면 2합 동안 적 위력 -8푼."
+    }
+  },
+  "노숙심법": {
+    "name": "노숙심법",
+    "type": "심공",
+    "category": "심공",
+    "grade": "명품",
+    "base_multiplier": 1.0,
+    "qi_cost": 0,
+    "desc": "다리 밑에서 잠들며 익힌 숨. 찬 바람과 굶주림 속에서도 숨이 끊기지 않는다.",
+    "effect": {
+      "heal_hp_pct": 16,
+      "heal_qi_pct": 18,
+      "atk_buff_pct": 5,
+      "buff_rounds": 2
+    },
+    "origin": "외전개방",
+    "gimmick": {
+      "cleanse": 1,
+      "regen_qi": {
+        "percent": 4,
+        "rounds": 2
+      },
+      "injury": 20,
+      "name": "다리 밑의 숨",
+      "text": "독이 한 합을 넘기지 못한다. 합마다 내력 2푼이 저절로 찬다. 내상을 입힐 일격을 2할 확률로 다잡는다."
+    }
+  },
+  "골목보": {
+    "name": "골목보",
+    "type": "경공",
+    "category": "경공",
+    "grade": "명품",
+    "base_multiplier": 1,
+    "qi_cost": 6,
+    "desc": "장터 골목을 누비는 거지의 걸음. 사람 틈으로 빠지며 쥐어박힐 자리를 먼저 비킨다.",
+    "effect": {
+      "evade": 68,
+      "counter_pct": 85,
+      "flee_bonus": 30
+    },
+    "origin": "외전개방",
+    "gimmick": {
+      "auto_evade": 5,
+      "step_heal": 2,
+      "next_power": 10,
+      "name": "사람 틈",
+      "text": "경공을 쓰지 않아도 5푼 확률로 저절로 공격을 피한다, 다 피하면 체력 2푼 회복, 다 피하면 다음 공격 위력이 1할 오른다."
+    }
+  },
+  "천리전성봉": {
+    "name": "천리전성봉",
+    "category": "봉법",
+    "type": "공격무공",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "다리에서 다리로 소리를 전하던 개방의 옛 봉. 봉이 바람을 가르는 소리가 다음 다리까지 들린다는 말이 있다. 잇달아 치며 맞을 때마다 상대의 손을 무디게 하고 이따금 손을 묶는다.",
+    "forms": [
+      "전성",
+      "천리",
+      "만교"
+    ],
+    "secret_technique": {
+      "name": "천리전성",
+      "unlock_grade": "신공",
+      "unlock_mastery": 40,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "origin": "외전개방",
+    "gimmick": {
+      "hits": 3,
+      "hit_rate": 0.5,
+      "weaken": {
+        "percent": 10,
+        "rounds": 2
+      },
+      "stun": 12,
+      "name": "다리를 잇는 소리",
+      "text": "3번 나눠 치며(한 번마다 위력 5할) 번번이 명중과 회심을 따로 가린다, 맞히면 2합 동안 적 위력 -1할, 맞히면 1할 2푼 확률로 적이 다음 합에 손을 쓰지 못한다."
+    }
+  },
+  "백가귀원공": {
+    "name": "백가귀원공",
+    "type": "심공",
+    "category": "심공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 0,
+    "desc": "백 집의 밥을 얻어먹으며 고른 숨. 남의 밥으로 사는 몸이라 무엇을 먹어도 탈이 나지 않고, 굶어도 숨이 끊기지 않는다.",
+    "effect": {
+      "heal_hp_pct": 30,
+      "heal_qi_pct": 40,
+      "atk_buff_pct": 15,
+      "buff_rounds": 3
+    },
+    "origin": "외전개방",
+    "gimmick": {
+      "cleanse": 1,
+      "regen_qi": {
+        "percent": 8,
+        "rounds": 3
+      },
+      "second_wind": {
+        "below": 30,
+        "percent": 15
+      },
+      "name": "백 집의 밥",
+      "text": "독이 한 합을 넘기지 못한다. 합마다 내력 4푼이 저절로 찬다. 체력이 3할 아래로 떨어지면 한 싸움에 한 번 숨이 트여 체력 1할 5푼을 채운다."
+    }
+  },
+  "천리전령보": {
+    "name": "천리전령보",
+    "type": "경공",
+    "category": "경공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 10,
+    "desc": "소식을 품고 사흘 밤낮을 달린 거지들의 걸음. 지친 발이 오히려 가볍다.",
+    "effect": {
+      "evade": 88,
+      "counter_pct": 170,
+      "flee_bonus": 50
+    },
+    "origin": "외전개방",
+    "gimmick": {
+      "auto_evade": 10,
+      "step_heal": 3,
+      "next_crit": 20,
+      "name": "사흘 밤낮",
+      "text": "경공을 쓰지 않아도 1할 확률로 저절로 공격을 피한다, 다 피하면 체력 3푼 회복, 다 피하면 다음 공격의 회심 확률이 2할 오른다."
     }
   }
 }
