@@ -12107,5 +12107,339 @@
         ]
       }
     }
+  },
+  "외전_모용백": {
+    "name": "모용백",
+    "tier": "난적",
+    "realm": "초절정",
+    "hp": 14300,
+    "attack": 233,
+    "exp_reward": 2,
+    "silver": [
+      0,
+      0
+    ],
+    "level": 37,
+    "hp_style": 0.93,
+    "attack_style": 0.85,
+    "chapters": [],
+    "weight": 0,
+    "named": true,
+    "armor": 18,
+    "title": "모용세가 종손 어른",
+    "desc": "모용세가의 족보를 붓으로 적는 종손 어른. 붓을 들기 전에 창을 든다. 늙은 창이 상대의 창을 감아 들인다.",
+    "intro": "\"내 창을 이기면 붓을 들겠다.\"",
+    "outro": "모용백이 창을 거두었다. \"백 년 만이구나.\"",
+    "spar_outro": "모용백이 웃으며 붓을 꺼냈다. \"창을 들고 오면 적겠다.\"",
+    "specials": [
+      {
+        "name": "감는 창",
+        "every": 3,
+        "mult": 2.0,
+        "accuracy": 10
+      },
+      {
+        "name": "족보의 붓",
+        "every": 5,
+        "mult": 1.6,
+        "seal": 1
+      }
+    ]
+  },
+  "외전_나곤": {
+    "name": "장백설창 나곤",
+    "tier": "강적",
+    "realm": "화경",
+    "hp": 18700,
+    "attack": 251,
+    "exp_reward": 3,
+    "silver": [
+      63,
+      91
+    ],
+    "armor": 24,
+    "level": 97,
+    "hp_style": 1.366,
+    "attack_style": 1.19,
+    "chapters": [],
+    "weight": 0,
+    "named": true,
+    "title": "연운창을 지킨 늙은 창객",
+    "desc": "백 년 전 모용운이 살린 아이의 손자. 장백의 눈 속에서 연운창을 지키며 이긴 자에게만 넘기라는 할아비의 말을 지킨다.",
+    "intro": "\"할아비의 말이다. 이긴 자에게만 넘긴다.\"",
+    "outro": "나곤이 창을 내렸다. \"되었다.\"",
+    "spar_outro": "나곤이 눈을 털며 웃었다. \"백 년을 기다린 보람이 있구나.\"",
+    "specials": [
+      {
+        "name": "설창",
+        "every": 3,
+        "mult": 2.15
+      },
+      {
+        "name": "눈사태",
+        "every": 5,
+        "mult": 1.5,
+        "accuracy": 15
+      }
+    ],
+    "phases": [
+      {
+        "hp_pct": 50,
+        "attack_mult": 1.2,
+        "text": "눈보라가 거세진다. 나곤의 창이 눈 속에 숨는다. 백 년 동안 이 눈 속에서 창을 지킨 집안의 창이다.",
+        "specials": [
+          {
+            "name": "설창",
+            "every": 3,
+            "mult": 2.15
+          },
+          {
+            "name": "장백의 눈",
+            "every": 4,
+            "mult": 2.75,
+            "accuracy": 20,
+            "break_pct": 5
+          }
+        ]
+      }
+    ]
+  },
+  "외전_마철": {
+    "name": "쌍구도 마철",
+    "tier": "난적",
+    "realm": "초절정",
+    "hp": 14000,
+    "attack": 234,
+    "exp_reward": 3,
+    "silver": [
+      100,
+      150
+    ],
+    "level": 88,
+    "hp_style": 1.0,
+    "attack_style": 1.0,
+    "chapters": [],
+    "weight": 0,
+    "named": true,
+    "armor": 16,
+    "title": "사도련 추심당 둘째 칼",
+    "desc": "추심당에서 열 해 동안 장부를 받아 온 둘째 칼. 두 자루 갈고리 칼로 상대의 칼을 걸어 꺾는다. 누이의 몸값을 갚으려 칼을 잡았다.",
+    "intro": "\"칼로 정하자. 죽이지는 않겠다.\"",
+    "outro": "마철이 칼을 거두었다. \"막내가 이겼다.\"",
+    "spar_outro": "마철이 갈고리 칼을 내리며 웃었다. \"결산회에 네 이름을 올려라.\"",
+    "specials": [
+      {
+        "name": "쌍구",
+        "every": 3,
+        "mult": 2.0,
+        "accuracy": 10
+      },
+      {
+        "name": "칼 걸기",
+        "every": 5,
+        "mult": 1.6,
+        "seal": 1
+      }
+    ]
+  },
+  "외전_사마주": {
+    "name": "철산판 사마주",
+    "tier": "강적",
+    "realm": "화경",
+    "hp": 18300,
+    "attack": 253,
+    "exp_reward": 3,
+    "silver": [
+      63,
+      91
+    ],
+    "armor": 24,
+    "level": 97,
+    "hp_style": 1.366,
+    "attack_style": 1.19,
+    "chapters": [],
+    "weight": 0,
+    "named": true,
+    "title": "사도련 련주의 장부 호법",
+    "desc": "련주 공손야의 장부를 지키는 호법. 쇠로 만든 주판을 병기로 쓴다. 장부에 손을 대려는 자의 칼을 주판알로 튕겨 낸다.",
+    "intro": "\"장부의 호법을 넘는 자만 장부에 손을 댄다.\"",
+    "outro": "사마주가 주판을 내려놓았다. \"셈이 맞는구나.\"",
+    "specials": [
+      {
+        "name": "철주판",
+        "every": 3,
+        "mult": 2.1,
+        "accuracy": 10
+      },
+      {
+        "name": "결산",
+        "every": 5,
+        "mult": 1.5,
+        "qi_drain": 12
+      }
+    ],
+    "phases": [
+      {
+        "hp_pct": 50,
+        "attack_mult": 1.2,
+        "text": "사마주의 주판알이 스스로 튕긴다. 사도련의 이십 년 장부를 지킨 손이다.",
+        "specials": [
+          {
+            "name": "철주판",
+            "every": 3,
+            "mult": 2.1,
+            "accuracy": 10
+          },
+          {
+            "name": "이십 년의 셈",
+            "every": 4,
+            "mult": 2.75,
+            "accuracy": 20,
+            "break_pct": 5
+          }
+        ]
+      }
+    ],
+    "deep_quirks": {
+      "혈풍": {
+        "text": "(사마주의 손바닥에 붉은 인이 박혀 있다. 혈교와 피의 계를 맺었다.)",
+        "quirks": [
+          {
+            "type": "bloodthirst",
+            "percent": 15,
+            "name": "혈계"
+          }
+        ]
+      },
+      "겁화": {
+        "text": "(사마주의 정수리에 검은 불길의 흉터가 있다. 신교 장로의 곁불을 받았다.)",
+        "quirks": [
+          {
+            "type": "bloodthirst",
+            "percent": 15,
+            "name": "혈계"
+          },
+          {
+            "type": "barrier",
+            "percent": 4,
+            "every": 5,
+            "name": "곁불의 열기"
+          }
+        ]
+      },
+      "천붕": {
+        "text": "(사마주의 단전께에서 이따금 검은 연기가 실처럼 샌다. 천마가 숨겨 넣은 불, 잠화를 품었다. 그 불이 맞선 자의 맥을 태운다.)",
+        "quirks": [
+          {
+            "type": "bloodthirst",
+            "percent": 12,
+            "name": "혈계"
+          },
+          {
+            "type": "sever",
+            "percent": 25,
+            "name": "숨은 불"
+          }
+        ]
+      }
+    }
+  },
+  "외전_제갈문": {
+    "name": "제갈문",
+    "tier": "난적",
+    "realm": "초절정",
+    "hp": 14100,
+    "attack": 233,
+    "exp_reward": 2,
+    "silver": [
+      0,
+      0
+    ],
+    "level": 37,
+    "hp_style": 0.93,
+    "attack_style": 0.85,
+    "chapters": [],
+    "weight": 0,
+    "named": true,
+    "armor": 16,
+    "title": "제갈세가 천기각주",
+    "desc": "천기각의 새 각주. 가주의 사촌이다. 방 하나를 쇠뇌로 채우고 손짓 하나로 쏜다.",
+    "intro": "\"이 방을 빠져나가면 보내 주마.\"",
+    "outro": "제갈문이 손을 거두었다. \"서자라 부르기 아깝구나.\"",
+    "spar_outro": "제갈문이 쇠뇌를 내리며 웃었다. \"가주께 그리 아뢰마.\"",
+    "specials": [
+      {
+        "name": "열두 쇠뇌",
+        "every": 3,
+        "mult": 2.0,
+        "accuracy": 15
+      },
+      {
+        "name": "기관 잠금",
+        "every": 5,
+        "mult": 1.5,
+        "seal": 1
+      }
+    ]
+  },
+  "외전_공야반": {
+    "name": "귀수 공야반",
+    "tier": "강적",
+    "realm": "화경",
+    "hp": 18000,
+    "attack": 254,
+    "exp_reward": 3,
+    "silver": [
+      63,
+      91
+    ],
+    "armor": 22,
+    "level": 97,
+    "hp_style": 1.366,
+    "attack_style": 1.19,
+    "chapters": [],
+    "weight": 0,
+    "named": true,
+    "title": "제갈세가의 옛 천기각주",
+    "desc": "천기각을 서른 해 맡았던 장인. 사람이 짐을 짊어지지 않는 날을 꿈꾸며 목우의 설계도를 세상에 풀었다. 그 설계도의 끝을 신교가 고쳤다.",
+    "intro": "\"가르친 것을 다 써서 넘어 보아라.\"",
+    "outro": "공야반이 쇠뇌를 내렸다. \"다 썼구나.\"",
+    "spar_outro": "공야반이 웃었다. \"내가 가르친 것보다 많구나.\"",
+    "specials": [
+      {
+        "name": "귀수연노",
+        "every": 3,
+        "mult": 2.1,
+        "accuracy": 15
+      },
+      {
+        "name": "굴대 덫",
+        "every": 5,
+        "mult": 1.5,
+        "seal": 1
+      }
+    ],
+    "phases": [
+      {
+        "hp_pct": 50,
+        "attack_mult": 1.2,
+        "text": "방앗간의 기둥마다 숨겨 둔 쇠뇌가 깨어난다. 서른 해 동안 천기각을 맡은 손이다.",
+        "specials": [
+          {
+            "name": "귀수연노",
+            "every": 3,
+            "mult": 2.1,
+            "accuracy": 15
+          },
+          {
+            "name": "천기만발",
+            "every": 4,
+            "mult": 2.75,
+            "accuracy": 20,
+            "break_pct": 5
+          }
+        ]
+      }
+    ]
   }
 }

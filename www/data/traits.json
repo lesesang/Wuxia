@@ -1705,6 +1705,108 @@
     ],
     "origin": "외전공동"
   },
+  "담밖의창": {
+    "name": "담 밖의 창",
+    "desc": "전투의 첫 합에서 주는 피해가 2할 늘고 회심의 일격 피해가 1할 늘어난다. 얕보이는 자리에서 먼저 창을 낸다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "first_strike",
+        "percent": 20
+      },
+      {
+        "type": "crit_power",
+        "percent": 10
+      }
+    ],
+    "origin": "외전모용"
+  },
+  "세가의말씨": {
+    "name": "세가의 말씨",
+    "desc": "명성 40을 더 들고 시작하고 장터 값이 1할 싸진다. 세가의 이름을 빌려야 하는 일에서 말이 먼저 통한다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "start_fame",
+        "amount": 40
+      },
+      {
+        "type": "market_discount",
+        "percent": 10
+      }
+    ],
+    "origin": "외전모용"
+  },
+  "주판손": {
+    "name": "주판 손",
+    "desc": "얻는 은자가 1할 5푼 늘고 장터 값이 1할 싸진다. 값과 셈이 얽힌 사건에서 숫자가 먼저 보인다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "silver_rate",
+        "percent": 15
+      },
+      {
+        "type": "market_discount",
+        "percent": 10
+      }
+    ],
+    "origin": "외전사도련"
+  },
+  "빚쟁이눈": {
+    "name": "빚쟁이의 눈",
+    "desc": "전투의 첫 합에서 주는 피해가 2할 늘고 달아날 확률이 1할 5푼 오른다. 달아나는 자와 숨는 자를 먼저 알아본다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "first_strike",
+        "percent": 20
+      },
+      {
+        "type": "flee_rate",
+        "percent": 15
+      }
+    ],
+    "origin": "외전사도련"
+  },
+  "기관손": {
+    "name": "기관의 손",
+    "desc": "전투에 쓰는 도구를 5개 들고 시작하고 피할 틈이 1할 좁아진다. 기관과 장치가 얽힌 사건에서 손이 먼저 간다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "start_battle_tool",
+        "amount": 5
+      },
+      {
+        "type": "hit_bonus",
+        "percent": 10
+      }
+    ],
+    "origin": "외전제갈"
+  },
+  "서자의셈": {
+    "name": "서자의 셈",
+    "desc": "무공 성취를 1할 5푼 더 빠르게 얻고 사건에서 오르는 기량이 1할 5푼 늘어난다. 얕보이는 자리에서 먼저 읽는다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "mastery_rate",
+        "percent": 15
+      },
+      {
+        "type": "event_growth",
+        "percent": 15
+      }
+    ],
+    "origin": "외전제갈"
+  },
   "불굴": {
     "name": "불사지체",
     "desc": "전투에서 합마다 체력을 2푼(한 싸움에 3할까지), 달마다 체력을 1할 5푼 더 회복한다. 베여도 베여도 살이 차오른다.",

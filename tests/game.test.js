@@ -1034,7 +1034,8 @@ test("상황별 반응: 상태와 무공, 무기에 따라 달라진다", () => 
 });
 
 test("상황별 반응: 출신, 무공, 명성, 능력치, 시작 특성이 고르게 쓰인다", () => {
-  const events = Object.values(DB.events).filter((e) => e.kind !== "story" && e.kind !== "final" && !e.chain && !e.requires?.origin && !e.requires?.sect && !e.requires?.no_sect);
+  // 출신 이야기의 장면은 그 출신만의 일이라 세지 않는다
+  const events = Object.values(DB.events).filter((e) => e.kind !== "story" && e.kind !== "final" && !e.chain && !e.requires?.origin && !e.requires?.sect && !e.requires?.no_sect && !DB.events[e.scene_of]?.requires?.origin);
   const uses = { origin: 0, min_fame: 0, max_fame: 0, stat_min: 0, trait: 0, any_skill: 0, main_category: 0 };
   let reactive = 0;
   for (const event of events) {
@@ -2612,14 +2613,15 @@ function runToEnd(game, { accept = true, giveUp = false, onEvent = () => {} } = 
 }
 
 test("외전의 출신은 천마봉이 아니라 저마다의 끝으로 간다", () => {
-  assert.equal(DB.origins.side_order.length, 7);
-  const styles = new Set();
+  // 외전의 출신은 일곱 계열에 같은 수씩 있다
+  assert.equal(DB.origins.side_order.length % 7, 0);
+  const styles = {};
   const lean = { 정도: 0, 사도: 0, 마도: 0 };
   for (const key of DB.origins.side_order) {
     const o = DB.origins.origins[key];
     const p = new Player(key);
     assert.ok(o.side && o.locked && o.desc.includes("일류") && p.realm === "일류", key);
-    styles.add(p.bestSkill().category);
+    styles[p.bestSkill().category] = (styles[p.bestSkill().category] || 0) + 1;
     lean[p.dominantAlignment() || Object.keys(o.alignment)[0]] += 1;
     assert.equal(p.skills.filter((s) => DB.skills[s.key].origin === key).length, 3, `${key} 전용 무공과 심법과 보법`);
     assert.ok(DB.endings.side[o.fallback_ending] === key, `${key} 담담한 끝`);
@@ -2643,7 +2645,8 @@ test("외전의 출신은 천마봉이 아니라 저마다의 끝으로 간다",
       if (e.spar && e.battle) assert.ok(e.lose_next && last.parts[e.lose_next], `${key} ${choice.label} 진 뒤`);
     }
   }
-  assert.deepEqual([...styles].sort(), ["검법", "권법", "도법", "봉법", "암기", "장법", "창법"].sort());
+  assert.deepEqual(Object.keys(styles).sort(), ["검법", "권법", "도법", "봉법", "암기", "장법", "창법"].sort());
+  for (const n of Object.values(styles)) assert.equal(n, DB.origins.side_order.length / 7, JSON.stringify(styles));
   assert.ok(lean.정도 >= 2 && lean.사도 >= 2 && lean.마도 >= 2, JSON.stringify(lean));
   for (const [key, origin] of Object.entries(DB.endings.side)) {
     assert.ok(DB.endings.titles[key] && DB.endings.seals[key] && DB.endings.text[key] && DB.endings.frames[key].length >= 2, key);
@@ -2977,7 +2980,7 @@ test("무기 계열마다 무공 수가 같고 등급이 고르다", () => {
   const attacks = Object.values(DB.skills).filter((s) => s.type === "공격무공" && !s.reserved);
   for (const style of styles) {
     const list = attacks.filter((s) => s.category === style);
-    assert.equal(list.length, 21, style);
+    assert.equal(list.length, attacks.filter((s) => s.category === "검법").length, style);
     for (const [grade, min] of [["기본", 2], ["명품", 3], ["상승", 3], ["일절", 1], ["신공", 2]]) {
       assert.ok(list.filter((s) => s.grade === grade).length >= min, `${style} ${grade}`);
     }

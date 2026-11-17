@@ -7192,5 +7192,463 @@
       "name": "황사",
       "text": "다 피할 때마다 이 싸움의 위력이 6푼씩 오른다(3할까지), 다 피하면 곧바로 위력 5할로 되받아친다, 다 피하면 적이 걸음을 놓쳐 2합 동안 회피 +8."
     }
+  },
+  "비연창법": {
+    "name": "비연창법",
+    "type": "공격무공",
+    "category": "창법",
+    "grade": "상승",
+    "base_multiplier": 1.5,
+    "qi_cost": 9,
+    "desc": "모용의 창 가운데 방계가 배울 수 있는 마지막 창. 제비가 물을 차듯 창끝이 낮게 들어가 높게 빠진다.",
+    "forms": [
+      "비연",
+      "낙수",
+      "회선"
+    ],
+    "secret_technique": {
+      "name": "비연점수",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    },
+    "origin": "외전모용",
+    "gimmick": {
+      "opening": 30,
+      "crit_power": 20,
+      "name": "물 차는 제비",
+      "text": "첫 합 위력 +3할, 회심 위력 +2할."
+    }
+  },
+  "연운심법": {
+    "name": "연운심법",
+    "type": "심공",
+    "category": "심공",
+    "grade": "명품",
+    "base_multiplier": 1.0,
+    "qi_cost": 0,
+    "desc": "북방의 구름을 보며 고르는 모용의 숨. 본가의 직계는 다른 숨을 배운다. 방계의 숨은 담 밖의 바람을 닮았다.",
+    "effect": {
+      "heal_hp_pct": 12,
+      "heal_qi_pct": 20,
+      "atk_buff_pct": 10,
+      "buff_rounds": 2
+    },
+    "origin": "외전모용",
+    "gimmick": {
+      "focus": 6,
+      "regen_qi": {
+        "percent": 5,
+        "rounds": 3
+      },
+      "name": "담 밖의 바람",
+      "text": "회심 확률이 6푼 오른다. 합마다 내력 2푼이 저절로 찬다."
+    }
+  },
+  "비연보": {
+    "name": "비연보",
+    "type": "경공",
+    "category": "경공",
+    "grade": "명품",
+    "base_multiplier": 1,
+    "qi_cost": 6,
+    "desc": "제비처럼 낮게 스쳐 지나는 걸음. 창을 든 채 상대의 옆구리를 돌아 나간다.",
+    "effect": {
+      "evade": 70,
+      "counter_pct": 85,
+      "flee_bonus": 25
+    },
+    "origin": "외전모용",
+    "gimmick": {
+      "strike": 30,
+      "auto_evade": 5,
+      "name": "스치는 날개",
+      "text": "경공을 쓰지 않아도 5푼 확률로 저절로 공격을 피한다, 다 피하면 곧바로 위력 3할로 되받아친다."
+    }
+  },
+  "연운비천창": {
+    "name": "연운비천창",
+    "category": "창법",
+    "type": "공격무공",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "연운창에 새겨진 제비가 백 년 동안 기다린 창. 창끝이 구름을 뚫고 날아올라 내리꽂힌다.",
+    "forms": [
+      "연운",
+      "비천",
+      "낙뢰"
+    ],
+    "secret_technique": {
+      "name": "연운비천",
+      "unlock_grade": "신공",
+      "unlock_mastery": 40,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "origin": "외전모용",
+    "gimmick": {
+      "pierce": 60,
+      "combo": 50,
+      "crit": 10,
+      "name": "구름 뚫는 제비",
+      "text": "방어 6할 무시, 회심이 터지면 제비가 다시 내리꽂히듯 위력 5할로 한 번 더 찌른다, 회심 확률 +1할."
+    }
+  },
+  "장백설심공": {
+    "name": "장백설심공",
+    "type": "심공",
+    "category": "심공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 0,
+    "desc": "장백의 눈 속에서 백 년을 버틴 집안의 숨. 눈이 쌓이듯 숨이 쌓이고, 쌓인 숨은 녹지 않는다.",
+    "effect": {
+      "heal_hp_pct": 30,
+      "heal_qi_pct": 45,
+      "atk_buff_pct": 15,
+      "buff_rounds": 3
+    },
+    "origin": "외전모용",
+    "gimmick": {
+      "ward": 20,
+      "next_power": 30,
+      "focus": 8,
+      "name": "쌓인 눈",
+      "text": "싸움을 시작할 때 최대 체력 2할의 호신 기운을 두른다. 네 합마다 모은 숨으로 그 합의 공격 위력이 3할 오른다. 회심 확률이 8푼 오른다."
+    }
+  },
+  "비연횡공보": {
+    "name": "비연횡공보",
+    "type": "경공",
+    "category": "경공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 10,
+    "desc": "제비가 하늘을 가로지르듯 창을 든 채 허공을 비껴 나는 걸음. 모용운이 아이를 안고 강을 건넌 걸음이라 한다.",
+    "effect": {
+      "evade": 88,
+      "counter_pct": 170,
+      "flee_bonus": 55
+    },
+    "origin": "외전모용",
+    "gimmick": {
+      "afterimage": 15,
+      "next_power": 30,
+      "momentum": 5,
+      "name": "하늘을 가로지르는 날개",
+      "text": "다 피하면 잔상이 남아 다음 합에 1할 5푼 확률로 몸이 먼저 움직인다, 다 피하면 다음 공격 위력이 3할 오른다, 다 피할 때마다 이 싸움의 위력이 5푼씩 오른다(3할까지)."
+    }
+  },
+  "혈채도법": {
+    "name": "혈채도법",
+    "type": "공격무공",
+    "category": "도법",
+    "grade": "상승",
+    "base_multiplier": 1.5,
+    "qi_cost": 9,
+    "desc": "빚을 받아 내는 칼. 한 번 걸린 빚은 놓지 않는다. 베인 자리마다 갚을 몫이 늘어난다.",
+    "forms": [
+      "추심",
+      "이자",
+      "결산"
+    ],
+    "secret_technique": {
+      "name": "혈채결산",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    },
+    "origin": "외전사도련",
+    "gimmick": {
+      "mark": {
+        "every": 3,
+        "percent": 45
+      },
+      "execute": {
+        "below": 30,
+        "percent": 40
+      },
+      "name": "쌓이는 이자",
+      "text": "세 번 맞힐 때마다 쌓인 표식이 터져 그 일격의 피해가 4할 5푼 더해진다, 적 체력 3할 이하에서 위력 +4할."
+    }
+  },
+  "산반심법": {
+    "name": "산반심법",
+    "type": "심공",
+    "category": "심공",
+    "grade": "명품",
+    "base_multiplier": 1.0,
+    "qi_cost": 0,
+    "desc": "주판알을 튕기듯 숨을 셈하는 추심당의 숨. 들숨과 날숨의 셈이 맞지 않으면 칼도 맞지 않는다.",
+    "effect": {
+      "heal_hp_pct": 10,
+      "heal_qi_pct": 22,
+      "atk_buff_pct": 10,
+      "buff_rounds": 2
+    },
+    "origin": "외전사도련",
+    "gimmick": {
+      "focus": 5,
+      "lifesteal_buff": {
+        "percent": 10,
+        "rounds": 3
+      },
+      "name": "주판알",
+      "text": "회심 확률이 5푼 오른다. 준 피해의 5푼을 흡수한다."
+    }
+  },
+  "추심보": {
+    "name": "추심보",
+    "type": "경공",
+    "category": "경공",
+    "grade": "명품",
+    "base_multiplier": 1,
+    "qi_cost": 6,
+    "desc": "빚진 자의 뒤를 밟는 걸음. 달아나는 자보다 반 걸음 먼저 그 앞에 선다.",
+    "effect": {
+      "evade": 70,
+      "counter_pct": 80,
+      "flee_bonus": 35
+    },
+    "origin": "외전사도련",
+    "gimmick": {
+      "dazzle": 8,
+      "refund": 1,
+      "name": "반 걸음 앞",
+      "text": "다 피하면 쓴 내력의 절반을 되찾는다, 다 피하면 적이 걸음을 놓쳐 2합 동안 회피 +8."
+    }
+  },
+  "만채귀일도": {
+    "name": "만채귀일도",
+    "category": "도법",
+    "type": "공격무공",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "사도련 개파 때 련주가 첫 장부를 받아 낸 칼. 만 가지 빚이 한 칼로 돌아온다. 베인 자는 그동안의 셈을 한꺼번에 치른다.",
+    "forms": [
+      "만채",
+      "귀일",
+      "대결산"
+    ],
+    "secret_technique": {
+      "name": "만채귀일",
+      "unlock_grade": "신공",
+      "unlock_mastery": 40,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "origin": "외전사도련",
+    "gimmick": {
+      "mark": {
+        "every": 3,
+        "percent": 60
+      },
+      "detonate": 50,
+      "bleed": 10,
+      "name": "한꺼번에 치르는 셈",
+      "text": "세 번 맞힐 때마다 쌓인 표식이 터져 그 일격의 피해가 6할 더해진다, 회심이 터지면 쌓인 상처가 한꺼번에 터져 남은 피해의 5할을 단번에 입힌다, 맞힌 피해의 1할이 칼자국으로 흐른다."
+    }
+  },
+  "철장부심공": {
+    "name": "철장부심공",
+    "type": "심공",
+    "category": "심공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 0,
+    "desc": "련주가 이십 년 동안 장부를 넘기며 고른 숨. 들숨에 받을 것을, 날숨에 줄 것을 셈한다. 셈이 끝나지 않는 한 숨도 끊이지 않는다.",
+    "effect": {
+      "heal_hp_pct": 25,
+      "heal_qi_pct": 50,
+      "atk_buff_pct": 20,
+      "buff_rounds": 3
+    },
+    "origin": "외전사도련",
+    "gimmick": {
+      "lifesteal_buff": {
+        "percent": 15,
+        "rounds": 3
+      },
+      "qi_shield": 15,
+      "focus": 8,
+      "name": "끝나지 않는 셈",
+      "text": "준 피해의 8푼을 흡수한다. 맞는 힘의 1할 5푼을 내력으로 대신 받는다. 회심 확률이 8푼 오른다."
+    }
+  },
+  "무흔추영보": {
+    "name": "무흔추영보",
+    "type": "경공",
+    "category": "경공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 10,
+    "desc": "빚진 자의 그림자를 밟는 추심당의 끝 걸음. 그림자를 밟힌 자는 어디로 달아나도 반 걸음 늦는다.",
+    "effect": {
+      "evade": 89,
+      "counter_pct": 160,
+      "flee_bonus": 70
+    },
+    "origin": "외전사도련",
+    "gimmick": {
+      "auto_evade": 10,
+      "dazzle": 10,
+      "next_crit": 1,
+      "name": "그림자 밟기",
+      "text": "경공을 쓰지 않아도 1할 확률로 저절로 공격을 피한다, 다 피하면 적이 걸음을 놓쳐 2합 동안 회피 +10, 다 피하면 다음 공격은 반드시 회심."
+    }
+  },
+  "천기연노": {
+    "name": "천기연노",
+    "type": "공격무공",
+    "category": "암기",
+    "grade": "상승",
+    "base_multiplier": 1.5,
+    "qi_cost": 9,
+    "desc": "천기각에서 만든 손쇠뇌. 한 번 당기면 화살 셋이 엇갈려 날아가 피할 길을 막는다.",
+    "forms": [
+      "연노",
+      "엇갈림",
+      "구궁"
+    ],
+    "secret_technique": {
+      "name": "천기삼발",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    },
+    "origin": "외전제갈",
+    "gimmick": {
+      "hits": 3,
+      "hit_rate": 0.42,
+      "pierce": 25,
+      "name": "엇갈린 세 화살",
+      "text": "3번 나눠 쏘며(한 번마다 위력 4할 2푼) 번번이 명중과 회심을 따로 가린다, 방어 2할 5푼 무시."
+    }
+  },
+  "팔진심법": {
+    "name": "팔진심법",
+    "type": "심공",
+    "category": "심공",
+    "grade": "명품",
+    "base_multiplier": 1.0,
+    "qi_cost": 0,
+    "desc": "팔진의 여덟 문을 차례로 여닫듯 숨을 돌리는 제갈의 숨. 어지러운 자리일수록 문 하나가 더 보인다.",
+    "effect": {
+      "heal_hp_pct": 10,
+      "heal_qi_pct": 22,
+      "atk_buff_pct": 5,
+      "buff_rounds": 2
+    },
+    "origin": "외전제갈",
+    "gimmick": {
+      "clear_mind": 40,
+      "next_power": 20,
+      "name": "여덟 문",
+      "text": "혈도를 짚는 일격을 4할 확률로 막는다. 네 합마다 모은 숨으로 그 합의 공격 위력이 2할 오른다."
+    }
+  },
+  "구궁보": {
+    "name": "구궁보",
+    "type": "경공",
+    "category": "경공",
+    "grade": "명품",
+    "base_multiplier": 1,
+    "qi_cost": 6,
+    "desc": "아홉 칸을 밟아 도는 기관사의 걸음. 기관이 터지는 자리를 미리 비켜 선다.",
+    "effect": {
+      "evade": 72,
+      "counter_pct": 70,
+      "flee_bonus": 30
+    },
+    "origin": "외전제갈",
+    "gimmick": {
+      "refund": 1,
+      "afterimage": 10,
+      "name": "아홉 칸",
+      "text": "다 피하면 쓴 내력의 절반을 되찾는다, 다 피하면 잔상이 남아 다음 합에 1할 확률로 몸이 먼저 움직인다."
+    }
+  },
+  "목우유성침": {
+    "name": "목우유성침",
+    "category": "암기",
+    "type": "공격무공",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "목우의 굴대가 돌듯 침이 회전하며 날아간다. 공야반이 설계도의 여백에 남긴 마지막 기관이다. 침 하나가 박히면 다음 침이 그 자리를 따라간다.",
+    "forms": [
+      "유성",
+      "굴대",
+      "연환"
+    ],
+    "secret_technique": {
+      "name": "목우유성",
+      "unlock_grade": "신공",
+      "unlock_mastery": 40,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "origin": "외전제갈",
+    "gimmick": {
+      "hits": 4,
+      "hit_rate": 0.36,
+      "chain": 8,
+      "chain_max": 40,
+      "name": "돌아가는 굴대",
+      "text": "4번 나눠 날리며(한 번마다 위력 3할 6푼) 번번이 명중과 회심을 따로 가린다, 끊이지 않고 맞힐수록 위력이 8푼씩 오른다(최대 4할)."
+    }
+  },
+  "천기귀원공": {
+    "name": "천기귀원공",
+    "type": "심공",
+    "category": "심공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 0,
+    "desc": "천기각의 역대 각주들이 기관을 짜며 고른 숨. 수천 개의 톱니가 하나로 맞물리듯 숨이 맞물린다.",
+    "effect": {
+      "heal_hp_pct": 28,
+      "heal_qi_pct": 50,
+      "atk_buff_pct": 15,
+      "buff_rounds": 3
+    },
+    "origin": "외전제갈",
+    "gimmick": {
+      "clear_mind": 60,
+      "next_crit": 1,
+      "regen_qi": {
+        "percent": 8,
+        "rounds": 3
+      },
+      "name": "맞물리는 톱니",
+      "text": "혈도를 짚는 일격을 6할 확률로 막는다. 네 합마다 그 합의 공격이 반드시 회심이 된다. 합마다 내력 4푼이 저절로 찬다."
+    }
+  },
+  "팔문둔갑보": {
+    "name": "팔문둔갑보",
+    "type": "경공",
+    "category": "경공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 10,
+    "desc": "팔진의 여덟 문을 몸으로 드나드는 걸음. 생문으로 들어가 사문으로 나오니 쫓는 자는 늘 빈 문을 친다.",
+    "effect": {
+      "evade": 89,
+      "counter_pct": 150,
+      "flee_bonus": 60
+    },
+    "origin": "외전제갈",
+    "gimmick": {
+      "afterimage": 20,
+      "refund": 1,
+      "auto_evade": 8,
+      "name": "여덟 문",
+      "text": "다 피하면 잔상이 남아 다음 합에 2할 확률로 몸이 먼저 움직인다, 다 피하면 쓴 내력의 절반을 되찾는다, 경공을 쓰지 않아도 8푼 확률로 저절로 공격을 피한다."
+    }
   }
 }
