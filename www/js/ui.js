@@ -11,7 +11,7 @@ import {
 } from "./meta.js";
 import {
   ALIGNMENTS, ALIGN_STEPS, benefitText, pathPerks, byname, fameRank, getChapterInfo, getMonth, getYear, marketTurns, nextSlotThreshold,
-  ORIGIN_SECTS, veteranBonus, personalize, sectWord, fullName, realmProgress, traitSlots, realmPerks, activeCompanions, MAX_COMPANIONS,
+  originSect, veteranBonus, personalize, sectWord, fullName, realmProgress, traitSlots, realmPerks, activeCompanions, MAX_COMPANIONS,
   DEFAULT_DIFFICULTY, difficultyOf, quirkText, auraText } from "./rules.js";
 import { MAX_TURN } from "./character.js";
 import { storage } from "./storage.js";
@@ -384,10 +384,10 @@ function statBars(o) {
 function originDetail(key) {
   const o = DB.origins.origins[key];
   const skillNames = o.choose_start ? "첫 병기에 맞는 무공과 고른 심법" : o.skills.map((k) => DB.skills[k].name).join(", ");
-  const sect = ORIGIN_SECTS[key] ? DB.sects[ORIGIN_SECTS[key]] : null;
+  const sect = originSect(key) ? DB.sects[originSect(key)] : null;
   return `<span class="pick-desc block">${esc(o.desc)}</span>${statBars(o)}
     <span class="pick-stats block">시작 무공: ${esc(skillNames)}</span>
-    ${sect ? `<span class="pick-stats block">${sectWord(ORIGIN_SECTS[key])}: ${esc(sect.name)} (${esc(sect.bonus_text)})</span>` : ""}
+    ${sect ? `<span class="pick-stats block">${sectWord(originSect(key))}: ${esc(sect.name)} (${esc(sect.bonus_text)})</span>` : ""}
     ${o.side ? `<span class="pick-stats block">목표: ${esc(o.goal)}</span><span class="pick-stats block">${o.end_turn}달에 끝나는 외전</span>` : ""}`;
 }
 

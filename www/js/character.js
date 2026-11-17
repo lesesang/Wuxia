@@ -2,7 +2,7 @@
 import { DB } from "./data.js";
 import { randInt, rng } from "./rng.js";
 import {
-  ALIGN_CLASH, ALIGN_EASE, MAX_FAME, ALIGNMENT_CAP, alignValue, dominant, FOCUS_GAIN, hasEffect, newAlignment, ORIGIN_SECTS, sectBonus,
+  ALIGN_CLASH, ALIGN_EASE, MAX_FAME, ALIGNMENT_CAP, alignValue, dominant, FOCUS_GAIN, hasEffect, newAlignment, originSect, sectBonus,
   startSkills, sumEffect,
 } from "./rules.js";
 import { josa } from "./josa.js";
@@ -244,7 +244,7 @@ export class Player {
     this.alignMilestones = { 정도: 0, 사도: 0, 마도: 0 }; // 길마다 넘은 단계의 수
     this.rumors = []; // 들은 강호의 오랜 이야기
     this.fame = Math.min(MAX_FAME, sumEffect(traitKeys, "start_fame", "amount"));
-    this.sect = ORIGIN_SECTS[originKey] || null;
+    this.sect = originSect(originKey);
     this.injury = 0;
     this.pent = {}; // 경지의 끝에 막혀 쌓아 둔 기량
     this.turn = 1;
@@ -592,7 +592,7 @@ export class Player {
     p.alignMilestones = d.align_milestones ?? {};
     p.revives = d.revives ?? 1 + sumEffect(d.traits || [], "extra_revive", "amount");
     p.fame = d.fame ?? 0;
-    p.sect = d.sect !== undefined ? d.sect : (ORIGIN_SECTS[p.originKey] || null);
+    p.sect = d.sect !== undefined ? d.sect : originSect(p.originKey);
     p.injury = d.injury ?? 0;
     p.pent = { ...(d.pent || {}) };
     p.turn = d.turn;

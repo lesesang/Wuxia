@@ -257,7 +257,7 @@ export function pickRandomEvent(player) {
     const event = DB.randomEvents[key];
     if (event.legacy_find || event.action) return false; // 유산의 흔적과 수련 중의 사건은 정해진 자리에서만 나온다
     if (event.chain && !canStartChain(player, event.chain.id)) return false;
-    if (!fitsStory(player, event) || event.manor_event) return false;
+    if (!fitsStory(player, event) || event.manor_event || sideOrigin(player)?.skip?.includes(key)) return false;
     return (event.chapters || []).includes(chapter) && !player.seenEvents.includes(key)
       && checkRequires(player, event.requires);
   });

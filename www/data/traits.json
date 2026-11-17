@@ -1568,6 +1568,143 @@
     ],
     "origin": "외전야수"
   },
+  "나한의뼈": {
+    "name": "나한의 뼈",
+    "desc": "받는 피해가 4푼 줄고 실전 경험을 싸움마다 하나 더 얻는다. 맞으며 버티는 일에서 뼈가 먼저 견딘다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "damage_reduce",
+        "percent": 4
+      },
+      {
+        "type": "battle_exp",
+        "amount": 1
+      }
+    ],
+    "origin": "외전소림"
+  },
+  "목탁소리": {
+    "name": "목탁 소리",
+    "desc": "심법 회복이 1할, 무공 성취가 1할 빨라진다. 경과 좌선이 얽힌 사건에서 숨이 먼저 고요해진다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "mindset_power",
+        "percent": 10
+      },
+      {
+        "type": "mastery_rate",
+        "percent": 10
+      }
+    ],
+    "origin": "외전소림"
+  },
+  "돌문의인내": {
+    "name": "돌문의 인내",
+    "desc": "받는 피해가 3푼 줄고 매달 체력을 2푼 더 회복한다. 기다리고 버티는 일에서 먼저 지치지 않는다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "damage_reduce",
+        "percent": 3
+      },
+      {
+        "type": "turn_regen",
+        "hp_pct": 2,
+        "qi_pct": 0
+      }
+    ],
+    "origin": "외전무당"
+  },
+  "태극의눈": {
+    "name": "태극의 눈",
+    "desc": "피할 틈이 1할 좁아지고 회심의 일격 확률이 4푼 오른다. 다투는 두 사람 사이에서 가운데가 먼저 보인다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "hit_bonus",
+        "percent": 10
+      },
+      {
+        "type": "crit",
+        "percent": 4
+      }
+    ],
+    "origin": "외전무당"
+  },
+  "종루의귀": {
+    "name": "종루의 귀",
+    "desc": "달아날 확률이 2할, 피할 틈이 1할 좁아진다. 쫓기고 숨는 일에서 발소리를 먼저 듣는다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "flee_rate",
+        "percent": 20
+      },
+      {
+        "type": "hit_bonus",
+        "percent": 10
+      }
+    ],
+    "origin": "외전아미"
+  },
+  "연잎의손": {
+    "name": "연잎의 손",
+    "desc": "상비약 회복이 2할 늘고 요양으로 되찾는 체력과 내력이 2할 늘어난다. 다친 사람과 지친 사람을 돌보는 일에서 손이 먼저 간다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "consumable_rate",
+        "percent": 20
+      },
+      {
+        "type": "heal_rate",
+        "percent": 20
+      }
+    ],
+    "origin": "외전아미"
+  },
+  "모래의뼈": {
+    "name": "모래의 뼈",
+    "desc": "받는 피해가 3푼 줄고 실전 경험을 싸움마다 하나 더 얻는다. 거친 땅과 거친 싸움에서 뼈가 먼저 견딘다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "damage_reduce",
+        "percent": 3
+      },
+      {
+        "type": "battle_exp",
+        "amount": 1
+      }
+    ],
+    "origin": "외전공동"
+  },
+  "보장의셈": {
+    "name": "보장의 셈",
+    "desc": "은자 60을 더 들고 시작하고 장터 값이 1할 싸진다. 곡식과 값을 다루는 일에서 셈이 먼저 선다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "start_silver",
+        "amount": 60
+      },
+      {
+        "type": "market_discount",
+        "percent": 10
+      }
+    ],
+    "origin": "외전공동"
+  },
   "불굴": {
     "name": "불사지체",
     "desc": "전투에서 합마다 체력을 2푼(한 싸움에 3할까지), 달마다 체력을 1할 5푼 더 회복한다. 베여도 베여도 살이 차오른다.",

@@ -11678,5 +11678,434 @@
     "requires": {
       "difficulty_min": "천붕"
     }
+  },
+  "외전_혜명": {
+    "name": "철곤 혜명",
+    "tier": "난적",
+    "realm": "화경",
+    "hp": 14500,
+    "attack": 232,
+    "exp_reward": 2,
+    "silver": [
+      56,
+      77
+    ],
+    "armor": 22,
+    "level": 97,
+    "hp_style": 1.12,
+    "attack_style": 1.0,
+    "chapters": [],
+    "weight": 0,
+    "named": true,
+    "title": "소림 나한당 수좌",
+    "desc": "닫힌 산문 안에서 십 년을 지낸 나한당의 수좌. 곤 한 자루로 무승원의 마당을 지킨다. 방장의 명이 아니면 문을 나서지 않는다.",
+    "intro": "\"산문 밖의 곤이 얼마나 되는지 보자.\"",
+    "outro": "혜명이 곤을 내렸다. \"방장께 그리 아뢰겠다.\"",
+    "spar_outro": "혜명이 곤을 세우고 합장했다. \"산문 밖의 곤이 무겁구나.\"",
+    "specials": [
+      {
+        "name": "나한진각",
+        "every": 3,
+        "mult": 2.0,
+        "accuracy": 10
+      },
+      {
+        "name": "복호곤",
+        "every": 5,
+        "mult": 1.6,
+        "seal": 1
+      }
+    ]
+  },
+  "외전_적암": {
+    "name": "적암대사",
+    "tier": "강적",
+    "realm": "화경",
+    "hp": 18500,
+    "attack": 250,
+    "exp_reward": 3,
+    "silver": [
+      63,
+      91
+    ],
+    "armor": 24,
+    "level": 97,
+    "hp_style": 1.366,
+    "attack_style": 1.19,
+    "chapters": [],
+    "weight": 0,
+    "named": true,
+    "title": "소림 장경각주",
+    "desc": "장경각을 사십 년 지킨 노승. 천마가 돌아온다는 소문을 듣고 각에 갇힌 경이 아무도 지키지 못한다며 사본 열두 권을 들고 산을 내려갔다.",
+    "intro": "\"경은 각에 있으면 종이다. 네 곤은 무엇이냐.\"",
+    "outro": "적암이 곤을 짚고 웃었다. \"되었다.\"",
+    "spar_outro": "적암이 곤을 거두었다. \"들판의 곤이로구나.\"",
+    "specials": [
+      {
+        "name": "반석",
+        "every": 3,
+        "mult": 2.1
+      },
+      {
+        "name": "무상곤",
+        "every": 5,
+        "mult": 1.5,
+        "accuracy": 15
+      }
+    ],
+    "phases": [
+      {
+        "hp_pct": 50,
+        "attack_mult": 1.2,
+        "text": "늙은 곤이 느려진다. 느린데 막을 자리가 없다. 사십 년 동안 경을 읽은 손이다.",
+        "specials": [
+          {
+            "name": "반석",
+            "every": 3,
+            "mult": 2.1
+          },
+          {
+            "name": "장경일곤",
+            "every": 4,
+            "mult": 2.7,
+            "accuracy": 20,
+            "break_pct": 5
+          }
+        ]
+      }
+    ]
+  },
+  "외전_송결": {
+    "name": "현허자 송결",
+    "tier": "난적",
+    "realm": "화경",
+    "hp": 14200,
+    "attack": 234,
+    "exp_reward": 2,
+    "silver": [
+      56,
+      77
+    ],
+    "armor": 22,
+    "level": 97,
+    "hp_style": 1.12,
+    "attack_style": 1.0,
+    "chapters": [],
+    "weight": 0,
+    "named": true,
+    "title": "무당 둘째 제자",
+    "desc": "장문인이 폐관한 동안 산문을 닫자고 고집한 무당의 둘째 제자. 검이 원을 그리며 안으로 감긴다.",
+    "intro": "\"말로 하지 말고 검으로 답해라.\"",
+    "outro": "송결이 검을 내렸다. \"무당이었구나.\"",
+    "spar_outro": "송결이 검을 거두고 웃었다. \"진무에게도 그리 말해 두마.\"",
+    "specials": [
+      {
+        "name": "태극권형",
+        "every": 3,
+        "mult": 2.0,
+        "accuracy": 10
+      },
+      {
+        "name": "안으로 감기는 검",
+        "every": 5,
+        "mult": 1.6,
+        "seal": 1
+      }
+    ]
+  },
+  "외전_진무": {
+    "name": "청운검 진무",
+    "tier": "강적",
+    "realm": "화경",
+    "hp": 18800,
+    "attack": 252,
+    "exp_reward": 3,
+    "silver": [
+      63,
+      91
+    ],
+    "armor": 24,
+    "level": 97,
+    "hp_style": 1.366,
+    "attack_style": 1.19,
+    "chapters": [],
+    "weight": 0,
+    "named": true,
+    "title": "무당 첫째 제자",
+    "desc": "장문인이 폐관한 동안 무당의 제자들을 이끌고 맹의 싸움터에 선 첫째 제자. 산에서 배운 검이 싸움터에서 무거워졌다.",
+    "intro": "\"무당의 검이 어디를 향하는지 보여 드리자.\"",
+    "outro": "진무가 검을 내렸다. \"막내가 이겼구나.\"",
+    "spar_outro": "진무가 검을 거두며 웃었다. \"산의 검이 이렇게 무거웠나.\"",
+    "specials": [
+      {
+        "name": "청운분광",
+        "every": 3,
+        "mult": 2.15
+      },
+      {
+        "name": "성벽의 검",
+        "every": 5,
+        "mult": 1.5,
+        "accuracy": 15
+      }
+    ],
+    "phases": [
+      {
+        "hp_pct": 50,
+        "attack_mult": 1.2,
+        "text": "진무의 검이 느려진다. 성벽 위에서 사흘 밤을 버틴 검이다. 느린데 물러설 자리가 없다.",
+        "specials": [
+          {
+            "name": "청운분광",
+            "every": 3,
+            "mult": 2.15
+          },
+          {
+            "name": "균주의 사흘",
+            "every": 4,
+            "mult": 2.75,
+            "accuracy": 20,
+            "break_pct": 5
+          }
+        ]
+      }
+    ]
+  },
+  "외전_정심": {
+    "name": "정심 사태",
+    "tier": "난적",
+    "realm": "화경",
+    "hp": 14000,
+    "attack": 230,
+    "exp_reward": 2,
+    "silver": [
+      56,
+      77
+    ],
+    "armor": 22,
+    "level": 97,
+    "hp_style": 1.12,
+    "attack_style": 1.0,
+    "chapters": [],
+    "weight": 0,
+    "named": true,
+    "title": "아미 계율원 수좌",
+    "desc": "금정의 계율원을 지키는 노니. 장이 연꽃처럼 열렸다가 닫히고, 닫힌 연꽃 안에 들어간 기운은 나오지 못한다.",
+    "intro": "\"남을 지킨 장이 어떤지 보자.\"",
+    "outro": "정심 사태가 장을 거두었다. \"지키는 장이 되었구나.\"",
+    "spar_outro": "정심 사태가 합장했다. \"장문인께 그리 아뢰마.\"",
+    "specials": [
+      {
+        "name": "연화폐합",
+        "every": 3,
+        "mult": 2.0,
+        "accuracy": 10
+      },
+      {
+        "name": "계율의 장",
+        "every": 5,
+        "mult": 1.6,
+        "seal": 1
+      }
+    ]
+  },
+  "외전_묵현": {
+    "name": "냉혈수 묵현",
+    "tier": "난적",
+    "realm": "화경",
+    "hp": 18200,
+    "attack": 250,
+    "exp_reward": 2,
+    "silver": [
+      49,
+      70
+    ],
+    "armor": 24,
+    "level": 73,
+    "hp_style": 1.12,
+    "attack_style": 1.0,
+    "chapters": [],
+    "weight": 0,
+    "named": true,
+    "title": "신교 적수대를 거느리는 장로",
+    "desc": "신교의 장로. 적수대를 거느리고 교단을 떠난 자를 끝까지 쫓는다. 수레를 몰던 시절의 홍란을 직접 붉은 소매에 들인 사람이다.",
+    "intro": "\"연못은 떠난 자를 잊지 않는다.\"",
+    "outro": "묵현이 무릎을 꿇었다. \"아미의 장이... 연못보다 깊구나.\"",
+    "specials": [
+      {
+        "name": "냉혈수",
+        "every": 3,
+        "mult": 2.1,
+        "qi_drain": 12
+      },
+      {
+        "name": "붉은 소매",
+        "every": 5,
+        "mult": 1.5,
+        "accuracy": 15
+      }
+    ],
+    "phases": [
+      {
+        "hp_pct": 50,
+        "attack_mult": 1.2,
+        "text": "묵현의 손이 붉게 물든다. 수레에 아이들을 태우던 손이다.",
+        "specials": [
+          {
+            "name": "냉혈수",
+            "every": 3,
+            "mult": 2.1,
+            "qi_drain": 12
+          },
+          {
+            "name": "연못의 손",
+            "every": 4,
+            "mult": 2.7,
+            "accuracy": 20,
+            "break_pct": 5
+          }
+        ]
+      }
+    ]
+  },
+  "외전_갈무진": {
+    "name": "철권 갈무진",
+    "tier": "난적",
+    "realm": "화경",
+    "hp": 14600,
+    "attack": 236,
+    "exp_reward": 2,
+    "silver": [
+      56,
+      77
+    ],
+    "armor": 22,
+    "level": 97,
+    "hp_style": 1.12,
+    "attack_style": 1.0,
+    "chapters": [],
+    "weight": 0,
+    "named": true,
+    "title": "공동 장문인",
+    "desc": "맹의 회의 탁자를 주먹으로 부수고 돌아온 공동의 장문인. 주먹이 흙벽처럼 밀려온다.",
+    "intro": "\"변경의 주먹이 어떤지 맞아 보겠다.\"",
+    "outro": "갈무진이 주먹을 거두었다. \"좋다.\"",
+    "spar_outro": "갈무진이 웃으며 권대를 풀었다. \"평량의 주먹보다 거칠구나.\"",
+    "specials": [
+      {
+        "name": "철권",
+        "every": 3,
+        "mult": 2.05,
+        "accuracy": 10
+      },
+      {
+        "name": "탁자 부수기",
+        "every": 5,
+        "mult": 1.6,
+        "seal": 1
+      }
+    ]
+  },
+  "외전_구양열": {
+    "name": "황사마군 구양열",
+    "tier": "난적",
+    "realm": "화경",
+    "hp": 18400,
+    "attack": 252,
+    "exp_reward": 2,
+    "silver": [
+      49,
+      70
+    ],
+    "armor": 24,
+    "level": 73,
+    "hp_style": 1.12,
+    "attack_style": 1.0,
+    "chapters": [],
+    "weight": 0,
+    "named": true,
+    "title": "신교 서북 분타를 거느린 장로",
+    "desc": "신교의 장로. 서역으로 가는 길을 쥐고 마적의 길값을 거두어 신교의 곳간을 채운다. 손을 털면 모래바람이 인다.",
+    "intro": "\"맹도 버린 보를 주먹 하나가 지키는구나.\"",
+    "outro": "구양열이 모래 위에 쓰러졌다. \"흙더미가... 장성보다 단단하구나.\"",
+    "specials": [
+      {
+        "name": "황사장",
+        "every": 3,
+        "mult": 2.1,
+        "accuracy": 10
+      },
+      {
+        "name": "모래바람",
+        "every": 5,
+        "mult": 1.5,
+        "seal": 1
+      }
+    ],
+    "phases": [
+      {
+        "hp_pct": 50,
+        "attack_mult": 1.2,
+        "text": "구양열의 둘레로 모래가 기둥처럼 솟는다. 서역의 길을 십 년 쥔 손이다.",
+        "specials": [
+          {
+            "name": "황사장",
+            "every": 3,
+            "mult": 2.1,
+            "accuracy": 10
+          },
+          {
+            "name": "사막의 기둥",
+            "every": 4,
+            "mult": 2.75,
+            "accuracy": 20,
+            "break_pct": 5
+          }
+        ]
+      }
+    ],
+    "deep_quirks": {
+      "혈풍": {
+        "text": "(구양열의 손바닥에 붉은 인이 박혀 있다. 혈교와 피의 계를 맺었다.)",
+        "quirks": [
+          {
+            "type": "bloodthirst",
+            "percent": 15,
+            "name": "혈계"
+          }
+        ]
+      },
+      "겁화": {
+        "text": "(구양열의 정수리에 검은 불길의 흉터가 있다. 신교 장로의 곁불을 받았다.)",
+        "quirks": [
+          {
+            "type": "bloodthirst",
+            "percent": 15,
+            "name": "혈계"
+          },
+          {
+            "type": "barrier",
+            "percent": 4,
+            "every": 5,
+            "name": "곁불의 열기"
+          }
+        ]
+      },
+      "천붕": {
+        "text": "(구양열의 단전께에서 이따금 검은 연기가 실처럼 샌다. 천마가 숨겨 넣은 불, 잠화를 품었다. 그 불이 맞선 자의 맥을 태운다.)",
+        "quirks": [
+          {
+            "type": "bloodthirst",
+            "percent": 12,
+            "name": "혈계"
+          },
+          {
+            "type": "sever",
+            "percent": 25,
+            "name": "숨은 불"
+          }
+        ]
+      }
+    }
   }
 }
