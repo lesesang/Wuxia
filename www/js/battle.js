@@ -245,7 +245,7 @@ export function useConsumable(player, key) {
     } else if (effect.type === "cure" && effect.what === "injury") {
       player.addInjury(-(effect.amount ?? 1));
     } else if (effect.type === "stat") {
-      notes.push(`${STAT_NAMES[effect.stat]}+${player.gainStat(effect.stat, effect.amount)}`);
+      notes.push(player.gainStatText(effect.stat, effect.amount));
     }
   }
   // 영약을 삼키거나 서책을 읽으면 그 기운을 갈무리하며 심법도 깊어진다
@@ -264,6 +264,7 @@ export class Battle {
     this.log = [];
     this.roundNum = 0;
     this.isFinal = isFinal;
+    this.noFlee = false;     // 줄거리의 싸움은 물러설 수 없다
     this.tempBuffs = [];
     this.poison = null;
     this.atkBuff = null;
@@ -1212,7 +1213,7 @@ export class Battle {
     const mindNow = action === "심법";
     let evadeSkill = null;
 
-    if (action === "도주" && !this.isFinal) {
+    if (action === "도주" && !this.isFinal && !this.noFlee) {
       if (this.flee()) return this.finish(false, true);
     } else if (action === "비기" && skill) {
       this.useSecret(skill);
@@ -1414,8 +1415,7 @@ export class Battle {
     const second = pick(stats.filter((s) => s !== first));
     const [low, high] = this.enemy.growthRange;
     const gains = [first, second].map((stat) => {
-      const gained = this.player.gainStat(stat, applyGrowth(scaledGrowth(randInt(low, high), this.player.turn), this.player.traits, stat));
-      return `${STAT_NAMES[stat]}+${gained}`;
+      return this.player.gainStatText(stat, applyGrowth(scaledGrowth(randInt(low, high), this.player.turn), this.player.traits, stat));
     });
     this.log.push(`성장: ${gains.join(", ")}`);
   }

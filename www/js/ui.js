@@ -281,7 +281,7 @@ ${section("성취 쌓기", ["공격 무공은 수련과 싸움, 심법은 운기
     전투: `${section("싸움의 기본", [
     "무공은 내력을 씁니다. 내력이 없으면 맨손으로 싸웁니다.",
     "적의 필살기는 한 합 전에 예고됩니다. <b>경공</b>으로 흘려내면 다음 공격이 강해지고, 보통 공격을 흘리면 그 절반입니다. 예고된 합에 큰 힘을 쏟으면 꺾이는 필살기도 있습니다.",
-    "<b>운기</b>로 회복하고 점혈을 풉니다. 위험하면 <b>도주</b>도 방법입니다.",
+    "<b>운기</b>로 회복하고 점혈을 풉니다. 위험하면 <b>도주</b>도 방법이지만, 줄거리의 싸움과 결전에서는 물러설 수 없습니다.",
     "약이나 도구 하나는 합을 쓰지 않습니다. 같은 합에 하나를 더 쓰면 합이 지나갑니다.",
     "내상은 싸움이 끝나도 남고 주는 피해를 줄입니다."])}
 ${section("선천진기", ["강호행마다 한 번, 쓰러지는 순간 일으킬 수 있습니다. 체력과 내력이 절반만큼 차고 그 싸움 동안 위력이 1할 5푼 오르며 받는 피해가 1할 5푼 줍니다."])}
@@ -788,7 +788,6 @@ function companionList(p) {
   return rows.length ? `<div class="modal-section"><h4>결전에 달려올 사람</h4>${rows.map((c) => `<div class="skill-row">${esc(c.name)}<div class="skill-meta">${esc(c.help_text)}</div></div>`).join("")}</div>` : "";
 }
 
-/** 병장기의 영기 한 줄 */
 /** 든 병장기를 내려놓는 단추 */
 function unequipButton(p, slot) {
   if (!p[slot] || game.battle || !p.alive) return "";
@@ -923,7 +922,7 @@ function renderBattlePrelude() {
       <div class="event-body">${lines.map((l) => `<p class="event-text">${esc(l)}</p>`).join("")}
         <p class="section-note">${esc(b.enemy.realm)}${b.spar ? ", 비무" : ""}</p>
         <button class="choice-btn" data-act="battle" data-action="기본공격" data-begin="1">맞선다</button>
-        ${b.isFinal ? "" : `<button class="choice-btn" data-act="battle" data-action="도주">물러선다<small> 실패하면 공격받음</small></button>`}
+        ${b.isFinal || b.noFlee ? "" : `<button class="choice-btn" data-act="battle" data-action="도주">물러선다<small> 실패하면 공격받음</small></button>`}
       </div></div></div></div>`;
 }
 
@@ -994,7 +993,7 @@ function renderBattle() {
         <button class="bt-btn" data-act="battle" data-action="비기" ${secretReady ? "" : "disabled"}>${skill?.secretUnlocked ? esc(skill.secretName) : "비기"}<small>${esc(secretNote)}</small></button>
         <button class="bt-btn${b.sealed ? " suggest" : ""}" data-act="battle" data-action="심법" ${mindset ? "" : "disabled"}>${mindset ? esc(mindset.name) : "심법"}<small>${mindset ? "회복, 점혈 해제" : "익힌 심법 없음"}</small></button>
         <button class="bt-btn${warning && movement ? " suggest" : ""}" data-act="battle" data-action="경공" ${movement && p.qi >= movement.qiCost ? "" : "disabled"}>${movement ? esc(movement.name) : "경공"}<small>${movement ? `내력 ${movement.qiCost}, 회피 ${halpun(b.evadeChance(movement))}` : "익힌 경공 없음"}</small></button>
-        ${b.isFinal ? "" : `<button class="bt-btn flee" data-act="battle" data-action="도주">도주<small>실패하면 공격받음</small></button>`}
+        ${b.isFinal || b.noFlee ? "" : `<button class="bt-btn flee" data-act="battle" data-action="도주">도주<small>실패하면 공격받음</small></button>`}
       </div>
       ${items.length ? `<p class="item-hint">${b.freeItemUsed ? "이번 합에 도구를 썼다. 하나 더 쓰면 합이 지나간다" : "도구 하나는 합을 쓰지 않는다"}</p><div class="battle-items">${items.map(([key, count]) => `<button class="item-btn${lowHp && DB.market[key].effects.some((e) => e.type === "heal") ? " suggest" : ""}" data-act="battle" data-action="소비품" data-key="${esc(key)}">${esc(DB.market[key].name)} ${count}개</button>`).join("")}</div>` : ""}
     </div>`}${gameModals()}`;

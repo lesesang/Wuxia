@@ -144,7 +144,6 @@ export function takeProvisions() {
 export const manorLevels = (data = loadMeta()) => Object.fromEntries(
   Object.entries(DB.karma.manor.wings).map(([key, wing]) => [key, Math.min(wing.costs.length, data.manor?.[key] || 0)]));
 export const manorSize = (data = loadMeta()) => Object.values(manorLevels(data)).reduce((a, b) => a + b, 0);
-/** 다음 강호행에 장원을 나타나게 하는 문패의 값. 장원이 클수록 비싸다 */
 /** 문패 값은 장원이 클수록 오른다. 올린 단계 셋마다 한 계단이다 */
 export const gateCost = (data = loadMeta()) => {
   const costs = DB.karma.manor.gate.costs;
@@ -240,7 +239,6 @@ export const activeContent = (data = loadMeta()) => data.content.filter((k) => !
 
 const WIN_ENDINGS = ["기본", "배드", "생사경"];
 export const legacyAvailable = (data = loadMeta()) => data.endings_seen.some((k) => WIN_ENDINGS.includes(k));
-/** 유산은 천마를 쓰러뜨린 사람만 남긴다 */
 /** 천마를 넘어선 결말인가 */
 export const beatFinal = (endingKey) => WIN_ENDINGS.includes(endingKey);
 /** 외전을 끝맺은 결말인가 */

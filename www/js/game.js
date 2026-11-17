@@ -3,7 +3,7 @@ import { Battle, enemyPool, Enemy, statureEnemy, useConsumable } from "./battle.
 import { GRADE_ORDER, Player, Skill, STAT_NAMES } from "./character.js";
 import { DB } from "./data.js";
 import {
-  grantStartGear, grantStartSkills, advanceChain, applyEffects, failChain, checkRequires, dueChainEvent, enemyIntro, LAST_CHAIN_TURN, pickActionEvent, pickFortune, pickRandomEvent, resolveChoice, reactiveLine, startChain, storyEventForTurn, dueOriginEvent, dueManorEvent, pendingOriginEvents,
+  grantStartGear, grantStartSkills, advanceChain, applyEffects, failChain, checkRequires, dueChainEvent, enemyIntro, LAST_CHAIN_TURN, pickActionEvent, pickFortune, pickRandomEvent, resolveChoice, reactiveLine, startChain, storyEventForTurn, dueOriginEvent, dueManorEvent, pendingOriginEvents, playable,
 } from "./events.js";
 import { buy, openMarket, sell } from "./market.js";
 import {
@@ -178,7 +178,9 @@ export class Game {
   openStoryEvent() {
     const p = this.player;
     const urgent = p.turn >= LAST_CHAIN_TURN && p.chains.length > 0;
-    const story = urgent ? null : storyEventForTurn(p);
+    let story = urgent ? null : storyEventForTurn(p);
+    // 고를 길이 하나도 남지 않은 줄거리는 지나간다
+    if (story && !playable(p, story)) story = null;
     if (p.turn === 1 && !this.giftsDone && !(story && DB.events[story].prelude)) {
       // 번외 선택이 끝나면 쓸 무공을 먼저 정하고, 그에 맞는 행장을 받는다
       if (hasArtChoices(p)) {
@@ -203,14 +205,14 @@ export class Game {
       return;
     }
     // 출신의 이야기는 조건을 채우면 반드시 찾아온다
-    const originKey = dueOriginEvent(p);
+    const originKey = [dueOriginEvent(p)].find((k) => playable(p, k));
     if (originKey) {
       p.originTurn = p.turn;
       this.event = { key: originKey, forced: true };
       return;
     }
     // 문패를 챙긴 강호행에는 장원의 일이 때맞춰 찾아온다
-    const manorKey = dueManorEvent(p);
+    const manorKey = [dueManorEvent(p)].find((k) => playable(p, k));
     if (manorKey) {
       p.manorTurn = p.turn;
       this.event = { key: manorKey, forced: true };
@@ -257,7 +259,7 @@ export class Game {
     if (name === "수련") {
       const ext = this.grow("external");
       const mar = this.grow("martial");
-      this.addLog([actionLine("수련"), `외공+${ext}, 무리+${mar}`]);
+      this.addLog([actionLine("수련"), `${ext}, ${mar}`]);
       if (rng.random() < SPARRING_CHANCE) {
         const silver = p.gainSilver(randInt(6, 10) * getChapter(p.turn));
         p.battles += 1;
@@ -272,7 +274,7 @@ export class Game {
       const internal = this.grow("internal");
       const mind = this.grow("mind");
       const [, qi] = p.healPercent(0, 15);
-      this.addLog([actionLine("명상"), `내공+${internal}, 심경+${mind}, 내력+${qi}`]);
+      this.addLog([actionLine("명상"), `${internal}, ${mind}, 내력+${qi}`]);
       const skill = p.bestOfType("심공");
       if (skill) this.addLog(skill.gainMastery(p.masteryGainAmount() * MIND_MASTERY_RATE));
       // 고요한 중에 깨달음이 오면 주무공도 함께 깊어진다
@@ -313,7 +315,7 @@ export class Game {
     const p = this.player;
     let amount = randInt(...TRAIN_GROWTH);
     if (rng.random() < TRAIN_BONUS_BASE + p.mind / 5000) amount += randInt(8, 13); // 심경이 높으면 두 배 오를 때가 많아진다
-    return p.gainStat(stat, applyGrowth(scaledGrowth(amount, p.turn), p.traits, stat));
+    return p.gainStatText(stat, applyGrowth(scaledGrowth(amount, p.turn), p.traits, stat));
   }
 
   explore() {
@@ -536,6 +538,11 @@ export class Game {
       this.gauntlet = { name, enemies: enemies.slice(1), reward, round: 1, total: enemies.length, spar: !!spar };
       this.startBattle(enemies[0], !!spar, null, null, true);
     }
+    // 줄거리의 싸움에서는 물러설 수 없다
+    if (this.battle && isStory(DB.events[state.key])) {
+      this.battle.noFlee = true;
+      if (!this.battle.spar) this.addLog(["물러설 수 없는 싸움이다."]);
+    }
     if (this.battle) return;
     // 달을 쓰지 않는 사건 뒤에는 그달의 다음 사건으로 바로 이어진다
     if (state.forced) this.openStoryEvent();
@@ -560,7 +567,7 @@ export class Game {
   battleAction(action = "기본공격", itemKey = null) {
     if (!this.battle || !VALID_BATTLE_ACTIONS.includes(action)) return;
     const { battle, player } = this;
-    if (action === "도주" && battle.isFinal) return;
+    if (action === "도주" && (battle.isFinal || battle.noFlee)) return;
     // 막간을 고르지 않고 합을 진행하면 첫 선택지를 따른다
     if (battle.interlude) this.battleInterlude(0);
 
@@ -632,6 +639,12 @@ export class Game {
       this.addLog([...(after.text ? [after.text] : []), ...(summary.length ? [summary.join(", ")] : [])]);
       if (after.effects.next) this.offerAfterBattle = sceneKey(after.key, after.effects.next);
       else if (after.effects.sect_offer && player.sect === null) this.offerAfterBattle = `제안_${after.effects.sect_offer}`;
+    } else if (after.effects.lose_flags && player.hp > 0) {
+      // 겨룸에 져도 줄거리는 이어진다
+      for (const flag of after.effects.lose_flags) if (!player.hasFlag(flag)) player.flags.push(flag);
+    }
+    if (result.victory) {
+      // 이긴 뒤의 일은 위에서 정했다
     } else if (after.effects.lose_next && player.hp > 0) {
       // 져도 이야기가 이어지는 겨룸
       this.offerAfterBattle = sceneKey(after.key, after.effects.lose_next);
@@ -958,7 +971,9 @@ function karmaGain(player, key, victory) {
   return { total, lines };
 }
 
-/** 성별과 이름을 정한다. 가문의 성씨는 고정이고 비워 둔 칸은 저절로 정한다 */
+/** 줄거리 사건과 그 안의 장면 */
+const isStory = (e) => !!e && (e.kind === "story" || isStory(DB.events[e.scene_of]));
+
 /** 다음 장면의 키. 같은 사건의 장면 이름이면 그 사건 아래에서 찾는다 */
 function sceneKey(from, next) {
   if (DB.events[next]) return next;
@@ -966,6 +981,7 @@ function sceneKey(from, next) {
   return `${root}:${next}`;
 }
 
+/** 성별과 이름을 정한다. 가문의 성씨는 고정이고 비워 둔 칸은 저절로 정한다 */
 export function settlePerson(originKey, person = {}) {
   const gender = person.gender === "여" ? "여" : "남";
   const names = DB.flavor.names;

@@ -4709,7 +4709,7 @@ test("수련, 운기, 요양 중의 사건은 그 일을 할 때만 나오고 �
     game.action("수련");
     if (game.event && DB.events[game.event.key].action === "수련") {
       met += 1;
-      assert.ok(game.log.some((l) => l.includes("외공+")), "수련 기록이 남는다");
+      assert.ok(game.log.some((l) => l.includes("외공")), "수련 기록이 남는다");
     }
   }
   assert.ok(met > 0);
@@ -5105,4 +5105,37 @@ test("유산 5단계에는 보관한 다섯을 모두 이어받고, 소교주는
   assert.equal(legacyPowers({ legacy_level: 5 }).take, 5);
   const text = JSON.stringify([DB.events, DB.enemies, DB.endings, DB.companions, DB.flavor]);
   assert.ok(!text.includes("소교주"));
+});
+
+test("줄거리의 싸움에서는 물러설 수 없고, 겨룸에 져도 줄거리는 이어진다", () => {
+  seed(3);
+  const game = newGame();
+  const p = game.player;
+  p.turn = 80;
+  p.flags.push("혈해_2", "혈해_맹약");
+  game.event = { key: "혈해_호법", forced: true };
+  const index = eventView(p, "혈해_호법").choices.find((c) => !c.locked && DB.events.혈해_호법.choices[c.index].outcomes[0].effects.spar).index;
+  game.chooseEvent(index);
+  assert.ok(game.battle?.noFlee);
+  const round = game.battle.roundNum;
+  game.battleAction("도주");
+  assert.equal(game.battle.roundNum, round);
+  // 지는 겨룸
+  game.battle.enemy.hp = game.battle.enemy.maxHp;
+  for (let i = 0; i < 200 && game.battle; i++) { p.qi = 0; game.battleAction("기본공격"); if (game.battle) game.battle.enemy.hp = game.battle.enemy.maxHp; }
+  assert.ok(p.alive);
+  assert.ok(p.hasFlag("혈해_3"));
+});
+
+test("고를 길이 없는 줄거리는 지나가고 막히지 않는다", () => {
+  const meta = loadMeta();
+  meta.unlocked_origins.push(...DB.origins.side_order);
+  saveMeta(meta);
+  const game = newGame("외전혈승");
+  const p = game.player;
+  p.turn = 110;
+  p.flags = p.flags.filter((f) => !f.startsWith("혈승_"));
+  game.event = null;
+  game.openStoryEvent();
+  assert.ok(!game.event || game.event.key !== "외전혈승_8");
 });
