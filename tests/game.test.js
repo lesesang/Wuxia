@@ -1610,11 +1610,15 @@ test("출신 고유 무공은 장터나 적에게서 얻지 못하고 권마의 
     assert.ok(!Object.values(DB.enemies).some((e) => e.drop?.skill === k), k);
   }
   assert.equal(DB.events.권마시험.requires.origin, "권마계승");
-  // 출신마다 전용 인연은 둘이고 값이 같다. 강호초출은 사부의 신공을 주는 인연이 하나 더 있다
+  // 출신마다 전용 인연은 셋이다. 출신의 신공 셋은 하나의 인연으로 사야 찾아온다
   for (const origin of DB.origins.order) {
     const own = Object.values(DB.karma.content).filter((c) => c.origin === origin);
-    assert.equal(own.length, 2, origin);
-    assert.ok(own.every((c) => c.cost === 8), origin);
+    assert.equal(own.length, 3, origin);
+  }
+  for (const [key, skill] of Object.entries(DB.skills).filter(([, s]) => s.origin && s.grade === "신공" && s.origin !== "무림초출")) {
+    const givers = Object.entries(DB.events).filter(([, e]) => JSON.stringify(e).includes(`"skill":"${key}"`));
+    assert.ok(givers.length, key);
+    for (const [k, e] of givers) assert.ok(e.requires?.unlocked && DB.karma.content[e.requires.unlocked]?.origin === skill.origin, `${k} ${key}`);
   }
 });
 
@@ -2203,7 +2207,7 @@ test("출신마다 전용 자질과 인연이 있고 그 출신만 쓴다", () =
     const traits = Object.keys(DB.traits).filter((t) => DB.traits[t].origin === key);
     assert.equal(traits.length, 2, `${key} 자질`);
     const content = Object.keys(DB.karma.content).filter((c) => DB.karma.content[c].origin === key);
-    assert.equal(content.length, 2, `${key} 인연`);
+    assert.equal(content.length, 3, `${key} 인연`);
     for (const c of content) assert.ok(Object.values(DB.events).some((e) => e.requires?.origin === key && e.requires?.unlocked === c), `${key} 인연 사건 ${c}`);
     assert.equal(Object.values(DB.karma.upgrades).filter((u) => u.origin === key).length, 1, `${key} 기틀`);
     for (const trait of traits) {
@@ -2781,7 +2785,8 @@ test("외전은 처음부터 끝까지 걸어 그 출신의 결말로 끝난다"
   saveMeta(meta);
   for (const key of DB.origins.side_order) {
     const game = newGame(key);
-    assert.deepEqual(game.player.content, [], "카르마로 산 인연은 외전에 나오지 않는다");
+    // 카르마로 산 인연은 외전에 나오지 않고, 그 외전 출신의 신공 인연만 찾아온다
+    assert.deepEqual(game.player.content, Object.keys(DB.karma.content).filter((c) => DB.karma.content[c].side && DB.karma.content[c].origin === key));
     assert.equal(game.player.maxTurn, DB.origins.origins[key].end_turn);
     const seen = [];
     runToEnd(game, { onEvent: (g) => seen.push(g.event.key) });
@@ -4544,7 +4549,7 @@ test("사부의 마지막 가르침 끝에서 내 계열에 맞는 사부의 병
   p.learnSkill(Skill.fromDict({ key: "기초창법", grade: "기본", mastery: 0 }));
   applyEffects(p, { style_gear: { grade: "신물", origin: "무림초출" } });
   assert.ok(p.weapon === "무명창" || p.gear.includes("무명창"));
-  assert.equal(Object.values(DB.karma.content).filter((c) => c.origin === "무림초출").length, 2);
+  assert.equal(Object.values(DB.karma.content).filter((c) => c.origin === "무림초출").length, 3);
   assert.ok(!DB.karma.content.사부의이름);
 });
 
@@ -5138,4 +5143,18 @@ test("고를 길이 없는 줄거리는 지나가고 막히지 않는다", () =>
   game.event = null;
   game.openStoryEvent();
   assert.ok(!game.event || game.event.key !== "외전혈승_8");
+});
+
+test("사부의 맞수는 어느 길로 끝나도 보물 호신구를 주고, 출신의 신공은 인연을 사야 찾아온다", () => {
+  const event = DB.events.맞수_결판;
+  const ends = [...event.choices, ...DB.events["맞수_결판:눈밭"].choices].flatMap((c) => c.outcomes.map((o) => o.effects))
+    .filter((e) => !e.lose_next || e.battle);
+  for (const e of ends) assert.equal(e.style_gear?.grade, "보물");
+  assert.equal(DB.events.맞수_결판.choices[0].outcomes[0].effects.lose_next, "눈밭");
+  const p = new Player("남궁세가");
+  p.realm = "초절정";
+  p.turn = 50;
+  assert.ok(!checkRequires(p, DB.events.남궁_심법.requires));
+  p.content = ["남궁신공"];
+  assert.ok(checkRequires(p, DB.events.남궁_심법.requires));
 });
