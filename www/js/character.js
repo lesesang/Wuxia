@@ -220,6 +220,7 @@ export class Player {
     this.bossWeaken = 0;
     this.chronicle = [];
     this.slain = []; // 쓰러뜨린 이름 있는 적
+    this.startStyle = null; // 강호초출이 처음 든 병기의 계열
     this.content = [];
     this.chains = [];
     this.chainsDone = 0;
@@ -535,7 +536,7 @@ export class Player {
       hp: this.hp, qi: this.qi, battles: this.battles,
       encountered_enemies: this.encounteredEnemies, pending_encounters: this.pendingEncounters,
       skills: this.skills.map((s) => s.toDict()), main_skill: this.mainSkill, chosen_arts: this.chosenArts,
-      traits: this.traits, slain: this.slain, silver: this.silver, weapon: this.weapon, armor: this.armor, gear: this.gear, pending_legacy: this.pendingLegacy, person: this.person,
+      traits: this.traits, slain: this.slain, start_style: this.startStyle, silver: this.silver, weapon: this.weapon, armor: this.armor, gear: this.gear, pending_legacy: this.pendingLegacy, person: this.person,
       inventory: this.inventory, boss_weaken: this.bossWeaken, alignment: this.alignment,
       flags: this.flags, seen_events: this.seenEvents, origin_turn: this.originTurn, manor: this.manor, manor_turn: this.manorTurn, difficulty: this.difficulty, kills: this.kills,
       fame: this.fame, sect: this.sect, injury: this.injury,
@@ -572,6 +573,7 @@ export class Player {
     p.chosenArts = { ...(d.chosen_arts || {}) };
     p.traits = (d.traits || []).filter((k) => DB.traits[k]);
     p.slain = d.slain || [];
+    p.startStyle = d.start_style ?? null;
     p.skills.forEach((s) => p.applyEvolveTrait(s));
     p.silver = d.silver ?? 0;
     p.weapon = DB.market[d.weapon] ? d.weapon : null;

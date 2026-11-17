@@ -5158,3 +5158,21 @@ test("사부의 맞수는 어느 길로 끝나도 보물 호신구를 주고, �
   p.content = ["남궁신공"];
   assert.ok(checkRequires(p, DB.events.남궁_심법.requires));
 });
+
+test("사부의 맞수는 처음 든 병기와 같은 계통의 무공을 쓴다", () => {
+  for (const style of ["창법", "권법"]) {
+    const game = newGame("무림초출");
+    const p = game.player;
+    const pick = eventView(p, "시작_병기고").choices.find((c) => DB.events.시작_병기고.choices[c.index].outcomes[0].effects.start_weapon === style);
+    game.event = { key: "시작_병기고", forced: true };
+    game.chooseEvent(pick.index);
+    assert.equal(p.startStyle, style);
+    assert.equal(Player.fromDict(p.toDict()).startStyle, style);
+    game.event = null; game.battle = null;
+    p.content = ["사부의맞수"];
+    game.event = { key: "맞수_나루" };
+    game.chooseEvent(0);
+    assert.deepEqual(game.battle.enemy.specials.map((s) => s.name), DB.events.맞수_나루.choices[0].outcomes[0].effects.foe_style[style].specials.map((s) => s.name));
+    assert.ok(eventView(p, "맞수_나루").text.includes(style === "창법" ? "창" : "주먹"));
+  }
+});
