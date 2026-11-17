@@ -23,7 +23,6 @@ const ALIGN_TABLE = {
   마도: { names: ["마도 무인", "마인", "마두", "마도 고수", "대마두", "마도의 거두"], damage: [15, 20, 23, 27, 30, 35], healCut: [3, 5, 6, 7, 8, 10], kill_heal: [0, 3, 4, 6, 8, 10] },
 };
 
-/** 장이 뒤로 갈수록 기량이 더디게 오른다 */
 /** 사건에서 몸이 축나는 정도. 경지와 기량이 높을수록 작다. 현경의 고수가 독버섯으로 죽어 가지는 않는다 */
 const REALM_HARDINESS = { 절정: 0.8, 초절정: 0.6, 화경: 0.4, 현경: 0.25, 생사경: 0.15 };
 export function eventToll(player) {
@@ -60,9 +59,10 @@ export function personalize(text, person = null) {
 /** 세가에 몸담은 무인에게는 사문 대신 가문이라 한다 */
 export const sectWord = (sect) => (DB.sects[sect]?.house ? "가문" : "사문");
 
-/** 두 글자 성은 띄어 적는다. 지난 저장에는 이름이 없어 무명으로 부른다 */
+/** 두 글자 성은 띄어 적는다. 이름이 없으면 무명으로 부른다 */
 export const fullName = (person) => (person?.given ? `${person.surname || ""}${person.surname?.length > 1 ? " " : ""}${person.given}` : "무명");
 
+/** 장이 뒤로 갈수록 기량이 더디게 오른다 */
 const growthScale = (turn) => DB.balance.growth_by_chapter[getChapter(turn) - 1];
 /** 양을 성장 배율대로 줄인다. 소수점 아래는 그 확률로 1이 더 오른다. */
 export function scaledGrowth(amount, turn) {

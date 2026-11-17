@@ -56,7 +56,7 @@ function battleChoice(game) {
   if (battle.enemy.specialForRound(battle.roundNum + 1) && movement && player.qi >= movement.qiCost) return ["경공"];
   if (skill?.secretUnlocked && player.qi >= skill.secretQiCost) return ["비기"];
   if (skill && player.qi < skill.qiCost && player.bestOfType("심공")) return ["심법"];
-  if (hpRatio < 0.25 && !battle.isFinal && battle.enemy.hp > battle.enemy.maxHp * 0.4) return ["도주"];
+  if (hpRatio < 0.25 && !battle.isFinal && !battle.noFlee && battle.enemy.hp > battle.enemy.maxHp * 0.4) return ["도주"];
   return ["기본공격"];
 }
 

@@ -131,7 +131,6 @@ export function startChain(player, id) {
   player.note(`${DB.chains[id].title} 일에 발을 들였다.`);
 }
 
-/** 고른 결과에 따라 연계를 다음 편으로 넘기거나 끝낸다. */
 /** 비무에서 져서 이어지던 일이 어그러졌다. */
 export function failChain(player, id) {
   if (!player.chains.some((c) => c.id === id)) return;
@@ -406,6 +405,9 @@ function eventTalk(player, key) {
   return own.length ? own[seed % own.length].text : null;
 }
 
+/** 고를 수 있는 선택지가 하나라도 있는 사건인가 */
+export const playable = (player, key) => !!key && eventView(player, key).choices.some((c) => !c.locked);
+
 export function eventView(player, key) {
   const event = DB.events[key];
   const choices = [];
@@ -422,7 +424,6 @@ export function eventView(player, key) {
   return { key, title, text, choices, chain: event.chain ? DB.chains[event.chain.id].title : null };
 }
 
-/** 적이 플레이어를 보고 하는 말. 상황에 맞는 대사가 있으면 그것을 쓴다. */
 /** 조건에 맞는 첫 대사. 없으면 기본 대사 */
 export function reactiveLine(player, list, fallback = null) {
   const special = (list || []).find((i) => checkRequires(player, i.requires));
@@ -599,7 +600,6 @@ export function grantStartSkills(player) {
   return lines;
 }
 
-/** 시작 선물 중 병기와 도구, 성취. 주무공이 정해진 뒤 그 계열에 맞춰 받는다. */
 /** 길을 나서기 전에는 챙긴 것 가운데 가장 좋은 병장기를 든다. 그 뒤로는 플레이어가 고른다 */
 export function equipBestGear(player) {
   for (const slot of ["weapon", "armor"]) {
@@ -658,7 +658,7 @@ export function applyEffects(player, effects) {
       const rate = EVENT_STAT_SCALE * manorRate * (100 + sumEffect(player.traits, "event_growth", "percent")) / 100;
       const scaled = Math.max(1, Math.round(amount * rate));
       const amountNow = effects.full_growth ? scaled : Math.max(1, scaledGrowth(scaled, player.turn));
-      summary.push(`${STAT_NAMES[stat]}+${player.gainStat(stat, applyGrowth(amountNow, player.traits, stat))}`);
+      summary.push(player.gainStatText(stat, applyGrowth(amountNow, player.traits, stat)));
     } else {
       const lost = amount * STAT_SCALE;
       player[stat] = Math.max(1, player[stat] + lost);
@@ -771,7 +771,7 @@ export function applyEffects(player, effects) {
     if (skill) {
       summary.push(`새 무공 ${skill.name}`, ...player.learnSkill(skill));
     } else {
-      summary.push(`무리+${player.gainStat("martial", 2)}`);
+      summary.push(player.gainStatText("martial", 2));
     }
   }
 
@@ -791,7 +791,7 @@ export function applyEffects(player, effects) {
       summary.push(`새 무공 ${skill.name}`, ...player.learnSkill(skill));
       player.note(`${wanted} ${skill.name}${josa(skill.name, "을/를")} 얻었다.`);
     } else {
-      summary.push(`무리+${player.gainStat("martial", 4)}`);
+      summary.push(player.gainStatText("martial", 4));
     }
   }
 

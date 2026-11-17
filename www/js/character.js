@@ -278,6 +278,15 @@ export class Player {
     return this.raiseStat(stat, amount, cap);
   }
 
+  /** 기량을 올리고 기록에 남길 말을 돌려준다. 끝에 막혀 쌓인 몫은 그렇게 적는다 */
+  gainStatText(stat, amount) {
+    const pentBefore = this.pent[stat] || 0;
+    const gained = this.gainStat(stat, amount);
+    const stored = (this.pent[stat] || 0) - pentBefore;
+    if (stored > 0 && !gained) return `${STAT_NAMES[stat]} ${stored} 쌓임`;
+    return `${STAT_NAMES[stat]}+${gained}${stored > 0 ? `(${stored} 쌓임)` : ""}`;
+  }
+
   /** 끝을 지켜 기량을 올리고, 끝을 넘는 몫은 쌓아 둔다 */
   raiseStat(stat, amount, cap = this.statCap()) {
     const before = this[stat];
