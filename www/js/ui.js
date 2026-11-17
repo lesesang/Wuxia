@@ -273,7 +273,7 @@ ${section("실전", ["싸울수록 쌓입니다. 열다섯 번마다 주는 피�
 ${section("생사경", ["현경 너머의 숨은 경지이자 가장 높은 결말입니다. 돌파로는 오르지 못하고, 천마를 쓰러뜨린 그 순간에만 판가름 납니다.", "네 기량이 끝에 가깝고 실전이 넉넉한 무인이 체력과 내력을 넉넉히 남긴 채 천마를 넘어서면 이릅니다."])}`,
     무공: `${section("품계", [
     "<b>기본</b>: 강호 어디서나 배웁니다. <b>명품</b>: 이름난 문파와 고수의 무공입니다. <b>상승</b>: 고수의 무공이고 이 품계부터 <b>묘리</b>가 깨어납니다.",
-    "<b>일절</b>: 한 문파의 깊은 비전이고 승급으로 오르는 끝입니다. <b>신공</b>: 출신의 이야기와 카르마로 연 인연에서만 나오고, 일절의 끝에서 큰 깨달음으로 오르기도 합니다."])}
+    "<b>일절</b>: 한 문파의 깊은 비전이고 승급으로 오르는 끝입니다. <b>신공</b>: 카르마로 연 인연에서만 나오고, 일절의 끝에서 큰 깨달음으로 오르기도 합니다."])}
 ${section("쓰는 무공", ["공격, 심법, 경공 칸마다 쓸 무공 하나를 신상의 무공 칸에서 고릅니다. 새로 얻어도 저절로 바뀌지 않습니다.", "성취가 100을 넘으면 다음 품계로 오르고 성취 30에서 다시 쌓습니다. 같은 무공을 또 얻으면 성취가 오르고, 같은 갈래의 더 깊은 무공을 얻으면 쓰던 무공이 그것으로 이어집니다. 몇몇 무공은 성취가 차면 <b>비기</b>가 열립니다.", "쓰는 칸 밖의 무공도 위력, 최대 내력, 회피에 각각 1할까지 보탭니다. 주무공과 같은 계열은 두 배로 치고 주무공의 성취를 빠르게 합니다.", "성취는 다른 무공으로 옮길 수 있습니다. 품계가 높은 쪽에서 옮기면 7할, 같으면 절반, 낮으면 3할이 갑니다."])}
 ${section("묘리", ["무공마다 고유한 묘리가 있습니다. 회심과 출혈, 독과 화상, 표식과 여운, 적을 굳히거나 얼리는 한기, 예고된 필살기를 흐트러뜨리는 수, 회심 뒤의 연환, 쌓인 독과 상처를 터뜨리는 수, 성한 적에게 실리는 중수, 내력이 넘칠 때 실리는 기운 같은 것입니다.", "경공의 묘리는 다 피했을 때 드러납니다. 되받아치기, 잔상, 기세, 적이 걸음을 놓쳐 더 피하는 것 등이 있습니다.", "<b>심법의 묘리</b>는 운기하지 않아도 싸우는 내내 흐릅니다. 호신 기운, 합마다 차는 기운, 내력으로 대신 받기, 숨이 트이는 회복, 잃은 체력만큼 끓는 피 같은 것입니다."])}
 ${section("위력", ["<b>위력 N배</b>는 기본 공격력에 곱하는 값이고 맨손이 1배입니다. 기본 공격력은 네 기량(무리, 외공, 내공, 심경 순으로 크게 들어감)과 병기의 위력으로 정해집니다.", "품계가 오를 때마다 0.25배, 성취 1마다 0.003배가 더해지고 경지, 자질, 소속, 성향의 보정이 곱해집니다."])}
@@ -304,7 +304,7 @@ ${section("소속", [
     "<b>구파일방</b>: 소림, 무당, 화산, 아미, 곤륜, 종남, 점창, 청성, 공동, 개방. <b>오대세가</b>: 남궁, 하북팽가, 사천당가, 모용, 제갈(남궁과 팽가는 멸문해 그 마지막 사람만 출신으로 고릅니다). <b>사파</b>: 사도련, 녹림맹, 살막, 흑사방, 하오문. <b>마도</b>: 천마신교, 혈교, 귀문교."])}
 ${section("성향", ["싸움과 선택에 따라 정도, 사도, 마도가 쌓이고 가장 높은 길의 단계에 따라 혜택을 받습니다. 정도는 장터 값과 받는 피해와 회복, 사도는 은자와 회심과 회피, 마도는 주는 피해와 쓰러뜨린 자의 기운이 낫지만 회복이 더딥니다.", `한 길이 ${ALIGN_STEPS.join(", ")}을 처음 넘을 때마다 깨달음을 하나씩 얻고 길이 바뀌어도 잃지 않습니다. ${Object.values(DB.balance.paths).map((path) => `<b>${esc(path.name)}</b>: ${path.steps.map((st) => esc(st.name)).join(", ")}`).join(". ")}.`])}
 ${section("혈해", ["6년차 초부터 9년차 중반까지 혈교의 이야기가 정해진 때에 찾아옵니다. 토벌하거나, 손잡거나, 지켜볼 수 있습니다. 8년차 마지막 달에 혈마가 깨어납니다. 손잡아도 마지막 상대는 천마입니다."])}
-${section("출신의 이야기", ["출신마다 전용 이야기가 있고 그 끝에서 출신만의 신공과 병기를 얻습니다. 조건을 채운 이야기는 그 장에 든 지 반년이 지나면 달의 처음에 반드시 찾아옵니다.", "이어지는 인연은 여러 달을 쓰는 대신 끝을 맺으면 보상이 큽니다."])}`,
+${section("출신의 이야기", ["출신마다 전용 이야기가 있습니다. 조건을 채운 이야기는 그 장에 든 지 반년이 지나면 달의 처음에 반드시 찾아옵니다. 출신만의 신공 셋을 주는 이야기는 상점에서 그 출신의 신공 인연을 사야 찾아옵니다.", "이어지는 인연은 여러 달을 쓰는 대신 끝을 맺으면 보상이 큽니다."])}`,
     장터: `${section("장터", ["해마다 마지막 달에 열리고 달을 쓰지 않습니다. 주무공에 맞는 무공과 병기가 더 자주 나오고, 뒤쪽 장터일수록 좋은 물건이 나옵니다.", "약과 도구, 쓰지 않는 병장기는 값의 4할에 되팝니다. 들고 있는 병장기는 먼저 내려놓아야 합니다."])}
 ${section("물건의 품계", ["범품, 양품, 명품, 보물, 신물 순입니다. 명품 이상의 병장기에는 <b>영기</b>가 있고, 병기의 영기는 주무공 계열과 맞아야 깨어납니다. 새 병장기는 신상의 행낭 칸에서 골라 듭니다."])}
 ${section("수상한 누군가", ["결전 직전 마지막 달에는 장터 대신 수상한 누군가가 보따리를 풉니다. 보물과 신물, 상승 이상의 비급만 다루고 값이 3할쯤 비쌉니다. 카르마로 거래하는 물건도 늘 내놓습니다."])}
@@ -316,7 +316,7 @@ ${section("도구", ["수련 도구는 언제든, 전투 도구는 싸움 중에
     `<b>깊은 강호</b>: ${DB.difficulty.order.slice(1).map((k) => `${esc(DB.difficulty.levels[k].name)}${josa(DB.difficulty.levels[k].name, "은/는")} ${DB.difficulty.levels[k].karma}배`).join(", ")}를 받습니다.`,
     "써도 누적은 줄지 않고, 누적이 늘면 누적 보상을 저절로 받습니다."])}
 ${section("상점", ["<b>출신</b>은 새 출신을, <b>자질</b>은 타고난 바탕을(장착 칸에 한이 있음), <b>기틀</b>은 늘 적용되는 바탕을, <b>인연</b>은 새 이야기와 결전에 달려올 사람을, <b>채비</b>는 다음 강호행 한 번에 쓰는 준비물을 엽니다.", "잠긴 출신의 전용 자질, 기틀, 인연은 그 출신을 열면 보입니다. 병기와 갑의는 겹칠수록 좋아지고 끝을 넘으면 은자가 되며, 같은 비급이 겹치면 성취가 됩니다."])}
-${section("외전", ["생사경에 오른 뒤 상점에서 따로 엽니다. 천마봉으로 가지 않고 같은 강호의 같은 십 년을 저마다의 목표로 걷습니다. 출신마다 서장과 고비, 마지막 고비, 결말 셋이 있습니다.", "본편의 줄거리와 카르마로 산 인연은 나오지 않고 변경과 새외의 일을 만납니다. 외전의 출신은 한 품계 높은 무공을 지니고 시작하지만, 길의 적은 본편보다 강하고 마지막 상대는 그보다 훨씬 강합니다."])}
+${section("외전", ["생사경에 오른 뒤 상점에서 따로 엽니다. 천마봉으로 가지 않고 같은 강호의 같은 십 년을 저마다의 목표로 걷습니다. 출신마다 서장과 고비, 마지막 고비, 결말 셋이 있습니다.", "본편의 줄거리와 카르마로 산 인연은 나오지 않고 변경과 새외의 일을 만납니다. 외전 출신의 신공 셋은 외전 칸에서 그 출신의 신공 인연을 사야 찾아옵니다. 외전의 출신은 한 품계 높은 무공을 지니고 시작하지만, 길의 적은 본편보다 강하고 마지막 상대는 그보다 훨씬 강합니다."])}
 ${section("장원", [`쌓은 카르마가 ${DB.karma.manor.need_total}에 이르면 열립니다. 객사, 연무장, 약방, 서고를 단계별로 올리고 올린 채는 사라지지 않습니다.`, "장원은 문패를 챙긴 강호행에만 나타납니다. 그 강호행에서는 장원의 일이 몇 달에 한 번씩 찾아오고 길에서 만나는 일에 장원으로 푸는 선택지가 열립니다. 장원에서 얻는 것은 장원이 클수록 큽니다."])}
 ${section("전설의 유산", ["천마를 한 번 쓰러뜨리면 열립니다. 천마를 쓰러뜨리거나 외전을 끝맺은 강호행에서 무공이나 병장기, 귀한 물건 하나를 남기고, 다음 강호행의 첫 해 안에 별호만 남은 고수들의 자취에서 이어받습니다.", "처음에는 무공의 품계가 한 단계 낮아지고(상승까지만) 병장기는 낮은 단계로 돌아옵니다.", ...DB.karma.legacy.upgrades.map((u, i) => `<b>${i + 1}단계 ${esc(u.name)}</b>: ${esc(u.desc)}`)])}`,
   };
@@ -450,7 +450,7 @@ const emptyNote = (text) => `<p class="codex-empty">${text}</p>`;
 function shopPanels(meta) {
   // 잠긴 출신의 전용 항목은 그 출신을 해금한 뒤에 보인다
   const open = (origin) => !origin || meta.unlocked_origins.includes(origin);
-  const hidden = [...Object.values(DB.traits).filter((t) => !t.hidden), ...Object.values(DB.karma.upgrades), ...Object.values(DB.karma.content)].some((x) => !open(x.origin));
+  const hidden = [...Object.values(DB.traits).filter((t) => !t.hidden), ...Object.values(DB.karma.upgrades), ...Object.values(DB.karma.content).filter((c) => !c.side)].some((x) => !open(x.origin));
   const lockedNote = hidden ? `<p class="section-note">잠긴 출신의 전용 항목은 그 출신을 해금하면 보입니다.</p>` : "";
   const pips = (level, max) => `<span class="pips">${Array.from({ length: max }, (_, i) => `<i class="${i < level ? "on" : ""}"></i>`).join("")}</span>`;
   const origins = DB.origins.order.filter((k) => !meta.unlocked_origins.includes(k))
@@ -464,7 +464,9 @@ function shopPanels(meta) {
     const seen = endings.filter((e) => meta.endings_seen.includes(e)).length;
     return `<div class="pick-row"><div class="pick-main"><div class="pick-name">${esc(o.name)} <span class="rarity">결말 ${seen}/${endings.length}</span></div><p class="pick-desc">${esc(o.goal)}</p></div></div>`;
   }).join("");
-  const sides = `<p class="section-note">외전의 출신은 천마봉으로 가지 않습니다. 같은 강호의 같은 십 년을 저마다의 목표로 걷고, 그 출신만의 줄거리와 결말이 있습니다. 카르마로 산 인연은 외전에 나오지 않습니다. 깊은 강호에서는 외전의 이야기도 그 강호에 맞게 달라집니다. 외전의 길은 본편보다 거칩니다.</p>${sideOpen(meta) ? "" : `<p class="section-note">외전은 생사경에 오른 무인에게 열립니다. 천마를 쓰러뜨리는 순간 생사의 경계를 넘어야 합니다.</p>`}${sideRows || emptyNote("모든 외전을 해금했습니다.")}${ownedSides ? `<h4 class="shop-group">해금한 외전</h4>${ownedSides}` : ""}`;
+  const sideContent = Object.entries(DB.karma.content).filter(([k, c]) => c.side && !meta.content.includes(k) && meta.unlocked_origins.includes(c.origin))
+    .map(([k, c]) => shopRow(esc(c.name), `<p class="pick-desc">${esc(c.desc)}</p>${originOnly(c.origin)}`, "buy-content", k, c.cost, meta)).join("");
+  const sides = `<p class="section-note">외전의 출신은 천마봉으로 가지 않습니다. 같은 강호의 같은 십 년을 저마다의 목표로 걷고, 그 출신만의 줄거리와 결말이 있습니다. 카르마로 산 인연은 외전에 나오지 않고, 외전 출신의 신공 인연만 그 외전에 찾아옵니다. 깊은 강호에서는 외전의 이야기도 그 강호에 맞게 달라집니다. 외전의 길은 본편보다 거칩니다.</p>${sideOpen(meta) ? "" : `<p class="section-note">외전은 생사경에 오른 무인에게 열립니다. 천마를 쓰러뜨리는 순간 생사의 경계를 넘어야 합니다.</p>`}${sideRows || emptyNote("모든 외전을 해금했습니다.")}${ownedSides ? `<h4 class="shop-group">해금한 외전</h4>${ownedSides}` : ""}${sideContent ? `<h4 class="shop-group">외전 출신의 신공</h4>${sideContent}` : ""}`;
   const levels = manorLevels(meta);
   const gate = gateCost(meta);
   const gateRow = meta.manor_gate
@@ -512,8 +514,8 @@ function shopPanels(meta) {
     .filter((g) => upgradeEntries(g).length)
     .map((g) => `${groupHead(g)}${upgradeEntries(g).map(upgradeRow).join("")}`).join("");
   const contentRow = ([k, c]) => shopRow(esc(c.name), `<p class="pick-desc">${esc(c.desc)}</p>${originOnly(c.origin)}`, "buy-content", k, c.cost, meta);
-  const contentLeft = Object.entries(DB.karma.content).filter(([k, c]) => !meta.content.includes(k) && open(c.origin));
-  const contentGroups = [...new Set(Object.values(DB.karma.content).map((c) => c.group))];
+  const contentLeft = Object.entries(DB.karma.content).filter(([k, c]) => !c.side && !meta.content.includes(k) && open(c.origin));
+  const contentGroups = [...new Set(Object.values(DB.karma.content).filter((c) => !c.side).map((c) => c.group))];
   const contentFilter = groupFilter("content", contentGroups);
   const contentList = contentGroups.filter((g) => contentFilter.on === "전체" || contentFilter.on === g).map((g) => {
     const entries = contentLeft.filter(([, c]) => c.group === g);
@@ -538,7 +540,7 @@ function shopPanels(meta) {
     manor,
     trait: filterRow() + (traits || emptyNote("이 갈래의 자질을 모두 해금했습니다.")) + lockedNote,
     upgrade: `<p class="section-note">기틀은 장착하지 않아도 모든 강호행에 적용됩니다.</p>${upgrades}${lockedNote}`,
-    content: `<p class="section-note">인연은 본편의 강호행에서 찾아옵니다.</p>${content || emptyNote("모든 인연을 해금했습니다.")}${lockedNote}`,
+    content: `<p class="section-note">인연은 본편의 강호행에서 찾아옵니다. 외전 출신의 신공 인연은 외전 칸에 있습니다.</p>${content || emptyNote("모든 인연을 해금했습니다.")}${lockedNote}`,
     legacy,
     reward: rewardPanel(meta),
   };
@@ -582,7 +584,7 @@ function affordableCount(meta) {
   const origins = [...DB.origins.order, ...(sideOpen(meta) ? DB.origins.side_order : [])].filter((o) => !meta.unlocked_origins.includes(o) && DB.origins.origins[o].cost <= k).length;
   const traits = Object.keys(DB.traits).filter((t) => !DB.traits[t].hidden && !meta.unlocked_traits.includes(t) && DB.traits[t].cost <= k).length;
   const ups = Object.entries(DB.karma.upgrades).filter(([key, u]) => u.costs[upgradeLevel(key, meta)] <= k).length;
-  const content = Object.entries(DB.karma.content).filter(([key, c]) => !meta.content.includes(key) && c.cost <= k).length;
+  const content = Object.entries(DB.karma.content).filter(([key, c]) => !meta.content.includes(key) && c.cost <= k && (!c.origin || meta.unlocked_origins.includes(c.origin))).length;
   return origins + traits + ups + content;
 }
 

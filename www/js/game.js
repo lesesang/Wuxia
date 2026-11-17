@@ -110,7 +110,8 @@ export class Game {
     this.player = new Player(originKey, [...traits, ...upgradeTraits(meta, originKey), ...rewardTraits(meta), ...provisions.map((k) => `채비_${k}`), ...world]);
     this.player.difficulty = difficulty;
     // 카르마로 산 인연은 본편의 것이다. 외전은 그 출신의 이야기가 끝나는 달에 끝난다
-    this.player.content = side ? [] : activeContent(meta);
+    // 외전에는 그 외전의 신공 인연만 찾아오고, 본편에는 외전의 것이 나오지 않는다
+    this.player.content = activeContent(meta).filter((key) => (side ? DB.karma.content[key]?.side && DB.karma.content[key].origin === originKey : !DB.karma.content[key]?.side));
     if (side) this.player.maxTurn = side.end_turn;
     // 문패를 챙긴 강호행에만 장원이 길 위에 나타난다
     this.player.manor = manor;

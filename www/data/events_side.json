@@ -7057,7 +7057,8 @@
         }
       ],
       "requires": {
-        "origin": "외전당가"
+        "origin": "외전당가",
+        "unlocked": "당가신공"
       },
       "variants": [
         {
@@ -7125,7 +7126,8 @@
       ],
       "requires": {
         "realm_min": "초절정",
-        "origin": "외전당가"
+        "origin": "외전당가",
+        "unlocked": "당가신공"
       }
     },
     "당가_신공_보법": {
@@ -7167,7 +7169,8 @@
       ],
       "requires": {
         "realm_min": "초절정",
-        "origin": "외전당가"
+        "origin": "외전당가",
+        "unlocked": "당가신공"
       }
     },
     "빙궁_신공_장": {
@@ -7209,7 +7212,8 @@
         }
       ],
       "requires": {
-        "origin": "외전빙궁"
+        "origin": "외전빙궁",
+        "unlocked": "빙궁신공"
       },
       "variants": [
         {
@@ -7276,7 +7280,8 @@
       ],
       "requires": {
         "realm_min": "초절정",
-        "origin": "외전빙궁"
+        "origin": "외전빙궁",
+        "unlocked": "빙궁신공"
       }
     },
     "빙궁_신공_보법": {
@@ -7318,7 +7323,8 @@
       ],
       "requires": {
         "realm_min": "초절정",
-        "origin": "외전빙궁"
+        "origin": "외전빙궁",
+        "unlocked": "빙궁신공"
       }
     },
     "매화_신공_검": {
@@ -7360,7 +7366,8 @@
         }
       ],
       "requires": {
-        "origin": "외전매화"
+        "origin": "외전매화",
+        "unlocked": "매화신공"
       },
       "variants": [
         {
@@ -7427,7 +7434,8 @@
       ],
       "requires": {
         "realm_min": "초절정",
-        "origin": "외전매화"
+        "origin": "외전매화",
+        "unlocked": "매화신공"
       }
     },
     "매화_신공_보법": {
@@ -7469,7 +7477,8 @@
       ],
       "requires": {
         "realm_min": "초절정",
-        "origin": "외전매화"
+        "origin": "외전매화",
+        "unlocked": "매화신공"
       }
     },
     "살막_신공_도": {
@@ -7511,7 +7520,8 @@
         }
       ],
       "requires": {
-        "origin": "외전살막"
+        "origin": "외전살막",
+        "unlocked": "살막신공"
       },
       "variants": [
         {
@@ -7578,7 +7588,8 @@
       ],
       "requires": {
         "realm_min": "초절정",
-        "origin": "외전살막"
+        "origin": "외전살막",
+        "unlocked": "살막신공"
       }
     },
     "살막_신공_보법": {
@@ -7620,7 +7631,8 @@
       ],
       "requires": {
         "realm_min": "초절정",
-        "origin": "외전살막"
+        "origin": "외전살막",
+        "unlocked": "살막신공"
       }
     },
     "수로_신공_창": {
@@ -7662,7 +7674,8 @@
         }
       ],
       "requires": {
-        "origin": "외전수로"
+        "origin": "외전수로",
+        "unlocked": "수로신공"
       },
       "variants": [
         {
@@ -7729,7 +7742,8 @@
       ],
       "requires": {
         "realm_min": "초절정",
-        "origin": "외전수로"
+        "origin": "외전수로",
+        "unlocked": "수로신공"
       }
     },
     "수로_신공_보법": {
@@ -7772,7 +7786,8 @@
       "requires": {
         "realm_min": "초절정",
         "not_slain": "수적두목",
-        "origin": "외전수로"
+        "origin": "외전수로",
+        "unlocked": "수로신공"
       }
     },
     "혈승_신공_장": {
@@ -7814,7 +7829,8 @@
         }
       ],
       "requires": {
-        "origin": "외전혈승"
+        "origin": "외전혈승",
+        "unlocked": "혈승신공"
       },
       "variants": [
         {
@@ -7881,7 +7897,8 @@
       ],
       "requires": {
         "realm_min": "초절정",
-        "origin": "외전혈승"
+        "origin": "외전혈승",
+        "unlocked": "혈승신공"
       }
     },
     "혈승_신공_보법": {
@@ -7923,7 +7940,8 @@
       ],
       "requires": {
         "realm_min": "초절정",
-        "origin": "외전혈승"
+        "origin": "외전혈승",
+        "unlocked": "혈승신공"
       }
     },
     "야수_신공_권": {
@@ -7965,7 +7983,8 @@
         }
       ],
       "requires": {
-        "origin": "외전야수"
+        "origin": "외전야수",
+        "unlocked": "야수신공"
       },
       "variants": [
         {
@@ -8032,7 +8051,8 @@
       ],
       "requires": {
         "realm_min": "초절정",
-        "origin": "외전야수"
+        "origin": "외전야수",
+        "unlocked": "야수신공"
       }
     },
     "야수_신공_보법": {
@@ -8074,7 +8094,8 @@
       ],
       "requires": {
         "realm_min": "초절정",
-        "origin": "외전야수"
+        "origin": "외전야수",
+        "unlocked": "야수신공"
       }
     }
   }
