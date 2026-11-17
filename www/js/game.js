@@ -534,6 +534,12 @@ export class Game {
       // 상대의 이름과 첫 대사는 내 주무공 계열에 맞춰 고를 수 있다
       const style = (v) => (v && typeof v === "object" ? v[this.player.bestSkill()?.category] ?? v.기본 ?? null : v);
       this.startBattle(effects.battle, !!effects.spar, style(effects.foe), style(effects.foe_line), true);
+      // 처음 든 병기와 같은 계통의 무공을 쓰는 상대
+      const own = effects.foe_style?.[this.player.startStyle ?? this.player.bestSkill()?.category];
+      if (own && this.battle) {
+        this.battle.enemy.specials = own.specials.map((sp) => ({ ...sp }));
+        this.addLog([own.line]);
+      }
     } else if (effects.gauntlet) {
       const { enemies, reward, name, spar } = effects.gauntlet;
       this.gauntlet = { name, enemies: enemies.slice(1), reward, round: 1, total: enemies.length, spar: !!spar };

@@ -51,6 +51,7 @@ function unmetReason(player, requires) {
   if (r.injured && !player.injury) return "내상이 없다";
   if (r.ascend_ready && !ascendTarget(player, r.ascend_ready)) return "아직 그 무공이 끝에 이르지 않았다";
   if (r.main_category && player.bestSkill()?.category !== r.main_category) return `${r.main_category}${josa(r.main_category, "을/를")} 쓰는 무인이 아니다`;
+  if (r.start_style && (player.startStyle ?? player.bestSkill()?.category) !== r.start_style) return `처음 든 병기가 ${r.start_style}의 것이 아니다`;
   if (r.trait && !player.traits.includes(r.trait)) return "타고난 바가 다르다";
   if (r.unlocked && !player.content.includes(r.unlocked)) return "아직 인연이 닿지 않았다";
   if (r.dominant && player.dominantAlignment() !== r.dominant) return `${r.dominant}의 길이 아니다`;
@@ -506,6 +507,7 @@ const STARTER_SKILLS = {
 function takeStartWeapon(player, style) {
   // 강호초출은 고른 병기에 맞는 무공 하나로 시작한다
   const key = STARTER_SKILLS[style];
+  player.startStyle = style;
   // 유산이나 채비로 받은 무공은 그대로 두고 출신의 기본 무공만 바꾼다
   const defaults = DB.origins.origins[player.originKey].skills || [];
   player.skills = player.skills.filter((s) => s.type !== "공격무공" || !defaults.includes(s.key));
