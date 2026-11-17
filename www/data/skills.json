@@ -8718,5 +8718,1076 @@
       "name": "곧은 구름길",
       "text": "다 피하면 곧바로 위력 6할로 되받아친다, 다 피하면 체력 3푼 회복, 다 피하면 다음 공격 위력이 2할 오른다."
     }
+  },
+  "쇄혼도법": {
+    "name": "쇄혼도법",
+    "type": "공격무공",
+    "category": "도법",
+    "grade": "상승",
+    "base_multiplier": 1.5,
+    "qi_cost": 9,
+    "desc": "쇄혼도가 교도 마을의 아이들에게 내리는 첫 칼. 베인 자리에 차가운 기운이 남아 상대의 숨이 칼끝에 묶인다.",
+    "forms": [
+      "쇄혼",
+      "귀영",
+      "단백"
+    ],
+    "secret_technique": {
+      "name": "쇄혼일도",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    },
+    "origin": "외전신교",
+    "gimmick": {
+      "lifesteal": 10,
+      "weaken": {
+        "percent": 10,
+        "rounds": 1
+      },
+      "name": "묶이는 숨",
+      "text": "준 피해의 1할을 체력으로 흡수, 맞히면 적의 다음 합 위력이 1할 준다."
+    }
+  },
+  "천마심법": {
+    "name": "천마심법",
+    "type": "심공",
+    "category": "심공",
+    "grade": "명품",
+    "base_multiplier": 1.0,
+    "qi_cost": 0,
+    "desc": "교도 마을에서 아침마다 외는 숨. 교주를 하늘로 섬기는 말을 숨에 실어 왼다.",
+    "effect": {
+      "heal_hp_pct": 10,
+      "heal_qi_pct": 20,
+      "atk_buff_pct": 20,
+      "buff_rounds": 2
+    },
+    "origin": "외전신교",
+    "gimmick": {
+      "rage": {
+        "per": 3,
+        "max": 18
+      },
+      "regen_qi": {
+        "percent": 5,
+        "rounds": 3
+      },
+      "name": "하늘을 섬기는 숨",
+      "text": "잃은 체력 1할마다 위력이 3푼씩 오른다(1할 8푼까지). 합마다 내력 2푼이 저절로 찬다."
+    }
+  },
+  "혈영보": {
+    "name": "혈영보",
+    "type": "경공",
+    "category": "경공",
+    "grade": "명품",
+    "base_multiplier": 1,
+    "qi_cost": 6,
+    "desc": "신교의 무사들이 쓰는 핏빛 그림자 걸음. 피가 튀는 자리를 피해 다음 자리로 옮긴다.",
+    "effect": {
+      "evade": 70,
+      "counter_pct": 90,
+      "flee_bonus": 25
+    },
+    "origin": "외전신교",
+    "gimmick": {
+      "momentum": 5,
+      "next_crit": 1,
+      "name": "핏빛 그림자",
+      "text": "다 피할 때마다 이 싸움의 위력이 5푼씩 오른다(3할까지), 다 피하면 다음 공격은 반드시 회심."
+    }
+  },
+  "천혼쇄심도": {
+    "name": "천혼쇄심도",
+    "category": "도법",
+    "type": "공격무공",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "쇄혼도의 끝. 천 개의 혼이 묶인 칼이 한꺼번에 운다. 맞은 자의 숨이 칼끝에 끌려 나와 그대로 칼의 무게가 된다.",
+    "forms": [
+      "천혼",
+      "쇄심",
+      "귀곡"
+    ],
+    "secret_technique": {
+      "name": "천혼쇄심",
+      "unlock_grade": "신공",
+      "unlock_mastery": 40,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "origin": "외전신교",
+    "gimmick": {
+      "lifesteal": 15,
+      "execute": {
+        "below": 30,
+        "percent": 50
+      },
+      "weaken": {
+        "percent": 15,
+        "rounds": 2
+      },
+      "name": "천 개의 혼",
+      "text": "준 피해의 1할 5푼을 체력으로 흡수, 적 체력 3할 이하에서 위력 +5할, 맞히면 2합 동안 적 위력 -1할 5푼."
+    }
+  },
+  "천마귀원공": {
+    "name": "천마귀원공",
+    "type": "심공",
+    "category": "심공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 0,
+    "desc": "교도 마을의 기도를 천 번 왼 뒤에 남은 숨. 교주를 하늘로 섬기는 마음이 단전을 데운다.",
+    "effect": {
+      "heal_hp_pct": 25,
+      "heal_qi_pct": 45,
+      "atk_buff_pct": 25,
+      "buff_rounds": 3
+    },
+    "origin": "외전신교",
+    "gimmick": {
+      "rage": {
+        "per": 4,
+        "max": 24
+      },
+      "lifesteal_buff": {
+        "percent": 18,
+        "rounds": 3
+      },
+      "injury": 40,
+      "name": "하늘을 데우는 숨",
+      "text": "잃은 체력 1할마다 위력이 4푼씩 오른다(2할 4푼까지). 준 피해의 9푼을 흡수한다. 내상을 입힐 일격을 4할 확률로 다잡는다."
+    }
+  },
+  "혈영귀혼보": {
+    "name": "혈영귀혼보",
+    "type": "경공",
+    "category": "경공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 10,
+    "desc": "신교의 선봉이 피 속을 지나는 걸음. 피가 튀는 자리마다 핏빛 그림자가 남아 쫓는 칼을 홀린다.",
+    "effect": {
+      "evade": 88,
+      "counter_pct": 170,
+      "flee_bonus": 50
+    },
+    "origin": "외전신교",
+    "gimmick": {
+      "momentum": 6,
+      "afterimage": 15,
+      "next_crit": 1,
+      "name": "핏빛 잔상",
+      "text": "다 피할 때마다 이 싸움의 위력이 6푼씩 오른다(3할까지), 다 피하면 잔상이 남아 다음 합에 1할 5푼 확률로 몸이 먼저 움직인다, 다 피하면 다음 공격은 반드시 회심."
+    }
+  },
+  "홍수비침": {
+    "name": "홍수비침",
+    "type": "공격무공",
+    "category": "암기",
+    "grade": "상승",
+    "base_multiplier": 1.5,
+    "qi_cost": 9,
+    "desc": "붉은 소매 속에 숨긴 침. 말이 끝나기 전에 날아가 말을 끊는다. 맞은 자의 숨이 한 박자 늦는다.",
+    "forms": [
+      "홍수",
+      "단언",
+      "절설"
+    ],
+    "secret_technique": {
+      "name": "홍수일침",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    },
+    "origin": "외전홍수",
+    "gimmick": {
+      "stun": 12,
+      "poison": 8,
+      "name": "말을 끊는 침",
+      "text": "맞히면 1할 2푼 확률로 적이 다음 합에 손을 쓰지 못한다, 적을 중독시킨다(독 위력 8)."
+    }
+  },
+  "홍의심법": {
+    "name": "홍의심법",
+    "type": "심공",
+    "category": "심공",
+    "grade": "명품",
+    "base_multiplier": 1.0,
+    "qi_cost": 0,
+    "desc": "붉은 옷을 입은 자들의 숨. 웃는 얼굴 뒤에서 숨이 흐트러지지 않는다.",
+    "effect": {
+      "heal_hp_pct": 10,
+      "heal_qi_pct": 22,
+      "atk_buff_pct": 10,
+      "buff_rounds": 2
+    },
+    "origin": "외전홍수",
+    "gimmick": {
+      "focus": 6,
+      "qi_shield": 10,
+      "name": "웃는 얼굴",
+      "text": "회심 확률이 6푼 오른다. 맞는 힘의 1할을 내력으로 대신 받는다."
+    }
+  },
+  "홍운보": {
+    "name": "홍운보",
+    "type": "경공",
+    "category": "경공",
+    "grade": "명품",
+    "base_multiplier": 1,
+    "qi_cost": 6,
+    "desc": "붉은 소매가 바람에 날리듯 걷는 걸음. 소매가 먼저 움직이고 몸은 그 뒤를 따른다.",
+    "effect": {
+      "evade": 72,
+      "counter_pct": 75,
+      "flee_bonus": 35
+    },
+    "origin": "외전홍수",
+    "gimmick": {
+      "dazzle": 8,
+      "next_power": 15,
+      "name": "날리는 소매",
+      "text": "다 피하면 적이 걸음을 놓쳐 2합 동안 회피 +8, 다 피하면 다음 공격 위력이 1할 5푼 오른다."
+    }
+  },
+  "만홍천라침": {
+    "name": "만홍천라침",
+    "category": "암기",
+    "type": "공격무공",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "붉은 옷의 여인이 서른 해 동안 소매에 넣어 다닌 침의 끝. 소매를 털면 붉은 그물이 하늘을 덮고 그 그물에 걸린 자는 말도 숨도 끊긴다.",
+    "forms": [
+      "만홍",
+      "천라",
+      "절명"
+    ],
+    "secret_technique": {
+      "name": "만홍천라",
+      "unlock_grade": "신공",
+      "unlock_mastery": 40,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "origin": "외전홍수",
+    "gimmick": {
+      "hits": 4,
+      "hit_rate": 0.36,
+      "stun": 15,
+      "poison": 12,
+      "name": "붉은 그물",
+      "text": "4번 나눠 날리며(한 번마다 위력 3할 6푼) 번번이 명중과 회심을 따로 가린다, 맞히면 1할 5푼 확률로 적이 다음 합에 손을 쓰지 못한다, 적을 중독시킨다(독 위력 12)."
+    }
+  },
+  "홍의환심공": {
+    "name": "홍의환심공",
+    "type": "심공",
+    "category": "심공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 0,
+    "desc": "웃는 얼굴 뒤의 숨. 사람의 마음을 사는 자는 제 마음이 흔들리지 않아야 한다.",
+    "effect": {
+      "heal_hp_pct": 25,
+      "heal_qi_pct": 50,
+      "atk_buff_pct": 20,
+      "buff_rounds": 3
+    },
+    "origin": "외전홍수",
+    "gimmick": {
+      "focus": 10,
+      "clear_mind": 50,
+      "next_power": 30,
+      "name": "웃는 얼굴 뒤",
+      "text": "회심 확률이 1할 오른다. 혈도를 짚는 일격을 5할 확률로 막는다. 네 합마다 모은 숨으로 그 합의 공격 위력이 3할 오른다."
+    }
+  },
+  "홍운비소보": {
+    "name": "홍운비소보",
+    "type": "경공",
+    "category": "경공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 10,
+    "desc": "붉은 구름처럼 날리는 소매의 걸음. 소매가 먼저 가고 몸은 소매 그림자 안에 숨는다.",
+    "effect": {
+      "evade": 89,
+      "counter_pct": 150,
+      "flee_bonus": 70
+    },
+    "origin": "외전홍수",
+    "gimmick": {
+      "dazzle": 10,
+      "auto_evade": 10,
+      "refund": 1,
+      "name": "붉은 구름",
+      "text": "다 피하면 적이 걸음을 놓쳐 2합 동안 회피 +10, 경공을 쓰지 않아도 1할 확률로 저절로 공격을 피한다, 다 피하면 쓴 내력의 절반을 되찾는다."
+    }
+  },
+  "창산쾌검": {
+    "name": "창산쾌검",
+    "type": "공격무공",
+    "category": "검법",
+    "grade": "상승",
+    "base_multiplier": 1.5,
+    "qi_cost": 9,
+    "desc": "창산의 바람을 따라가는 점창의 빠른 검. 벌레가 날개를 한 번 치는 동안 검이 세 번 지난다.",
+    "forms": [
+      "창산",
+      "유풍",
+      "쾌섬"
+    ],
+    "secret_technique": {
+      "name": "창산삼섬",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    },
+    "origin": "외전점창",
+    "gimmick": {
+      "combo": 45,
+      "accuracy": 15,
+      "name": "바람보다 빠른 검",
+      "text": "회심이 터지면 위력 4할 5푼으로 한 번 더 벤다, 명중 +1할 5푼."
+    }
+  },
+  "이해심법": {
+    "name": "이해심법",
+    "type": "심공",
+    "category": "심공",
+    "grade": "명품",
+    "base_multiplier": 1.0,
+    "qi_cost": 0,
+    "desc": "호수 위의 물빛처럼 숨을 펴는 점창의 숨. 독기가 들어와도 물에 풀리듯 흩어진다.",
+    "effect": {
+      "heal_hp_pct": 12,
+      "heal_qi_pct": 18,
+      "atk_buff_pct": 10,
+      "buff_rounds": 2
+    },
+    "origin": "외전점창",
+    "gimmick": {
+      "cleanse": 1,
+      "focus": 5,
+      "name": "호수의 물빛",
+      "text": "독이 한 합을 넘기지 못한다. 회심 확률이 5푼 오른다."
+    }
+  },
+  "섬영보": {
+    "name": "섬영보",
+    "type": "경공",
+    "category": "경공",
+    "grade": "명품",
+    "base_multiplier": 1,
+    "qi_cost": 6,
+    "desc": "번개 그림자처럼 짧게 끊어 움직이는 점창의 걸음. 벌레 떼 사이를 빠져나가며 익혔다.",
+    "effect": {
+      "evade": 74,
+      "counter_pct": 75,
+      "flee_bonus": 30
+    },
+    "origin": "외전점창",
+    "gimmick": {
+      "next_crit": 1,
+      "partial": 0.4,
+      "name": "번개 그림자",
+      "text": "다 피하면 다음 공격은 반드시 회심, 다 피하지 못해도 위력을 6할 줄인다."
+    }
+  },
+  "섬전탈혼검": {
+    "name": "섬전탈혼검",
+    "category": "검법",
+    "type": "공격무공",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "점창의 번개가 혼을 빼앗는 검. 장문인만 쓰던 검이다. 번쩍이는 한순간 세 번 베이고, 벤 자는 세 번째가 지나간 뒤에야 첫 번째를 안다.",
+    "forms": [
+      "섬전",
+      "탈혼",
+      "천둥"
+    ],
+    "secret_technique": {
+      "name": "섬전탈혼",
+      "unlock_grade": "신공",
+      "unlock_mastery": 40,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "origin": "외전점창",
+    "gimmick": {
+      "combo": 60,
+      "accuracy": 30,
+      "opening": 40,
+      "name": "늦게 오는 천둥",
+      "text": "회심이 터지면 천둥이 뒤따르듯 위력 6할로 한 번 더 벤다, 명중 +3할, 첫 합 위력 +4할."
+    }
+  },
+  "창산운해공": {
+    "name": "창산운해공",
+    "type": "심공",
+    "category": "심공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 0,
+    "desc": "창산 위의 구름바다처럼 펴지는 숨. 독무도 구름에 섞이면 흩어진다.",
+    "effect": {
+      "heal_hp_pct": 28,
+      "heal_qi_pct": 45,
+      "atk_buff_pct": 15,
+      "buff_rounds": 3
+    },
+    "origin": "외전점창",
+    "gimmick": {
+      "cleanse": 1,
+      "regen": {
+        "percent": 6,
+        "rounds": 2
+      },
+      "focus": 8,
+      "name": "창산의 구름",
+      "text": "독이 한 합을 넘기지 못한다. 합마다 체력 3푼이 저절로 찬다. 회심 확률이 8푼 오른다."
+    }
+  },
+  "뇌운비섬보": {
+    "name": "뇌운비섬보",
+    "type": "경공",
+    "category": "경공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 10,
+    "desc": "천둥 구름 사이를 번개처럼 지나는 점창의 끝 걸음. 벌레 떼도 따라오지 못한다.",
+    "effect": {
+      "evade": 89,
+      "counter_pct": 150,
+      "flee_bonus": 60
+    },
+    "origin": "외전점창",
+    "gimmick": {
+      "next_crit": 1,
+      "auto_evade": 10,
+      "strike": 50,
+      "name": "구름 속 번개",
+      "text": "다 피하면 다음 공격은 반드시 회심, 경공을 쓰지 않아도 1할 확률로 저절로 공격을 피한다, 다 피하면 곧바로 위력 5할로 되받아친다."
+    }
+  },
+  "설봉장": {
+    "name": "설봉장",
+    "type": "공격무공",
+    "category": "장법",
+    "grade": "상승",
+    "base_multiplier": 1.5,
+    "qi_cost": 9,
+    "desc": "곤륜의 설산 외문에서 내려오는 장. 눈사태처럼 무겁게 밀려와 막는 손을 얼린다.",
+    "forms": [
+      "설봉",
+      "눈사태",
+      "빙하"
+    ],
+    "secret_technique": {
+      "name": "설봉일장",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    },
+    "origin": "외전곤륜",
+    "gimmick": {
+      "frost": 3,
+      "heavy": 25,
+      "name": "눈사태",
+      "text": "맞힐 때마다 한기가 스며 세 번 쌓이면 적이 한 합 얼어붙는다, 적의 체력이 7할 넘게 남았으면 위력 +2할 5푼."
+    }
+  },
+  "설산심법": {
+    "name": "설산심법",
+    "type": "심공",
+    "category": "심공",
+    "grade": "명품",
+    "base_multiplier": 1.0,
+    "qi_cost": 0,
+    "desc": "만년설 위에서 고르는 곤륜의 숨. 숨이 차가울수록 오래 간다.",
+    "effect": {
+      "heal_hp_pct": 14,
+      "heal_qi_pct": 20,
+      "atk_buff_pct": 5,
+      "buff_rounds": 2
+    },
+    "origin": "외전곤륜",
+    "gimmick": {
+      "ward": 12,
+      "injury": 30,
+      "name": "찬 숨",
+      "text": "싸움을 시작할 때 최대 체력 1할 2푼의 호신 기운을 두른다. 내상을 입힐 일격을 3할 확률로 다잡는다."
+    }
+  },
+  "답설보": {
+    "name": "답설보",
+    "type": "경공",
+    "category": "경공",
+    "grade": "명품",
+    "base_multiplier": 1,
+    "qi_cost": 6,
+    "desc": "눈 위를 밟되 발자국을 얕게 남기는 곤륜의 걸음. 아이들을 데리고 눈길을 걷는 사람의 걸음이다.",
+    "effect": {
+      "evade": 68,
+      "counter_pct": 80,
+      "flee_bonus": 35
+    },
+    "origin": "외전곤륜",
+    "gimmick": {
+      "partial": 0.45,
+      "auto_evade": 5,
+      "name": "얕은 발자국",
+      "text": "다 피하지 못해도 위력을 5할 5푼 줄인다, 경공을 쓰지 않아도 5푼 확률로 저절로 공격을 피한다."
+    }
+  },
+  "만년설붕장": {
+    "name": "만년설붕장",
+    "category": "장법",
+    "type": "공격무공",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "곤륜 설산 외문의 끝. 만년 묵은 눈이 한꺼번에 무너지듯 손바닥이 쏟아진다. 막은 자는 눈 속에 묻힌 것처럼 움직이지 못한다.",
+    "forms": [
+      "설붕",
+      "만년",
+      "빙하천리"
+    ],
+    "secret_technique": {
+      "name": "만년설붕",
+      "unlock_grade": "신공",
+      "unlock_mastery": 40,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "origin": "외전곤륜",
+    "gimmick": {
+      "frost": 2,
+      "heavy": 40,
+      "guard": 15,
+      "name": "무너지는 만년설",
+      "text": "맞힐 때마다 한기가 스며 두 번 쌓이면 적이 한 합 얼어붙는다, 적의 체력이 7할 넘게 남았으면 위력 +4할, 맞힌 합에 받는 피해 -1할 5푼."
+    }
+  },
+  "현기귀원공": {
+    "name": "현기귀원공",
+    "type": "심공",
+    "category": "심공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 0,
+    "desc": "곤륜 현기공의 앞편과 장문인만 아는 숨을 합친 것. 차가운 숨이 단전에서 돌며 몸을 지킨다.",
+    "effect": {
+      "heal_hp_pct": 30,
+      "heal_qi_pct": 45,
+      "atk_buff_pct": 15,
+      "buff_rounds": 3
+    },
+    "origin": "외전곤륜",
+    "gimmick": {
+      "ward": 25,
+      "regen_qi": {
+        "percent": 8,
+        "rounds": 3
+      },
+      "injury": 40,
+      "name": "현기",
+      "text": "싸움을 시작할 때 최대 체력 2할 5푼의 호신 기운을 두른다. 합마다 내력 4푼이 저절로 찬다. 내상을 입힐 일격을 4할 확률로 다잡는다."
+    }
+  },
+  "천리빙원보": {
+    "name": "천리빙원보",
+    "type": "경공",
+    "category": "경공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 10,
+    "desc": "천 리 빙원을 건너는 걸음. 아이 스물을 데리고 걸어도 얼음이 깨지지 않는다.",
+    "effect": {
+      "evade": 87,
+      "counter_pct": 160,
+      "flee_bonus": 60
+    },
+    "origin": "외전곤륜",
+    "gimmick": {
+      "partial": 0.3,
+      "step_heal": 3,
+      "refund": 1,
+      "name": "빙원",
+      "text": "다 피하지 못해도 위력을 7할 줄인다, 다 피하면 체력 3푼 회복, 다 피하면 쓴 내력의 절반을 되찾는다."
+    }
+  },
+  "파석권": {
+    "name": "파석권",
+    "type": "공격무공",
+    "category": "권법",
+    "grade": "상승",
+    "base_multiplier": 1.5,
+    "qi_cost": 9,
+    "desc": "갱도의 바위를 맨손으로 깨며 익힌 주먹. 한 번에 깨지 못하면 같은 자리를 다시 친다.",
+    "forms": [
+      "파석",
+      "갱도",
+      "낙반"
+    ],
+    "secret_technique": {
+      "name": "파석일권",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    },
+    "origin": "외전광부",
+    "gimmick": {
+      "shatter": 12,
+      "chain": 5,
+      "chain_max": 25,
+      "name": "같은 자리",
+      "text": "맞힐 때마다 적의 방어를 1할 2푼씩 무너뜨린다, 끊이지 않고 맞힐수록 위력이 5푼씩 오른다(최대 2할 5푼)."
+    }
+  },
+  "갱도심법": {
+    "name": "갱도심법",
+    "type": "심공",
+    "category": "심공",
+    "grade": "명품",
+    "base_multiplier": 1.0,
+    "qi_cost": 0,
+    "desc": "무너진 갱도 안에서 일곱 날을 버틴 숨. 숨을 아껴야 산다.",
+    "effect": {
+      "heal_hp_pct": 18,
+      "heal_qi_pct": 14,
+      "atk_buff_pct": 10,
+      "buff_rounds": 2
+    },
+    "origin": "외전광부",
+    "gimmick": {
+      "second_wind": {
+        "below": 25,
+        "percent": 15
+      },
+      "injury": 30,
+      "name": "아끼는 숨",
+      "text": "체력이 2할 5푼 아래로 떨어지면 한 싸움에 한 번 숨이 트여 체력 1할 5푼을 채운다. 내상을 입힐 일격을 3할 확률로 다잡는다."
+    }
+  },
+  "낙반보": {
+    "name": "낙반보",
+    "type": "경공",
+    "category": "경공",
+    "grade": "명품",
+    "base_multiplier": 1,
+    "qi_cost": 6,
+    "desc": "무너지는 갱도에서 돌을 피하며 익힌 걸음. 위에서 떨어지는 것을 먼저 본다.",
+    "effect": {
+      "evade": 64,
+      "counter_pct": 95,
+      "flee_bonus": 30
+    },
+    "origin": "외전광부",
+    "gimmick": {
+      "strike": 35,
+      "afterimage": 10,
+      "name": "떨어지는 돌",
+      "text": "다 피하면 곧바로 위력 3할 5푼으로 되받아친다, 다 피하면 잔상이 남아 다음 합에 1할 확률로 몸이 먼저 움직인다."
+    }
+  },
+  "산붕권": {
+    "name": "산붕권",
+    "category": "권법",
+    "type": "공격무공",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "산을 무너뜨린다는 광부의 주먹. 갱도의 바위를 백 번 깬 손이 끝내 한 번에 산을 깬다.",
+    "forms": [
+      "산붕",
+      "천갱",
+      "만석"
+    ],
+    "secret_technique": {
+      "name": "산붕일권",
+      "unlock_grade": "신공",
+      "unlock_mastery": 40,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "origin": "외전광부",
+    "gimmick": {
+      "shatter": 15,
+      "low_hp": 30,
+      "heavy": 30,
+      "name": "무너지는 산",
+      "text": "맞힐 때마다 적의 방어를 1할 5푼씩 무너뜨린다, 체력 절반 이하에서 위력 +3할, 적의 체력이 7할 넘게 남았으면 위력 +3할."
+    }
+  },
+  "칠일귀식공": {
+    "name": "칠일귀식공",
+    "type": "심공",
+    "category": "심공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 0,
+    "desc": "무너진 갱도에서 일곱 날을 버틴 숨의 끝. 숨 한 번이 하루를 간다.",
+    "effect": {
+      "heal_hp_pct": 30,
+      "heal_qi_pct": 40,
+      "atk_buff_pct": 20,
+      "buff_rounds": 3
+    },
+    "origin": "외전광부",
+    "gimmick": {
+      "second_wind": {
+        "below": 30,
+        "percent": 20
+      },
+      "injury": 50,
+      "ward": 15,
+      "name": "일곱 날",
+      "text": "체력이 3할 아래로 떨어지면 한 싸움에 한 번 숨이 트여 체력 2할을 채운다. 내상을 입힐 일격을 5할 확률로 다잡는다. 싸움을 시작할 때 최대 체력 1할 5푼의 호신 기운을 두른다."
+    }
+  },
+  "천장보": {
+    "name": "천장보",
+    "type": "경공",
+    "category": "경공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 10,
+    "desc": "무너지는 천장 아래를 지나는 걸음. 돌이 떨어지는 자리를 먼저 알고 그 사이로 지나간다.",
+    "effect": {
+      "evade": 86,
+      "counter_pct": 190,
+      "flee_bonus": 40
+    },
+    "origin": "외전광부",
+    "gimmick": {
+      "strike": 60,
+      "step_heal": 3,
+      "partial": 0.3,
+      "name": "무너지는 천장",
+      "text": "다 피하면 곧바로 위력 6할로 되받아친다, 다 피하면 체력 3푼 회복, 다 피하지 못해도 위력을 7할 줄인다."
+    }
+  },
+  "상앗대법": {
+    "name": "상앗대법",
+    "type": "공격무공",
+    "category": "봉법",
+    "grade": "상승",
+    "base_multiplier": 1.5,
+    "qi_cost": 9,
+    "desc": "황하의 물살에 상앗대를 꽂아 배를 밀던 손으로 휘두르는 봉. 꽂고 밀고 비튼다.",
+    "forms": [
+      "꽂기",
+      "밀기",
+      "비틀기"
+    ],
+    "secret_technique": {
+      "name": "황하일도",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    },
+    "origin": "외전사공",
+    "gimmick": {
+      "stun": 10,
+      "pierce": 20,
+      "name": "물살 꽂기",
+      "text": "맞히면 1할 확률로 적이 다음 합에 손을 쓰지 못한다, 방어 2할 무시."
+    }
+  },
+  "물살심법": {
+    "name": "물살심법",
+    "type": "심공",
+    "category": "심공",
+    "grade": "명품",
+    "base_multiplier": 1.0,
+    "qi_cost": 0,
+    "desc": "황하의 누런 물살을 거스르는 사공의 숨. 거스를수록 숨이 깊어진다.",
+    "effect": {
+      "heal_hp_pct": 16,
+      "heal_qi_pct": 16,
+      "atk_buff_pct": 10,
+      "buff_rounds": 2
+    },
+    "origin": "외전사공",
+    "gimmick": {
+      "regen": {
+        "percent": 4,
+        "rounds": 2
+      },
+      "rage": {
+        "per": 3,
+        "max": 18
+      },
+      "name": "거스르는 숨",
+      "text": "합마다 체력 2푼이 저절로 찬다. 잃은 체력 1할마다 위력이 3푼씩 오른다(1할 8푼까지)."
+    }
+  },
+  "뱃전보": {
+    "name": "뱃전보",
+    "type": "경공",
+    "category": "경공",
+    "grade": "명품",
+    "base_multiplier": 1,
+    "qi_cost": 6,
+    "desc": "흔들리는 뱃전에서 넘어지지 않는 걸음. 물결이 기울면 몸이 먼저 반대로 간다.",
+    "effect": {
+      "evade": 66,
+      "counter_pct": 90,
+      "flee_bonus": 30
+    },
+    "origin": "외전사공",
+    "gimmick": {
+      "partial": 0.4,
+      "momentum": 4,
+      "name": "뱃전",
+      "text": "다 피하지 못해도 위력을 6할 줄인다, 다 피할 때마다 이 싸움의 위력이 4푼씩 오른다(3할까지)."
+    }
+  },
+  "황하역류봉": {
+    "name": "황하역류봉",
+    "category": "봉법",
+    "type": "공격무공",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "황하를 거스르던 사공들의 상앗대가 끝내 닿은 곳. 휘두르면 물살이 거꾸로 흐르듯 상대의 힘이 되돌아간다.",
+    "forms": [
+      "역류",
+      "탁랑",
+      "황룡"
+    ],
+    "secret_technique": {
+      "name": "황하역류",
+      "unlock_grade": "신공",
+      "unlock_mastery": 40,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "origin": "외전사공",
+    "gimmick": {
+      "disrupt": 25,
+      "pierce": 40,
+      "stun": 15,
+      "name": "거꾸로 흐르는 물",
+      "text": "부드러움으로 강함을 눌러 예고된 필살기를 2할 5푼 확률로 흐트러뜨린다, 방어 4할 무시, 맞히면 1할 5푼 확률로 적이 다음 합에 손을 쓰지 못한다."
+    }
+  },
+  "탁류귀원공": {
+    "name": "탁류귀원공",
+    "type": "심공",
+    "category": "심공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 0,
+    "desc": "누런 물을 마시고도 탈이 없는 사공들의 숨. 흐린 것을 받아들여 맑게 내보낸다.",
+    "effect": {
+      "heal_hp_pct": 30,
+      "heal_qi_pct": 40,
+      "atk_buff_pct": 20,
+      "buff_rounds": 3
+    },
+    "origin": "외전사공",
+    "gimmick": {
+      "cleanse": 1,
+      "rage": {
+        "per": 4,
+        "max": 24
+      },
+      "regen": {
+        "percent": 5,
+        "rounds": 2
+      },
+      "name": "탁류",
+      "text": "독이 한 합을 넘기지 못한다. 잃은 체력 1할마다 위력이 4푼씩 오른다(2할 4푼까지). 합마다 체력 3푼이 저절로 찬다."
+    }
+  },
+  "황룡도강보": {
+    "name": "황룡도강보",
+    "type": "경공",
+    "category": "경공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 10,
+    "desc": "황하의 누런 용이 강을 건너듯 물 위를 디디는 걸음. 백 년 전 천마를 건넨 사공의 걸음이라 한다.",
+    "effect": {
+      "evade": 87,
+      "counter_pct": 170,
+      "flee_bonus": 50
+    },
+    "origin": "외전사공",
+    "gimmick": {
+      "partial": 0.3,
+      "momentum": 6,
+      "strike": 45,
+      "name": "강 건너기",
+      "text": "다 피하지 못해도 위력을 7할 줄인다, 다 피할 때마다 이 싸움의 위력이 6푼씩 오른다(3할까지), 다 피하면 곧바로 위력 4할 5푼으로 되받아친다."
+    }
+  },
+  "위소창법": {
+    "name": "위소창법",
+    "type": "공격무공",
+    "category": "창법",
+    "grade": "상승",
+    "base_multiplier": 1.5,
+    "qi_cost": 9,
+    "desc": "해안 위소의 군호들이 성벽 위에서 쓰는 창. 길게 찌르고 짧게 거둔다. 성벽을 오르는 손을 떨어뜨린다.",
+    "forms": [
+      "성벽",
+      "찌르기",
+      "거두기"
+    ],
+    "secret_technique": {
+      "name": "위소일창",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    },
+    "origin": "외전위소",
+    "gimmick": {
+      "guard": 12,
+      "opening": 30,
+      "name": "성벽의 창",
+      "text": "맞힌 합에 받는 피해 -1할 2푼, 첫 합 위력 +3할."
+    }
+  },
+  "해풍심법": {
+    "name": "해풍심법",
+    "type": "심공",
+    "category": "심공",
+    "grade": "명품",
+    "base_multiplier": 1.0,
+    "qi_cost": 0,
+    "desc": "바닷바람 속에서 고르는 군호의 숨. 짠바람이 숨을 깎아 낼수록 숨이 단단해진다.",
+    "effect": {
+      "heal_hp_pct": 14,
+      "heal_qi_pct": 18,
+      "atk_buff_pct": 10,
+      "buff_rounds": 2
+    },
+    "origin": "외전위소",
+    "gimmick": {
+      "focus": 5,
+      "regen": {
+        "percent": 4,
+        "rounds": 2
+      },
+      "name": "짠바람",
+      "text": "회심 확률이 5푼 오른다. 합마다 체력 2푼이 저절로 찬다."
+    }
+  },
+  "갯벌보": {
+    "name": "갯벌보",
+    "type": "경공",
+    "category": "경공",
+    "grade": "명품",
+    "base_multiplier": 1,
+    "qi_cost": 6,
+    "desc": "갯벌에서 빠지지 않는 걸음. 발을 오래 두지 않는다.",
+    "effect": {
+      "evade": 66,
+      "counter_pct": 85,
+      "flee_bonus": 35
+    },
+    "origin": "외전위소",
+    "gimmick": {
+      "step_heal": 2,
+      "next_power": 15,
+      "name": "갯벌",
+      "text": "다 피하면 체력 2푼 회복, 다 피하면 다음 공격 위력이 1할 5푼 오른다."
+    }
+  },
+  "천호파랑창": {
+    "name": "천호파랑창",
+    "category": "창법",
+    "type": "공격무공",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "위소의 천호들이 대대로 이어 온 창. 성벽에 밀려오는 파도처럼 연이어 찌르고, 마지막 파도가 가장 무겁다.",
+    "forms": [
+      "파랑",
+      "노도",
+      "천호"
+    ],
+    "secret_technique": {
+      "name": "천호파랑",
+      "unlock_grade": "신공",
+      "unlock_mastery": 40,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "origin": "외전위소",
+    "gimmick": {
+      "rhythm": {
+        "every": 3,
+        "percent": 60
+      },
+      "guard": 15,
+      "pierce": 40,
+      "name": "마지막 파도",
+      "text": "세 번 펼칠 때마다 파도가 밀려오듯 위력이 6할 더 오른다, 맞힌 합에 받는 피해 -1할 5푼, 방어 4할 무시."
+    }
+  },
+  "해조귀원공": {
+    "name": "해조귀원공",
+    "type": "심공",
+    "category": "심공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 0,
+    "desc": "밀물과 썰물의 숨. 바닷가 위소의 군호들이 밤새 파도 소리에 맞춰 쉬던 숨이다.",
+    "effect": {
+      "heal_hp_pct": 30,
+      "heal_qi_pct": 40,
+      "atk_buff_pct": 20,
+      "buff_rounds": 3
+    },
+    "origin": "외전위소",
+    "gimmick": {
+      "ward": 20,
+      "regen": {
+        "percent": 5,
+        "rounds": 2
+      },
+      "next_power": 30,
+      "name": "밀물과 썰물",
+      "text": "싸움을 시작할 때 최대 체력 2할의 호신 기운을 두른다. 합마다 체력 3푼이 저절로 찬다. 네 합마다 모은 숨으로 그 합의 공격 위력이 3할 오른다."
+    }
+  },
+  "노도보": {
+    "name": "노도보",
+    "type": "경공",
+    "category": "경공",
+    "grade": "신공",
+    "base_multiplier": 1,
+    "qi_cost": 10,
+    "desc": "성난 파도처럼 밀고 빠지는 걸음. 빠질 때 이미 다음 파도가 온다.",
+    "effect": {
+      "evade": 87,
+      "counter_pct": 180,
+      "flee_bonus": 45
+    },
+    "origin": "외전위소",
+    "gimmick": {
+      "momentum": 6,
+      "strike": 50,
+      "next_power": 20,
+      "name": "성난 파도",
+      "text": "다 피할 때마다 이 싸움의 위력이 6푼씩 오른다(3할까지), 다 피하면 곧바로 위력 5할로 되받아친다, 다 피하면 다음 공격 위력이 2할 오른다."
+    }
   }
 }

@@ -2045,6 +2045,245 @@
     ],
     "origin": "외전종남"
   },
+  "마을의맹세": {
+    "name": "교도 마을의 맹세",
+    "desc": "주는 피해가 3푼 늘고 잃은 체력이 많을수록 더 세게 친다. 교단과 맹세가 얽힌 일에서 물러서지 않는다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "damage_bonus",
+        "percent": 3
+      },
+      {
+        "type": "low_hp_power",
+        "below": 50,
+        "percent": 30
+      }
+    ],
+    "origin": "외전신교"
+  },
+  "시린손": {
+    "name": "시린 손",
+    "desc": "준 피해의 일부를 체력으로 거두는 힘이 늘고 회심의 일격 확률이 4푼 오른다. 칼과 혼이 얽힌 일에서 손이 먼저 차가워진다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "mindset_power",
+        "percent": 8
+      },
+      {
+        "type": "crit",
+        "percent": 4
+      }
+    ],
+    "origin": "외전신교"
+  },
+  "웃는얼굴": {
+    "name": "웃는 얼굴",
+    "desc": "명성 40을 더 들고 시작하고 장터 값이 1할 싸진다. 사람을 모으고 달래는 일에서 웃음이 먼저 나간다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "start_fame",
+        "amount": 40
+      },
+      {
+        "type": "market_discount",
+        "percent": 10
+      }
+    ],
+    "origin": "외전홍수"
+  },
+  "소매속침": {
+    "name": "소매 속의 침",
+    "desc": "전투의 첫 합에서 주는 피해가 2할 늘고 회심의 일격 확률이 4푼 오른다. 말이 막히는 자리에서 침이 먼저 나간다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "first_strike",
+        "percent": 20
+      },
+      {
+        "type": "crit",
+        "percent": 4
+      }
+    ],
+    "origin": "외전홍수"
+  },
+  "바람의손": {
+    "name": "바람의 손",
+    "desc": "피할 틈이 1할 좁아지고 회심의 일격 확률이 5푼 오른다. 빠르게 끝내야 하는 일에서 손이 먼저 나간다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "hit_bonus",
+        "percent": 10
+      },
+      {
+        "type": "crit",
+        "percent": 5
+      }
+    ],
+    "origin": "외전점창"
+  },
+  "벌레를아는귀": {
+    "name": "벌레를 아는 귀",
+    "desc": "독에 강해지고 상비약 회복이 2할 늘어난다. 독과 벌레가 얽힌 일에서 소리가 먼저 들린다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "poison_immune"
+      },
+      {
+        "type": "consumable_rate",
+        "percent": 20
+      }
+    ],
+    "origin": "외전점창"
+  },
+  "눈길의손": {
+    "name": "눈길의 손",
+    "desc": "상비약 회복이 2할 늘고 요양으로 되찾는 체력과 내력이 2할 늘어난다. 아이들과 약한 자를 돌보는 일에서 손이 먼저 간다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "consumable_rate",
+        "percent": 20
+      },
+      {
+        "type": "heal_rate",
+        "percent": 20
+      }
+    ],
+    "origin": "외전곤륜"
+  },
+  "만년설의숨": {
+    "name": "만년설의 숨",
+    "desc": "받는 피해가 3푼 줄고 매달 내력을 3푼 더 회복한다. 추위와 기다림이 얽힌 일에서 숨이 흐트러지지 않는다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "damage_reduce",
+        "percent": 3
+      },
+      {
+        "type": "turn_regen",
+        "hp_pct": 0,
+        "qi_pct": 3
+      }
+    ],
+    "origin": "외전곤륜"
+  },
+  "바위주먹": {
+    "name": "바위 주먹",
+    "desc": "주는 피해가 3푼 늘고 실전 경험을 싸움마다 하나 더 얻는다. 힘으로 버티는 일에서 먼저 깨부순다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "damage_bonus",
+        "percent": 3
+      },
+      {
+        "type": "battle_exp",
+        "amount": 1
+      }
+    ],
+    "origin": "외전광부"
+  },
+  "갱도의눈": {
+    "name": "갱도의 눈",
+    "desc": "기연을 만날 확률이 1할 5푼 오르고 받는 피해가 2푼 줄어든다. 무너질 것과 숨겨진 것을 먼저 본다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "fortune_rate",
+        "percent": 15
+      },
+      {
+        "type": "damage_reduce",
+        "percent": 2
+      }
+    ],
+    "origin": "외전광부"
+  },
+  "물살의어깨": {
+    "name": "물살의 어깨",
+    "desc": "받는 피해가 3푼 줄고 요양으로 되찾는 체력과 내력이 2할 늘어난다. 물과 배가 얽힌 일에서 몸이 먼저 버틴다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "damage_reduce",
+        "percent": 3
+      },
+      {
+        "type": "heal_rate",
+        "percent": 20
+      }
+    ],
+    "origin": "외전사공"
+  },
+  "나루의얼굴": {
+    "name": "나루의 얼굴",
+    "desc": "명성 40과 은자 40을 더 들고 시작한다. 나루를 오간 사람들이 먼저 알아본다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "start_fame",
+        "amount": 40
+      },
+      {
+        "type": "start_silver",
+        "amount": 40
+      }
+    ],
+    "origin": "외전사공"
+  },
+  "성벽의창": {
+    "name": "성벽의 창",
+    "desc": "받는 피해가 3푼 줄고 전투의 첫 합에서 주는 피해가 1할 5푼 늘어난다. 지키는 싸움에서 먼저 창을 낸다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "damage_reduce",
+        "percent": 3
+      },
+      {
+        "type": "first_strike",
+        "percent": 15
+      }
+    ],
+    "origin": "외전위소"
+  },
+  "군호의셈": {
+    "name": "군호의 셈",
+    "desc": "전투에 쓰는 도구를 5개 들고 시작하고 은자 40을 더 들고 시작한다. 무기와 군량이 얽힌 일에서 셈이 먼저 선다.",
+    "rarity": "희귀",
+    "cost": 7,
+    "effects": [
+      {
+        "type": "start_battle_tool",
+        "amount": 5
+      },
+      {
+        "type": "start_silver",
+        "amount": 40
+      }
+    ],
+    "origin": "외전위소"
+  },
   "불굴": {
     "name": "불사지체",
     "desc": "전투에서 합마다 체력을 2푼(한 싸움에 3할까지), 달마다 체력을 1할 5푼 더 회복한다. 베여도 베여도 살이 차오른다.",
