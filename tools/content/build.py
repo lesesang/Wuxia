@@ -13,7 +13,7 @@ import s12
 import side
 # 새 외전 출신. 한 파일에 하나씩
 _OLD_FOES=set(dsl.ENEMIES)
-NEW_SIDE=['o_sorim','o_mudang','o_ami','o_gongdong','o_moyong','o_sadoryeon','o_jegal','o_dark','o_gwimun','o_nokrim','o_heuksa','o_mangnani','o_hwasan','o_cheongseong','o_jongnam','o_singyo','o_hongsu','o_jeomchang','o_gonryun','o_gwangbu','o_sagong','o_wiso','o_dark2']
+NEW_SIDE=['o_sorim','o_mudang','o_ami','o_gongdong','o_moyong','o_sadoryeon','o_jegal','o_dark','o_gwimun','o_nokrim','o_heuksa','o_mangnani','o_hwasan','o_cheongseong','o_jongnam','o_singyo','o_hongsu','o_jeomchang','o_gonryun','o_gwangbu','o_sagong','o_wiso','o_dark2','o_gaebang','side_more']
 for _m in NEW_SIDE: __import__(_m)
 D=os.path.join(ROOT,'www','data','')
 def load(n): return json.load(open(D+n+'.json'))
@@ -86,6 +86,10 @@ for _k in set(dsl.ENEMIES)-_OLD_FOES:
     _h,_a=side.FINAL_TUNE.get(_k,(1,1))
     _base=dsl.ENEMIES[_k][1]
     E[_k]['hp']=int(round(_base['hp']*_h/50)*50); E[_k]['attack']=int(round(_base['attack']*_a))
+for _k in set(dsl.ENEMIES)&_OLD_FOES:
+    if _k in side.FINAL_TUNE:
+        _h,_a=side.FINAL_TUNE[_k]; _base=dsl.ENEMIES[_k][1]
+        E[_k]['hp']=int(round(_base['hp']*_h/50)*50); E[_k]['attack']=int(round(_base['attack']*_a))
 save('enemies',E)
 for name in set(battles(dsl.STORY))|set(battles(dsl.RANDOM))|set(battles(dsl.MANOR)): assert name in E, name
 # 결말
@@ -118,6 +122,13 @@ K['manor']={
   "연무장":W("연무장","무인들이 병기를 맞대는 마당. 배우려는 아이와 가르칠 사람을 길에서 장원으로 들일 수 있다.",["떠돌이 무인이 한 수를 청한다","현판을 노리는 자들이 온다","식객들이 장원의 이름으로 일을 청한다"]),
   "약방":W("약방","약초밭과 약탕기를 둔 채. 병든 마을과 다친 사람을 장원의 약으로 돌볼 수 있다.",["떠돌이 의원이 약방을 맡는다","돌림병 든 고을에 약을 댄다","약왕곡에서 사람이 온다"]),
   "서고":W("서고","흩어진 책을 모아 두는 채. 길에서 찾은 책과 사람을 장원에 들일 수 있다.",["벽 속에 묻힌 책 궤가 나온다","책을 베끼러 온 사람들이 모인다","장서를 탐내는 사람들이 온다"])}}
+_base_traits=load('traits')
+for k,v in dsl.TRAITS.items():
+    assert k not in _base_traits or _base_traits[k].get('origin')==v.get('origin'), ('자질 이름 겹침',k)
+for k,v in dsl.UPGRADES.items():
+    assert k not in K['upgrades'] or K['upgrades'][k].get('origin')==v.get('origin'), ('기틀 이름 겹침',k)
+for k,v in side.CONTENT.items():
+    assert k not in K['content'] or K['content'][k].get('origin')==v.get('origin'), ('인연 이름 겹침',k)
 for k,u in dsl.UPGRADES.items(): K['upgrades'][k]=u
 T0={k:v for k,v in load('traits').items() if k not in dsl.TRAITS and k!='물귀신숨'}
 T={}; last=[k for k,v in T0.items() if v.get('rarity')=='희귀' and not v.get('hidden')][-1]
@@ -130,7 +141,7 @@ K['achievements']=[a for a in K['achievements'] if not a['key'].startswith('외�
  {"key":"외전3","name":"세 갈래 곁길","desc":"외전 셋을 끝맺는다.","type":"sides","value":3,"karma":8},
  {"key":"외전7","name":"강호의 일곱 변두리","desc":"외전 일곱을 끝맺는다.","type":"sides","value":7,"karma":15},
  {"key":"외전14","name":"열네 갈래의 십 년","desc":"외전 열넷을 끝맺는다.","type":"sides","value":14,"karma":20},
- {"key":"외전28","name":"같은 강호의 모든 얼굴","desc":"외전 스물여덟을 모두 끝맺는다.","type":"sides","value":28,"karma":30}]
+ {"key":"외전28","name":"같은 강호의 모든 얼굴","desc":"외전을 모두 끝맺는다.","type":"sides","value":len(O['side_order']),"karma":30}]
 _C={}
 for _k,_v in K['content'].items():
     _C[_k]=_v
