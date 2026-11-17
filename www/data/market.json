@@ -4894,5 +4894,118 @@
     },
     "origin": "무림초출",
     "no_drop": true
+  },
+  "열두자리침통": {
+    "name": "열두 자리 침통",
+    "category": "도구",
+    "price": 130,
+    "markets": [
+      3,
+      4
+    ],
+    "desc": "단전 둘레 열두 자리에 놓는 침. 맞은 자의 기운이 세 합 동안 흩어져 위력이 2할 꺾이고, 놓는 동안 내 숨도 고른다.",
+    "effects": [
+      {
+        "type": "enemy_weaken",
+        "percent": 20,
+        "rounds": 3
+      },
+      {
+        "type": "heal",
+        "stat": "qi",
+        "percent": 20
+      }
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "grade": "명품",
+    "battle_only": true
+  },
+  "천기손쇠뇌": {
+    "name": "천기 손쇠뇌",
+    "category": "도구",
+    "price": 100,
+    "markets": [
+      2,
+      3,
+      4
+    ],
+    "desc": "제갈의 천기각에서 흘러나온 손쇠뇌. 한 번 당기면 적 최대 체력의 1할을 깎는다. 천마에게는 3분의 1만 든다.",
+    "effects": [
+      {
+        "type": "burst",
+        "percent": 10
+      }
+    ],
+    "consumable": true,
+    "stock_qty": 1,
+    "grade": "명품",
+    "battle_only": true
+  },
+  "설산털배자": {
+    "name": "설산 털배자",
+    "category": "방어구",
+    "price": 300,
+    "markets": [
+      3,
+      4
+    ],
+    "desc": "곤륜의 설산에서 짠 털배자. 받는 피해 -22",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "armor",
+        "bonus": 22
+      }
+    ],
+    "grade": "명품",
+    "gimmick": {
+      "name": "눈 속의 온기",
+      "guard_pct": 4,
+      "regen": 1,
+      "text": "받는 피해 -4푼, 합마다 체력 1푼 회복(한 싸움에 3할까지)."
+    }
+  },
+  "석이버섯": {
+    "name": "석이버섯",
+    "category": "영약",
+    "price": 130,
+    "markets": [
+      1,
+      2,
+      3
+    ],
+    "desc": "벼랑에서 따는 버섯. 심경이 40 오른다.",
+    "effects": [
+      {
+        "type": "stat",
+        "stat": "mind",
+        "amount": 40
+      }
+    ],
+    "grade": "양품",
+    "consumable": true,
+    "stock_qty": 1
+  },
+  "장백웅담": {
+    "name": "장백 웅담",
+    "category": "영약",
+    "price": 130,
+    "markets": [
+      1,
+      2,
+      3
+    ],
+    "desc": "장백의 늙은 곰에게서 나온 쓸개. 내공이 40 오른다.",
+    "effects": [
+      {
+        "type": "stat",
+        "stat": "internal",
+        "amount": 40
+      }
+    ],
+    "grade": "양품",
+    "consumable": true,
+    "stock_qty": 1
   }
 }
