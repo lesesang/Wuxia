@@ -133,7 +133,7 @@ const ROWS = [
   ["탐색 위주 / 시장 이용", { style: "탐색 위주" }],
   ["수련 위주 / 시장 이용", { style: "수련 위주" }],
   ["섞어서 / 시장 안 씀", { useMarket: false }],
-  ...["외전당가", "외전빙궁", "외전매화", "외전살막", "외전수로", "외전혈승", "외전야수"].flatMap((origin) => [
+  ...DB.origins.side_order.flatMap((origin) => [
     [`외전 첫 판 / ${origin}`, { origin }],
     [`외전 완성 / ${origin}`, { origin, total: 400, traits: ["천하제일기재", "천생근골", "오성"], upgrades: ALL_UPGRADES }],
   ]),
@@ -152,7 +152,11 @@ const ROWS = [
 import { Player } from "../../www/js/character.js";
 unlockAll();
 const HPX=Number(process.env.HPX||1), ATKX=Number(process.env.ATKX||1);
-const FINAL = { 외전당가: ["외전_오독문주"], 외전빙궁: ["외전_하란"], 외전매화: ["외전_철필", "외전_백송"], 외전살막: ["외전_추살수좌"], 외전수로: ["외전_총채주"], 외전혈승: ["외전_염철"], 외전야수: ["외전_백공"] };
+// 출신마다 마지막 고비와 그 앞 고비의 이야기만의 상대
+const FINAL = Object.fromEntries(DB.origins.side_order.map((o) => {
+  const own = Object.values(DB.storyEvents).filter((e) => e.requires?.origin === o && e.turn >= 97);
+  return [o, [...new Set([...JSON.stringify(own).matchAll(/"battle":"(외전_[^"]+)"/g)].map((m) => m[1]))]];
+}));
 const OV = JSON.parse(process.env.OV || '{}');
 if (process.env.FX) { const [h, a] = process.env.FX.split(',').map(Number); DB.difficulty.side.final = { hp: h, attack: a }; }
 for (const [k, [hp, atk]] of Object.entries(OV)) { DB.enemies[k].hp = hp; DB.enemies[k].attack = atk; }

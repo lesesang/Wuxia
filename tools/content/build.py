@@ -12,6 +12,7 @@ import s11
 import s12
 import side
 # 새 외전 출신. 한 파일에 하나씩
+_OLD_FOES=set(dsl.ENEMIES)
 NEW_SIDE=['o_sorim','o_mudang','o_ami','o_gongdong','o_moyong','o_sadoryeon','o_jegal','o_dark','o_gwimun','o_nokrim','o_heuksa','o_mangnani','o_hwasan','o_cheongseong','o_jongnam','o_singyo','o_hongsu','o_jeomchang','o_gonryun','o_gwangbu','o_sagong','o_wiso','o_dark2']
 for _m in NEW_SIDE: __import__(_m)
 D=os.path.join(ROOT,'www','data','')
@@ -77,6 +78,14 @@ for key,(base,kw) in dsl.ENEMIES.items():
     e.update(chapters=[],weight=0,named=True); e.update(kw)
     E[key]={ "name":e.pop('name'), **e}
 for k,v in s7.BOSS.items(): E[k]['deep_quirks']=v
+# 새 외전의 고비 상대는 97달 기준의 수치로 적었다. 마지막 고비의 상대는 기존 외전의 마지막 상대와 같은 곡선을 따른다
+_finals={m for e in dsl.STORY.values() if e.get('turn')==120 for m in __import__('re').findall(r'"battle": "(외전_[^"]+)"', json.dumps(e,ensure_ascii=False))}
+for _k in set(dsl.ENEMIES)-_OLD_FOES:
+    E[_k]['level']=97
+    E[_k]['hp_style'],E[_k]['attack_style']=(1.366,1.19) if _k in _finals else (1.12,1.0)
+    _h,_a=side.FINAL_TUNE.get(_k,(1,1))
+    _base=dsl.ENEMIES[_k][1]
+    E[_k]['hp']=int(round(_base['hp']*_h/50)*50); E[_k]['attack']=int(round(_base['attack']*_a))
 save('enemies',E)
 for name in set(battles(dsl.STORY))|set(battles(dsl.RANDOM))|set(battles(dsl.MANOR)): assert name in E, name
 # 결말
