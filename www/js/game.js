@@ -423,7 +423,9 @@ export class Game {
     // 외전의 길은 생사경을 본 무인이 걷는 길이라 본편보다 거칠다
     if (sideOrigin(this.player)) {
       // 그 이야기만의 상대는 그보다도 한층 강하다
-      const rough = enemy.key.startsWith("외전_") ? DB.difficulty.side.final : DB.difficulty.side.enemy;
+      // 깊은 강호에서는 그 강호의 몫(level.side)을 따른다. 깊이와 외전의 거칢이 다 겹치면 걸을 수 없는 길이 된다
+      const side = level.side || DB.difficulty.side;
+      const rough = enemy.key.startsWith("외전_") ? side.final : side.enemy;
       enemy.maxHp = Math.max(1, Math.round(enemy.maxHp * rough.hp));
       enemy.hp = enemy.maxHp;
       enemy.attack = Math.max(1, Math.round(enemy.attack * rough.attack));

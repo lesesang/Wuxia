@@ -9,6 +9,12 @@ import s8
 import s9
 import s10
 import s11
+import s12
+import side
+# 새 외전 출신. 한 파일에 하나씩
+_OLD_FOES=set(dsl.ENEMIES)
+NEW_SIDE=['o_sorim','o_mudang','o_ami','o_gongdong','o_moyong','o_sadoryeon','o_jegal','o_dark','o_gwimun','o_nokrim','o_heuksa','o_mangnani','o_hwasan','o_cheongseong','o_jongnam','o_singyo','o_hongsu','o_jeomchang','o_gonryun','o_gwangbu','o_sagong','o_wiso','o_dark2']
+for _m in NEW_SIDE: __import__(_m)
 D=os.path.join(ROOT,'www','data','')
 def load(n): return json.load(open(D+n+'.json'))
 def save(n,d):
@@ -43,6 +49,9 @@ def battles(o):
     elif isinstance(o,list):
         for v in o: yield from battles(v)
 O=load('origins')
+for k,v in side.ORIGINS.items():
+    O['origins'][k]=v
+    if k not in O['side_order']: O['side_order'].append(k)
 for k,v in s7.DEEP_ORIGIN.items(): O['origins'][k]['deep']=v
 for k in O['side_order']: O['origins'][k]['cost']=60
 O['origins']['외전매화']['chapters']['2']['desc']='스승이 떠나온 산문에서 스승의 젊은 날을 듣는다.'
@@ -50,6 +59,15 @@ _h=O['origins']['외전혈승']; _h['end_turn']=120; _h['goal']='개조의 의�
 for k,v in {"외전빙궁":["북해고수"],"외전매화":["십대고수"],"외전수로":["수적두목"],"외전야수":["천마사냥개","남만술사","백액호","금안조","철갑현귀","불가사리","천년백사"],"외전혈승":["마교심판자","혈교우호법"]}.items(): O['origins'][k]['shun']=v
 SK=load('skills')
 s9.patch_skills(SK,O)
+for k,v in side.SKILLS.items():
+    assert k not in SK or SK[k].get('origin')==v['origin'], '무공 이름이 겹친다: '+k
+    SK[k]=v
+_sig={}
+for _k,_s in SK.items():
+    if not _s.get('gimmick') or _s['grade'] not in ['명품','상승','일절','신공']: continue
+    _g=(_s.get('category') or _s['type'])+':'+','.join(sorted(x for x in _s['gimmick'] if x not in('name','text')))
+    if _g in _sig and (_k in side.SKILLS or _sig[_g] in side.SKILLS): print('묘리 겹침', _k, _sig[_g], _g)
+    _sig.setdefault(_g,_k)
 save('skills',SK)
 save('origins',O)
 # 적
@@ -60,6 +78,14 @@ for key,(base,kw) in dsl.ENEMIES.items():
     e.update(chapters=[],weight=0,named=True); e.update(kw)
     E[key]={ "name":e.pop('name'), **e}
 for k,v in s7.BOSS.items(): E[k]['deep_quirks']=v
+# 새 외전의 고비 상대는 97달 기준의 수치로 적었다. 마지막 고비의 상대는 기존 외전의 마지막 상대와 같은 곡선을 따른다
+_finals={m for e in dsl.STORY.values() if e.get('turn')==120 for m in __import__('re').findall(r'"battle": "(외전_[^"]+)"', json.dumps(e,ensure_ascii=False))}
+for _k in set(dsl.ENEMIES)-_OLD_FOES:
+    E[_k]['level']=97
+    E[_k]['hp_style'],E[_k]['attack_style']=(1.366,1.19) if _k in _finals else (1.12,1.0)
+    _h,_a=side.FINAL_TUNE.get(_k,(1,1))
+    _base=dsl.ENEMIES[_k][1]
+    E[_k]['hp']=int(round(_base['hp']*_h/50)*50); E[_k]['attack']=int(round(_base['attack']*_a))
 save('enemies',E)
 for name in set(battles(dsl.STORY))|set(battles(dsl.RANDOM))|set(battles(dsl.MANOR)): assert name in E, name
 # 결말
@@ -102,7 +128,16 @@ save('traits',T)
 K['achievements']=[a for a in K['achievements'] if not a['key'].startswith('외전')]+[
  {"key":"외전1","name":"곁길의 끝","desc":"외전 하나를 끝맺는다.","type":"sides","value":1,"karma":5},
  {"key":"외전3","name":"세 갈래 곁길","desc":"외전 셋을 끝맺는다.","type":"sides","value":3,"karma":8},
- {"key":"외전7","name":"강호의 일곱 변두리","desc":"외전 일곱을 모두 끝맺는다.","type":"sides","value":7,"karma":15}]
+ {"key":"외전7","name":"강호의 일곱 변두리","desc":"외전 일곱을 끝맺는다.","type":"sides","value":7,"karma":15},
+ {"key":"외전14","name":"열네 갈래의 십 년","desc":"외전 열넷을 끝맺는다.","type":"sides","value":14,"karma":20},
+ {"key":"외전28","name":"같은 강호의 모든 얼굴","desc":"외전 스물여덟을 모두 끝맺는다.","type":"sides","value":28,"karma":30}]
+_C={}
+for _k,_v in K['content'].items():
+    _C[_k]=_v
+    if _v.get('side') and not any(x.get('side') for x in list(K['content'].values())[list(K['content']).index(_k)+1:]):
+        for _a,_b in side.CONTENT.items(): _C[_a]=_b
+for _a,_b in side.CONTENT.items(): _C.setdefault(_a,_b)
+K['content']=_C
 save('karma',K)
 print(len(dsl.STORY),len(dsl.RANDOM),len(dsl.ENDINGS),len(dsl.ENEMIES))
 

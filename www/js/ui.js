@@ -11,7 +11,7 @@ import {
 } from "./meta.js";
 import {
   ALIGNMENTS, ALIGN_STEPS, benefitText, pathPerks, byname, fameRank, getChapterInfo, getMonth, getYear, marketTurns, nextSlotThreshold,
-  ORIGIN_SECTS, veteranBonus, personalize, sectWord, fullName, realmProgress, traitSlots, realmPerks, activeCompanions, MAX_COMPANIONS,
+  originSect, veteranBonus, personalize, sectWord, fullName, realmProgress, traitSlots, realmPerks, activeCompanions, MAX_COMPANIONS,
   DEFAULT_DIFFICULTY, difficultyOf, quirkText, auraText } from "./rules.js";
 import { MAX_TURN } from "./character.js";
 import { storage } from "./storage.js";
@@ -384,10 +384,10 @@ function statBars(o) {
 function originDetail(key) {
   const o = DB.origins.origins[key];
   const skillNames = o.choose_start ? "첫 병기에 맞는 무공과 고른 심법" : o.skills.map((k) => DB.skills[k].name).join(", ");
-  const sect = ORIGIN_SECTS[key] ? DB.sects[ORIGIN_SECTS[key]] : null;
+  const sect = originSect(key) ? DB.sects[originSect(key)] : null;
   return `<span class="pick-desc block">${esc(o.desc)}</span>${statBars(o)}
     <span class="pick-stats block">시작 무공: ${esc(skillNames)}</span>
-    ${sect ? `<span class="pick-stats block">${sectWord(ORIGIN_SECTS[key])}: ${esc(sect.name)} (${esc(sect.bonus_text)})</span>` : ""}
+    ${sect ? `<span class="pick-stats block">${sectWord(originSect(key))}: ${esc(sect.name)} (${esc(sect.bonus_text)})</span>` : ""}
     ${o.side ? `<span class="pick-stats block">목표: ${esc(o.goal)}</span><span class="pick-stats block">${o.end_turn}달에 끝나는 외전</span>` : ""}`;
 }
 
@@ -455,8 +455,13 @@ function shopPanels(meta) {
   const pips = (level, max) => `<span class="pips">${Array.from({ length: max }, (_, i) => `<i class="${i < level ? "on" : ""}"></i>`).join("")}</span>`;
   const origins = DB.origins.order.filter((k) => !meta.unlocked_origins.includes(k))
     .map((k) => shopRow(esc(DB.origins.origins[k].name), originDetail(k), "unlock-origin", k, DB.origins.origins[k].cost, meta)).join("");
-  const sideRows = DB.origins.side_order.filter((k) => !meta.unlocked_origins.includes(k))
-    .map((k) => shopRow(esc(DB.origins.origins[k].name), originDetail(k), "unlock-origin", k, DB.origins.origins[k].cost, meta, "해금", !sideOpen(meta))).join("");
+  // 외전의 출신은 문파와 세가의 것과 그 밖의 것으로 나누어 보인다
+  const sideRow = (k) => shopRow(esc(DB.origins.origins[k].name), originDetail(k), "unlock-origin", k, DB.origins.origins[k].cost, meta, "해금", !sideOpen(meta));
+  const lockedSides = DB.origins.side_order.filter((k) => !meta.unlocked_origins.includes(k));
+  const isSchool = (k) => DB.sects[DB.origins.origins[k].sect]?.school || ["소림", "무당", "화산", "아미", "곤륜", "종남", "점창", "청성", "공동", "당가", "모용", "제갈"].includes(originSect(k));
+  const schoolRows = lockedSides.filter(isSchool).map(sideRow).join("");
+  const otherRows = lockedSides.filter((k) => !isSchool(k)).map(sideRow).join("");
+  const sideRows = (schoolRows ? `<h4 class="shop-group">구파일방과 세가</h4>${schoolRows}` : "") + (otherRows ? `<h4 class="shop-group">강호의 다른 자리</h4>${otherRows}` : "");
   // 해금한 외전은 본 결말의 수와 함께 보여 준다
   const ownedSides = DB.origins.side_order.filter((k) => meta.unlocked_origins.includes(k)).map((k) => {
     const o = DB.origins.origins[k];
@@ -466,7 +471,7 @@ function shopPanels(meta) {
   }).join("");
   const sideContent = Object.entries(DB.karma.content).filter(([k, c]) => c.side && !meta.content.includes(k) && meta.unlocked_origins.includes(c.origin))
     .map(([k, c]) => shopRow(esc(c.name), `<p class="pick-desc">${esc(c.desc)}</p>${originOnly(c.origin)}`, "buy-content", k, c.cost, meta)).join("");
-  const sides = `<p class="section-note">외전의 출신은 천마봉으로 가지 않습니다. 같은 강호의 같은 십 년을 저마다의 목표로 걷고, 그 출신만의 줄거리와 결말이 있습니다. 카르마로 산 인연은 외전에 나오지 않고, 외전 출신의 신공 인연만 그 외전에 찾아옵니다. 깊은 강호에서는 외전의 이야기도 그 강호에 맞게 달라집니다. 외전의 길은 본편보다 거칩니다.</p>${sideOpen(meta) ? "" : `<p class="section-note">외전은 생사경에 오른 무인에게 열립니다. 천마를 쓰러뜨리는 순간 생사의 경계를 넘어야 합니다.</p>`}${sideRows || emptyNote("모든 외전을 해금했습니다.")}${ownedSides ? `<h4 class="shop-group">해금한 외전</h4>${ownedSides}` : ""}${sideContent ? `<h4 class="shop-group">외전 출신의 신공</h4>${sideContent}` : ""}`;
+  const sides = `<p class="section-note">외전의 출신은 천마봉으로 가지 않습니다. 같은 강호의 같은 십 년을 저마다의 목표로 걷고, 그 출신만의 줄거리와 결말이 있습니다. 카르마로 산 인연은 외전에 나오지 않고, 외전 출신의 신공 인연만 그 외전에 찾아옵니다. 깊은 강호에서는 외전의 이야기도 그 강호에 맞게 달라집니다. 외전의 길은 본편보다 거칩니다.</p>${sideOpen(meta) ? "" : `<p class="section-note">외전은 생사경 결말을 한 번이라도 본 무인에게 열립니다. 기본 강호에서든 더 깊은 강호에서든, 천마를 쓰러뜨리는 순간 생사의 경계를 넘어야 합니다.</p>`}${sideRows || emptyNote("모든 외전을 해금했습니다.")}${ownedSides ? `<h4 class="shop-group">해금한 외전</h4>${ownedSides}` : ""}${sideContent ? `<h4 class="shop-group">외전 출신의 신공</h4>${sideContent}` : ""}`;
   const levels = manorLevels(meta);
   const gate = gateCost(meta);
   const gateRow = meta.manor_gate

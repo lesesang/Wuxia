@@ -169,6 +169,8 @@ export function applyGrowth(amount, traits, stat) {
 
 // ---------- 문파 ----------
 export const ORIGIN_SECTS = { 남궁세가: "남궁", 하오문: "하오문", 개방제자: "개방", 외전당가: "당가", 외전살막: "살막", 외전혈승: "혈교" };
+/** 출신이 처음부터 몸담은 곳. 외전의 출신은 origins.json의 sect로 정한다 */
+export const originSect = (key) => ORIGIN_SECTS[key] || DB.origins?.origins?.[key]?.sect || null;
 /** 외전의 출신이면 그 출신의 데이터, 아니면 null */
 export const sideOrigin = (player) => (DB.origins.origins[player.originKey]?.side ? DB.origins.origins[player.originKey] : null);
 /** 본편에서만, 또는 외전에서만 일어나는 일을 가린다 */
