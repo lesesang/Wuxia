@@ -4994,7 +4994,8 @@ test("깊은 강호의 적은 약이 아니라 혈계와 관정으로 강해지�
 });
 
 test("출신 전용 이야기는 경지가 낮고 앞선 선택을 달리해도 10년 안에 전부 찾아온다", () => {
-  for (const origin of Object.keys(DB.origins.origins)) for (const depth of ["강호", "겁화"]) {
+  const deepest = DB.difficulty.order.at(-1);
+  for (const origin of Object.keys(DB.origins.origins)) for (const depth of ["강호", deepest]) {
     const p = new Player(origin);
     p.difficulty = depth;
     p.content = [...new Set(Object.values(DB.randomEvents).map((e) => e.requires?.unlocked).filter(Boolean))];
@@ -5011,7 +5012,7 @@ test("출신 전용 이야기는 경지가 낮고 앞선 선택을 달리해도 
     }
     // 깊은 강호에서만 찾아오는 일은 그 강호에서 따로 잰다
     const all = Object.keys(DB.randomEvents).filter((k) => DB.randomEvents[k].requires?.origin === origin
-      && !DB.randomEvents[k].requires?.max_kills && (depth === "겁화" || !DB.randomEvents[k].requires?.difficulty_min));
+      && !DB.randomEvents[k].requires?.max_kills && (depth === deepest || !DB.randomEvents[k].requires?.difficulty_min));
     const missed = all.filter((k) => !p.seenEvents.includes(k));
     assert.deepEqual(missed, [], `${origin} ${depth}: ${missed.join(", ")}`);
   }

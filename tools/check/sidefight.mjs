@@ -165,7 +165,7 @@ for (const [name, options] of ROWS.filter(([n]) => n.startsWith("외전") && (!p
     let wins = 0, n = 0, rounds = 0;
     for (const snap of snaps) for (let t = 0; t < T; t++) {
       const game = new Game(); game.player = Player.fromDict(snap); game.player.revives = 0;
-      game.startBattle(foe, false, null, null, true); if (process.env.DBG && t===0) console.log(game.battle.enemy.key, game.battle.enemy.name, game.battle.enemy.maxHp, game.battle.enemy.attack, game.player.realm, Math.round(game.player.maxHp));
+      game.startBattle(foe, false, null, null, true); if (process.env.DBG && t===0) console.log(game.battle.enemy.key, game.battle.enemy.name, game.battle.enemy.maxHp, game.battle.enemy.attack, JSON.stringify(game.battle.enemy.quirks), game.player.realm, Math.round(game.player.maxHp));
       const en = game.battle.enemy;
       for (let i = 0; i < 400 && game.battle; i++) {
         if (game.battle.prelude) { game.beginBattle?.(); continue; }
