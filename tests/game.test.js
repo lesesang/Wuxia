@@ -4994,8 +4994,9 @@ test("깊은 강호의 적은 약이 아니라 혈계와 관정으로 강해지�
 });
 
 test("출신 전용 이야기는 경지가 낮고 앞선 선택을 달리해도 10년 안에 전부 찾아온다", () => {
-  for (const origin of Object.keys(DB.origins.origins)) {
+  for (const origin of Object.keys(DB.origins.origins)) for (const depth of ["강호", "겁화"]) {
     const p = new Player(origin);
+    p.difficulty = depth;
     p.content = [...new Set(Object.values(DB.randomEvents).map((e) => e.requires?.unlocked).filter(Boolean))];
     const met = [];
     for (p.turn = 1; p.turn <= 119; p.turn++) {
@@ -5008,10 +5009,11 @@ test("출신 전용 이야기는 경지가 낮고 앞선 선택을 달리해도 
       for (const o of choice?.outcomes || []) for (const f of o.effects?.flags || []) p.flags.push(f);
       met.push(key);
     }
+    // 깊은 강호에서만 찾아오는 일은 그 강호에서 따로 잰다
     const all = Object.keys(DB.randomEvents).filter((k) => DB.randomEvents[k].requires?.origin === origin
-      && !DB.randomEvents[k].requires?.max_kills);
+      && !DB.randomEvents[k].requires?.max_kills && (depth === "겁화" || !DB.randomEvents[k].requires?.difficulty_min));
     const missed = all.filter((k) => !p.seenEvents.includes(k));
-    assert.deepEqual(missed, [], `${origin}: ${missed.join(", ")}`);
+    assert.deepEqual(missed, [], `${origin} ${depth}: ${missed.join(", ")}`);
   }
 });
 
@@ -5175,4 +5177,81 @@ test("사부의 맞수는 처음 든 병기와 같은 계통의 무공을 쓴다
     assert.deepEqual(game.battle.enemy.specials.map((s) => s.name), DB.events.맞수_나루.choices[0].outcomes[0].effects.foe_style[style].specials.map((s) => s.name));
     assert.ok(eventView(p, "맞수_나루").text.includes(style === "창법" ? "창" : "주먹"));
   }
+});
+
+test("강호초출의 신물 일곱은 서로 다른 영기를, 계열별 신공은 서로 다른 묘리를 지닌다", () => {
+  seed(5);
+  const keys = ["무명검", "무명도", "무명창", "무명곤", "무명권갑", "무명장갑", "무명비도"];
+  const effectKeys = (g) => Object.keys(g).filter((k) => !["name", "text"].includes(k));
+  const weaponSets = keys.map((k) => effectKeys(DB.market[k].gimmick));
+  assert.equal(new Set(weaponSets.flat()).size, weaponSets.flat().length, "신물의 영기가 겹치지 않는다");
+  const arts = Object.entries(DB.skills).filter(([, s]) => s.origin === "무림초출" && s.type === "공격무공").map(([, s]) => effectKeys(s.gimmick));
+  assert.equal(arts.length, 7);
+  assert.equal(new Set(arts.flat()).size, arts.flat().length, "신공의 묘리가 겹치지 않는다");
+
+  const fresh = (weapon) => {
+    const p = new Player();
+    p.realm = "현경";
+    const enemy = new Enemy("산적");
+    enemy.hp = enemy.maxHp = 100000;
+    enemy.armor = 0;
+    const b = new Battle(p, enemy);
+    b.hits = () => true;
+    b.critChance = () => 0;
+    b.weaponG = DB.market[weapon].gimmick;
+    b.strikeGimmick = () => b.weaponG;
+    return b;
+  };
+  const avg = (fn) => { let t = 0; for (let i = 0; i < 200; i++) t += fn(); return t / 200; };
+  const plain = avg(() => { const b = fresh("무명검"); b.weaponG = {}; return b.strike(1000, "시험"); });
+  // 앞서 읽는 날: 필살기가 예고된 합에 더 세다
+  assert.ok(avg(() => { const b = fresh("무명검"); b.enemy.specials = [{ name: "큰 초식", every: 1, mult: 2 }]; b.roundNum = 1; return b.strike(1000, "시험"); }) > plain * 1.25);
+  // 벌어진 칼자국: 크게 벤 뒤의 공격이 더 깊다
+  let b = fresh("무명도");
+  b.strike(20000, "시험");
+  assert.ok(b.gashed > 0);
+  assert.ok(b.strike(1000, "시험") > plain * 1.15 && b.gashed === 0);
+  // 창끝의 거리: 첫 세 합은 덜 맞는다
+  b = fresh("무명창");
+  b.roundNum = 1;
+  const near = avg(() => b.incoming());
+  b.roundNum = 5;
+  assert.ok(near < avg(() => b.incoming()) * 0.85);
+  // 멈추지 않는 곤: 운기 다음 합의 공격이 세다
+  b = fresh("무명곤");
+  b.tempoReady = true;
+  assert.ok(b.strike(1000, "시험") > plain * 1.25 && !b.tempoReady);
+  // 맞을수록 단단한 주먹: 맞은 만큼 쌓이고 끝이 있다
+  b = fresh("무명권갑");
+  for (let i = 0; i < 10; i++) b.enemyAttack();
+  assert.equal(b.gritStacks, 40);
+  const gritHit = b.strike(1000, "시험");
+  assert.ok(gritHit > plain * 1.2 && b.gritStacks === 0, `${gritHit} ${plain}`);
+  // 맥을 누르는 손: 다음 필살기가 한 합 늦춰진다
+  b = fresh("무명장갑");
+  b.enemy.specials = [{ name: "큰 초식", every: 3, mult: 2 }];
+  b.roundNum = 2;
+  b.applyGimmickOnHit({ delay: 100 }, 10);
+  assert.equal(b.enemy.specialForRound(3), null);
+  assert.ok(b.enemy.specialForRound(4));
+  // 보이지 않는 첫 비도: 첫 공격만 반드시 회심이다
+  b = fresh("무명비도");
+  b.strike(1000, "시험");
+  assert.ok(b.log.some((l) => l.includes("회심")) && b.ambushed);
+  b.log = [];
+  b.strike(1000, "시험");
+  assert.ok(!b.log.some((l) => l.includes("회심")));
+});
+
+test("끝나지 않는 싸움은 없다: 길어지면 적의 회복이 줄다가 멎는다", () => {
+  const p = new Player();
+  const enemy = new Enemy("산적");
+  const b = new Battle(p, enemy);
+  b.roundNum = 10;
+  assert.equal(b.enemyHealRate(), 1);
+  b.roundNum = 60;
+  assert.equal(b.enemyHealRate(), 0.5);
+  b.roundNum = 90;
+  assert.equal(b.enemyHealRate(), 0);
+  assert.ok(b.log.some((l) => l.includes("더는 상처가 아물지 않는다")));
 });
