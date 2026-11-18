@@ -46,15 +46,15 @@ MAIN = [
  ("개방제자", "남녀", "under an old stone arch bridge at night, river reflecting paper lanterns",
   "fifth-knot disciple of the beggar sect, black hair, messy hair tied in a short ponytail, smudge of dirt on cheek, bright clever black eyes, patched and frayed pale green robe, rope belt with five knotted cords, bandaged forearms, wine gourd at waist, straw sandals, plain wooden staff planted on the ground, leaning on it with one hand, faint knowing smile, closed mouth, cowboy shot, close view",
   "sword, blade, armor, child, grin, open mouth, teeth, laughing"),
- ("권마계승", "남녀", "rocky canyon at sunset, huge boulders marked with deep fist-shaped craters, cave entrance with a stone seat, red-orange sky, swirling dust",
-  "inheritor of a legendary fist master's secret manual, black hair, long wild loose hair, sharp features, crimson eyes with a faint red glow, dark grey sleeveless robe over black inner shirt, dark red sash, muscular forearms with faint visible veins, cloth-wrapped fists, small scars on knuckles, faint red aura around the right fist, right fist clenched in front of chest, left arm relaxed, controlled fury",
-  "weapon, sword, holding weapon, staff, gauntlet, metal claws"),
+ ("권마계승", "남녀", "rocky canyon at dusk, huge boulders marked with deep fist-shaped craters, cave entrance with a stone seat, overcast amber sky, swirling dust",
+  "inheritor of a legendary fist master's secret manual, black hair tied back in a rough high ponytail with loose strands, mature sharp face, dark brown eyes with a fierce gaze, dark grey sleeveless robe over black inner shirt, dark red sash, muscular forearms with faint visible veins, cloth-wrapped fists, small scars on knuckles, faint red aura around the right fist, right fist clenched in front of chest, left arm relaxed, controlled fury",
+  "weapon, sword, holding weapon, staff, gauntlet, metal claws, red eyes, glowing eyes, hair over eyes, messy bangs, sun"),
  ("혈지생환", "남녀", "edge of a dried blood pond in a mountain valley, cracked dark earth, ruined stone shrine pillars, grey overcast dusk sky with a faint red glow, crows on dead branches, mist",
   "sole survivor of a sacrificial blood pond, black hair tied back in a low ponytail with loose strands, pale skin, faint dark circles under the eyes, haunted dark eyes with a faint crimson glint, mature calm face, grey cloak with the hood down, black high-collar inner robe, faint red scar-like markings on the palms glowing softly, right hand raised at chest height with palm open, quiet cold expression",
   "weapon, sword, holding weapon, staff, blood, dripping blood, gore, emo, messy short hair, glowing red eyes, hoodie"),
  ("하오문", "남녀", "narrow alley of a night market, tiled rooftops and red lanterns, teahouse signboard, thin mist, moonlight on wet stones",
-  "information broker of the back alleys, black hair, long hair in a low ponytail over the shoulder, side bangs, narrow black eyes, faint knowing smile, dark grey hanfu, black hooded cloak with the hood down, leather belt with small pouches and a thin ledger book, cloth wrist wraps, three short steel throwing knives fanned between the fingers of the raised right hand, left hand holding a folded note",
-  "sword, long sword, kunai, claws, leaves"),
+  "information broker of the back alleys, black hair, long hair in a low ponytail over the shoulder, side bangs, narrow black eyes, faint knowing smile, dark grey hanfu, black hooded cloak with the hood down, wide dark cloth sash with a thin thread-bound ledger tucked in it, cloth wrist wraps, three short steel throwing knives fanned between the fingers of the raised right hand, left hand holding a folded note",
+  "sword, long sword, kunai, claws, leaves, leather belt, pouches, belt buckle, holster"),
 ]
 
 SIDE = [
