@@ -14,7 +14,8 @@ STYLE = ("manhwa cover art, korean webtoon key visual, murim, wuxia, chinese mar
 WEAPON = ("1.15::firm grip, fingers wrapped around the handle, detailed weapon, realistic weapon proportions, detailed hilt and guard, "
           "leather-wrapped grip, polished metal, metal reflections, detailed scabbard::")
 # 늘 빼는 것(gen.py의 기본 제외에 덧붙음)
-UC = ("pointed chin, sharp chin, v-shaped jaw, needle chin, overly sharp jawline, elongated face, long face, narrow face, tiny chin, big eyes, oversized eyes, sleepy eyes, "
+UC = ("giant red moon, big red sun behind character, red circle behind head, halo, flat red background, "
+      "pointed chin, sharp chin, v-shaped jaw, needle chin, overly sharp jawline, elongated face, long face, narrow face, tiny chin, big eyes, oversized eyes, sleepy eyes, "
       "comical, silly expression, goofy, cartoonish, exaggerated features, cute, moe, childish face, chibi, simple background, pastel colors, photorealistic, 3d, "
       "oversized weapon, giant weapon, weapon too large, stiff pose, awkward pose, unnatural pose, twisted torso, "
       "missing fingers, fused fingers, extra hands, deformed hands, deformed weapon, broken weapon, ugly face, deformed face, "
@@ -46,9 +47,9 @@ MAIN = [
  ("권마계승", "남녀", "rocky canyon at sunset, huge boulders marked with deep fist-shaped craters, cave entrance with a stone seat, red-orange sky, swirling dust",
   "inheritor of a legendary fist master's secret manual, black hair, long wild loose hair, sharp features, crimson eyes with a faint red glow, dark grey sleeveless robe over black inner shirt, dark red sash, muscular forearms with faint visible veins, cloth-wrapped fists, small scars on knuckles, faint red aura around the right fist, right fist clenched in front of chest, left arm relaxed, controlled fury",
   "weapon, sword, holding weapon, staff, gauntlet, metal claws"),
- ("혈지생환", "남녀", "edge of a dried blood pond, cracked dark red earth, ruined shrine pillars, crimson dusk sky, crows on dead branches",
-  "sole survivor of a sacrificial blood pond, black hair, short messy hair, pale skin, faint dark circles under the eyes, haunted crimson eyes, grey hooded cloak with the hood down, black high-collar inner robe, faint red scar-like markings on the palms glowing softly, right hand raised at chest height with palm open, quiet cold expression",
-  "weapon, sword, holding weapon, staff, blood, dripping blood, gore"),
+ ("혈지생환", "남녀", "edge of a dried blood pond in a mountain valley, cracked dark earth, ruined stone shrine pillars, grey overcast dusk sky with a faint red glow, crows on dead branches, mist",
+  "sole survivor of a sacrificial blood pond, black hair tied back in a low ponytail with loose strands, pale skin, faint dark circles under the eyes, haunted dark eyes with a faint crimson glint, mature calm face, grey cloak with the hood down, black high-collar inner robe, faint red scar-like markings on the palms glowing softly, right hand raised at chest height with palm open, quiet cold expression",
+  "weapon, sword, holding weapon, staff, blood, dripping blood, gore, emo, messy short hair, glowing red eyes, hoodie"),
  ("하오문", "남녀", "narrow alley of a night market, tiled rooftops and red lanterns, teahouse signboard, thin mist, moonlight on wet stones",
   "information broker of the back alleys, black hair, long hair in a low ponytail over the shoulder, side bangs, narrow black eyes, faint knowing smile, dark grey hanfu, black hooded cloak with the hood down, leather belt with small pouches and a thin ledger book, cloth wrist wraps, three short steel throwing knives fanned between the fingers of the raised right hand, left hand holding a folded note",
   "sword, long sword, kunai, claws, leaves"),
@@ -70,7 +71,7 @@ SIDE = [
  ("외전수로", "남녀", "wide yangtze river at dusk, wooden pirate boats, reeds, mist over the water",
   "heir of a fallen river stronghold, black hair tied back with a cloth band, sun-tanned skin, confident grin, white shirt with rolled sleeves under a dark blue sleeveless vest, red waist sash, coil of rope on the shoulder, long iron-tipped fishing harpoon planted upright beside the body",
   "sword"),
- ("외전혈승", "남녀", "grey mountain road, ruined shrine, red sunset, crows",
+ ("외전혈승", "남녀", "grey mountain road through pines, ruined stone shrine, overcast evening sky, crows, drifting mist",
   "wandering monk of the blood sect, bald, shaved head, calm half-closed eyes, ash grey kasaya, long red prayer beads around the neck, monk staff with iron rings planted on the ground, one hand raised in a prayer gesture, calm stern face, natural skin tone, dark eyes, quiet menacing serenity",
   "sword, hair, smile, red eyes, pale skin, white skin, creepy"),
  ("외전야수", "남녀", "southern jungle, waterfall, giant ferns, a white tiger lying behind",
@@ -85,8 +86,8 @@ SIDE = [
  ("외전아미", "여", "temple with a golden roof on the misty peak of mount emei, sea of clouds below, stone stairway, morning light",
   "lay disciple of emei escorting a fugitive, black hair, long low ponytail, kind but firm eyes, white and pale grey robe with lotus embroidery, jian sheathed at the hip, one hand on the hilt, other hand holding a torn red sleeve, protective resolute expression",
   "curved sword, dao, drawn sword"),
- ("외전공동", "남녀", "earthen frontier fortress walls, ruins of the great wall, sand storm, desert sun",
-  "swordsman of kongtong guarding an abandoned frontier fort, black hair, sand-colored headscarf, sun-tanned skin, steady watchful eyes, sand-colored cloak over a dark robe, red sword cord tied to the hilt, jian sheathed at the hip, hand on the hilt",
+ ("외전공동", "남녀", "earthen frontier fortress walls, ruins of the great wall, blowing sand, hazy afternoon light",
+  "swordsman of kongtong guarding an abandoned frontier fort, black hair tied up, sand-colored headscarf around the neck, face fully visible, sun-tanned skin, steady watchful eyes, sand-colored cloak over a dark robe, red sword cord tied to the hilt, jian sheathed at the hip, hand on the hilt",
   "curved sword, dao, drawn sword"),
  ("외전모용", "남녀", "snowy changbai mountains, tall pines, falling snow",
   "unrecognized scion of the murong clan, black hair, long hair tied with a silver ring, proud sharp eyes, fur-lined dark green robe with silver embroidery, long spear held upright, spearhead visible above the head, snow on the shoulders, determined expression",
@@ -140,20 +141,20 @@ SIDE = [
 
 # (파일 이름, 성별, 배경, 인물, 더 뺄 것). 주요 인물은 시드 9013
 NPC = [
- ("천마", "남", "summit of the heavenly demon peak above a sea of storm clouds, crimson lightning, swirling crimson clouds, far below a vast army of kneeling cultists with crimson banners, falling snow",
-  "1boy, solo, the heavenly demon, ruler of the demonic cult, ageless man who looks in his thirties, overwhelmingly handsome, cold majestic face, long black hair billowing in the wind, glowing crimson eyes, black and crimson imperial robe with gold dragon embroidery flowing in the wind, black jade crown, seated on a towering black stone throne carved with dragons, sitting upright with both hands resting on the armrests, back straight, head slightly raised, black flame aura rising like smoke, overwhelming godlike presence, looking down at viewer, low angle, from below, dramatic lighting, majestic, cowboy shot",
+ ("천마", "남", "summit of the heavenly demon peak above a sea of storm clouds, dark night sky with crimson lightning, far below a vast army of kneeling cultists with crimson banners, falling snow",
+  "1boy, solo, the heavenly demon, ruler of the demonic cult, ageless man who looks in his thirties, overwhelmingly handsome, cold majestic face, long black hair billowing in the wind, glowing crimson eyes, black and crimson imperial robe with gold dragon embroidery flowing in the wind, black jade crown, seated on a black stone throne carved with dragons, cowboy shot, the figure filling the frame, sitting upright with both hands resting on the armrests, back straight, head slightly raised, black flame aura rising like smoke, overwhelming godlike presence, looking down at viewer, low angle, from below, dramatic lighting, majestic, cowboy shot",
   "weapon, holding weapon, sword, horns, smile, hand on chin, hand on face, slouching"),
  ("혈마", "남", "vast underground temple of the blood sect, a still lake of dark blood, red mist drifting low over the surface, ancient carved stone pillars, grey-robed cultists prostrating far in the background, dim crimson light",
   "1boy, solo, the founder of the blood sect revived in a pool of blood, tall imposing man who looks in his forties, cold sharp handsome face, long straight dark crimson hair falling loose past the shoulders, deep red eyes with a faint glow, pale skin, thin dark red veins faintly visible on the neck and hands, dark crimson robe over a black inner robe with faded gold patterns, wide sleeves, standing tall on a black stone altar at the edge of the blood lake, body turned slightly, one hand behind his back, the other hand raised at chest height with a thin thread of blood mist curling from the fingertips, robe and hair stirred by a faint wind, dark red qi aura shimmering around the shoulders, cold contemptuous gaze down at viewer, calm terrifying majesty, three-quarter view, low angle, dramatic red rim light, cowboy shot",
   "weapon, holding weapon, staff, gore, horns, crown, floating hair, smile, open mouth, fangs, exaggerated, skull"),
- ("혈불사도명", "남", "grey mountain temple courtyard at dusk, iron cauldron of porridge steaming, rows of starving people kneeling, red sunset through incense smoke",
+ ("혈불사도명", "남", "grey mountain temple courtyard at dusk, iron cauldron of porridge steaming, rows of starving people kneeling, grey sky, incense smoke",
   "1boy, solo, leader of the blood sect, elderly monk, bald, deep lines on the face, gaunt dignified face, thin lips, faint merciful expression with cold half-lidded eyes, ash grey kasaya with dark red stains along the hem, long red prayer beads wrapped around the hand, standing before the cauldron, serene yet sinister, dramatic backlight, three-quarter view, cowboy shot",
   "weapon, holding weapon, staff, gore, smile, grin, smiling, open mouth, teeth, goofy"),
  ("무림맹주", "남", "great hall of the martial alliance, huge banners of the nine sects and five clans, rows of martial artists standing in formation, shafts of light from high windows",
   "1boy, solo, leader of the martial alliance, dignified middle-aged man, neat black beard with grey streaks, long black hair tied with a gold crown, white and gold robe with cloud embroidery, jian sheathed at the hip, left hand on the scabbard, right hand resting on the hilt, solemn heavy gaze, last pillar of the orthodox world, low angle, dramatic lighting, cowboy shot",
   "curved sword, dao"),
  ("무영", "남", "rooftops at midnight, black mist pouring like smoke, a thin crescent moon",
-  "1boy, solo, first general of the demonic cult, assassin whose face is hidden in deep shadow, black hooded robe, only two faint red eyes visible, edges of the robe dissolving into black mist, a thin black blade held low in a reverse grip, silent menace, dramatic shadows, cowboy shot",
+  "1boy, solo, first general of the demonic cult, assassin, man in his thirties, pale expressionless handsome face half hidden by a black cloth mask over the mouth and nose, cold narrow black eyes, black hair tied back, black hooded robe with the hood down, edges of the robe dissolving into black mist, a thin black blade held low in a reverse grip, silent menace, dramatic shadows, cowboy shot",
   "smile"),
  ("환면마후", "여", "palace hall of hanging crimson silk, dozens of white porcelain masks floating in the air, candlelight",
   "1girl, solo, second general of the demonic cult, beautiful dangerous mature woman, long black hair adorned with gold hairpins, crimson robe with gold phoenix embroidery, holding a white porcelain mask beside her face, masks floating around her, enigmatic smile, half of her face in shadow, dramatic lighting, cowboy shot",
