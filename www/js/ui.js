@@ -683,9 +683,11 @@ function loadPerson() {
 /** 성별과 이름을 정하는 칸. 가문 출신은 성씨가 고정이다 */
 function personSetup() {
   const fixed = DB.origins.origins[ui.origin]?.surname;
-  const radio = (value) => `<label class="person-gender"><input type="radio" name="person-gender" value="${value}" ${ui.person.gender === value ? "checked" : ""}> ${value === "남" ? "남성" : "여성"}</label>`;
+  const onlyGender = DB.origins.origins[ui.origin]?.gender;
+  const radio = (value) => `<label class="person-gender"><input type="radio" name="person-gender" value="${value}" ${(onlyGender || ui.person.gender) === value ? "checked" : ""} ${onlyGender && onlyGender !== value ? "disabled" : ""}> ${value === "남" ? "남성" : "여성"}</label>`;
   return `<div class="person-setup">
       <div class="person-row">${radio("남")}${radio("여")}</div>
+      ${onlyGender ? `<p class="section-note">이 출신은 ${onlyGender === "남" ? "남성" : "여성"}으로만 시작합니다.</p>` : ""}
       <div class="person-row person-names">
         <label>성씨<input id="person-surname" maxlength="2" autocomplete="off" value="${esc(fixed || ui.person.surname)}" ${fixed ? "disabled" : ""} placeholder="비우면 저절로"></label>
         <label>이름<input id="person-given" maxlength="3" autocomplete="off" value="${esc(ui.person.given)}" placeholder="비우면 저절로"></label>

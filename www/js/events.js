@@ -258,6 +258,9 @@ export function pickRandomEvent(player) {
     if (event.legacy_find || event.action) return false; // 유산의 흔적과 수련 중의 사건은 정해진 자리에서만 나온다
     if (event.chain && !canStartChain(player, event.chain.id)) return false;
     if (!fitsStory(player, event) || event.manor_event || sideOrigin(player)?.skip?.includes(key)) return false;
+    // 받지 않는 성별의 문파에 드는 일은 찾아오지 않는다
+    const joining = key.match(/^(.+)_입문$/)?.[1] || key.match(/^제안_(.+)$/)?.[1];
+    if (joining && sectBarred(player, joining)) return false;
     return (event.chapters || []).includes(chapter) && !player.seenEvents.includes(key)
       && checkRequires(player, event.requires);
   });
@@ -301,7 +304,14 @@ function eventChoices(player, key) {
   const extra = (event.variants || [])
     .filter((v) => v.choices && checkRequires(player, v.requires))
     .flatMap((v) => v.choices.map((c) => ({ ...c, tag: c.tag ?? v.tag ?? null })));
-  return [...extra, ...event.choices];
+  // 받지 않는 성별의 문파로 들어가는 선택지는 보이지 않는다
+  return [...extra, ...event.choices].filter((c) => !c.outcomes.some((o) => [o.effects?.join_sect, o.effects?.sect_offer].some((s) => s && sectBarred(player, s))));
+}
+
+/** 소림은 남자만, 아미는 여자만 문하에 받는다(sects.json의 gender) */
+export function sectBarred(player, sect) {
+  const gender = DB.sects[sect]?.gender;
+  return Boolean(gender && (player.person?.gender ?? "남") !== gender);
 }
 
 /** 조건이 맞는 첫 반응의 본문. 없으면 기본 본문. */

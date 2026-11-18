@@ -3,7 +3,7 @@ import { Battle, enemyPool, Enemy, statureEnemy, useConsumable } from "./battle.
 import { GRADE_ORDER, Player, Skill, STAT_NAMES } from "./character.js";
 import { DB } from "./data.js";
 import {
-  grantStartGear, grantStartSkills, advanceChain, applyEffects, failChain, checkRequires, dueChainEvent, enemyIntro, LAST_CHAIN_TURN, pickActionEvent, pickFortune, pickRandomEvent, resolveChoice, reactiveLine, startChain, storyEventForTurn, dueOriginEvent, dueManorEvent, pendingOriginEvents, playable,
+  grantStartGear, grantStartSkills, advanceChain, applyEffects, failChain, checkRequires, dueChainEvent, enemyIntro, LAST_CHAIN_TURN, pickActionEvent, pickFortune, pickRandomEvent, sectBarred, resolveChoice, reactiveLine, startChain, storyEventForTurn, dueOriginEvent, dueManorEvent, pendingOriginEvents, playable,
 } from "./events.js";
 import { buy, openMarket, sell } from "./market.js";
 import {
@@ -526,7 +526,7 @@ export class Game {
       return;
     }
     // 도운 뒤에 받는 소속 제안. 받아야 소속이 된다
-    if (effects.sect_offer && !effects.battle && this.player.sect === null) {
+    if (effects.sect_offer && !effects.battle && this.player.sect === null && !sectBarred(this.player, effects.sect_offer)) {
       this.event = { key: `제안_${effects.sect_offer}`, forced: state.forced };
       return;
     }
@@ -647,7 +647,7 @@ export class Game {
       const summary = applyEffects(player, after.effects);
       this.addLog([...(after.text ? [after.text] : []), ...(summary.length ? [summary.join(", ")] : [])]);
       if (after.effects.next) this.offerAfterBattle = sceneKey(after.key, after.effects.next);
-      else if (after.effects.sect_offer && player.sect === null) this.offerAfterBattle = `제안_${after.effects.sect_offer}`;
+      else if (after.effects.sect_offer && player.sect === null && !sectBarred(player, after.effects.sect_offer)) this.offerAfterBattle = `제안_${after.effects.sect_offer}`;
     } else if (after.effects.lose_flags && player.hp > 0) {
       // 겨룸에 져도 줄거리는 이어진다
       for (const flag of after.effects.lose_flags) if (!player.hasFlag(flag)) player.flags.push(flag);
@@ -992,7 +992,9 @@ function sceneKey(from, next) {
 
 /** 성별과 이름을 정한다. 가문의 성씨는 고정이고 비워 둔 칸은 저절로 정한다 */
 export function settlePerson(originKey, person = {}) {
-  const gender = person.gender === "여" ? "여" : "남";
+  // 소림과 아미의 외전처럼 성별이 정해진 출신은 그 성별로만 시작한다
+  const fixed = DB.origins.origins[originKey]?.gender;
+  const gender = fixed || (person.gender === "여" ? "여" : "남");
   const names = DB.flavor.names;
   const clean = (text, limit) => String(text ?? "").replace(/[<>&"'`\s]/g, "").slice(0, limit);
   const surname = DB.origins.origins[originKey]?.surname || clean(person.surname, 2) || pick(names.surnames);
