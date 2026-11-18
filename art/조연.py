@@ -81,13 +81,13 @@ P("십팔동인", "남", "one of the eighteen bronze men of shaolin, shaved head
 P("무당진인", "남", "wudang taoist master who parries swords with a twig, seventies, long white beard, serene smile, grey taoist robe, holding a pine twig like a sword", "wudang mountain pavilion in clouds", "작", "sword, metal sword")
 P("화산장로", "남", "mount hua elder swordsman, sixties, grey beard, plum blossom embroidered robes, sword held vertically", "mount hua cliff path with plum trees")
 P("아미사태", "녀", "emei buddhist nun swordswoman, fifties, shaved head under a grey nun cap, compassionate stern face, grey robes, sword held in prayer stance", "golden roof temple on emei peak in clouds", "무", "hair")
-P("개방십걸", "남", "one of the ten heroes of the beggar sect, forties, messy hair, red drunken face, picking his nose, patched clothes, bamboo staff on the shoulder", "under a stone bridge with lanterns")
+P("개방십걸", "남", "one of the ten heroes of the beggar sect, forties, messy hair tied with a rag, ruddy cheerful drunken face, stubble, patched green and brown clothes with knotted cords at the waist, wine gourd in one hand, bamboo staff on the shoulder, lazy grin", "under a stone bridge with lanterns")
 P("당가배신자", "남", "traitor of the tang clan who once taught throwing knives, fifties, thin mustache, cold eyes, dark green tang clan robe, flying knives between fingers", "bamboo forest in sichuan mist", "작")
 P("곤륜역도", "남", "kunlun sect uncle who fled with a secret manual, sixties, gaunt face, white hair, white kunlun robe torn by blizzards, old sword, scroll case on the back", "kunlun snow pass in a blizzard")
 P("하오문주", "녀", "head of the information network of the lowly, old woman in her seventies, wrinkled sly face, grey hair in a bun, plain dark robe, many letters and a smoking pipe", "back room of a teahouse full of scroll shelves", "작", "sword")
 
 # ---------------------------------------------------------------- 3, 4장과 정마대전
-P("마교장로", "남", "demonic cult elder called gloomy wind lord, seventies, gaunt face, long grey hair, black and crimson robe, dark wind swirling around, bony hands", "black mountain fortress of the demonic cult, crimson banners", "맨", "weapon")
+P("마교장로", "남", "demonic cult elder called gloomy wind lord, seventies, gaunt human face with deep wrinkles, sunken cold eyes, long grey hair and thin grey beard, black and crimson robe, dark wind swirling around, thin old human hands", "black mountain fortress of the demonic cult, crimson banners", "맨", "weapon, skeleton, skull, bone hands, undead")
 P("혈마대귀", "남", "blood demon corps captain, thirties, pale skin with crimson veins, red armor pieces over black clothes, saber, fearless deathly eyes", "battlefield at dusk, smoke")
 P("십이마장", "남", "fifth demon general called mountain crusher, forties, giant muscular body, bald head, crimson war paint, black heavy armor, enormous iron mace", "shattered fortress wall, crimson banners")
 P("십이마장귀곡", "남", "seventh demon general ghost valley master who controls living puppets, fifties, sunken eyes, long black robe, silver threads from his fingers to puppet-like figures in the dark", "misty valley with hanging lanterns", "작", "sword")
