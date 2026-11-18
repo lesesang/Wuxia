@@ -16,7 +16,7 @@ SCENE = ("korean webtoon background art, anime style background, illustration, m
          "cinematic lighting, volumetric light, rich colors, atmospheric depth, wide shot, establishing shot, scenery, no humans, highly detailed background")
 UC_PERSON = "monochrome, greyscale, faceless, blank face, crowd"
 UC_BEAST = "photorealistic, photo, 3d, realistic painting, full moon, giant moon, big sun, symmetrical composition, human, 1boy, 1girl, person, rider, cute, chibi, cartoon animal, deformed animal, extra legs, extra heads, extra tails, fused limbs"
-UC_SCENE = "photorealistic, photo, 3d render, realistic, people, person, human, character, 1boy, 1girl, crowd, face, text, signature, modern building, car, power lines, western castle"
+UC_SCENE = "torii, japanese architecture, floating island, photorealistic, photo, 3d render, realistic, people, person, human, character, 1boy, 1girl, crowd, face, text, signature, modern building, car, power lines, western castle"
 
 POSE = "three-quarter view, looking at viewer, cowboy shot"
 SEX = {"남": "1boy, solo", "녀": "1girl, solo", "무리": "multiple boys, group, a leader standing in front, several followers behind him"}
@@ -254,11 +254,11 @@ S("천마봉_정상", "flat snowy summit of a black mountain, an empty black sto
 S("피연못", "underground blood lake, still dark red water, ancient carved pillars, red mist, dim crimson light")
 S("혈교산사", "blood sect mountain temple, grey stone buildings, red banners, red sunset, crows")
 S("낙양_불", "the city of luoyang burning at night, pagodas and city walls on fire, smoke and sparks")
-S("태산_비무대", "martial tournament stage on mount tai, stone platform, banners of many sects, sea of clouds")
+S("태산_비무대", "large square stone martial arts tournament stage on a mountain plateau of mount tai, surrounded by wooden spectator stands and tall colorful sect banners on poles, empty stage, sea of clouds and distant peaks behind, bright daylight")
 S("무림맹_본청", "grand hall of the martial alliance, tall pillars, banners of nine sects and five clans, long table")
 S("소림사", "shaolin temple compound on songshan mountain, long stone stairway up to a red temple gate with a big plaque, grey tiled halls, stone pagoda forest beside, old cypress trees, morning mist and sunlight", "lake, river, water")
 S("무당산", "wudang mountain palaces on cliffs in clouds")
-S("화산", "mount hua plank road on sheer cliffs, plum trees")
+S("화산", "narrow wooden plank walkway bolted to the sheer granite cliff face of mount hua, iron chains as handrails, dizzying drop below, jagged granite peaks, a few plum trees blooming on ledges, small taoist pavilion on a far peak, morning mist")
 S("아미금정", "golden summit temple of mount emei above the sea of clouds")
 S("곤륜설산", "kunlun snowy mountain sect gate in a blizzard")
 S("객잔", "interior of a roadside inn, wooden tables and benches, wine jars, warm lanterns, wooden staircase to the second floor, counter with an abacus, evening warm light through paper windows")
