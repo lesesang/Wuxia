@@ -4,12 +4,12 @@ import { readFile } from "node:fs/promises";
 import { loadData, DB } from "../../www/js/data.js";
 await loadData(async (n) => JSON.parse(await readFile(new URL(`../../www/data/${n}.json`, import.meta.url), "utf-8")));
 const { Game } = await import("../../www/js/game.js");
-const { eventView, pickRandomEvent } = await import("../../www/js/events.js");
+const { eventView, pickRandomEvent, pickActionEvent } = await import("../../www/js/events.js");
 const { loadMeta, saveMeta } = await import("../../www/js/meta.js");
 const { pickArts } = await import("../arts.js");
 const c = (l) => l[Math.floor(Math.random() * l.length)];
 const N = +process.argv[2] || 20, ORIGIN = process.argv[3] || "무림초출", DIFF = process.argv[4] || "강호";
-const tot = { 사건: 0, 줄거리: 0, 달: 0, 고른수: 0 }; const byCh = [0, 0, 0, 0, 0, 0]; const left = [0, 0, 0, 0, 0, 0];
+const tot = { 사건: 0, 줄거리: 0, 달: 0, 고른수: 0, 바닥난달: 0, 수련사건없음: 0 }; const byCh = [0, 0, 0, 0, 0, 0]; const left = [0, 0, 0, 0, 0, 0];
 for (let r = 0; r < N; r++) {
   const m = loadMeta();
   m.unlocked_origins = Object.keys(DB.origins.origins); m.total_karma = 900; m.difficulty_cleared = [...DB.difficulty.order];
@@ -36,6 +36,8 @@ for (let r = 0; r < N; r++) {
         // 이 장에서 아직 만나지 않은 무작위 사건 수
         left[ch] += Object.keys(DB.randomEvents).filter((k) => { const e = DB.randomEvents[k]; return !e.action && !e.manor_event && !e.legacy_find && (e.chapters || []).includes(ch) && !p.seenEvents.includes(k); }).length;
       }
+      if (!pickRandomEvent(p)) tot.바닥난달++;
+      if (!pickActionEvent(p, "수련") && !pickActionEvent(p, "명상") && !pickActionEvent(p, "휴식")) tot.수련사건없음++;
       tot.달++; last = null; g.advanceTurn();
     } else if (g.pickingArts) g.finishArtsPick?.();
     else g.action(c(["탐색", "탐색", "수련", "명상", "휴식"]));
