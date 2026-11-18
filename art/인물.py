@@ -3,25 +3,26 @@
 # 이미 그린 그림은 건너뛴다. 다시 그리려면 그 파일을 지운다.
 import os, subprocess, sys
 
-# 고정 그림체(바, 표지 애니). 인물마다 바꾸지 않는다
-STYLE = ("high quality anime illustration, wuxia novel illustration, chinese martial arts, jianghu atmosphere, painterly digital painting, "
-         "clean lineart, semi-realistic proportions, ancient china, traditional chinese clothing, flowing hanfu, subtle ink wash accents, "
-         "cinematic lighting, gentle rim light, balanced contrast, natural colors, detailed face, mature features, sharp eyes, "
-         "layered robes, detailed fabric folds, detailed background, scenery, highly detailed, "
+# 고정 그림체(웹툰 표지, B3에 B2를 섞음). 인물마다 바꾸지 않는다
+STYLE = ("manhwa cover art, korean webtoon key visual, murim, wuxia, chinese martial arts, ancient china, traditional chinese clothing, flowing hanfu, "
+         "polished digital painting with clean edges, crisp lineart, high contrast, cool cinematic color grading, strong rim light, sharp shadows, "
+         "wind, flowing hair and robes, semi-realistic manhwa face, mature handsome face, natural oval face, balanced facial proportions, "
+         "natural jawline, defined nose bridge, deep-set sharp eyes, natural eye size, layered robes, detailed background, scenery, atmospheric depth, "
          "1.2::detailed hands, beautiful hands, anatomically correct hands, natural finger placement, five fingers::, "
          "correct anatomy")
 # 병기를 든 인물에게만 붙인다. 맨손 인물에게 붙이면 없는 병기가 그려진다
 WEAPON = ("1.15::firm grip, fingers wrapped around the handle, detailed weapon, realistic weapon proportions, detailed hilt and guard, "
           "leather-wrapped grip, polished metal, metal reflections, detailed scabbard::")
 # 늘 빼는 것(gen.py의 기본 제외에 덧붙음)
-UC = ("comical, silly expression, goofy, cartoonish, exaggerated features, cute, moe, childish face, chibi, simple background, pastel colors, photorealistic, 3d, "
+UC = ("pointed chin, sharp chin, v-shaped jaw, needle chin, overly sharp jawline, elongated face, long face, narrow face, tiny chin, big eyes, oversized eyes, sleepy eyes, "
+      "comical, silly expression, goofy, cartoonish, exaggerated features, cute, moe, childish face, chibi, simple background, pastel colors, photorealistic, 3d, "
       "oversized weapon, giant weapon, weapon too large, stiff pose, awkward pose, unnatural pose, twisted torso, "
       "missing fingers, fused fingers, extra hands, deformed hands, deformed weapon, broken weapon, ugly face, deformed face, "
       "asymmetrical eyes, bad anatomy, ornate weapon, fantasy weapon, multiple weapons, western clothes, fantasy armor, glasses, "
       "bad hands, malformed hands, extra fingers, too many fingers, claw hands, wrong grip, floating weapon, weapon merging with hand, "
       "bent blade, warped blade, blurry weapon, melted metal")
-HERO = {"남": "1boy, solo, wuxia protagonist, young man, early twenties, handsome, sharp jawline, refined facial features, heroic, charismatic, dignified posture",
-        "녀": "1girl, solo, wuxia protagonist, young woman, early twenties, beautiful, elegant refined features, heroic, charismatic, dignified posture"}
+HERO = {"남": "1boy, solo, wuxia protagonist, young man, early twenties, handsome, refined facial features, athletic build, broad shoulders, heroic, charismatic, dignified posture",
+        "녀": "1girl, solo, wuxia protagonist, young woman, early twenties, beautiful, elegant refined features, clear bright eyes, slender athletic build, heroic, charismatic, dignified posture"}
 POSE = "three-quarter view, standing, contrapposto, looking at viewer, upper body"
 SEED = {"남": 7013, "녀": 8013}
 
@@ -140,8 +141,8 @@ SIDE = [
 # (파일 이름, 성별, 배경, 인물, 더 뺄 것). 주요 인물은 시드 9013
 NPC = [
  ("천마", "남", "summit of the heavenly demon peak above a sea of storm clouds, crimson lightning, swirling crimson clouds, far below a vast army of kneeling cultists with crimson banners, falling snow",
-  "1boy, solo, the heavenly demon, ruler of the demonic cult, ageless man who looks in his thirties, overwhelmingly handsome, cold majestic face, long black hair billowing in the wind, glowing crimson eyes, black and crimson imperial robe with gold dragon embroidery flowing in the wind, black jade crown, seated on a towering black stone throne carved with dragons, one elbow on the armrest, chin resting lightly on fingers, black flame aura rising like smoke, overwhelming godlike presence, looking down at viewer, low angle, from below, dramatic lighting, majestic, cowboy shot",
-  "weapon, holding weapon, sword, horns, smile"),
+  "1boy, solo, the heavenly demon, ruler of the demonic cult, ageless man who looks in his thirties, overwhelmingly handsome, cold majestic face, long black hair billowing in the wind, glowing crimson eyes, black and crimson imperial robe with gold dragon embroidery flowing in the wind, black jade crown, seated on a towering black stone throne carved with dragons, sitting upright with both hands resting on the armrests, back straight, head slightly raised, black flame aura rising like smoke, overwhelming godlike presence, looking down at viewer, low angle, from below, dramatic lighting, majestic, cowboy shot",
+  "weapon, holding weapon, sword, horns, smile, hand on chin, hand on face, slouching"),
  ("혈마", "남", "vast underground temple of the blood sect, a still lake of dark blood, red mist drifting low over the surface, ancient carved stone pillars, grey-robed cultists prostrating far in the background, dim crimson light",
   "1boy, solo, the founder of the blood sect revived in a pool of blood, tall imposing man who looks in his forties, cold sharp handsome face, long straight dark crimson hair falling loose past the shoulders, deep red eyes with a faint glow, pale skin, thin dark red veins faintly visible on the neck and hands, dark crimson robe over a black inner robe with faded gold patterns, wide sleeves, standing tall on a black stone altar at the edge of the blood lake, body turned slightly, one hand behind his back, the other hand raised at chest height with a thin thread of blood mist curling from the fingertips, robe and hair stirred by a faint wind, dark red qi aura shimmering around the shoulders, cold contemptuous gaze down at viewer, calm terrifying majesty, three-quarter view, low angle, dramatic red rim light, cowboy shot",
   "weapon, holding weapon, staff, gore, horns, crown, floating hair, smile, open mouth, fangs, exaggerated, skull"),
@@ -178,11 +179,7 @@ NPC = [
 ]
 
 # 고른 시드(파일 이름: 시드). 없으면 기본 시드를 쓴다
-PICK = {  # 다시 뽑아 고른 씨앗
-    "남궁세가_남": 7016, "외전수로_남": 7016, "외전종남_남": 7016, "외전망나니_남": 7016,
-    "외전곤륜_남": 7014, "외전홍수_남": 7016,
-    "외전아미_녀": 8015, "외전녹림_녀": 8015, "외전빙궁_녀": 8016, "외전야수_남": 7014, "외전야수_녀": 8014, "외전종남_녀": 8014, "외전망나니_녀": 8016, "외전곤륜_녀": 8016,
-}
+PICK = {}
 
 def entries():
     for key, genders, bg, body, extra in MAIN + SIDE:
