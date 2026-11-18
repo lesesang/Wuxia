@@ -235,7 +235,7 @@ P("단조", "남", "red fang, captain of the blood guard, forties, fierce face, 
 P("고담", "남", "blood lake keeper elder of the demonic cult, seventies, gaunt face, long grey hair, black robe with crimson sleeves, hands stained red", "edge of the underground blood lake", "맨", "weapon")
 P("염교", "남", "blood collector of the blood sect, thirties, thin cruel face, shaved head, ash grey robe, bronze bowl and a curved knife", "village square with an iron cauldron", "작")
 P("위소", "남", "young spearman, early twenties, eager fierce face, black hair in a high ponytail, simple dark blue clothes, long red-tasseled spear", "riverbank at dawn")
-P("흑아", "남", "black fang, captain of the demonic cult beast core hunters, thirties, wolfish face, fur cloak, nets and a hooked spear", "dark forest with traps")
+P("흑아", "남", "black fang, captain of the demonic cult beast core hunters, human man in his thirties, lean hard human face with a scar on the chin, sharp hunter eyes, black hair tied back, grey wolf pelt cloak over the shoulders, dark leather armor, coiled net on the hip, hooked spear", "dark forest with traps at night", "무", "furry, anthro, wolf head, animal head, kemono, animal ears")
 P("구량", "남", "red-eyed demon, forties, shaved head, glowing red eyes, ash grey robe, bloody hands", "ruined temple at night", "맨", "weapon")
 P("구호", "남", "blood-robed demon, thirties, pale face, long messy black hair, blood red robe, saber dripping", "battlefield at night")
 
