@@ -6,15 +6,16 @@ import os, subprocess, sys
 from 인물 import STYLE, WEAPON, UC
 
 # 짐승과 영물: 사람 얼굴과 손 태그를 빼고 같은 채색을 쓴다
-BEAST = ("manhwa cover art, korean webtoon key visual, wuxia, ancient china, polished digital painting with clean edges, crisp lineart, "
-         "high contrast, cool cinematic color grading, strong rim light, sharp shadows, wind, detailed background, scenery, atmospheric depth, "
-         "no humans, animal focus, majestic creature, detailed fur and scales, realistic animal anatomy, powerful presence")
+BEAST = ("korean webtoon key visual, manhwa illustration, anime style, wuxia, ancient china, clean crisp lineart, cel shading with smooth gradients, "
+         "polished digital painting with clean edges, high contrast, cool cinematic color grading, strong rim light, sharp shadows, wind, "
+         "detailed background, scenery, atmospheric depth, no humans, animal focus, majestic creature, detailed fur and scales, "
+         "realistic animal anatomy, powerful presence, dynamic pose")
 # 사건 배경: 사람 없이 장소만
 SCENE = ("korean webtoon background art, anime style background, illustration, manhwa key visual, murim, wuxia, ancient china, "
          "traditional chinese architecture, intricate details, polished digital painting with clean edges, crisp lineart, "
          "cinematic lighting, volumetric light, rich colors, atmospheric depth, wide shot, establishing shot, scenery, no humans, highly detailed background")
 UC_PERSON = "monochrome, greyscale, faceless, blank face, crowd"
-UC_BEAST = "photorealistic, photo, 3d, human, 1boy, 1girl, person, rider, cute, chibi, cartoon animal, deformed animal, extra legs, extra heads, extra tails, fused limbs"
+UC_BEAST = "photorealistic, photo, 3d, realistic painting, full moon, giant moon, big sun, symmetrical composition, human, 1boy, 1girl, person, rider, cute, chibi, cartoon animal, deformed animal, extra legs, extra heads, extra tails, fused limbs"
 UC_SCENE = "photorealistic, photo, 3d render, realistic, people, person, human, character, 1boy, 1girl, crowd, face, text, signature, modern building, car, power lines, western castle"
 
 POSE = "three-quarter view, looking at viewer, cowboy shot"
@@ -229,19 +230,19 @@ P("포두", "남", "local constable, forties, strict face, short beard, red cons
 # ---------------------------------------------------------------- 짐승과 영물
 B("늑대무리", "pack of starving winter wolves, thin grey wolves with bared fangs, glowing eyes", "snowy forest at night")
 B("멧돼지떼", "herd of enraged wild boars with tusks charging", "destroyed mountain farm field")
-B("독사떼", "swarm of venomous snakes coiling over rocks, raised heads", "rocky valley with fog")
+B("독사떼", "dozens of venomous vipers coiling over each other, several raising their heads and baring fangs, green and black scales, forked tongues", "rocky valley floor covered with snakes, fog")
 B("불곰", "huge fierce brown bear standing on hind legs, roaring", "autumn mountain forest")
 B("식인호랑이", "man-eating tiger, scarred, crouching to pounce, burning eyes", "dark bamboo forest")
 B("왕지네", "giant centuries-old centipede, armored black and red segments, many legs", "damp cave")
 B("설표", "snow leopard on a cliff, pale spotted fur, piercing eyes", "snowy mountain pass")
 B("금안조", "giant golden-eyed divine eagle with spread wings", "cliff top above clouds")
-B("백액호", "huge white-browed king tiger with the character king on its forehead, majestic", "mountain shrine forest")
+B("백액호", "huge white-browed king tiger, orange fur with black stripes, white fur on the brow, the chinese character wang marked in the stripes on its forehead, majestic, standing on a rock", "mountain shrine forest")
 B("철갑현귀", "thousand-year black armored turtle carrying a stone stele on its back", "ancient lake shore")
 B("이무기", "thousand-year serpent dragon without horns, giant, coiled in a pond", "mountain pond under storm")
 B("천년혈망", "thousand-year blood python, giant crimson snake", "swamp")
-B("만년빙잠", "ten-thousand-year ice silkworm, translucent glowing white", "ice cave")
+B("만년빙잠", "giant ten-thousand-year ice silkworm larva, segmented plump caterpillar body, translucent white like jade, frost crystals on its body, cold mist breathing out", "ice cave")
 B("금섬", "giant golden toad breathing poison mist", "poison marsh")
-B("불가사리", "ancient iron-eating beast, bear-like body of iron, glowing eyes", "ruined forge")
+B("불가사리", "ancient iron-eating beast bulgasari, bear-like body with an elephant-like trunk and rhinoceros eyes, hide of dark iron plates with rust, needle-like bristles, glowing eyes, chewing on a broken sword", "ruined forge")
 B("천년백사", "thousand-year white serpent coiled around a spirit herb", "cliff garden")
 B("흑룡", "black dragon rising from a deep pool, without a pearl, majestic", "deep pool under thunderstorm")
 B("해치", "haetae, divine lion-like beast with one horn, judging", "ancient palace courtyard")
