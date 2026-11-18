@@ -6,7 +6,7 @@ import { listAssets } from "../tools/build_asset_list.js";
 import { Battle, dropSkill, Enemy, statureEnemy, useConsumable } from "../www/js/battle.js";
 import { GRADE_ORDER, Player, Skill } from "../www/js/character.js";
 import { DB } from "../www/js/data.js";
-import { applyEffects, dueManorEvent, hasManor, dueOriginEvent, pendingOriginEvents, grantStartGear, grantStartGifts, canStartChain, checkRequires, enemyIntro, eventView, LAST_CHAIN_TURN, pickRandomEvent, resolveChoice, storyEventForTurn, validateChains, validateEvents } from "../www/js/events.js";
+import { applyEffects, dueManorEvent, hasManor, dueOriginEvent, pendingOriginEvents, grantStartGear, grantStartGifts, canStartChain, checkRequires, enemyIntro, eventView, LAST_CHAIN_TURN, pickRandomEvent, sectBarred, resolveChoice, storyEventForTurn, validateChains, validateEvents } from "../www/js/events.js";
 import { buildEpilogue, Game, settlePerson } from "../www/js/game.js";
 import { halpun, josa } from "../www/js/josa.js";
 import { blockReason, buy, equipmentBonus, ITEM_GRADES, openMarket, priceOf, sell } from "../www/js/market.js";
@@ -1905,6 +1905,7 @@ test("싸움으로 도운 뒤에도 제안이 온다", () => {
   const game = newGame();
   game.pendingNext = false;
   game.player.sect = null;
+  game.player.person.gender = "여";
   game.event = { key: "아미_입문", forced: false };
   const index = eventView(game.player, "아미_입문").choices.find((c) => c.label === "함께 산채를 친다").index;
   game.chooseEvent(index);
@@ -1915,6 +1916,23 @@ test("싸움으로 도운 뒤에도 제안이 온다", () => {
   game.battleAction("기본공격");
   assert.equal(game.event?.key, "제안_아미");
   assert.equal(game.player.sect, null);
+});
+
+test("소림은 남자만, 아미는 여자만 문하에 받는다", () => {
+  const man = new Player();
+  man.person.gender = "남";
+  const woman = new Player();
+  woman.person.gender = "여";
+  assert.ok(sectBarred(woman, "소림") && !sectBarred(man, "소림"));
+  assert.ok(sectBarred(man, "아미") && !sectBarred(woman, "아미"));
+  // 문을 두드리는 달에는 받지 않는 문파가 보이지 않는다
+  const labelsFor = (sect) => DB.events.문을_두드리다.choices.filter((c) => c.outcomes.some((o) => o.effects?.sect_offer === sect)).map((c) => c.label);
+  for (const p of [man, woman]) p.alignment.정도 = 300;
+  const seen = (p) => eventView(p, "문을_두드리다").choices.map((c) => c.label);
+  assert.ok(!seen(man).some((l) => labelsFor("아미").includes(l)) && !seen(woman).some((l) => labelsFor("소림").includes(l)));
+  // 성별이 정해진 외전 출신은 그 성별로만 시작한다
+  assert.equal(settlePerson("외전소림", { gender: "여" }).gender, "남");
+  assert.equal(settlePerson("외전아미", { gender: "남" }).gender, "여");
 });
 
 test("성향이 맞서면 도움 대신 적대하는 사건이 온다", () => {
