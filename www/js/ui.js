@@ -316,7 +316,7 @@ ${section("도구", ["수련 도구는 언제든, 전투 도구는 싸움 중에
     `<b>깊은 강호</b>: ${DB.difficulty.order.slice(1).map((k) => `${esc(DB.difficulty.levels[k].name)}${josa(DB.difficulty.levels[k].name, "은/는")} ${DB.difficulty.levels[k].karma}배`).join(", ")}를 받습니다.`,
     "써도 누적은 줄지 않고, 누적이 늘면 누적 보상을 저절로 받습니다."])}
 ${section("상점", ["<b>출신</b>은 새 출신을, <b>자질</b>은 타고난 바탕을(장착 칸에 한이 있음), <b>기틀</b>은 늘 적용되는 바탕을, <b>인연</b>은 새 이야기와 결전에 달려올 사람을, <b>채비</b>는 다음 강호행 한 번에 쓰는 준비물을 엽니다.", "잠긴 출신의 전용 자질, 기틀, 인연은 그 출신을 열면 보입니다. 병기와 갑의는 겹칠수록 좋아지고 끝을 넘으면 은자가 되며, 같은 비급이 겹치면 성취가 됩니다."])}
-${section("외전", ["생사경에 오른 뒤 상점에서 따로 엽니다. 천마봉으로 가지 않고 같은 강호의 같은 십 년을 저마다의 목표로 걷습니다. 출신마다 서장과 고비, 마지막 고비, 결말 셋이 있습니다.", "본편의 줄거리와 카르마로 산 인연은 나오지 않고 변경과 새외의 일을 만납니다. 외전 출신의 신공 셋은 외전 칸에서 그 출신의 신공 인연을 사야 찾아옵니다. 외전의 출신은 한 품계 높은 무공을 지니고 시작하지만, 길의 적은 본편보다 강하고 마지막 상대는 그보다 훨씬 강합니다."])}
+${section("외전", ["생사경 결말을 한 번이라도 본 뒤 상점의 외전 칸에서 출신마다 엽니다. 정파, 사파, 마도의 출신이 있습니다. 천마봉으로 가지 않고 같은 강호의 같은 십 년을 저마다의 큰 목표로 걷습니다. 출신마다 서장과 고비, 마지막 고비, 결말 셋이 있습니다.", "본편의 줄거리와 카르마로 산 인연은 나오지 않고, 길 위의 일과 그 출신만의 일을 만납니다. 외전 출신의 신공 셋은 외전 칸에서 그 출신의 신공 인연을 사야 찾아옵니다. 외전의 출신은 한 품계 높은 무공을 지니고 시작하지만, 길의 적은 본편보다 강하고 마지막 상대는 그보다 훨씬 강합니다. 외전도 네 깊이의 강호로 걸을 수 있습니다."])}
 ${section("장원", [`쌓은 카르마가 ${DB.karma.manor.need_total}에 이르면 열립니다. 객사, 연무장, 약방, 서고를 단계별로 올리고 올린 채는 사라지지 않습니다.`, "장원은 문패를 챙긴 강호행에만 나타납니다. 그 강호행에서는 장원의 일이 몇 달에 한 번씩 찾아오고 길에서 만나는 일에 장원으로 푸는 선택지가 열립니다. 장원에서 얻는 것은 장원이 클수록 큽니다."])}
 ${section("전설의 유산", ["천마를 한 번 쓰러뜨리면 열립니다. 천마를 쓰러뜨리거나 외전을 끝맺은 강호행에서 무공이나 병장기, 귀한 물건 하나를 남기고, 다음 강호행의 첫 해 안에 별호만 남은 고수들의 자취에서 이어받습니다.", "처음에는 무공의 품계가 한 단계 낮아지고(상승까지만) 병장기는 낮은 단계로 돌아옵니다.", ...DB.karma.legacy.upgrades.map((u, i) => `<b>${i + 1}단계 ${esc(u.name)}</b>: ${esc(u.desc)}`)])}`,
   };
@@ -458,10 +458,12 @@ function shopPanels(meta) {
   // 외전의 출신은 문파와 세가의 것과 그 밖의 것으로 나누어 보인다
   const sideRow = (k) => shopRow(esc(DB.origins.origins[k].name), originDetail(k), "unlock-origin", k, DB.origins.origins[k].cost, meta, "해금", !sideOpen(meta));
   const lockedSides = DB.origins.side_order.filter((k) => !meta.unlocked_origins.includes(k));
-  const isSchool = (k) => DB.sects[DB.origins.origins[k].sect]?.school || ["소림", "무당", "화산", "아미", "곤륜", "종남", "점창", "청성", "공동", "당가", "모용", "제갈"].includes(originSect(k));
-  const schoolRows = lockedSides.filter(isSchool).map(sideRow).join("");
-  const otherRows = lockedSides.filter((k) => !isSchool(k)).map(sideRow).join("");
-  const sideRows = (schoolRows ? `<h4 class="shop-group">구파일방과 세가</h4>${schoolRows}` : "") + (otherRows ? `<h4 class="shop-group">강호의 다른 자리</h4>${otherRows}` : "");
+  // 외전의 출신은 처음 걷는 길의 성향에 따라 정파, 사파, 마도로 나누어 보인다
+  const leanOf = (k) => Object.entries(DB.origins.origins[k].alignment || {}).sort((x, y) => y[1] - x[1])[0]?.[0] || "정도";
+  const sideRows = [["정도", "정파"], ["사도", "사파"], ["마도", "마도"]].map(([lean, label]) => {
+    const rows = lockedSides.filter((k) => leanOf(k) === lean).map(sideRow).join("");
+    return rows ? `<h4 class="shop-group">${label}</h4>${rows}` : "";
+  }).join("");
   // 해금한 외전은 본 결말의 수와 함께 보여 준다
   const ownedSides = DB.origins.side_order.filter((k) => meta.unlocked_origins.includes(k)).map((k) => {
     const o = DB.origins.origins[k];

@@ -24,7 +24,7 @@ def rows_cb(origin, *items):
     for key,d in ENDINGS.items():
         if d["origin"]==origin: d["frames"].append(group)
 def boss_cb(key, who):
-    s7.BOSS.setdefault(key,{})["천붕"]={"text":f"({who}의 단전께에서 이따금 검은 연기가 실처럼 샌다. 천마가 숨겨 넣은 불, 잠화를 품었다. 그 불이 맞선 자의 맥을 태운다.)",
+    s7.BOSS.setdefault(key,{})["천붕"]={"text":f"({who}의 단전께에서 이따금 검은 연기가 실처럼 샌다. 신교의 잠화장로가 숨겨 넣은 불, 잠화를 품었다. 그 불이 맞선 자의 맥을 태운다.)",
      "quirks":[{"type":"bloodthirst","percent":12,"name":"혈계"},{"type":"sever","percent":25,"name":"숨은 불"}]}
 TIE=dict(battle="잠화무인")
 

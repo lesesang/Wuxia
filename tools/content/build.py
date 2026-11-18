@@ -13,7 +13,7 @@ import s12
 import side
 # 새 외전 출신. 한 파일에 하나씩
 _OLD_FOES=set(dsl.ENEMIES)
-NEW_SIDE=['o_sorim','o_mudang','o_ami','o_gongdong','o_moyong','o_sadoryeon','o_jegal','o_dark','o_gwimun','o_nokrim','o_heuksa','o_mangnani','o_hwasan','o_cheongseong','o_jongnam','o_singyo','o_hongsu','o_jeomchang','o_gonryun','o_gwangbu','o_sagong','o_wiso','o_dark2','side_more']
+NEW_SIDE=['o_sorim','o_mudang','o_ami','o_gongdong','o_moyong','o_sadoryeon','o_jegal','o_dark','o_gwimun','o_nokrim','o_heuksa','o_mangnani','o_cheongseong','o_jongnam','o_singyo','o_hongsu','o_jeomchang','o_gonryun','o_gwangbu','o_sagong','o_wiso','o_dark2','side_more']
 for _m in NEW_SIDE: __import__(_m)
 D=os.path.join(ROOT,'www','data','')
 def load(n): return json.load(open(D+n+'.json'))
@@ -54,8 +54,9 @@ for k,v in side.ORIGINS.items():
     if k not in O['side_order']: O['side_order'].append(k)
 for k,v in s7.DEEP_ORIGIN.items(): O['origins'][k]['deep']=v
 for k in O['side_order']: O['origins'][k]['cost']=60
-O['origins']['외전매화']['chapters']['2']['desc']='스승이 떠나온 산문에서 스승의 젊은 날을 듣는다.'
-_h=O['origins']['외전혈승']; _h['end_turn']=120; _h['goal']='개조의 의지를 거두어 강림의 밤을 열고, 죽 한 그릇의 값을 마저 치른다'; _h['goal_short']='값을 치르는 날'; _h['chapters']['4']['desc']='빼앗긴 그릇을 되찾는 싸움. 그리고 강림의 밤.'; _h['chapters']['5']['desc']='혈마신교의 강호다. 죽 한 그릇의 값이 아직 남았다.'
+O['origins']['외전매화']['chapters']['2']['desc']='스승이 떠나온 화산 본산에서 스승의 젊은 날을 듣는다.'
+O['origins']['외전매화'].update(sect="화산",skip=["문파대사_화산"],desc="화산의 속가 매화검수이자 천하십대고수 매화노검 백송이 산을 떠나기 전 마지막으로 거둔 제자. 화산 뒷산 스승의 초막에서 매화검법과 스승의 검을 함께 받아 일류에 올랐다. 스승은 명부의 열째 자리를 비우고 편지 한 장 없이 사라졌다.")
+_h=O['origins']['외전혈승']; _h['end_turn']=120; _h['goal']='혈교의 순례승으로 개조의 의지를 거두어 혈마가 깨어나는 강림의 밤을 열고, 죽 한 그릇의 값을 마저 치른다'; _h['goal_short']='값을 치르는 날'; _h['chapters']['4']['desc']='빼앗긴 그릇을 되찾는 싸움. 그리고 강림의 밤.'; _h['chapters']['5']['desc']='혈마신교의 강호다. 죽 한 그릇의 값이 아직 남았다.'
 for k,v in {"외전빙궁":["북해고수"],"외전매화":["십대고수"],"외전수로":["수적두목"],"외전야수":["천마사냥개","남만술사","백액호","금안조","철갑현귀","불가사리","천년백사"],"외전혈승":["마교심판자","혈교우호법"]}.items(): O['origins'][k]['shun']=v
 SK=load('skills')
 s9.patch_skills(SK,O)
