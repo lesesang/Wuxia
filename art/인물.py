@@ -4,16 +4,17 @@
 import os, subprocess, sys
 
 # 고정 그림체(바, 표지 애니). 인물마다 바꾸지 않는다
-STYLE = ("high quality anime illustration, martial arts novel cover style, painterly digital painting, clean lineart, "
-         "semi-realistic proportions, wuxia, ancient china, cinematic lighting, gentle rim light, balanced contrast, misty background, "
-         "natural colors, detailed face, mature features, sharp eyes, layered robes, detailed fabric folds, highly detailed, "
+STYLE = ("high quality anime illustration, wuxia novel illustration, chinese martial arts, jianghu atmosphere, painterly digital painting, "
+         "clean lineart, semi-realistic proportions, ancient china, traditional chinese clothing, flowing hanfu, subtle ink wash accents, "
+         "cinematic lighting, gentle rim light, balanced contrast, natural colors, detailed face, mature features, sharp eyes, "
+         "layered robes, detailed fabric folds, detailed background, scenery, highly detailed, "
          "1.2::detailed hands, beautiful hands, anatomically correct hands, natural finger placement, five fingers::, "
          "correct anatomy")
 # 병기를 든 인물에게만 붙인다. 맨손 인물에게 붙이면 없는 병기가 그려진다
 WEAPON = ("1.15::firm grip, fingers wrapped around the handle, detailed weapon, realistic weapon proportions, detailed hilt and guard, "
           "leather-wrapped grip, polished metal, metal reflections, detailed scabbard::")
 # 늘 빼는 것(gen.py의 기본 제외에 덧붙음)
-UC = ("cute, moe, childish face, chibi, simple background, pastel colors, photorealistic, 3d, "
+UC = ("comical, silly expression, goofy, cartoonish, exaggerated features, cute, moe, childish face, chibi, simple background, pastel colors, photorealistic, 3d, "
       "oversized weapon, giant weapon, weapon too large, stiff pose, awkward pose, unnatural pose, twisted torso, "
       "missing fingers, fused fingers, extra hands, deformed hands, deformed weapon, broken weapon, ugly face, deformed face, "
       "asymmetrical eyes, bad anatomy, ornate weapon, fantasy weapon, multiple weapons, western clothes, fantasy armor, glasses, "
@@ -38,8 +39,8 @@ MAIN = [
  ("표국표사", "남녀", "mountain pass under an overcast sky, row of stone cairns, broken escort cart, torn red escort banner on a leaning pole, wind carrying dust",
   "lone surviving escort guard, black hair, high ponytail tied with red cord, a few loose strands, small scar on cheek, brown eyes, steady confident eyes, dark brown hanfu, brown leather vest, rope belt with a bronze escort agency token, cloth wrist wraps, travel-worn cloak, chinese spear held upright with its butt planted beside the feet, steel spearhead with red horsehair tassel visible above the head, right hand gripping the shaft at shoulder height",
   "sword, flag on weapon, banner on spear, leaves, branch, beard"),
- ("개방제자", "남녀", "underneath an old stone arch bridge at night, river reflecting paper lanterns, straw mats and a small campfire on the bank",
-  "fifth-knot disciple of the beggar sect, black hair, messy hair tied in a short ponytail, smudge of dirt on cheek, bright mischievous black eyes, patched and frayed pale green robe, rope belt with five knotted cords, bandaged forearms, wine gourd at waist, straw sandals, plain wooden staff planted on the ground, leaning on it with one hand, sly grin",
+ ("개방제자", "남녀", "under an old stone arch bridge at night, river reflecting paper lanterns",
+  "fifth-knot disciple of the beggar sect, black hair, messy hair tied in a short ponytail, smudge of dirt on cheek, bright mischievous black eyes, patched and frayed pale green robe, rope belt with five knotted cords, bandaged forearms, wine gourd at waist, straw sandals, plain wooden staff planted on the ground, leaning on it with one hand, sly grin, cowboy shot, close view",
   "sword, blade, armor, child"),
  ("권마계승", "남녀", "rocky canyon at sunset, huge boulders marked with deep fist-shaped craters, cave entrance with a stone seat, red-orange sky, swirling dust",
   "inheritor of a legendary fist master's secret manual, black hair, long wild loose hair, sharp features, crimson eyes with a faint red glow, dark grey sleeveless robe over black inner shirt, dark red sash, muscular forearms with faint visible veins, cloth-wrapped fists, small scars on knuckles, faint red aura around the right fist, right fist clenched in front of chest, left arm relaxed, controlled fury",
@@ -57,8 +58,8 @@ SIDE = [
   "direct heir of the sichuan tang poison clan, black hair, neat high ponytail with a jade pin, cold intelligent green eyes, black inner robe, dark green outer robe with silver bamboo embroidery, single black leather glove on the right hand, needle case and small medicine pouches at the belt, three thin steel needles held between gloved fingers, calm calculating expression",
   "sword, spear"),
  ("외전빙궁", "남녀", "frozen northern sea, ice palace of the north sea in the distance, gentle snowfall, pale blue sky",
-  "direct disciple of the north sea ice palace, long silver-white hair, ice blue eyes, porcelain skin, white hanfu with pale blue snowflake embroidery, white fur collar, frost clinging to the sleeves, visible cold breath, right palm raised with swirling frost mist, cold serene expression",
-  "weapon, sword, holding weapon"),
+  "direct disciple of the north sea ice palace, long silver-white hair, ice blue eyes, porcelain skin, white hanfu with pale blue snowflake embroidery, white fur collar, frost clinging to the sleeves, visible cold breath, right palm raised with swirling frost mist, cold serene expression, mature face, sharp elegant features",
+  "weapon, sword, holding weapon, halo, ring, cute, blush, round face"),
  ("외전매화", "남녀", "plum blossom trees on the steep cliffs of mount hua, falling plum petals, small thatched hut on a ledge, morning mist",
   "plum blossom swordsman of mount hua and last disciple of a legendary old swordsman, black hair, long hair in a half updo with a plum blossom hairpin, clear determined eyes, white hanfu with pink plum blossom embroidery, pale rose sash, jian sheathed at the left hip in a white scabbard, plum blossom tassel, right hand resting on the hilt, gentle resolute smile",
   "curved sword, dao, drawn sword"),
@@ -72,7 +73,7 @@ SIDE = [
   "wandering monk of the blood sect, bald, shaved head, calm half-closed eyes, ash grey kasaya, long red prayer beads around the neck, monk staff with iron rings planted on the ground, one hand raised in a prayer gesture, quiet unsettling serenity",
   "sword, hair"),
  ("외전야수", "남녀", "southern jungle, waterfall, giant ferns, a white tiger lying behind",
-  "child of the beast palace raised by tigers, wild messy black hair, sun-tanned skin, golden eyes, tiger fur shawl, necklace of bone and fangs, sleeveless brown tunic, cloth wrapped fists, feral grin",
+  "child of the beast palace raised by tigers, wild messy black hair, sun-tanned skin, golden eyes, tiger fur shawl, necklace of bone and fangs, sleeveless brown tunic, cloth wrapped fists, fierce feral stare, closed mouth",
   "weapon, sword, holding weapon"),
  ("외전소림", "남", "closed mountain gate of shaolin temple, stone stairs, old pines, bell tower in morning mist",
   "lay disciple of shaolin temple, short black hair, earnest steady eyes, ochre and brown practice robe, wooden prayer beads at the wrist, plain wooden staff planted on the ground with one hand resting on it, calm determined expression",
@@ -80,7 +81,7 @@ SIDE = [
  ("외전무당", "남녀", "stone door of a sealed meditation cave on wudang mountain, misty peaks, old pine",
   "taoist disciple of wudang guarding a sealed door, black hair in a topknot with a wooden hairpin, clear calm eyes, white and light blue taoist robe with taiji embroidery, jian sheathed at the hip, hand resting on the hilt, composed expression",
   "curved sword, dao, drawn sword"),
- ("외전아미", "여", "golden summit of mount emei above a sea of clouds, temple bell tower, morning light",
+ ("외전아미", "여", "temple with a golden roof on the misty peak of mount emei, sea of clouds below, stone stairway, morning light",
   "lay disciple of emei escorting a fugitive, black hair, long low ponytail, kind but firm eyes, white and pale grey robe with lotus embroidery, jian sheathed at the hip, one hand on the hilt, other hand holding a torn red sleeve, protective resolute expression",
   "curved sword, dao, drawn sword"),
  ("외전공동", "남녀", "earthen frontier fortress walls, ruins of the great wall, sand storm, desert sun",
@@ -99,25 +100,25 @@ SIDE = [
   "spear bearer of the ghost gate cult, pale skin, long straight black hair, hollow grey eyes, black robe with white talisman patterns, spear held upright with a small paper lantern hanging below the spearhead, solemn expression",
   "sword"),
  ("외전녹림", "남녀", "mountain bandit stronghold, wooden palisade, pine forest, campfire smoke",
-  "chief of a small bandit stronghold, black hair in a wild ponytail, scar on the chin, bold grin, fur vest over rough dark brown clothes, rope belt, heavy wooden club resting on the shoulder",
-  "sword, blade"),
+  "chief of a small bandit stronghold, black hair in a wild ponytail, scar on the chin, fierce confident smirk, sharp eyes, fur vest over rough dark brown clothes, rope belt, heavy iron-studded wooden club resting on the shoulder",
+  "sword, blade, white background, cute, open mouth smile"),
  ("외전흑사", "남녀", "smoky gambling den, dice tables, hanging lanterns",
   "gambler of the black snake gang, black hair with side bangs, sly eyes, black robe with gold coin patterns, gold coins held between the fingers, sly smile",
   "sword, spear"),
  ("외전망나니", "남녀", "execution ground in the rain, wooden platform, overcast sky",
-  "former executioner hunting the truth, black hair unkempt, tired heavy eyes, plain grey clothes, wide executioner's saber wrapped in cloth carried on the back with the hilt over the shoulder, grim expression",
+  "former executioner hunting the truth, black hair unkempt, tired heavy eyes, plain grey clothes, long single-edged saber in a worn black scabbard slung across the back, hilt over the right shoulder, arms at the sides, grim tired expression",
   "jian"),
  ("외전청성", "남녀", "pine forest of qingcheng mountain, torn red wedding ribbons on the branches",
   "disciple of qingcheng who guarded a broken wedding, black hair in a long ponytail, gentle firm eyes, green robe with pine needle embroidery, red ribbon tied on the wrist, jian sheathed at the hip, hand on the hilt, resolute expression",
   "curved sword, dao, drawn sword"),
- ("외전종남", "남녀", "village at the foot of zhongnan mountain, wheat fields, straw roofs",
+ ("외전종남", "남녀", "village at the foot of zhongnan mountain under a cloudy sky, golden wheat fields, straw-roofed houses, mountain behind",
   "outer hall swordsman of zhongnan paying off a debt, black hair in a simple topknot, honest eyes, plain brown hanfu, worn sword sheathed at the hip, folded debt document in one hand, steady expression",
   "curved sword, dao, drawn sword"),
  ("외전신교", "남녀", "village of the heavenly demon cult, crimson banners, dark sky",
   "young blade of the heavenly demon cult, long black hair, red eyes, cold ambitious gaze, black and crimson robe with red sleeves, heavy dao sheathed at the hip, hand on the hilt, pale wisps drifting around the scabbard",
   "jian"),
  ("외전홍수", "남녀", "night banquet hall in luoyang, red lanterns, silk curtains",
-  "agent of the red sleeves of the demonic cult, black hair in an elegant updo, alluring sharp eyes, crimson robe with very long red sleeves, thin steel needles glinting from the cuff, folding fan in the other hand, enigmatic smile",
+  "agent of the red sleeves of the demonic cult, black hair in an elegant topknot, alluring sharp eyes, crimson robe with very long red sleeves, thin steel needles glinting from the cuff, folding fan in the other hand, enigmatic smile",
   "sword, spear"),
  ("외전점창", "남녀", "cangshan mountain above erhai lake, swarms of insects in the mist, stone pillar",
   "fast swordsman of diancang, black hair in a high ponytail, focused sharp eyes, light blue robe with lightning embroidery, jian sheathed at the hip, hand on the hilt ready to draw",
@@ -128,9 +129,9 @@ SIDE = [
  ("외전광부", "남녀", "silver mine tunnel, wooden supports, oil lamps, rubble",
   "miner who broke out of a collapsed mine with bare fists, black hair with a sweat band, dust on the face, muscular arms, torn sleeveless shirt, bandaged fists, clenched fist at the chest, burning eyes",
   "weapon, sword, holding weapon, pickaxe"),
- ("외전사공", "남녀", "yellow river ferry crossing, muddy water, wooden boats, cliffs",
-  "ferryman of the yellow river, black hair tied back, sun-tanned skin, straw hat hanging on the back, rolled up trousers, long bamboo punting pole planted upright, easygoing smile",
-  "sword, blade"),
+ ("외전사공", "남녀", "yellow river ferry crossing at dusk, muddy rushing water, wooden ferry boats, tall loess cliffs, drifting mist",
+  "ferryman of the yellow river, black hair tied back, sun-tanned skin, straw hat hanging on the back, rolled up trousers, long bamboo punting pole planted upright, calm sharp eyes, faint smile, weathered strong hands",
+  "sword, blade, white background, messy spiky hair"),
  ("외전위소", "남녀", "ruins of a coastal fortress, broken walls, stormy sea, tattered banner",
   "child of a fallen coastal garrison, black hair in a topknot with red cord, determined eyes, worn military padded coat over a dark robe, red tasseled spear held upright, spearhead visible, stern expression",
   "sword"),
@@ -141,9 +142,9 @@ NPC = [
  ("천마", "남", "summit of the heavenly demon peak above a sea of storm clouds, crimson lightning, swirling crimson clouds, far below a vast army of kneeling cultists with crimson banners, falling snow",
   "1boy, solo, the heavenly demon, ruler of the demonic cult, ageless man who looks in his thirties, overwhelmingly handsome, cold majestic face, long black hair billowing in the wind, glowing crimson eyes, black and crimson imperial robe with gold dragon embroidery flowing in the wind, black jade crown, seated on a towering black stone throne carved with dragons, one elbow on the armrest, chin resting lightly on fingers, black flame aura rising like smoke, overwhelming godlike presence, looking down at viewer, low angle, from below, dramatic lighting, majestic, cowboy shot",
   "weapon, holding weapon, sword, horns, smile"),
- ("혈마", "남", "vast underground blood temple, a lake of blood boiling, crimson vortex of blood mist, red lightning, ancient carved pillars, cultists in grey kasaya prostrating far below",
-  "1boy, solo, the ancient blood demon risen from a pool of blood, towering regal figure, long crimson hair floating upward, glowing red eyes, pale skin with faint dark red vein patterns, crown of hardened blood, ancient crimson and gold ritual robe, blood flowing upward from the hem like flames, arms slightly spread, standing at the center of the blood lake, terrifying majesty, low angle, from below, dramatic lighting, cowboy shot",
-  "weapon, holding weapon, staff, gore, horns, smile"),
+ ("혈마", "남", "vast underground temple of the blood sect, a still lake of dark blood, red mist drifting low over the surface, ancient carved stone pillars, grey-robed cultists prostrating far in the background, dim crimson light",
+  "1boy, solo, the founder of the blood sect revived in a pool of blood, tall imposing man who looks in his forties, cold sharp handsome face, long straight dark crimson hair falling loose past the shoulders, deep red eyes with a faint glow, pale skin, thin dark red veins faintly visible on the neck and hands, dark crimson robe over a black inner robe with faded gold patterns, wide sleeves, standing tall on a black stone altar at the edge of the blood lake, body turned slightly, one hand behind his back, the other hand raised at chest height with a thin thread of blood mist curling from the fingertips, robe and hair stirred by a faint wind, dark red qi aura shimmering around the shoulders, cold contemptuous gaze down at viewer, calm terrifying majesty, three-quarter view, low angle, dramatic red rim light, cowboy shot",
+  "weapon, holding weapon, staff, gore, horns, crown, floating hair, smile, open mouth, fangs, exaggerated, skull"),
  ("혈불사도명", "남", "grey mountain temple courtyard at dusk, iron cauldron of porridge steaming, rows of starving people kneeling, red sunset through incense smoke",
   "1boy, solo, leader of the blood sect, elderly monk, bald, deep lines on the face, calm merciful smile with cold eyes, ash grey kasaya with dark red stains along the hem, long red prayer beads wrapped around the hand, standing before the cauldron, serene yet sinister, dramatic backlight, three-quarter view, cowboy shot",
   "weapon, holding weapon, staff, gore"),
@@ -176,22 +177,41 @@ NPC = [
   "weapon, holding weapon, sword, staff"),
 ]
 
-def run(out, name, seed, char, bg, extra):
-    if "holding weapon" not in extra: char = f"{char}, {WEAPON}"
-    path = os.path.join(out, name)
+# 고른 시드(파일 이름: 시드). 없으면 기본 시드를 쓴다
+PICK = {  # 다시 뽑아 고른 씨앗
+    "남궁세가_남": 7016, "외전수로_남": 7016, "외전종남_남": 7016, "외전망나니_남": 7016,
+    "외전곤륜_남": 7014, "외전홍수_남": 7016,
+    "외전아미_녀": 8015, "외전녹림_녀": 8015, "외전빙궁_녀": 8016, "외전야수_남": 7014, "외전야수_녀": 8014, "외전종남_녀": 8014, "외전망나니_녀": 8016, "외전곤륜_녀": 8016,
+}
+
+def entries():
+    for key, genders, bg, body, extra in MAIN + SIDE:
+        for g in ("남", "녀"):
+            if g in genders or (g == "녀" and genders == "여"):
+                yield f"{key}_{g}", SEED[g], f"{HERO[g]}, {body}, {POSE}", bg, extra
+    for key, g, bg, body, extra in NPC:
+        yield key, 9013, body, bg, extra
+
+# 바늘, 동전, 비도, 소매 쇠뇌처럼 작은 암기를 쓰는 인물. 병기 강조를 붙이면 긴 병기가 그려진다
+SMALL = ("외전당가", "외전흑사", "외전홍수", "외전제갈", "하오문")
+
+def run(path, seed, char, bg, extra):
+    small = any(os.path.basename(path).startswith(k) for k in SMALL)
+    if small: extra = (extra + ", " if extra else "") + "long weapon, staff, polearm, spear, sword, club"
+    elif "holding weapon" not in extra: char = f"{char}, {WEAPON}"
     if os.path.exists(path + ".png"): return
     subprocess.run([sys.executable, "-I", os.path.join(os.path.dirname(os.path.abspath(__file__)), "gen.py"),
                     path, str(seed), STYLE, char, bg, UC + (", " + extra if extra else "")])
     if os.path.exists(path + ".json"): os.remove(path + ".json")
 
 if __name__ == "__main__":
-    out = sys.argv[1]; only = sys.argv[2] if len(sys.argv) > 2 else ""; plus = int(sys.argv[3]) if len(sys.argv) > 3 else 0
+    # 고른 그림 전부: python3 인물.py 출력폴더 [이름 일부]
+    # 후보 여럿:     python3 인물.py 출력폴더 이름 시드 시드 ...   (파일은 이름_시드.png)
+    out = sys.argv[1]; only = sys.argv[2] if len(sys.argv) > 2 else ""; seeds = [int(x) for x in sys.argv[3:]]
     os.makedirs(out, exist_ok=True)
-    for key, genders, bg, body, extra in MAIN + SIDE:
-        if only and only not in key: continue
-        for g in ("남", "녀"):
-            if g in genders or (g == "녀" and genders == "여"):
-                run(out, f"{key}_{g}", SEED[g] + plus, f"{HERO[g]}, {body}, {POSE}", bg, extra)
-    for key, g, bg, body, extra in NPC:
-        if only and only not in key: continue
-        run(out, key, 9013 + plus, body, bg, extra)
+    for name, seed, char, bg, extra in entries():
+        if only and only not in name: continue
+        if seeds:
+            for sd in seeds: run(os.path.join(out, f"{name}_{sd}"), sd, char, bg, extra)
+        else:
+            run(os.path.join(out, name), PICK.get(name, seed), char, bg, extra)
