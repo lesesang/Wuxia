@@ -1,5 +1,6 @@
 [
  "css/game.css",
+ "data/art.json",
  "data/balance.json",
  "data/chapters.json",
  "data/companions.json",
@@ -32,6 +33,7 @@
  "icons/icon-512.png",
  "icons/icon-maskable-512.png",
  "index.html",
+ "js/art.js",
  "js/audio.js",
  "js/battle.js",
  "js/character.js",

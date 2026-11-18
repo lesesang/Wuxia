@@ -5275,3 +5275,16 @@ test("끝나지 않는 싸움은 없다: 길어지면 적의 회복이 줄다가
   assert.equal(b.enemyHealRate(), 0);
   assert.ok(b.log.some((l) => l.includes("더는 상처가 아물지 않는다")));
 });
+
+test("모든 적과 동료, 출신에 그림이 있고 연결된 그림 파일이 있다", () => {
+  const www = new URL("../www", import.meta.url).pathname;
+  const has = (p) => readdirSync(`${www}/img/${p.split("/")[0]}`).includes(`${p.split("/")[1]}.webp`);
+  for (const key of Object.keys(DB.enemies)) assert.ok(DB.art.enemy[key] && has(DB.art.enemy[key]), key);
+  for (const key of Object.keys(DB.companions)) assert.ok(has(DB.art.companion[key]), key);
+  for (const path of Object.values(DB.art.foe)) assert.ok(has(path), path);
+  for (const [, path] of DB.art.npc) assert.ok(has(path), path);
+  for (const [, name] of DB.art.scene) assert.ok(has(`b/${name}`), name);
+  for (const [key, o] of Object.entries(DB.origins.origins)) {
+    for (const g of o.gender ? [o.gender === "여" ? "녀" : "남"] : ["남", "녀"]) assert.ok(has(`p/${key}_${g}`), `${key}_${g}`);
+  }
+});

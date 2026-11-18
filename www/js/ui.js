@@ -12,10 +12,11 @@ import {
 import {
   ALIGNMENTS, ALIGN_STEPS, benefitText, pathPerks, byname, fameRank, getChapterInfo, getMonth, getYear, marketTurns, nextSlotThreshold,
   originSect, veteranBonus, personalize, sectWord, fullName, realmProgress, traitSlots, realmPerks, activeCompanions, MAX_COMPANIONS,
-  DEFAULT_DIFFICULTY, difficultyOf, quirkText, auraText } from "./rules.js";
+  DEFAULT_DIFFICULTY, difficultyOf, quirkText, auraText, getChapter } from "./rules.js";
 import { MAX_TURN } from "./character.js";
 import { storage } from "./storage.js";
 import { halpun, josa } from "./josa.js";
+import { artOn, setArt, portraitOf, enemyArt, companionArt, castArt, sceneOf, backdrop, turnScene, npcOf } from "./art.js";
 
 const game = new Game();
 const ui = {
@@ -29,6 +30,24 @@ const esc = (value) => String(value ?? "").replace(/[&<>"']/g,
   (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const TIER_NAMES = { 일반: "일반", 난적: "난적", 강적: "강적", 보스: "마두" };
 const percent = (part, whole) => Math.min(100, Math.trunc(part / whole * 100));
+
+// ---------- 그림 ----------
+// 변수로 넘긴 url()은 스타일 파일 기준으로 풀리므로 문서 기준의 절대 주소로 넘긴다
+const cssUrl = (url) => `url('${new URL(url, document.baseURI).href.replace(/'/g, "%27")}')`;
+/** 사건이나 달의 배경 띠. npc가 있으면 그 사람의 그림을 곁에 세운다 */
+function sceneBand(bg, npc = null, cls = "") {
+  if (!bg && !npc) return "";
+  return `<figure class="scene${cls ? ` ${cls}` : ""}"${bg ? ` style="--scene:${cssUrl(bg)}"` : ""} aria-hidden="true">${npc ? `<img class="scene-npc" src="${esc(npc)}" alt="" decoding="async">` : ""}</figure>`;
+}
+const avatar = (url, cls = "avatar") => (url ? `<img class="${cls}" src="${esc(url)}" alt="" decoding="async">` : "");
+const playerPortrait = (p) => portraitOf(p.originKey, p.person?.gender);
+const originFace = (key) => avatar(portraitOf(key, DB.origins.origins[key].gender || ui.person.gender), "pick-portrait");
+/** 화면 전체의 흐린 배경. 넓은 화면에서 양옆을 채운다 */
+function setBackdrop(url) {
+  const style = document.body.style;
+  if (url) style.setProperty("--backdrop", cssUrl(url));
+  else style.removeProperty("--backdrop");
+}
 
 // ---------- 공통 조각 ----------
 
@@ -337,6 +356,8 @@ function settingsModal() {
       <select id="set-speed">${option("0", "바로 표시", speed)}${option("35", "느리게", speed)}${option("18", "보통", speed)}${option("7", "빠르게", speed)}</select></div>
     <div class="setting-row"><label for="set-font">글자 크기</label>
       <select id="set-font">${option("small", "작게", font)}${option("normal", "보통", font)}${option("large", "크게", font)}</select></div>
+    <div class="setting-row"><label for="set-art">그림 보기<br><small class="muted">끄면 글로만 진행하고 데이터를 덜 씁니다</small></label>
+      <input type="checkbox" id="set-art" class="toggle" ${artOn() ? "checked" : ""}></div>
     <div class="setting-row"><span>언어</span><span class="muted">한국어</span></div>
     ${installPrompt ? `<div class="setting-row"><span>앱처럼 쓰기</span><button class="mini-btn" data-act="install">홈 화면에 추가</button></div>` : ""}
     <div class="setting-row"><span>기록 옮기기<br><small class="muted">카르마, 강호록, 진행 중인 달을 파일로</small></span>
@@ -354,6 +375,7 @@ function settingsModal() {
 
 function renderTitle() {
   document.body.className = "home title-screen";
+  setBackdrop(backdrop("천마봉"));
   setMood("calm");
   const meta = loadMeta();
   const hasSave = loadCheckpoint() !== null;
@@ -597,6 +619,7 @@ function affordableCount(meta) {
 
 function renderShop() {
   document.body.className = "home setup-screen";
+  setBackdrop(backdrop("산정_일출"));
   setMood("calm");
   const meta = loadMeta();
   const tabs = [["origin", "출신"], ["side", "외전"], ["trait", "자질"], ["upgrade", "기틀"], ["content", "인연"], ["provision", "채비"], ["manor", "장원"], ["legacy", "유산"], ["reward", "누적"]];
@@ -734,6 +757,7 @@ function worldTerms(level) {
 
 function renderSetup() {
   document.body.className = "home setup-screen";
+  setBackdrop(backdrop("산정_일출"));
   setMood("calm");
   const meta = loadMeta();
   const slots = traitSlots(meta.total_karma) + extraSlots(meta);
@@ -743,9 +767,9 @@ function renderSetup() {
   if (!meta.unlocked_origins.includes(ui.origin)) ui.origin = "무림초출";
 
   const origins = DB.origins.order.filter((key) => meta.unlocked_origins.includes(key)).map((key) => `<div class="pick-row"><label class="pick-label"><input type="radio" name="origin" value="${esc(key)}" ${ui.origin === key ? "checked" : ""}>
-      <span class="pick-main"><span class="pick-name">${esc(DB.origins.origins[key].name)}${meta.origin_wins.includes(key) ? ` <span class="rarity">천마 격파</span>` : ""}</span>${originDetail(key)}</span></label></div>`).join("")
+      ${originFace(key)}<span class="pick-main"><span class="pick-name">${esc(DB.origins.origins[key].name)}${meta.origin_wins.includes(key) ? ` <span class="rarity">천마 격파</span>` : ""}</span>${originDetail(key)}</span></label></div>`).join("")
     + (DB.origins.side_order.some((key) => meta.unlocked_origins.includes(key)) ? `<h4 class="shop-group">외전</h4>${DB.origins.side_order.filter((key) => meta.unlocked_origins.includes(key)).map((key) => `<div class="pick-row"><label class="pick-label"><input type="radio" name="origin" value="${esc(key)}" ${ui.origin === key ? "checked" : ""}>
-      <span class="pick-main"><span class="pick-name">${esc(DB.origins.origins[key].name)}${meta.side_done.includes(key) ? ` <span class="rarity">끝맺음</span>` : ""}</span>${originDetail(key)}</span></label></div>`).join("")}` : "");
+      ${originFace(key)}<span class="pick-main"><span class="pick-name">${esc(DB.origins.origins[key].name)}${meta.side_done.includes(key) ? ` <span class="rarity">끝맺음</span>` : ""}</span>${originDetail(key)}</span></label></div>`).join("")}` : "");
 
   const ownedTraits = byRarity(visibleTraits(ui.origin).filter((key) => meta.unlocked_traits.includes(key)),
     (key) => `<div class="pick-row"><label class="pick-label"><input type="checkbox" name="trait" value="${esc(key)}" ${ui.traits.has(key) ? "checked" : ""} ${!ui.traits.has(key) && ui.traits.size >= slots ? "disabled" : ""}>
@@ -796,7 +820,7 @@ function chronicleList(p) {
 
 function companionList(p) {
   const rows = activeCompanions(p);
-  return rows.length ? `<div class="modal-section"><h4>결전에 달려올 사람</h4>${rows.map((c) => `<div class="skill-row">${esc(c.name)}<div class="skill-meta">${esc(c.help_text)}</div></div>`).join("")}</div>` : "";
+  return rows.length ? `<div class="modal-section"><h4>결전에 달려올 사람</h4>${rows.map((c) => `<div class="skill-row companion-row">${avatar(companionArt(c.key), "row-portrait")}<span>${esc(c.name)}<span class="skill-meta block">${esc(c.help_text)}</span></span></div>`).join("")}</div>` : "";
 }
 
 /** 든 병장기를 내려놓는 단추 */
@@ -862,7 +886,7 @@ function statusModal() {
 
   const vet = veteranBonus(p);
   const panels = {
-    stats: `<div class="modal-section">
+    stats: `${playerPortrait(p) ? `<div class="status-hero">${avatar(playerPortrait(p), "status-portrait")}<div><b>${esc(fullName(p.person))}</b><span class="skill-meta block">${esc(p.realm)}, ${esc(byname(p))}</span><span class="skill-meta block">${esc(p.origin)}</span></div></div>` : ""}<div class="modal-section">
         ${statRow("외공", "external", "체력, 위력")}${statRow("내공", "internal", "내력, 체력, 비기 위력")}
         ${statRow("무리", "martial", "위력, 명중, 성취")}${statRow("심경", "mind", "회심의 일격, 받는 피해, 수련, 돌파")}
         ${cap < 999 ? `<p class="stat-cap-note">${esc(p.realm)}의 기량은 ${cap}에서 막힙니다.${p.cappedStats().length ? ` 막힌 기량 하나마다 나머지가 ${halpun(p.cappedStats().length * DB.realms.cap_boost.per_capped)} 더 빨리 오릅니다.` : ""}${Object.values(p.pent).some(Boolean) ? " 막힌 동안 쌓인 몫은 경지가 오르면 풀립니다." : ""}</p>` : ""}
@@ -928,7 +952,8 @@ function renderBattlePrelude() {
   const b = game.battle;
   const { called, intro, affix } = b.prelude;
   const lines = [b.enemy.desc, intro, ...(affix || [])].filter(Boolean);
-  return `<div class="stage"><div class="stage-inner"><div class="event-sheet">
+  const foe = enemyArt(b.enemy);
+  return `<div class="stage"><div class="stage-inner">${sceneBand(ui.scene, foe, "scene-foe")}<div class="event-sheet">
       <h2 class="event-title">${esc(called)}</h2>
       <div class="event-body">${lines.map((l) => `<p class="event-text">${esc(l)}</p>`).join("")}
         <p class="section-note">${esc(b.enemy.realm)}${b.spar ? ", 비무" : ""}</p>
@@ -941,6 +966,8 @@ function renderBattle() {
   document.body.className = "in-battle";
   setMood("battle");
   const { player: p, battle: b, gauntlet } = game;
+  if (!ui.scene) ui.scene = turnScene("탐색", getChapter(p.turn));
+  setBackdrop(ui.scene);
   if (b.prelude) {
     app().innerHTML = `${topbar()}${renderBattlePrelude()}${sidebar()}${gameModals()}`;
     return;
@@ -981,13 +1008,13 @@ function renderBattle() {
       <button class="round-menu" data-act="open-status" data-tab="stats" aria-label="신상 보기">신상</button>
     </div>
     <div class="vs-row">
-      <div class="combatant" data-side="player"><div class="name">${esc(fullName(p.person))}</div>
+      <div class="combatant" data-side="player">${avatar(playerPortrait(p), "fighter")}<div class="name">${esc(fullName(p.person))}</div>
         <div class="hpbar-outer${lowHp ? " danger" : ""}"><div class="hpbar-inner mine" data-bar="player" style="width:${percent(p.hp, p.maxHp())}%"></div></div>
         <div class="hpnum">체력 <b>${p.hp}</b>/${p.maxHp()}</div>
         <div class="qibar"><div style="width:${percent(p.qi, p.maxQi())}%"></div></div>
         <div class="hpnum">내력 ${p.qi}/${p.maxQi()}</div></div>
       <div class="vs-mark">대</div>
-      <div class="combatant" data-side="enemy">${b.enemy.title ? `<div class="enemy-title">${esc(b.enemy.title)}</div>` : ""}<div class="name">${esc(b.enemy.name)}</div>
+      <div class="combatant" data-side="enemy">${avatar(enemyArt(b.enemy), "fighter")}${b.enemy.title ? `<div class="enemy-title">${esc(b.enemy.title)}</div>` : ""}<div class="name">${esc(b.enemy.name)}</div>
         <div class="hpbar-outer"><div class="hpbar-inner enemy" data-bar="enemy" style="width:${percent(b.enemy.hp, b.enemy.maxHp)}%"></div></div>
         <div class="hpnum">체력 <b>${b.enemy.hp}</b>/${b.enemy.maxHp}</div>
         ${b.enemy.barrier ? `<div class="hpnum">강기 ${b.enemy.barrier}</div>` : ""}
@@ -1059,7 +1086,7 @@ function topbar() {
   const turn = Math.min(p.turn, p.maxTurn);
   return `<div class="topbar"><div class="topbar-inner">
     <div class="topbar-row1">
-      <span class="turn-info">${getYear(turn)}년차 ${getMonth(turn)}월<small>${p.difficulty !== DEFAULT_DIFFICULTY ? `${esc(difficultyOf(p).name)}, ` : ""}${esc(getChapterInfo(turn, p).title)}, ${p.turn}/${p.maxTurn}달</small></span>
+      ${avatar(playerPortrait(p), "avatar")}<span class="turn-info">${getYear(turn)}년차 ${getMonth(turn)}월<small>${p.difficulty !== DEFAULT_DIFFICULTY ? `${esc(difficultyOf(p).name)}, ` : ""}${esc(getChapterInfo(turn, p).title)}, ${p.turn}/${p.maxTurn}달</small></span>
       <span class="realm-info">${esc(p.realm)}<small>${esc(fullName(p.person))}${byname(p) === "이름 없는 무인" ? "" : `, ${esc(byname(p))}`}</small></span>
     </div>
     <div class="turn-track"><span style="width:${percent(turn, p.maxTurn)}%"></span></div>
@@ -1103,7 +1130,8 @@ function renderEnding() {
   const p = game.player;
   const { ending } = game;
   const meta = loadMeta();
-  return `<div class="stage"><div class="stage-inner ending-sheet">
+  const endScene = backdrop(ending.key === "사망" ? "무덤" : DB.origins.origins[p.originKey]?.side ? "산정_일출" : "천마봉_정상");
+  return `<div class="stage"><div class="stage-inner ending-sheet">${sceneBand(endScene, playerPortrait(p), "scene-ending")}
       <div class="seal seal-${esc(ending.key)}">${esc(ending.seal)}</div>
       <h2 class="ending-title">${esc(ending.title)}</h2>
       ${ending.difficulty && ending.difficulty !== DEFAULT_DIFFICULTY ? `<p class="ending-world">${esc(DB.difficulty.levels[ending.difficulty]?.title ?? "")}</p>` : ""}
@@ -1177,7 +1205,9 @@ function renderMarket() {
   const rest = views.filter((v) => !known.includes(v.category));
   const specials = rest.length ? `<h4 class="market-group">특별한 물건</h4>${rest.map(row).join("")}` : "";
   const stock = specials + sections.join("");
-  return `<div class="stage market-stage${market.special ? " market-special" : ""}"><div class="market-inner">
+  const marketScene = market.special ? sceneBand(backdrop("대나무숲"), castArt("수상한누군가")) : sceneBand(backdrop("장터"), castArt("장터상인"));
+  ui.scene = backdrop(market.special ? "대나무숲" : "장터");
+  return `<div class="stage market-stage${market.special ? " market-special" : ""}"><div class="market-inner">${marketScene}
       <h2 class="market-title">${esc(market.name)}</h2>
       <p class="market-sub">${market.special ? "결전을 앞둔 밤, 누군가 말없이 보따리를 풀어 놓는다." : "달을 쓰지 않습니다. 다음 장터는 일 년 뒤입니다."}</p>
       ${market.special ? `<p class="market-karma">은자 <b>${player.silver}</b>, 카르마 <b>${loadMeta().current_karma}</b></p>` : ""}
@@ -1209,7 +1239,9 @@ function renderArtsPick() {
 function renderEvent() {
   const p = game.player;
   const view = eventView(p, game.event.key);
-  return `<div class="stage"><div class="stage-inner"><div class="event-sheet">
+  const chapterScene = DB.art?.chapter?.[String(getChapter(p.turn))];
+  ui.scene = sceneOf(view.title, view.text, chapterScene);
+  return `<div class="stage"><div class="stage-inner">${sceneBand(ui.scene, npcOf(view.title, view.text))}<div class="event-sheet">
       ${game.notice ? `<div class="event-notice">${game.notice.map((l) => `<p>${esc(l)}</p>`).join("")}</div>` : ""}
       <h2 class="event-title">${esc(view.title)}</h2>
       <div class="event-body"><p class="event-text" data-type>${esc(view.text)}</p>
@@ -1259,7 +1291,8 @@ function renderTurn() {
         ${action("명상", "운기", "내공, 심경, 내력")}${action("휴식", "요양", "체력, 내력, 내상", needRest ? " suggest" : "")}
       </div>
       ${market ? `<p class="hint">${market}</p>` : ""}`;
-  return `<div class="stage" aria-live="polite"><div class="stage-inner">${body}</div></div>
+  ui.scene = turnScene(ui.lastAction, getChapter(p.turn));
+  return `<div class="stage" aria-live="polite"><div class="stage-inner">${sceneBand(ui.scene, null, "scene-sm")}${body}</div></div>
     <div class="action-area"><div class="action-inner">${controls}</div></div>`;
 }
 
@@ -1273,6 +1306,7 @@ function renderPlay() {
   else if (game.event) middle = renderEvent();
   else middle = renderTurn();
   app().innerHTML = `${topbar()}${middle}${sidebar()}${gameModals()}`;
+  setBackdrop(ui.scene);
 }
 
 // ---------- 글자 효과 ----------
@@ -1492,7 +1526,7 @@ const actions = {
   "leave-legacy": (el) => { if (game.leaveLegacy(Number(el.dataset.key), ui.legacyDrop)) ui.legacyDrop = null; render(); },
   "unlock-origin": (el) => { unlockOrigin(el.dataset.key, DB.origins.origins[el.dataset.key].cost); render(); },
   "unlock-trait": (el) => { unlockTrait(el.dataset.key, DB.traits[el.dataset.key].cost); render(); },
-  action: (el) => { game.action(el.dataset.action); render(); },
+  action: (el) => { ui.lastAction = el.dataset.action; game.action(el.dataset.action); render(); },
   next: () => { game.advanceTurn(); render(); },
   choose: (el) => { game.chooseEvent(Number(el.dataset.index)); render(); },
   battle: (el) => {
@@ -1593,6 +1627,9 @@ export function installInput() {
       storage.set("wuxia-show-guide", target.checked ? "off" : "on");
       const other = document.getElementById("set-guide");
       if (other) other.checked = !target.checked;
+    } else if (target.id === "set-art") {
+      setArt(target.checked);
+      render();
     } else if (target.id === "set-font") {
       storage.set("wuxia-font", target.value);
       document.documentElement.dataset.font = target.value;
