@@ -530,7 +530,18 @@ F = [
  ("사_진하", "남", "elder who came back with six others, sixties, white beard, serene face hiding faint ember eyes, white robe", "mountain path", "맨", "weapon"),
 ]
 for key, sex, look, bg, kind, *extra in F:
-    P(key, sex, look, bg, kind, extra[0] if extra else "")
+    ex = [extra[0]] if extra and extra[0] else []
+    monk = "monk" in look
+    old = any(w in look for w in ("fifties", "sixties", "seventies", "elder", "old "))
+    if monk:
+        if "bald" not in look:
+            look = look.replace("shaved head", "1.3::completely shaved bald head::") if "shaved head" in look else look + ", 1.3::completely shaved bald head::"
+        look += ", east asian face"
+        ex.append("hair, long hair, ponytail, topknot, blue hair")
+    elif "silver" not in look and "white hair" not in look:
+        look += ", east asian face" + ("" if old else ", black hair")
+        ex.append("blue hair, light blue hair" + ("" if old else ", silver hair, white hair"))
+    P(key, sex, look, bg + ", detailed environment, natural colors, varied lighting", kind, ", ".join(ex))
 
 DEFAULT = 9013
 PICK = {
