@@ -8,5 +8,5 @@ a=shlex.split(m.replace('\\\n',' '))
 bg,male,fem,common,extra=a
 mp="1boy, solo, wuxia protagonist, handsome, sharp facial features, heroic, charismatic, dignified posture, "+male+", "+common
 fp="1girl, solo, wuxia protagonist, beautiful, elegant facial features, heroic, charismatic, dignified posture, "+fem+", "+common
-for sd in ms: subprocess.run(["python3","-I","gen2.py",f"{who}{suf}_남_{sd}",sd,S,mp,bg,X+", "+extra])
-for sd in fs: subprocess.run(["python3","-I","gen2.py",f"{who}{suf}_녀_{sd}",sd,S,fp,bg,X+", "+extra])
+for sd in ms: subprocess.run(["python3","-I","gen.py",f"{who}{suf}_남_{sd}",sd,S,mp,bg,X+", "+extra])
+for sd in fs: subprocess.run(["python3","-I","gen.py",f"{who}{suf}_녀_{sd}",sd,S,fp,bg,X+", "+extra])
