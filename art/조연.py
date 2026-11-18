@@ -446,7 +446,7 @@ F = [
  ("사_소하", "남", "rising young swordsman of the north called clear river sword, twenties, handsome confident face, white robe, sword", "riverside", "무"),
  ("사_노진", "남", "soldier captain guarding a labor officer, thirties, stern face, chinese lamellar armor, spear", "village road", "무"),
  ("사_갈백", "남", "wandering poison master called ghost hand, forties, pale greenish face, black robe, poison mist", "swamp", "맨", "weapon"),
- ("사_장칠상여", "남", "smuggler disguised as a funeral bearer, forties, white mourning clothes, coffin pole", "funeral procession road", "무"),
+ ("사_장칠상여", "남", "smuggler disguised as a funeral bearer, forties, 1.3::coarse white hemp mourning clothes, white hemp headband of mourning::, long wooden coffin carrying pole", "funeral procession road", "무"),
  ("사_우칠", "남", "river pirate called water snake, thirties, slim body, wet clothes, short spear", "river at dusk", "무"),
  ("사_여소", "녀", "assassin disguised as a silk merchant called silver needle, twenties, beautiful calm face, silk merchant dress, silver needles between fingers", "silk shop", "작"),
  ("사_구상", "남", "one-eyed warrior who tears down martial hall plaques, thirties, eyepatch, rough face, saber", "martial hall gate with a plaque", "무"),
