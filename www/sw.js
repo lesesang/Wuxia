@@ -1,6 +1,6 @@
 // 오프라인 실행을 맡는 서비스 워커.
 // 인터넷이 되면 항상 새 파일을 받고, 안 되거나 느리면 저장해 둔 파일로 실행한다.
-const CACHE = "wuxia-v1";
+const CACHE = "wuxia-v2";
 const NETWORK_TIMEOUT = 4000;
 
 self.addEventListener("install", (event) => {

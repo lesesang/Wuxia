@@ -1,4 +1,5 @@
 // 오프라인 실행에 필요한 파일 목록(www/asset-list.json)을 만든다. www의 파일을 늘리면 다시 돌린다.
+// 그림(img/)은 미리 받지 않고 화면에 나올 때 받아 저장해 둔다. 처음 설치가 무거워지지 않게 한다.
 import { readdirSync, statSync, writeFileSync } from "node:fs";
 import { join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -8,7 +9,7 @@ export function listAssets(www) {
     const path = join(dir, name);
     return statSync(path).isDirectory() ? walk(path) : [relative(www, path).split("\\").join("/")];
   });
-  return walk(www).filter((p) => !["sw.js", "asset-list.json", "CNAME", ".nojekyll"].includes(p)).sort();
+  return walk(www).filter((p) => !["sw.js", "asset-list.json", "CNAME", ".nojekyll"].includes(p) && !p.startsWith("img/")).sort();
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
