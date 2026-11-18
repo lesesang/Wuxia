@@ -41,8 +41,8 @@ MAIN = [
   "lone surviving escort guard, black hair, high ponytail tied with red cord, a few loose strands, small scar on cheek, brown eyes, steady confident eyes, dark brown hanfu, brown leather vest, rope belt with a bronze escort agency token, cloth wrist wraps, travel-worn cloak, chinese spear held upright with its butt planted beside the feet, steel spearhead with red horsehair tassel visible above the head, right hand gripping the shaft at shoulder height",
   "sword, flag on weapon, banner on spear, leaves, branch, beard"),
  ("개방제자", "남녀", "under an old stone arch bridge at night, river reflecting paper lanterns",
-  "fifth-knot disciple of the beggar sect, black hair, messy hair tied in a short ponytail, smudge of dirt on cheek, bright mischievous black eyes, patched and frayed pale green robe, rope belt with five knotted cords, bandaged forearms, wine gourd at waist, straw sandals, plain wooden staff planted on the ground, leaning on it with one hand, sly grin, cowboy shot, close view",
-  "sword, blade, armor, child"),
+  "fifth-knot disciple of the beggar sect, black hair, messy hair tied in a short ponytail, smudge of dirt on cheek, bright clever black eyes, patched and frayed pale green robe, rope belt with five knotted cords, bandaged forearms, wine gourd at waist, straw sandals, plain wooden staff planted on the ground, leaning on it with one hand, faint knowing smile, closed mouth, cowboy shot, close view",
+  "sword, blade, armor, child, grin, open mouth, teeth, laughing"),
  ("권마계승", "남녀", "rocky canyon at sunset, huge boulders marked with deep fist-shaped craters, cave entrance with a stone seat, red-orange sky, swirling dust",
   "inheritor of a legendary fist master's secret manual, black hair, long wild loose hair, sharp features, crimson eyes with a faint red glow, dark grey sleeveless robe over black inner shirt, dark red sash, muscular forearms with faint visible veins, cloth-wrapped fists, small scars on knuckles, faint red aura around the right fist, right fist clenched in front of chest, left arm relaxed, controlled fury",
   "weapon, sword, holding weapon, staff, gauntlet, metal claws"),
@@ -71,8 +71,8 @@ SIDE = [
   "heir of a fallen river stronghold, black hair tied back with a cloth band, sun-tanned skin, confident grin, white shirt with rolled sleeves under a dark blue sleeveless vest, red waist sash, coil of rope on the shoulder, long iron-tipped fishing harpoon planted upright beside the body",
   "sword"),
  ("외전혈승", "남녀", "grey mountain road, ruined shrine, red sunset, crows",
-  "wandering monk of the blood sect, bald, shaved head, calm half-closed eyes, ash grey kasaya, long red prayer beads around the neck, monk staff with iron rings planted on the ground, one hand raised in a prayer gesture, quiet unsettling serenity",
-  "sword, hair"),
+  "wandering monk of the blood sect, bald, shaved head, calm half-closed eyes, ash grey kasaya, long red prayer beads around the neck, monk staff with iron rings planted on the ground, one hand raised in a prayer gesture, calm stern face, natural skin tone, dark eyes, quiet menacing serenity",
+  "sword, hair, smile, red eyes, pale skin, white skin, creepy"),
  ("외전야수", "남녀", "southern jungle, waterfall, giant ferns, a white tiger lying behind",
   "child of the beast palace raised by tigers, wild messy black hair, sun-tanned skin, golden eyes, tiger fur shawl, necklace of bone and fangs, sleeveless brown tunic, cloth wrapped fists, fierce feral stare, closed mouth",
   "weapon, sword, holding weapon"),
@@ -106,9 +106,9 @@ SIDE = [
  ("외전흑사", "남녀", "smoky gambling den, dice tables, hanging lanterns",
   "gambler of the black snake gang, black hair with side bangs, sly eyes, black robe with gold coin patterns, gold coins held between the fingers, sly smile",
   "sword, spear"),
- ("외전망나니", "남녀", "execution ground in the rain, wooden platform, overcast sky",
-  "former executioner hunting the truth, black hair unkempt, tired heavy eyes, plain grey clothes, long single-edged saber in a worn black scabbard slung across the back, hilt over the right shoulder, arms at the sides, grim tired expression",
-  "jian"),
+ ("외전망나니", "남녀", "execution ground in the rain, wooden platform, overcast sky, dim lantern light, muted colors",
+  "former executioner hunting the truth, black hair unkempt, tired heavy dark eyes, plain dark grey and black clothes with a dark red sash, long single-edged saber in a worn black scabbard slung across the back, hilt over the right shoulder, arms at the sides, grim tired expression",
+  "jian, monochrome, greyscale, blank eyes, white eyes"),
  ("외전청성", "남녀", "pine forest of qingcheng mountain, torn red wedding ribbons on the branches",
   "disciple of qingcheng who guarded a broken wedding, black hair in a long ponytail, gentle firm eyes, green robe with pine needle embroidery, red ribbon tied on the wrist, jian sheathed at the hip, hand on the hilt, resolute expression",
   "curved sword, dao, drawn sword"),
@@ -147,8 +147,8 @@ NPC = [
   "1boy, solo, the founder of the blood sect revived in a pool of blood, tall imposing man who looks in his forties, cold sharp handsome face, long straight dark crimson hair falling loose past the shoulders, deep red eyes with a faint glow, pale skin, thin dark red veins faintly visible on the neck and hands, dark crimson robe over a black inner robe with faded gold patterns, wide sleeves, standing tall on a black stone altar at the edge of the blood lake, body turned slightly, one hand behind his back, the other hand raised at chest height with a thin thread of blood mist curling from the fingertips, robe and hair stirred by a faint wind, dark red qi aura shimmering around the shoulders, cold contemptuous gaze down at viewer, calm terrifying majesty, three-quarter view, low angle, dramatic red rim light, cowboy shot",
   "weapon, holding weapon, staff, gore, horns, crown, floating hair, smile, open mouth, fangs, exaggerated, skull"),
  ("혈불사도명", "남", "grey mountain temple courtyard at dusk, iron cauldron of porridge steaming, rows of starving people kneeling, red sunset through incense smoke",
-  "1boy, solo, leader of the blood sect, elderly monk, bald, deep lines on the face, calm merciful smile with cold eyes, ash grey kasaya with dark red stains along the hem, long red prayer beads wrapped around the hand, standing before the cauldron, serene yet sinister, dramatic backlight, three-quarter view, cowboy shot",
-  "weapon, holding weapon, staff, gore"),
+  "1boy, solo, leader of the blood sect, elderly monk, bald, deep lines on the face, gaunt dignified face, thin lips, faint merciful expression with cold half-lidded eyes, ash grey kasaya with dark red stains along the hem, long red prayer beads wrapped around the hand, standing before the cauldron, serene yet sinister, dramatic backlight, three-quarter view, cowboy shot",
+  "weapon, holding weapon, staff, gore, smile, grin, smiling, open mouth, teeth, goofy"),
  ("무림맹주", "남", "great hall of the martial alliance, huge banners of the nine sects and five clans, rows of martial artists standing in formation, shafts of light from high windows",
   "1boy, solo, leader of the martial alliance, dignified middle-aged man, neat black beard with grey streaks, long black hair tied with a gold crown, white and gold robe with cloud embroidery, jian sheathed at the hip, left hand on the scabbard, right hand resting on the hilt, solemn heavy gaze, last pillar of the orthodox world, low angle, dramatic lighting, cowboy shot",
   "curved sword, dao"),
@@ -179,7 +179,7 @@ NPC = [
 ]
 
 # 고른 시드(파일 이름: 시드). 없으면 기본 시드를 쓴다
-PICK = {}
+PICK = {"권마계승_녀": 8015, "외전공동_남": 7015, "외전빙궁_녀": 8014, "노구산": 9015, "외전망나니_남": 7014, "외전혈승_남": 7014, "혈불사도명": 9014}
 
 def entries():
     for key, genders, bg, body, extra in MAIN + SIDE:
