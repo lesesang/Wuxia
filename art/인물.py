@@ -7,12 +7,18 @@ import os, subprocess, sys
 STYLE = ("high quality anime illustration, martial arts novel cover style, painterly digital painting, clean lineart, "
          "semi-realistic proportions, wuxia, ancient china, cinematic lighting, gentle rim light, balanced contrast, misty background, "
          "natural colors, detailed face, mature features, sharp eyes, layered robes, detailed fabric folds, highly detailed, "
-         "detailed hands, five fingers, correct anatomy, detailed weapon, realistic weapon proportions")
+         "1.2::detailed hands, beautiful hands, anatomically correct hands, natural finger placement, five fingers::, "
+         "correct anatomy")
+# 병기를 든 인물에게만 붙인다. 맨손 인물에게 붙이면 없는 병기가 그려진다
+WEAPON = ("1.15::firm grip, fingers wrapped around the handle, detailed weapon, realistic weapon proportions, detailed hilt and guard, "
+          "leather-wrapped grip, polished metal, metal reflections, detailed scabbard::")
 # 늘 빼는 것(gen.py의 기본 제외에 덧붙음)
 UC = ("cute, moe, childish face, chibi, simple background, pastel colors, photorealistic, 3d, "
       "oversized weapon, giant weapon, weapon too large, stiff pose, awkward pose, unnatural pose, twisted torso, "
       "missing fingers, fused fingers, extra hands, deformed hands, deformed weapon, broken weapon, ugly face, deformed face, "
-      "asymmetrical eyes, bad anatomy, ornate weapon, fantasy weapon, multiple weapons, western clothes, fantasy armor, glasses")
+      "asymmetrical eyes, bad anatomy, ornate weapon, fantasy weapon, multiple weapons, western clothes, fantasy armor, glasses, "
+      "bad hands, malformed hands, extra fingers, too many fingers, claw hands, wrong grip, floating weapon, weapon merging with hand, "
+      "bent blade, warped blade, blurry weapon, melted metal")
 HERO = {"남": "1boy, solo, wuxia protagonist, young man, early twenties, handsome, sharp jawline, refined facial features, heroic, charismatic, dignified posture",
         "녀": "1girl, solo, wuxia protagonist, young woman, early twenties, beautiful, elegant refined features, heroic, charismatic, dignified posture"}
 POSE = "three-quarter view, standing, contrapposto, looking at viewer, upper body"
@@ -37,10 +43,10 @@ MAIN = [
   "sword, blade, armor, child"),
  ("권마계승", "남녀", "rocky canyon at sunset, huge boulders marked with deep fist-shaped craters, cave entrance with a stone seat, red-orange sky, swirling dust",
   "inheritor of a legendary fist master's secret manual, black hair, long wild loose hair, sharp features, crimson eyes with a faint red glow, dark grey sleeveless robe over black inner shirt, dark red sash, muscular forearms with faint visible veins, cloth-wrapped fists, small scars on knuckles, faint red aura around the right fist, right fist clenched in front of chest, left arm relaxed, controlled fury",
-  "weapon, sword, holding weapon, gauntlet, metal claws"),
+  "weapon, sword, holding weapon, staff, gauntlet, metal claws"),
  ("혈지생환", "남녀", "edge of a dried blood pond, cracked dark red earth, ruined shrine pillars, crimson dusk sky, crows on dead branches",
   "sole survivor of a sacrificial blood pond, black hair, short messy hair, pale skin, faint dark circles under the eyes, haunted crimson eyes, grey hooded cloak with the hood down, black high-collar inner robe, faint red scar-like markings on the palms glowing softly, right hand raised at chest height with palm open, quiet cold expression",
-  "weapon, sword, holding weapon, blood, dripping blood, gore"),
+  "weapon, sword, holding weapon, staff, blood, dripping blood, gore"),
  ("하오문", "남녀", "narrow alley of a night market, tiled rooftops and red lanterns, teahouse signboard, thin mist, moonlight on wet stones",
   "information broker of the back alleys, black hair, long hair in a low ponytail over the shoulder, side bangs, narrow black eyes, faint knowing smile, dark grey hanfu, black hooded cloak with the hood down, leather belt with small pouches and a thin ledger book, cloth wrist wraps, three short steel throwing knives fanned between the fingers of the raised right hand, left hand holding a folded note",
   "sword, long sword, kunai, claws, leaves"),
@@ -132,45 +138,46 @@ SIDE = [
 
 # (파일 이름, 성별, 배경, 인물, 더 뺄 것). 주요 인물은 시드 9013
 NPC = [
- ("천마", "남", "summit of the heavenly demon peak, snow, dark storm clouds, crimson sky, black stone throne",
-  "1boy, solo, the heavenly demon, ageless man who looks in his thirties, overwhelmingly handsome, long black hair flowing to the waist, crimson eyes, black and crimson imperial robe with gold dragon embroidery, black jade crown, seated on a black stone throne, one hand resting on the armrest, chin slightly raised, dark aura like smoke, calm overwhelming presence, looking down at viewer, three-quarter view, upper body",
-  "weapon, holding weapon, horns"),
- ("혈마", "남", "pool of blood in a ruined underground temple, red mist, ancient carved pillars",
-  "1boy, solo, the ancient blood demon awakened, tall gaunt man, long crimson hair, glowing red eyes, pale skin with dark red vein patterns, tattered ancient crimson robe, red mist rising around the body, menacing smile, three-quarter view, standing, upper body",
-  "weapon, gore, horns"),
- ("혈불사도명", "남", "grey mountain temple courtyard, iron cauldron of porridge, red sunset",
-  "1boy, solo, leader of the blood sect, elderly monk, bald, calm smile, ash grey kasaya with dark red stains along the hem, long red prayer beads in hand, serene yet sinister, three-quarter view, standing, upper body",
-  "weapon, gore"),
- ("무림맹주", "남", "great hall of the martial alliance, huge banners, crowd of martial artists in the distance",
-  "1boy, solo, leader of the martial alliance, dignified middle-aged man, neat beard, long black hair with grey streaks, white and gold robe, jian sheathed at the hip, hand on the hilt, solemn heavy gaze, three-quarter view, standing, upper body",
+ ("천마", "남", "summit of the heavenly demon peak above a sea of storm clouds, crimson lightning, swirling crimson clouds, far below a vast army of kneeling cultists with crimson banners, falling snow",
+  "1boy, solo, the heavenly demon, ruler of the demonic cult, ageless man who looks in his thirties, overwhelmingly handsome, cold majestic face, long black hair billowing in the wind, glowing crimson eyes, black and crimson imperial robe with gold dragon embroidery flowing in the wind, black jade crown, seated on a towering black stone throne carved with dragons, one elbow on the armrest, chin resting lightly on fingers, black flame aura rising like smoke, overwhelming godlike presence, looking down at viewer, low angle, from below, dramatic lighting, majestic, cowboy shot",
+  "weapon, holding weapon, sword, horns, smile"),
+ ("혈마", "남", "vast underground blood temple, a lake of blood boiling, crimson vortex of blood mist, red lightning, ancient carved pillars, cultists in grey kasaya prostrating far below",
+  "1boy, solo, the ancient blood demon risen from a pool of blood, towering regal figure, long crimson hair floating upward, glowing red eyes, pale skin with faint dark red vein patterns, crown of hardened blood, ancient crimson and gold ritual robe, blood flowing upward from the hem like flames, arms slightly spread, standing at the center of the blood lake, terrifying majesty, low angle, from below, dramatic lighting, cowboy shot",
+  "weapon, holding weapon, staff, gore, horns, smile"),
+ ("혈불사도명", "남", "grey mountain temple courtyard at dusk, iron cauldron of porridge steaming, rows of starving people kneeling, red sunset through incense smoke",
+  "1boy, solo, leader of the blood sect, elderly monk, bald, deep lines on the face, calm merciful smile with cold eyes, ash grey kasaya with dark red stains along the hem, long red prayer beads wrapped around the hand, standing before the cauldron, serene yet sinister, dramatic backlight, three-quarter view, cowboy shot",
+  "weapon, holding weapon, staff, gore"),
+ ("무림맹주", "남", "great hall of the martial alliance, huge banners of the nine sects and five clans, rows of martial artists standing in formation, shafts of light from high windows",
+  "1boy, solo, leader of the martial alliance, dignified middle-aged man, neat black beard with grey streaks, long black hair tied with a gold crown, white and gold robe with cloud embroidery, jian sheathed at the hip, left hand on the scabbard, right hand resting on the hilt, solemn heavy gaze, last pillar of the orthodox world, low angle, dramatic lighting, cowboy shot",
   "curved sword, dao"),
- ("무영", "남", "dark night, black mist, faint moonlight",
-  "1boy, solo, first general of the demonic cult, figure whose face is hidden in deep shadow, black hooded robe, only faint red eyes visible, edges of the robe dissolving into shadow, silent menace, three-quarter view, standing, upper body",
-  "weapon"),
- ("환면마후", "여", "palace hall with hanging silk, floating porcelain masks",
-  "1girl, solo, second general of the demonic cult, beautiful mature woman, long black hair, crimson robe, holding a white porcelain mask near her face, several masks floating around her, enigmatic smile, three-quarter view, standing, upper body",
-  "weapon"),
- ("쇄혼도위극", "남", "battlefield at dusk, crimson banners, drifting pale wisps",
-  "1boy, solo, fourth general of the demonic cult, middle-aged man, scarred face, grey streaks in black hair, black lacquered robe with crimson trim, heavy dao resting on the shoulder with iron chains wrapped around it, pale ghostly wisps clinging to the blade, cold eyes, three-quarter view, standing, upper body",
+ ("무영", "남", "rooftops at midnight, black mist pouring like smoke, a thin crescent moon",
+  "1boy, solo, first general of the demonic cult, assassin whose face is hidden in deep shadow, black hooded robe, only two faint red eyes visible, edges of the robe dissolving into black mist, a thin black blade held low in a reverse grip, silent menace, dramatic shadows, cowboy shot",
+  "smile"),
+ ("환면마후", "여", "palace hall of hanging crimson silk, dozens of white porcelain masks floating in the air, candlelight",
+  "1girl, solo, second general of the demonic cult, beautiful dangerous mature woman, long black hair adorned with gold hairpins, crimson robe with gold phoenix embroidery, holding a white porcelain mask beside her face, masks floating around her, enigmatic smile, half of her face in shadow, dramatic lighting, cowboy shot",
+  "weapon, holding weapon, staff, sword"),
+ ("쇄혼도위극", "남", "battlefield at dusk, broken crimson banners, smoke, pale wisps of countless souls drifting",
+  "1boy, solo, fourth general of the demonic cult, middle-aged warrior, scarred face, grey streaks in black hair tied back, black lacquered robe with crimson trim, a heavy dao resting on the shoulder with iron chains wrapped around the scabbard, pale ghostly faces swirling around the blade, cold eyes, imposing, low angle, cowboy shot",
   "jian"),
- ("공손야", "남", "hall of the unorthodox alliance, mountains of ledgers, iron abacus, dim lanterns",
-  "1boy, solo, lord of the unorthodox alliance, elderly man, grey hair tied back, iron-hard face, black robe with dark red trim, seated behind a desk of ledgers, writing brush in hand, cold calculating eyes, three-quarter view, upper body",
-  "weapon"),
- ("무면객", "남", "misty bamboo forest at night",
-  "1boy, solo, master of the assassin house, figure wearing a plain white featureless mask, grey robe, hands hidden in the sleeves, unsettling stillness, three-quarter view, standing, upper body",
-  "weapon"),
- ("노구산", "남", "under a stone bridge, river, paper lanterns, straw mats",
-  "1boy, solo, elder of the beggar sect, old man, messy grey hair, sharp sober eyes, ragged patched clothes, wine gourd at the waist, wooden staff in hand, sly knowing smile, three-quarter view, standing, upper body",
+ ("공손야", "남", "hall of the unorthodox alliance, mountains of ledgers stacked to the ceiling, iron abacus, dim lanterns, kneeling debtors in the shadows",
+  "1boy, solo, lord of the unorthodox alliance, elderly man, grey hair tied back, iron-hard face, black robe with dark red trim, seated behind a massive desk of ledgers, writing brush in hand, cold calculating eyes looking up at viewer, oppressive presence, dramatic lighting, cowboy shot",
+  "weapon, holding weapon, sword"),
+ ("무면객", "남", "misty bamboo forest at night, moonlight through the leaves",
+  "1boy, solo, master of the assassin house, figure wearing a plain white featureless mask, grey robe, hands hidden in the sleeves, a single thin needle visible between two fingers, unsettling stillness, mist curling around the feet, dramatic shadows, cowboy shot",
+  "smile"),
+ ("노구산", "남", "under a stone bridge at night, river reflecting paper lanterns, hundreds of beggars gathered in the dark",
+  "1boy, solo, acting head of the beggar sect, old man, messy grey hair, sharp sober eyes that miss nothing, ragged patched clothes, wine gourd at the waist, wooden staff planted on the ground, sly knowing smile, warm lantern light on the face, cowboy shot",
   "sword, blade"),
- ("매화노검", "남", "plum blossom grove on a lonely island, petals on the wind, sea in the background",
-  "1boy, solo, legendary old swordsman, long white hair and white beard, kind but sharp eyes, simple white robe, jian sheathed at the hip, hand on the hilt, plum petal on the shoulder, three-quarter view, standing, upper body",
+ ("매화노검", "남", "plum blossom grove on a lonely island, storm of petals on the wind, sea in the background",
+  "1boy, solo, legendary old swordsman once among the ten greatest masters, long white hair and white beard flowing in the wind, kind but piercing eyes, simple white robe, jian sheathed at the hip, hand resting on the hilt, plum petals swirling around him, serene overwhelming presence, cowboy shot",
   "curved sword, dao"),
- ("초출사부", "남", "thatched hermitage on a misty mountain, old pine, stone table with tea",
-  "1boy, solo, nameless hermit master, old man, grey hair in a topknot, short grey beard, plain faded robe, sitting on a stone with a cup of tea, gentle wise smile, three-quarter view, upper body",
-  "weapon"),
+ ("초출사부", "남", "thatched hermitage on a misty mountain at dawn, ancient pine, stone table with tea",
+  "1boy, solo, nameless hermit master at the peak of mastery, old man, grey hair in a topknot, short grey beard, plain faded robe, sitting on a stone with a cup of tea, gentle wise smile, sharp eyes, a single leaf hovering above his finger, quiet depth, cowboy shot",
+  "weapon, holding weapon, sword, staff"),
 ]
 
 def run(out, name, seed, char, bg, extra):
+    if "holding weapon" not in extra: char = f"{char}, {WEAPON}"
     path = os.path.join(out, name)
     if os.path.exists(path + ".png"): return
     subprocess.run([sys.executable, "-I", os.path.join(os.path.dirname(os.path.abspath(__file__)), "gen.py"),
