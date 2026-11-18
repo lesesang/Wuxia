@@ -99,7 +99,7 @@ P("혈수인", "남", "master of the red handprint, hooded figure, pale hand sta
 P("마교심판자", "남", "black punishment judge of the demonic cult, sixties, gaunt face, black judge robe, iron ledger in one hand, iron brush pen in the other", "edge of a blood lake in an underground cavern", "작")
 P("권마의그림자", "남", "shadowy will of an ancient fist demon, translucent dark figure of a powerful old man, glowing eyes, bandaged fists, ink-like aura", "ancient stone cave with fist craters on the walls", "맨", "weapon")
 P("생사문지기", "남", "ancient master who became the gate itself, half stone half man, long white hair, closed eyes, robes merging into a stone gate", "giant ancient stone gate in clouds", "맨", "weapon")
-P("전대천마잔영", "남", "shadow of the heavenly demon from a hundred years ago, young man in his twenties, cold beautiful face, long black hair, black robe with crimson trim, transparent ghostly edges, black aura", "secluded cave of seclusion with carved walls", "맨", "weapon")
+P("백년천마잔영", "남", "shadow of the heavenly demon from a hundred years ago, young man in his twenties, cold beautiful face, long black hair, black robe with crimson trim, transparent ghostly edges, black aura", "secluded cave of seclusion with carved walls", "맨", "weapon")
 P("혈마미완", "남", "withered blood demon awakened without enough blood, gaunt tall figure in the center of the frame, cowboy shot, skin cracked like dry bark, glowing red eyes, long dark red hair, tattered crimson robe, red mist, dim red light from below", "dried cracked blood lake bed in an underground temple with stone pillars", "맨", "weapon, crown, tiny figure, far away")
 P("화경마인", "남", "left guardian of the blood sect, red-haired demon, fifties, wild red hair loose, inhuman cold eyes, ash grey robe with crimson trim, saber", "blood sect mountain altar at red dusk")
 P("혈교우호법", "남", "right guardian of the blood sect, needle of blood, fifties, thin face, long thin mustache, ash grey robe, blood red needles between fingers", "blood sect cavern with red candles", "작")
@@ -570,7 +570,7 @@ PICK = {
     "장터상인": 9015,
     "적면마": 9016,
     "적연": 9015,
-    "전대천마잔영": 9015,
+    "백년천마잔영": 9015,
     "젊은협객": 9014,
     "점소이": 9014,
     "점창산": 9014,
