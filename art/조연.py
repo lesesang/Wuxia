@@ -487,7 +487,7 @@ F = [
  ("사_고목", "남", "zhongnan outer hall fist fighter, thirties, broad body, dark blue robe, wrapped fists", "mountain village", "맨", "weapon"),
  ("사_목수호위", "남", "workshop guard of a carpenter, thirties, plain face, work clothes, axe", "carpentry workshop", "무"),
  ("사_곽칠장터", "남", "market brawler, thirties, rough face, rolled sleeves, saber", "market", "무"),
- ("사_구섭", "남", "iron fan fortress chief called one eye, forties, eyepatch, fur vest, iron fan", "mountain fortress", "작"),
+ ("사_구섭", "남", "iron fan fortress chief called one eye, man in his forties, black leather-free cloth eyepatch over one eye, rough scarred face, thick beard, fur vest over a dark robe, large black iron folding fan held open", "mountain bandit fortress at dusk", "작", "both eyes visible, young, pretty"),
  ("사_녹림사자사칭", "남", "impostor claiming to be the greenwood king's envoy, thirties, smooth smile, fine robe, faint ember eyes", "mountain stronghold", "작", "sword"),
  ("사_염운사관인", "남", "salt patrol ship official, forties, official robe, black hat, saber", "patrol boat", "무"),
  ("사_금의위넷", "남", "imperial guard at a pleasure house gate, twenties, stern face, red flying fish robe, spring saber", "pleasure house gate at night", "무"),
