@@ -8,7 +8,7 @@ UC=("lowres, artistic error, film grain, scan artifacts, worst quality, bad qual
 base=style+", "+bg+QUAL
 UC=UC+(", "+extra if extra else "")
 body={"input":base,"model":"nai-diffusion-4-5-full","action":"generate","parameters":{
- "params_version":3,"width":832,"height":1216,"scale":5,"sampler":"k_euler_ancestral","steps":28,"n_samples":1,
+ "params_version":3,"width":int(os.environ.get("ART_W",832)),"height":int(os.environ.get("ART_H",1216)),"scale":5,"sampler":"k_euler_ancestral","steps":28,"n_samples":1,
  "ucPreset":0,"qualityToggle":True,"seed":int(seed),"noise_schedule":"karras","cfg_rescale":0,"sm":False,"sm_dyn":False,
  "dynamic_thresholding":False,"add_original_image":True,"legacy":False,"legacy_v3_extend":False,"legacy_uc":False,
  "autoSmea":False,"use_coords":False,"deliberate_euler_ancestral_bug":False,"prefer_brownian":True,
