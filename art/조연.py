@@ -308,7 +308,7 @@ S("낙양_불", "the city of luoyang burning at night, pagodas and city walls on
 S("태산_비무대", "large square stone martial arts tournament stage on a mountain plateau of mount tai, surrounded by wooden spectator stands and tall colorful sect banners on poles, empty stage, sea of clouds and distant peaks behind, bright daylight")
 S("무림맹_본청", "grand hall of the martial alliance, tall pillars, banners of nine sects and five clans, long table")
 S("소림사", "shaolin temple compound on songshan mountain, long stone stairway up to a red temple gate with a big plaque, grey tiled halls, stone pagoda forest beside, old cypress trees, morning mist and sunlight", "lake, river, water")
-S("무당산", "wudang mountain palaces on cliffs in clouds")
+S("무당산", "wudang mountain taoist palace complex built along steep green peaks, red walls and green-glazed tiled roofs with upturned eaves, long stone stairways, golden summit hall on the highest peak, sea of clouds, morning sun", "pagoda, japanese architecture, castle")
 S("화산", "narrow wooden plank walkway bolted to the sheer granite cliff face of mount hua, iron chains as handrails, dizzying drop below, jagged granite peaks, a few plum trees blooming on ledges, small taoist pavilion on a far peak, morning mist")
 S("아미금정", "golden summit temple of mount emei above the sea of clouds")
 S("곤륜설산", "kunlun snowy mountain sect gate in a blizzard")
@@ -322,10 +322,10 @@ S("하오문_골목", "dark back alley with red lanterns, rain, wet stones")
 S("기루", "elegant pleasure house interior, silk curtains, red lanterns")
 S("관아", "courtyard of a county magistrate office seen from the main gate, big red complaint drum on a wooden stand, pair of stone lions, red pillared hall with a black plaque, stone-paved yard, daylight")
 S("장원", "traditional chinese courtyard manor seen from inside the front courtyard at eye level, white walls with grey tiled roofs, a moon gate leading to inner courtyards, a lotus pond with a small stone bridge and pavilion, willow trees, warm afternoon light", "aerial view, bird's-eye view, from above")
-S("연무장", "open-air martial arts training ground of a manor, packed earth yard, wooden training dummies, weapon racks with spears and staffs, stone weights, surrounding grey walls and a pavilion, dawn light and mist")
+S("연무장", "open-air martial arts training ground in a manor courtyard at dawn, packed earth yard with wooden training dummies, weapon racks holding spears, staffs and swords, stone lifting weights, a drum, surrounding grey walls and a small pavilion, light mist", "empty square, stage")
 S("서고", "ancient library with tall shelves of scrolls, candlelight")
 S("약방", "herbal medicine shop with drawers, hanging herbs")
-S("비동", "secret natural stone cave for closed-door seclusion, rough rock walls carved with rows of small human figures in martial arts stances and lines of ancient script, a flat stone meditation platform in the center, a single beam of light from a crack above, dust in the air")
+S("비동", "secret stone cave for closed-door seclusion, rough rock walls covered with carved reliefs of small human figures in martial arts stances and columns of ancient chinese script, a flat stone meditation platform in the center, a single beam of light from a crack above, dust in the air", "smooth walls, empty walls")
 S("북해빙궁", "chinese-style palace complex built of white ice and blue ice blocks on a frozen northern sea, curved ice roofs with upturned eaves, ice pillars and a great ice gate, glaciers behind, faint aurora in the night sky, snow")
 S("남만밀림", "southern jungle with giant trees, poisonous fog, ruined temple")
 S("다리밑", "under an old stone arch bridge at night, river with floating lanterns")
@@ -337,14 +337,55 @@ S("설산고개", "snowy high mountain pass, blizzard, narrow trail")
 S("대나무숲", "dense bamboo forest with moonlight and mist")
 S("산정_일출", "mountain summit at sunrise above a sea of clouds, old pine")
 
+# ---------------------------------------------------------------- 사건 배경 더하기(사문, 깊은 강호, 외전)
+S("종남산", "zhongnan mountain sect gate, long straight stone stairway through dark pines up to a grey tiled gate hall, morning mist, steep ridges")
+S("점창산", "diancang sect on cangshan mountain, temple halls on a green ridge above erhai lake, clouds at the peaks, bright morning")
+S("청성산", "a taoist temple of qingcheng sect with grey tiled roofs and red pillars, clearly visible in the middle ground, nestled in a dense green pine and cypress forest on a mountain slope, mossy stone steps leading to its gate, quiet mist")
+S("공동산", "kongtong mountain sect on rugged loess cliffs of the northwest, temple buildings on bare yellow rock, wind and dust, evening")
+S("당가", "tang clan manor in sichuan, dark walls surrounded by a bamboo forest, green tiled roofs, drifting mist, a medicine garden")
+S("모용세가", "murong clan manor in suzhou, elegant garden with lake, rock garden, covered corridors, white walls, willows, spring")
+S("제갈세가", "zhuge clan estate at longzhong, thatched study halls among hills, a mechanism tower with wooden gears, bamboo grove")
+S("남궁폐허", "ruins of a burned chinese noble clan manor at dusk, charred wooden pillars and fallen grey roof tiles, a collapsed wooden gate with a scorched plaque, broken stone lions, torn sky blue banners, drifting embers and ash", "western ruins, greek columns, stone columns, temple ruins, gothic")
+S("팽가폐허", "ruined courtyard of a saber clan house at night in heavy rain, broken wooden gate, cracked stone tiger statue, puddles reflecting lanterns")
+S("개방총타", "headquarters of the beggar sect in a ruined old temple by a river, patched tents and bamboo poles, cooking fires, evening")
+S("사도련본단", "headquarters of the unorthodox alliance, a fortified black-walled mansion on a river port, crimson lanterns, guarded gates, night")
+S("살막", "hidden assassin house inside a quiet mountain teahouse at night, paper lanterns, a hidden door behind shelves, mist")
+S("장경각", "shaolin scripture pavilion, tall multistory wooden library with shelves of sutras, dust in beams of light, quiet")
+S("천기각", "workshop interior of a mechanism master, large wooden gears and cogwheels on the walls, a wooden ox automaton on the floor, racks of crossbows, scattered blueprints on a long table, oil lamps, warm light", "empty room, throne, door")
+S("겁화전", "dark stone hall with a colossal round bronze cauldron furnace in the center, black and red flames rising from its mouth, iron chains hanging from the ceiling, glowing embers on the floor, smoke, red light on carved pillars", "gothic arch, church, door, gate")
+S("흑수동", "black water cave, a dark underground river in a vast cave, black water reflecting faint torchlight, stone cells carved in the walls")
+S("검문소", "ancient chinese checkpoint on an unpaved dirt mountain road, a wooden barrier pole on two posts across the road, a small wooden guard hut with a grey tiled roof, cloth banners on bamboo poles, a horse cart and travelers with bundles waiting, pine slopes, dusk", "asphalt, paved road, road markings, modern road, guardrail, power lines, street lamp, bunting")
+S("경매장", "underground auction house, crowded tiered wooden seats, a lit stage with a display table, lanterns and smoke, night")
+S("혼례장", "traditional chinese wedding hall decorated in red, red lanterns and silk, double happiness ornaments, candles, banquet tables")
+S("형장", "public execution ground in a chinese town square under grey rain, a raised wooden platform with a chopping block in the center, wooden posts, a magistrate canopy with a table at the side, empty wet stone square, bleak", "pier, dock, sea")
+S("산해관", "great frontier pass gate at the end of the great wall by the sea, massive stone gate tower, banners, cold wind, dusk")
+S("서역길", "silk road through a desert, ruined beacon towers, sand dunes, a caravan of camels in the distance, burning sunset")
+S("초원", "vast northern grassland with felt tents, horses grazing, wide sky, distant mountains, wind over the grass")
+S("황하나루", "ferry crossing on the muddy yellow river, tall loess cliffs, wooden ferry boats, mist over the water")
+S("위소성벽", "ruined coastal garrison fortress walls by a stormy sea, broken battlements, tattered banners, crashing waves")
+S("해적선", "deck of a chinese junk ship on a dark stormy sea, red-brown battened junk sails with bamboo ribs, wooden deck with ropes and barrels, swinging paper lanterns, lightning", "galleon, western ship, square sails, european ship")
+S("수채", "river bandit water fortress of wooden houses on stilts above a reedy river, wooden walkways and watchtowers made of logs and bamboo, small boats moored below, banners, dusk", "stone castle, european castle, fortress walls")
+S("폐광", "abandoned silver mine entrance in a dry mountain, wooden supports, rusted carts on rails, dust")
+S("빙원", "endless frozen plain under a pale sky, ice ridges, blowing snow, a lone trail of footprints")
+S("귀문교", "ghost gate cult temple at night, blue ghost lanterns hanging from bare trees, old graves, a dim temple hall")
+S("무승원", "open-air courtyard of shaolin warrior monks, outdoors, large stone-paved yard with shallow footprint hollows worn into the stones, rows of wooden training dummies and weapon racks with staffs, temple halls with grey roofs around, morning light and mist", "indoors, interior, room")
+S("봉마진", "ancient battlefield with a giant carved stone seal formation on the ground, broken weapons, runes, eerie dusk")
+S("정자", "lakeside pavilion with a tea table in morning mist, willows, still water, mountains far away")
+S("주루", "busy two-story restaurant tavern interior, wooden balconies, red lanterns, round tables, evening crowd noise implied")
+S("나루", "small river ferry dock at dawn, wooden pier, moored boats, reeds, mist over the water")
+S("산채_밤", "mountain bandit stronghold at night, sharpened log palisade wall and wooden gate with watchtowers, rough log huts inside, several roaring bonfires, black banners, torches, cliffs and stars above")
+
 DEFAULT = 9013
 PICK = {
     "각명대사": 9018,
     "강호승냥이": 9014,
     "개방십걸": 9014,
+    "개방총타": 9015,
     "객잔주인": 9014,
+    "검문소": 9020,
     "겁화대마졸": 9014,
     "겁화대주": 9015,
+    "겁화전": 9016,
     "고담": 9014,
     "곡진": 9017,
     "곤륜설산": 9015,
@@ -360,15 +401,18 @@ PICK = {
     "구호": 9015,
     "권마의그림자": 9014,
     "귀도객": 9015,
+    "귀문교": 9014,
     "귀문술사": 9015,
     "귀호": 9014,
     "금섬": 9015,
     "금안조": 9014,
     "금의위밀정": 9014,
     "기녀": 9014,
+    "나루": 9015,
     "나한승": 9014,
     "낙양_불": 9014,
     "낙일봉무인": 9014,
+    "남궁폐허": 9017,
     "남만밀림": 9014,
     "남만술사": 9014,
     "낭인": 9014,
@@ -377,6 +421,7 @@ PICK = {
     "늑대무리": 9015,
     "다리밑": 9015,
     "단조": 9014,
+    "당가": 9014,
     "당가배신자": 9014,
     "당천기": 9014,
     "대나무숲": 9015,
@@ -397,29 +442,36 @@ PICK = {
     "맹주호법": 9015,
     "맹집법사": 9015,
     "모극": 9014,
+    "모용세가": 9015,
     "묘아": 9016,
     "묘지기": 9014,
     "무각": 9014,
-    "무당산": 9015,
+    "무당산": 9016,
     "무당진인": 9014,
     "무덤": 9014,
     "무림맹추격대": 9014,
     "무명노인": 9014,
+    "무승원": 9017,
     "무애": 9014,
     "배신표사": 9015,
     "법목": 9014,
     "법천": 9014,
+    "봉마진": 9015,
     "북해고수": 9015,
     "북해빙궁": 9014,
     "붉은옷여인": 9015,
+    "비동": 9016,
     "비무결승": 9014,
     "비무철권": 9014,
+    "사도련본단": 9015,
     "사도련향주": 9014,
     "사량": 9015,
     "사이비도사": 9014,
     "사파복수귀": 9014,
     "산적": 9014,
     "산정_일출": 9014,
+    "산채_밤": 9017,
+    "살막": 9014,
     "살막살수": 9014,
     "상한": 9014,
     "생사문지기": 9014,
@@ -439,6 +491,7 @@ PICK = {
     "소칠": 9018,
     "수로채졸": 9015,
     "수적두목": 9015,
+    "수채": 9018,
     "신교분타": 9014,
     "신교사자": 9018,
     "십대고수": 9014,
@@ -451,7 +504,7 @@ PICK = {
     "아미사태": 9018,
     "엄충": 9015,
     "연단마군": 9014,
-    "연무장": 9015,
+    "연무장": 9016,
     "연무휘": 9014,
     "염교": 9014,
     "오현철": 9014,
@@ -509,6 +562,7 @@ PICK = {
     "잠화표사": 9014,
     "장강": 9015,
     "장강수적": 9014,
+    "장경각": 9015,
     "장원": 9016,
     "장원집사": 9014,
     "장칠": 9018,
@@ -519,16 +573,21 @@ PICK = {
     "전대천마잔영": 9015,
     "젊은협객": 9014,
     "점소이": 9014,
+    "점창산": 9014,
     "점창장로": 9014,
     "점창제자": 9014,
     "정마대전": 9015,
     "정연사태": 9014,
+    "정자": 9014,
     "정파명숙": 9014,
+    "제갈세가": 9015,
     "제갈장로": 9014,
     "조각무인": 9014,
     "종남검수": 9014,
+    "주루": 9014,
     "진숭": 9014,
     "진후": 9015,
+    "천기각": 9018,
     "천년백사": 9017,
     "천년혈망": 9016,
     "천마봉": 9014,
@@ -539,13 +598,16 @@ PICK = {
     "철목": 9015,
     "철봉승": 9014,
     "철혈대원": 9017,
+    "청성산": 9016,
     "청성장로": 9014,
     "청송자": 9014,
     "청허진인": 9014,
     "초량": 9014,
+    "초원": 9015,
     "촌장": 9014,
     "태산_비무대": 9015,
     "파랑": 9015,
+    "폐광": 9014,
     "포도대장": 9014,
     "표국": 9015,
     "피연못": 9018,
@@ -553,6 +615,7 @@ PICK = {
     "하오문주": 9014,
     "하진": 9014,
     "하후청": 9015,
+    "해적선": 9017,
     "해치": 9014,
     "혁련수": 9014,
     "혁련철": 9015,
@@ -566,11 +629,14 @@ PICK = {
     "혈교혈위대": 9014,
     "혈마귀졸": 9014,
     "혈마대귀": 9014,
+    "형장": 9017,
     "호교대": 9016,
+    "혼례장": 9014,
     "홍매": 9014,
     "화경마인": 9015,
     "화산": 9015,
     "화산장로": 9015,
+    "황하나루": 9015,
     "흑룡": 9015,
     "흑사방향주": 9014,
     "흑아": 9016,
