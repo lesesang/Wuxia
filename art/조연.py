@@ -368,12 +368,12 @@ S("수채", "river bandit water fortress of wooden houses on stilts above a reed
 S("폐광", "abandoned silver mine entrance in a dry mountain, wooden supports, rusted carts on rails, dust")
 S("빙원", "endless frozen plain under a pale sky, ice ridges, blowing snow, a lone trail of footprints")
 S("귀문교", "ghost gate cult temple at night, blue ghost lanterns hanging from bare trees, old graves, a dim temple hall")
-S("무승원", "shaolin warrior monks training yard, stone floor worn with footprints, wooden dummies, morning light")
+S("무승원", "open-air courtyard of shaolin warrior monks, outdoors, large stone-paved yard with shallow footprint hollows worn into the stones, rows of wooden training dummies and weapon racks with staffs, temple halls with grey roofs around, morning light and mist", "indoors, interior, room")
 S("봉마진", "ancient battlefield with a giant carved stone seal formation on the ground, broken weapons, runes, eerie dusk")
 S("정자", "lakeside pavilion with a tea table in morning mist, willows, still water, mountains far away")
 S("주루", "busy two-story restaurant tavern interior, wooden balconies, red lanterns, round tables, evening crowd noise implied")
 S("나루", "small river ferry dock at dawn, wooden pier, moored boats, reeds, mist over the water")
-S("산채_밤", "mountain bandit camp at night with bonfires, wooden huts, banners, cliffs, stars")
+S("산채_밤", "mountain bandit stronghold at night, sharpened log palisade wall and wooden gate with watchtowers, rough log huts inside, several roaring bonfires, black banners, torches, cliffs and stars above")
 
 DEFAULT = 9013
 PICK = {
