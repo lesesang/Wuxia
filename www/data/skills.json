@@ -6887,37 +6887,6 @@
       "text": "다 피하면 잔상이 남아 다음 합에 1할 5푼 확률로 몸이 먼저 움직인다, 다 피하면 곧바로 위력 5할로 되받아친다, 다 피하면 다음 공격은 반드시 회심."
     }
   },
-  "금정연화장": {
-    "name": "금정연화장",
-    "type": "공격무공",
-    "category": "장법",
-    "grade": "상승",
-    "base_multiplier": 1.5,
-    "qi_cost": 9,
-    "desc": "금정의 종루 아래에서 아미의 속가에게 내리는 장. 연꽃이 피듯 손바닥이 열리고, 열린 자리마다 상대의 기운이 흩어진다.",
-    "forms": [
-      "연화",
-      "금정",
-      "청음"
-    ],
-    "secret_technique": {
-      "name": "금정연화",
-      "unlock_grade": "상승",
-      "unlock_mastery": 60,
-      "multiplier": 2.4,
-      "qi_cost": 50
-    },
-    "origin": "외전아미",
-    "gimmick": {
-      "weaken": {
-        "percent": 12,
-        "rounds": 1
-      },
-      "qi_back": 3,
-      "name": "피어나는 손",
-      "text": "맞히면 적의 다음 합 위력이 1할 2푼 준다, 맞힐 때 내력 3푼 회복."
-    }
-  },
   "청련심법": {
     "name": "청련심법",
     "type": "심공",
@@ -6959,38 +6928,6 @@
       "next_power": 15,
       "name": "구름바다",
       "text": "다 피하지 못해도 위력을 6할 줄인다, 다 피하면 다음 공격 위력이 1할 5푼 오른다."
-    }
-  },
-  "보현자항장": {
-    "name": "보현자항장",
-    "category": "장법",
-    "type": "공격무공",
-    "grade": "신공",
-    "base_multiplier": 2.2,
-    "qi_cost": 16,
-    "desc": "금정의 노니들이 대대로 한 사람에게만 넘긴 장. 자비로운 배가 강을 건네주듯 손바닥이 상대의 힘을 실어 건너편으로 흘려보낸다.",
-    "forms": [
-      "자항",
-      "보현",
-      "만월"
-    ],
-    "secret_technique": {
-      "name": "자항보도",
-      "unlock_grade": "신공",
-      "unlock_mastery": 40,
-      "multiplier": 3.0,
-      "qi_cost": 80
-    },
-    "origin": "외전아미",
-    "gimmick": {
-      "weaken": {
-        "percent": 15,
-        "rounds": 2
-      },
-      "lifesteal": 10,
-      "crit_ward": 30,
-      "name": "건네주는 배",
-      "text": "맞히면 2합 동안 적 위력 -1할 5푼, 준 피해의 1할을 체력으로 흡수, 회심이 터지면 준 피해의 3할이 호신 기운이 된다."
     }
   },
   "청음자비공": {
@@ -7038,35 +6975,6 @@
       "text": "다 피하지 못해도 위력을 7할 줄인다, 다 피하면 쓴 내력의 절반을 되찾는다, 다 피하면 적이 걸음을 놓쳐 2합 동안 회피 +10."
     }
   },
-  "삭풍권": {
-    "name": "삭풍권",
-    "type": "공격무공",
-    "category": "권법",
-    "grade": "상승",
-    "base_multiplier": 1.5,
-    "qi_cost": 9,
-    "desc": "공동이 변경을 지키던 시절의 권. 모래바람처럼 거칠게 몰아쳐 막는 손을 그대로 밀어 버린다.",
-    "forms": [
-      "삭풍",
-      "모래벽",
-      "관문"
-    ],
-    "secret_technique": {
-      "name": "삭풍일권",
-      "unlock_grade": "상승",
-      "unlock_mastery": 60,
-      "multiplier": 2.4,
-      "qi_cost": 50
-    },
-    "origin": "외전공동",
-    "gimmick": {
-      "chain": 5,
-      "chain_max": 30,
-      "stun": 10,
-      "name": "몰아치는 모래",
-      "text": "끊이지 않고 맞힐수록 위력이 5푼씩 오른다(최대 3할), 맞히면 1할 확률로 적이 다음 합에 손을 쓰지 못한다."
-    }
-  },
   "철벽심법": {
     "name": "철벽심법",
     "type": "심공",
@@ -7111,35 +7019,6 @@
       "next_power": 15,
       "name": "모래 쥐기",
       "text": "다 피할 때마다 이 싸움의 위력이 5푼씩 오른다(3할까지), 다 피하면 다음 공격 위력이 1할 5푼 오른다."
-    }
-  },
-  "장성철벽권": {
-    "name": "장성철벽권",
-    "category": "권법",
-    "type": "공격무공",
-    "grade": "신공",
-    "base_multiplier": 2.2,
-    "qi_cost": 16,
-    "desc": "공동의 시조가 장성 위에서 오랑캐의 기마를 맨손으로 막던 권. 주먹 하나가 벽이 되어 밀려오는 것을 그대로 되민다.",
-    "forms": [
-      "철벽",
-      "관문",
-      "장성"
-    ],
-    "secret_technique": {
-      "name": "만리장성",
-      "unlock_grade": "신공",
-      "unlock_mastery": 40,
-      "multiplier": 3.0,
-      "qi_cost": 80
-    },
-    "origin": "외전공동",
-    "gimmick": {
-      "guard": 20,
-      "low_hp": 30,
-      "pierce": 40,
-      "name": "주먹의 벽",
-      "text": "맞힌 합에 받는 피해 -2할, 체력 절반 이하에서 위력 +3할, 방어 4할 무시."
     }
   },
   "사막귀원공": {
@@ -8263,187 +8142,6 @@
       "text": "다 피하면 곧바로 위력 6할로 되받아친다, 다 피하면 적이 걸음을 놓쳐 2합 동안 회피 +10, 다 피하면 다음 공격은 반드시 회심."
     }
   },
-  "매화분분검": {
-    "name": "매화분분검",
-    "type": "공격무공",
-    "category": "검법",
-    "grade": "상승",
-    "base_multiplier": 1.5,
-    "qi_cost": 9,
-    "desc": "매화검수가 처음 받는 매화의 검. 꽃잎이 바람에 흩어지듯 검끝이 여러 갈래로 흩어진다.",
-    "forms": [
-      "분분",
-      "낙화",
-      "매향"
-    ],
-    "secret_technique": {
-      "name": "매화분분",
-      "unlock_grade": "상승",
-      "unlock_mastery": 60,
-      "multiplier": 2.4,
-      "qi_cost": 50
-    },
-    "origin": "외전화산",
-    "gimmick": {
-      "hits": 2,
-      "hit_rate": 0.62,
-      "weaken": {
-        "percent": 8,
-        "rounds": 1
-      },
-      "name": "흩어지는 꽃잎",
-      "text": "2번 나눠 베며(한 번마다 위력 6할 2푼) 번번이 명중과 회심을 따로 가린다, 맞히면 적의 다음 합 위력이 8푼 준다."
-    }
-  },
-  "매향심법": {
-    "name": "매향심법",
-    "type": "심공",
-    "category": "심공",
-    "grade": "명품",
-    "base_multiplier": 1.0,
-    "qi_cost": 0,
-    "desc": "매화 향을 들이쉬듯 숨을 고르는 화산의 숨. 겨울 끝의 찬 공기를 단전에 들인다.",
-    "effect": {
-      "heal_hp_pct": 12,
-      "heal_qi_pct": 20,
-      "atk_buff_pct": 10,
-      "buff_rounds": 2
-    },
-    "origin": "외전화산",
-    "gimmick": {
-      "focus": 5,
-      "ward": 10,
-      "name": "찬 꽃향",
-      "text": "회심 확률이 5푼 오른다. 싸움을 시작할 때 최대 체력 1할의 호신 기운을 두른다."
-    }
-  },
-  "낙영보": {
-    "name": "낙영보",
-    "type": "경공",
-    "category": "경공",
-    "grade": "명품",
-    "base_multiplier": 1,
-    "qi_cost": 6,
-    "desc": "지는 꽃잎처럼 가볍게 내려앉는 화산의 걸음. 벼랑의 매화 가지 위에서 익힌다.",
-    "effect": {
-      "evade": 72,
-      "counter_pct": 80,
-      "flee_bonus": 30
-    },
-    "origin": "외전화산",
-    "gimmick": {
-      "afterimage": 10,
-      "partial": 0.4,
-      "name": "지는 꽃잎",
-      "text": "다 피하면 잔상이 남아 다음 합에 1할 확률로 몸이 먼저 움직인다, 다 피하지 못해도 위력을 6할 줄인다."
-    }
-  },
-  "매화만개검": {
-    "name": "매화만개검",
-    "category": "검법",
-    "type": "공격무공",
-    "grade": "신공",
-    "base_multiplier": 2.2,
-    "qi_cost": 16,
-    "desc": "화산의 매화가 한꺼번에 피는 검. 매화검수의 수좌들만 전해 받는다. 검끝이 한 번 지날 때 꽃잎 스물넷이 동시에 흩날린다.",
-    "forms": [
-      "만개",
-      "설중매",
-      "춘풍"
-    ],
-    "secret_technique": {
-      "name": "매화만개",
-      "unlock_grade": "신공",
-      "unlock_mastery": 40,
-      "multiplier": 3.0,
-      "qi_cost": 80
-    },
-    "origin": "외전화산",
-    "gimmick": {
-      "hits": 3,
-      "hit_rate": 0.5,
-      "echo": 30,
-      "bleed": 10,
-      "name": "한꺼번에 피는 매화",
-      "text": "3번 나눠 베며(한 번마다 위력 5할) 번번이 명중과 회심을 따로 가린다, 3할 확률로 여운이 남아 절반의 힘으로 한 번 더 닿는다, 맞힌 피해의 1할이 꽃잎 같은 상처로 흐른다."
-    }
-  },
-  "설중매심공": {
-    "name": "설중매심공",
-    "type": "심공",
-    "category": "심공",
-    "grade": "신공",
-    "base_multiplier": 1,
-    "qi_cost": 0,
-    "desc": "눈 속에서 피는 매화의 숨. 의심과 추위를 다 견딘 뒤에야 꽃을 피운다.",
-    "effect": {
-      "heal_hp_pct": 30,
-      "heal_qi_pct": 45,
-      "atk_buff_pct": 15,
-      "buff_rounds": 3
-    },
-    "origin": "외전화산",
-    "gimmick": {
-      "focus": 10,
-      "ward": 20,
-      "guard": {
-        "percent": 15,
-        "rounds": 2
-      },
-      "name": "눈 속의 매화",
-      "text": "회심 확률이 1할 오른다. 싸움을 시작할 때 최대 체력 2할의 호신 기운을 두른다. 받는 피해가 늘 1할 준다."
-    }
-  },
-  "매화비영보": {
-    "name": "매화비영보",
-    "type": "경공",
-    "category": "경공",
-    "grade": "신공",
-    "base_multiplier": 1,
-    "qi_cost": 10,
-    "desc": "매화 꽃잎이 바람을 타고 나는 걸음. 산문 밖의 검객과 산문 안의 매화검수가 함께 다듬었다.",
-    "effect": {
-      "evade": 88,
-      "counter_pct": 160,
-      "flee_bonus": 55
-    },
-    "origin": "외전화산",
-    "gimmick": {
-      "afterimage": 15,
-      "next_crit": 1,
-      "partial": 0.3,
-      "name": "나는 꽃잎",
-      "text": "다 피하면 잔상이 남아 다음 합에 1할 5푼 확률로 몸이 먼저 움직인다, 다 피하면 다음 공격은 반드시 회심, 다 피하지 못해도 위력을 7할 줄인다."
-    }
-  },
-  "청송장": {
-    "name": "청송장",
-    "type": "공격무공",
-    "category": "장법",
-    "grade": "상승",
-    "base_multiplier": 1.5,
-    "qi_cost": 9,
-    "desc": "청성의 소나무 숲에서 익히는 장. 바람에 흔들리는 솔잎처럼 손바닥이 여러 번 떨려 막는 자의 힘을 흩는다.",
-    "forms": [
-      "청송",
-      "송뢰",
-      "솔바람"
-    ],
-    "secret_technique": {
-      "name": "청송만엽",
-      "unlock_grade": "상승",
-      "unlock_mastery": 60,
-      "multiplier": 2.4,
-      "qi_cost": 50
-    },
-    "origin": "외전청성",
-    "gimmick": {
-      "disrupt": 20,
-      "guard": 10,
-      "name": "솔바람",
-      "text": "부드러움으로 강함을 눌러 예고된 필살기를 2할 확률로 흐트러뜨린다, 맞힌 합에 받는 피해 -1할."
-    }
-  },
   "운무심법": {
     "name": "운무심법",
     "type": "심공",
@@ -8488,36 +8186,6 @@
       "next_power": 15,
       "name": "구름길",
       "text": "다 피하면 쓴 내력의 절반을 되찾는다, 다 피하면 다음 공격 위력이 1할 5푼 오른다."
-    }
-  },
-  "청송만학장": {
-    "name": "청송만학장",
-    "category": "장법",
-    "type": "공격무공",
-    "grade": "신공",
-    "base_multiplier": 2.2,
-    "qi_cost": 16,
-    "desc": "청성의 소나무 만 그루가 한꺼번에 흔들리는 장. 손바닥이 닿는 자리마다 솔바람이 일어 막는 손을 갈라놓는다.",
-    "forms": [
-      "만학",
-      "송뢰",
-      "운해"
-    ],
-    "secret_technique": {
-      "name": "청송만학",
-      "unlock_grade": "신공",
-      "unlock_mastery": 40,
-      "multiplier": 3.0,
-      "qi_cost": 80
-    },
-    "origin": "외전청성",
-    "gimmick": {
-      "disrupt": 30,
-      "hits": 2,
-      "hit_rate": 0.65,
-      "guard": 15,
-      "name": "만 그루의 바람",
-      "text": "부드러움으로 강함을 눌러 예고된 필살기를 3할 확률로 흐트러뜨린다, 2번 나눠 치며(한 번마다 위력 6할 5푼) 번번이 명중과 회심을 따로 가린다, 맞힌 합에 받는 피해 -1할 5푼."
     }
   },
   "운해송풍공": {
@@ -9788,6 +9456,185 @@
       "guard": 15,
       "name": "무너지는 만년설",
       "text": "맞힐 때마다 한기가 스며 두 번 쌓이면 적이 한 합 얼어붙는다, 적의 체력이 7할 넘게 남았으면 위력 +4할, 맞힌 합에 받는 피해 -1할 5푼."
+    }
+  },
+  "금정연화검": {
+    "name": "금정연화검",
+    "type": "공격무공",
+    "category": "검법",
+    "grade": "상승",
+    "base_multiplier": 1.5,
+    "qi_cost": 9,
+    "desc": "금정의 종루 아래에서 아미의 속가에게 내리는 검. 연꽃이 피듯 칼끝이 둥글게 열리고, 열린 자리마다 상대의 기운이 흩어진다.",
+    "forms": [
+      "연화",
+      "금정",
+      "청음"
+    ],
+    "secret_technique": {
+      "name": "금정연화",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    },
+    "origin": "외전아미",
+    "gimmick": {
+      "weaken": {
+        "percent": 12,
+        "rounds": 1
+      },
+      "qi_back": 3,
+      "name": "피어나는 칼끝",
+      "text": "맞히면 적의 다음 합 위력이 1할 2푼 준다, 맞힐 때 내력 3푼 회복."
+    }
+  },
+  "보현자항검": {
+    "name": "보현자항검",
+    "category": "검법",
+    "type": "공격무공",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "금정의 노니들이 대대로 한 사람에게만 넘긴 검. 자비로운 배가 강을 건네주듯 칼날이 상대의 힘을 실어 건너편으로 흘려보낸다.",
+    "forms": [
+      "자항",
+      "보현",
+      "만월"
+    ],
+    "secret_technique": {
+      "name": "자항보도",
+      "unlock_grade": "신공",
+      "unlock_mastery": 40,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "origin": "외전아미",
+    "gimmick": {
+      "weaken": {
+        "percent": 15,
+        "rounds": 2
+      },
+      "lifesteal": 10,
+      "crit_ward": 30,
+      "name": "건네주는 배",
+      "text": "맞히면 2합 동안 적 위력 -1할 5푼, 준 피해의 1할을 체력으로 흡수, 회심이 터지면 준 피해의 3할이 호신 기운이 된다."
+    }
+  },
+  "삭풍검": {
+    "name": "삭풍검",
+    "type": "공격무공",
+    "category": "검법",
+    "grade": "상승",
+    "base_multiplier": 1.5,
+    "qi_cost": 9,
+    "desc": "공동이 변경을 지키던 시절의 검. 모래바람처럼 거칠게 몰아쳐 막는 칼을 그대로 밀어 버린다.",
+    "forms": [
+      "삭풍",
+      "모래벽",
+      "관문"
+    ],
+    "secret_technique": {
+      "name": "삭풍일검",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    },
+    "origin": "외전공동",
+    "gimmick": {
+      "chain": 5,
+      "chain_max": 30,
+      "stun": 10,
+      "name": "몰아치는 모래",
+      "text": "끊이지 않고 맞힐수록 위력이 5푼씩 오른다(최대 3할), 맞히면 1할 확률로 적이 다음 합에 손을 쓰지 못한다."
+    }
+  },
+  "장성철벽검": {
+    "name": "장성철벽검",
+    "category": "검법",
+    "type": "공격무공",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "공동의 시조가 장성 위에서 오랑캐의 기마를 막던 검. 검 하나가 벽이 되어 밀려오는 것을 그대로 되민다.",
+    "forms": [
+      "철벽",
+      "관문",
+      "장성"
+    ],
+    "secret_technique": {
+      "name": "만리장성",
+      "unlock_grade": "신공",
+      "unlock_mastery": 40,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "origin": "외전공동",
+    "gimmick": {
+      "guard": 20,
+      "low_hp": 30,
+      "pierce": 40,
+      "name": "검의 벽",
+      "text": "맞힌 합에 받는 피해 -2할, 체력 절반 이하에서 위력 +3할, 방어 4할 무시."
+    }
+  },
+  "청송검": {
+    "name": "청송검",
+    "type": "공격무공",
+    "category": "검법",
+    "grade": "상승",
+    "base_multiplier": 1.5,
+    "qi_cost": 9,
+    "desc": "청성의 소나무 숲에서 익히는 검. 바람에 흔들리는 솔잎처럼 칼끝이 여러 번 떨려 막는 자의 힘을 흩는다.",
+    "forms": [
+      "청송",
+      "송뢰",
+      "솔바람"
+    ],
+    "secret_technique": {
+      "name": "청송만엽",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    },
+    "origin": "외전청성",
+    "gimmick": {
+      "disrupt": 20,
+      "guard": 10,
+      "name": "솔바람",
+      "text": "부드러움으로 강함을 눌러 예고된 필살기를 2할 확률로 흐트러뜨린다, 맞힌 합에 받는 피해 -1할."
+    }
+  },
+  "청송만학검": {
+    "name": "청송만학검",
+    "category": "검법",
+    "type": "공격무공",
+    "grade": "신공",
+    "base_multiplier": 2.2,
+    "qi_cost": 16,
+    "desc": "청성의 소나무 만 그루가 한꺼번에 흔들리는 검. 칼끝이 닿는 자리마다 솔바람이 일어 막는 손을 갈라놓는다.",
+    "forms": [
+      "만학",
+      "송뢰",
+      "운해"
+    ],
+    "secret_technique": {
+      "name": "청송만학",
+      "unlock_grade": "신공",
+      "unlock_mastery": 40,
+      "multiplier": 3.0,
+      "qi_cost": 80
+    },
+    "origin": "외전청성",
+    "gimmick": {
+      "disrupt": 30,
+      "hits": 2,
+      "hit_rate": 0.65,
+      "guard": 15,
+      "name": "만 그루의 바람",
+      "text": "부드러움으로 강함을 눌러 예고된 필살기를 3할 확률로 흐트러뜨린다, 2번 나눠 치며(한 번마다 위력 6할 5푼) 번번이 명중과 회심을 따로 가린다, 맞힌 합에 받는 피해 -1할 5푼."
     }
   }
 }
