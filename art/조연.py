@@ -198,7 +198,7 @@ P("장칠", "남", "chief of all seventy-two greenwood strongholds, forties, rug
 P("적연", "녀", "crimson-robed rakshasa, former elder of the demonic cult, forties, beautiful fierce face, long black hair, crimson robe", "blood lake cave", "맨", "weapon")
 P("연무휘", "남", "carefree sword, swordsman who left for the jianghu the same year, twenties, handsome cheerful face, white robe, sword", "town gate")
 P("왕백로", "남", "noodle king, retired master who was one of the ten great masters thirty years ago, old man in his seventies, round kind wrinkled face, white mustache, sleeves rolled up, white apron over a brown robe, hands dusted with flour, wooden rolling pin", "noodle shop kitchen", "작", "sword")
-P("은비", "녀", "nine-tailed fox spirit in human form, ageless beauty, long silver hair, golden eyes, nine silver fox tails, white robes", "moonlit bamboo forest", "맨", "weapon")
+P("은비", "녀", "nine-tailed fox spirit in human form, ageless elegant beauty, mature face, long silver hair with a silver hairpin, golden eyes, human ears, nine fluffy silver fox tails spreading behind, layered white and pale blue hanfu", "moonlit bamboo forest", "맨", "weapon, animal ears, fox ears, cat ears")
 B("설백", "white tiger spirit beast, huge and noble, blue eyes, gentle but powerful", "snowy mountain forest")
 
 # ---------------------------------------------------------------- 말로 만나는 사람
@@ -270,7 +270,7 @@ S("녹림산채", "bandit stronghold in a pine forest on a mountain slope, tall 
 S("하오문_골목", "dark back alley with red lanterns, rain, wet stones")
 S("기루", "elegant pleasure house interior, silk curtains, red lanterns")
 S("관아", "courtyard of a county magistrate office seen from the main gate, big red complaint drum on a wooden stand, pair of stone lions, red pillared hall with a black plaque, stone-paved yard, daylight")
-S("장원", "peaceful manor estate with courtyards, pond, training ground, guest house")
+S("장원", "traditional chinese courtyard manor estate seen from a raised viewpoint, white walls with grey tiled roofs, several courtyards linked by moon gates, a lotus pond with a small stone bridge and pavilion, willow trees, a guest house and a training yard, warm afternoon light, eye-level view, no aerial view")
 S("연무장", "open-air martial arts training ground of a manor, packed earth yard, wooden training dummies, weapon racks with spears and staffs, stone weights, surrounding grey walls and a pavilion, dawn light and mist")
 S("서고", "ancient library with tall shelves of scrolls, candlelight")
 S("약방", "herbal medicine shop with drawers, hanging herbs")
