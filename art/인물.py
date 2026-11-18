@@ -14,7 +14,8 @@ STYLE = ("manhwa cover art, korean webtoon key visual, murim, wuxia, chinese mar
 WEAPON = ("1.15::firm grip, fingers wrapped around the handle, detailed weapon, realistic weapon proportions, detailed hilt and guard, "
           "leather-wrapped grip, polished metal, metal reflections, detailed scabbard::")
 # 늘 빼는 것(gen.py의 기본 제외에 덧붙음)
-UC = ("giant red moon, big red sun behind character, red circle behind head, halo, flat red background, "
+UC = ("caucasian, european, western face, blonde hair, modern hairstyle, slicked back hair, undercut, leather jacket, belt buckle, english text, "
+      "giant red moon, big red sun behind character, red circle behind head, halo, flat red background, "
       "pointed chin, sharp chin, v-shaped jaw, needle chin, overly sharp jawline, elongated face, long face, narrow face, tiny chin, big eyes, oversized eyes, sleepy eyes, "
       "comical, silly expression, goofy, cartoonish, exaggerated features, cute, moe, childish face, chibi, simple background, pastel colors, photorealistic, 3d, "
       "oversized weapon, giant weapon, weapon too large, stiff pose, awkward pose, unnatural pose, twisted torso, "
@@ -93,7 +94,7 @@ SIDE = [
   "unrecognized scion of the murong clan, black hair, long hair tied with a silver ring, proud sharp eyes, fur-lined dark green robe with silver embroidery, long spear held upright, spearhead visible above the head, snow on the shoulders, determined expression",
   "sword"),
  ("외전사도련", "남녀", "debt collection hall of the unorthodox alliance, stacks of ledgers, iron abacus, red lanterns",
-  "debt collector of the unorthodox alliance, black hair slicked back, cold eyes, black and dark red robe, ledger book tucked in the belt, dao sheathed at the hip, hand resting on the hilt, thin cold smile",
+  "debt collector of the unorthodox alliance, black hair tied in a topknot with loose strands, cold eyes, black and dark red robe, ledger book tucked in the belt, dao sheathed at the hip, hand resting on the hilt, thin cold smile",
   "jian"),
  ("외전제갈", "남녀", "workshop filled with wooden gears, a wooden mechanical ox, scrolls and blueprints",
   "mechanist of the zhuge clan, black hair in a neat bun, intelligent eyes, deep blue robe with geometric patterns, small wooden repeating crossbow strapped to the forearm, rolled blueprint in the other hand, thoughtful expression",
@@ -105,7 +106,7 @@ SIDE = [
   "chief of a small bandit stronghold, black hair in a wild ponytail, scar on the chin, fierce confident smirk, sharp eyes, fur vest over rough dark brown clothes, rope belt, heavy iron-studded wooden club resting on the shoulder",
   "sword, blade, white background, cute, open mouth smile"),
  ("외전흑사", "남녀", "smoky gambling den, dice tables, hanging lanterns",
-  "gambler of the black snake gang, black hair with side bangs, sly eyes, black robe with gold coin patterns, gold coins held between the fingers, sly smile",
+  "gambler of the black snake gang, long black hair tied in a low ponytail with side bangs, sly eyes, black robe with gold coin patterns, gold coins held between the fingers, sly smile",
   "sword, spear"),
  ("외전망나니", "남녀", "execution ground in the rain, wooden platform, overcast sky, dim lantern light, muted colors",
   "former executioner hunting the truth, black hair unkempt, tired heavy dark eyes, plain dark grey and black clothes with a dark red sash, long single-edged saber in a worn black scabbard slung across the back, hilt over the right shoulder, arms at the sides, grim tired expression",
