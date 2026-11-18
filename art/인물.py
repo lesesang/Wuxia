@@ -14,7 +14,8 @@ STYLE = ("manhwa cover art, korean webtoon key visual, murim, wuxia, chinese mar
 WEAPON = ("1.15::firm grip, fingers wrapped around the handle, detailed weapon, realistic weapon proportions, detailed hilt and guard, "
           "leather-wrapped grip, polished metal, metal reflections, detailed scabbard::")
 # 늘 빼는 것(gen.py의 기본 제외에 덧붙음)
-UC = ("giant red moon, big red sun behind character, red circle behind head, halo, flat red background, "
+UC = ("caucasian, european, western face, blonde hair, modern hairstyle, slicked back hair, undercut, leather jacket, belt buckle, english text, "
+      "giant red moon, big red sun behind character, red circle behind head, halo, flat red background, "
       "pointed chin, sharp chin, v-shaped jaw, needle chin, overly sharp jawline, elongated face, long face, narrow face, tiny chin, big eyes, oversized eyes, sleepy eyes, "
       "comical, silly expression, goofy, cartoonish, exaggerated features, cute, moe, childish face, chibi, simple background, pastel colors, photorealistic, 3d, "
       "oversized weapon, giant weapon, weapon too large, stiff pose, awkward pose, unnatural pose, twisted torso, "
@@ -32,9 +33,9 @@ MAIN = [
  ("무림초출", "남녀", "cliff edge above a sea of clouds, distant ink-wash mountain peaks, crooked old pine, small thatched hermitage behind, early morning sun through mist, falling pine needles",
   "disciple who just came down the mountain after ten years with a hermit master, black hair, very long hair, high ponytail tied with a long red ribbon fluttering in the wind, loose strands framing face, dark brown eyes, calm confident half smile, white cross-collar inner robe, dark blue outer robe with silver cloud embroidery on hems and cuffs, black sash knotted at waist, worn leather bracers over cloth wrist wraps, plain cloth bundle tied across back, cloth boots, faint dust on hem, arms crossed over chest, empty hands, unarmed",
   "weapon, sword, holding weapon, sheath, quiver, arrows"),
- ("남궁세가", "남녀", "ruins of a burned noble manor at dusk, charred pillars, collapsed gate with a scorched plaque reading nothing, drifting embers, orange sky fading to ash grey",
+ ("남궁세가", "남녀", "ruins of a burned chinese noble clan manor at dusk, charred wooden pillars, fallen grey roof tiles, collapsed wooden gate with a scorched plaque, drifting embers, orange sky fading to ash grey",
   "last heir of a fallen sword clan, black hair, long straight hair, half updo held by a silver hair crown, grey eyes, fair skin, noble bearing, white silk inner robe, sky blue outer robe with silver cloud embroidery, torn left sleeve, scorched hem, blue sash with white jade pendant, jian sheathed at left hip in a white jade scabbard, blue tassel hanging from the pommel, right hand resting on the sword hilt, calm resolute gaze, quiet pride",
-  "curved sword, dao, drawn sword"),
+  "curved sword, dao, drawn sword, western ruins, gothic, spire, cathedral, stone columns"),
  ("하북팽가", "남녀", "courtyard of a ruined clan house at night, broken wooden gate, heavy rain, puddles reflecting red lanterns, stone tiger statue with a cracked head",
   "youngest of five brothers of a saber clan, black hair, long wild ponytail, red headband, amber eyes, fierce eyes, rain-soaked hair, black inner robe, dark orange outer robe with gold tiger embroidery, wide leather belt with bronze tiger head buckle, leather bracers, dao in a black curved scabbard at left hip, red cloth wrapped hilt, small round bronze guard, right hand gripping the hilt ready to draw, left hand holding the scabbard, fierce confident smirk",
   "jian, straight sword, drawn sword, scythe, polearm, long handle"),
@@ -60,8 +61,8 @@ SIDE = [
   "direct heir of the sichuan tang poison clan, black hair, neat high ponytail with a jade pin, cold intelligent green eyes, black inner robe, dark green outer robe with silver bamboo embroidery, single black leather glove on the right hand, needle case and small medicine pouches at the belt, three thin steel needles held between gloved fingers, calm calculating expression",
   "sword, spear"),
  ("외전빙궁", "남녀", "frozen northern sea, ice palace of the north sea in the distance, gentle snowfall, pale blue sky",
-  "direct disciple of the north sea ice palace, long silver-white hair, ice blue eyes, porcelain skin, white hanfu with pale blue snowflake embroidery, white fur collar, frost clinging to the sleeves, visible cold breath, right palm raised with swirling frost mist, cold serene expression, mature face, sharp elegant features",
-  "weapon, sword, holding weapon, halo, ring, cute, blush, round face"),
+  "direct disciple of the north sea ice palace, 1.3::long silver hair, shining silver-white hair, clear sky blue eyes, blue irises::, porcelain skin, white hanfu with pale blue snowflake embroidery, white fur collar, frost clinging to the sleeves, visible cold breath, right palm raised with swirling frost mist, cold serene expression, mature face, sharp elegant features",
+  "weapon, sword, holding weapon, halo, ring, cute, blush, round face, black hair, dark hair, brown eyes, black eyes, red eyes"),
  ("외전매화", "남녀", "plum blossom trees on the steep cliffs of mount hua, falling plum petals, small thatched hut on a ledge, morning mist",
   "plum blossom swordsman of mount hua and last disciple of a legendary old swordsman, black hair, long hair in a half updo with a plum blossom hairpin, clear determined eyes, white hanfu with pink plum blossom embroidery, pale rose sash, jian sheathed at the left hip in a white scabbard, plum blossom tassel, right hand resting on the hilt, gentle resolute smile",
   "curved sword, dao, drawn sword"),
@@ -93,7 +94,7 @@ SIDE = [
   "unrecognized scion of the murong clan, black hair, long hair tied with a silver ring, proud sharp eyes, fur-lined dark green robe with silver embroidery, long spear held upright, spearhead visible above the head, snow on the shoulders, determined expression",
   "sword"),
  ("외전사도련", "남녀", "debt collection hall of the unorthodox alliance, stacks of ledgers, iron abacus, red lanterns",
-  "debt collector of the unorthodox alliance, black hair slicked back, cold eyes, black and dark red robe, ledger book tucked in the belt, dao sheathed at the hip, hand resting on the hilt, thin cold smile",
+  "debt collector of the unorthodox alliance, black hair tied in a topknot with loose strands, cold eyes, black and dark red robe, ledger book tucked in the belt, dao sheathed at the hip, hand resting on the hilt, thin cold smile",
   "jian"),
  ("외전제갈", "남녀", "workshop filled with wooden gears, a wooden mechanical ox, scrolls and blueprints",
   "mechanist of the zhuge clan, black hair in a neat bun, intelligent eyes, deep blue robe with geometric patterns, small wooden repeating crossbow strapped to the forearm, rolled blueprint in the other hand, thoughtful expression",
@@ -105,7 +106,7 @@ SIDE = [
   "chief of a small bandit stronghold, black hair in a wild ponytail, scar on the chin, fierce confident smirk, sharp eyes, fur vest over rough dark brown clothes, rope belt, heavy iron-studded wooden club resting on the shoulder",
   "sword, blade, white background, cute, open mouth smile"),
  ("외전흑사", "남녀", "smoky gambling den, dice tables, hanging lanterns",
-  "gambler of the black snake gang, black hair with side bangs, sly eyes, black robe with gold coin patterns, gold coins held between the fingers, sly smile",
+  "gambler of the black snake gang, long black hair tied in a low ponytail with side bangs, sly eyes, black robe with gold coin patterns, gold coins held between the fingers, sly smile",
   "sword, spear"),
  ("외전망나니", "남녀", "execution ground in the rain, wooden platform, overcast sky, dim lantern light, muted colors",
   "former executioner hunting the truth, black hair unkempt, tired heavy dark eyes, plain dark grey and black clothes with a dark red sash, long single-edged saber in a worn black scabbard slung across the back, hilt over the right shoulder, arms at the sides, grim tired expression",
@@ -186,6 +187,7 @@ PICK = {
     "공손야": 7021,
     "권마계승_남": 7020,
     "권마계승_녀": 7021,
+    "남궁세가_녀": 8022,
     "노구산": 7021,
     "매화노검": 7021,
     "무림초출_남": 7020,
@@ -204,7 +206,7 @@ PICK = {
     "외전모용_녀": 7021,
     "외전빙궁_남": 7020,
     "외전빙궁_녀": 8014,
-    "외전사도련_남": 7021,
+    "외전사도련_남": 7026,
     "외전사도련_녀": 7021,
     "외전살막_남": 7021,
     "외전살막_녀": 7021,
@@ -224,7 +226,7 @@ PICK = {
     "외전혈승_녀": 9016,
     "외전홍수_남": 7021,
     "외전홍수_녀": 7021,
-    "외전흑사_남": 7021,
+    "외전흑사_남": 7027,
     "천마": 9017,
     "초출사부": 7021,
     "하북팽가_남": 7021,

@@ -572,7 +572,7 @@ export class Player {
     p.mainSkill = d.main_skill ?? null;
     p.chosenArts = { ...(d.chosen_arts || {}) };
     p.traits = (d.traits || []).filter((k) => DB.traits[k]);
-    p.slain = d.slain || [];
+    p.slain = (d.slain || []).map((k) => (k === "전대천마잔영" ? "백년천마잔영" : k)); // 예전 저장의 키
     p.startStyle = d.start_style ?? null;
     p.skills.forEach((s) => p.applyEvolveTrait(s));
     p.silver = d.silver ?? 0;

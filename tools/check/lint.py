@@ -24,7 +24,7 @@ def check(s,path,f):
         if ch in BAD: finds['부호 '+ch].append((loc,s[:80])); break
         if ord(ch)>0x1F000: finds['이모티콘'].append((loc,s[:80])); break
     if re.search(r'[A-Za-z]{2,}',s): finds['영문'].append((loc,s[:80]))
-    for w in ['부활','전생','환생','회차','윤회','소교주','전대 천마','첫 천마','천마의 아들','천마의 딸','후계자','레벨','스킬','버프','보스','스탯','HP','아이템','퀘스트','마단','약물']:
+    for w in ['부활','전생','환생','회차','윤회','소교주','전대 천마','전대천마','첫 천마','천마의 아들','천마의 딸','후계자','레벨','스킬','버프','보스','스탯','HP','아이템','퀘스트','마단','약물']:
         if w in s: finds['금칙어 '+w].append((loc,s[:90]))
     for ph in re.findall(r'〈([^〉]*)〉',s):
         base=ph.split(':')[0]

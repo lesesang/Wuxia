@@ -14,7 +14,7 @@ BEAST = ("korean webtoon key visual, manhwa illustration, anime style, wuxia, an
 SCENE = ("korean webtoon background art, anime style background, illustration, manhwa key visual, murim, wuxia, ancient china, "
          "traditional chinese architecture, intricate details, polished digital painting with clean edges, crisp lineart, "
          "cinematic lighting, volumetric light, rich colors, atmospheric depth, wide shot, establishing shot, scenery, no humans, highly detailed background")
-UC_PERSON = "monochrome, greyscale, faceless, blank face, crowd, giant moon, red moon, big red sun behind character, halo, circle behind head"
+UC_PERSON = "caucasian, european, western face, blonde hair, light brown hair, modern hairstyle, slicked back hair, undercut, leather jacket, belt buckle, buttons, collar shirt, english text, latin letters, monochrome, greyscale, faceless, blank face, crowd, giant moon, red moon, big red sun behind character, halo, circle behind head, eclipse, black sun, sun, moon behind head"
 UC_BEAST = "photorealistic, photo, 3d, realistic painting, full moon, giant moon, big sun, symmetrical composition, human, 1boy, 1girl, person, rider, cute, chibi, cartoon animal, deformed animal, extra legs, extra heads, extra tails, fused limbs"
 UC_SCENE = "torii, japanese architecture, floating island, photorealistic, photo, 3d render, realistic, people, person, human, character, 1boy, 1girl, crowd, face, text, signature, modern building, car, power lines, western castle"
 
@@ -33,17 +33,17 @@ def S(key, look, extra=""):
     ALL.append((key, "배", look, "", "배", extra))
 
 # ---------------------------------------------------------------- 1장의 길(이류, 일류)
-P("산적", "무리", "mountain bandits, ragged hemp clothes, headbands, unkempt beards, the leader holding a rusty single-edged saber, greedy grins", "narrow mountain pass ambush, rocks and twisted pines, dusty afternoon")
+P("산적", "남", "mountain bandit, thirties, rough sun-burned face, unkempt beard, dirty cloth headband, ragged hemp clothes with rope belt, rusty single-edged saber held low, greedy grin", "narrow mountain pass ambush, rocks and twisted pines, dusty afternoon")
 P("낭인", "남", "wandering ronin swordsman for hire, thirties, stubble, tired cold eyes, faded grey travel robe, straw rain cape, worn saber in a battered scabbard at the hip, hand resting on the hilt", "rainy crossroads with a broken wayside shrine, misty fields")
-P("흑풍채두목", "남", "bandit chief called one-eyed saber, forties, black eyepatch over the left eye, thick beard, scarred muscular arms, black fur vest, heavy broad axe resting on the shoulder, cruel smirk", "mountain bandit fortress gate, wooden palisade, black banners, torchlight at dusk")
-P("녹림호걸", "남", "greenwood outlaw with his own code of honor, thirties, rugged handsome face, headband, sleeveless dark green tunic, rope belt, heavy saber held low, bold confident grin", "pine forest trail, sunlight through trees")
+P("흑풍채두목", "남", "bandit chief called one-eyed saber, forties, black eyepatch over the left eye, thick black beard, hair in a rough topknot, scarred muscular arms, black fur vest over a dark brown tunic, heavy chinese broad-bladed axe with a long wooden handle resting on the shoulder, cruel smirk", "mountain bandit fortress gate, wooden palisade, black banners, torchlight at dusk", "무", "viking, double-bladed axe, european axe, horned helmet")
+P("녹림호걸", "남", "greenwood outlaw with his own code of honor, thirties, rugged handsome east asian face, black hair in a ponytail, headband, sleeveless dark green tunic, rope belt, heavy saber held low, bold confident grin", "pine forest trail, sunlight through trees")
 P("사파자객", "녀", "unorthodox sect assassin woman, black hair in a tight bun, cold narrow eyes, black fitted clothes, dark face veil lowered under the chin, short twin daggers in reverse grip", "moonlit tiled rooftops, night mist", "작")
-P("사이비도사", "남", "fake taoist charlatan, fifties, thin mustache, shifty eyes, shabby yellow taoist robe, paper talismans in one hand, gourd at the waist, sly smile", "village square at dusk, incense stand, curious crowd far behind", "작", "sword")
-P("배신표사", "남", "treacherous escort guard, thirties, greedy eyes, brown escort uniform with a torn agency badge, spear held across the body, nervous sneer", "abandoned escort cart on a mountain road, scattered cargo boxes")
-P("세가공자", "무리", "spoiled son of a local landlord in silk brocade robe with a folding fan in front, arrogant smirk, thugs in black behind him holding clubs", "busy town street, shop signs, onlookers")
+P("사이비도사", "남", "fake taoist charlatan, fifties, east asian face, black hair in a messy taoist topknot with a wooden pin, thin mustache, shifty eyes, shabby yellow taoist robe, paper talismans in one hand, gourd at the waist, sly smile", "village square at dusk, incense stand, curious crowd far behind", "작", "sword")
+P("배신표사", "남", "treacherous escort guard, thirties, east asian face, black hair tied in a topknot with a red cord, greedy eyes, brown escort uniform with a torn agency badge, spear held across the body, nervous sneer", "abandoned escort cart on a mountain road, scattered cargo boxes")
+P("세가공자", "남", "spoiled son of a local landlord, early twenties, smooth arrogant handsome face, smirk, hair in a topknot with a jade crown, luxurious embroidered silk brocade robe, folding fan in hand", "busy town street with shop signs", "작", "sword")
 P("혈단중독자", "남", "young laborer under a blood pact, twenties, bare muscular arms, glowing red seal mark on the palm, bloodshot eyes, torn hemp clothes, wild hair", "dim village alley at night, red lanterns", "맨", "weapon")
 P("마단장정", "남", "village strongman burning with a dark flame, twenties, black flames visible under the skin like veins, smoke rising from the shoulders, torn sleeveless shirt, clenched fists, pained fierce face", "burning barn at night, sparks", "맨", "weapon")
-P("잠화표사", "남", "escort guard with a hidden fire inside, thirties, calm face with faintly glowing ember-colored eyes, neat brown escort uniform, saber at the hip, faint dark glow under the belly", "inn courtyard at dusk, escort carts")
+P("잠화표사", "남", "escort guard with a hidden fire inside, thirties, calm east asian face, black hair tied in a topknot, with faintly glowing ember-colored eyes, neat brown escort uniform, saber at the hip, faint dark glow under the belly", "inn courtyard at dusk, escort carts")
 
 # ---------------------------------------------------------------- 2, 3장의 길
 P("귀도객", "남", "assassin swordsman called ghost blade, pale gaunt face, long messy black hair over one eye, black robe, long thin saber held low, emotionless stare", "foggy graveyard at dusk, leaning tombstones")
@@ -53,35 +53,35 @@ P("독고객", "남", "lone poison wanderer, thirties, sallow skin, dark lips, w
 P("장강수적", "남", "elite river raider with twin axes, thirties, broad shoulders, sleeveless black vest, two hand axes held at the sides, fierce grin", "riverside granary on fire at night, boats")
 P("녹림채주", "남", "chief of one of the seventy-two greenwood strongholds, forties, burly, thick beard, brown fur cloak, huge saber planted beside him", "mountain stronghold hall with tiger skins, torches")
 P("종남검수", "남", "proud zhongnan sect swordsman, twenties, handsome stern face, topknot, dark blue zhongnan robes, straight jian held at the side, arrogant gaze", "zhongnan mountain stone steps, pines, morning mist")
-P("혈교혈승", "남", "blood sect monk, forties, shaved head, red prayer beads, ash grey kasaya with dark red stains, iron monk staff, calm menacing eyes", "ruined mountain temple at red sunset, crows")
-P("혈교혈사", "남", "blood sect zealot, thirties, shaved head with red ink scriptures written on the scalp, ash grey robe, saber in hand, chanting with fanatic eyes", "mountain road at dusk, blood sect banners")
+P("혈교혈승", "남", "blood sect monk, forties, completely shaved bald head, red prayer beads, ash grey kasaya with dark red stains, iron monk staff, calm menacing eyes", "ruined mountain temple under a grey overcast sky, crows, mist", "무", "hair, topknot, ponytail, long hair")
+P("혈교혈사", "남", "blood sect zealot, thirties, shaved head with red ink scriptures written on the scalp, ash grey robe, saber in hand, chanting with fanatic eyes", "grey mountain road under an overcast sky, ash grey blood sect banners, mist")
 P("동창번자", "남", "eastern depot agent serving the palace eunuchs, thirties, pale smooth face, brown official uniform with a black hat, thin saber, cold sneer", "government office courtyard at night, lanterns")
 P("남만술사", "남", "southern miao tribe beast palace shaman, fifties, dark skin, heavy silver horn-shaped headdress and silver neck rings, indigo batik robes, tribal face paint, carved staff with a snake coiled on it, insects swarming around", "steaming southern jungle with giant trees, poisonous fog", "작")
 P("독문고수", "남", "five poisons sect elder, sixties, long straight white hair, pale skin, green-black robe, long fingernails tinted green, venom dripping from fingertips, cruel smile", "jungle temple with snakes on the stones", "맨", "weapon, snakes in hair, medusa")
 P("철혈대원", "남", "elite iron blood corps soldier of a regional army, thirties, stern square face clearly visible, short beard, heavy lamellar armor, iron helmet held under one arm, long glaive in the other hand", "military checkpoint on a highway, banners, dust", "무", "face hidden, helmet on head, visor")
-P("절정고수", "남", "wandering swordsman selling his name, late twenties, handsome confident face, long hair tied loosely, white travel robe with a blue sash, jian in hand, faint smirk", "inn rooftop at sunset")
+P("절정고수", "남", "wandering swordsman selling his name, late twenties, handsome confident east asian face, long black hair tied in a high ponytail, white travel robe with a blue sash, jian in hand, faint smirk", "inn rooftop at sunset")
 P("혈교수련자", "남", "blood cultivating monk of the blood sect, thirties, shaved head, natural tan skin, detailed face, sharp eyes with red irises, ash grey robe, red prayer beads, faint red mist around the hands", "blood-stained stone meditation cave with candles", "맨", "weapon, grey skin, blank eyes, glowing eyes, faceless")
-P("세가호위", "남", "a guard captain of a noble clan searching for a runaway young lady, thirties, stern dutiful face, short beard, dark blue clan uniform with an embroidered crest, saber at the hip, hand on the hilt", "riverside town road at dusk, other guards blurred far behind")
+P("세가호위", "남", "a guard captain of a noble clan searching for a runaway young lady, thirties, stern dutiful east asian face, short black beard, black hair in a topknot with a cloth band, dark blue cross-collar clan robe with an embroidered crest, saber at the hip, hand on the hilt", "riverside town road at dusk, other guards blurred far behind")
 P("점창제자", "남", "young diancang sect swordsman, late teens, eager face, light blue robes, thin fast sword held ready", "cangshan mountain with clouds, erhai lake far below")
 P("살막살수", "남", "killer of the assassin house, black mask covering the whole face except cold eyes, black fitted clothes, thin black blade", "dark rooftops under a crescent moon")
 P("세가무사", "남", "captain of the iron sword corps of the five great clans, late twenties, disciplined proud face, topknot with a silver crown, polished dark blue uniform with clan crest, straight sword held point down in both hands", "clan manor gate with stone lions")
-P("철봉승", "남", "wandering mendicant monk with an iron club, forties, shaved head, thick eyebrows, patched brown robe, iron staff resting on the shoulder, hungry grin", "rural temple gate, autumn leaves")
+P("철봉승", "남", "wandering mendicant monk with an iron club, forties, completely shaved bald head, east asian face, thick eyebrows, patched brown robe, iron staff resting on the shoulder, hungry grin", "rural temple gate in daylight, autumn leaves", "무", "hair, topknot, ponytail")
 P("젊은협객", "남", "young righteous hero, twenties, earnest brave face, white and blue robes, jian drawn, standing firm despite fear", "village gate at dawn")
-P("현상금꾼", "남", "bounty hunter, thirties, rough stubbled face, scar over the eyebrow, leather vest over a dark cloth robe, iron chain coiled on the shoulder, saber at the hip, holding a crumpled wanted notice", "inn wall covered with paper notices, lanterns")
+P("현상금꾼", "남", "bounty hunter, thirties, rough stubbled east asian face, scar over the eyebrow, black hair in a rough topknot, padded dark cloth vest over a cross-collar robe, iron chain coiled on the shoulder, saber at the hip, holding a crumpled wanted notice", "inn wall covered with paper notices written in chinese brush calligraphy, lanterns")
 P("이름사냥꾼", "남", "young swordsman hungry for fame, early twenties, cocky overconfident face, brand new cheap white robe, sword drawn and pointed forward", "town square with onlookers blurred")
 P("무명사냥꾼", "남", "thug who preys on unknown wanderers, thirties, sneering face, missing tooth, dirty brown clothes, wooden club studded with nails on the shoulder", "muddy back road at dusk")
 P("수로채졸", "남", "river bandit, twenties, sun-burned face, wet hair under a cloth headband, sleeveless wet tunic, short hooked spear", "reedy riverbank at dawn mist, small boats")
-P("흑사방향주", "남", "black snake gang hall master who runs gambling and smuggling, forties, slick hair, gold teeth, black silk robe with a snake pattern, twin sabers crossed on the back, dice in hand", "smoky gambling den with lanterns")
+P("흑사방향주", "남", "black snake gang hall master who runs gambling and smuggling, forties, east asian face, black hair in a topknot with a gold pin, thin mustache, gold teeth, black silk robe with a snake pattern, twin sabers crossed on the back, dice in hand", "smoky gambling den with lanterns")
 P("비무청성", "남", "qingcheng sect swordsman in a tournament, twenties, calm polite face, light green taoist robes, slender sword held in salute", "tournament stage at mount tai, banners, spectators blurred")
 P("비무철권", "남", "iron fist king, thirties, huge muscular body, shaved head, bare torso with iron bracers, fists raised", "tournament stage at mount tai, banners", "맨", "weapon")
-P("비무결승", "남", "the crimson-clad young master, twenties, beautiful cold face, long black hair, flowing crimson robe, slender sword dripping, chilling smile", "tournament stage at mount tai at sunset, blood on the stone")
+P("비무결승", "남", "the crimson-clad young master, twenties, beautiful cold face, long black hair, flowing crimson robe, slender sword dripping, chilling smile", "stone tournament stage on mount tai under a grey overcast sky, banners, blood on the stone")
 P("조각무인", "남", "wandering martial artist clutching a torn manual page, thirties, haggard obsessive eyes, shabby robe, sword at the hip, torn page in the other hand", "ruined library cave with scattered scrolls")
 P("무명노인", "남", "nameless old master testing a disciple, eighties, long white hair and beard blowing in the wind, plain worn grey robe, barefoot, holding a bamboo stick, mild amused eyes, overwhelming calm presence", "mountain cliff edge above a sea of clouds", "작", "sword, metal sword")
 P("묘지기", "남", "old bodyguard who kept a dead hero's last words, seventies, white beard, weathered calm face, black robe, old saber across the knees, sitting before a grave", "lonely grave on a hill under an old tree, autumn")
 P("십팔동인", "남", "one of the eighteen bronze men of shaolin, shaved head, whole body painted bronze like a statue, bare muscular torso, calm expressionless face, fists raised in a guard stance", "shaolin temple courtyard with stone floor and bronze statues", "맨", "weapon")
 P("무당진인", "남", "wudang taoist master who parries swords with a twig, seventies, long white beard, serene smile, grey taoist robe, holding a pine twig like a sword", "wudang mountain pavilion in clouds", "작", "sword, metal sword")
 P("화산장로", "남", "mount hua elder swordsman, sixties, grey beard, plum blossom embroidered robes, sword held vertically", "mount hua cliff path with plum trees")
-P("아미사태", "녀", "emei buddhist nun swordswoman, middle-aged woman in her fifties, fine wrinkles, compassionate stern face, grey nun cap covering the head, grey robes, sword held vertically before her in salute", "golden roof temple on emei peak in clouds", "무", "hair, young girl, teenager")
+P("아미사태", "녀", "chinese buddhist bhikkhuni swordswoman of emei, middle-aged woman in her fifties, completely shaved bald head, fine wrinkles, compassionate stern face, plain grey chinese monastic robe with wide sleeves, brown kasaya over one shoulder, prayer beads, sword held vertically before her", "golden roof temple on emei peak in clouds", "무", "hair, young girl, nun habit, veil, wimple, coif, christian nun, western nun, catholic, hood")
 P("개방십걸", "남", "one of the ten heroes of the beggar sect, forties, messy hair tied with a rag, weathered tanned face with slightly flushed cheeks, short stubble, sharp amused eyes, patched green and brown clothes with knotted cords at the waist, wine gourd in one hand, bamboo staff on the shoulder, relaxed confident smirk, closed mouth", "under a stone bridge with lanterns")
 P("당가배신자", "남", "traitor of the tang clan who once taught throwing knives, fifties, thin mustache, cold eyes, dark green tang clan robe, flying knives between fingers", "bamboo forest in sichuan mist", "작")
 P("곤륜역도", "남", "kunlun sect uncle who fled with a secret manual, sixties, gaunt face, white hair, white kunlun robe torn by blizzards, old sword, scroll case on the back", "kunlun snow pass in a blizzard")
@@ -90,18 +90,18 @@ P("하오문주", "녀", "head of the information network of the lowly, old woma
 # ---------------------------------------------------------------- 3, 4장과 정마대전
 P("마교장로", "남", "demonic cult elder called gloomy wind lord, seventies, gaunt human face with deep wrinkles, sunken cold eyes, long grey hair and thin grey beard, black and crimson robe, dark wind swirling around, thin old human hands", "black mountain fortress of the demonic cult, crimson banners", "맨", "weapon, skeleton, skull, bone hands, undead")
 P("혈마대귀", "남", "blood demon corps captain, thirties, pale skin with crimson veins, red armor pieces over black clothes, saber, fearless deathly eyes", "battlefield at dusk, smoke")
-P("십이마장", "남", "fifth demon general called mountain crusher, forties, giant muscular body, bald head, crimson war paint, black heavy armor, enormous iron mace", "shattered fortress wall, crimson banners")
+P("십이마장", "남", "fifth demon general called mountain crusher, forties, giant muscular body, bald head, thick beard, crimson war paint on the face, black chinese lamellar armor with crimson cords over a black robe, enormous iron mace", "shattered fortress wall, crimson banners", "무", "plate armor, european armor, knight, western armor")
 P("십이마장귀곡", "남", "seventh demon general ghost valley master who controls living puppets, fifties, sunken eyes, long black robe, silver threads from his fingers to puppet-like figures in the dark", "misty valley with hanging lanterns", "작", "sword")
 P("혈수라", "남", "third demon general blood asura, thirties, wild red hair, many scars over a muscular bare torso, crazed grin, twin sabers dripping", "burning battlefield at night")
-P("천마친위대", "남", "commander of the heavenly demon's guard called stone-faced ghost, forties, expressionless face like stone, full black armor with crimson trim, long halberd", "black stone gate of the heavenly demon peak, snow")
+P("천마친위대", "남", "commander of the heavenly demon guard called stone-faced ghost, forties, expressionless stone-like face clearly visible, short black beard, bare head with topknot, black chinese lamellar armor with crimson trim, long halberd", "black stone gate of the heavenly demon peak, snow", "무", "helmet, visor, face hidden, mask, plate armor, knight")
 P("무림맹추격대", "남", "wind-breaking sword of the alliance pursuit squad, thirties, stern righteous face, white and blue alliance uniform, sword drawn", "forest road at dawn")
 P("혈수인", "남", "master of the red handprint, hooded figure, pale hand stained with blood red, face half hidden in shadow", "burned manor courtyard with red handprints on the walls", "맨", "weapon")
 P("마교심판자", "남", "black punishment judge of the demonic cult, sixties, gaunt face, black judge robe, iron ledger in one hand, iron brush pen in the other", "edge of a blood lake in an underground cavern", "작")
 P("권마의그림자", "남", "shadowy will of an ancient fist demon, translucent dark figure of a powerful old man, glowing eyes, bandaged fists, ink-like aura", "ancient stone cave with fist craters on the walls", "맨", "weapon")
 P("생사문지기", "남", "ancient master who became the gate itself, half stone half man, long white hair, closed eyes, robes merging into a stone gate", "giant ancient stone gate in clouds", "맨", "weapon")
-P("전대천마잔영", "남", "shadow of the heavenly demon from a hundred years ago, young man in his twenties, cold beautiful face, long black hair, black robe with crimson trim, transparent ghostly edges, black aura", "secluded cave of seclusion with carved walls", "맨", "weapon")
-P("혈마미완", "남", "withered blood demon awakened without enough blood, gaunt tall figure, skin cracked like dry bark, long dark red hair, tattered crimson robe, red mist", "dried cracked blood lake bed in an underground temple", "맨", "weapon, crown")
-P("화경마인", "남", "left guardian of the blood sect, red-haired demon, fifties, wild red hair loose, inhuman cold eyes, ash grey robe with crimson trim, saber", "blood sect mountain altar at red dusk")
+P("백년천마잔영", "남", "shadow of the heavenly demon from a hundred years ago, young man in his twenties, cold beautiful face, long black hair, black robe with crimson trim, transparent ghostly edges, black aura", "natural rough rock cave for closed-door seclusion with carved walls", "맨", "weapon, gothic arch, pointed arch, cathedral, doorway, halo")
+P("혈마미완", "남", "withered blood demon awakened without enough blood, gaunt tall figure in the center of the frame, cowboy shot, skin cracked like dry bark, glowing red eyes, long dark red hair, tattered crimson robe, red mist, dim red light from below", "dried cracked blood lake bed in an underground temple with stone pillars", "맨", "weapon, crown, tiny figure, far away")
+P("화경마인", "남", "left guardian of the blood sect, red-haired demon, fifties, wild red hair loose, inhuman cold eyes, ash grey robe with crimson trim, saber", "stone altar of the blood sect in a misty mountain gorge, overcast grey sky, torches")
 P("혈교우호법", "남", "right guardian of the blood sect, needle of blood, fifties, thin face, long thin mustache, ash grey robe, blood red needles between fingers", "blood sect cavern with red candles", "작")
 P("혈교혈위대", "남", "blood guard of the blood sect, thirties, shaved head, red scripture tattoos on the neck, ash grey robe, saber held in both hands, chanting with half-closed eyes", "blood sect cave temple with red candles")
 P("연단마군", "남", "demonic cult elder of the furnace hall, seventies, bald with burn scars, black flames dancing on the shoulders, black robe, standing before a giant bronze furnace", "furnace hall with a huge glowing cauldron", "맨", "weapon")
@@ -117,7 +117,7 @@ P("구파협객", "남", "white-clad sword of the nine sects, thirties, noble ha
 P("나한승", "남", "shaolin warrior monk sent to subdue demons, thirties, shaved head, brown robes, iron staff, solemn face", "shaolin gate in morning mist")
 P("정파명숙", "남", "great elder of the orthodox sects called mount tai sword, seventies, long white beard, dignified face, grey robe, heavy sword", "mount tai summit in clouds")
 P("맹주호법", "남", "twin wall sword, guardian of the alliance leader, forties, stern face, white alliance robe with gold trim, two swords", "alliance hall with banners")
-P("마교척살조", "녀", "crimson sleeve assassin of the demonic cult, twenties, cold beautiful face, black hair in a tight bun, black robe with long crimson sleeves, curved blade held low", "rooftops at night under a red moon")
+P("마교척살조", "녀", "crimson sleeve assassin of the demonic cult, twenties, cold beautiful face, black hair in a tight bun, black robe with long crimson sleeves, curved blade held low", "dark tiled rooftops of a chinese town at night, lanterns below, mist, no moon")
 P("사파복수귀", "남", "vengeful unorthodox fighter called poison arm, thirties, one arm wrapped in black bandages, hateful eyes, flying knives", "funeral ground with white banners", "작")
 P("마교암살귀", "남", "silent ghost assassin of the demonic cult, thin man in black, cloth over the mouth, dead eyes, thin blade", "alliance command tent at night")
 P("천마사냥개", "남", "nine-blood demon hound, tracker of the heavenly demon, forties, beast-like face, sniffing, chain whip, fur collar over black armor", "snowy forest at night with blood trail")
@@ -126,11 +126,11 @@ P("동창추포대", "남", "arrest officer of the eastern depot, thirties, pale
 P("맹집법사", "남", "iron-faced judge of the martial alliance, middle-aged man in his fifties, stern square face with deep frown lines, greying short beard, black judge robe with silver trim, iron ruler tucked in the belt, sword held point down", "alliance court hall")
 P("천하도전자", "남", "challenger who only duels famous masters, thirties, lean face, single saber, white headband, cold confidence", "cliff top at dawn")
 P("십대고수", "남", "unmoving sword, one of the ten great masters, middle-aged man in his fifties, calm weathered face, neat greying beard, grey hair tied up, heavy calm presence, plain grey robe, both hands resting on the pommel of a sword planted point down", "mountain pavilion in rain")
-P("강호승냥이", "남", "jackal who preys on the weak in wartime, forties, gaunt scarred face, stubble, cold greedy eyes, mismatched leather armor scraps over dirty brown clothes, notched saber held low", "burned village with smoke at dusk", "무", "animal ears, kemonomimi, grin, teeth")
+P("강호승냥이", "남", "jackal who preys on the weak in wartime, forties, gaunt scarred face, stubble, cold greedy eyes, black hair in a messy topknot, east asian face, torn lamellar armor scraps over a dirty brown cross-collar robe, notched saber held low", "burned village with smoke at dusk", "무", "animal ears, kemonomimi, grin, teeth")
 P("귀문술사", "남", "bone monk of the ghost gate sect, old man in his sixties, gaunt hollow-cheeked human face with sunken eyes, shaved head, grey robes, spear with a shaft woven of bones, ghost fires", "graveyard with blue ghost lanterns", "무", "skull, skull face, skeleton")
 P("호교대", "남", "devotee of the demonic cult guard, twenties, detailed face, sharp fanatic eyes, thin lips, short black hair, black robe with crimson sash, long spear held upright", "black stone temple stairs with crimson banners at dusk", "무", "faceless, blank face, featureless face")
 P("혈마귀졸", "남", "soldier of the blood demon corps, twenties, pale skin with faint red veins on the neck, dead calm dark eyes, short black hair, dark red lacquered armor pieces over black clothes, saber at the hip", "smoky battlefield at dusk, dark sky, broken banners")
-P("떠돌이패", "남", "mercenary of the black wolf band, thirties, scarred face, wolf pelt over the shoulders, worn leather armor, saber", "war-torn road with broken carts")
+P("떠돌이패", "남", "mercenary of the black wolf band, thirties, scarred east asian face, black hair tied back, wolf pelt over the shoulders, worn chinese lamellar vest over a dark robe, saber", "war-torn road with broken carts")
 P("맹순찰조", "남", "patrol warrior of the martial alliance, twenties, upright serious face, white and blue alliance uniform, straight sword at the hip, holding an alliance token", "highway checkpoint with alliance banners")
 P("적면마", "남", "red-faced old demon, old man in his seventies, deep reddish weathered complexion, deep wrinkles, wild white hair and long white beard, cold cruel eyes, thin cruel smile, black robe, long fingernails", "battlefield after the battle at dusk, crows", "맨", "weapon, hand on face, grin, teeth, bright red skin, demon, horns")
 P("옛무인그림자", "남", "silent shadow of an ancient master, translucent figure in old robes, face hidden, only the tip of a sword visible", "stone chamber on a mountain ridge")
@@ -150,26 +150,26 @@ P("외전_오독문주", "녀", "spider poison mother, matriarch of the five poi
 P("외전_철필", "남", "iron brush, elder of the zhuge clan who records the ten masters list, seventies, stern scholar, long white beard, iron judge brush", "library hall with scrolls", "작")
 P("외전_추살수좌", "남", "traceless killer of assassins, forties, plain forgettable face, grey clothes, thin dark sword", "rain-soaked alley")
 P("외전_총채주", "남", "water ghost, lord of the yangtze waterways, fifties, massive, wet black robe, harpoon, cruel grin", "great river fleet at night")
-P("외전_곽승", "남", "demonic cult elder who guarded the blood lake for a hundred years, very old man, long white eyebrows tinged dark red drooping past the cheeks, bald crown with long white hair at the back, long white beard, deep wrinkles, black robe with crimson sleeves, gnarled black iron staff, commanding glare", "steep valley path at night leading to a blood lake, torches")
+P("외전_곽승", "남", "demonic cult elder who guarded the blood lake for a hundred years, very old man, long white eyebrows tinged dark red drooping past the cheeks, bald crown with long snow-white hair at the back, east asian face, long white beard, deep wrinkles, black robe with crimson sleeves, gnarled black iron staff, commanding glare", "steep valley path at night leading to a blood lake, torches")
 P("외전_혜명", "남", "head monk of the arhat hall of shaolin, fifties, shaved head with ordination scars, thick black eyebrows, square stern face, muscular, brown monk robe with sleeves tied back, long iron-bound wooden staff held across the body", "shaolin martial monks courtyard with stone floor, closed temple gate, morning mist")
 P("외전_적암", "남", "old monk who guarded the scripture pavilion for forty years, eighties, long white eyebrows, thin weathered kind face, faded saffron robe, a cloth bundle of twelve scripture copies tied on the back, wooden walking stick", "mountain road leading away from shaolin at dawn, pine trees", "작", "sword")
 P("외전_송결", "남", "second disciple of wudang who wants the gate closed, forties, stern disciplined face, neat black topknot with a wooden pin, short beard, grey taoist robe with yin yang emblem, sword moving in a circular guard", "wudang mountain gate with stone stairs and clouds")
 P("외전_진무", "남", "first disciple of wudang leading his juniors on the battlefield, forties, tired resolute face, topknot loosened, grey taoist robe torn and stained by battle, straight sword held low", "battlefield at dusk with wudang banners and smoke")
-P("외전_정심", "녀", "old nun guarding the emei discipline hall, sixties, shaved head under a grey nun cap, strict calm face, grey nun robes, prayer beads on the wrist, sword raised like a closing lotus", "emei temple hall with golden roof in clouds", "무", "hair")
+P("외전_정심", "녀", "old chinese buddhist bhikkhuni guarding the emei discipline hall, woman in her sixties, completely shaved bald head, deep wrinkles, strict calm face, plain grey chinese monastic robe, brown kasaya, prayer beads on the wrist, sword raised", "emei temple hall with golden roof in clouds", "무", "hair, nun habit, veil, wimple, coif, christian nun, western nun, catholic, hood")
 P("외전_묵현", "남", "cold blood elder of the demonic cult who hunts deserters to the end, sixties, gaunt cold face, thin grey mustache, slicked back grey hair, black robe with crimson sleeves, bare pale hands with long nails", "lonely mountain road at night with an abandoned cart", "맨", "weapon")
 P("외전_갈무진", "남", "iron fist, leader of kongtong sect, fifties, broad heavy body, short grey beard, thick neck, brown and ochre robe with sleeves rolled up, huge scarred fists", "alliance meeting hall with a smashed wooden table", "맨", "weapon")
 P("외전_구양열", "남", "yellow sand demon lord, demonic cult elder who rules the western trade road, sixties, sun-darkened leathery face clearly visible, grey beard, sharp eyes, desert turban without veil, black robe with crimson trim, sand swirling from his hands", "desert caravan road with ruined beacon towers and camels far away", "맨", "weapon, face veil, mask, face hidden, sun behind head")
-P("외전_모용백", "남", "elder of the murong clan who keeps the genealogy, seventies, neat white beard, dignified face, white and blue robes, old silver spear held upright", "murong ancestral hall with tablets and candles")
-P("외전_나곤", "남", "snow spear of changbai, forties, rugged weathered face, short black beard with frost, fur hat and heavy fur coat, long red-tasseled spear", "changbai mountains in deep snow, birch trees")
+P("외전_모용백", "남", "elder of the murong clan who keeps the genealogy, seventies, neat white beard, dignified face, white and blue robes, old silver spear held upright", "chinese ancestral hall with rows of wooden spirit tablets, red pillars and candles", "무", "gothic, church, cathedral, arch window, western interior")
+P("외전_나곤", "남", "snow spear of changbai, forties, rugged weathered face, short black beard with frost, hair tied up with a fur-trimmed headband, heavy dark fur-lined chinese robe and fur cloak, long red-tasseled spear", "changbai mountains in deep snow, birch trees", "무", "ushanka, russian hat, fur hat")
 P("외전_마철", "남", "twin hook blade of the debt collection hall, thirties, lean hard face, scar across the nose, black hair tied back, dark grey clothes, two hook swords held crossed", "debt collection hall with ledgers and hanging lanterns")
 P("외전_사마주", "남", "iron abacus guardian of the unorthodox alliance ledgers, fifties, shrewd narrow eyes, neat goatee, black robe with crimson lining, heavy iron abacus held like a weapon", "ledger hall with stacked account books and candles", "작")
 P("외전_제갈문", "남", "new master of the heavenly mechanism pavilion, thirties, sharp intelligent face, neat topknot with a silver crown, dark blue scholar robe, mechanical crossbow on the forearm, hand raised to signal", "room lined with mounted crossbows and gears", "작")
 P("외전_공야반", "남", "ghost hand master craftsman, sixties, wiry body, grey hair tied up, sharp eyes, sleeves rolled up, leather apron with tools, a wooden ox automaton behind him", "workshop full of gears and wooden mechanisms", "작", "sword")
 P("외전_육허", "남", "exorcist taoist abbot of the azure cloud temple, fifties, stern face, long black beard, black and yellow taoist robe, yellow paper talismans flying around, peachwood sword", "taoist temple courtyard at night with blue lanterns")
 P("외전_엄대웅", "남", "greenwood king, old but mighty, sixties, huge frame, white bushy beard and eyebrows, tiger fur cloak over dark armor, heavy iron club planted beside him", "greenwood stronghold great hall with tiger skins and torches")
-P("외전_단철웅", "남", "mountain-splitting axe, patrol chief of the greenwood, forties, huge muscular body, bald head, thick black beard, sleeveless leather armor, huge double-bladed axe on the shoulder", "mountain stronghold on a cliff")
-P("외전_염칠", "남", "dice master, second table master of the black snake gang, thirties, sly handsome face, slicked hair, black silk robe with gold snakes, three iron dice between fingers", "smoky gambling hall with lanterns", "작")
-P("외전_하백", "남", "golden hand, first table master of the black snake gang, fifties, fat smiling face, thin mustache, luxurious black and gold robes, gold rings on every finger", "luxurious gambling hall with piles of silver", "작")
+P("외전_단철웅", "남", "mountain-splitting axe, patrol chief of the greenwood, forties, huge muscular body, shaved head, east asian face, thick black beard, sleeveless dark hemp tunic with a fur mantle, broad cloth sash, huge chinese broad-bladed axe with a long handle on the shoulder", "mountain stronghold on a cliff")
+P("외전_염칠", "남", "dice master, second table master of the black snake gang, thirties, sly handsome east asian face, long black hair tied in a low ponytail, black silk robe with gold snakes, three iron dice between fingers", "smoky gambling hall with lanterns", "작")
+P("외전_하백", "남", "golden hand, first table master of the black snake gang, fifties, fat smiling east asian face, thin mustache, black hair in a topknot with a gold crown, luxurious black and gold robes, gold rings on every finger", "luxurious gambling hall with piles of silver", "작")
 P("외전_육종", "남", "best swordsman of the imperial embroidered guard, forties, stern iron face, short beard, red flying fish robe, black gauze hat, spring saber held ready", "palace gate at night with lanterns")
 P("외전_위소경", "남", "white-faced director of the eastern depot, middle-aged eunuch man in his fifties, pale powdered beardless face with fine wrinkles, narrow cunning eyes, thin smile, hair in a neat topknot with a small black official crown, purple silk robes with wide sleeves, holding a folded document", "palace office with screens", "작", "sword, wide hat, conical hat, beret")
 P("외전_당한", "남", "poison dragon hand, elder of the tang clan, sixties, cold elegant face, thin grey beard, dark green robes, green poison mist curling from the sleeves", "sichuan bamboo forest in mist", "맨", "weapon")
@@ -216,7 +216,7 @@ P("마흥", "남", "gold claw, county constable chief, forties, cunning face, th
 P("곽양", "남", "unorthodox grandmaster, sixties, heavy powerful build, grey beard, black and crimson robe, cold eyes, hands behind the back", "luxurious hall with screens", "맨", "weapon")
 P("법천", "남", "high priest of the blood sacrifice, seventies, shaved head, deep wrinkles, long white eyebrows, crimson kasaya over ash grey robe, ritual staff with a red jewel", "blood altar with red candles", "작", "sword")
 P("진숭", "남", "border army commandant, forties, stern weathered face, black beard, scale armor with red cloak, sword", "border fortress wall at dusk")
-P("곽귀", "남", "king of tomb robbers, fifties, sly wrinkled face, sparse beard, dusty brown clothes, shovel slung on the back, lantern", "ancient tomb entrance at night", "작", "sword")
+P("곽귀", "남", "king of tomb robbers, fifties, sly wrinkled face, sparse beard, dusty brown clothes, shovel slung on the back, holding a small paper lantern", "ancient chinese tomb entrance at night", "작", "sword, kerosene lamp, hurricane lamp, oil lantern, metal lantern")
 P("곽수", "남", "traitorous guardian of the alliance called silver palm, fifties, smooth deceptive smile, grey beard, white alliance robe, silver glove on one hand", "alliance hall at night", "맨", "weapon")
 P("파랑", "남", "black tooth poison insect shaman of the beast palace, forties, dark skin, blackened teeth, silver neck rings, indigo robes, insects crawling on his arms", "steaming southern jungle", "작")
 P("사량", "남", "eleventh demon general poison dragon, forties, pale greenish skin, slit-pupil eyes, long black hair, black robe with green dragon embroidery, green poison mist from his hands", "poison swamp at night", "맨", "weapon")
@@ -224,7 +224,7 @@ P("소운진인", "남", "hermit taoist of wudang, seventies, gentle face, long 
 P("유청운", "남", "plum blossom swordsman of mount hua, twenties, handsome serious face, topknot, white robe with plum blossom embroidery, sword", "mount hua cliff with plum blossoms")
 P("마진", "남", "iron rake, ferry hall master of the unorthodox alliance, forties, rough scarred face, wet black robe, iron rake weapon", "river ferry at dusk")
 P("구양천", "남", "elder of the martial alliance, seventies, dignified white beard, white robe with gold trim, staff", "alliance council hall", "작", "sword")
-P("도각", "남", "iron bell necromancer monk of the ghost gate sect, man in his fifties, gaunt hollow-cheeked human face with sunken dark eyes, natural skin, shaved head, grey robe, small iron bell in one hand and a staff in the other, blue ghost fires floating around", "graveyard at night with blue lanterns", "무", "skull, skull face, skeleton, bone, undead")
+P("도각", "남", "iron bell necromancer monk of the ghost gate sect, man in his fifties, gaunt hollow-cheeked human face with sunken dark eyes, natural skin, shaved head, grey robe, small iron bell in one hand and a staff in the other, blue ghost fires floating around", "graveyard at night with blue lanterns", "무", "skull, skull face, skeleton, bone, undead, cross, christian cross, western gravestone, celtic cross")
 P("마랑", "녀", "black spider, poison woman, thirties, pale beautiful face, dark lips, black hair with spider pins, black and purple robe, poison threads between fingers", "dark room with spider webs", "작")
 P("상한", "남", "patrol captain of the ice palace, thirties, cold handsome face, silver hair, white fur armor, ice spear", "frozen sea at dusk")
 P("육청", "남", "head plum blossom swordsman of mount hua, thirties, sharp proud face, topknot with a plum blossom pin, white and red robe, sword", "mount hua training ground with plum trees")
@@ -244,11 +244,11 @@ P("위무결", "남", "rival saber master of the clear river, twenties, fierce h
 P("소연화", "녀", "mistress of the medicine king valley, twenties, gentle beautiful face, long black hair with a jade pin, pale green robes, golden acupuncture needles between fingers", "herb garden valley with mist", "작", "sword")
 P("석대우", "남", "iron wall great general who led a hundred thousand border soldiers, fifties, huge broad body, short grey beard, heavy black armor, tower shield and spear", "frontier fortress wall with banners")
 P("묘아", "녀", "the greatest thief under heaven, twenties, playful sly smile, cat-like eyes, black hair tied in a short high ponytail, dark navy cross-collar night-walker tunic and trousers, cloth wrist and ankle wraps, black sash, holding a stolen green jade", "imperial palace tiled rooftops at night with lanterns", "작", "sword, modern clothes, bob cut, jacket, bodysuit")
-P("무애", "남", "drunken monk, former head of the shaolin arhat hall, sixties, bald, red nose, big belly, patched robe, wine gourd", "mountain tavern", "맨", "weapon")
+P("무애", "남", "drunken monk, former head of the shaolin arhat hall, sixties, completely shaved bald head with ordination scars, red nose, jolly wrinkled face, big belly, patched brown monk robe, wine gourd in hand", "mountain tavern interior with wine jars", "맨", "weapon, hair, topknot, red sun, sun")
 P("장칠", "남", "chief of all seventy-two greenwood strongholds, forties, rugged tanned face, short black beard, scar over the eyebrow, confident grin, black hair in a rough topknot, brown fur cloak over dark leather armor, hand axe at the belt", "greenwood fortress hall with torches", "무", "grey skin, pale skin, washed out")
 P("적연", "녀", "crimson-robed rakshasa, former elder of the demonic cult, forties, beautiful fierce face, long black hair, crimson robe", "blood lake cave", "맨", "weapon")
 P("연무휘", "남", "carefree sword, swordsman who left for the jianghu the same year, twenties, handsome cheerful face, white robe, sword", "town gate")
-P("왕백로", "남", "noodle king, retired master who was one of the ten great masters thirty years ago, old man in his seventies, round kind wrinkled face, white mustache, sleeves rolled up, white apron over a brown robe, hands dusted with flour, wooden rolling pin", "noodle shop kitchen", "작", "sword")
+P("왕백로", "남", "noodle king, retired master who was one of the ten great masters thirty years ago, old man in his seventies, round kind wrinkled face, white mustache, grey hair in a small topknot, sleeves of a brown cross-collar robe tied back, plain cloth apron, hands dusted with flour, wooden rolling pin", "noodle shop kitchen", "작", "sword")
 P("은비", "녀", "ageless elegant beauty, mature face, long straight silver hair flowing down, silver hairpin, golden eyes, 1.3::human ears, no animal ears::, hair covering ears, nine fluffy silver fox tails spreading behind, layered white and pale blue hanfu", "moonlit bamboo forest", "맨", "weapon, animal ears, fox ears, cat ears")
 B("설백", "white tiger spirit beast, huge and noble, blue eyes, gentle but powerful", "snowy mountain forest")
 
@@ -256,8 +256,8 @@ B("설백", "white tiger spirit beast, huge and noble, blue eyes, gentle but pow
 P("각명대사", "남", "abbot of shaolin, bald old monk in his seventies, shaved head, long white eyebrows drooping past the eyes, kind wise wrinkled face, red and gold kasaya over a brown robe, long prayer beads, one hand raised in blessing", "shaolin main hall with a great golden buddha and incense smoke", "맨", "weapon, hair, long hair, ponytail")
 P("청허진인", "남", "leader of wudang in closed seclusion, eighties, ethereal serene face, long white hair and beard, white taoist robe, seated in meditation, faint white aura", "mountain cave on wudang peak with clouds", "맨", "weapon")
 P("운암자", "남", "leader of mount hua sect, old man in his sixties, refined calm face, neat grey beard, white robe with plum blossom embroidery, facing the viewer, hands folded in front", "mount hua hall with plum blossoms outside", "맨", "weapon")
-P("정연사태", "녀", "leader of emei sect, old buddhist nun in her sixties, shaved head, wrinkled serene face with gentle eyes, grey nun cap covering the head, grey and white robes, prayer beads, palms together", "emei golden temple hall", "맨", "weapon, hair")
-P("청송자", "남", "leader of qingcheng sect, sixties, gentle taoist, thin grey beard, green taoist robe, horsetail whisk", "qingcheng temple among pines", "맨", "weapon")
+P("정연사태", "녀", "leader of emei sect, old chinese buddhist bhikkhuni in her sixties, completely shaved bald head, wrinkled serene face with gentle eyes, plain grey chinese monastic robe, golden-brown kasaya, long prayer beads, palms together", "emei golden temple hall with incense", "맨", "weapon, hair, nun habit, veil, wimple, coif, christian nun, western nun, catholic, hood")
+P("청송자", "남", "leader of qingcheng sect, sixties, gentle taoist, thin grey beard, grey topknot, green taoist robe, holding a taoist fly whisk with a wooden handle and long white horsehair", "qingcheng temple among pines", "맨", "weapon, whisk, kitchen")
 P("당천기", "남", "ten thousand poisons hand, head of the tang clan, sixties, cold elegant face, thin black and grey beard, dark green robes with gold trim, black gloves", "tang clan hall with bamboo screens", "맨", "weapon")
 P("모용진", "남", "head of the murong clan, fifties, noble handsome face, short beard, white and sky blue robes, jade pendant", "murong manor by the lake", "맨", "weapon")
 P("제갈현", "남", "head of the zhuge clan, fifties, wise calm face, long beard, blue scholar robe, white feather fan", "study with maps and models", "작", "sword")
@@ -266,21 +266,21 @@ P("위숙", "남", "old librarian of the martial alliance archives, seventies, t
 P("붉은옷여인", "녀", "mysterious woman in crimson from the demonic cult, twenties, captivating smile, long black hair, crimson robe with wide sleeves, offering a red pill on her palm", "rainy inn at night", "작", "sword")
 P("신교사자", "남", "envoy of the demonic cult, thirties, polite cold smile, neat topknot, black robe with crimson sleeves, bowing slightly while holding a rolled paper scroll tied with red cord", "inn courtyard at dusk", "작", "sword, phone, smartphone, card, tablet")
 P("수상한누군가", "남", "mysterious peddler, deep hood hiding the upper face, faint knowing smile, patched dark cloak, a wooden cart full of rare treasures and scrolls", "foggy crossroads at night with a single lantern", "작", "sword")
-P("장터상인", "남", "market merchant, forties, friendly round face, small mustache, brown merchant robe, cap, abacus in hand", "busy market street with stalls", "작", "sword")
+P("장터상인", "남", "market merchant, forties, friendly round east asian face, small black mustache, black hair under a black cloth merchant cap, brown cross-collar merchant robe, abacus in hand", "busy market street with stalls", "작", "sword")
 P("객잔주인", "녀", "inn owner, forties, sharp but warm face, hair in a bun with a wooden pin, apron over a dark red dress, holding a ledger", "inn hall with wooden tables", "작", "sword")
 P("점소이", "남", "inn waiter boy, late teens, cheerful face, white towel over the shoulder, carrying a tray with a teapot", "inn hall with lanterns", "작", "sword")
 P("의원", "남", "village doctor, sixties, kind face, grey beard, plain blue robe, wooden medicine box on the shoulder", "clinic with herb drawers", "작", "sword")
-P("대장장이", "남", "blacksmith, forties, muscular sweaty arms, leather apron, soot on face, hammer in hand", "forge with glowing coals and sparks", "작", "sword")
+P("대장장이", "남", "chinese village blacksmith, forties, east asian face, black hair tied in a topknot with a cloth band, muscular sweaty arms, sleeves of a cross-collar hemp tunic rolled up, cloth apron, soot on face, hammer in hand", "forge with glowing coals and sparks", "작", "sword")
 P("장원집사", "남", "manor steward, fifties, neat grey beard, dark robe, respectful bow, ledger under the arm", "manor courtyard with a pond", "작", "sword")
 P("표국국주", "남", "head of an escort agency, fifties, stern dignified face, grey beard, brown robe, escort banner behind", "escort agency yard with carts", "맨", "weapon")
 P("촌장", "남", "village elder, seventies, white beard, kind tired face, plain robe, walking cane", "village gate with an old tree", "작", "sword")
 P("기녀", "녀", "courtesan musician, twenties, elegant beauty, hair ornaments, silk robes, holding a pipa", "pleasure house with silk curtains", "작", "sword")
-P("서생", "남", "young scholar, twenties, gentle timid face, scholar hat, light robe, holding a book", "study with books and a window", "작", "sword")
+P("서생", "남", "young chinese scholar, twenties, gentle timid face, black futou scholar cap, light blue scholar robe, holding a thread-bound book", "study with books and a lattice window", "작", "sword, mortarboard, graduation cap, square academic cap")
 P("포두", "남", "local constable, middle-aged man in his forties, strict weathered face, short black beard, dark red and black traditional constable robe, soft black cloth headwrap of a ming dynasty yamen runner, saber at the hip", "magistrate office courtyard in daylight, grey stone and wooden buildings", "무", "monochrome red, red tint, red background, peaked cap, military cap, police hat, visor, modern uniform")
 
 # ---------------------------------------------------------------- 짐승과 영물
 B("늑대무리", "pack of starving winter wolves, thin grey wolves with bared fangs, glowing eyes", "snowy forest at night")
-B("멧돼지떼", "herd of enraged wild boars with tusks charging", "destroyed mountain farm field")
+B("멧돼지떼", "herd of four enraged wild boars with long tusks charging across a ruined field, bristly dark brown fur, kicked up dirt, daylight", "destroyed mountain farm field at morning", "silhouette, backlit")
 B("독사떼", "dozens of venomous vipers coiling over each other, several raising their heads and baring fangs, green and black scales, forked tongues", "rocky valley floor covered with snakes, fog")
 B("불곰", "huge fierce brown bear standing on hind legs, roaring", "autumn mountain forest")
 B("식인호랑이", "man-eating tiger, scarred, crouching to pounce, burning eyes", "dark bamboo forest")
@@ -295,7 +295,7 @@ B("만년빙잠", "giant ten-thousand-year ice silkworm larva, segmented plump c
 B("금섬", "giant golden toad breathing poison mist", "poison marsh")
 B("불가사리", "ancient iron-eating beast bulgasari, bear-like body with an elephant-like trunk and rhinoceros eyes, hide of dark iron plates with rust, needle-like bristles, glowing eyes, chewing on a broken sword", "ruined forge")
 B("천년백사", "huge thousand-year white serpent with pearly scales, head raised with golden eyes clearly visible, coiled around a glowing spirit herb on a cliff ledge", "cliff garden with clouds and rare herbs", "headless, no head")
-B("흑룡", "black dragon rising from a deep pool, without a pearl, majestic", "deep pool under thunderstorm")
+B("흑룡", "chinese long dragon with black scales and long whiskers rising out of a deep pool, head clearly visible with glowing golden eyes, serpentine body coiled, lightning lighting it from the front", "deep mountain pool under a thunderstorm", "silhouette, backlit, western dragon, wings")
 B("해치", "haetae, divine lion-like beast with one horn, judging", "ancient palace courtyard")
 B("외전_백공", "giant white ape guardian with long arms, wise eyes", "jungle throne ruins")
 
@@ -314,7 +314,7 @@ S("아미금정", "golden summit temple of mount emei above the sea of clouds")
 S("곤륜설산", "kunlun snowy mountain sect gate in a blizzard")
 S("객잔", "interior of a roadside inn, wooden tables and benches, wine jars, warm lanterns, wooden staircase to the second floor, counter with an abacus, evening warm light through paper windows")
 S("장터", "bustling market street of a chinese town, stalls, banners, lanterns")
-S("표국", "open-air courtyard of an escort agency seen from the gate, wooden escort carts loaded with crates, tall red escort banner flags on poles, weapon racks with spears, stables on the side, grey tiled roofs, morning light")
+S("표국", "outdoor courtyard of an escort agency under open sky, seen from the main gate, wooden escort carts loaded with crates in the yard, tall red triangular escort banner flags on poles, weapon racks with spears, grey tiled roof buildings around, morning light", "indoors, interior, curtains")
 S("고갯길", "narrow dirt road winding through a high mountain pass between rocky cliffs, twisted pines, a stone marker by the road, dusty afternoon light, no river")
 S("장강", "great yangtze river with boats and cliffs at dusk")
 S("녹림산채", "bandit stronghold in a pine forest on a mountain slope, tall sharpened log palisade wall, wooden gate with watchtowers, rough log cabins and thatched huts inside, torches and black banners, dusk")
@@ -378,7 +378,7 @@ S("산채_밤", "mountain bandit stronghold at night, sharpened log palisade wal
 DEFAULT = 9013
 PICK = {
     "각명대사": 9018,
-    "강호승냥이": 9014,
+    "강호승냥이": 9027,
     "개방십걸": 9014,
     "개방총타": 9015,
     "객잔주인": 9014,
@@ -390,6 +390,7 @@ PICK = {
     "곡진": 9017,
     "곤륜설산": 9015,
     "곤륜역도": 9014,
+    "곽귀": 9022,
     "곽수": 9014,
     "곽양": 9014,
     "곽준명": 9014,
@@ -417,7 +418,7 @@ PICK = {
     "남만술사": 9014,
     "낭인": 9014,
     "녹림산채": 9015,
-    "녹림호걸": 9015,
+    "녹림호걸": 9026,
     "늑대무리": 9015,
     "다리밑": 9015,
     "단조": 9014,
@@ -425,22 +426,24 @@ PICK = {
     "당가배신자": 9014,
     "당천기": 9014,
     "대나무숲": 9015,
-    "대장장이": 9014,
-    "도각": 9017,
+    "대장장이": 9026,
+    "도각": 9023,
     "도곤": 9014,
     "독고객": 9014,
     "독문고수": 9014,
     "동창번자": 9014,
     "동창추포대": 9015,
+    "떠돌이패": 9025,
     "마교심판자": 9014,
     "마교암살귀": 9014,
-    "마교척살조": 9015,
+    "마교척살조": 9029,
     "마단장정": 9015,
     "마흥": 9014,
     "만년빙잠": 9015,
     "맹순찰조": 9015,
     "맹주호법": 9015,
     "맹집법사": 9015,
+    "멧돼지떼": 9023,
     "모극": 9014,
     "모용세가": 9015,
     "묘아": 9016,
@@ -452,8 +455,9 @@ PICK = {
     "무림맹추격대": 9014,
     "무명노인": 9014,
     "무승원": 9017,
-    "무애": 9014,
-    "배신표사": 9015,
+    "무애": 9024,
+    "배신표사": 9025,
+    "백년천마잔영": 9033,
     "법목": 9014,
     "법천": 9014,
     "봉마진": 9015,
@@ -461,14 +465,14 @@ PICK = {
     "북해빙궁": 9014,
     "붉은옷여인": 9015,
     "비동": 9016,
-    "비무결승": 9014,
+    "비무결승": 9028,
     "비무철권": 9014,
     "사도련본단": 9015,
     "사도련향주": 9014,
     "사량": 9015,
-    "사이비도사": 9014,
+    "사이비도사": 9025,
     "사파복수귀": 9014,
-    "산적": 9014,
+    "산적": 9022,
     "산정_일출": 9014,
     "산채_밤": 9017,
     "살막": 9014,
@@ -476,15 +480,15 @@ PICK = {
     "상한": 9014,
     "생사문지기": 9014,
     "서고": 9015,
-    "서생": 9015,
+    "서생": 9023,
     "석담": 9016,
     "설란": 9015,
     "설백": 9015,
     "설표": 9014,
-    "세가공자": 9015,
+    "세가공자": 9022,
     "세가무사": 9015,
     "세가직계": 9014,
-    "세가호위": 9014,
+    "세가호위": 9026,
     "소림사": 9015,
     "소연화": 9014,
     "소운진인": 9014,
@@ -495,32 +499,32 @@ PICK = {
     "신교분타": 9014,
     "신교사자": 9018,
     "십대고수": 9014,
-    "십이마장": 9014,
+    "십이마장": 9022,
     "십이마장귀곡": 9014,
     "십이마장백골": 9015,
     "십이마장소면": 9016,
     "십이마장흑풍": 9014,
     "십팔동인": 9015,
-    "아미사태": 9018,
+    "아미사태": 9024,
     "엄충": 9015,
     "연단마군": 9014,
     "연무장": 9016,
     "연무휘": 9014,
     "염교": 9014,
     "오현철": 9014,
-    "왕백로": 9014,
+    "왕백로": 9026,
     "외전_갈석": 9014,
-    "외전_곽승": 9016,
+    "외전_곽승": 9026,
     "외전_곽호": 9015,
     "외전_구양열": 9017,
     "외전_구양학": 9014,
     "외전_구참": 9014,
-    "외전_나곤": 9015,
-    "외전_단철웅": 9014,
+    "외전_나곤": 9024,
+    "외전_단철웅": 9026,
     "외전_당한": 9014,
     "외전_마철": 9014,
     "외전_맹추": 9015,
-    "외전_모용백": 9014,
+    "외전_모용백": 9022,
     "외전_묵현": 9014,
     "외전_방노삼": 9014,
     "외전_백공": 9014,
@@ -533,20 +537,20 @@ PICK = {
     "외전_아누": 9014,
     "외전_엄대웅": 9014,
     "외전_연비": 9014,
-    "외전_염칠": 9015,
+    "외전_염칠": 9026,
     "외전_오독문주": 9014,
     "외전_위소경": 9016,
     "외전_육종": 9015,
     "외전_육허": 9014,
     "외전_적암": 9015,
-    "외전_정심": 9014,
+    "외전_정심": 9022,
     "외전_제갈문": 9014,
     "외전_진무": 9014,
     "외전_철필": 9015,
     "외전_총채주": 9014,
     "외전_추살수좌": 9014,
     "외전_하문겸": 9014,
-    "외전_하백": 9015,
+    "외전_하백": 9025,
     "외전_혜명": 9014,
     "외전_홍의": 9014,
     "위소": 9015,
@@ -559,7 +563,7 @@ PICK = {
     "잠화당주": 9014,
     "잠화무인": 9014,
     "잠화장로": 9014,
-    "잠화표사": 9014,
+    "잠화표사": 9026,
     "장강": 9015,
     "장강수적": 9014,
     "장경각": 9015,
@@ -567,17 +571,17 @@ PICK = {
     "장원집사": 9014,
     "장칠": 9018,
     "장터": 9015,
-    "장터상인": 9015,
+    "장터상인": 9027,
     "적면마": 9016,
-    "적연": 9015,
-    "전대천마잔영": 9015,
+    "적연": 9028,
+    "절정고수": 9026,
     "젊은협객": 9014,
     "점소이": 9014,
     "점창산": 9014,
     "점창장로": 9014,
     "점창제자": 9014,
     "정마대전": 9015,
-    "정연사태": 9014,
+    "정연사태": 9024,
     "정자": 9014,
     "정파명숙": 9014,
     "제갈세가": 9015,
@@ -593,14 +597,15 @@ PICK = {
     "천마봉": 9014,
     "천마봉_정상": 9014,
     "천마사냥개": 9015,
+    "천마친위대": 9022,
     "천하도전자": 9014,
     "철갑현귀": 9017,
     "철목": 9015,
-    "철봉승": 9014,
+    "철봉승": 9032,
     "철혈대원": 9017,
     "청성산": 9016,
     "청성장로": 9014,
-    "청송자": 9014,
+    "청송자": 9023,
     "청허진인": 9014,
     "초량": 9014,
     "초원": 9015,
@@ -609,7 +614,7 @@ PICK = {
     "파랑": 9015,
     "폐광": 9014,
     "포도대장": 9014,
-    "표국": 9015,
+    "표국": 9022,
     "피연못": 9018,
     "하오문_골목": 9015,
     "하오문주": 9014,
@@ -620,27 +625,28 @@ PICK = {
     "혁련수": 9014,
     "혁련철": 9015,
     "혁천": 9014,
-    "현상금꾼": 9015,
+    "현상금꾼": 9026,
     "혈교산사": 9014,
     "혈교수련자": 9016,
     "혈교우호법": 9014,
-    "혈교혈사": 9014,
-    "혈교혈승": 9014,
+    "혈교혈사": 9029,
+    "혈교혈승": 9031,
     "혈교혈위대": 9014,
     "혈마귀졸": 9014,
     "혈마대귀": 9014,
+    "혈마미완": 9024,
     "형장": 9017,
     "호교대": 9016,
     "혼례장": 9014,
     "홍매": 9014,
-    "화경마인": 9015,
+    "화경마인": 9028,
     "화산": 9015,
     "화산장로": 9015,
     "황하나루": 9015,
-    "흑룡": 9015,
-    "흑사방향주": 9014,
+    "흑룡": 9023,
+    "흑사방향주": 9026,
     "흑아": 9016,
-    "흑풍채두목": 9014,
+    "흑풍채두목": 9022,
 }
 
 def run(path, seed, key, kind, body, bg, wk, extra):
