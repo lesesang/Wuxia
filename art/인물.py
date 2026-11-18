@@ -8,6 +8,7 @@ STYLE = ("manhwa cover art, korean webtoon key visual, murim, wuxia, chinese mar
          "polished digital painting with clean edges, crisp lineart, high contrast, cool cinematic color grading, strong rim light, sharp shadows, "
          "wind, flowing hair and robes, semi-realistic manhwa face, mature handsome face, natural oval face, balanced facial proportions, "
          "natural jawline, defined nose bridge, deep-set sharp eyes, natural eye size, layered robes, detailed background, scenery, atmospheric depth, "
+         "1.1::intricate details, detailed hair strands, intricate embroidery, fine fabric texture, sharp focus::, "
          "1.2::detailed hands, beautiful hands, anatomically correct hands, natural finger placement, five fingers::, "
          "correct anatomy")
 # 병기를 든 인물에게만 붙인다. 맨손 인물에게 붙이면 없는 병기가 그려진다
@@ -22,9 +23,9 @@ UC = ("caucasian, european, western face, blonde hair, modern hairstyle, slicked
       "missing fingers, fused fingers, extra hands, deformed hands, deformed weapon, broken weapon, ugly face, deformed face, "
       "asymmetrical eyes, bad anatomy, ornate weapon, fantasy weapon, multiple weapons, western clothes, fantasy armor, glasses, "
       "bad hands, malformed hands, extra fingers, too many fingers, claw hands, wrong grip, floating weapon, weapon merging with hand, "
-      "bent blade, warped blade, blurry weapon, melted metal")
-HERO = {"남": "1boy, solo, wuxia protagonist, young man, early twenties, handsome, refined facial features, athletic build, broad shoulders, heroic, charismatic, dignified posture",
-        "녀": "1girl, solo, wuxia protagonist, young woman, early twenties, beautiful, elegant refined features, clear bright eyes, slender athletic build, heroic, charismatic, dignified posture"}
+      "bent blade, warped blade, blurry weapon, melted metal, blurry, smudged lines, messy lineart, flat shading, low detail")
+HERO = {"남": "1boy, solo, wuxia protagonist, east asian young man, early twenties, handsome, refined facial features, athletic build, broad shoulders, heroic, charismatic, dignified posture",
+        "녀": "1girl, solo, wuxia protagonist, east asian young woman, early twenties, beautiful, elegant refined features, clear bright eyes, slender athletic build, heroic, charismatic, dignified posture"}
 POSE = "three-quarter view, standing, contrapposto, looking at viewer, upper body"
 SEED = {"남": 7013, "녀": 8013}
 
@@ -61,7 +62,7 @@ SIDE = [
   "direct heir of the sichuan tang poison clan, black hair, neat high ponytail with a jade pin, cold intelligent green eyes, black inner robe, dark green outer robe with silver bamboo embroidery, single black leather glove on the right hand, needle case and small medicine pouches at the belt, three thin steel needles held between gloved fingers, calm calculating expression",
   "sword, spear"),
  ("외전빙궁", "남녀", "frozen northern sea, ice palace of the north sea in the distance, gentle snowfall, pale blue sky",
-  "direct disciple of the north sea ice palace, 1.3::long silver hair, shining silver-white hair, clear sky blue eyes, blue irises::, porcelain skin, white hanfu with pale blue snowflake embroidery, white fur collar, frost clinging to the sleeves, visible cold breath, right palm raised with swirling frost mist, cold serene expression, mature face, sharp elegant features",
+  "direct disciple of the north sea ice palace, 1.3::long silver hair, shining silver-white hair, clear sky blue eyes, blue irises::, porcelain skin, white hanfu with pale blue snowflake embroidery, white fur collar, frost clinging to the sleeves, visible cold breath, right palm raised with swirling frost mist, cold serene expression, 1.2::mature face, adult, sharp elegant features, narrow cool eyes::",
   "weapon, sword, holding weapon, halo, ring, cute, blush, round face, black hair, dark hair, brown eyes, black eyes, red eyes"),
  ("외전매화", "남녀", "plum blossom trees on the steep cliffs of mount hua, falling plum petals, small thatched hut on a ledge, morning mist",
   "plum blossom swordsman of mount hua and last disciple of a legendary old swordsman, black hair, long hair in a half updo with a plum blossom hairpin, clear determined eyes, white hanfu with pink plum blossom embroidery, pale rose sash, jian sheathed at the left hip in a white scabbard, plum blossom tassel, right hand resting on the hilt, gentle resolute smile",
@@ -142,9 +143,9 @@ SIDE = [
 
 # (파일 이름, 성별, 배경, 인물, 더 뺄 것). 주요 인물은 시드 9013
 NPC = [
- ("천마", "남", "summit of the heavenly demon peak above a sea of storm clouds, dark night sky with crimson lightning, far below a vast army of kneeling cultists with crimson banners, falling snow",
-  "1boy, solo, the heavenly demon, ruler of the demonic cult, ageless man who looks in his thirties, overwhelmingly handsome, cold majestic face, long black hair billowing in the wind, glowing crimson eyes, black and crimson imperial robe with gold dragon embroidery flowing in the wind, black jade crown, seated on a black stone throne carved with dragons, cowboy shot, the figure filling the frame, sitting upright with both hands resting on the armrests, back straight, head slightly raised, black flame aura rising like smoke, overwhelming godlike presence, looking down at viewer, low angle, from below, dramatic lighting, majestic, cowboy shot",
-  "weapon, holding weapon, sword, horns, smile, hand on chin, hand on face, slouching"),
+ ("천마", "남", "black stone throne platform on the summit of the heavenly demon peak, dark storm clouds with crimson lightning, crimson banners, falling snow",
+  "1boy, solo, the heavenly demon, ruler of the demonic cult, ageless man who looks in his thirties, overwhelmingly handsome, cold majestic face, long black hair billowing in the wind, glowing crimson eyes, black and crimson imperial robe with gold dragon embroidery flowing in the wind, black jade crown, 1.4::upper body, portrait, close-up, the figure filling the frame::, seated on a black stone throne carved with dragons, sitting upright with both hands resting on the armrests, back straight, head slightly raised, black flame aura rising like smoke, overwhelming godlike presence, looking down at viewer, slightly from below, dramatic lighting, majestic",
+  "weapon, holding weapon, sword, horns, smile, hand on chin, hand on face, slouching, full body, wide shot, small figure, distant, crowd"),
  ("혈마", "남", "vast underground temple of the blood sect, a still lake of dark blood, red mist drifting low over the surface, ancient carved stone pillars, grey-robed cultists prostrating far in the background, dim crimson light",
   "1boy, solo, the founder of the blood sect revived in a pool of blood, tall imposing man who looks in his forties, cold sharp handsome face, long straight dark crimson hair falling loose past the shoulders, deep red eyes with a faint glow, pale skin, thin dark red veins faintly visible on the neck and hands, dark crimson robe over a black inner robe with faded gold patterns, wide sleeves, standing tall on a black stone altar at the edge of the blood lake, body turned slightly, one hand behind his back, the other hand raised at chest height with a thin thread of blood mist curling from the fingertips, robe and hair stirred by a faint wind, dark red qi aura shimmering around the shoulders, cold contemptuous gaze down at viewer, calm terrifying majesty, three-quarter view, low angle, dramatic red rim light, cowboy shot",
   "weapon, holding weapon, staff, gore, horns, crown, floating hair, smile, open mouth, fangs, exaggerated, skull"),
