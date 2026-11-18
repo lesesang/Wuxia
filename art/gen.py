@@ -17,8 +17,12 @@ body={"input":base,"model":"nai-diffusion-4-5-full","action":"generate","paramet
  "negative_prompt":UC,
  "characterPrompts":[{"prompt":char,"uc":"","center":{"x":0.5,"y":0.5},"enabled":True}]}}
 open(name+".json","w").write(json.dumps(body))
-r=subprocess.run(["curl","-sS","-o",name+".zip","-w","%{http_code}","-X","POST","https://image.novelai.net/ai/generate-image",
-  "-H","Content-Type: application/json","-H","Authorization: Bearer dummy","--data-binary","@"+name+".json"],capture_output=True,text=True)
+import time
+for attempt in range(8):
+    r=subprocess.run(["curl","-sS","-o",name+".zip","-w","%{http_code}","-X","POST","https://image.novelai.net/ai/generate-image",
+      "-H","Content-Type: application/json","-H","Authorization: Bearer dummy","--data-binary","@"+name+".json"],capture_output=True,text=True)
+    if r.stdout!="429": break
+    time.sleep(20*(attempt+1))  # 무료 조건은 한 번에 한 장만 받으므로 다른 생성이 끝나기를 기다린다
 print(name,r.stdout,r.stderr[:300])
 if r.stdout=="200":
     import zipfile
