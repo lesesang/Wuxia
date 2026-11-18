@@ -225,7 +225,7 @@ P("표국국주", "남", "head of an escort agency, fifties, stern dignified fac
 P("촌장", "남", "village elder, seventies, white beard, kind tired face, plain robe, walking cane", "village gate with an old tree", "작", "sword")
 P("기녀", "녀", "courtesan musician, twenties, elegant beauty, hair ornaments, silk robes, holding a pipa", "pleasure house with silk curtains", "작", "sword")
 P("서생", "남", "young scholar, twenties, gentle timid face, scholar hat, light robe, holding a book", "study with books and a window", "작", "sword")
-P("포두", "남", "local constable, middle-aged man in his forties, strict weathered face, short black beard, dark red and black constable uniform, black hat, saber at the hip", "magistrate office courtyard in daylight, grey stone and wooden buildings", "무", "monochrome red, red tint, red background")
+P("포두", "남", "local constable, middle-aged man in his forties, strict weathered face, short black beard, dark red and black traditional constable robe, soft black cloth headwrap of a ming dynasty yamen runner, saber at the hip", "magistrate office courtyard in daylight, grey stone and wooden buildings", "무", "monochrome red, red tint, red background, peaked cap, military cap, police hat, visor, modern uniform")
 
 # ---------------------------------------------------------------- 짐승과 영물
 B("늑대무리", "pack of starving winter wolves, thin grey wolves with bared fangs, glowing eyes", "snowy forest at night")
@@ -300,6 +300,7 @@ PICK = {
     "구파협객": 9014,
     "권마의그림자": 9014,
     "귀도객": 9015,
+    "귀문술사": 9015,
     "금섬": 9015,
     "금안조": 9014,
     "금의위밀정": 9014,
@@ -328,6 +329,7 @@ PICK = {
     "만년빙잠": 9015,
     "맹순찰조": 9015,
     "맹주호법": 9015,
+    "맹집법사": 9015,
     "묘지기": 9014,
     "무당산": 9015,
     "무당진인": 9014,
@@ -351,6 +353,7 @@ PICK = {
     "서고": 9015,
     "서생": 9015,
     "설란": 9015,
+    "설백": 9015,
     "설표": 9014,
     "세가공자": 9015,
     "세가무사": 9015,
@@ -362,8 +365,10 @@ PICK = {
     "수적두목": 9015,
     "신교분타": 9014,
     "신교사자": 9015,
+    "십대고수": 9014,
     "십이마장": 9014,
     "십이마장귀곡": 9014,
+    "십이마장백골": 9015,
     "십이마장소면": 9014,
     "십이마장흑풍": 9014,
     "십팔동인": 9015,
@@ -426,10 +431,12 @@ PICK = {
     "장원집사": 9014,
     "장터": 9015,
     "장터상인": 9015,
+    "적면마": 9014,
     "적연": 9015,
     "전대천마잔영": 9015,
     "젊은협객": 9014,
     "점소이": 9014,
+    "점창장로": 9014,
     "점창제자": 9014,
     "정마대전": 9015,
     "정연사태": 9014,
@@ -445,6 +452,7 @@ PICK = {
     "천하도전자": 9014,
     "철갑현귀": 9014,
     "철봉승": 9014,
+    "청성장로": 9014,
     "청송자": 9014,
     "청허진인": 9014,
     "촌장": 9014,
