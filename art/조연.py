@@ -224,7 +224,7 @@ P("소운진인", "남", "hermit taoist of wudang, seventies, gentle face, long 
 P("유청운", "남", "plum blossom swordsman of mount hua, twenties, handsome serious face, topknot, white robe with plum blossom embroidery, sword", "mount hua cliff with plum blossoms")
 P("마진", "남", "iron rake, ferry hall master of the unorthodox alliance, forties, rough scarred face, wet black robe, iron rake weapon", "river ferry at dusk")
 P("구양천", "남", "elder of the martial alliance, seventies, dignified white beard, white robe with gold trim, staff", "alliance council hall", "작", "sword")
-P("도각", "남", "iron bell necromancer monk of the ghost gate sect, fifties, gaunt face, shaved head, grey robe, iron bell and a bone staff, blue ghost fires", "graveyard with blue lanterns")
+P("도각", "남", "iron bell necromancer monk of the ghost gate sect, man in his fifties, gaunt hollow-cheeked human face with sunken dark eyes, natural skin, shaved head, grey robe, small iron bell in one hand and a staff in the other, blue ghost fires floating around", "graveyard at night with blue lanterns", "무", "skull, skull face, skeleton, bone, undead")
 P("마랑", "녀", "black spider, poison woman, thirties, pale beautiful face, dark lips, black hair with spider pins, black and purple robe, poison threads between fingers", "dark room with spider webs", "작")
 P("상한", "남", "patrol captain of the ice palace, thirties, cold handsome face, silver hair, white fur armor, ice spear", "frozen sea at dusk")
 P("육청", "남", "head plum blossom swordsman of mount hua, thirties, sharp proud face, topknot with a plum blossom pin, white and red robe, sword", "mount hua training ground with plum trees")
