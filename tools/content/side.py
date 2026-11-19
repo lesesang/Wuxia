@@ -39,7 +39,11 @@ E=s9.E; M=s9.M; V=s9.V; GATE=s9.GATE
 
 def content(short, origin, name, desc):
     "출신의 신공 인연. 신공 세 사건의 키는 short+'_신공_'으로 시작한다"
-    CONTENT[short+"신공"]={"name":name,"cost":15,"desc":desc,"origin":origin,"group":"외전 전용","side":True}
+    CONTENT[short+"신공"]={"name":name,"cost":10,"desc":desc,"origin":origin,"group":"출신 전용","side":True}
+
+def bond(key, origin, name, desc, cost=8):
+    "출신의 인연. 그 외전에서만 찾아온다. 사건에는 requires.unlocked를 둔다"
+    CONTENT[key]={"name":name,"cost":cost,"desc":desc,"origin":origin,"group":"출신 전용","side":True}
 
 def deep_text(origin, depth, c1, c4): s7.DEEP_ORIGIN.setdefault(origin,{})[depth]={"1":c1,"4":c4}
 def deeper(event, hyul, geop, cb): STORY[event]["deeper"]={"혈풍":hyul,"겁화":geop,"천붕":cb}

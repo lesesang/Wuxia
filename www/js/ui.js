@@ -549,9 +549,7 @@ function shopPanels(meta) {
     const seen = endings.filter((e) => meta.endings_seen.includes(e)).length;
     return `<div class="pick-row"><div class="pick-main"><div class="pick-name">${esc(o.name)} <span class="rarity">결말 ${seen}/${endings.length}</span></div><p class="pick-desc">${esc(o.goal)}</p></div></div>`;
   }).join("");
-  const sideContent = byOrigin(Object.entries(DB.karma.content).filter(([k, c]) => c.side && !meta.content.includes(k)), ([, c]) => c.origin)
-    .map(([k, c]) => shopRow(esc(c.name), `<p class="pick-desc">${esc(c.desc)}</p>${originOnly(c.origin, meta)}`, "buy-content", k, c.cost, meta, "해금", !open(c.origin))).join("");
-  const sides = `<p class="section-note">외전의 출신은 천마봉으로 가지 않고, 같은 강호의 같은 십 년을 저마다의 목표로 걷습니다. 길은 본편보다 거칩니다.</p>${sideOpen(meta) ? "" : `<p class="section-note">생사경 결말을 한 번이라도 보면 열립니다.</p>`}${sideRows || emptyNote("모든 외전을 해금했습니다.")}${ownedSides ? `<h4 class="shop-group">해금한 외전</h4>${ownedSides}` : ""}${sideContent ? `<h4 class="shop-group">외전 출신의 신공</h4>${sideContent}` : ""}`;
+  const sides = `<p class="section-note">외전의 출신은 천마봉으로 가지 않고, 같은 강호의 같은 십 년을 저마다의 목표로 걷습니다. 길은 본편보다 거칩니다.</p>${sideOpen(meta) ? "" : `<p class="section-note">생사경 결말을 한 번이라도 보면 열립니다.</p>`}${sideRows || emptyNote("모든 외전을 해금했습니다.")}${ownedSides ? `<h4 class="shop-group">해금한 외전</h4>${ownedSides}` : ""}`;
   const levels = manorLevels(meta);
   const gate = gateCost(meta);
   const gateRow = meta.manor_gate
@@ -599,8 +597,8 @@ function shopPanels(meta) {
     .filter((g) => upgradeEntries(g).length)
     .map((g) => `${groupHead(g)}${upgradeEntries(g).map(upgradeRow).join("")}`).join("");
   const contentRow = ([k, c]) => shopRow(esc(c.name), `<p class="pick-desc">${esc(c.desc)}</p>${originOnly(c.origin, meta)}`, "buy-content", k, c.cost, meta, "해금", !open(c.origin));
-  const contentLeft = Object.entries(DB.karma.content).filter(([k, c]) => !c.side && !meta.content.includes(k));
-  const contentGroups = [...new Set(Object.values(DB.karma.content).filter((c) => !c.side).map((c) => c.group))];
+  const contentLeft = Object.entries(DB.karma.content).filter(([k]) => !meta.content.includes(k));
+  const contentGroups = [...new Set(Object.values(DB.karma.content).map((c) => c.group))];
   const contentFilter = groupFilter("content", contentGroups);
   const contentList = contentGroups.filter((g) => contentFilter.on === "전체" || contentFilter.on === g).map((g) => {
     const entries = contentLeft.filter(([, c]) => c.group === g);
@@ -625,7 +623,7 @@ function shopPanels(meta) {
     manor,
     trait: filterRow() + (traits || emptyNote("이 갈래의 자질을 모두 해금했습니다.")),
     upgrade: `<p class="section-note">기틀은 장착하지 않아도 모든 강호행에 적용됩니다. 출신 전용 항목은 그 출신을 해금하면 살 수 있습니다.</p>${upgrades}`,
-    content: `<p class="section-note">인연은 본편의 강호행에서 찾아옵니다. 외전 출신의 신공 인연은 외전 칸에 있습니다. 출신 전용 인연은 그 출신을 해금하면 살 수 있습니다.</p>${content || emptyNote("모든 인연을 해금했습니다.")}`,
+    content: `<p class="section-note">인연은 본편의 강호행에서 찾아옵니다. 출신 전용 인연은 그 출신으로 걷는 강호행에서만 찾아오고, 외전 출신의 인연은 그 외전에서 찾아옵니다. 그 출신을 해금하면 살 수 있습니다.</p>${content || emptyNote("모든 인연을 해금했습니다.")}`,
     legacy,
     reward: rewardPanel(meta),
   };

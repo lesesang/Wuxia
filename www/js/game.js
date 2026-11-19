@@ -18,6 +18,7 @@ import {
 } from "./rules.js";
 import { halpun, josa } from "./josa.js";
 
+const SIDE_WEAKEN_CAP = 30; // 외전의 마지막 상대는 인연으로 이만큼까지 약해진다
 const FINAL_UNLEASH_FROM = 880; // 평균 기량이 이보다 높으면 천마가 숨긴 힘을 꺼낸다
 const FINAL_UNLEASH_HP = 0.42;
 const FINAL_UNLEASH_ATTACK = 0.2;
@@ -429,6 +430,12 @@ export class Game {
       enemy.maxHp = Math.max(1, Math.round(enemy.maxHp * rough.hp));
       enemy.hp = enemy.maxHp;
       enemy.attack = Math.max(1, Math.round(enemy.attack * rough.attack));
+      // 출신의 인연으로 그 이야기만의 상대를 미리 흔들어 두었다
+      const weaken = enemy.key.startsWith("외전_") ? Math.min(this.player.bossWeaken, SIDE_WEAKEN_CAP) : 0;
+      if (weaken && !spar) {
+        enemy.maxHp = Math.max(1, Math.round(enemy.maxHp * (100 - weaken) / 100));
+        enemy.hp = enemy.maxHp;
+      }
     }
     // 깊은 강호의 천마가 더 지닌 괴공. 같은 괴공은 깊은 쪽으로 바꾼다
     for (const q of enemy.key === "천마" ? level.final_quirks || [] : []) {

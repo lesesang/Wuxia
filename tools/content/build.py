@@ -13,7 +13,7 @@ import s12
 import side
 # 새 외전 출신. 한 파일에 하나씩
 _OLD_FOES=set(dsl.ENEMIES)
-NEW_SIDE=['o_sorim','o_mudang','o_ami','o_gongdong','o_moyong','o_sadoryeon','o_jegal','o_dark','o_gwimun','o_nokrim','o_heuksa','o_mangnani','o_cheongseong','o_jongnam','o_singyo','o_hongsu','o_jeomchang','o_gonryun','o_gwangbu','o_sagong','o_wiso','o_dark2','side_more']
+NEW_SIDE=['o_sorim','o_mudang','o_ami','o_gongdong','o_moyong','o_sadoryeon','o_jegal','o_dark','o_gwimun','o_nokrim','o_heuksa','o_mangnani','o_cheongseong','o_jongnam','o_singyo','o_hongsu','o_jeomchang','o_gonryun','o_gwangbu','o_sagong','o_wiso','o_dark2','side_more','bonds_a','bonds_b','bonds_c']
 for _m in NEW_SIDE: __import__(_m)
 D=os.path.join(ROOT,'www','data','')
 def load(n): return json.load(open(D+n+'.json'))
@@ -206,8 +206,26 @@ for _k,_v in K['content'].items():
     if _v.get('side') and not any(x.get('side') for x in list(K['content'].values())[list(K['content']).index(_k)+1:]):
         for _a,_b in side.CONTENT.items(): _C[_a]=_b
 for _a,_b in side.CONTENT.items(): _C.setdefault(_a,_b)
+# 외전 출신의 인연도 출신 전용 묶음에 둔다. 신공 인연은 본편과 같은 값이고, 합쳐진 최고 무공의 이름을 쓴다
+_REN={"태을직검":"천뢰검법","무상선정공":"달마심공","태청무극검":"태극검","양의귀원공":"태극심공","한매삼영검":"이십사수매화검법","천라추혼침":"만천화우","만년설붕검":"대라검법","섬전탈혼검":"사일검법","연운비천창":"회천창법","목우유성침":"구궁연노"}
+for _k,_v in _C.items():
+    if _v.get('side'):
+        _v['group']='출신 전용'
+        if _k.endswith('신공'): _v['cost']=10
+        for _a,_b in _REN.items(): _v['desc']=_v['desc'].replace(_a,_b)
+# 상점 데이터는 묶음, 출신 차례, 값 순
+_groups=[]
+for _v in _C.values():
+    if _v.get('group') not in _groups: _groups.append(_v.get('group'))
+_ord=[None]+O['order']+O['side_order']
+_C=dict(sorted(_C.items(), key=lambda kv:(_groups.index(kv[1].get('group')), _ord.index(kv[1].get('origin')), kv[1].get('cost',0))))
 K['content']=_C
 save('karma',K)
+_MK=load('market')
+for _k,_v in dsl.MARKET.items():
+    assert _k not in _MK or _MK[_k].get('origin')==_v['origin'], ('물건 이름 겹침',_k)
+    _MK[_k]=_v
+save('market',_MK)
 print(len(dsl.STORY),len(dsl.RANDOM),len(dsl.ENDINGS),len(dsl.ENEMIES))
 
 # 장원에서 얻는 것을 키우고 장원의 크기에 따라 더 커지게 한다

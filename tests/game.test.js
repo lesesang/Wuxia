@@ -902,6 +902,24 @@ test("잠긴 출신과 자리를 넘는 특성은 막힌다", () => {
   assert.deepEqual(game.player.traits, ["금전운"]);
 });
 
+test("본편과 외전의 모든 출신이 같은 수와 종류의 상점 항목을 지닌다", () => {
+  for (const key of [...DB.origins.order, ...DB.origins.side_order]) {
+    const side = !!DB.origins.origins[key].side;
+    assert.equal(Object.values(DB.traits).filter((t) => t.origin === key).length, 2, `${key} 자질`);
+    assert.equal(Object.values(DB.karma.upgrades).filter((u) => u.origin === key).length, 1, `${key} 기틀`);
+    const bonds = Object.entries(DB.karma.content).filter(([, c]) => c.origin === key);
+    assert.equal(bonds.length, 3, `${key} 인연`);
+    for (const [k, c] of bonds) {
+      assert.equal(c.group, "출신 전용", k);
+      assert.equal(!!c.side, side, `${k} 외전 표시`);
+      assert.ok(Object.values(DB.events).some((e) => e.requires?.unlocked === k), `${k} 사건`);
+    }
+    // 하나는 출신의 신공 셋, 하나는 전용 신물을 준다
+    const relics = Object.values(DB.market).filter((m) => m.origin === key && m.grade === "신물");
+    assert.ok(relics.length >= 1, `${key} 신물`);
+  }
+});
+
 test("출신 전용 항목은 그 출신을 해금해야 산다", () => {
   const data = loadMeta();
   data.current_karma = 999;

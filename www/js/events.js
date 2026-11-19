@@ -713,6 +713,8 @@ export function applyEffects(player, effects) {
 
   for (const flag of effects.flags || []) player.addFlag(flag);
   if (effects.boss_weaken) player.bossWeaken += effects.boss_weaken;
+  // 외전의 마지막 상대를 미리 흔들어 둔다. 본편의 준비와 섞이지 않게 이름을 달리 둔다
+  if (effects.final_weaken) player.bossWeaken += effects.final_weaken;
 
   if ("fame" in effects) {
     const before = player.fame;
