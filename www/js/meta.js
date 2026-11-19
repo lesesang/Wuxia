@@ -88,7 +88,7 @@ export function buyUpgrade(key) {
   const data = loadMeta();
   const level = data.upgrades[key] || 0;
   const cost = DB.karma.upgrades[key]?.costs[level];
-  if (cost === undefined || data.current_karma < cost) return false;
+  if (cost === undefined || data.current_karma < cost || !originReady(DB.karma.upgrades[key].origin, data)) return false;
   data.current_karma -= cost;
   data.upgrades[key] = level + 1;
   // 새로 올리면 그 단계까지 쓰는 것으로 돌아간다
@@ -211,7 +211,7 @@ export const nextReward = (data = loadMeta()) => DB.karma.rewards.find((r) => da
 export function buyContent(key) {
   const data = loadMeta();
   const cost = DB.karma.content[key]?.cost;
-  if (cost === undefined || data.content.includes(key) || data.current_karma < cost) return false;
+  if (cost === undefined || data.content.includes(key) || data.current_karma < cost || !originReady(DB.karma.content[key].origin, data)) return false;
   data.current_karma -= cost;
   data.content.push(key);
   saveMeta(data);
@@ -297,7 +297,10 @@ export function dropLegacy(index) {
 }
 
 export const unlockOrigin = (key, cost) => unlock("unlocked_origins", key, cost);
-export const unlockTrait = (key, cost) => unlock("unlocked_traits", key, cost);
+export const unlockTrait = (key, cost) => (originReady(DB.traits[key]?.origin) ? unlock("unlocked_traits", key, cost) : false);
+
+/** 출신 전용 항목은 그 출신을 해금해야 살 수 있다 */
+export const originReady = (origin, data = loadMeta()) => !origin || data.unlocked_origins.includes(origin);
 
 function addToList(listName, keys) {
   if (!keys.length) return;
