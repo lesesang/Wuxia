@@ -400,7 +400,7 @@ test("무적에 가까운 조합을 막는 끝이 있다", () => {
   b3.applyGimmickOnHit({ lifesteal: 18 }, 999999);
   assert.equal(p3.hp, 1 + Math.trunc(p3.maxHp() * 0.25));
   // 저절로 차는 기운은 한 싸움에 3할까지다
-  const [p4, b4] = rig(["무영비도", "양의귀원공"]);
+  const [p4, b4] = rig(["무영비도", "태극심공"]);
   p4.hp = 10;
   for (let i = 0; i < 40; i++) b4.tickEffects();
   assert.ok(p4.hp <= 10 + Math.ceil(p4.maxHp() * 0.31), `${p4.hp}`);
@@ -500,8 +500,7 @@ test("내상은 피해를 줄이고 회복으로 낫는다", () => {
 });
 
 test("적 중독은 합마다 피해를 준다", () => {
-  const p = new Player();
-  p.sect = "당가";
+  const p = new Player("외전당가");
   const enemy = new Enemy("산적");
   const battle = new Battle(p, enemy);
   battle.hits = () => true;
@@ -516,8 +515,8 @@ test("주화입마: 심경이 낮으면 마공 비기에 내상", () => {
   seed(1);
   const p = new Player();
   p.mind = 1;
-  p.learnSkill(new Skill("천마파천공"));
-  const skill = p.getSkill("천마파천공");
+  p.learnSkill(new Skill("권왕패천"));
+  const skill = p.getSkill("권왕패천");
   skill.secretUnlocked = true;
   const battle = new Battle(p, new Enemy("천마"));
   for (let i = 0; i < 10; i++) {
@@ -901,6 +900,24 @@ test("잠긴 출신과 자리를 넘는 특성은 막힌다", () => {
   assert.equal(game.player, null);
   game.start("무림초출", ["금전운", "철옹성", "전투광"]);
   assert.deepEqual(game.player.traits, ["금전운"]);
+});
+
+test("본편과 외전의 모든 출신이 같은 수와 종류의 상점 항목을 지닌다", () => {
+  for (const key of [...DB.origins.order, ...DB.origins.side_order]) {
+    const side = !!DB.origins.origins[key].side;
+    assert.equal(Object.values(DB.traits).filter((t) => t.origin === key).length, 2, `${key} 자질`);
+    assert.equal(Object.values(DB.karma.upgrades).filter((u) => u.origin === key).length, 1, `${key} 기틀`);
+    const bonds = Object.entries(DB.karma.content).filter(([, c]) => c.origin === key);
+    assert.equal(bonds.length, 3, `${key} 인연`);
+    for (const [k, c] of bonds) {
+      assert.equal(c.group, "출신 전용", k);
+      assert.equal(!!c.side, side, `${k} 외전 표시`);
+      assert.ok(Object.values(DB.events).some((e) => e.requires?.unlocked === k), `${k} 사건`);
+    }
+    // 하나는 출신의 신공 셋, 하나는 전용 신물을 준다
+    const relics = Object.values(DB.market).filter((m) => m.origin === key && m.grade === "신물");
+    assert.ok(relics.length >= 1, `${key} 신물`);
+  }
 });
 
 test("출신 전용 항목은 그 출신을 해금해야 산다", () => {
@@ -1761,12 +1778,22 @@ test("무공을 여럿 들고 시작하면 달이 가기 전에 쓸 무공을 �
   withKarma(0);
 });
 
+test("출신은 시작 성향과 출신의 보정을 지니고, 소속에는 보정이 없다", () => {
+  for (const k of [...DB.origins.order, ...DB.origins.side_order]) {
+    const o = DB.origins.origins[k];
+    assert.ok(Object.values(o.alignment || {}).reduce((a, b) => a + b, 0) > 0, k);
+    assert.ok(Object.keys(o.bonus || {}).length && o.bonus_text, k);
+  }
+  for (const s of Object.values(DB.sects)) assert.ok(!s.bonus, s.name);
+  assert.equal(new Player("하오문").alignment.사도, 60);
+});
+
 test("성향 자질은 희귀 이상이고 오를 때 더 오른다", () => {
   for (const t of Object.values(DB.traits)) {
     if (t.effects?.some((e) => e.type === "start_alignment" || e.type === "alignment_gain")) assert.ok(["희귀", "전설"].includes(t.rarity), t.name);
   }
   const p = new Player("무림초출", ["호연지기"]);
-  assert.equal(p.alignment.정도, 70);
+  assert.equal(p.alignment.정도, 70 + DB.origins.origins.무림초출.alignment.정도);
   p.adjustAlignment("정도", 40);
   assert.ok(p.alignment.정도 > 120, "오를 때 더 오른다");
   p.adjustAlignment("정도", 5000);
@@ -2258,7 +2285,7 @@ test("출신마다 전용 자질과 인연이 있고 그 출신만 쓴다", () =
   assert.ok(!game.player.traits.includes("창궁의혈통"), "다른 출신은 장착할 수 없다");
   game.start("남궁세가", ["창궁의혈통"]);
   assert.ok(game.player.traits.includes("창궁의혈통"));
-  assert.equal(game.player.skills.find((s) => s.key === "창궁검법").mastery, 80);
+  assert.equal(game.player.skills.find((s) => s.key === "창궁검법").mastery, 40 + DB.traits.창궁의혈통.effects.find((e) => e.type === "start_mastery").amount);
   data.unlocked_traits = [];
   saveMeta(data);
 });
@@ -3941,14 +3968,11 @@ test("사도나 마도를 걷는 무인에게는 무림맹주도 적으로 나�
   assert.ok(!seen(() => {}).has("무림맹주"));
 });
 
-test("문파의 최고 무공은 신공이고 아직 얻을 수 없으며, 문파의 고등급 무공은 그 소속의 사건에서만 나온다", () => {
-  const reserved = Object.keys(DB.skills).filter((k) => DB.skills[k].reserved);
-  assert.ok(reserved.length >= 15);
-  for (const k of reserved) {
+test("문파의 최고 무공은 그 소속의 외전 출신이 잇고, 문파의 고등급 무공은 그 소속의 사건에서만 나온다", () => {
+  assert.deepEqual(Object.keys(DB.skills).filter((k) => DB.skills[k].reserved), []);
+  for (const [k, sect] of [["달마심공", "외전소림"], ["태극검", "외전무당"], ["이십사수매화검법", "외전매화"], ["만천화우", "외전당가"], ["회천창법", "외전모용"], ["구궁연노", "외전제갈"]]) {
     assert.equal(DB.skills[k].grade, "신공", k);
-    assert.ok(DB.skills[k].school, k);
-    assert.ok(!Object.values(DB.market).some((i) => i.effects.some((e) => e.skill === k)), `${k} 장터`);
-    assert.ok(!Object.values(DB.enemies).some((e) => e.drop?.skill === k), `${k} 드롭`);
+    assert.equal(DB.skills[k].origin, sect, k);
   }
   const problems = [];
   const scan = (node, sect, where) => {
@@ -3974,7 +3998,7 @@ test("문파의 최고 무공은 신공이고 아직 얻을 수 없으며, 문�
 });
 
 test("무공의 품계가 위상에 맞는다", () => {
-  for (const [k, g] of [["타구봉법", "일절"], ["백보신권", "신공"], ["만천화우", "신공"], ["역근공", "일절"], ["달마심공", "신공"], ["태극검", "신공"], ["이십사수매화검법", "신공"], ["매화검법", "일절"], ["파산권", "명품"]]) assert.equal(DB.skills[k].grade, g, k);
+  for (const [k, g] of [["타구봉법", "일절"], ["만천화우", "신공"], ["역근공", "일절"], ["달마심공", "신공"], ["태극검", "신공"], ["이십사수매화검법", "신공"], ["매화검법", "일절"], ["파산권", "명품"]]) assert.equal(DB.skills[k].grade, g, k);
   // 문파의 비전은 장터에 나오지 않는다
   for (const k of ["매화검법", "역근공", "태극검", "타구봉법"]) assert.ok(!Object.values(DB.market).some((i) => i.effects.some((e) => e.skill === k)), k);
   assert.equal(DB.events.제안_개방.choices[0].outcomes[0].effects.skill, "오호곤법", "개방에 들어가자마자 방주의 봉법을 주지 않는다");

@@ -2,7 +2,7 @@
 import { DB } from "./data.js";
 import { randInt, rng } from "./rng.js";
 import {
-  ALIGN_CLASH, ALIGN_EASE, MAX_FAME, ALIGNMENT_CAP, alignValue, dominant, FOCUS_GAIN, hasEffect, newAlignment, originSect, sectBonus,
+  ALIGN_CLASH, ALIGN_EASE, MAX_FAME, ALIGNMENT_CAP, alignValue, dominant, FOCUS_GAIN, hasEffect, newAlignment, originSect, originBonus,
   startSkills, sumEffect,
 } from "./rules.js";
 import { josa } from "./josa.js";
@@ -349,7 +349,7 @@ export class Player {
   }
 
   gainSilver(amount) {
-    let percent = sumEffect(this.traits, "silver_rate", "percent") + sectBonus(this, "silver");
+    let percent = sumEffect(this.traits, "silver_rate", "percent") + originBonus(this, "silver");
     percent += alignValue(this.alignment, "사도", "silver");
     const gained = Math.trunc(amount * (1 + percent / 100) * SILVER_EASE);
     this.silver += gained;

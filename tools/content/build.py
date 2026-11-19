@@ -13,7 +13,7 @@ import s12
 import side
 # 새 외전 출신. 한 파일에 하나씩
 _OLD_FOES=set(dsl.ENEMIES)
-NEW_SIDE=['o_sorim','o_mudang','o_ami','o_gongdong','o_moyong','o_sadoryeon','o_jegal','o_dark','o_gwimun','o_nokrim','o_heuksa','o_mangnani','o_cheongseong','o_jongnam','o_singyo','o_hongsu','o_jeomchang','o_gonryun','o_gwangbu','o_sagong','o_wiso','o_dark2','side_more']
+NEW_SIDE=['o_sorim','o_mudang','o_ami','o_gongdong','o_moyong','o_sadoryeon','o_jegal','o_dark','o_gwimun','o_nokrim','o_heuksa','o_mangnani','o_cheongseong','o_jongnam','o_singyo','o_hongsu','o_jeomchang','o_gonryun','o_gwangbu','o_sagong','o_wiso','o_dark2','side_more','bonds_a','bonds_b','bonds_c']
 for _m in NEW_SIDE: __import__(_m)
 D=os.path.join(ROOT,'www','data','')
 def load(n): return json.load(open(D+n+'.json'))
@@ -58,6 +58,59 @@ O['origins']['외전매화']['chapters']['2']['desc']='스승이 떠나온 화�
 O['origins']['외전매화'].update(sect="화산",skip=["문파대사_화산"],desc="화산의 속가 매화검수이자 천하십대고수 매화노검 백송이 산을 떠나기 전 마지막으로 거둔 제자. 화산 뒷산 스승의 초막에서 매화검법과 스승의 검을 함께 받아 일류에 올랐다. 스승은 명부의 열째 자리를 비우고 편지 한 장 없이 사라졌다.")
 _h=O['origins']['외전혈승']; _h['end_turn']=120; _h['goal']='혈교의 순례승으로 개조의 의지를 거두어 혈마가 깨어나는 강림의 밤을 열고, 죽 한 그릇의 값을 마저 치른다'; _h['goal_short']='값을 치르는 날'; _h['chapters']['4']['desc']='빼앗긴 그릇을 되찾는 싸움. 그리고 강림의 밤.'; _h['chapters']['5']['desc']='혈마신교의 강호다. 죽 한 그릇의 값이 아직 남았다.'
 for k,v in {"외전빙궁":["북해고수"],"외전매화":["십대고수"],"외전수로":["수적두목"],"외전야수":["천마사냥개","남만술사","백액호","금안조","철갑현귀","불가사리","천년백사"],"외전혈승":["마교심판자","혈교우호법"]}.items(): O['origins'][k]['shun']=v
+# 출신마다 시작 성향과 출신의 보정. 소속의 보정은 두지 않는다
+_LBL={"damage":"주는 피해","damage_reduce":"받는 피해","crit":"회심의 일격 확률","evade":"경공 회피","heal_bonus":"심법 회복량","silver":"얻는 은자","poison":"공격이 적을 중독시킨다"}
+def _hp(n):
+    a,b=divmod(n,10); return (f"{a}할" if a else "")+(" " if a and b else "")+(f"{b}푼" if b else "")
+def _btext(b):
+    out=[]
+    for k,v in b.items():
+        if k=="poison": out.append(_LBL[k])
+        else: out.append(f"{_LBL[k]} {_hp(v)} {'감소' if k=='damage_reduce' else '증가'}")
+    return ", ".join(out)
+ORIGIN_TRAITS={
+ "무림초출":({"정도":30},{"damage":4,"damage_reduce":3}),
+ "남궁세가":({"정도":60},{"crit":8}),
+ "하북팽가":({"정도":60},{"damage":8}),
+ "표국표사":({"정도":40},{"damage_reduce":4,"silver":10}),
+ "개방제자":({"정도":60},{"heal_bonus":20,"damage_reduce":2}),
+ "권마계승":({"마도":40},{"damage":4,"crit":4}),
+ "혈지생환":({"정도":20,"마도":30},{"damage":4,"heal_bonus":15}),
+ "하오문":({"사도":60},{"evade":6,"silver":10}),
+ "외전당가":({"정도":60},{"poison":6}),
+ "외전빙궁":({"정도":40},{"damage_reduce":3,"heal_bonus":15}),
+ "외전매화":({"정도":60},{"crit":8}),
+ "외전살막":({"사도":60},{"crit":5,"evade":5}),
+ "외전수로":({"사도":60},{"evade":5,"silver":10}),
+ "외전혈승":({"마도":60},{"damage":4,"heal_bonus":15}),
+ "외전야수":({"마도":40},{"damage":5,"damage_reduce":3}),
+ "외전소림":({"정도":60},{"damage_reduce":6}),
+ "외전무당":({"정도":60},{"heal_bonus":30}),
+ "외전아미":({"정도":60},{"evade":10}),
+ "외전공동":({"정도":60},{"damage_reduce":4,"damage":3}),
+ "외전모용":({"정도":60},{"damage":5,"crit":3}),
+ "외전사도련":({"사도":60},{"damage":4,"silver":10}),
+ "외전제갈":({"정도":60},{"crit":4,"silver":10}),
+ "외전귀문":({"마도":60},{"damage":3,"poison":4}),
+ "외전녹림":({"사도":60},{"damage_reduce":3,"silver":10}),
+ "외전흑사":({"사도":60},{"silver":15,"crit":3}),
+ "외전망나니":({"사도":40},{"crit":6,"damage":3}),
+ "외전청성":({"정도":60},{"heal_bonus":15,"evade":5}),
+ "외전종남":({"정도":60},{"damage":4,"evade":4}),
+ "외전신교":({"마도":60},{"damage":8}),
+ "외전홍수":({"마도":60},{"crit":4,"evade":5}),
+ "외전점창":({"정도":60},{"crit":5,"evade":5}),
+ "외전곤륜":({"정도":60},{"heal_bonus":20,"damage_reduce":2}),
+ "외전광부":({"사도":40},{"damage_reduce":5,"damage":2}),
+ "외전사공":({"정도":30,"사도":30},{"damage_reduce":3,"heal_bonus":15}),
+ "외전위소":({"정도":40},{"damage_reduce":3,"damage":4}),
+}
+assert set(ORIGIN_TRAITS)==set(O['order'])|set(O['side_order']), set(O['order'])|set(O['side_order'])^set(ORIGIN_TRAITS)
+for _k,(_a,_b) in ORIGIN_TRAITS.items():
+    O['origins'][_k]['alignment']=_a; O['origins'][_k]['bonus']=_b; O['origins'][_k]['bonus_text']=_btext(_b)
+_S=load('sects')
+for _v in _S.values(): _v.pop('bonus',None); _v.pop('bonus_text',None)
+save('sects',_S)
 SK=load('skills')
 s9.patch_skills(SK,O)
 for k,v in side.SKILLS.items():
@@ -69,6 +122,10 @@ for _k,_s in SK.items():
     _g=(_s.get('category') or _s['type'])+':'+','.join(sorted(x for x in _s['gimmick'] if x not in('name','text')))
     if _g in _sig and (_k in side.SKILLS or _sig[_g] in side.SKILLS): print('묘리 겹침', _k, _sig[_g], _g)
     _sig.setdefault(_g,_k)
+# 문파와 세가의 최고 무공은 그 소속의 외전 출신이 잇는다. 같은 갈래의 무공과 이어진다
+for _k,(_l,_r,_s) in {"달마심공":("소림심법",5,"소림"),"태극검":("무당검",4,"무당"),"태극심공":("무당심법",5,"무당"),"이십사수매화검법":("매화검",4,"화산"),"만천화우":("당가암기",4,"당가"),"사일검법":("점창검",3,"점창"),"회천창법":("모용창",4,"모용"),"구궁연노":("제갈침",3,"제갈"),"천뢰검법":(None,None,"종남"),"대라검법":(None,None,"곤륜")}.items():
+    SK[_k].pop('school',None)
+    if _l: SK[_k]['lineage']=_l; SK[_k]['lineage_rank']=_r
 save('skills',SK)
 save('origins',O)
 # 적
@@ -136,6 +193,15 @@ T={}; last=[k for k,v in T0.items() if v.get('rarity')=='희귀' and not v.get('
 for k,v in T0.items():
     T[k]=v
     if k==last: T.update(dsl.TRAITS)
+# 출신 전용 자질과 기틀은 같은 값어치로 맞춘 표를 따른다(tools/check/shop_value.py)
+from shop_tune import TRAIT_TUNE, UPGRADE_TUNE
+for _k,_v in TRAIT_TUNE.items(): T[_k].update(_v)
+for _k,_v in UPGRADE_TUNE.items(): K['upgrades'][_k].update(_v)
+# 등급은 값을 따른다: 7 미만은 일반, 7 이상은 희귀. 자질 데이터는 등급, 출신 차례, 값 순
+for _v in T.values():
+    if not _v.get('hidden') and _v.get('rarity')!='전설': _v['rarity']='희귀' if _v['cost']>=7 else '일반'
+_RO=['일반','희귀','전설']; _OO=[None]+O['order']+O['side_order']
+T=dict(sorted(T.items(), key=lambda kv:(1 if kv[1].get('hidden') else 0, _RO.index(kv[1].get('rarity','일반')) if not kv[1].get('hidden') else 0, _OO.index(kv[1].get('origin')), kv[1].get('cost',0))))
 save('traits',T)
 K['achievements']=[a for a in K['achievements'] if not a['key'].startswith('외전')]+[
  {"key":"외전1","name":"곁길의 끝","desc":"외전 하나를 끝맺는다.","type":"sides","value":1,"karma":5},
@@ -149,8 +215,26 @@ for _k,_v in K['content'].items():
     if _v.get('side') and not any(x.get('side') for x in list(K['content'].values())[list(K['content']).index(_k)+1:]):
         for _a,_b in side.CONTENT.items(): _C[_a]=_b
 for _a,_b in side.CONTENT.items(): _C.setdefault(_a,_b)
+# 외전 출신의 인연도 출신 전용 묶음에 둔다. 신공 인연은 본편과 같은 값이고, 합쳐진 최고 무공의 이름을 쓴다
+_REN={"태을직검":"천뢰검법","무상선정공":"달마심공","태청무극검":"태극검","양의귀원공":"태극심공","한매삼영검":"이십사수매화검법","천라추혼침":"만천화우","만년설붕검":"대라검법","섬전탈혼검":"사일검법","연운비천창":"회천창법","목우유성침":"구궁연노"}
+for _k,_v in _C.items():
+    if _v.get('side'):
+        _v['group']='출신 전용'
+        if _k.endswith('신공'): _v['cost']=10
+        for _a,_b in _REN.items(): _v['desc']=_v['desc'].replace(_a,_b)
+# 상점 데이터는 묶음, 출신 차례, 값 순
+_groups=[]
+for _v in _C.values():
+    if _v.get('group') not in _groups: _groups.append(_v.get('group'))
+_ord=[None]+O['order']+O['side_order']
+_C=dict(sorted(_C.items(), key=lambda kv:(_groups.index(kv[1].get('group')), _ord.index(kv[1].get('origin')), kv[1].get('cost',0))))
 K['content']=_C
 save('karma',K)
+_MK=load('market')
+for _k,_v in dsl.MARKET.items():
+    assert _k not in _MK or _MK[_k].get('origin')==_v['origin'], ('물건 이름 겹침',_k)
+    _MK[_k]=_v
+save('market',_MK)
 print(len(dsl.STORY),len(dsl.RANDOM),len(dsl.ENDINGS),len(dsl.ENEMIES))
 
 # 장원에서 얻는 것을 키우고 장원의 크기에 따라 더 커지게 한다

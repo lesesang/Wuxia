@@ -5007,5 +5007,707 @@
     "grade": "양품",
     "consumable": true,
     "stock_qty": 1
+  },
+  "쌍생침갑": {
+    "name": "쌍생침갑",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "쌍둥이가 태어나던 해 가주가 두 짝으로 벼려 하나씩 쥐여 준 침갑. 두 짝이 모여야 침이 서로를 부른다. 암기에 맞음, 위력 +100",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 100,
+        "style": "암기"
+      }
+    ],
+    "grade": "신물",
+    "gimmick": {
+      "name": "서로 부르는 침",
+      "poison": 8,
+      "mark": {
+        "every": 3,
+        "percent": 45
+      },
+      "text": "적을 중독시킨다(독 위력 8), 세 번 맞힐 때마다 표식이 터져 피해가 4할 5푼 더해진다."
+    },
+    "origin": "외전당가",
+    "no_drop": true
+  },
+  "빙백수투": {
+    "name": "빙백수투",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "빙궁의 문지기 노인이 젊어서 끼던 장갑. 만년빙을 실처럼 뽑아 짰다고 한다. 장법에 맞음, 위력 +100",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 100,
+        "style": "장법"
+      }
+    ],
+    "grade": "신물",
+    "gimmick": {
+      "name": "얼음 실",
+      "frost": 4,
+      "guard": 8,
+      "power": 8,
+      "burn": 15,
+      "text": "위력 +8푼, 맞힌 적이 두 합 동안 준 피해의 1할 5푼을 더 입는다, 맞힐 때마다 한기가 스며 네 번 쌓이면 적이 한 합 얼어붙는다, 맞힌 합에 받는 피해 -8푼."
+    },
+    "origin": "외전빙궁",
+    "no_drop": true
+  },
+  "매화노검": {
+    "name": "매화노검",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "스승 백송이 마흔 해 동안 산문 밖에서 들던 검. 검집만 초막에 두고 사라졌던 그 칼날이다. 검법에 맞음, 위력 +100",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 100,
+        "style": "검법"
+      }
+    ],
+    "grade": "신물",
+    "gimmick": {
+      "name": "지는 매화",
+      "bleed": 8,
+      "crit": 8,
+      "crit_power": 20,
+      "text": "맞힌 피해의 8푼이 칼자국으로 남아 세 합 동안 피가 흐른다, 회심 확률 +8푼, 회심 위력 +2할."
+    },
+    "origin": "외전매화",
+    "no_drop": true
+  },
+  "무성": {
+    "name": "무성",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "막주의 칼들이 대대로 이어 쓴다는 칼. 칼날에 빛이 맺히지 않아 칼집에서 나와도 보이지 않는다. 도법에 맞음, 위력 +100",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 100,
+        "style": "도법"
+      }
+    ],
+    "grade": "신물",
+    "gimmick": {
+      "name": "보이지 않는 날",
+      "ambush": 40,
+      "execute": {
+        "below": 30,
+        "percent": 20
+      },
+      "text": "싸움의 첫 공격은 반드시 회심이 되고 위력 +4할, 적 체력 3할 이하에서 위력 +2할."
+    },
+    "origin": "외전살막",
+    "no_drop": true
+  },
+  "청교작살창": {
+    "name": "청교작살창",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "청교채의 채주들이 대대로 쥐던 작살창. 창끝의 미늘이 물살을 따라 깊어진다. 창법에 맞음, 위력 +100",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 100,
+        "style": "창법"
+      }
+    ],
+    "grade": "신물",
+    "gimmick": {
+      "name": "물살 미늘",
+      "pierce": 30,
+      "gash": {
+        "over": 8,
+        "percent": 25
+      },
+      "text": "적의 방어 3할 무시, 한 번에 적 최대 체력의 8푼 넘게 찌르면 상처가 벌어져 다음 공격의 피해가 2할 5푼 오른다."
+    },
+    "origin": "외전수로",
+    "no_drop": true
+  },
+  "피안선장": {
+    "name": "피안선장",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "개조가 순례할 때 짚었다는 선장. 머리의 고리 아홉 개가 피를 머금으면 울린다. 봉법에 맞음, 위력 +100",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 100,
+        "style": "봉법"
+      }
+    ],
+    "grade": "신물",
+    "gimmick": {
+      "name": "아홉 고리",
+      "lifesteal": 5,
+      "stun": 10,
+      "weaken": {
+        "percent": 12,
+        "rounds": 2
+      },
+      "text": "준 피해의 5푼을 체력으로 흡수, 맞힌 적의 위력을 2합 동안 1할 2푼 깎는다, 맞히면 1할 확률로 적이 다음 합에 손을 쓰지 못한다."
+    },
+    "origin": "외전혈승",
+    "no_drop": true
+  },
+  "산군발톱": {
+    "name": "산군발톱",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "산군 백액호가 한 세대 전 만수왕에게 내주었다는 발톱으로 만든 권갑. 맹약을 맺은 손에만 맞는다. 권법에 맞음, 위력 +100",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 100,
+        "style": "권법"
+      }
+    ],
+    "grade": "신물",
+    "gimmick": {
+      "name": "산군의 발톱",
+      "heavy": 20,
+      "grit": 8,
+      "power": 8,
+      "bleed": 8,
+      "text": "위력 +8푼, 맞힌 피해의 8푼이 발톱 자국으로 남아 세 합 동안 피가 흐른다, 적의 체력이 7할 넘게 남았으면 위력 +2할, 적에게 맞을 때마다 다음 공격 위력 +8푼(4할까지)."
+    },
+    "origin": "외전야수",
+    "no_drop": true
+  },
+  "항마선장": {
+    "name": "항마선장",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "장경각을 지키던 무승들이 대대로 짚던 곤. 각주가 사본 열두 권과 함께 내보낸 단 하나의 병기다. 봉법에 맞음, 위력 +100",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 100,
+        "style": "봉법"
+      }
+    ],
+    "grade": "신물",
+    "gimmick": {
+      "name": "항마의 곤",
+      "vs_side": {
+        "마도": 25
+      },
+      "guard": 6,
+      "text": "마도의 적에게 위력 +2할 5푼, 맞힌 합에 받는 피해 -6푼."
+    },
+    "origin": "외전소림",
+    "no_drop": true
+  },
+  "송문고검": {
+    "name": "송문고검",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "장문인 청허진인이 젊은 날 쓰다 폐관동 앞 바위에 꽂아 둔 고검. 송문의 소나무 결이 칼날에 남았다. 검법에 맞음, 위력 +100",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 100,
+        "style": "검법"
+      }
+    ],
+    "grade": "신물",
+    "gimmick": {
+      "name": "끝없는 원",
+      "tempo": 30,
+      "guard": 8,
+      "qi_back": 2,
+      "text": "운기, 경공, 도구를 쓴 다음 합의 공격 위력 +3할, 맞힌 합에 받는 피해 -8푼, 맞힐 때 내력 2푼 회복."
+    },
+    "origin": "외전무당",
+    "no_drop": true
+  },
+  "금정연검": {
+    "name": "금정연검",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "금정의 종루에 걸려 백 년 동안 종소리를 들었다는 검. 칼날이 울면 사람의 마음이 가라앉는다. 검법에 맞음, 위력 +100",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 100,
+        "style": "검법"
+      }
+    ],
+    "grade": "신물",
+    "gimmick": {
+      "name": "종루의 울림",
+      "delay": 30,
+      "guard": 8,
+      "qi_back": 2,
+      "text": "맞히면 3할 확률로 적의 다음 필살기가 한 합 늦춰진다, 맞힌 합에 받는 피해 -8푼, 맞힐 때 내력 2푼 회복."
+    },
+    "origin": "외전아미",
+    "no_drop": true
+  },
+  "장성고검": {
+    "name": "장성고검",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "공동의 시조가 장성 위에서 들었다는 넓은 검. 날이 두꺼워 모래바람에도 이가 빠지지 않는다. 검법에 맞음, 위력 +100",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 100,
+        "style": "검법"
+      }
+    ],
+    "grade": "신물",
+    "gimmick": {
+      "name": "성벽의 날",
+      "reach": {
+        "rounds": 3,
+        "percent": 20
+      },
+      "shatter": 6,
+      "text": "싸움의 첫 세 합 동안 받는 피해 -2할, 맞힐 때마다 적의 방어를 6푼씩 깎는다(4할까지)."
+    },
+    "origin": "외전공동",
+    "no_drop": true
+  },
+  "은연창": {
+    "name": "은연창",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "족보에 이름이 오르지 못한 아버지가 평생 남몰래 벼린 창. 은빛 창날에 제비 한 마리가 새겨져 있다. 창법에 맞음, 위력 +100",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 100,
+        "style": "창법"
+      }
+    ],
+    "grade": "신물",
+    "gimmick": {
+      "name": "담 밖의 제비",
+      "opening": 30,
+      "accuracy": 10,
+      "crit": 6,
+      "text": "명중 +1할, 첫 합 위력 +3할, 회심 확률 +6푼."
+    },
+    "origin": "외전모용",
+    "no_drop": true
+  },
+  "결산도": {
+    "name": "결산도",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "추심당의 첫 당주가 받을 것을 다 받고 나서야 칼집에 넣었다는 칼. 칼등에 줄이 백 개 그어져 있다. 도법에 맞음, 위력 +100",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 100,
+        "style": "도법"
+      }
+    ],
+    "grade": "신물",
+    "gimmick": {
+      "name": "줄을 긋는 칼",
+      "execute": {
+        "below": 30,
+        "percent": 30
+      },
+      "low_hp": 15,
+      "text": "적 체력 3할 이하에서 위력 +3할, 체력 절반 이하에서 위력 +1할 5푼."
+    },
+    "origin": "외전사도련",
+    "no_drop": true
+  },
+  "소매쇠뇌": {
+    "name": "소매쇠뇌",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "공야반이 젊은 날 천기각에서 처음 만든 소매 속 쇠뇌. 굴대 아홉이 맞물려 숨 한 번에 침 아홉을 쏜다. 암기에 맞음, 위력 +100",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 100,
+        "style": "암기"
+      }
+    ],
+    "grade": "신물",
+    "gimmick": {
+      "name": "맞물린 굴대",
+      "combo": 40,
+      "accuracy": 10,
+      "text": "명중 +1할, 회심이 터지면 위력 4할로 한 번 더 쏜다."
+    },
+    "origin": "외전제갈",
+    "no_drop": true
+  },
+  "혼등창": {
+    "name": "혼등창",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "첫 등지기가 등각의 불을 지키며 들었다는 창. 창끝에 작은 등잔이 매달려 꺼지지 않는다. 창법에 맞음, 위력 +100",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 100,
+        "style": "창법"
+      }
+    ],
+    "grade": "신물",
+    "gimmick": {
+      "name": "꺼지지 않는 등",
+      "lifesteal": 5,
+      "burn": 15,
+      "text": "준 피해의 5푼을 체력으로 흡수, 맞힌 적이 두 합 동안 준 피해의 1할 5푼을 더 입는다."
+    },
+    "origin": "외전귀문",
+    "no_drop": true
+  },
+  "흑송곤": {
+    "name": "흑송곤",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "늙은 채주가 서른 해 동안 관군을 막던 몽둥이. 흑송의 옹이가 쇠처럼 굳었다. 봉법에 맞음, 위력 +100",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 100,
+        "style": "봉법"
+      }
+    ],
+    "grade": "신물",
+    "gimmick": {
+      "name": "옹이",
+      "disrupt": 20,
+      "grit": 6,
+      "text": "예고된 필살기를 2할 확률로 흐트러뜨린다, 적에게 맞을 때마다 다음 공격 위력 +6푼(4할까지)."
+    },
+    "origin": "외전녹림",
+    "no_drop": true
+  },
+  "아홉닢금전": {
+    "name": "아홉닢금전",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "흑사방의 첫 방주가 아홉 판을 처음 열 때 판마다 하나씩 던졌다는 금전 아홉 닢. 던지면 저절로 손에 돌아온다. 암기에 맞음, 위력 +100",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 100,
+        "style": "암기"
+      }
+    ],
+    "grade": "신물",
+    "gimmick": {
+      "name": "돌아오는 동전",
+      "echo": 20,
+      "crit": 6,
+      "qi_back": 2,
+      "text": "2할 확률로 동전이 한 번 더 닿는다, 회심 확률 +6푼, 맞힐 때 내력 2푼 회복."
+    },
+    "origin": "외전흑사",
+    "no_drop": true
+  },
+  "삼대귀두도": {
+    "name": "삼대귀두도",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "삼대째 망나니 집안의 칼. 할아버지가 벼리고 아버지가 갈고 내가 씻었다. 단칼에 끝내라는 칼이다. 도법에 맞음, 위력 +100",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 100,
+        "style": "도법"
+      }
+    ],
+    "grade": "신물",
+    "gimmick": {
+      "name": "단칼",
+      "ambush": 30,
+      "gash": {
+        "over": 10,
+        "percent": 30
+      },
+      "text": "싸움의 첫 공격은 반드시 회심이 되고 위력 +3할, 한 번에 적 최대 체력의 1할 넘게 베면 다음 공격의 피해가 3할 오른다."
+    },
+    "origin": "외전망나니",
+    "no_drop": true
+  },
+  "송하검": {
+    "name": "송하검",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "대사형 송하가 혼례날 허리에 찼던 검. 자객이 쓰러진 대사형에게서 빼 갔다. 솔바람 소리가 칼날에 배었다. 검법에 맞음, 위력 +100",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 100,
+        "style": "검법"
+      }
+    ],
+    "grade": "신물",
+    "gimmick": {
+      "name": "솔바람",
+      "foresight": {
+        "percent": 30,
+        "crit": 15
+      },
+      "accuracy": 8,
+      "text": "명중 +8푼, 적의 필살기가 예고된 합에 치면 위력 +3할, 회심 확률 +1할 5푼."
+    },
+    "origin": "외전청성",
+    "no_drop": true
+  },
+  "외당철검": {
+    "name": "외당철검",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "외당을 세운 검수가 사십 년 동안 들었다는 무딘 철검. 날이 없어도 막는 것을 다 꺾는다. 검법에 맞음, 위력 +100",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 100,
+        "style": "검법"
+      }
+    ],
+    "grade": "신물",
+    "gimmick": {
+      "name": "무딘 날",
+      "heavy": 25,
+      "stun": 10,
+      "weaken": {
+        "percent": 10,
+        "rounds": 2
+      },
+      "text": "적의 체력이 7할 넘게 남았으면 위력 +2할 5푼, 맞힌 적의 위력을 2합 동안 1할 깎는다, 맞히면 1할 확률로 적이 다음 합에 손을 쓰지 못한다."
+    },
+    "origin": "외전종남",
+    "no_drop": true
+  },
+  "혈월도": {
+    "name": "혈월도",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "제사마장 위극이 마장이 되기 전 처음 들었던 칼. 묶인 혼이 없어 가볍다. 마장은 이 칼을 마을의 늙은 무녀에게 맡겨 두었다. 도법에 맞음, 위력 +100",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 100,
+        "style": "도법"
+      }
+    ],
+    "grade": "신물",
+    "gimmick": {
+      "name": "첫 칼",
+      "power": 8,
+      "lifesteal": 5,
+      "low_hp": 15,
+      "text": "위력 +8푼, 준 피해의 5푼을 체력으로 흡수, 체력 절반 이하에서 위력 +1할 5푼."
+    },
+    "origin": "외전신교",
+    "no_drop": true
+  },
+  "홍잠": {
+    "name": "홍잠",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "붉은 옷의 여인이 소매를 받던 날 머리에 꽂았다는 붉은 비녀. 속이 비어 침 일곱이 들어간다. 암기에 맞음, 위력 +100",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 100,
+        "style": "암기"
+      }
+    ],
+    "grade": "신물",
+    "gimmick": {
+      "name": "비녀 속의 침",
+      "mark": {
+        "every": 4,
+        "percent": 50
+      },
+      "accuracy": 12,
+      "crit": 5,
+      "text": "명중 +1할 2푼, 회심 확률 +5푼, 네 번 맞힐 때마다 표식이 터져 피해가 5할 더해진다."
+    },
+    "origin": "외전홍수",
+    "no_drop": true
+  },
+  "뇌석검": {
+    "name": "뇌석검",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "창산 꼭대기의 번개 맞은 바위에서 나온 쇠로 벼린 검. 칼날에 번개 무늬가 남았다. 검법에 맞음, 위력 +100",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 100,
+        "style": "검법"
+      }
+    ],
+    "grade": "신물",
+    "gimmick": {
+      "name": "번개 무늬",
+      "combo": 35,
+      "crit": 8,
+      "text": "회심 확률 +8푼, 회심이 터지면 번개가 뒤따르듯 위력 3할 5푼으로 한 번 더 벤다."
+    },
+    "origin": "외전점창",
+    "no_drop": true
+  },
+  "설봉검": {
+    "name": "설봉검",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "장문인 설봉자가 젊은 날 천산을 넘으며 들었던 검. 칼날에 서리가 내려 녹지 않는다. 검법에 맞음, 위력 +100",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 100,
+        "style": "검법"
+      }
+    ],
+    "grade": "신물",
+    "gimmick": {
+      "name": "녹지 않는 서리",
+      "frost": 4,
+      "pierce": 20,
+      "power": 8,
+      "burn": 15,
+      "text": "위력 +8푼, 맞힌 적이 두 합 동안 준 피해의 1할 5푼을 더 입는다, 맞힐 때마다 한기가 스며 네 번 쌓이면 적이 한 합 얼어붙는다, 적의 방어 2할 무시."
+    },
+    "origin": "외전곤륜",
+    "no_drop": true
+  },
+  "십장권갑": {
+    "name": "십장권갑",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "늙은 십장이 표국의 권사였던 시절 끼던 쇠 권갑. 갱도의 돌에 닳아 손가락 마디가 둥글어졌다. 권법에 맞음, 위력 +100",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 100,
+        "style": "권법"
+      }
+    ],
+    "grade": "신물",
+    "gimmick": {
+      "name": "닳은 마디",
+      "shatter": 8,
+      "echo": 15,
+      "power": 8,
+      "bleed": 8,
+      "text": "위력 +8푼, 맞힌 피해의 8푼이 상처로 남아 세 합 동안 피가 흐른다, 맞힐 때마다 적의 방어를 8푼씩 깎는다(4할까지), 1할 5푼 확률로 주먹의 여운이 한 번 더 닿는다."
+    },
+    "origin": "외전광부",
+    "no_drop": true
+  },
+  "철목상앗대": {
+    "name": "철목상앗대",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "방노삼이 젊은 날 황하의 물살을 거슬러 오르며 쓰던 상앗대. 쇠처럼 굳은 나무 속에 물살의 결이 남았다. 봉법에 맞음, 위력 +100",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 100,
+        "style": "봉법"
+      }
+    ],
+    "grade": "신물",
+    "gimmick": {
+      "name": "물살의 결",
+      "disrupt": 25,
+      "guard": 6,
+      "text": "예고된 필살기를 2할 5푼 확률로 흐트러뜨린다, 맞힌 합에 받는 피해 -6푼."
+    },
+    "origin": "외전사공",
+    "no_drop": true
+  },
+  "개소창": {
+    "name": "개소창",
+    "category": "무기",
+    "price": 0,
+    "markets": [],
+    "desc": "위소를 세우던 해 조정이 첫 천호에게 내린 창. 대대로 천호만 들었다. 흑조단이 위소를 칠 때 빼앗아 갔다. 창법에 맞음, 위력 +100",
+    "effects": [
+      {
+        "type": "equip",
+        "slot": "weapon",
+        "bonus": 100,
+        "style": "창법"
+      }
+    ],
+    "grade": "신물",
+    "gimmick": {
+      "name": "천호의 창",
+      "vs_side": {
+        "사도": 25
+      },
+      "reach": {
+        "rounds": 3,
+        "percent": 20
+      },
+      "text": "사도의 적에게 위력 +2할 5푼, 싸움의 첫 세 합 동안 받는 피해 -2할."
+    },
+    "origin": "외전위소",
+    "no_drop": true
   }
 }

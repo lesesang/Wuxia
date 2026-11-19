@@ -4,7 +4,7 @@ import { DB } from "./data.js";
 import { checkRequires, reactiveLine } from "./events.js";
 import { equipmentBonus, gearGimmick } from "./market.js";
 import { pick, pickWeighted, randInt, rng, uniform } from "./rng.js";
-import { activeCompanions, difficultyOf, quirkText, MAX_FAME, veteranBonus, applyGrowth, scaledGrowth, isNamed, battleBuffs, fameRankChanged, hasEffect, alignValue, dominant, KILL_ALIGN, realmBonus, realmIndex, sectBonus, sumEffect, talkLine, fameEffect } from "./rules.js";
+import { activeCompanions, difficultyOf, quirkText, MAX_FAME, veteranBonus, applyGrowth, scaledGrowth, isNamed, battleBuffs, fameRankChanged, hasEffect, alignValue, dominant, KILL_ALIGN, realmBonus, realmIndex, originBonus, sumEffect, talkLine, fameEffect } from "./rules.js";
 import { halpun, josa } from "./josa.js";
 
 const BASE_HIT = 0.88;
@@ -369,7 +369,7 @@ export class Battle {
     if (this.innate) scale *= 1 + INNATE_POWER / 100;
     scale *= 1 + sumEffect(p.traits, "damage_bonus", "percent") / 100;
     scale *= 1 + Math.min(MAX_KILL_POWER, p.kills * sumEffect(p.traits, "kill_power", "percent")) / 100;
-    scale *= 1 + sectBonus(p, "damage") / 100;
+    scale *= 1 + originBonus(p, "damage") / 100;
     scale *= 1 - p.injury * INJURY_PENALTY / 100;
     scale *= 1 + alignValue(p.alignment, "마도", "damage") / 100;
     for (const c of this.companions) scale *= 1 + (c.help.atk || 0) / 100;
@@ -400,7 +400,7 @@ export class Battle {
 
   critChance() {
     const p = this.player;
-    return Math.min(MAX_CRIT, p.mind / 4000 + (sumEffect(p.traits, "crit", "percent") + sectBonus(p, "crit") + alignValue(p.alignment, "사도", "crit") + (this.mindG?.focus || 0)) / 100);
+    return Math.min(MAX_CRIT, p.mind / 4000 + (sumEffect(p.traits, "crit", "percent") + originBonus(p, "crit") + alignValue(p.alignment, "사도", "crit") + (this.mindG?.focus || 0)) / 100);
   }
 
   /** 무공의 묘리에 병기의 영기를 더한다 */
@@ -622,7 +622,7 @@ export class Battle {
   }
 
   applyPoisonOnHit(skill, g = null) {
-    let power = sectBonus(this.player, "poison");
+    let power = originBonus(this.player, "poison");
     if (skill?.inflict) power += skill.inflict.poison || 0;
     power += g ? g.poison || 0 : skill?.activeGimmick()?.poison || 0;
     power += sumEffect(this.player.traits, "inflict_poison", "power");
@@ -731,7 +731,7 @@ export class Battle {
       this.log.push("아직 익힌 심법이 없다.");
       return;
     }
-    const boost = 1 + (sectBonus(p, "heal_bonus") + sumEffect(p.traits, "mindset_power", "percent")) / 100;
+    const boost = 1 + (originBonus(p, "heal_bonus") + sumEffect(p.traits, "mindset_power", "percent")) / 100;
     const hpValue = skill.effectValue("heal_hp_pct");
     const qiValue = skill.effectValue("heal_qi_pct");
     // 운기 한 번에 채우는 양에는 끝이 있고, 잇달아 운기하면 숨이 얕아진다
@@ -841,7 +841,7 @@ export class Battle {
     base *= 1 - veteranBonus(this.player).reduce / 100;
     if (this.innate) base *= 1 - INNATE_POWER / 100;
     base *= 1 - Math.min(MAX_MIND_GUARD, this.player.mind / MIND_GUARD_RATE);
-    base *= 1 - sectBonus(this.player, "damage_reduce") / 100;
+    base *= 1 - originBonus(this.player, "damage_reduce") / 100;
     base *= 1 - alignValue(this.player.alignment, "정도", "guard") / 100;
     base *= 1 - Math.min(MAX_DAMAGE_REDUCE, sumEffect(this.player.traits, "damage_reduce", "percent") + fameEffect(this.player, "fame_guard")) / 100;
     base *= 1 - fameEffect(this.player, "fame_dread") / 100;
@@ -1093,7 +1093,7 @@ export class Battle {
    */
   evadeChance(evadeSkill, round = this.roundNum + 1, streak = this.stepStreak + 1) {
     if (!evadeSkill) return 0;
-    const own = evadeSkill.effectValue("evade") + sectBonus(this.player, "evade") + this.player.idleBonus("경공") + alignValue(this.player.alignment, "사도", "evade") + (this.dazzle?.percent || 0);
+    const own = evadeSkill.effectValue("evade") + originBonus(this.player, "evade") + this.player.idleBonus("경공") + alignValue(this.player.alignment, "사도", "evade") + (this.dazzle?.percent || 0);
     const base = Math.min(MAX_EVADE, own);
     const read = Math.max(0, streak - 1) * STEP_STREAK_PENALTY;
     const chance = Math.max(Math.min(base, MIN_STREAK_EVADE), base - read);
