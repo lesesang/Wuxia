@@ -77,7 +77,6 @@ P("비무철권", "남", "iron fist king, thirties, huge muscular body, shaved h
 P("비무결승", "남", "the crimson-clad young master, twenties, beautiful cold face, long black hair, flowing crimson robe, slender sword dripping, chilling smile", "stone tournament stage on mount tai under a grey overcast sky, banners, blood on the stone")
 P("조각무인", "남", "wandering martial artist clutching a torn manual page, thirties, haggard obsessive eyes, shabby robe, sword at the hip, torn page in the other hand", "ruined library cave with scattered scrolls")
 P("무명노인", "남", "nameless old master testing a disciple, eighties, long white hair and beard blowing in the wind, plain worn grey robe, barefoot, holding a bamboo stick, mild amused eyes, overwhelming calm presence", "mountain cliff edge above a sea of clouds", "작", "sword, metal sword")
-P("묘지기", "남", "old bodyguard who kept a dead hero's last words, seventies, white beard, weathered calm face, black robe, old saber across the knees, sitting before a grave", "lonely grave on a hill under an old tree, autumn")
 P("십팔동인", "남", "one of the eighteen bronze men of shaolin, shaved head, whole body painted bronze like a statue, bare muscular torso, calm expressionless face, fists raised in a guard stance", "shaolin temple courtyard with stone floor and bronze statues", "맨", "weapon")
 P("무당진인", "남", "wudang taoist master who parries swords with a twig, seventies, long white beard, serene smile, grey taoist robe, holding a pine twig like a sword", "wudang mountain pavilion in clouds", "작", "sword, metal sword")
 P("화산장로", "남", "mount hua elder swordsman, sixties, grey beard, plum blossom embroidered robes, sword held vertically", "mount hua cliff path with plum trees")
@@ -98,7 +97,6 @@ P("무림맹추격대", "남", "wind-breaking sword of the alliance pursuit squa
 P("혈수인", "남", "master of the red handprint, hooded figure, pale hand stained with blood red, face half hidden in shadow", "burned manor courtyard with red handprints on the walls", "맨", "weapon")
 P("마교심판자", "남", "black punishment judge of the demonic cult, sixties, gaunt face, black judge robe, iron ledger in one hand, iron brush pen in the other", "edge of a blood lake in an underground cavern", "작")
 P("권마의그림자", "남", "shadowy will of an ancient fist demon, translucent dark figure of a powerful old man, glowing eyes, bandaged fists, ink-like aura", "ancient stone cave with fist craters on the walls", "맨", "weapon")
-P("생사문지기", "남", "ancient master who became the gate itself, half stone half man, long white hair, closed eyes, robes merging into a stone gate", "giant ancient stone gate in clouds", "맨", "weapon")
 P("백년천마잔영", "남", "shadow of the heavenly demon from a hundred years ago, young man in his twenties, cold beautiful face, long black hair, black robe with crimson trim, transparent ghostly edges, black aura", "natural rough rock cave for closed-door seclusion with carved walls", "맨", "weapon, gothic arch, pointed arch, cathedral, doorway, halo")
 P("혈마미완", "남", "withered blood demon awakened without enough blood, gaunt tall figure in the center of the frame, cowboy shot, skin cracked like dry bark, glowing red eyes, long dark red hair, tattered crimson robe, red mist, dim red light from below", "dried cracked blood lake bed in an underground temple with stone pillars", "맨", "weapon, crown, tiny figure, far away")
 P("화경마인", "남", "left guardian of the blood sect, red-haired demon, fifties, wild red hair loose, inhuman cold eyes, ash grey robe with crimson trim, saber", "stone altar of the blood sect in a misty mountain gorge, overcast grey sky, torches")
@@ -615,7 +613,6 @@ PICK = {
     "모극": 9014,
     "모용세가": 9015,
     "묘아": 9016,
-    "묘지기": 9014,
     "무각": 9014,
     "무당산": 9016,
     "무당진인": 9014,
@@ -770,7 +767,6 @@ PICK = {
     "살막": 9014,
     "살막살수": 9014,
     "상한": 9014,
-    "생사문지기": 9014,
     "서고": 9015,
     "서생": 9023,
     "석담": 9016,
