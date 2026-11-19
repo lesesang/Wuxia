@@ -37,11 +37,30 @@ const cssUrl = (url) => `url('${new URL(url, document.baseURI).href.replace(/'/g
 /** 사건이나 달의 배경 띠. npc가 있으면 그 사람의 그림을 곁에 세운다 */
 function sceneBand(bg, npc = null, cls = "") {
   if (!bg && !npc) return "";
-  return `<figure class="scene${cls ? ` ${cls}` : ""}"${bg ? ` style="--scene:${cssUrl(bg)}"` : ""} aria-hidden="true">${npc ? `<img class="scene-npc" src="${esc(npc)}" alt="" decoding="async">` : ""}</figure>`;
+  return `<figure class="scene${cls ? ` ${cls}` : ""}"${bg ? ` style="--scene:${cssUrl(bg)}"` : ""}>${bg ? `<img class="scene-img" src="${esc(bg)}" alt="" decoding="async" data-zoom="${esc(bg)}">` : ""}${npc ? `<img class="scene-npc" src="${esc(npc)}" alt="" decoding="async" data-zoom="${esc(npc)}">` : ""}</figure>`;
 }
-const avatar = (url, cls = "avatar") => (url ? `<img class="${cls}" src="${esc(url)}" alt="" decoding="async">` : "");
+/** 그림 하나. 누르면 크게 본다 */
+const avatar = (url, cls = "avatar", caption = "") => (url ? `<img class="${cls}" src="${esc(url)}" alt="${esc(caption)}" loading="lazy" decoding="async" data-zoom="${esc(url)}"${caption ? ` data-caption="${esc(caption)}"` : ""}>` : "");
+
+/** 그림을 화면 가득 보인다. 아무 데나 누르거나 Esc로 닫는다 */
+function openZoom(url, caption = "") {
+  closeZoom();
+  const view = document.createElement("figure");
+  view.className = "zoom-view";
+  view.setAttribute("role", "dialog");
+  view.setAttribute("aria-label", caption || "그림 크게 보기");
+  view.innerHTML = `<img src="${esc(url)}" alt="${esc(caption)}"><button class="zoom-close" aria-label="닫기">✕</button>${caption ? `<figcaption>${esc(caption)}</figcaption>` : ""}`;
+  view.addEventListener("click", closeZoom);
+  document.body.appendChild(view);
+}
+function closeZoom() {
+  const view = document.querySelector(".zoom-view");
+  if (!view) return false;
+  view.remove();
+  return true;
+}
 const playerPortrait = (p) => portraitOf(p.originKey, p.person?.gender);
-const originFace = (key) => avatar(portraitOf(key, DB.origins.origins[key].gender || ui.person.gender), "pick-portrait");
+const originFace = (key) => avatar(portraitOf(key, DB.origins.origins[key].gender || ui.person.gender), "pick-portrait", DB.origins.origins[key].name);
 /** 화면 전체의 흐린 배경. 넓은 화면에서 양옆을 채운다 */
 function setBackdrop(url) {
   const style = document.body.style;
@@ -114,7 +133,7 @@ function codexRows(tab, meta) {
       rows: meta.global_codex.filter((k) => DB.enemies[k]).map((k) => {
         const e = DB.enemies[k];
         const tier = TIER_NAMES[e.tier] || e.tier;
-        return { key: k, name: e.title ? `${e.title} ${e.name}` : e.name, meta: `${tier}, ${e.realm} 경지`, desc: e.desc, more: enemyDetail(e), cats: [tier] };
+        return { key: k, name: e.title ? `${e.title} ${e.name}` : e.name, meta: `${tier}, ${e.realm} 경지`, desc: e.desc, more: enemyDetail(e), cats: [tier], img: enemyArt({ key: k, name: e.name }) };
       }),
     };
   }
@@ -148,10 +167,11 @@ function codexRows(tab, meta) {
         const log = loadEventLog()[k];
         const picks = log ? Object.keys(log.picks).length : 0;
         const label = e.chain ? `${kind}, ${DB.chains[e.chain.id].title} ${e.chain.index + 1}/${e.chain.total}편` : kind;
-        return { key: k, name: e.title, meta: `${label}${picks ? `, 고른 선택 ${picks}가지` : ""}`, desc: e.text.split(/(?<=[.?!"])\s/)[0], read: true, cats: [kind], search: `${e.text} ${log ? JSON.stringify(log) : ""}` };
+        return { key: k, name: e.title, meta: `${label}${picks ? `, 고른 선택 ${picks}가지` : ""}`, desc: e.text.split(/(?<=[.?!"])\s/)[0], read: true, cats: [kind], search: `${e.text} ${log ? JSON.stringify(log) : ""}`, img: sceneOf(e.title, e.text), wide: true };
       }),
     };
   }
+  if (tab === "gallery") return { gallery: true, rows: [], filters: [], empty: "" };
   if (tab === "achievements") {
     return {
       total: DB.karma.achievements.filter((a) => !a.hidden).length, filterLabel: "상태", filters: ["이룸", "아직"], empty: "",
@@ -184,10 +204,39 @@ function codexRows(tab, meta) {
 function codexRowHtml(row) {
   const more = row.more ? `<details class="codex-more"><summary>자세히</summary>${row.more.map((l) => `<p>${esc(l)}</p>`).join("")}</details>` : "";
   const read = row.read ? `<button class="mini-btn codex-read" data-act="codex-read" data-key="${esc(row.key)}">다시 읽기</button>` : "";
-  return `<div class="codex-item"><div class="codex-name">${esc(row.name)}</div><div class="codex-meta">${esc(row.meta)}</div>${row.desc ? `<div>${esc(row.desc)}</div>` : ""}${more}${read}</div>`;
+  const body = `<div class="codex-name">${esc(row.name)}</div><div class="codex-meta">${esc(row.meta)}</div>${row.desc ? `<div>${esc(row.desc)}</div>` : ""}${more}${read}`;
+  if (!row.img) return `<div class="codex-item">${body}</div>`;
+  return `<div class="codex-item with-art">${avatar(row.img, `codex-thumb${row.wide ? " wide" : ""}`, row.name)}<div>${body}</div></div>`;
+}
+
+/** 화첩: 연 출신의 초상, 만난 사람, 지나온 곳의 그림을 모아 본다 */
+function galleryHtml(meta) {
+  if (!artOn()) return `<p class="codex-empty">설정에서 그림 보기를 켜면 볼 수 있습니다.</p>`;
+  const tile = (url, name) => `<figure>${avatar(url, "", name)}<figcaption>${esc(name)}</figcaption></figure>`;
+  const heroes = [...DB.origins.order, ...DB.origins.side_order].filter((k) => meta.unlocked_origins.includes(k)).flatMap((k) => {
+    const o = DB.origins.origins[k];
+    return (o.gender ? [o.gender] : ["남", "여"]).map((g) => tile(portraitOf(k, g), `${o.name}${o.gender ? "" : g === "남" ? ", 남" : ", 여"}`));
+  });
+  const seen = new Set();
+  const people = meta.global_codex.filter((k) => DB.enemies[k]).map((k) => {
+    const e = DB.enemies[k];
+    const url = enemyArt({ key: k, name: e.name });
+    if (!url || seen.has(url)) return "";
+    seen.add(url);
+    return tile(url, e.title ? `${e.title} ${e.name}` : e.name);
+  }).filter(Boolean);
+  const places = new Map();
+  for (const k of meta.known_events) {
+    const e = DB.events[k];
+    const url = e && sceneOf(e.title, e.text);
+    if (url && !places.has(url)) places.set(url, e.title);
+  }
+  const part = (title, items, wide = false) => `<h4 class="gallery-title">${title} <span class="group-count">${items.length}</span></h4>${items.length ? `<div class="gallery${wide ? " wide" : ""}">${items.join("")}</div>` : `<p class="codex-empty">아직 없습니다.</p>`}`;
+  return `<p class="codex-meta">그림을 누르면 크게 볼 수 있습니다.</p>${part("출신", heroes)}${part("만난 사람과 짐승", people)}${part("지나온 곳", [...places].map(([url, title]) => tile(url, title)), true)}`;
 }
 
 function codexListHtml(data) {
+  if (data.gallery) return galleryHtml(loadMeta());
   const query = ui.codexQuery.trim().toLowerCase();
   const rows = data.rows.filter((r) => (ui.codexFilter === "전체" || r.cats.includes(ui.codexFilter))
     && (!query || `${r.name} ${r.meta} ${r.desc || ""} ${r.search || ""} ${(r.more || []).join(" ")}`.toLowerCase().includes(query)));
@@ -235,7 +284,7 @@ function codexReader(key) {
 function codexBody() {
   if (ui.codexRead && DB.events[ui.codexRead]) return codexReader(ui.codexRead);
   const meta = loadMeta();
-  const titles = { enemies: "인물", skills: "무공", items: "물건", events: "사건", achievements: "공적", endings: "결말", runs: "강호행" };
+  const titles = { enemies: "인물", gallery: "화첩", skills: "무공", items: "물건", events: "사건", achievements: "공적", endings: "결말", runs: "강호행" };
   const data = codexRows(ui.tab, meta);
   const tabCount = (key) => {
     if (key === "enemies") return `${meta.global_codex.filter((k) => DB.enemies[k]).length}/${Object.keys(DB.enemies).length}`;
@@ -245,7 +294,7 @@ function codexBody() {
     if (key === "achievements") return `${meta.achievements.length}`;
     return "";
   };
-  const searchable = !["endings", "runs"].includes(ui.tab);
+  const searchable = !["endings", "runs", "gallery"].includes(ui.tab);
   return `<div class="tabs codex-tabs">${Object.entries(titles).map(([key, label]) => `<button class="tab-btn${ui.tab === key ? " active" : ""}" data-act="tab" data-tab="${key}">${esc(label)} ${tabCount(key)}</button>`).join("")}</div>
     ${data.note ? `<p class="codex-meta">${esc(data.note)}</p>` : ""}
     ${searchable ? `<div class="codex-tools"><input type="search" id="codex-search" class="codex-search" placeholder="이름이나 문장으로 찾기" value="${esc(ui.codexQuery)}" aria-label="강호록 찾기">
@@ -820,7 +869,7 @@ function chronicleList(p) {
 
 function companionList(p) {
   const rows = activeCompanions(p);
-  return rows.length ? `<div class="modal-section"><h4>결전에 달려올 사람</h4>${rows.map((c) => `<div class="skill-row companion-row">${avatar(companionArt(c.key), "row-portrait")}<span>${esc(c.name)}<span class="skill-meta block">${esc(c.help_text)}</span></span></div>`).join("")}</div>` : "";
+  return rows.length ? `<div class="modal-section"><h4>결전에 달려올 사람</h4>${rows.map((c) => `<div class="skill-row companion-row">${avatar(companionArt(c.key), "row-portrait", c.name)}<span>${esc(c.name)}<span class="skill-meta block">${esc(c.help_text)}</span></span></div>`).join("")}</div>` : "";
 }
 
 /** 든 병장기를 내려놓는 단추 */
@@ -886,7 +935,7 @@ function statusModal() {
 
   const vet = veteranBonus(p);
   const panels = {
-    stats: `${playerPortrait(p) ? `<div class="status-hero">${avatar(playerPortrait(p), "status-portrait")}<div><b>${esc(fullName(p.person))}</b><span class="skill-meta block">${esc(p.realm)}, ${esc(byname(p))}</span><span class="skill-meta block">${esc(p.origin)}</span></div></div>` : ""}<div class="modal-section">
+    stats: `${playerPortrait(p) ? `<div class="status-hero">${avatar(playerPortrait(p), "status-portrait", fullName(p.person))}<div><b>${esc(fullName(p.person))}</b><span class="skill-meta block">${esc(p.realm)}, ${esc(byname(p))}</span><span class="skill-meta block">${esc(p.origin)}</span></div></div>` : ""}<div class="modal-section">
         ${statRow("외공", "external", "체력, 위력")}${statRow("내공", "internal", "내력, 체력, 비기 위력")}
         ${statRow("무리", "martial", "위력, 명중, 성취")}${statRow("심경", "mind", "회심의 일격, 받는 피해, 수련, 돌파")}
         ${cap < 999 ? `<p class="stat-cap-note">${esc(p.realm)}의 기량은 ${cap}에서 막힙니다.${p.cappedStats().length ? ` 막힌 기량 하나마다 나머지가 ${halpun(p.cappedStats().length * DB.realms.cap_boost.per_capped)} 더 빨리 오릅니다.` : ""}${Object.values(p.pent).some(Boolean) ? " 막힌 동안 쌓인 몫은 경지가 오르면 풀립니다." : ""}</p>` : ""}
@@ -1008,13 +1057,13 @@ function renderBattle() {
       <button class="round-menu" data-act="open-status" data-tab="stats" aria-label="신상 보기">신상</button>
     </div>
     <div class="vs-row">
-      <div class="combatant" data-side="player">${avatar(playerPortrait(p), "fighter")}<div class="name">${esc(fullName(p.person))}</div>
+      <div class="combatant" data-side="player">${avatar(playerPortrait(p), "fighter", fullName(p.person))}<div class="name">${esc(fullName(p.person))}</div>
         <div class="hpbar-outer${lowHp ? " danger" : ""}"><div class="hpbar-inner mine" data-bar="player" style="width:${percent(p.hp, p.maxHp())}%"></div></div>
         <div class="hpnum">체력 <b>${p.hp}</b>/${p.maxHp()}</div>
         <div class="qibar"><div style="width:${percent(p.qi, p.maxQi())}%"></div></div>
         <div class="hpnum">내력 ${p.qi}/${p.maxQi()}</div></div>
       <div class="vs-mark">대</div>
-      <div class="combatant" data-side="enemy">${avatar(enemyArt(b.enemy), "fighter")}${b.enemy.title ? `<div class="enemy-title">${esc(b.enemy.title)}</div>` : ""}<div class="name">${esc(b.enemy.name)}</div>
+      <div class="combatant" data-side="enemy">${avatar(enemyArt(b.enemy), "fighter", b.enemy.title ? `${b.enemy.title} ${b.enemy.name}` : b.enemy.name)}${b.enemy.title ? `<div class="enemy-title">${esc(b.enemy.title)}</div>` : ""}<div class="name">${esc(b.enemy.name)}</div>
         <div class="hpbar-outer"><div class="hpbar-inner enemy" data-bar="enemy" style="width:${percent(b.enemy.hp, b.enemy.maxHp)}%"></div></div>
         <div class="hpnum">체력 <b>${b.enemy.hp}</b>/${b.enemy.maxHp}</div>
         ${b.enemy.barrier ? `<div class="hpnum">강기 ${b.enemy.barrier}</div>` : ""}
@@ -1086,7 +1135,7 @@ function topbar() {
   const turn = Math.min(p.turn, p.maxTurn);
   return `<div class="topbar"><div class="topbar-inner">
     <div class="topbar-row1">
-      ${avatar(playerPortrait(p), "avatar")}<span class="turn-info">${getYear(turn)}년차 ${getMonth(turn)}월<small>${p.difficulty !== DEFAULT_DIFFICULTY ? `${esc(difficultyOf(p).name)}, ` : ""}${esc(getChapterInfo(turn, p).title)}, ${p.turn}/${p.maxTurn}달</small></span>
+      ${avatar(playerPortrait(p), "avatar", fullName(p.person))}<span class="turn-info">${getYear(turn)}년차 ${getMonth(turn)}월<small>${p.difficulty !== DEFAULT_DIFFICULTY ? `${esc(difficultyOf(p).name)}, ` : ""}${esc(getChapterInfo(turn, p).title)}, ${p.turn}/${p.maxTurn}달</small></span>
       <span class="realm-info">${esc(p.realm)}<small>${esc(fullName(p.person))}${byname(p) === "이름 없는 무인" ? "" : `, ${esc(byname(p))}`}</small></span>
     </div>
     <div class="turn-track"><span style="width:${percent(turn, p.maxTurn)}%"></span></div>
@@ -1568,6 +1617,14 @@ function closeModalQuietly() {
 }
 
 export function installInput() {
+  // 그림을 누르면 크게 본다. 그림이 고르기 칸 안에 있어도 고르지 않고 그림만 연다
+  document.addEventListener("click", (event) => {
+    const art = event.target.closest?.("[data-zoom]");
+    if (!art || art.closest(".zoom-view")) return;
+    event.preventDefault();
+    event.stopPropagation();
+    openZoom(art.dataset.zoom, art.dataset.caption || art.alt || "");
+  }, true);
   document.addEventListener("click", (event) => {
     const overlay = event.target.classList?.contains("modal-overlay");
     if (overlay) {
@@ -1649,7 +1706,7 @@ export function installInput() {
   });
 
   document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") closeModal();
+    if (event.key === "Escape" && !closeZoom()) closeModal();
   });
 
   window.addEventListener("popstate", () => {
