@@ -544,3 +544,6 @@ body.setup-screen .home-wrap { padding: .6rem .9rem 1rem; }
 .gallery.wide { grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr)); }
 .gallery.wide img { aspect-ratio: 1216 / 832; }
 .gallery-title { color: var(--gold); font-size: .95rem; font-weight: 400; margin: 1rem 0 .4rem; }
+
+/* 아직 살 수 없는 출신 전용 항목 */
+.pick-stats.warn { color: var(--gold); }

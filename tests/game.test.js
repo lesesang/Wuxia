@@ -11,7 +11,7 @@ import { buildEpilogue, Game, settlePerson } from "../www/js/game.js";
 import { halpun, josa } from "../www/js/josa.js";
 import { blockReason, buy, equipmentBonus, ITEM_GRADES, openMarket, priceOf, sell } from "../www/js/market.js";
 import {
-  activeContent, resetSetupChoices, upgradeUse, legacyPowers, upgradeLegacy, setUpgradeUse, upgradeLevel, addKarma, buyContent, buyProvision, refundProvision, upgradeTraits, buyUpgrade, exportRecords, importRecords, extraSlots, loadCheckpoint, legacyAvailable, loadEventLog, loadMeta, nextReward, recordEventPick, openLegacy, saveMeta, toggleContent, unlockOrigin, sideOpen, manorOpen, buildWing, buyGate, refundGate, gateCost, manorLevels,
+  activeContent, resetSetupChoices, upgradeUse, legacyPowers, upgradeLegacy, setUpgradeUse, upgradeLevel, addKarma, buyContent, buyProvision, refundProvision, upgradeTraits, buyUpgrade, exportRecords, importRecords, extraSlots, loadCheckpoint, legacyAvailable, loadEventLog, loadMeta, nextReward, recordEventPick, openLegacy, saveMeta, toggleContent, unlockOrigin, unlockTrait, sideOpen, manorOpen, buildWing, buyGate, refundGate, gateCost, manorLevels,
 } from "../www/js/meta.js";
 import { sideDeepLine, enemyRealmIndex, personalize, fullName, alignTier, applyGrowth, checkBreakthrough, focusedSide, byname, fameRank, getChapter, getYear, marketTurns, sumEffect, talkLine, traitSlots } from "../www/js/rules.js";
 import { rng } from "../www/js/rng.js";
@@ -901,6 +901,21 @@ test("잠긴 출신과 자리를 넘는 특성은 막힌다", () => {
   assert.equal(game.player, null);
   game.start("무림초출", ["금전운", "철옹성", "전투광"]);
   assert.deepEqual(game.player.traits, ["금전운"]);
+});
+
+test("출신 전용 항목은 그 출신을 해금해야 산다", () => {
+  const data = loadMeta();
+  data.current_karma = 999;
+  data.unlocked_origins = ["무림초출"];
+  saveMeta(data);
+  assert.equal(unlockTrait("창궁의기세", 1), false);
+  assert.equal(buyContent("창궁위패"), false);
+  assert.equal(buyUpgrade("창궁검리"), false);
+  assert.equal(loadMeta().current_karma, 999);
+  assert.ok(unlockOrigin("남궁세가", 0));
+  assert.ok(unlockTrait("창궁의기세", 1));
+  assert.ok(buyContent("창궁위패"));
+  assert.ok(buyUpgrade("창궁검리"));
 });
 
 test("카르마로 개방하면 차감된다", () => {
