@@ -1797,34 +1797,6 @@
       "text": "2번 나눠 치며(한 번마다 위력 7할) 번번이 명중과 회심을 따로 가린다, 맞히면 8푼 확률로 적이 다음 합에 손을 쓰지 못한다."
     }
   },
-  "패천도결": {
-    "name": "패천도결",
-    "type": "공격무공",
-    "category": "도법",
-    "grade": "신공",
-    "base_multiplier": 2.2,
-    "qi_cost": 16,
-    "desc": "하늘을 베겠다던 광인이 남긴 도결.",
-    "forms": [
-      "패도",
-      "개천",
-      "멸지"
-    ],
-    "secret_technique": {
-      "name": "패천일도",
-      "unlock_grade": "신공",
-      "unlock_mastery": 50,
-      "multiplier": 3.0,
-      "qi_cost": 80
-    },
-    "gimmick": {
-      "power": 30,
-      "pierce": 100,
-      "low_hp": 25,
-      "name": "패천일도",
-      "text": "위력 +3할, 방어 10할 무시, 체력 절반 이하에서 위력 +2할 5푼."
-    }
-  },
   "무상도결": {
     "name": "단애도결",
     "type": "공격무공",
@@ -2051,34 +2023,6 @@
       "text": "맞힌 합에 받는 피해 -8푼, 끊이지 않고 맞힐수록 위력이 6푼씩 오른다(최대 3할)."
     }
   },
-  "용담신창": {
-    "name": "용담신창",
-    "type": "공격무공",
-    "category": "창법",
-    "grade": "신공",
-    "base_multiplier": 2.2,
-    "qi_cost": 16,
-    "desc": "한 자루 창으로 만군 사이를 일곱 번 드나들었다는 전설의 창법.",
-    "forms": [
-      "칠진칠출",
-      "용담",
-      "호위"
-    ],
-    "secret_technique": {
-      "name": "용담무쌍",
-      "unlock_grade": "신공",
-      "unlock_mastery": 50,
-      "multiplier": 3.0,
-      "qi_cost": 80
-    },
-    "gimmick": {
-      "lifesteal": 6,
-      "hits": 7,
-      "hit_rate": 0.2,
-      "name": "칠진칠출",
-      "text": "7번 나눠 치며(한 번마다 위력 2할) 번번이 명중과 회심을 따로 가린다, 준 피해의 6푼을 체력으로 흡수."
-    }
-  },
   "무상창결": {
     "name": "파진창결",
     "type": "공격무공",
@@ -2275,35 +2219,6 @@
       "power": 10,
       "name": "항마복호",
       "text": "위력 +1할, 마도의 적에게 위력 +2할 5푼."
-    }
-  },
-  "제천곤결": {
-    "name": "제천곤결",
-    "type": "공격무공",
-    "category": "봉법",
-    "grade": "신공",
-    "base_multiplier": 2.2,
-    "qi_cost": 16,
-    "desc": "하늘과 겨루겠다는 뜻을 담은 곤법의 끝.",
-    "forms": [
-      "제천",
-      "요천",
-      "파운"
-    ],
-    "secret_technique": {
-      "name": "제천일곤",
-      "unlock_grade": "신공",
-      "unlock_mastery": 50,
-      "multiplier": 3.0,
-      "qi_cost": 80
-    },
-    "gimmick": {
-      "power": 25,
-      "stun": 15,
-      "chain": 4,
-      "chain_max": 20,
-      "name": "제천대성",
-      "text": "위력 +2할 5푼, 맞히면 1할 5푼 확률로 적이 다음 합에 손을 쓰지 못한다, 끊이지 않고 맞힐수록 위력이 4푼씩 오른다(최대 2할)."
     }
   },
   "무상곤결": {
@@ -2557,35 +2472,6 @@
       "crit_ward": 30
     }
   },
-  "여래신장": {
-    "name": "여래신장",
-    "type": "공격무공",
-    "category": "장법",
-    "grade": "신공",
-    "base_multiplier": 2.2,
-    "qi_cost": 16,
-    "desc": "부처의 손바닥이라 불리는 전설의 장법.",
-    "forms": [
-      "여래",
-      "불광",
-      "대자대비"
-    ],
-    "secret_technique": {
-      "name": "만불조종",
-      "unlock_grade": "신공",
-      "unlock_mastery": 50,
-      "multiplier": 3.0,
-      "qi_cost": 80
-    },
-    "gimmick": {
-      "power": 20,
-      "stun": 20,
-      "guard": 15,
-      "name": "불광보조",
-      "text": "위력 +2할, 맞힌 합에 받는 피해 -1할 5푼, 맞히면 2할 확률로 적이 다음 합에 손을 쓰지 못한다, 회심이 터지면 준 피해의 2할 5푼이 호신 기운이 된다.",
-      "crit_ward": 25
-    }
-  },
   "매화침법": {
     "name": "산화침법",
     "type": "공격무공",
@@ -2665,34 +2551,6 @@
       "crit": 5,
       "name": "낭아혈흔",
       "text": "회심 확률 +5푼, 준 피해의 2할이 두 합 동안 더 번진다."
-    }
-  },
-  "무영신침": {
-    "name": "무형신침",
-    "type": "공격무공",
-    "category": "암기",
-    "grade": "신공",
-    "base_multiplier": 2.2,
-    "qi_cost": 16,
-    "desc": "보이지 않는다는 침. 맞은 사람도 모른다.",
-    "forms": [
-      "무영",
-      "무성",
-      "무흔"
-    ],
-    "secret_technique": {
-      "name": "무영일침",
-      "unlock_grade": "신공",
-      "unlock_mastery": 50,
-      "multiplier": 3.0,
-      "qi_cost": 80
-    },
-    "gimmick": {
-      "accuracy": 100,
-      "crit": 20,
-      "poison": 8,
-      "name": "무형일침",
-      "text": "명중 +10할, 회심 확률 +2할, 적을 중독시킨다(독 위력 8)."
     }
   },
   "만리추혼": {
@@ -2948,63 +2806,6 @@
       },
       "name": "숨죽이기",
       "text": "합마다 내력 2푼이 저절로 찬다. 네 합마다 그 합의 공격이 반드시 회심이 된다."
-    }
-  },
-  "무극검결": {
-    "name": "무극검결",
-    "type": "공격무공",
-    "category": "검법",
-    "grade": "신공",
-    "base_multiplier": 2.2,
-    "qi_cost": 16,
-    "desc": "검의 끝에 이른 이름 없는 고수가 남긴 검결. 어느 가문의 것도 아니다.",
-    "forms": [
-      "무극",
-      "무형",
-      "귀원"
-    ],
-    "secret_technique": {
-      "name": "무극일검",
-      "unlock_grade": "신공",
-      "unlock_mastery": 50,
-      "multiplier": 3.0,
-      "qi_cost": 80
-    },
-    "gimmick": {
-      "pierce": 100,
-      "crit": 10,
-      "hits": 2,
-      "hit_rate": 0.75,
-      "name": "무극일기",
-      "text": "2번 나눠 치며(한 번마다 위력 7할 5푼) 번번이 명중과 회심을 따로 가린다, 회심 확률 +1할, 방어 10할 무시."
-    }
-  },
-  "개천권결": {
-    "name": "개천권결",
-    "type": "공격무공",
-    "category": "권법",
-    "grade": "신공",
-    "base_multiplier": 2.2,
-    "qi_cost": 16,
-    "desc": "주먹 하나로 산문을 열었다는 전설의 권결.",
-    "forms": [
-      "개산",
-      "개천",
-      "벽력"
-    ],
-    "secret_technique": {
-      "name": "개천일권",
-      "unlock_grade": "신공",
-      "unlock_mastery": 50,
-      "multiplier": 3.0,
-      "qi_cost": 80
-    },
-    "gimmick": {
-      "pierce": 100,
-      "stun": 20,
-      "power": 10,
-      "name": "개천벽지",
-      "text": "위력 +1할, 방어 10할 무시, 맞히면 2할 확률로 적이 다음 합에 손을 쓰지 못한다."
     }
   },
   "오호단혼도": {
@@ -3356,38 +3157,6 @@
       "focus": 10
     }
   },
-  "혼원일기공": {
-    "name": "혼원일기공",
-    "type": "심공",
-    "category": "심공",
-    "grade": "신공",
-    "base_multiplier": 1,
-    "qi_cost": 0,
-    "desc": "천지의 기운을 한 호흡으로 모은다는 전설의 심법.",
-    "effect": {
-      "heal_hp_pct": 28,
-      "heal_qi_pct": 42,
-      "atk_buff_pct": 28,
-      "buff_rounds": 3
-    },
-    "gimmick": {
-      "ward": 15,
-      "regen": {
-        "percent": 6,
-        "rounds": 3
-      },
-      "regen_qi": {
-        "percent": 6,
-        "rounds": 3
-      },
-      "cleanse": 1,
-      "name": "혼원귀일",
-      "text": "싸움을 시작할 때 최대 체력 1할 5푼의 호신 기운을 두른다. 합마다 체력 3푼, 내력 3푼이 저절로 찬다. 맞는 힘의 1할 5푼을 내력으로 대신 받는다. 독이 한 합을 넘기지 못한다.",
-      "qi_shield": 15
-    },
-    "lineage": "토납",
-    "lineage_rank": 5
-  },
   "창궁비운보": {
     "name": "창궁비운보",
     "type": "경공",
@@ -3540,30 +3309,6 @@
       "name": "무종무적",
       "text": "경공을 쓰지 않아도 1할 2푼 확률로 저절로 공격을 피한다, 다 피하면 쓴 내력의 절반을 되찾는다."
     }
-  },
-  "이형환위": {
-    "name": "무영천환보",
-    "type": "경공",
-    "category": "경공",
-    "grade": "신공",
-    "base_multiplier": 1,
-    "qi_cost": 10,
-    "desc": "몸은 여기 있는데 그림자가 먼저 자리를 바꾼다는 전설의 보법.",
-    "effect": {
-      "evade": 90,
-      "counter_pct": 180,
-      "flee_bonus": 50
-    },
-    "gimmick": {
-      "auto_evade": 12,
-      "strike": 60,
-      "partial": 0.25,
-      "name": "천환",
-      "text": "경공을 쓰지 않아도 1할 2푼 확률로 저절로 공격을 피한다, 다 피하지 못해도 위력을 7할 5푼 줄인다, 다 피하면 곧바로 위력 6할로 되받아친다, 다 피하면 잔상이 남아 다음 합에 2할 5푼 확률로 몸이 먼저 움직인다.",
-      "afterimage": 25
-    },
-    "lineage": "경신",
-    "lineage_rank": 5
   },
   "양의검법": {
     "name": "양의검법",

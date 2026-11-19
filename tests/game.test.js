@@ -400,7 +400,7 @@ test("무적에 가까운 조합을 막는 끝이 있다", () => {
   b3.applyGimmickOnHit({ lifesteal: 18 }, 999999);
   assert.equal(p3.hp, 1 + Math.trunc(p3.maxHp() * 0.25));
   // 저절로 차는 기운은 한 싸움에 3할까지다
-  const [p4, b4] = rig(["무영비도", "혼원일기공"]);
+  const [p4, b4] = rig(["무영비도", "양의귀원공"]);
   p4.hp = 10;
   for (let i = 0; i < 40; i++) b4.tickEffects();
   assert.ok(p4.hp <= 10 + Math.ceil(p4.maxHp() * 0.31), `${p4.hp}`);
@@ -1435,22 +1435,22 @@ test("새로 얻거나 품계가 높아도 쓰던 무공이 바뀌지 않는다"
   const p = new Player("하북팽가");
   const main = p.mainSkill;
   const mind = p.bestOfType("심공").key;
-  assert.deepEqual(p.learnSkill(new Skill("패천도결")), []);
-  p.learnSkill(new Skill("혼원일기공"));
-  p.learnSkill(new Skill("이형환위"));
+  assert.deepEqual(p.learnSkill(new Skill("무명도결")), []);
+  p.learnSkill(new Skill("무명청허공"));
+  p.learnSkill(new Skill("무명행운보"));
   assert.equal(p.mainSkill, main);
   assert.equal(p.bestOfType("심공").key, mind);
-  assert.equal(p.bestOfType("경공").key, "이형환위", "처음 익힌 경공은 바로 쓴다");
+  assert.equal(p.bestOfType("경공").key, "무명행운보", "처음 익힌 경공은 바로 쓴다");
   p.learnSkill(new Skill("초상비"));
-  assert.equal(p.bestOfType("경공").key, "이형환위");
+  assert.equal(p.bestOfType("경공").key, "무명행운보");
   const game = new Game();
   game.player = p;
-  game.setMainSkill("패천도결");
-  game.setMainSkill("혼원일기공");
-  assert.equal(p.bestSkill().key, "패천도결");
-  assert.equal(p.bestOfType("심공").key, "혼원일기공");
+  game.setMainSkill("무명도결");
+  game.setMainSkill("무명청허공");
+  assert.equal(p.bestSkill().key, "무명도결");
+  assert.equal(p.bestOfType("심공").key, "무명청허공");
   const again = Player.fromDict(p.toDict());
-  assert.equal(again.bestOfType("심공").key, "혼원일기공");
+  assert.equal(again.bestOfType("심공").key, "무명청허공");
 });
 
 test("성향과 명성에 따라 찾아오는 적이 달라진다", () => {
@@ -2331,19 +2331,20 @@ test("강화는 상태 창과 고르는 화면에 특성으로 보이지 않는�
 });
 
 test("인연은 사야 나오고 꺼 두면 나오지 않는다", () => {
+  const GIJIN = Object.keys(DB.events).find((k) => DB.events[k].requires?.unlocked === "은거기인" && Object.keys(DB.events[k].requires).length === 1);
   withKarma(12);
   const plain = new Game();
   plain.start("무림초출");
-  assert.ok(!checkRequires(plain.player, DB.events.유적_석문.requires));
-  assert.ok(buyContent("숨겨진유적"));
+  assert.ok(!checkRequires(plain.player, DB.events[GIJIN].requires));
+  assert.ok(buyContent("은거기인"));
   const game = new Game();
   game.start("무림초출");
-  assert.ok(checkRequires(game.player, DB.events.유적_석문.requires));
-  toggleContent("숨겨진유적");
+  assert.ok(checkRequires(game.player, DB.events[GIJIN].requires));
+  toggleContent("은거기인");
   assert.deepEqual(activeContent(), []);
   const off = new Game();
   off.start("무림초출");
-  assert.ok(!checkRequires(off.player, DB.events.유적_석문.requires));
+  assert.ok(!checkRequires(off.player, DB.events[GIJIN].requires));
   withKarma(0);
 });
 
@@ -2443,11 +2444,11 @@ test("유산 강화: 이어받을 수와 보관 수가 늘고, 단계와 품계�
 
   const g = new Game();
   g.start("무림초출");
-  g.player.learnSkill(Skill.fromDict({ key: "무극검결", grade: "신공", mastery: 10 }));
+  g.player.learnSkill(Skill.fromDict({ key: "무명검결", grade: "신공", mastery: 10 }));
   g.player.weapon = "운철보검";
   g.finishGame(true, "기본");
-  assert.ok(g.legacyOptions().some((o) => o.key === "무극검결"));
-  g.leaveLegacy(g.legacyOptions().findIndex((o) => o.key === "무극검결"));
+  assert.ok(g.legacyOptions().some((o) => o.key === "무명검결"));
+  g.leaveLegacy(g.legacyOptions().findIndex((o) => o.key === "무명검결"));
   g.ending.legacyLeft = null;
   g.leaveLegacy(g.legacyOptions().findIndex((o) => o.key === "운철보검"));
   const n = new Game();
@@ -2459,7 +2460,7 @@ test("유산 강화: 이어받을 수와 보관 수가 늘고, 단계와 품계�
   n.action("휴식");
   n.chooseEvent(0);
   // 고른 유산은 한 자리에서 한꺼번에 이어받는다
-  assert.equal(n.player.skills.find((s) => s.key === "무극검결").grade, "신공");
+  assert.equal(n.player.skills.find((s) => s.key === "무명검결").grade, "신공");
   assert.ok(n.player.weapon === "운철보검" || n.player.gear.includes("운철보검"));
   assert.equal(n.player.pendingLegacy.length, 0);
   withKarma(0);
@@ -3266,7 +3267,7 @@ test("성취 100을 넘겨 더 쌓아야 승급하고, 승급은 일절까지다
   assert.equal(top.mastery, 100);
 });
 
-test("신공은 공격, 심법, 보법에 있고 출신이나 카르마 인연으로만 얻는다", () => {
+test("신공은 공격, 심법, 보법에 있고 출신의 이야기로만 얻는다", () => {
   const tops = Object.keys(DB.skills).filter((k) => DB.skills[k].grade === "신공" && !DB.skills[k].reserved);
   const origins = [...DB.origins.order, ...DB.origins.side_order].filter((o) => o !== "무림초출");
   for (const type of ["공격무공", "심공", "경공"]) {
@@ -3276,17 +3277,15 @@ test("신공은 공격, 심법, 보법에 있고 출신이나 카르마 인연�
     // 강호초출은 사부의 심법과 보법 하나씩, 공격 무공은 계열마다 하나씩
     const drifter = tops.filter((k) => DB.skills[k].type === type && DB.skills[k].origin === "무림초출");
     assert.equal(drifter.length, type === "공격무공" ? 7 : 1, `무림초출 ${type}`);
-    assert.ok(tops.some((k) => DB.skills[k].type === type && !DB.skills[k].origin), `공용 ${type}`);
   }
-  const free = tops.filter((k) => DB.skills[k].type === "공격무공" && !DB.skills[k].origin).map((k) => DB.skills[k].category);
-  assert.equal(new Set(free).size, 7, "강호 신공은 계열마다 하나");
+  assert.deepEqual(tops.filter((k) => !DB.skills[k].origin), [], "출신 전용이 아닌 신공은 없다");
   const problems = [];
   const scan = (node, req, where) => {
     if (Array.isArray(node)) return node.forEach((n) => scan(n, req, where));
     if (!node || typeof node !== "object") return undefined;
     const here = { origin: node.requires?.origin ?? req.origin, unlocked: node.requires?.unlocked ?? req.unlocked };
     const allowed = here.origin || here.unlocked;
-    if (node.style_skill?.grade === "신공" && !allowed) problems.push(where);
+    if (node.style_skill?.grade === "신공" && !node.style_skill.origin) problems.push(where);
     if (tops.includes(node.skill)) {
       const owner = DB.skills[node.skill].origin;
       if (owner ? here.origin !== owner : !allowed) problems.push(`${where}: ${node.skill}`);
@@ -3302,34 +3301,31 @@ test("신공은 공격, 심법, 보법에 있고 출신이나 카르마 인연�
     const owner = DB.skills[k].origin;
     // 강호초출의 공격 신공은 사부가 제자의 병기에 맞춰 준다
     const fitted = (e) => DB.skills[k].type === "공격무공" && JSON.stringify(e).includes(`"origin":"${owner}"}`);
-    if (owner) assert.ok(Object.values(DB.events).some((e) => e.requires?.origin === owner && (JSON.stringify(e).includes(`"${k}"`) || fitted(e))), `${k} 출신 이야기`);
-    else if (DB.skills[k].type !== "공격무공") assert.ok(Object.values(DB.events).some((e) => e.requires?.unlocked && JSON.stringify(e).includes(`"${k}"`)), `${k} 카르마 인연`);
+    assert.ok(Object.values(DB.events).some((e) => e.requires?.origin === owner && (JSON.stringify(e).includes(`"${k}"`) || fitted(e))), `${k} 출신 이야기`);
   }
-  assert.ok(Object.values(DB.events).some((e) => e.requires?.unlocked && JSON.stringify(e).includes('"grade":"신공"')), "강호 신공 카르마 인연");
   assert.ok(Object.values(DB.events).some((e) => e.requires?.origin === "무림초출" && JSON.stringify(e).includes('"grade":"신공"')), "강호초출 이야기");
 });
 
-test("주무공 계열 신공 보상은 다른 출신의 전용 신공을 주지 않고, 쓰던 심법은 그대로다", () => {
-  const p = new Player();
-  applyEffects(p, { style_skill: { grade: "신공" } });
-  assert.ok(p.hasSkill("무극검결"));
-  assert.ok(!p.hasSkill("제왕검형"));
-  const toNap = p.skills.find((s) => s.type === "심공");
-  toNap.grade = "일절";
-  applyEffects(p, { skill: "호체공" });
-  assert.equal(p.bestOfType("심공").key, toNap.key, "새로 얻어도 쓰던 심법을 그대로 쓴다");
-  applyEffects(p, { skill: "혼원일기공" });
-  assert.equal(p.bestOfType("심공").key, "혼원일기공", "같은 갈래의 심법은 성취를 이어받는다");
-  assert.equal(p.bestOfType("심공").mastery, toNap.mastery);
-});
-
-test("카르마 인연의 신공은 주무공 계열로 받고, 이미 익혔으면 대신 무리가 오른다", () => {
+test("신공 보상은 출신을 밝혀야 주고, 다른 출신의 전용 신공을 주지 않는다", () => {
   const p = new Player();
   const before = p.martial;
   applyEffects(p, { style_skill: { grade: "신공" } });
-  assert.ok(p.hasSkill("무극검결"));
-  applyEffects(p, { style_skill: { grade: "신공" } });
-  assert.ok(p.martial > before);
+  assert.ok(!p.skills.some((s) => s.grade === "신공"), "출신을 밝히지 않은 신공 보상은 무공을 주지 않는다");
+  assert.ok(p.martial > before, "대신 무리가 오른다");
+  applyEffects(p, { style_skill: { grade: "신공", origin: "무림초출" } });
+  assert.ok(p.hasSkill("무명검결"));
+  assert.ok(!p.hasSkill("제왕검형"));
+});
+
+test("같은 갈래의 더 깊은 심법은 성취를 이어받고, 쓰던 심법은 그대로다", () => {
+  const p = new Player();
+  const toNap = p.skills.find((s) => s.type === "심공");
+  toNap.grade = "명품";
+  applyEffects(p, { skill: "호체공" });
+  assert.equal(p.bestOfType("심공").key, toNap.key, "새로 얻어도 쓰던 심법을 그대로 쓴다");
+  applyEffects(p, { skill: "태허심법" });
+  assert.equal(p.bestOfType("심공").key, "태허심법", "같은 갈래의 심법은 성취를 이어받는다");
+  assert.equal(p.bestOfType("심공").mastery, toNap.mastery);
 });
 
 test("새 장의 성장은 장마다, 회복은 해마다다", () => {
@@ -3421,7 +3417,7 @@ test("같은 갈래의 더 깊은 무공은 이어받고 같은 무공은 성취
 });
 
 test("적의 경지와 이름, 품은 비급이 세계관에 맞는다", () => {
-  const nameless = ["무명노인", "권마의그림자", "옛무인그림자", "생사문지기", "천마", "묘지기"];
+  const nameless = ["무명노인", "권마의그림자", "옛무인그림자", "천마"];
   const banned = ["멸절", "호연패", "단목휘"];
   for (const [k, e] of Object.entries(DB.enemies)) {
     assert.ok(DB.realms.enemy_order.includes(e.realm), k);
@@ -4486,9 +4482,9 @@ test("무엇을 겹쳐도 무적이 되지 않는다", () => {
   const full = b.enemy.attack * b.enemy.attackMultiplier();
   assert.ok(b.incoming() >= Math.ceil(full * 0.1), "맞는 힘의 1할은 닿는다");
   // 저절로 피하는 것에도 끝이 있다
-  const steps = new Skill("이형환위");
+  const steps = new Skill("능공허도");
   p.skills.push(steps);
-  p.chosenArts.경공 = "이형환위";
+  p.chosenArts.경공 = "능공허도";
   p.armor = "운룡보의";
   const c = new Battle(p, new Enemy("낭인"));
   c.afterimage = 99;
