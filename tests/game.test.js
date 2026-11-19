@@ -400,7 +400,7 @@ test("무적에 가까운 조합을 막는 끝이 있다", () => {
   b3.applyGimmickOnHit({ lifesteal: 18 }, 999999);
   assert.equal(p3.hp, 1 + Math.trunc(p3.maxHp() * 0.25));
   // 저절로 차는 기운은 한 싸움에 3할까지다
-  const [p4, b4] = rig(["무영비도", "양의귀원공"]);
+  const [p4, b4] = rig(["무영비도", "태극심공"]);
   p4.hp = 10;
   for (let i = 0; i < 40; i++) b4.tickEffects();
   assert.ok(p4.hp <= 10 + Math.ceil(p4.maxHp() * 0.31), `${p4.hp}`);
@@ -516,8 +516,8 @@ test("주화입마: 심경이 낮으면 마공 비기에 내상", () => {
   seed(1);
   const p = new Player();
   p.mind = 1;
-  p.learnSkill(new Skill("천마파천공"));
-  const skill = p.getSkill("천마파천공");
+  p.learnSkill(new Skill("권왕패천"));
+  const skill = p.getSkill("권왕패천");
   skill.secretUnlocked = true;
   const battle = new Battle(p, new Enemy("천마"));
   for (let i = 0; i < 10; i++) {
@@ -3941,14 +3941,11 @@ test("사도나 마도를 걷는 무인에게는 무림맹주도 적으로 나�
   assert.ok(!seen(() => {}).has("무림맹주"));
 });
 
-test("문파의 최고 무공은 신공이고 아직 얻을 수 없으며, 문파의 고등급 무공은 그 소속의 사건에서만 나온다", () => {
-  const reserved = Object.keys(DB.skills).filter((k) => DB.skills[k].reserved);
-  assert.ok(reserved.length >= 15);
-  for (const k of reserved) {
+test("문파의 최고 무공은 그 소속의 외전 출신이 잇고, 문파의 고등급 무공은 그 소속의 사건에서만 나온다", () => {
+  assert.deepEqual(Object.keys(DB.skills).filter((k) => DB.skills[k].reserved), []);
+  for (const [k, sect] of [["달마심공", "외전소림"], ["태극검", "외전무당"], ["이십사수매화검법", "외전매화"], ["만천화우", "외전당가"], ["회천창법", "외전모용"], ["구궁연노", "외전제갈"]]) {
     assert.equal(DB.skills[k].grade, "신공", k);
-    assert.ok(DB.skills[k].school, k);
-    assert.ok(!Object.values(DB.market).some((i) => i.effects.some((e) => e.skill === k)), `${k} 장터`);
-    assert.ok(!Object.values(DB.enemies).some((e) => e.drop?.skill === k), `${k} 드롭`);
+    assert.equal(DB.skills[k].origin, sect, k);
   }
   const problems = [];
   const scan = (node, sect, where) => {
@@ -3974,7 +3971,7 @@ test("문파의 최고 무공은 신공이고 아직 얻을 수 없으며, 문�
 });
 
 test("무공의 품계가 위상에 맞는다", () => {
-  for (const [k, g] of [["타구봉법", "일절"], ["백보신권", "신공"], ["만천화우", "신공"], ["역근공", "일절"], ["달마심공", "신공"], ["태극검", "신공"], ["이십사수매화검법", "신공"], ["매화검법", "일절"], ["파산권", "명품"]]) assert.equal(DB.skills[k].grade, g, k);
+  for (const [k, g] of [["타구봉법", "일절"], ["만천화우", "신공"], ["역근공", "일절"], ["달마심공", "신공"], ["태극검", "신공"], ["이십사수매화검법", "신공"], ["매화검법", "일절"], ["파산권", "명품"]]) assert.equal(DB.skills[k].grade, g, k);
   // 문파의 비전은 장터에 나오지 않는다
   for (const k of ["매화검법", "역근공", "태극검", "타구봉법"]) assert.ok(!Object.values(DB.market).some((i) => i.effects.some((e) => e.skill === k)), k);
   assert.equal(DB.events.제안_개방.choices[0].outcomes[0].effects.skill, "오호곤법", "개방에 들어가자마자 방주의 봉법을 주지 않는다");

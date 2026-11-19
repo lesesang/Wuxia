@@ -69,6 +69,10 @@ for _k,_s in SK.items():
     _g=(_s.get('category') or _s['type'])+':'+','.join(sorted(x for x in _s['gimmick'] if x not in('name','text')))
     if _g in _sig and (_k in side.SKILLS or _sig[_g] in side.SKILLS): print('묘리 겹침', _k, _sig[_g], _g)
     _sig.setdefault(_g,_k)
+# 문파와 세가의 최고 무공은 그 소속의 외전 출신이 잇는다. 같은 갈래의 무공과 이어진다
+for _k,(_l,_r,_s) in {"달마심공":("소림심법",5,"소림"),"태극검":("무당검",4,"무당"),"태극심공":("무당심법",5,"무당"),"이십사수매화검법":("매화검",4,"화산"),"만천화우":("당가암기",4,"당가"),"사일검법":("점창검",3,"점창"),"회천창법":("모용창",4,"모용"),"구궁연노":("제갈침",3,"제갈"),"천뢰검법":(None,None,"종남"),"대라검법":(None,None,"곤륜")}.items():
+    SK[_k].pop('school',None)
+    if _l: SK[_k]['lineage']=_l; SK[_k]['lineage_rank']=_r
 save('skills',SK)
 save('origins',O)
 # 적
