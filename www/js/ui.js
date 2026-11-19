@@ -459,7 +459,9 @@ function originDetail(key) {
   const sect = originSect(key) ? DB.sects[originSect(key)] : null;
   return `<span class="pick-desc block">${esc(o.desc)}</span>${statBars(o)}
     <span class="pick-stats block">시작 무공: ${esc(skillNames)}</span>
-    ${sect ? `<span class="pick-stats block">${sectWord(originSect(key))}: ${esc(sect.name)} (${esc(sect.bonus_text)})</span>` : ""}
+    ${o.bonus_text ? `<span class="pick-stats block">출신의 힘: ${esc(o.bonus_text)}</span>` : ""}
+    ${Object.keys(o.alignment || {}).length ? `<span class="pick-stats block">시작 성향: ${Object.entries(o.alignment).map(([k, v]) => `${esc(k)} ${v}`).join(", ")}</span>` : ""}
+    ${sect ? `<span class="pick-stats block">${sectWord(originSect(key))}: ${esc(sect.name)}</span>` : ""}
     ${o.side ? `<span class="pick-stats block">목표: ${esc(o.goal)}</span><span class="pick-stats block">${o.end_turn}달에 끝나는 외전</span>` : ""}`;
 }
 
@@ -947,7 +949,7 @@ function statusModal() {
         ${cap < 999 ? `<p class="stat-cap-note">${esc(p.realm)}의 기량은 ${cap}에서 막힙니다.${p.cappedStats().length ? ` 막힌 기량 하나마다 나머지가 ${halpun(p.cappedStats().length * DB.realms.cap_boost.per_capped)} 더 빨리 오릅니다.` : ""}${Object.values(p.pent).some(Boolean) ? " 막힌 동안 쌓인 몫은 경지가 오르면 풀립니다." : ""}</p>` : ""}
       </div>
       <div class="modal-section">
-        ${row("출신", p.origin)}${row(sect ? sectWord(p.sect) : "소속", sect ? `${sect.name} (${sect.bonus_text})` : "없음")}
+        ${row("출신", `${p.origin}${DB.origins.origins[p.originKey]?.bonus_text ? ` (${DB.origins.origins[p.originKey].bonus_text})` : ""}`)}${row(sect ? sectWord(p.sect) : "소속", sect ? sect.name : "없음")}
         ${row("명성", `${p.fame} (${fameRank(p)})`)}
         ${p.injury ? row("내상", `${p.injury}단계, 주는 피해 -${halpun(p.injury * INJURY_PENALTY)}, 요양으로 치료`) : ""}
         ${row("실전 경험", `${p.battles} (${p.kills}명 처치)`)}

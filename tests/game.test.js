@@ -500,8 +500,7 @@ test("내상은 피해를 줄이고 회복으로 낫는다", () => {
 });
 
 test("적 중독은 합마다 피해를 준다", () => {
-  const p = new Player();
-  p.sect = "당가";
+  const p = new Player("외전당가");
   const enemy = new Enemy("산적");
   const battle = new Battle(p, enemy);
   battle.hits = () => true;
@@ -1761,12 +1760,22 @@ test("무공을 여럿 들고 시작하면 달이 가기 전에 쓸 무공을 �
   withKarma(0);
 });
 
+test("출신은 시작 성향과 출신의 보정을 지니고, 소속에는 보정이 없다", () => {
+  for (const k of [...DB.origins.order, ...DB.origins.side_order]) {
+    const o = DB.origins.origins[k];
+    assert.ok(Object.values(o.alignment || {}).reduce((a, b) => a + b, 0) > 0, k);
+    assert.ok(Object.keys(o.bonus || {}).length && o.bonus_text, k);
+  }
+  for (const s of Object.values(DB.sects)) assert.ok(!s.bonus, s.name);
+  assert.equal(new Player("하오문").alignment.사도, 60);
+});
+
 test("성향 자질은 희귀 이상이고 오를 때 더 오른다", () => {
   for (const t of Object.values(DB.traits)) {
     if (t.effects?.some((e) => e.type === "start_alignment" || e.type === "alignment_gain")) assert.ok(["희귀", "전설"].includes(t.rarity), t.name);
   }
   const p = new Player("무림초출", ["호연지기"]);
-  assert.equal(p.alignment.정도, 70);
+  assert.equal(p.alignment.정도, 70 + DB.origins.origins.무림초출.alignment.정도);
   p.adjustAlignment("정도", 40);
   assert.ok(p.alignment.정도 > 120, "오를 때 더 오른다");
   p.adjustAlignment("정도", 5000);

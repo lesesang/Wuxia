@@ -175,7 +175,8 @@ export const originSect = (key) => ORIGIN_SECTS[key] || DB.origins?.origins?.[ke
 export const sideOrigin = (player) => (DB.origins.origins[player.originKey]?.side ? DB.origins.origins[player.originKey] : null);
 /** 본편에서만, 또는 외전에서만 일어나는 일을 가린다 */
 export const fitsStory = (player, event) => (sideOrigin(player) ? !event.main_only : !event.side);
-export const sectBonus = (player, field) => DB.sects[player.sect]?.bonus?.[field] || 0;
+/** 출신의 보정. 소속에는 보정이 없다 */
+export const originBonus = (player, field) => DB.origins.origins[player.originKey]?.bonus?.[field] || 0;
 
 // ---------- 경지 ----------
 export const realmBonus = (realm) => DB.realms.combat_bonus[realm] || 0;

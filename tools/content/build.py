@@ -58,6 +58,59 @@ O['origins']['외전매화']['chapters']['2']['desc']='스승이 떠나온 화�
 O['origins']['외전매화'].update(sect="화산",skip=["문파대사_화산"],desc="화산의 속가 매화검수이자 천하십대고수 매화노검 백송이 산을 떠나기 전 마지막으로 거둔 제자. 화산 뒷산 스승의 초막에서 매화검법과 스승의 검을 함께 받아 일류에 올랐다. 스승은 명부의 열째 자리를 비우고 편지 한 장 없이 사라졌다.")
 _h=O['origins']['외전혈승']; _h['end_turn']=120; _h['goal']='혈교의 순례승으로 개조의 의지를 거두어 혈마가 깨어나는 강림의 밤을 열고, 죽 한 그릇의 값을 마저 치른다'; _h['goal_short']='값을 치르는 날'; _h['chapters']['4']['desc']='빼앗긴 그릇을 되찾는 싸움. 그리고 강림의 밤.'; _h['chapters']['5']['desc']='혈마신교의 강호다. 죽 한 그릇의 값이 아직 남았다.'
 for k,v in {"외전빙궁":["북해고수"],"외전매화":["십대고수"],"외전수로":["수적두목"],"외전야수":["천마사냥개","남만술사","백액호","금안조","철갑현귀","불가사리","천년백사"],"외전혈승":["마교심판자","혈교우호법"]}.items(): O['origins'][k]['shun']=v
+# 출신마다 시작 성향과 출신의 보정. 소속의 보정은 두지 않는다
+_LBL={"damage":"주는 피해","damage_reduce":"받는 피해","crit":"회심의 일격 확률","evade":"경공 회피","heal_bonus":"심법 회복량","silver":"얻는 은자","poison":"공격이 적을 중독시킨다"}
+def _hp(n):
+    a,b=divmod(n,10); return (f"{a}할" if a else "")+(" " if a and b else "")+(f"{b}푼" if b else "")
+def _btext(b):
+    out=[]
+    for k,v in b.items():
+        if k=="poison": out.append(_LBL[k])
+        else: out.append(f"{_LBL[k]} {_hp(v)} {'감소' if k=='damage_reduce' else '증가'}")
+    return ", ".join(out)
+ORIGIN_TRAITS={
+ "무림초출":({"정도":30},{"damage":4,"damage_reduce":3}),
+ "남궁세가":({"정도":60},{"crit":8}),
+ "하북팽가":({"정도":60},{"damage":8}),
+ "표국표사":({"정도":40},{"damage_reduce":4,"silver":10}),
+ "개방제자":({"정도":60},{"heal_bonus":20,"damage_reduce":2}),
+ "권마계승":({"마도":40},{"damage":4,"crit":4}),
+ "혈지생환":({"정도":20,"마도":30},{"damage":4,"heal_bonus":15}),
+ "하오문":({"사도":60},{"evade":6,"silver":10}),
+ "외전당가":({"정도":60},{"poison":6}),
+ "외전빙궁":({"정도":40},{"damage_reduce":3,"heal_bonus":15}),
+ "외전매화":({"정도":60},{"crit":8}),
+ "외전살막":({"사도":60},{"crit":5,"evade":5}),
+ "외전수로":({"사도":60},{"evade":5,"silver":10}),
+ "외전혈승":({"마도":60},{"damage":4,"heal_bonus":15}),
+ "외전야수":({"마도":40},{"damage":5,"damage_reduce":3}),
+ "외전소림":({"정도":60},{"damage_reduce":6}),
+ "외전무당":({"정도":60},{"heal_bonus":30}),
+ "외전아미":({"정도":60},{"evade":10}),
+ "외전공동":({"정도":60},{"damage_reduce":4,"damage":3}),
+ "외전모용":({"정도":60},{"damage":5,"crit":3}),
+ "외전사도련":({"사도":60},{"damage":4,"silver":10}),
+ "외전제갈":({"정도":60},{"crit":4,"silver":10}),
+ "외전귀문":({"마도":60},{"damage":3,"poison":4}),
+ "외전녹림":({"사도":60},{"damage_reduce":3,"silver":10}),
+ "외전흑사":({"사도":60},{"silver":15,"crit":3}),
+ "외전망나니":({"사도":40},{"crit":6,"damage":3}),
+ "외전청성":({"정도":60},{"heal_bonus":15,"evade":5}),
+ "외전종남":({"정도":60},{"damage":4,"evade":4}),
+ "외전신교":({"마도":60},{"damage":8}),
+ "외전홍수":({"마도":60},{"crit":4,"evade":5}),
+ "외전점창":({"정도":60},{"crit":5,"evade":5}),
+ "외전곤륜":({"정도":60},{"heal_bonus":20,"damage_reduce":2}),
+ "외전광부":({"사도":40},{"damage_reduce":5,"damage":2}),
+ "외전사공":({"정도":30,"사도":30},{"damage_reduce":3,"heal_bonus":15}),
+ "외전위소":({"정도":40},{"damage_reduce":3,"damage":4}),
+}
+assert set(ORIGIN_TRAITS)==set(O['order'])|set(O['side_order']), set(O['order'])|set(O['side_order'])^set(ORIGIN_TRAITS)
+for _k,(_a,_b) in ORIGIN_TRAITS.items():
+    O['origins'][_k]['alignment']=_a; O['origins'][_k]['bonus']=_b; O['origins'][_k]['bonus_text']=_btext(_b)
+_S=load('sects')
+for _v in _S.values(): _v.pop('bonus',None); _v.pop('bonus_text',None)
+save('sects',_S)
 SK=load('skills')
 s9.patch_skills(SK,O)
 for k,v in side.SKILLS.items():
