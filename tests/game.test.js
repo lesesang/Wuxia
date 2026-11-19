@@ -2285,7 +2285,7 @@ test("출신마다 전용 자질과 인연이 있고 그 출신만 쓴다", () =
   assert.ok(!game.player.traits.includes("창궁의혈통"), "다른 출신은 장착할 수 없다");
   game.start("남궁세가", ["창궁의혈통"]);
   assert.ok(game.player.traits.includes("창궁의혈통"));
-  assert.equal(game.player.skills.find((s) => s.key === "창궁검법").mastery, 80);
+  assert.equal(game.player.skills.find((s) => s.key === "창궁검법").mastery, 40 + DB.traits.창궁의혈통.effects.find((e) => e.type === "start_mastery").amount);
   data.unlocked_traits = [];
   saveMeta(data);
 });

@@ -193,6 +193,15 @@ T={}; last=[k for k,v in T0.items() if v.get('rarity')=='희귀' and not v.get('
 for k,v in T0.items():
     T[k]=v
     if k==last: T.update(dsl.TRAITS)
+# 출신 전용 자질과 기틀은 같은 값어치로 맞춘 표를 따른다(tools/check/shop_value.py)
+from shop_tune import TRAIT_TUNE, UPGRADE_TUNE
+for _k,_v in TRAIT_TUNE.items(): T[_k].update(_v)
+for _k,_v in UPGRADE_TUNE.items(): K['upgrades'][_k].update(_v)
+# 등급은 값을 따른다: 7 미만은 일반, 7 이상은 희귀. 자질 데이터는 등급, 출신 차례, 값 순
+for _v in T.values():
+    if not _v.get('hidden') and _v.get('rarity')!='전설': _v['rarity']='희귀' if _v['cost']>=7 else '일반'
+_RO=['일반','희귀','전설']; _OO=[None]+O['order']+O['side_order']
+T=dict(sorted(T.items(), key=lambda kv:(1 if kv[1].get('hidden') else 0, _RO.index(kv[1].get('rarity','일반')) if not kv[1].get('hidden') else 0, _OO.index(kv[1].get('origin')), kv[1].get('cost',0))))
 save('traits',T)
 K['achievements']=[a for a in K['achievements'] if not a['key'].startswith('외전')]+[
  {"key":"외전1","name":"곁길의 끝","desc":"외전 하나를 끝맺는다.","type":"sides","value":1,"karma":5},
