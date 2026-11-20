@@ -357,7 +357,7 @@ test("전투 임시 버프는 끝나면 되돌린다", () => {
   const base = p.external;
   const enemy = new Enemy("산적");
   const battle = new Battle(p, enemy);
-  assert.equal(p.external, base + 60);
+  assert.equal(p.external, base + 90);
   battle.finish(false, true);
   assert.equal(p.external, base);
 });
@@ -2236,7 +2236,7 @@ test("생사경 결말의 카르마는 25이다", () => {
 
 test("자질의 새 효과가 동작한다", () => {
   const veteran = new Player("무림초출", ["백전노장"]);
-  assert.equal(veteran.battles, 12);
+  assert.equal(veteran.battles, 20);
   const p = new Player("무림초출", ["절세미공"]);
   const skill = p.bestSkill();
   skill.mastery = 100;
@@ -2304,13 +2304,13 @@ test("시작 선물은 주무공 계열을 따른다", () => {
   assert.ok(lines.length >= 4);
   assert.ok(equipmentBonus(p, "weapon") >= 10);
   assert.equal(DB.market[p.weapon].effects[0].style, "도법");
-  assert.equal(p.inventory.베기짚단, 5);
-  assert.equal(p.inventory.맹호도유, 5);
+  assert.equal(p.inventory.베기짚단, 8);
+  assert.equal(p.inventory.맹호도유, 7);
   assert.ok(p.skills.some((s) => s.category === "도법" && s.grade === "명품" && s.key !== "오호단문도"));
   const drifter = new Player("무림초출", ["수련도구", "현기의호흡"]);
   applyEffects(drifter, { start_weapon: "창법", start_mindset: "양생공" });
   grantStartGear(drifter);
-  assert.equal(drifter.inventory.납창추, 5, "강호초출은 첫 병기를 고른 뒤 받는다");
+  assert.equal(drifter.inventory.납창추, 8, "강호초출은 첫 병기를 고른 뒤 받는다");
   assert.ok(!drifter.hasSkill("곤륜현기공"), "곤륜의 호흡은 심법을 주지 않는다");
   assert.ok(drifter.bestOfType("심공").mastery >= 40, "고른 첫 심법이 성취를 쌓은 채로 시작한다");
 });
@@ -4544,7 +4544,7 @@ test("씨름판은 경지와 기량에 따라 결과가 다르고, 곤륜의 호
   grantStartGear(base);
   grantStartGear(breath);
   assert.equal(breath.skills.length, base.skills.length, "심법을 따로 주지 않는다");
-  assert.equal(breath.bestOfType("심공").mastery, Math.min(100, base.bestOfType("심공").mastery + 40));
+  assert.equal(breath.bestOfType("심공").mastery, Math.min(100, base.bestOfType("심공").mastery + 60));
   withKarma(0);
 });
 

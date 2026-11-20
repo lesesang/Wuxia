@@ -52,7 +52,7 @@ def nice(x, unit):
     if unit == "amount": return max(10, int(round(x / 10) * 10)) if x >= 10 else max(1, int(round(x)))
     if x >= 10: return int(round(x / 5) * 5)
     return max(1, int(round(x)))
-CAP = {"damage_reduce": 10, "crit": 20, "damage_bonus": 10, "first_strike": 70, "flee_rate": 30, "market_discount": 20, "mindset_power": 50, "heal_rate": 100,
+CAP = {"damage_reduce": 10, "crit": 20, "damage_bonus": 10, "first_strike": 90, "flee_rate": 30, "market_discount": 20, "mindset_power": 90, "heal_rate": 100,
        "hit_bonus": 15, "battle_exp": 1, "start_battle_tool": 6, "extra_stock": 3}
 SCALABLE = set(PH) | {"turn_regen", "low_hp_power"}
 def scale(effects, f):

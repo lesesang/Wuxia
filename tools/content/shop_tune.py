@@ -21,27 +21,27 @@ TRAIT_TUNE = {
   "effects": [
    {
     "type": "mastery_rate",
-    "percent": 55
+    "percent": 60
    },
    {
     "type": "mindset_power",
     "percent": 15
    }
   ],
-  "desc": "무공 성취를 5할 5푼 더 빠르게 얻고 심법 회복이 1할 5푼 늘어난다. 십 년 들은 잔소리가 위기마다 귀에 울린다."
+  "desc": "무공 성취를 6할 더 빠르게 얻고 심법 회복이 1할 5푼 늘어난다. 십 년 들은 잔소리가 위기마다 귀에 울린다."
  },
  "창궁의기세": {
   "effects": [
    {
     "type": "first_strike",
-    "percent": 55
+    "percent": 70
    },
    {
     "type": "crit",
-    "percent": 5
+    "percent": 15
    }
   ],
-  "desc": "전투의 첫 합에서 주는 피해가 5할 5푼 늘어나고 회심의 일격 확률이 5푼 오른다. 남궁의 옛사람들이 그 기세를 먼저 알아본다."
+  "desc": "전투의 첫 합에서 주는 피해가 7할 늘어나고 회심의 일격 확률이 1할 5푼 오른다. 남궁의 옛사람들이 그 기세를 먼저 알아본다."
  },
  "창궁의혈통": {
   "effects": [
@@ -120,15 +120,15 @@ TRAIT_TUNE = {
   "effects": [
    {
     "type": "fortune_rate",
-    "percent": 25
+    "percent": 30
    },
    {
     "type": "turn_regen",
-    "hp_pct": 4,
-    "qi_pct": 4
+    "hp_pct": 5,
+    "qi_pct": 5
    }
   ],
-  "desc": "기연을 만날 확률이 2할 5푼 오르고 매달 체력과 내력을 4푼씩 더 회복한다. 소문과 끼니가 얽힌 사건에서 먼저 듣는다."
+  "desc": "기연을 만날 확률이 3할 오르고 매달 체력과 내력을 5푼씩 더 회복한다. 소문과 끼니가 얽힌 사건에서 먼저 듣는다."
  },
  "동냥밥심": {
   "effects": [
@@ -188,10 +188,10 @@ TRAIT_TUNE = {
    },
    {
     "type": "mindset_power",
-    "percent": 50
+    "percent": 90
    }
   ],
-  "desc": "공격이 적을 중독시키고 심법 회복이 5할 늘어난다. 그 손을 잡아 본 사람은 연못을 안다."
+  "desc": "공격이 적을 중독시키고 심법 회복이 9할 늘어난다. 그 손을 잡아 본 사람은 연못을 안다."
  },
  "외상장부": {
   "effects": [
@@ -210,27 +210,27 @@ TRAIT_TUNE = {
   "effects": [
    {
     "type": "fortune_rate",
-    "percent": 30
+    "percent": 60
    },
    {
     "type": "extra_stock",
     "amount": 3
    }
   ],
-  "desc": "기연을 만날 확률이 3할 오르고 장터에 물건이 3개 더 진열된다. 찻집 구석에 앉으면 소문 길이 들린다."
+  "desc": "기연을 만날 확률이 6할 오르고 장터에 물건이 3개 더 진열된다. 찻집 구석에 앉으면 소문 길이 들린다."
  },
  "독손끝": {
   "effects": [
    {
     "type": "first_strike",
-    "percent": 40
+    "percent": 70
    },
    {
     "type": "crit",
-    "percent": 8
+    "percent": 15
    }
   ],
-  "desc": "전투의 첫 합에서 주는 피해가 4할 늘어나고 회심의 일격 확률이 8푼 오른다. 독과 암기가 얽힌 사건에서 손끝이 먼저 안다."
+  "desc": "전투의 첫 합에서 주는 피해가 7할 늘어나고 회심의 일격 확률이 1할 5푼 오른다. 독과 암기가 얽힌 사건에서 손끝이 먼저 안다."
  },
  "약손길": {
   "effects": [
@@ -249,7 +249,7 @@ TRAIT_TUNE = {
   "effects": [
    {
     "type": "mindset_power",
-    "percent": 30
+    "percent": 60
    },
    {
     "type": "turn_regen",
@@ -257,7 +257,7 @@ TRAIT_TUNE = {
     "qi_pct": 8
    }
   ],
-  "desc": "심법 회복이 3할 늘어나고 매달 내력을 8푼 더 회복한다. 추위와 고요가 얽힌 사건에서 흔들리지 않는다."
+  "desc": "심법 회복이 6할 늘어나고 매달 내력을 8푼 더 회복한다. 추위와 고요가 얽힌 사건에서 흔들리지 않는다."
  },
  "적는눈": {
   "effects": [
@@ -302,10 +302,14 @@ TRAIT_TUNE = {
   "effects": [
    {
     "type": "first_strike",
-    "percent": 70
+    "percent": 90
+   },
+   {
+    "type": "crit",
+    "percent": 12
    }
   ],
-  "desc": "전투의 첫 합에서 주는 피해가 7할 늘어난다. 숨어들어 지우는 일에서 길을 안다."
+  "desc": "전투의 첫 합에서 주는 피해가 9할 늘어나고 회심의 일격 확률이 1할 2푼 오른다. 숨어들어 지우는 일에서 길을 안다."
  },
  "죽은걸음": {
   "effects": [
@@ -350,41 +354,41 @@ TRAIT_TUNE = {
   "effects": [
    {
     "type": "damage_bonus",
-    "percent": 6
+    "percent": 7
    },
    {
     "type": "mindset_power",
     "percent": 20
    }
   ],
-  "desc": "주는 피해가 6푼 늘어나고 심법 회복이 2할 늘어난다. 피와 경전이 얽힌 사건에서 구절이 먼저 떠오른다."
+  "desc": "주는 피해가 7푼 늘어나고 심법 회복이 2할 늘어난다. 피와 경전이 얽힌 사건에서 구절이 먼저 떠오른다."
  },
  "탁발의발": {
   "effects": [
    {
     "type": "fortune_rate",
-    "percent": 20
+    "percent": 25
    },
    {
     "type": "turn_regen",
-    "hp_pct": 4,
-    "qi_pct": 4
+    "hp_pct": 5,
+    "qi_pct": 5
    }
   ],
-  "desc": "기연을 만날 확률이 2할 오르고 매달 체력과 내력을 4푼씩 더 회복한다. 문전에서 쫓겨나는 일에 익숙하다."
+  "desc": "기연을 만날 확률이 2할 5푼 오르고 매달 체력과 내력을 5푼씩 더 회복한다. 문전에서 쫓겨나는 일에 익숙하다."
  },
  "짐승의귀": {
   "effects": [
    {
     "type": "fortune_rate",
-    "percent": 20
+    "percent": 30
    },
    {
     "type": "flee_rate",
-    "percent": 20
+    "percent": 30
    }
   ],
-  "desc": "기연을 만날 확률이 2할 오르고 달아날 확률이 2할 오른다. 산과 짐승이 얽힌 사건에서 뜻이 먼저 들린다."
+  "desc": "기연을 만날 확률이 3할 오르고 달아날 확률이 3할 오른다. 산과 짐승이 얽힌 사건에서 뜻이 먼저 들린다."
  },
  "범의젖심": {
   "effects": [
@@ -416,14 +420,14 @@ TRAIT_TUNE = {
   "effects": [
    {
     "type": "mindset_power",
-    "percent": 30
+    "percent": 45
    },
    {
     "type": "mastery_rate",
-    "percent": 30
+    "percent": 45
    }
   ],
-  "desc": "심법 회복이 3할 늘어나고 무공 성취를 3할 더 빠르게 얻는다. 경과 좌선이 얽힌 사건에서 숨이 먼저 고요해진다."
+  "desc": "심법 회복이 4할 5푼 늘어나고 무공 성취를 4할 5푼 더 빠르게 얻는다. 경과 좌선이 얽힌 사건에서 숨이 먼저 고요해진다."
  },
  "돌문의인내": {
   "effects": [
@@ -508,14 +512,14 @@ TRAIT_TUNE = {
   "effects": [
    {
     "type": "first_strike",
-    "percent": 45
+    "percent": 70
    },
    {
     "type": "crit_power",
-    "percent": 25
+    "percent": 50
    }
   ],
-  "desc": "전투의 첫 합에서 주는 피해가 4할 5푼 늘어나고 회심의 일격 피해가 2할 5푼 늘어난다. 얕보이는 자리에서 먼저 창을 낸다."
+  "desc": "전투의 첫 합에서 주는 피해가 7할 늘어나고 회심의 일격 피해가 5할 늘어난다. 얕보이는 자리에서 먼저 창을 낸다."
  },
  "세가의말씨": {
   "effects": [
@@ -547,14 +551,14 @@ TRAIT_TUNE = {
   "effects": [
    {
     "type": "first_strike",
-    "percent": 30
+    "percent": 70
    },
    {
     "type": "flee_rate",
-    "percent": 25
+    "percent": 30
    }
   ],
-  "desc": "전투의 첫 합에서 주는 피해가 3할 늘어나고 달아날 확률이 2할 5푼 오른다. 달아나는 자와 숨는 자를 먼저 알아본다."
+  "desc": "전투의 첫 합에서 주는 피해가 7할 늘어나고 달아날 확률이 3할 오른다. 달아나는 자와 숨는 자를 먼저 알아본다."
  },
  "기관손": {
   "effects": [
@@ -564,10 +568,10 @@ TRAIT_TUNE = {
    },
    {
     "type": "hit_bonus",
-    "percent": 9
+    "percent": 10
    }
   ],
-  "desc": "주무공 계열 전투 도구를 5개 들고 시작하고 명중이 9푼 오른다. 기관과 장치가 얽힌 사건에서 손이 먼저 간다."
+  "desc": "주무공 계열 전투 도구를 5개 들고 시작하고 명중이 1할 오른다. 기관과 장치가 얽힌 사건에서 손이 먼저 간다."
  },
  "서자의셈": {
   "effects": [
@@ -586,7 +590,7 @@ TRAIT_TUNE = {
   "effects": [
    {
     "type": "mindset_power",
-    "percent": 30
+    "percent": 60
    },
    {
     "type": "turn_regen",
@@ -594,7 +598,7 @@ TRAIT_TUNE = {
     "qi_pct": 8
    }
   ],
-  "desc": "심법 회복이 3할 늘어나고 매달 내력을 8푼 더 회복한다. 죽음과 장례가 얽힌 사건에서 혼의 소리를 먼저 듣는다."
+  "desc": "심법 회복이 6할 늘어나고 매달 내력을 8푼 더 회복한다. 죽음과 장례가 얽힌 사건에서 혼의 소리를 먼저 듣는다."
  },
  "상여꾼의어깨": {
   "effects": [
@@ -639,14 +643,14 @@ TRAIT_TUNE = {
   "effects": [
    {
     "type": "crit",
-    "percent": 10
+    "percent": 15
    },
    {
     "type": "fortune_rate",
-    "percent": 20
+    "percent": 30
    }
   ],
-  "desc": "회심의 일격 확률이 1할 오르고 기연을 만날 확률이 2할 오른다. 내기와 노름이 얽힌 일에서 판이 먼저 읽힌다."
+  "desc": "회심의 일격 확률이 1할 5푼 오르고 기연을 만날 확률이 3할 오른다. 내기와 노름이 얽힌 일에서 판이 먼저 읽힌다."
  },
  "밀수꾼의길": {
   "effects": [
@@ -665,14 +669,14 @@ TRAIT_TUNE = {
   "effects": [
    {
     "type": "first_strike",
-    "percent": 50
+    "percent": 70
    },
    {
     "type": "crit_power",
-    "percent": 20
+    "percent": 50
    }
   ],
-  "desc": "전투의 첫 합에서 주는 피해가 5할 늘어나고 회심의 일격 피해가 2할 늘어난다. 한 번에 끝내야 하는 일에서 손이 떨리지 않는다."
+  "desc": "전투의 첫 합에서 주는 피해가 7할 늘어나고 회심의 일격 피해가 5할 늘어난다. 한 번에 끝내야 하는 일에서 손이 떨리지 않는다."
  },
  "판결문읽는눈": {
   "effects": [
@@ -756,14 +760,14 @@ TRAIT_TUNE = {
   "effects": [
    {
     "type": "mindset_power",
-    "percent": 25
+    "percent": 35
    },
    {
     "type": "crit",
-    "percent": 10
+    "percent": 15
    }
   ],
-  "desc": "심법 회복이 2할 5푼 늘어나고 회심의 일격 확률이 1할 오른다. 칼과 혼이 얽힌 일에서 손이 먼저 차가워진다."
+  "desc": "심법 회복이 3할 5푼 늘어나고 회심의 일격 확률이 1할 5푼 오른다. 칼과 혼이 얽힌 일에서 손이 먼저 차가워진다."
  },
  "웃는얼굴": {
   "effects": [
@@ -782,14 +786,14 @@ TRAIT_TUNE = {
   "effects": [
    {
     "type": "first_strike",
-    "percent": 40
+    "percent": 70
    },
    {
     "type": "crit",
-    "percent": 8
+    "percent": 15
    }
   ],
-  "desc": "전투의 첫 합에서 주는 피해가 4할 늘어나고 회심의 일격 확률이 8푼 오른다. 말이 막히는 자리에서 침이 먼저 나간다."
+  "desc": "전투의 첫 합에서 주는 피해가 7할 늘어나고 회심의 일격 확률이 1할 5푼 오른다. 말이 막히는 자리에서 침이 먼저 나간다."
  },
  "바람의손": {
   "effects": [
@@ -860,14 +864,14 @@ TRAIT_TUNE = {
   "effects": [
    {
     "type": "fortune_rate",
-    "percent": 25
+    "percent": 40
    },
    {
     "type": "damage_reduce",
-    "percent": 3
+    "percent": 5
    }
   ],
-  "desc": "기연을 만날 확률이 2할 5푼 오르고 받는 피해가 3푼 줄어든다. 무너질 것과 숨겨진 것을 먼저 본다."
+  "desc": "기연을 만날 확률이 4할 오르고 받는 피해가 5푼 줄어든다. 무너질 것과 숨겨진 것을 먼저 본다."
  },
  "물살의어깨": {
   "effects": [
@@ -899,14 +903,14 @@ TRAIT_TUNE = {
   "effects": [
    {
     "type": "damage_reduce",
-    "percent": 5
+    "percent": 7
    },
    {
     "type": "first_strike",
-    "percent": 25
+    "percent": 35
    }
   ],
-  "desc": "받는 피해가 5푼 줄어들고 전투의 첫 합에서 주는 피해가 2할 5푼 늘어난다. 지키는 싸움에서 먼저 창을 낸다."
+  "desc": "받는 피해가 7푼 줄어들고 전투의 첫 합에서 주는 피해가 3할 5푼 늘어난다. 지키는 싸움에서 먼저 창을 낸다."
  },
  "군호의셈": {
   "effects": [
@@ -916,10 +920,10 @@ TRAIT_TUNE = {
    },
    {
     "type": "start_silver",
-    "amount": 180
+    "amount": 220
    }
   ],
-  "desc": "주무공 계열 전투 도구를 6개 들고 시작하고 은자 180을 더 들고 시작한다. 무기와 군량이 얽힌 일에서 셈이 먼저 선다."
+  "desc": "주무공 계열 전투 도구를 6개 들고 시작하고 은자 220을 더 들고 시작한다. 무기와 군량이 얽힌 일에서 셈이 먼저 선다."
  }
 }
 UPGRADE_TUNE = {
@@ -1030,14 +1034,14 @@ UPGRADE_TUNE = {
   "effects": [
    {
     "type": "mindset_power",
-    "percent": 15
+    "percent": 25
    },
    {
     "type": "heal_rate",
-    "percent": 10
+    "percent": 20
    }
   ],
-  "desc": "단계마다 심법 회복이 1할 5푼 늘어나고 요양으로 되찾는 체력과 내력이 1할 늘어난다."
+  "desc": "단계마다 심법 회복이 2할 5푼 늘어나고 요양으로 되찾는 체력과 내력이 2할 늘어난다."
  },
  "단골장부": {
   "costs": [
@@ -1084,14 +1088,14 @@ UPGRADE_TUNE = {
   "effects": [
    {
     "type": "damage_reduce",
-    "percent": 1
+    "percent": 2
    },
    {
     "type": "mindset_power",
-    "percent": 10
+    "percent": 15
    }
   ],
-  "desc": "단계마다 받는 피해가 1푼 줄어들고 심법 회복이 1할 늘어난다."
+  "desc": "단계마다 받는 피해가 2푼 줄어들고 심법 회복이 1할 5푼 늘어난다."
  },
  "빈검집": {
   "costs": [
@@ -1120,14 +1124,14 @@ UPGRADE_TUNE = {
   "effects": [
    {
     "type": "first_strike",
-    "percent": 15
+    "percent": 30
    },
    {
     "type": "silver_rate",
-    "percent": 10
+    "percent": 20
    }
   ],
-  "desc": "단계마다 전투의 첫 합에서 주는 피해가 1할 5푼 늘어나고 얻는 은자가 1할 늘어난다."
+  "desc": "단계마다 전투의 첫 합에서 주는 피해가 3할 늘어나고 얻는 은자가 2할 늘어난다."
  },
  "청교깃발": {
   "costs": [
@@ -1212,14 +1216,14 @@ UPGRADE_TUNE = {
   "effects": [
    {
     "type": "mastery_rate",
-    "percent": 10
+    "percent": 15
    },
    {
     "type": "mindset_power",
-    "percent": 10
+    "percent": 15
    }
   ],
-  "desc": "단계마다 무공 성취를 1할 더 빠르게 얻고 심법 회복이 1할 늘어난다."
+  "desc": "단계마다 무공 성취를 1할 5푼 더 빠르게 얻고 심법 회복이 1할 5푼 늘어난다."
  },
  "해진신발": {
   "costs": [
@@ -1267,14 +1271,14 @@ UPGRADE_TUNE = {
   "effects": [
    {
     "type": "crit_power",
-    "percent": 10
+    "percent": 20
    },
    {
     "type": "first_strike",
-    "percent": 10
+    "percent": 20
    }
   ],
-  "desc": "단계마다 회심의 일격 피해가 1할 늘어나고 전투의 첫 합에서 주는 피해가 1할 늘어난다."
+  "desc": "단계마다 회심의 일격 피해가 2할 늘어나고 전투의 첫 합에서 주는 피해가 2할 늘어난다."
  },
  "붉은먹": {
   "costs": [
@@ -1321,14 +1325,14 @@ UPGRADE_TUNE = {
   "effects": [
    {
     "type": "mindset_power",
-    "percent": 10
+    "percent": 15
    },
    {
     "type": "crit",
-    "percent": 2
+    "percent": 3
    }
   ],
-  "desc": "단계마다 심법 회복이 1할 늘어나고 회심의 일격 확률이 2푼 오른다."
+  "desc": "단계마다 심법 회복이 1할 5푼 늘어나고 회심의 일격 확률이 3푼 오른다."
  },
  "흑송가지": {
   "costs": [
@@ -1376,14 +1380,14 @@ UPGRADE_TUNE = {
   "effects": [
    {
     "type": "first_strike",
-    "percent": 6
+    "percent": 10
    },
    {
     "type": "damage_reduce",
     "percent": 2
    }
   ],
-  "desc": "단계마다 전투의 첫 합에서 주는 피해가 6푼 늘어나고 받는 피해가 2푼 줄어든다."
+  "desc": "단계마다 전투의 첫 합에서 주는 피해가 1할 늘어나고 받는 피해가 2푼 줄어든다."
  },
  "혼례의독침": {
   "costs": [
@@ -1543,9 +1547,9 @@ UPGRADE_TUNE = {
    },
    {
     "type": "first_strike",
-    "percent": 6
+    "percent": 10
    }
   ],
-  "desc": "단계마다 받는 피해가 2푼 줄어들고 전투의 첫 합에서 주는 피해가 6푼 늘어난다."
+  "desc": "단계마다 받는 피해가 2푼 줄어들고 전투의 첫 합에서 주는 피해가 1할 늘어난다."
  }
 }

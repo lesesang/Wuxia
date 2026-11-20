@@ -53,6 +53,7 @@ function unmetReason(player, requires) {
   if (r.main_category && player.bestSkill()?.category !== r.main_category) return `${r.main_category}${josa(r.main_category, "을/를")} 쓰는 무인이 아니다`;
   if (r.start_style && (player.startStyle ?? player.bestSkill()?.category) !== r.start_style) return `처음 든 병기가 ${r.start_style}의 것이 아니다`;
   if (r.trait && !player.traits.includes(r.trait)) return "타고난 바가 다르다";
+  if (r.traits && !r.traits.some((k) => player.traits.includes(k))) return "타고난 바가 다르다";
   if (r.unlocked && !player.content.includes(r.unlocked)) return "아직 인연이 닿지 않았다";
   if (r.dominant && player.dominantAlignment() !== r.dominant) return `${r.dominant}의 길이 아니다`;
   if (r.min_turn && player.turn < r.min_turn) return "아직 때가 아니다";

@@ -256,6 +256,7 @@ function whenText(r = {}) {
   if (r.realm_min) parts.push(`${r.realm_min}에 오른 뒤`);
   if (r.gender === "여") parts.push("여인일 때");
   if (r.trait) parts.push(`${DB.traits[r.trait]?.name ?? r.trait} 자질이 있을 때`);
+  if (r.traits) parts.push(`${r.traits.map((k) => DB.traits[k]?.name ?? k).join(", ")} 가운데 한 자질이 있을 때`);
   if (r.item) parts.push(`${DB.market[r.item]?.name ?? r.item}을 지녔을 때`);
   if (r.main_category) parts.push(`${r.main_category}을 쓸 때`);
   if (r.difficulty_min) parts.push(`${DB.difficulty.levels[r.difficulty_min]?.name ?? r.difficulty_min} 강호에서`);
