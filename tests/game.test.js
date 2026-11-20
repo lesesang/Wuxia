@@ -1272,7 +1272,7 @@ test("새 특성들이 작동한다", () => {
   const before = game.player.external;
   game.player.turn = 24;
   game.startNextTurn();
-  assert.equal(game.player.external, before + 70);
+  assert.equal(game.player.external, before + 80);
 });
 
 test("독인은 독에 당하지 않고 맑은 정신은 점혈되지 않는다", () => {
@@ -3366,7 +3366,7 @@ test("새 장의 성장은 장마다, 회복은 해마다다", () => {
   p.turn = 24;
   game.event = null;
   game.startNextTurn();
-  assert.equal(p.external, before + 70);
+  assert.equal(p.external, before + 80);
 });
 
 // ---------- 전체 플레이 ----------

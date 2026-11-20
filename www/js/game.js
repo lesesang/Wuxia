@@ -20,8 +20,8 @@ import { halpun, josa } from "./josa.js";
 
 const SIDE_WEAKEN_CAP = 30; // 외전의 마지막 상대는 인연으로 이만큼까지 약해진다
 const FINAL_UNLEASH_FROM = 880; // 평균 기량이 이보다 높으면 천마가 숨긴 힘을 꺼낸다
-const FINAL_UNLEASH_HP = 0.65;
-const FINAL_UNLEASH_ATTACK = 0.3;
+const FINAL_UNLEASH_HP = 0.7;
+const FINAL_UNLEASH_ATTACK = 0.33;
 const NATURAL_REGEN = 5;
 const MAX_TURN_REGEN = 30;
 const EXPLORE_BATTLE = 0.35; // 나머지는 사건과 기연

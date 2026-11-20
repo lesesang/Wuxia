@@ -721,7 +721,7 @@
   },
   "이기어검": {
     "name": "내력무궁",
-    "desc": "공격무공의 내력 소모가 6할 줄고 주는 피해가 1할 2푼 늘며 매달 내력을 8푼 더 회복한다. 긴 싸움에서 내력이 마르지 않는다.",
+    "desc": "공격무공의 내력 소모가 6할 줄고 주는 피해가 1할 8푼 늘며 매달 내력을 8푼 더 회복한다. 긴 싸움에서 내력이 마르지 않는다.",
     "rarity": "희귀",
     "cost": 10,
     "effects": [
@@ -731,7 +731,7 @@
       },
       {
         "type": "damage_bonus",
-        "percent": 12
+        "percent": 18
       },
       {
         "type": "turn_regen",
@@ -1088,9 +1088,9 @@
   },
   "대기만성": {
     "name": "대기만성",
-    "desc": "시작 기량이 모두 40 낮지만 새 장이 열릴 때마다 모든 기량이 70 오른다.",
+    "desc": "시작 기량이 모두 40 낮지만 새 장이 열릴 때마다 모든 기량이 80 오른다.",
     "rarity": "희귀",
-    "cost": 20,
+    "cost": 15,
     "effects": [
       {
         "type": "start_stat",
@@ -1114,7 +1114,7 @@
       },
       {
         "type": "chapter_growth",
-        "amount": 70
+        "amount": 80
       }
     ]
   },
@@ -2379,13 +2379,13 @@
   },
   "불굴": {
     "name": "불사지체",
-    "desc": "전투에서 합마다 체력을 4푼, 달마다 체력을 2할 5푼 더 회복하고 받는 피해가 1할 5푼 줄어든다. 차오르는 데 끝이 없다. 베여도 베여도 살이 차오른다.",
+    "desc": "전투에서 합마다 체력을 5푼, 달마다 체력을 2할 5푼 더 회복하고 받는 피해가 1할 8푼 줄어든다. 차오르는 데 끝이 없다. 베여도 베여도 살이 차오른다.",
     "rarity": "전설",
     "cost": 45,
     "effects": [
       {
         "type": "round_regen",
-        "hp_pct": 4
+        "hp_pct": 5
       },
       {
         "type": "turn_regen",
@@ -2394,7 +2394,7 @@
       },
       {
         "type": "damage_reduce",
-        "percent": 15
+        "percent": 18
       },
       {
         "type": "regen_unbound"
@@ -2491,7 +2491,7 @@
   },
   "신병합일": {
     "name": "신병합일",
-    "desc": "병기와 사람이 한 몸이다. 주무공 계열의 빼어난 병기를 들고 시작하고, 어떤 병기든 제 힘을 내며 병기 위력이 1배 2할, 주는 피해가 1할 늘어난다.",
+    "desc": "병기와 사람이 한 몸이다. 주무공 계열의 빼어난 병기를 들고 시작하고, 어떤 병기든 제 힘을 내며 병기 위력이 1배 5할, 주는 피해가 1할 늘어난다.",
     "rarity": "전설",
     "cost": 50,
     "effects": [
@@ -2504,7 +2504,7 @@
       },
       {
         "type": "main_weapon_bonus",
-        "percent": 120
+        "percent": 150
       },
       {
         "type": "damage_bonus",
@@ -2607,29 +2607,29 @@
   },
   "환골탈태": {
     "name": "환골탈태",
-    "desc": "한 번 죽었다 깨어난 듯 뼈와 살이 새로 났다. 모든 기량이 40 높게 시작하고, 내상과 독과 점혈에 무너지지 않으며, 받는 피해가 1할 5푼 줄고 매달 체력과 내력을 1할씩 더 회복한다.",
+    "desc": "한 번 죽었다 깨어난 듯 뼈와 살이 새로 났다. 모든 기량이 60 높게 시작하고, 내상과 독과 점혈에 무너지지 않으며, 주는 피해가 1할 2푼 늘고 받는 피해가 2할 줄며, 매달 체력과 내력을 1할씩 더 회복한다.",
     "rarity": "전설",
     "cost": 60,
     "effects": [
       {
         "type": "start_stat",
         "stat": "external",
-        "amount": 40
+        "amount": 60
       },
       {
         "type": "start_stat",
         "stat": "internal",
-        "amount": 40
+        "amount": 60
       },
       {
         "type": "start_stat",
         "stat": "martial",
-        "amount": 40
+        "amount": 60
       },
       {
         "type": "start_stat",
         "stat": "mind",
-        "amount": 40
+        "amount": 60
       },
       {
         "type": "no_injury"
@@ -2642,12 +2642,16 @@
       },
       {
         "type": "damage_reduce",
-        "percent": 15
+        "percent": 20
       },
       {
         "type": "turn_regen",
         "hp_pct": 10,
         "qi_pct": 10
+      },
+      {
+        "type": "damage_bonus",
+        "percent": 12
       }
     ]
   },
