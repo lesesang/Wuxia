@@ -145,10 +145,12 @@ const ROWS = [
   ["탐색 위주 / 특성 3개", { style: "탐색 위주", traits: ["천하제일기재", "천생근골", "오성"] }],
 ];
 
+export { play, unlockAll, ALL_UPGRADES };
+const MAIN = import.meta.url === `file://${process.argv[1]}` || process.argv[1]?.endsWith("simulate.js");
 const count = Number(process.argv[2] || 100);
 const filter = process.argv[3];
-unlockAll();
-for (const [name, options] of ROWS) {
+if (MAIN) unlockAll();
+for (const [name, options] of MAIN ? ROWS : []) {
   if (filter && !name.includes(filter)) continue;
   const results = Array.from({ length: count }, () => play(options));
   const tally = {};

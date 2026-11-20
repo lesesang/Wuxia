@@ -13,7 +13,7 @@ import s12
 import side
 # 새 외전 출신. 한 파일에 하나씩
 _OLD_FOES=set(dsl.ENEMIES)
-NEW_SIDE=['o_sorim','o_mudang','o_ami','o_gongdong','o_moyong','o_sadoryeon','o_jegal','o_dark','o_gwimun','o_nokrim','o_heuksa','o_mangnani','o_cheongseong','o_jongnam','o_singyo','o_hongsu','o_jeomchang','o_gonryun','o_gwangbu','o_sagong','o_wiso','o_dark2','side_more','bonds_a','bonds_b','bonds_c']
+NEW_SIDE=['o_sorim','o_mudang','o_ami','o_gongdong','o_moyong','o_sadoryeon','o_jegal','o_dark','o_gwimun','o_nokrim','o_heuksa','o_mangnani','o_cheongseong','o_jongnam','o_singyo','o_hongsu','o_jeomchang','o_gonryun','o_gwangbu','o_sagong','o_wiso','o_dark2','side_more','bonds_a','bonds_b','bonds_c','manor_more']
 for _m in NEW_SIDE: __import__(_m)
 D=os.path.join(ROOT,'www','data','')
 def load(n): return json.load(open(D+n+'.json'))
@@ -167,6 +167,7 @@ for _k,_rows in _M.items():
     _texts={t for _,t in _rows}
     N['frames'][_k]=[g for g in N['frames'][_k] if not (isinstance(g,list) and g and isinstance(g[0],dict) and g[0].get('text') in _texts)]
     N['frames'][_k].append([{"requires":r,"text":t} for r,t in _rows])
+import frames_more; frames_more.apply(N)
 save('endings',N)
 # 카르마
 K=load('karma')
