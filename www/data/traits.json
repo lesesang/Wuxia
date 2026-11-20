@@ -1097,13 +1097,22 @@
   },
   "구사일생": {
     "name": "구사일생",
-    "desc": "죽을 고비를 한 번 더 넘긴다. 쓰러지는 순간 선천진기를 한 번 더 일으킬 수 있다.",
+    "desc": "죽을 고비에서 한 번 더 버틴다. 체력이 5할 이하일 때 주는 피해가 2할 5푼 늘고, 달아날 확률이 3할 오르며, 받는 피해가 6푼 줄어든다.",
     "rarity": "희귀",
-    "cost": 15,
+    "cost": 10,
     "effects": [
       {
-        "type": "extra_revive",
-        "amount": 1
+        "type": "low_hp_power",
+        "below": 50,
+        "percent": 25
+      },
+      {
+        "type": "flee_rate",
+        "percent": 30
+      },
+      {
+        "type": "damage_reduce",
+        "percent": 6
       }
     ]
   },
