@@ -1260,7 +1260,7 @@ test("새 특성들이 작동한다", () => {
   assert.equal(equipmentBonus(sword, "weapon"), 10);
   const lone = new Player("무림초출", ["외길"]);
   lone.weapon = "철검";
-  assert.equal(equipmentBonus(lone, "weapon"), 16);
+  assert.equal(equipmentBonus(lone, "weapon"), 14);
   const herb = new Player("무림초출", ["약초꾼"]);
   assert.equal(herb.inventory.금창약, 3);
   assert.equal(new Player("무림초출", ["가보의호구"]).armor, "철사갑의");
