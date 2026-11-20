@@ -357,7 +357,7 @@ test("전투 임시 버프는 끝나면 되돌린다", () => {
   const base = p.external;
   const enemy = new Enemy("산적");
   const battle = new Battle(p, enemy);
-  assert.equal(p.external, base + 90);
+  assert.equal(p.external, base + 150);
   battle.finish(false, true);
   assert.equal(p.external, base);
 });
@@ -1260,7 +1260,7 @@ test("새 특성들이 작동한다", () => {
   assert.equal(equipmentBonus(sword, "weapon"), 10);
   const lone = new Player("무림초출", ["외길"]);
   lone.weapon = "철검";
-  assert.equal(equipmentBonus(lone, "weapon"), 15);
+  assert.equal(equipmentBonus(lone, "weapon"), 17);
   const herb = new Player("무림초출", ["약초꾼"]);
   assert.equal(herb.inventory.금창약, 3);
   assert.equal(new Player("무림초출", ["가보의호구"]).armor, "철사갑의");
@@ -1272,7 +1272,7 @@ test("새 특성들이 작동한다", () => {
   const before = game.player.external;
   game.player.turn = 24;
   game.startNextTurn();
-  assert.equal(game.player.external, before + 50);
+  assert.equal(game.player.external, before + 70);
 });
 
 test("독인은 독에 당하지 않고 맑은 정신은 점혈되지 않는다", () => {
@@ -1421,10 +1421,10 @@ function withKarma(amount, extra = {}) {
 }
 
 test("기틀은 장착 없이 적용되고 단계마다 비용이 오른다", () => {
-  withKarma(30);
+  withKarma(35);
   assert.ok(buyUpgrade("강골"));
   assert.ok(buyUpgrade("강골"));
-  assert.equal(loadMeta().current_karma, 24);
+  assert.equal(loadMeta().current_karma, 20);
   const game = new Game();
   game.start("무림초출");
   assert.equal(game.player.external, 330);
@@ -2242,7 +2242,7 @@ test("자질의 새 효과가 동작한다", () => {
   skill.mastery = 100;
   skill.gainMastery(1);
   assert.equal(skill.grade, "명품");
-  assert.equal(skill.mastery, 60);
+  assert.equal(skill.mastery, 70);
   const q = new Player("남궁세가", ["이기어검"]);
   const battle = new Battle(q, new Enemy("산적"));
   assert.ok(battle.artCost(q.bestSkill()) < q.bestSkill().qiCost || q.bestSkill().qiCost <= 1);
@@ -3366,7 +3366,7 @@ test("새 장의 성장은 장마다, 회복은 해마다다", () => {
   p.turn = 24;
   game.event = null;
   game.startNextTurn();
-  assert.equal(p.external, before + 50);
+  assert.equal(p.external, before + 70);
 });
 
 // ---------- 전체 플레이 ----------

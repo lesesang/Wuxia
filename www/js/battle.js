@@ -1132,8 +1132,10 @@ export class Battle {
     // 저절로 차오르는 기운은 한 싸움에 일정한 양까지다
     const mindHp = this.mindG?.regen ? Math.max(1, Math.floor(this.mindG.regen.percent / 2)) : 0;
     const mindQi = this.mindG?.regen_qi ? Math.max(1, Math.floor(this.mindG.regen_qi.percent / 2)) : 0;
-    const regen = Math.min(MAX_PASSIVE_REGEN - this.regenUsedHp, sumEffect(this.player.traits, "round_regen", "hp_pct") + (this.armorG?.regen || 0) + mindHp);
-    const regenQi = Math.min(MAX_PASSIVE_REGEN - this.regenUsedQi, sumEffect(this.player.traits, "round_regen", "qi_pct") + mindQi);
+    // 불사지체처럼 끝이 없는 몸은 한 싸움의 끝을 두지 않는다
+    const passiveCap = hasEffect(this.player.traits, "regen_unbound") ? Infinity : MAX_PASSIVE_REGEN;
+    const regen = Math.min(passiveCap - this.regenUsedHp, sumEffect(this.player.traits, "round_regen", "hp_pct") + (this.armorG?.regen || 0) + mindHp);
+    const regenQi = Math.min(passiveCap - this.regenUsedQi, sumEffect(this.player.traits, "round_regen", "qi_pct") + mindQi);
     if ((regen > 0 || regenQi > 0) && this.player.hp > 0) {
       this.player.healPercent(regen, regenQi);
       this.regenUsedHp += regen;

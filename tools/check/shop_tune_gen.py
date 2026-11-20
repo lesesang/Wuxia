@@ -8,6 +8,10 @@ D = os.path.join(HERE, "..", "..", "www", "data", "")
 T = json.load(open(D + "traits.json")); K = json.load(open(D + "karma.json"))
 
 def hp(n):
+    # 열 할이 넘는 것은 배로 적는다(100은 배, 120은 1배 2할)
+    if int(n) >= 100:
+        x, r = divmod(int(n), 100)
+        return ("배" if x == 1 and not r else f"{x}배") + (" " + hp(r) if r else "")
     a, b = divmod(int(n), 10)
     return (f"{a}할" if a else "") + (" " if a and b else "") + (f"{b}푼" if b else "")
 KOR = {1: "하나", 2: "둘", 3: "셋"}
@@ -52,8 +56,8 @@ def nice(x, unit):
     if unit == "amount": return max(10, int(round(x / 10) * 10)) if x >= 10 else max(1, int(round(x)))
     if x >= 10: return int(round(x / 5) * 5)
     return max(1, int(round(x)))
-CAP = {"damage_reduce": 10, "crit": 20, "damage_bonus": 10, "first_strike": 90, "flee_rate": 30, "market_discount": 20, "mindset_power": 90, "heal_rate": 100,
-       "hit_bonus": 15, "battle_exp": 1, "start_battle_tool": 6, "extra_stock": 3}
+CAP = {"damage_reduce": 15, "crit": 30, "damage_bonus": 15, "first_strike": 120, "flee_rate": 45, "market_discount": 30, "mindset_power": 120, "heal_rate": 150,
+       "hit_bonus": 20, "battle_exp": 2, "start_mastery": 50, "start_mindset_mastery": 50, "start_battle_tool": 9, "extra_stock": 4}
 SCALABLE = set(PH) | {"turn_regen", "low_hp_power"}
 def scale(effects, f):
     out = []
@@ -61,8 +65,8 @@ def scale(effects, f):
         e = dict(e); t = e["type"]
         if t == "turn_regen":
             for k in ("hp_pct", "qi_pct"):
-                if e.get(k): e[k] = min(8, nice(e[k] * f, "p"))
-        elif t == "low_hp_power": e["percent"] = min(60, nice(e["percent"] * f, "p"))
+                if e.get(k): e[k] = min(12, nice(e[k] * f, "p"))
+        elif t == "low_hp_power": e["percent"] = min(80, nice(e["percent"] * f, "p"))
         elif "percent" in e: e["percent"] = min(CAP.get(t, 999), nice(e["percent"] * f, "p"))
         elif "amount" in e and t not in ("battle_exp",): e["amount"] = min(CAP.get(t, 9999), nice(e["amount"] * f, "amount"))
         out.append(e)
@@ -78,19 +82,22 @@ def flavor(desc):
     i = desc.find(". ")
     return desc[i + 2:] if i >= 0 else ""
 
+# 출신 전용 자질은 값 10에 값어치 1.5(카르마 7짜리 희귀 자질의 한 배 반), 기틀은 세 단계 10, 15, 25
+TRAIT_VALUE = 1.5
+ORIGIN_UPGRADE_COSTS = [10, 15, 25]
 TT, UT = {}, {}
 for k, t in T.items():
     if not t.get("origin"): continue
     if not all(e["type"] in SCALABLE for e in t["effects"]):
         print("손으로", k, t["effects"]); continue
-    eff = fit(t["effects"], 1.0)
-    TT[k] = {"effects": eff, "desc": (sentence(eff) + " " + flavor(t["desc"])).strip()}
+    eff = scale(fit(t["effects"], TRAIT_VALUE), 1.0)  # 끝(CAP)을 늘 지킨다
+    TT[k] = {"cost": 10, "effects": eff, "desc": (sentence(eff) + " " + flavor(t["desc"])).strip()}
 for k, u in K["upgrades"].items():
     if not u.get("origin"): continue
     if not all(e["type"] in SCALABLE for e in u["effects"]):
-        print("손으로 기틀", k, u["effects"]); UT[k] = {"costs": [3, 5, 9]}; continue
+        print("손으로 기틀", k, u["effects"]); UT[k] = {"costs": ORIGIN_UPGRADE_COSTS}; continue
     eff = fit(u["effects"], 0.32)
-    UT[k] = {"costs": [3, 5, 9], "effects": eff, "desc": "단계마다 " + sentence(eff)}
+    UT[k] = {"costs": ORIGIN_UPGRADE_COSTS, "effects": eff, "desc": "단계마다 " + sentence(eff)}
 with open(os.path.join(HERE, "..", "content", "shop_tune.py"), "w") as f:
     f.write("# 출신 전용 자질과 기틀을 같은 값어치로 맞춘 표(tools/check/shop_value.py의 기준). build.py가 덮어쓴다\n")
     f.write("TRAIT_TUNE = " + json.dumps(TT, ensure_ascii=False, indent=1) + "\n")
