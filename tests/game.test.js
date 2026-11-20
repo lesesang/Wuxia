@@ -3460,6 +3460,24 @@ test("적의 경지와 이름, 품은 비급이 세계관에 맞는다", () => {
   for (const table of Object.values(DB.balance.drops)) for (const g of ["일절", "신공"]) assert.ok(!table.grades.includes(g));
 });
 
+test("세력의 수장은 화경 이상이고 장로는 초절정 이상이다", () => {
+  const at = (r) => DB.realms.enemy_order.indexOf(r);
+  for (const [k, e] of Object.entries(DB.enemies)) {
+    const title = e.title || "";
+    if (/(장문인|하오문주|오독문주|녹림왕|련주|막주|교주)$/.test(title)) assert.ok(at(e.realm) >= at("화경"), `${k}: ${title}`);
+    if (/장로$/.test(title) && !/불을 품은|잠화/.test(title)) assert.ok(at(e.realm) >= at("초절정"), `${k}: ${title}`);
+  }
+  const foes = [];
+  const walk = (o) => {
+    if (Array.isArray(o)) return o.forEach(walk);
+    if (!o || typeof o !== "object") return;
+    if (o.effects?.foe && o.effects?.battle && DB.enemies[o.effects.battle]) foes.push([o.effects.foe, DB.enemies[o.effects.battle].realm]);
+    Object.values(o).forEach(walk);
+  };
+  walk(DB.events);
+  for (const [foe, realm] of foes) if (/(장로|원로|장문인|문주|가주)\s/.test(foe + " ")) assert.ok(at(realm) >= at("초절정"), `${foe}: ${realm}`);
+});
+
 test("적은 시점으로 정하고 경지로 비중을 나눈다", () => {
   const count = (realm, turn, key, n = 1500) => {
     const game = newGame();
