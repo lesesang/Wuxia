@@ -1,0 +1,693 @@
+[
+  {
+    "text": "절벽 틈에서 옛 고수가 벽에 손가락으로 새긴 초식을 찾았다.",
+    "effects": {
+      "stats": {
+        "martial": 3
+      }
+    }
+  },
+  {
+    "text": "산중에서 백 년 묵은 영지를 캤다.",
+    "effects": {
+      "stats": {
+        "internal": 3
+      },
+      "qi_pct": 20
+    }
+  },
+  {
+    "text": "지나가던 노인이 무심코 던진 한마디가 벼락처럼 박혔다.",
+    "effects": {
+      "stats": {
+        "mind": 3
+      }
+    }
+  },
+  {
+    "text": "무너진 사당 아래에서 옛 무인의 쇠 호완을 찾아 찼다.",
+    "effects": {
+      "stats": {
+        "external": 3
+      }
+    }
+  },
+  {
+    "text": "폭포 뒤 동굴에서 앉은 채 굳은 해골이 쥔 구결을 보았다.",
+    "effects": {
+      "mastery": 14,
+      "stats": {
+        "internal": 1
+      }
+    }
+  },
+  {
+    "text": "맹호와 맞닥뜨렸다가 한나절을 겨룬 끝에 서로 물러났다.",
+    "effects": {
+      "stats": {
+        "external": 2,
+        "mind": 1
+      }
+    }
+  },
+  {
+    "text": "두 고수의 비무를 먼발치에서 지켜보았다. 눈이 트이는 듯했다.",
+    "effects": {
+      "stats": {
+        "martial": 2,
+        "mind": 1
+      }
+    }
+  },
+  {
+    "text": "병든 무인을 돌봐 주었더니 떠나며 금창약을 남겼다.",
+    "effects": {
+      "item": "금창약",
+      "stats": {
+        "mind": 1
+      }
+    },
+    "requires": {
+      "max_alignment": {
+        "마도": 400
+      }
+    }
+  },
+  {
+    "text": "낡은 다리 밑에서 누가 잃어버린 회기단 한 병을 주웠다.",
+    "effects": {
+      "item": "회기단"
+    }
+  },
+  {
+    "text": "빗속에서 낙수가 돌을 뚫는 모습을 한참 보았다.",
+    "effects": {
+      "mastery": 12,
+      "stats": {
+        "mind": 1
+      }
+    }
+  },
+  {
+    "text": "노을 지는 강에 병기를 씻다가 문득 초식의 군더더기가 보였다.",
+    "effects": {
+      "mastery": 16
+    }
+  },
+  {
+    "text": "버려진 도관에서 먼지 쌓인 도경을 몇 장 건졌다.",
+    "effects": {
+      "stats": {
+        "internal": 2,
+        "mind": 1
+      }
+    }
+  },
+  {
+    "text": "신비한 온천에 몸을 담그니 묵은 상처가 씻겼다.",
+    "chapters": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "effects": {
+      "hp_pct": 60,
+      "qi_pct": 60,
+      "injury": -1
+    }
+  },
+  {
+    "text": "주운 동전을 던지며 놀던 아이들의 손목에서 비도의 이치를 보았다.",
+    "effects": {
+      "stats": {
+        "martial": 3
+      }
+    }
+  },
+  {
+    "text": "짐꾼 일을 하며 한 달을 보냈다. 하체가 쇠처럼 굳었다.",
+    "chapters": [
+      1,
+      2
+    ],
+    "effects": {
+      "stats": {
+        "external": 3
+      }
+    }
+  },
+  {
+    "text": "전장에 떨어진 비단 쪽지에 십이마장의 진법 일부가 적혀 있었다.",
+    "chapters": [
+      4,
+      5
+    ],
+    "effects": {
+      "stats": {
+        "martial": 2,
+        "mind": 2
+      },
+      "fame": 5
+    }
+  },
+  {
+    "text": "천 년 묵은 고목 아래서 하룻밤 자니 진기가 저절로 돌았다.",
+    "chapters": [
+      3,
+      4,
+      5
+    ],
+    "effects": {
+      "stats": {
+        "internal": 4
+      }
+    }
+  },
+  {
+    "text": "구해 준 소년이 알고 보니 유명 표국의 도련님이었다. 사례가 두둑했다.",
+    "effects": {
+      "silver": 30,
+      "fame": 10
+    },
+    "requires": {
+      "max_alignment": {
+        "마도": 400
+      }
+    }
+  },
+  {
+    "text": "객잔 벽의 낙서가 어느 고수의 심득이었다. 손톱으로 긁어 외웠다.",
+    "chapters": [
+      2,
+      3,
+      4
+    ],
+    "effects": {
+      "mastery": 10,
+      "stats": {
+        "mind": 2
+      }
+    }
+  },
+  {
+    "text": "흰 수염 도인이 복숭아 하나를 건네고 사라졌다. 씨가 금빛이었다.",
+    "chapters": [
+      3,
+      4,
+      5
+    ],
+    "effects": {
+      "stats": {
+        "external": 1,
+        "internal": 1,
+        "martial": 1,
+        "mind": 1
+      },
+      "hp_pct": 20
+    }
+  },
+  {
+    "text": "무너진 서고에서 표지가 떨어져 나간 비급 한 권을 찾았다.",
+    "chapters": [
+      1,
+      2
+    ],
+    "effects": {
+      "random_skill": {
+        "max_grade": "명품"
+      }
+    }
+  },
+  {
+    "text": "죽어 가는 무인이 품에서 비급을 꺼내 주며 눈을 감았다.",
+    "chapters": [
+      2,
+      3,
+      4
+    ],
+    "effects": {
+      "random_skill": {
+        "max_grade": "명품"
+      },
+      "alignment": {
+        "정도": 20
+      }
+    }
+  },
+  {
+    "text": "동굴 벽 틈에 기름종이로 싼 비급이 숨겨져 있었다.",
+    "chapters": [
+      3,
+      4,
+      5
+    ],
+    "effects": {
+      "random_skill": {
+        "max_grade": "상승"
+      }
+    }
+  },
+  {
+    "text": "길가의 노병이 젊은 날의 무용담 끝에 쓸 만한 요령 하나를 일러 주었다.",
+    "effects": {
+      "mastery": 10,
+      "stats": {
+        "martial": 1
+      }
+    }
+  },
+  {
+    "text": "객잔 주방장이 남은 재료로 내력을 돋우는 약선을 차려 주었다.",
+    "effects": {
+      "hp_pct": 30,
+      "qi_pct": 30,
+      "stats": {
+        "internal": 1
+      }
+    }
+  },
+  {
+    "text": "고갯마루의 샘물을 마시자 몸속이 맑아졌다.",
+    "effects": {
+      "hp_pct": 25,
+      "qi_pct": 25,
+      "injury": -1
+    }
+  },
+  {
+    "text": "저잣거리 곡예사의 몸놀림에서 빈틈을 줄이는 법을 보았다.",
+    "effects": {
+      "stats": {
+        "mind": 1,
+        "martial": 1
+      }
+    }
+  },
+  {
+    "text": "낡은 이정표 뒤에 누가 숨겨 둔 약병을 찾았다.",
+    "effects": {
+      "item": "금창약"
+    }
+  },
+  {
+    "text": "길가 약초 덤불에서 해독에 쓰는 풀을 한 줌 뜯었다.",
+    "chapters": [
+      1,
+      2,
+      3
+    ],
+    "effects": {
+      "item": "해독단"
+    }
+  },
+  {
+    "text": "이름 모를 대장장이가 병기를 공짜로 손봐 주었다.",
+    "effects": {
+      "mastery": 8
+    }
+  },
+  {
+    "text": "소나기를 피해 든 동굴 벽에서 옛사람의 수련 흔적을 보았다.",
+    "effects": {
+      "stats": {
+        "martial": 2,
+        "mind": 1
+      }
+    }
+  },
+  {
+    "text": "처음 보는 열매를 먹었더니 온몸에 열이 돌았다.",
+    "effects": {
+      "stats": {
+        "internal": 3
+      },
+      "hp_pct": 15
+    }
+  },
+  {
+    "text": "늙은 마부가 말 다루는 숨 고르기를 일러 주었는데 내공에도 맞았다.",
+    "chapters": [
+      1,
+      2,
+      3
+    ],
+    "effects": {
+      "stats": {
+        "internal": 2
+      }
+    }
+  },
+  {
+    "text": "저잣거리에서 받은 사주가 묘하게 들어맞았다. 마음이 놓였다.",
+    "effects": {
+      "stats": {
+        "mind": 2
+      },
+      "qi_pct": 20
+    }
+  },
+  {
+    "text": "폐허의 무너진 벽에서 비급 한 장이 떨어졌다.",
+    "chapters": [
+      2,
+      3,
+      4
+    ],
+    "requires": {
+      "dominant": "사도"
+    },
+    "effects": {
+      "random_skill": {
+        "max_grade": "명품"
+      },
+      "silver": 30
+    }
+  },
+  {
+    "text": "옛 표행길의 주막 주인이 나를 알아보고 음식을 내왔다.",
+    "requires": {
+      "origin": "표국표사"
+    },
+    "effects": {
+      "hp_pct": 30,
+      "qi_pct": 20,
+      "stats": {
+        "mind": 1
+      }
+    }
+  },
+  {
+    "text": "문파의 후배가 길에서 나를 알아보고 약을 나눠 주었다.",
+    "requires": {
+      "has_sect": true,
+      "not_sect": [
+        "남궁"
+      ]
+    },
+    "effects": {
+      "item": "회기단",
+      "fame": 5
+    }
+  },
+  {
+    "text": "주먹을 맞댄 나무의 흠집이 초식처럼 보였다.",
+    "requires": {
+      "main_category": "권법"
+    },
+    "effects": {
+      "mastery": 12
+    }
+  },
+  {
+    "text": "던진 돌이 물 위를 일곱 번 튀었다. 손목의 비밀을 알았다.",
+    "requires": {
+      "main_category": "암기"
+    },
+    "effects": {
+      "mastery": 12
+    }
+  },
+  {
+    "text": "대나무 숲에서 바람을 찌르다 창끝의 흔들림이 멎었다.",
+    "requires": {
+      "main_category": "창법"
+    },
+    "effects": {
+      "mastery": 12
+    }
+  },
+  {
+    "text": "한 칼에 장작을 쪼개는 나무꾼의 힘 쓰는 법을 보았다.",
+    "requires": {
+      "main_category": "도법"
+    },
+    "effects": {
+      "mastery": 12
+    }
+  },
+  {
+    "text": "길에서 주운 복주머니 주인을 찾아 주었더니 은자를 나눠 주었다.",
+    "requires": {
+      "trait": "복성"
+    },
+    "effects": {
+      "silver": 30
+    }
+  },
+  {
+    "text": "주막 할멈이 첫 잔은 그냥 주었다. 술맛이 기가 막혔다.",
+    "requires": {
+      "trait": "주당"
+    },
+    "effects": {
+      "hp_pct": 20,
+      "qi_pct": 20
+    }
+  },
+  {
+    "text": "입담 한 번에 객잔 사람들이 웃었다. 그중 하나가 내 이름을 적어 갔다.",
+    "requires": {
+      "trait": "입담꾼"
+    },
+    "effects": {
+      "fame": 10
+    }
+  },
+  {
+    "text": "다리 밑 거지 아이들이 오늘 포졸이 어디 있는지 일러 주었다. 값은 만두 하나였다.",
+    "requires": {
+      "trait": "저잣거리아이"
+    },
+    "effects": {
+      "stats": {
+        "mind": 1
+      },
+      "silver": 15
+    }
+  },
+  {
+    "text": "내 몸의 멍을 본 떠돌이 약장수가 값 없이 고약을 붙여 주었다.",
+    "requires": {
+      "injured": true
+    },
+    "effects": {
+      "injury": -1
+    }
+  },
+  {
+    "text": "봉을 짚고 산을 오르다 바위틈에서 몸의 중심을 잡는 법을 깨달았다.",
+    "requires": {
+      "main_category": "봉법"
+    },
+    "effects": {
+      "mastery": 12
+    }
+  },
+  {
+    "text": "손바닥으로 폭포를 받아 보다가 기운이 터지는 자리를 알았다.",
+    "requires": {
+      "main_category": "장법"
+    },
+    "effects": {
+      "mastery": 12
+    }
+  },
+  {
+    "text": "모래 자루를 치다 자루가 터지는 순간 주먹이 가벼워졌다.",
+    "requires": {
+      "main_category": "권법"
+    },
+    "effects": {
+      "mastery": 12
+    }
+  },
+  {
+    "text": "벼랑 밑 동굴 천장에서 한 방울씩 떨어지는 젖빛 물을 받았다. 공청석유였다.",
+    "requires": {
+      "unlocked": "전설기연"
+    },
+    "effects": {
+      "item": "공청석유"
+    }
+  },
+  {
+    "text": "쓰러진 노승을 간호했더니 깨어나 대환단 한 알을 내놓고 떠났다.",
+    "requires": {
+      "unlocked": "전설기연"
+    },
+    "effects": {
+      "item": "대환단"
+    }
+  },
+  {
+    "text": "백 년 묵은 소나무 뿌리 아래 함이 있었다. 안에는 잘 보존된 비급이 있었다.",
+    "requires": {
+      "unlocked": "전설기연"
+    },
+    "effects": {
+      "random_skill": {
+        "max_grade": "상승"
+      }
+    }
+  },
+  {
+    "text": "천 년 묵은 영지를 먹은 노루를 놓아주었더니 이튿날 그 노루가 영지 한 뿌리를 물어 왔다.",
+    "requires": {
+      "unlocked": "전설기연"
+    },
+    "effects": {
+      "stats": {
+        "internal": 8
+      },
+      "hp_pct": 30
+    }
+  },
+  {
+    "text": "이름 모를 고수가 달밤에 초식 하나를 보여 주고 사라졌다. 평생 잊지 못할 일 초였다.",
+    "requires": {
+      "unlocked": "전설기연"
+    },
+    "effects": {
+      "mastery": 30,
+      "stats": {
+        "martial": 5
+      }
+    }
+  },
+  {
+    "text": "저잣거리 관상쟁이가 내 얼굴을 보더니 돈을 받지 않고 복을 빌어 주었다. 그날 길에서 큰돈을 주웠다.",
+    "requires": {
+      "unlocked": "전설기연"
+    },
+    "effects": {
+      "silver": 150
+    }
+  },
+  {
+    "text": "객잔 구석의 말없는 노인이 내 국수값을 대신 내고 사라졌다. 탁자에 젓가락으로 그린 초식이 남아 있었다.",
+    "effects": {
+      "mastery": 10
+    }
+  },
+  {
+    "text": "무림맹 전서구가 길을 잃고 내 어깨에 앉았다. 돌려보내니 사례 은자가 왔다.",
+    "chapters": [
+      2,
+      3,
+      4
+    ],
+    "effects": {
+      "silver": 40
+    },
+    "requires": {
+      "max_alignment": {
+        "마도": 200
+      },
+      "not_sect": [
+        "마교",
+        "혈교",
+        "귀문교"
+      ]
+    }
+  },
+  {
+    "text": "폐문한 작은 문파 터에서 쓸 만한 약을 찾았다.",
+    "effects": {
+      "item": "활혈단"
+    }
+  },
+  {
+    "text": "사천 땅 나그네에게 물을 나눠 주었다가 해독약 하나를 얻었다.",
+    "effects": {
+      "item": "해독단"
+    }
+  },
+  {
+    "text": "거지 형제가 오늘 저녁 돈 될 소식을 귀띔했다.",
+    "requires": {
+      "sect": "개방"
+    },
+    "effects": {
+      "fame": 5,
+      "silver": 15
+    }
+  },
+  {
+    "text": "풀숲에서 다친 산토끼를 놓아주었다. 저녁 무렵 그 자리에 산삼 싹이 보였다.",
+    "effects": {
+      "stats": {
+        "internal": 2
+      },
+      "hp_pct": 20
+    },
+    "chapters": [
+      1,
+      2,
+      3
+    ]
+  },
+  {
+    "text": "죽은 지 오래된 곰 곁에서 쓸개를 거두었다. 뒤탈은 없었다.",
+    "effects": {
+      "item": "웅담"
+    },
+    "chapters": [
+      1,
+      2
+    ]
+  },
+  {
+    "text": "계곡에서 뱀 허물 속에 말라붙은 쓸개를 찾았다.",
+    "effects": {
+      "item": "사담"
+    },
+    "chapters": [
+      1,
+      2,
+      3
+    ]
+  },
+  {
+    "text": "밤새 곁을 지키던 늙은 영물이 아침에 사라졌다. 앉았던 자리에 푸른 구슬이 남았다.",
+    "effects": {
+      "item": "영물내단"
+    },
+    "chapters": [
+      3,
+      4,
+      5
+    ],
+    "requires": {
+      "max_alignment": {
+        "마도": 400
+      }
+    }
+  },
+  {
+    "text": "이마에 흰 털이 난 사슴이 내 앞을 지나가다 잠시 돌아보았다. 숨이 고르게 내려앉았다.",
+    "effects": {
+      "stats": {
+        "mind": 3
+      }
+    },
+    "chapters": [
+      2,
+      3,
+      4
+    ]
+  },
+  {
+    "text": "산속 샘에서 물을 마시던 학 무리가 날아올랐다. 그 물을 떠 마시니 몸이 가벼웠다.",
+    "effects": {
+      "hp_pct": 30,
+      "qi_pct": 30
+    },
+    "chapters": [
+      2,
+      3,
+      4,
+      5
+    ]
+  }
+]
