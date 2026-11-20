@@ -167,6 +167,7 @@ for _k,_rows in _M.items():
     _texts={t for _,t in _rows}
     N['frames'][_k]=[g for g in N['frames'][_k] if not (isinstance(g,list) and g and isinstance(g[0],dict) and g[0].get('text') in _texts)]
     N['frames'][_k].append([{"requires":r,"text":t} for r,t in _rows])
+import frames_more; frames_more.apply(N)
 save('endings',N)
 # 카르마
 K=load('karma')
