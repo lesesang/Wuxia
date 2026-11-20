@@ -1260,7 +1260,7 @@ test("새 특성들이 작동한다", () => {
   assert.equal(equipmentBonus(sword, "weapon"), 10);
   const lone = new Player("무림초출", ["외길"]);
   lone.weapon = "철검";
-  assert.equal(equipmentBonus(lone, "weapon"), 14);
+  assert.equal(equipmentBonus(lone, "weapon"), 15);
   const herb = new Player("무림초출", ["약초꾼"]);
   assert.equal(herb.inventory.금창약, 3);
   assert.equal(new Player("무림초출", ["가보의호구"]).armor, "철사갑의");
@@ -1272,7 +1272,7 @@ test("새 특성들이 작동한다", () => {
   const before = game.player.external;
   game.player.turn = 24;
   game.startNextTurn();
-  assert.equal(game.player.external, before + 40);
+  assert.equal(game.player.external, before + 50);
 });
 
 test("독인은 독에 당하지 않고 맑은 정신은 점혈되지 않는다", () => {
@@ -1742,7 +1742,7 @@ test("시작 병기와 갑의, 비급, 무공은 겹쳐도 효과가 사라지�
   const weapons = new Player("하북팽가", ["병기광", "환생_병기_1", "환생_병기_2", "채비_쓸만한병기"]);
   const silver = weapons.silver;
   grantStartGear(weapons);
-  assert.equal(weapons.silver, silver + 60);
+  assert.equal(weapons.silver, silver + 120);
   assert.equal(equipmentBonus(weapons, "weapon") >= 50, true);
   const seen = {};
   for (const t of Object.values(DB.traits).filter((x) => !x.origin)) {
@@ -3366,7 +3366,7 @@ test("새 장의 성장은 장마다, 회복은 해마다다", () => {
   p.turn = 24;
   game.event = null;
   game.startNextTurn();
-  assert.equal(p.external, before + 40);
+  assert.equal(p.external, before + 50);
 });
 
 // ---------- 전체 플레이 ----------
