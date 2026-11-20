@@ -12,7 +12,7 @@ import {
 import { pick, pickWeighted, randInt, rng } from "./rng.js";
 import {
   actionLine, ALIGNMENT_CAP, alignTier, applyGrowth, byname, CHAPTER_STARTS, checkBreakthrough, checkGoodEnding, checkSaengsa,
-  scaledGrowth, fameRank, FOCUS_DRIFT, focusedSide, getChapter, getChapterInfo, getMonth, getYear, isMarketTurn, monthLine, auraText, isNamed, perkTrait, realmFit, enemyRealmIndex, returnedLine, standIn, realmIndex, sideOrigin, sideDeepLine, difficultyRank, sumEffect, talkLine, traitSlots,
+  scaledGrowth, hasEffect, fameRank, FOCUS_DRIFT, focusedSide, getChapter, getChapterInfo, getMonth, getYear, isMarketTurn, monthLine, auraText, isNamed, perkTrait, realmFit, enemyRealmIndex, returnedLine, standIn, realmIndex, sideOrigin, sideDeepLine, difficultyRank, sumEffect, talkLine, traitSlots,
   personalize, DEFAULT_DIFFICULTY, difficultyOf,
   ALIGNMENTS, ALIGN_STEPS,
 } from "./rules.js";
@@ -20,8 +20,8 @@ import { halpun, josa } from "./josa.js";
 
 const SIDE_WEAKEN_CAP = 30; // 외전의 마지막 상대는 인연으로 이만큼까지 약해진다
 const FINAL_UNLEASH_FROM = 880; // 평균 기량이 이보다 높으면 천마가 숨긴 힘을 꺼낸다
-const FINAL_UNLEASH_HP = 0.42;
-const FINAL_UNLEASH_ATTACK = 0.2;
+const FINAL_UNLEASH_HP = 0.7;
+const FINAL_UNLEASH_ATTACK = 0.33;
 const NATURAL_REGEN = 5;
 const MAX_TURN_REGEN = 30;
 const EXPLORE_BATTLE = 0.35; // 나머지는 사건과 기연
@@ -747,8 +747,9 @@ export class Game {
       return;
     }
     // 달마다 저절로 차는 양에도 끝이 있어 요양할 일이 남는다
-    const hp = Math.min(MAX_TURN_REGEN, NATURAL_REGEN + sumEffect(p.traits, "turn_regen", "hp_pct"));
-    const qi = Math.min(MAX_TURN_REGEN, NATURAL_REGEN + sumEffect(p.traits, "turn_regen", "qi_pct"));
+    const monthCap = hasEffect(p.traits, "regen_unbound") ? Infinity : MAX_TURN_REGEN;
+    const hp = Math.min(monthCap, NATURAL_REGEN + sumEffect(p.traits, "turn_regen", "hp_pct"));
+    const qi = Math.min(monthCap, NATURAL_REGEN + sumEffect(p.traits, "turn_regen", "qi_pct"));
     p.healPercent(hp, qi);
     lines.push(...this.alignmentMonth());
     if (CHAPTER_STARTS.includes(p.turn)) {
