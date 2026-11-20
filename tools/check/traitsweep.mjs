@@ -8,7 +8,7 @@ const shard = process.env.SHARD ? process.env.SHARD.split("/").map(Number) : [0,
 unlockAll();
 const UP = { 강골: 2, 혜안: 2, 원기: 2, 명경: 2, 감각: 2, 재물: 1, 약상자: 2, 기연: 1, 깨달음: 1 };
 const keys = ["(없음)", ...Object.keys(DB.traits).filter((k) => !DB.traits[k].origin && !DB.traits[k].hidden)]
-  .filter((k, i) => (!only || k.includes(only)) && i % shard[1] === shard[0]);
+  .filter((k, i) => (!only || only.split(",").some((o) => k === o || (o === "없음" && k === "(없음)"))) && i % shard[1] === shard[0]);
 for (const key of keys) {
   const rs = Array.from({ length: count }, () => play({ total: 120, traits: key === "(없음)" ? [] : [key], upgrades: UP }));
   const win = rs.filter((r) => ["배드", "기본", "생사경"].includes(r.ending)).length / count;
