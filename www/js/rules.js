@@ -192,7 +192,9 @@ export function realmFit(playerRealm, enemyRealm) {
 /** 특전의 글에 주무공 계열의 기운 이름을 넣는다. 검이면 검기와 검강, 권이면 권기와 권강이다 */
 export function auraText(text, category = "검법") {
   const [qi, gang, cut] = DB.realms.aura[category] || DB.realms.aura.검법;
-  return text.replaceAll("〈기상인〉", cut).replaceAll("〈기〉", qi).replaceAll("〈강〉", gang);
+  const word = { 기상인: cut, 기: qi, 강: gang };
+  // 〈기:이/가〉처럼 조사를 붙이면 그 계열의 말에 맞는 조사를 고른다(암기는 암경이라 받침이 있다)
+  return text.replace(/〈(기상인|기|강)(?::([^〉]+))?〉/g, (_, key, pair) => word[key] + (pair ? josa(word[key], pair) : ""));
 }
 
 /** 그 경지까지 얻은 특전 */
