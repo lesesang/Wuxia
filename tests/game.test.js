@@ -1599,6 +1599,16 @@ test("한 기량 자질은 네 기량이 값도 반응 사건 수도 같다", ()
   assert.equal(new Set(keys.map((k) => text.split(`"trait": "${k}"`).length)).size, 1);
 });
 
+test("자질, 기틀, 인연, 물건, 무공의 이름이 서로 겹치지 않는다", () => {
+  const seen = {};
+  const add = (kind, name) => { assert.ok(!seen[name], `${name}: ${seen[name]}와 ${kind}`); seen[name] = kind; };
+  for (const t of Object.values(DB.traits)) if (!t.hidden) add("자질", t.name);
+  for (const u of Object.values(DB.karma.upgrades)) add("기틀", u.name);
+  for (const c of Object.values(DB.karma.content)) add("인연", c.name);
+  for (const m of Object.values(DB.market)) add("물건", m.name);
+  for (const k of Object.values(DB.skills)) add("무공", k.name);
+});
+
 test("공통 자질의 설명은 출신을 단정하지 않는다", () => {
   for (const t of Object.values(DB.traits)) {
     if (!t.hidden && !t.origin) assert.doesNotMatch(t.desc, /어릴|집안|태어|자제|가문/, t.name);

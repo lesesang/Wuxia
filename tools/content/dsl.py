@@ -41,12 +41,12 @@ def manor(key, chapters, need, title, text, choices, variants=None, parts=None):
     MANOR[key]=e
 def hook(file, key, choice): HOOKS.append((file,key,choice))
 TRAITS={}; UPGRADES={}; MARKET={}
-def relic(key, origin, style, desc, bonus, g, text, slot="weapon", category="무기"):
+def relic(key, origin, style, desc, bonus, g, text, slot="weapon", category="무기", name=None):
     "출신 인연으로 얻는 전용 신물. 장터와 드롭에 나오지 않는다"
     g=dict(g); g["text"]=text
     eff={"type":"equip","slot":slot,"bonus":bonus}
     if style: eff["style"]=style
-    MARKET[key]={"name":key,"category":category,"price":0,"markets":[],"desc":desc,"effects":[eff],"grade":"신물","gimmick":g,"origin":origin,"no_drop":True}
+    MARKET[key]={"name":name or key,"category":category,"price":0,"markets":[],"desc":desc,"effects":[eff],"grade":"신물","gimmick":g,"origin":origin,"no_drop":True}
 def trait(key, origin, name, desc, *eff): TRAITS[key]={"name":name,"desc":desc,"rarity":"희귀","cost":7,"effects":list(eff),"origin":origin}
 def upgrade(key, origin, name, desc, *eff): UPGRADES[key]={"group":"출신 전용","name":name,"desc":desc,"costs":[10,20,30],"effects":list(eff),"origin":origin}
 T=lambda t,**k: {"type":t,**k}

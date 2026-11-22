@@ -5141,7 +5141,7 @@
     "no_drop": true
   },
   "피안선장": {
-    "name": "피안선장",
+    "name": "구환선장",
     "category": "무기",
     "price": 0,
     "markets": [],
@@ -5606,7 +5606,7 @@
     "no_drop": true
   },
   "설봉검": {
-    "name": "설봉검",
+    "name": "서리검",
     "category": "무기",
     "price": 0,
     "markets": [],
