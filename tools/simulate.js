@@ -70,13 +70,14 @@ function setUpgrades(upgrades = {}, total = 0) {
 
 const ALL_UPGRADES = { 강골: 3, 혜안: 3, 원기: 3, 명경: 3, 감각: 3, 재물: 3, 약상자: 3, 기연: 3, 깨달음: 3, 인맥: 3 };
 
-function play({ style = "섞어서", useMarket = true, origin = "무림초출", traits = [], upgrades = {}, total = null }) {
+function play({ style = "섞어서", useMarket = true, origin = "무림초출", traits = [], upgrades = {}, total = null, world = WORLD, observe = null }) {
   // 누적 보상이 끼어들므로 그 단계의 누적 카르마에 맞춘다. 정하지 않으면 자질 칸에 필요한 만큼만
   setUpgrades(upgrades, total ?? [0, 0, 30, 90][traits.length]);
   const game = new Game();
-  game.start(origin, traits, [], {}, WORLD);
+  game.start(origin, traits, [], {}, world);
   for (let i = 0; i < 3000 && game.player.alive; i++) {
     const p = game.player;
+    observe?.(game);
     if (!game.battle) equipBestGear(game.player); // 사람은 더 좋은 병장기를 얻으면 바꿔 든다
     // 사람은 행낭의 영약과 책을 그때그때 먹고 읽는다
     if (!game.battle && !game.event) {
