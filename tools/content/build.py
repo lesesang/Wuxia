@@ -151,9 +151,11 @@ for _k in set(dsl.ENEMIES)&_OLD_FOES:
 save('enemies',E)
 for name in set(battles(dsl.STORY))|set(battles(dsl.RANDOM))|set(battles(dsl.MANOR)): assert name in E, name
 # 결말
+# 외전의 결말은 길이 거칠고 출신을 여는 값이 크니 본편의 보통 결말(10) 이상을 준다
+SIDE_KARMA={6:10,7:10,8:12,9:12,10:14,12:15}
 N=load('endings'); N['side']={}
 for key,d in dsl.ENDINGS.items():
-    N['titles'][key]=d['title']; N['seals'][key]=d['seal']; N['karma'][key]=d['karma']; N['text'][key]=d['text']; N['frames'][key]=d['frames']; N['side'][key]=d['origin']
+    N['titles'][key]=d['title']; N['seals'][key]=d['seal']; N['karma'][key]=SIDE_KARMA.get(d['karma'],d['karma']); N['text'][key]=d['text']; N['frames'][key]=d['frames']; N['side'][key]=d['origin']
 for ending,index,req,text in s7.FRAMES:
     group=N['frames'][ending][index]
     group[:]=[r for r in group if r['text']!=text]
