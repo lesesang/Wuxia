@@ -602,7 +602,7 @@ F = [
  ("사_원표", "남", "pirate captain of the black tide gang called ghost spear, forties, sea-weathered face, scar across the nose, black head cloth, spear", "pirate ship deck on a stormy sea", "무"),
  ("사_사도걸", "남", "slave trader of the black tide gang called black whip, forties, greasy smile, black clothes, whip", "ship hold with oars and chained rowers", "무"),
  # 길 위의 새 사건과 장원의 일, 깊은 강호에 나오는 이름 있는 상대
- ("염소", "남", "night challenger called moon-backed guest, late twenties, lean sharp face, black hair tied high, dark blue night clothes, weapon held slantwise, standing on a tiled roof with the full moon behind", "tiled roof of an inn at night, moonlight", "무"),
+ ("염소", "남", "night challenger called moon-backed guest, late twenties, lean sharp face, black hair tied high, dark blue night clothes, weapon held slantwise, standing on a tiled roof", "tiled roofs of a town at night, hanging lanterns below, starry sky", "무"),
  ("하설", "녀", "wandering martial artist called rain guest, late twenties, calm composed face, wet black hair, grey travel robe with a bamboo rain hat on her back, weapon resting on her lap", "mountain temple porch in heavy rain", "무"),
  ("관초", "남", "gatekeeper of the black water cave called black robe hand, forties, gaunt stern face, black robe, iron key ring at the belt, cold suspicious eyes", "dark cave gate by a black river at night", "무"),
  ("사곡", "남", "shadow agent of the hidden fire elder called traceless flame, thirties, expressionless pale face half hidden by a black hood, faint ember glow in his palm", "dark alley at night, faint red glow", "작"),
@@ -629,6 +629,16 @@ for key, sex, look, bg, kind, *extra in F:
 
 DEFAULT = 9013
 PICK = {
+    "염소": 9016,
+    "하설": 9014,
+    "관초": 9014,
+    "사곡": 9015,
+    "염주": 9015,
+    "하장": 9013,
+    "마곡": 9014,
+    "묘칠": 9014,
+    "방로": 9013,
+    "잠화원로": 9015,
     "사_갈사": 9015,
     "사_곽련": 9014,
     "사_구만": 9014,
