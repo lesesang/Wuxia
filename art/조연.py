@@ -612,6 +612,12 @@ F = [
  ("묘칠", "녀", "shadow bodyguard of the lower nine gate called twin daggers, twenties, sharp catlike eyes, black fitted clothes, twin daggers in reverse grip", "back room of a gambling house with candles", "작"),
  ("방로", "남", "right-hand man of the yangtze waterway chief called twin sabers, forties, sun-darkened face, thick beard, sleeveless dark tunic, two sabers", "large river boat deck in fog", "무"),
  ("잠화원로", "남", "elder of an orthodox sect with a hidden fire in his dantian, sixties, dignified grey beard, white and blue sect robe, eerie fixed smile, faint red glow under the belly", "great hall of an orthodox sect at night, candles", "무"),
+ ("적심", "남", "blood cult bridegroom called blood robe, thirties, shaved head, grey monk robe with a red sash tied over it like a wedding sash, thin cruel smile, blood-red prayer beads", "mountain village wedding courtyard with red lanterns at dusk", "무"),
+ ("구도", "남", "peddler of demonic embers called black flame, forties, sly grin, scorched hair at the crown of the head, shabby dark merchant robe, black flame flickering in his open palm", "back alley of a market at night, faint black smoke", "작"),
+ ("사막", "남", "pursuit captain of the black water cave called cold eyes, thirties, expressionless cold face, black hooded robe, torch in one hand, faint red glow under the belly", "mountain path at night with torches behind", "무"),
+ ("청우거사", "남", "old hermit swordsman called blue rain, seventies, long white beard, faded blue robe, bamboo hat at his back, kind but sharp eyes", "wooden pavilion by a mountain road in light rain", "무"),
+ ("노혁", "남", "fist fighter seeking revenge called iron fist, forties, stern square face, short beard, sleeveless brown robe, heavy wrapped fists", "dusty crossroads with a stone marker", "맨"),
+ ("하우", "남", "iron-armored bodyguard chief called iron shell, forties, scarred heavy face, lamellar iron vest over dark robe, heavy saber", "courtyard of a rich mansion at night with lanterns", "무"),
 ]
 for key, sex, look, bg, kind, *extra in F:
     ex = [extra[0]] if extra and extra[0] else []
@@ -629,6 +635,12 @@ for key, sex, look, bg, kind, *extra in F:
 
 DEFAULT = 9013
 PICK = {
+    "적심": 9014,
+    "구도": 9013,
+    "사막": 9014,
+    "청우거사": 9013,
+    "노혁": 9015,
+    "하우": 9013,
     "염소": 9016,
     "하설": 9014,
     "관초": 9014,
