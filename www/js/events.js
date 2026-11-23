@@ -252,6 +252,9 @@ const ALONE_FLAG = "홀로_간다";
 const ALONE_GATE_RATE = 0.15;
 const BOUGHT_EVENT_WEIGHT = 5;
 
+/** 제 소속의 큰일(문파대사_소속)이 그 소속 무인에게 찾아오는 비중 */
+export const OWN_SECT_AFFAIR_WEIGHT = 40;
+
 export function pickRandomEvent(player) {
   const chapter = getChapter(player.turn);
   const options = Object.keys(DB.randomEvents).filter((key) => {
@@ -272,6 +275,8 @@ export function pickRandomEvent(player) {
     const event = DB.randomEvents[k];
     // 카르마로 산 인연은 일반 인연보다 조금 더 자주 찾아온다
     const base = event.weight ?? (event.requires?.origin ? ORIGIN_EVENT_WEIGHT : event.requires?.unlocked ? BOUGHT_EVENT_WEIGHT : event.requires || event.chain ? 3 : 1);
+    // 제 소속의 큰일은 그 소속의 무인에게 먼저 닿는다
+    if (k === `문파대사_${player.sect}`) return base * OWN_SECT_AFFAIR_WEIGHT;
     // 홀로 가기로 한 무인에게는 문파의 손길이 드물게 닿는다
     return alone && DB.randomEvents[k].sect_gate ? base * ALONE_GATE_RATE : base;
   }));

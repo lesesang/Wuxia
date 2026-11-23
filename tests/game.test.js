@@ -3558,6 +3558,24 @@ test("3년 차에 소속 없는 무인은 문을 두드리고 혼자 가면 문�
   assert.ok(gates(true) < gates(false) * 0.5);
 });
 
+test("제 소속의 큰일은 그 소속 무인에게 먼저 찾아오고, 큰일 뒤의 일은 큰일을 겪어야 열린다", () => {
+  const hits = (sect) => {
+    const q = new Player("표국표사");
+    q.turn = 40;
+    q.sect = sect;
+    let n = 0;
+    for (let i = 0; i < 600; i++) if (pickRandomEvent(q) === "문파대사_무당") n += 1;
+    return n;
+  };
+  assert.ok(hits("무당") > hits(null) * 5);
+  const q = new Player("표국표사");
+  q.turn = 50;
+  q.sect = "무당";
+  assert.ok(!checkRequires(q, DB.events.무당_두제자.requires));
+  q.seenEvents.push("문파대사_무당");
+  assert.ok(checkRequires(q, DB.events.무당_두제자.requires));
+});
+
 test("소속은 세력마다 입문, 제안, 적대를 갖추고 사파와 마도도 넉넉하다", () => {
   for (const key of Object.keys(DB.sects)) {
     if (["남궁"].includes(key)) continue;
