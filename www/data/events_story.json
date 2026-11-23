@@ -3150,6 +3150,166 @@
         "tag": "정도"
       },
       {
+        "label": "하남 황보세가의 모래 연무장을 찾아간다",
+        "outcomes": [
+          {
+            "text": "모래 바닥에서 장정들과 주먹을 섞었다. 가주가 내 주먹을 보고 웃었다.",
+            "effects": {
+              "sect_offer": "황보"
+            }
+          }
+        ],
+        "requires": {
+          "dominant": "정도"
+        },
+        "hidden": true,
+        "tag": "정도"
+      },
+      {
+        "label": "남쪽 바다의 해남파로 가는 배를 탄다",
+        "outcomes": [
+          {
+            "text": "보름 동안 뱃전에 서 있었다. 섬에 닿은 날, 내 발이 흔들리지 않는 것을 검수들이 보았다.",
+            "effects": {
+              "sect_offer": "해남"
+            }
+          }
+        ],
+        "requires": {
+          "dominant": "정도"
+        },
+        "hidden": true,
+        "tag": "정도"
+      },
+      {
+        "label": "상산 조가의 사당에 절을 올린다",
+        "outcomes": [
+          {
+            "text": "부러진 창 열두 자루 앞에서 절했다. 가주가 창 하나를 내렸다.",
+            "effects": {
+              "sect_offer": "조가"
+            }
+          }
+        ],
+        "requires": {
+          "dominant": "정도"
+        },
+        "hidden": true,
+        "tag": "정도"
+      },
+      {
+        "label": "퇴마 도관 청운관의 문을 두드린다",
+        "outcomes": [
+          {
+            "text": "부적 쓰는 방에서 사흘을 기다렸다. 관주가 내 숨을 들었다.",
+            "effects": {
+              "sect_offer": "청운관"
+            }
+          }
+        ],
+        "requires": {
+          "dominant": "정도"
+        },
+        "hidden": true,
+        "tag": "정도"
+      },
+      {
+        "label": "약왕곡 어귀의 줄에 선다",
+        "outcomes": [
+          {
+            "text": "환자 대신 약 짐을 지고 줄에 섰다. 대제자가 나를 곡 안으로 들였다.",
+            "effects": {
+              "sect_offer": "약왕곡"
+            }
+          }
+        ],
+        "requires": {
+          "dominant": "정도"
+        },
+        "hidden": true,
+        "tag": "정도"
+      },
+      {
+        "label": "북쪽 빙원 끝 얼음 문까지 걷는다",
+        "outcomes": [
+          {
+            "text": "천 리를 걸었다. 얼음 문이 소리 없이 열렸다.",
+            "effects": {
+              "sect_offer": "빙궁"
+            }
+          }
+        ],
+        "requires": {
+          "dominant": "정도"
+        },
+        "hidden": true,
+        "tag": "정도"
+      },
+      {
+        "label": "장강 중류 채주의 배를 찾아간다",
+        "outcomes": [
+          {
+            "text": "채주의 배에서 칼 두 번에 셈을 끝냈다. 부총채주가 장부를 폈다.",
+            "effects": {
+              "sect_offer": "수로채"
+            }
+          }
+        ],
+        "requires": {
+          "dominant": "사도"
+        },
+        "hidden": true,
+        "tag": "사도"
+      },
+      {
+        "label": "남쪽 장터의 오독문 독꾼을 따라간다",
+        "outcomes": [
+          {
+            "text": "독충 항아리가 가득한 방에서 이레를 버텼다.",
+            "effects": {
+              "sect_offer": "오독문"
+            }
+          }
+        ],
+        "requires": {
+          "dominant": "사도"
+        },
+        "hidden": true,
+        "tag": "사도"
+      },
+      {
+        "label": "남만 밀림의 야수궁으로 내려간다",
+        "outcomes": [
+          {
+            "text": "밀림 어귀에서 범 한 마리와 눈을 마주쳤다. 범이 먼저 고개를 돌렸다.",
+            "effects": {
+              "sect_offer": "야수궁"
+            }
+          }
+        ],
+        "requires": {
+          "dominant": "마도"
+        },
+        "hidden": true,
+        "tag": "마도"
+      },
+      {
+        "label": "서역 길목의 배화교 화당을 찾는다",
+        "outcomes": [
+          {
+            "text": "꺼지지 않는 불 앞에 앉았다. 불꽃이 내 쪽으로 기울었다.",
+            "effects": {
+              "sect_offer": "배화교"
+            }
+          }
+        ],
+        "requires": {
+          "dominant": "마도"
+        },
+        "hidden": true,
+        "tag": "마도"
+      },
+      {
         "label": "어느 문도 두드리지 않고 혼자 간다",
         "outcomes": [
           {
