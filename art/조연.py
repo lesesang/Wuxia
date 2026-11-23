@@ -372,13 +372,9 @@ S("정자", "lakeside pavilion with a tea table in morning mist, willows, still 
 S("주루", "busy two-story restaurant tavern interior, wooden balconies, red lanterns, round tables, evening crowd noise implied")
 S("나루", "small river ferry dock at dawn, wooden pier, moored boats, reeds, mist over the water")
 S("산채_밤", "mountain bandit stronghold at night, sharpened log palisade wall and wooden gate with watchtowers, rough log huts inside, several roaring bonfires, black banners, torches, cliffs and stars above")
-S("황보세가", "martial family manor of henan with a large sand-floored training yard, wooden training dummies and hanging sandbags, grey tiled roofs, morning sunlight")
-S("해남섬", "island sword sect on a rocky tropical coast, wooden halls with blue tiled roofs on cliffs above crashing waves, small boats moored below, palm trees, bright sea")
-S("상산조가", "ancestral shrine of a frontier spear family on a mountain slope, stone hall with broken spears hanging in rows on the wall inside, banners, autumn trees")
 S("청운관", "small taoist exorcist temple on a misty mountain, black tiled roofs, yellow paper talismans hanging from the eaves, incense smoke, stone lanterns, dusk")
 S("약왕곡", "secluded valley of medicinal herbs, terraced herb gardens, wooden drying racks full of herbs, thatched physician halls, a stream, mist in the morning")
 S("오독문", "dark poison sect cave in a southern jungle, clay jars and cages of poisonous insects and snakes, green poisonous mist, carved stone pillars")
-S("배화교화당", "fire temple of a fire-worshipping cult on a western desert road, stone building with domed roof and arched doorway, great sacred fire burning on an altar inside, red banners, sunset")
 
 # ---------------------------------------------------------------- 사건에만 나오는 이류에서 절정까지의 상대(이름 있거나 생김새가 다른 사람). 키는 사_로 시작
 F = [
@@ -625,27 +621,42 @@ F = [
  ("청우거사", "남", "old hermit swordsman called blue rain, seventies, long white beard, faded blue robe, bamboo hat at his back, kind but sharp eyes", "wooden pavilion by a mountain road in light rain", "무"),
  ("노혁", "남", "fist fighter seeking revenge called iron fist, forties, stern square face, short beard, sleeveless brown robe, heavy wrapped fists", "dusty crossroads with a stone marker", "맨"),
  ("하우", "남", "iron-armored bodyguard chief called iron shell, forties, scarred heavy face, lamellar iron vest over dark robe, heavy saber", "courtyard of a rich mansion at night with lanterns", "무"),
+ # 소속 사건의 인물과 상대
+ ("곽태", "남", "old head of the debt collection hall of the unorthodox alliance, seventies, thin hunched old man, sharp greedy eyes, wispy white beard, dark brown robe, thick ledger under one arm, abacus at the belt", "dim counting hall with ledgers piled high, candles", "맨"),
+ ("조일", "남", "chief of the assassin guild pursuit squad called traceless, forties, expressionless lean face, short black hair, plain black fitted clothes, black token hanging at the belt, short blade held low", "narrow gate in a dark alley at night", "작"),
+ ("묘선", "녀", "head of the crimson sleeves of the demonic cult called golden thread sleeve, thirties, beautiful cold face, black hair in an elaborate bun, black robe with crimson sleeves embroidered with gold thread, folded fan", "lacquered audience hall with red curtains", "작"),
+ ("송하", "남", "first disciple of the qingcheng taoist sect called blue cloud, late twenties, gentle handsome face, black hair in a taoist topknot, green and white taoist robe with red wedding sash, sword", "taoist temple courtyard decorated for a wedding with red lanterns", "무"),
+ ("우대강", "남", "grand chief of the yangtze river bandits called water ghost, fifties, massive build, shaved head, thick black beard, sleeveless black tunic, many scars, long harpoon spear", "huge river boat standing against the current in fog", "무"),
+ ("사_흑의사오", "남", "demonic cult spy in black, thirties, thin sly face, black hood and black night clothes, crouching behind a rock", "mountain cave entrance at night", "작"),
+ ("사_묵필조삼", "남", "forger and cult agent called ink brush, forties, thin mustache, scholar robe stained with ink, brush tucked behind his ear, short knife", "back room of a scribe shop with papers", "작"),
+ ("사_홍수양칠", "남", "squad leader of the demonic cult red water squad, thirties, cruel smile, black robe with crimson sleeves, saber", "misty buddhist mountain path", "무"),
+ ("사_묵칠", "남", "shadow lieutenant of a demonic cult elder called cold blood's shadow, thirties, pale gaunt face, black clothes, twin short blades", "mountain pass at dusk", "작"),
+ ("사_철발방노", "남", "seven-knot beggar sect branch chief called iron bowl, fifties, scruffy beard, patched ragged clothes with seven knots, iron begging bowl and staff", "under a stone bridge with beggars gathered", "무"),
+ ("사_홍선", "녀", "demonic cult assassin of the soul-darkening squad, twenties, beautiful cold face, black clothes, red thread wound around her hands, thin needles", "wedding procession road with red banners", "작"),
+ ("사_오진혁", "남", "elder of the martial alliance called iron sword hand, fifties, stern square face, grey beard, white and blue alliance robe, sword", "alliance meeting hall", "무"),
+ ("사_백시우", "남", "captain of the martial alliance death squad called soul-cutting sword, thirties, determined scarred face, white headband, white battle robe, sword", "battlefield at the foot of a dark mountain", "무"),
+ ("사_오대용", "남", "martial school master in debt called iron palm, forties, tired proud face, short beard, brown martial school robe, bare heavy hands", "martial school courtyard", "맨"),
+ ("사_우대치", "남", "bandit fortress chief called black bear, forties, huge hairy body, bear fur cloak, wild beard, heavy axe", "bandit leaders gathering hall with torches", "무"),
+ ("사_서문혁", "남", "rear guard general of the martial alliance called iron wall sword, forties, calm stern face, light armor over white robe, sword and round shield", "mountain retreat road with soldiers behind", "무"),
+ ("사_혈안지공", "남", "blood cult steward monk called blood eye, forties, shaved head, red-rimmed eyes, grey monk robe, blood-stained ledger, iron staff", "village square with offering bowls", "무"),
+ ("사_카랑", "남", "southern barbarian poison insect shaman disciple, twenties, tattooed face, bone ornaments, beast skin, staff with a jar of insects", "jungle valley with a carved stone pillar", "무"),
+ ("사_사도칠", "남", "leader of the demonic cult inner core hunting squad called black hound, thirties, wild hair, fur collar, black leather armor, hooked blade", "dark jungle at night", "무"),
+ ("사_우문호", "남", "southern punitive force captain of the martial alliance called iron sword, forties, stern face, alliance armor, sword", "military camp at the edge of a jungle", "무"),
+ ("사_마상", "남", "challenger called one blade roaming free, thirties, arrogant grin, long hair tied loosely, black robe open at the chest, long saber", "library hall doorway", "무"),
+ ("사_곽삼", "남", "lantern keeper leader of the ghost gate cult called black lantern, forties, pale sunken face, grey robe, black paper lantern glowing faintly", "mountain path lined with lanterns at night", "작"),
  # 새 소속의 시험 장로와 적대 사건의 대주
- ("황보장로", "남", "elder of a fist-fighting martial family called diamond hand, sixties, broad shoulders, thick white eyebrows, short grey beard, brown training robe with rolled sleeves, heavy calloused bare fists", "sand training yard of a martial family manor", "맨"),
- ("해남장로", "남", "elder swordsman of the southern sea island sect called wave sword, fifties, sun-darkened weathered face, grey hair tied with a blue cloth, light blue robe with wave embroidery on the sleeves, sword", "deck of a small boat on a rough sea under storm clouds", "무"),
- ("조가장로", "남", "old spear general of a frontier spear family called silver spear, sixties, stern scarred face, white beard, faded military robe over light armor, long spear held upright", "ancestral shrine with broken spears hanging on the wall", "무"),
  ("청운관장로", "남", "taoist exorcist elder called thunder seal, sixties, gaunt calm face, long grey beard, dark blue taoist robe, yellow paper talismans held between two fingers of a raised open palm", "taoist temple courtyard at night with incense smoke and hanging talismans", "작"),
  ("약왕곡장로", "남", "physician guardian of the medicine king valley called iron needle, fifties, calm sharp eyes, neat black beard, plain green physician robe, long silver acupuncture needles between his fingers", "herb valley with drying racks of medicinal herbs", "작"),
  ("빙궁장로", "남", "elder gatekeeper of the northern sea ice palace called cold snow hand, sixties, pale face, frost on white eyebrows and beard, white fur-lined robe, open palm with faint frost mist", "great ice gate in a snowstorm", "맨"),
  ("수로채장로", "남", "vice chief of the yangtze river bandits called iron carp, fifties, heavy sun-tanned face, thick grey beard, open dark tunic showing a scarred chest, broad saber", "large river bandit boat at dusk, banners", "무"),
  ("오독문장로", "녀", "elder of the five poisons sect called seven-step poison maiden, forties, beautiful but cold face, dark purple lips, black and purple layered robe, silver hairpins shaped like scorpions, poison needles between her fingers", "dim cave lined with clay jars of poisonous insects, green mist", "작"),
  ("야수궁장로", "남", "elder of the southern barbarian beast palace called iron mane, fifties, wild long grey hair like a mane, tanned muscular body, tiger skin draped over one shoulder, necklace of beast fangs, bare clawed hands, a tiger lying behind him", "dense southern jungle with giant roots and hanging vines", "맨"),
- ("배화교장로", "남", "fire-worshipping cult elder from the western regions called red flame, fifties, deep-set eyes, short black beard, red and gold layered robes, red head cloth, long iron staff with a flame at one end", "fire temple interior with a great sacred fire on a stone altar", "무"),
- ("사_벽산권황보찬", "남", "captain of a fist-fighting martial family guard called mountain-smashing fist, early thirties, square jaw, short black hair, brown martial robe with rolled sleeves, wrapped fists raised", "street of a henan town", "맨"),
- ("사_만파검위초", "남", "outer hall master of the southern sea sword sect called ten thousand waves sword, thirties, tanned lean face, light blue robe with wave embroidery, sword", "harbor inn at night by the sea", "무"),
- ("사_철창조언명", "남", "spear guard captain of a frontier spear family called iron spear, thirties, stern face, short beard, dark military robe, long spear", "mountain foot road at dusk", "무"),
  ("사_벽력수하청", "남", "patrolling taoist exorcist called thunder hand, thirties, serious young face, dark blue taoist robe, burning talismans around his raised palm", "roadside shrine with burning talismans", "작"),
  ("사_금침수노윤", "남", "guardian of the medicine king valley called golden needle, thirties, calm narrow eyes, green physician robe, golden needles between fingers", "valley entrance with a long line of patients", "작"),
  ("사_빙장설무진", "남", "patrol envoy of the northern ice palace called ice palm, thirties, pale handsome face, frost on his eyelashes, white fur robe, open palm with frost", "snowy mountain pass", "맨"),
  ("사_물뱀곽두", "남", "lower river bandit boss called water snake, thirties, lean wiry body, wet black hair, sleeveless dark tunic, curved saber", "river bandit boats surrounding a ferry", "무"),
  ("사_흑지주낙홍", "녀", "poison assassin of the five poisons sect called black spider, twenties, pale beautiful face, cold smile, black dress with a purple spider pattern, poison needles", "inn interior with a cup of tea on the table", "작"),
  ("사_흑조수바투", "남", "beast-taming shaman of the southern beast palace called black claw, thirties, painted face, feathered headdress, leopard skin, bone staff", "dark jungle path with glowing beast eyes in the bushes", "무"),
- ("사_염륜카심", "남", "fire guard captain of a fire-worshipping cult called flame wheel, thirties, deep-set eyes, black beard, red robe, iron staff wreathed in fire", "burning inn on a desert road at night", "무"),
 ]
 for key, sex, look, bg, kind, *extra in F:
     ex = [extra[0]] if extra and extra[0] else []
@@ -663,19 +674,24 @@ for key, sex, look, bg, kind, *extra in F:
 
 DEFAULT = 9013
 PICK = {
-    "황보장로": 9014,
-    "조가장로": 9014,
+    "묘선": 9014,
+    "송하": 9014,
+    "우대강": 9014,
+    "사_묵칠": 9014,
+    "사_묵필조삼": 9014,
+    "사_홍수양칠": 9014,
+    "사_백시우": 9014,
+    "사_서문혁": 9014,
+    "사_오대용": 9014,
+    "사_우대치": 9014,
+    "사_마상": 9014,
     "청운관장로": 9014,
     "빙궁장로": 9014,
     "야수궁장로": 9014,
-    "배화교장로": 9014,
-    "사_만파검위초": 9014,
     "사_물뱀곽두": 9014,
     "사_흑지주낙홍": 9014,
     "약왕곡": 9014,
     "오독문": 9014,
-    "해남섬": 9014,
-    "황보세가": 9014,
     "적심": 9014,
     "구도": 9013,
     "사막": 9014,
