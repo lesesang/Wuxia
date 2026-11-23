@@ -8887,187 +8887,6 @@
       "text": "맞힐 때마다 한기가 스며 두 번 쌓이면 적이 한 합 얼어붙는다, 적의 체력이 7할 넘게 남았으면 위력 +4할, 맞힌 합에 받는 피해 -1할 5푼."
     }
   },
-  "황보신권": {
-    "name": "황보신권",
-    "type": "공격무공",
-    "category": "권법",
-    "grade": "기본",
-    "base_multiplier": 1.13,
-    "qi_cost": 4,
-    "desc": "황보세가 사람이 처음 받는 주먹. 꾸밈없이 곧게 뻗는다.",
-    "forms": [
-      "직권",
-      "붕권",
-      "황보일권"
-    ],
-    "secret_technique": {
-      "name": "황보붕산",
-      "unlock_grade": "명품",
-      "unlock_mastery": 50,
-      "multiplier": 1.85,
-      "qi_cost": 30
-    },
-    "gimmick": {
-      "name": "황보일권",
-      "power": 8,
-      "accuracy": 6,
-      "text": "위력 +8푼, 명중 +6푼."
-    },
-    "school": "황보",
-    "lineage": "황보권",
-    "lineage_rank": 1
-  },
-  "벽력신권": {
-    "name": "벽력신권",
-    "type": "공격무공",
-    "category": "권법",
-    "grade": "상승",
-    "base_multiplier": 1.52,
-    "qi_cost": 9,
-    "desc": "주먹이 닿기 전에 소리가 먼저 닿는다는 황보세가의 비전.",
-    "forms": [
-      "뇌성",
-      "벽력",
-      "천둥"
-    ],
-    "secret_technique": {
-      "name": "벽력일권",
-      "unlock_grade": "상승",
-      "unlock_mastery": 60,
-      "multiplier": 2.4,
-      "qi_cost": 50
-    },
-    "gimmick": {
-      "name": "벽력",
-      "accuracy": 10,
-      "stun": 18,
-      "text": "명중 +1할, 맞히면 1할 8푼 확률로 적이 다음 합에 손을 쓰지 못한다."
-    },
-    "school": "황보",
-    "lineage": "황보권",
-    "lineage_rank": 2
-  },
-  "해남검법": {
-    "name": "해남검법",
-    "type": "공격무공",
-    "category": "검법",
-    "grade": "기본",
-    "base_multiplier": 1.13,
-    "qi_cost": 4,
-    "desc": "해남파 제자가 배 위에서 처음 익히는 검. 흔들리는 바닥에서도 끝이 서 있다.",
-    "forms": [
-      "파랑",
-      "조수",
-      "해풍"
-    ],
-    "secret_technique": {
-      "name": "해남일섬",
-      "unlock_grade": "명품",
-      "unlock_mastery": 50,
-      "multiplier": 1.85,
-      "qi_cost": 30
-    },
-    "gimmick": {
-      "name": "파도결",
-      "accuracy": 8,
-      "qi_back": 2,
-      "text": "명중 +8푼, 맞힐 때 내력 2푼 회복."
-    },
-    "school": "해남",
-    "lineage": "해남검",
-    "lineage_rank": 1
-  },
-  "노도검법": {
-    "name": "노도검법",
-    "type": "공격무공",
-    "category": "검법",
-    "grade": "상승",
-    "base_multiplier": 1.52,
-    "qi_cost": 9,
-    "desc": "밀려오는 파도처럼 앞의 검 위에 뒤의 검을 겹치는 해남파의 비전.",
-    "forms": [
-      "노도",
-      "만파",
-      "창해"
-    ],
-    "secret_technique": {
-      "name": "노도만파",
-      "unlock_grade": "상승",
-      "unlock_mastery": 60,
-      "multiplier": 2.4,
-      "qi_cost": 50
-    },
-    "gimmick": {
-      "name": "노도",
-      "chain": 5,
-      "chain_max": 25,
-      "crit": 6,
-      "text": "끊이지 않고 맞힐수록 위력이 5푼씩 오른다(최대 2할 5푼), 회심 확률 +6푼."
-    },
-    "school": "해남",
-    "lineage": "해남검",
-    "lineage_rank": 2
-  },
-  "상산창법": {
-    "name": "상산창법",
-    "type": "공격무공",
-    "category": "창법",
-    "grade": "기본",
-    "base_multiplier": 1.13,
-    "qi_cost": 4,
-    "desc": "상산조가 사람이 처음 받는 창. 찌르고 거두는 손이 한 호흡이다.",
-    "forms": [
-      "출창",
-      "회창",
-      "연환"
-    ],
-    "secret_technique": {
-      "name": "상산연환",
-      "unlock_grade": "명품",
-      "unlock_mastery": 50,
-      "multiplier": 1.85,
-      "qi_cost": 30
-    },
-    "gimmick": {
-      "name": "연환일창",
-      "chain": 3,
-      "chain_max": 15,
-      "text": "끊이지 않고 맞힐수록 위력이 3푼씩 오른다(최대 1할 5푼)."
-    },
-    "school": "조가",
-    "lineage": "조가창",
-    "lineage_rank": 1
-  },
-  "백룡창법": {
-    "name": "백룡창법",
-    "type": "공격무공",
-    "category": "창법",
-    "grade": "상승",
-    "base_multiplier": 1.52,
-    "qi_cost": 9,
-    "desc": "흰 용이 몸을 틀듯 갑옷의 이음매를 찾아 들어가는 상산조가의 비전.",
-    "forms": [
-      "백룡출해",
-      "반룡",
-      "용미"
-    ],
-    "secret_technique": {
-      "name": "백룡천돌",
-      "unlock_grade": "상승",
-      "unlock_mastery": 60,
-      "multiplier": 2.4,
-      "qi_cost": 50
-    },
-    "gimmick": {
-      "name": "용의 비늘 틈",
-      "accuracy": 12,
-      "pierce": 25,
-      "text": "명중 +1할 2푼, 적의 방어 2할 5푼 무시."
-    },
-    "school": "조가",
-    "lineage": "조가창",
-    "lineage_rank": 2
-  },
   "벽사장": {
     "name": "벽사장",
     "type": "공격무공",
@@ -9100,38 +8919,6 @@
     "lineage": "청운장법",
     "lineage_rank": 1
   },
-  "오뢰장": {
-    "name": "오뢰장",
-    "type": "공격무공",
-    "category": "장법",
-    "grade": "상승",
-    "base_multiplier": 1.52,
-    "qi_cost": 9,
-    "desc": "다섯 우레를 손바닥에 모은다는 청운관의 비전. 떠도는 혼이 먼저 흩어진다.",
-    "forms": [
-      "뇌인",
-      "오뢰",
-      "정법"
-    ],
-    "secret_technique": {
-      "name": "오뢰격",
-      "unlock_grade": "상승",
-      "unlock_mastery": 60,
-      "multiplier": 2.4,
-      "qi_cost": 50
-    },
-    "gimmick": {
-      "name": "오뢰정법",
-      "stun": 15,
-      "vs_side": {
-        "마도": 25
-      },
-      "text": "맞히면 1할 5푼 확률로 적이 다음 합에 손을 쓰지 못한다, 마도의 적에게 위력 +2할 5푼."
-    },
-    "school": "청운관",
-    "lineage": "청운장법",
-    "lineage_rank": 2
-  },
   "낭리도법": {
     "name": "낭리도법",
     "type": "공격무공",
@@ -9160,65 +8947,6 @@
     },
     "school": "수로채",
     "lineage": "수채도",
-    "lineage_rank": 1
-  },
-  "역류도법": {
-    "name": "역류도법",
-    "type": "공격무공",
-    "category": "도법",
-    "grade": "상승",
-    "base_multiplier": 1.52,
-    "qi_cost": 9,
-    "desc": "물살을 거슬러 오르듯 상대의 칼을 타고 들어가는 수로채의 비전.",
-    "forms": [
-      "역류",
-      "소용돌이",
-      "탁류"
-    ],
-    "secret_technique": {
-      "name": "역류참",
-      "unlock_grade": "상승",
-      "unlock_mastery": 60,
-      "multiplier": 2.4,
-      "qi_cost": 50
-    },
-    "gimmick": {
-      "name": "역류",
-      "accuracy": 10,
-      "bleed": 8,
-      "text": "명중 +1할, 맞힌 피해의 8푼이 칼자국으로 흐른다."
-    },
-    "school": "수로채",
-    "lineage": "수채도",
-    "lineage_rank": 2
-  },
-  "남만독침": {
-    "name": "남만독침",
-    "type": "공격무공",
-    "category": "암기",
-    "grade": "기본",
-    "base_multiplier": 1.13,
-    "qi_cost": 4,
-    "desc": "오독문 독꾼이 처음 받는 침. 남만의 풀독을 묻힌다.",
-    "forms": [
-      "풀독",
-      "쐐기",
-      "가시"
-    ],
-    "secret_technique": {
-      "name": "칠침연사",
-      "unlock_grade": "명품",
-      "unlock_mastery": 50,
-      "multiplier": 1.85,
-      "qi_cost": 30
-    },
-    "gimmick": {
-      "name": "남만독",
-      "poison": 8,
-      "text": "적을 중독시킨다(독 위력 8)."
-    },
-    "school": "오독문",
-    "lineage": "오독침법",
     "lineage_rank": 1
   },
   "천주독망": {
@@ -9252,65 +8980,6 @@
     },
     "school": "오독문",
     "lineage": "오독침법",
-    "lineage_rank": 2
-  },
-  "화륜곤": {
-    "name": "화륜곤",
-    "type": "공격무공",
-    "category": "봉법",
-    "grade": "기본",
-    "base_multiplier": 1.13,
-    "qi_cost": 4,
-    "desc": "배화교 신도가 처음 받는 곤법. 곤 끝이 불바퀴처럼 돈다.",
-    "forms": [
-      "화륜",
-      "불씨",
-      "선회"
-    ],
-    "secret_technique": {
-      "name": "화륜선",
-      "unlock_grade": "명품",
-      "unlock_mastery": 50,
-      "multiplier": 1.85,
-      "qi_cost": 30
-    },
-    "gimmick": {
-      "name": "불바퀴",
-      "burn": 12,
-      "text": "준 피해의 1할 2푼이 두 합 동안 더 번진다."
-    },
-    "school": "배화교",
-    "lineage": "배화곤",
-    "lineage_rank": 1
-  },
-  "열화곤법": {
-    "name": "열화곤법",
-    "type": "공격무공",
-    "category": "봉법",
-    "grade": "상승",
-    "base_multiplier": 1.52,
-    "qi_cost": 9,
-    "desc": "불은 더러움을 사른다는 가르침을 곤에 실은 배화교의 비전.",
-    "forms": [
-      "열화",
-      "성화",
-      "정화"
-    ],
-    "secret_technique": {
-      "name": "열화천륜",
-      "unlock_grade": "상승",
-      "unlock_mastery": 60,
-      "multiplier": 2.4,
-      "qi_cost": 50
-    },
-    "gimmick": {
-      "name": "열화",
-      "burn": 20,
-      "stun": 12,
-      "text": "준 피해의 2할이 두 합 동안 더 번진다, 맞히면 1할 2푼 확률로 적이 다음 합에 손을 쓰지 못한다."
-    },
-    "school": "배화교",
-    "lineage": "배화곤",
     "lineage_rank": 2
   },
   "백초공": {
@@ -9414,56 +9083,149 @@
     "lineage": "빙궁보",
     "lineage_rank": 2
   },
-  "호표보": {
-    "name": "호표보",
-    "type": "경공",
-    "category": "경공",
-    "grade": "기본",
-    "base_multiplier": 1.0,
-    "qi_cost": 5,
-    "desc": "범과 표범의 몸놀림을 옮긴 야수궁의 걸음. 물러서는 듯 덮친다.",
-    "effect": {
-      "evade": 60,
-      "counter_pct": 65,
-      "flee_bonus": 15
+  "오뢰검법": {
+    "name": "오뢰검법",
+    "type": "공격무공",
+    "category": "검법",
+    "grade": "상승",
+    "base_multiplier": 1.52,
+    "qi_cost": 9,
+    "desc": "부적을 흩뿌리며 검끝에 다섯 우레를 모은다는 청운관의 비전. 떠도는 혼이 먼저 흩어진다.",
+    "forms": [
+      "뇌인",
+      "오뢰",
+      "정법"
+    ],
+    "secret_technique": {
+      "name": "오뢰격",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
     },
     "gimmick": {
-      "name": "범의 되받기",
-      "strike": 25,
-      "text": "다 피하면 곧바로 위력 2할 5푼으로 되받아친다."
+      "name": "오뢰정법",
+      "stun": 15,
+      "vs_side": {
+        "마도": 25
+      },
+      "text": "맞히면 1할 5푼 확률로 적이 다음 합에 손을 쓰지 못한다, 마도의 적에게 위력 +2할 5푼."
     },
-    "school": "야수궁",
-    "lineage": "야수보",
+    "school": "청운관",
+    "lineage": "청운관검",
     "lineage_rank": 1
   },
-  "수왕공": {
-    "name": "수왕공",
-    "type": "심공",
-    "category": "심공",
+  "역류창법": {
+    "name": "역류창법",
+    "type": "공격무공",
+    "category": "창법",
     "grade": "상승",
-    "base_multiplier": 1.0,
-    "qi_cost": 0,
-    "desc": "짐승의 피를 깨운다는 야수궁의 비전. 다칠수록 사나워진다.",
-    "effect": {
-      "heal_hp_pct": 10,
-      "heal_qi_pct": 22,
-      "atk_buff_pct": 30,
-      "buff_rounds": 3
+    "base_multiplier": 1.52,
+    "qi_cost": 9,
+    "desc": "물살을 거슬러 오르듯 상대의 병기를 타고 들어가는 수로채의 작살창. 총채주가 물길을 쥔 창이다.",
+    "forms": [
+      "역류",
+      "소용돌이",
+      "작살"
+    ],
+    "secret_technique": {
+      "name": "역류참",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
     },
     "gimmick": {
-      "name": "짐승의 피",
-      "guard": {
-        "percent": 16,
-        "rounds": 2
-      },
-      "rage": {
-        "per": 3,
-        "max": 18
-      },
-      "text": "받는 피해가 늘 8푼 준다. 잃은 체력 1할마다 위력이 3푼씩 오른다(1할 8푼까지)."
+      "name": "역류",
+      "accuracy": 10,
+      "bleed": 8,
+      "text": "명중 +1할, 맞힌 피해의 8푼이 상처로 흐른다."
+    },
+    "school": "수로채",
+    "lineage": "수채창",
+    "lineage_rank": 1
+  },
+  "오독공": {
+    "name": "오독공",
+    "type": "심공",
+    "category": "심공",
+    "grade": "기본",
+    "base_multiplier": 1.0,
+    "qi_cost": 0,
+    "desc": "오독문 독꾼이 처음 받는 심법. 다섯 독을 조금씩 몸에 들여 독에 무디어진다.",
+    "effect": {
+      "heal_hp_pct": 6,
+      "heal_qi_pct": 14,
+      "atk_buff_pct": 0,
+      "buff_rounds": 0
+    },
+    "gimmick": {
+      "name": "독에 무딘 몸",
+      "cleanse": 1,
+      "text": "독이 한 합을 넘기지 못한다."
+    },
+    "school": "오독문",
+    "lineage": "오독심법",
+    "lineage_rank": 1
+  },
+  "맹수권": {
+    "name": "맹수권",
+    "type": "공격무공",
+    "category": "권법",
+    "grade": "기본",
+    "base_multiplier": 1.13,
+    "qi_cost": 4,
+    "desc": "야수궁 사람이 처음 받는 주먹. 범과 곰의 몸놀림을 주먹에 옮겼다.",
+    "forms": [
+      "호조",
+      "웅장",
+      "맹습"
+    ],
+    "secret_technique": {
+      "name": "맹수연격",
+      "unlock_grade": "명품",
+      "unlock_mastery": 50,
+      "multiplier": 1.85,
+      "qi_cost": 30
+    },
+    "gimmick": {
+      "name": "맹수의 발톱",
+      "power": 6,
+      "crit": 5,
+      "text": "위력 +6푼, 회심 확률 +5푼."
     },
     "school": "야수궁",
-    "lineage": "야수심법",
+    "lineage": "야수권",
+    "lineage_rank": 1
+  },
+  "만수곤법": {
+    "name": "만수곤법",
+    "type": "공격무공",
+    "category": "봉법",
+    "grade": "상승",
+    "base_multiplier": 1.52,
+    "qi_cost": 9,
+    "desc": "대술사의 뼈 지팡이에서 나온 야수궁의 비전. 지팡이 끝의 짐승 독이 몸을 굳힌다.",
+    "forms": [
+      "백골",
+      "만수",
+      "독아"
+    ],
+    "secret_technique": {
+      "name": "만수난무",
+      "unlock_grade": "상승",
+      "unlock_mastery": 60,
+      "multiplier": 2.4,
+      "qi_cost": 50
+    },
+    "gimmick": {
+      "name": "짐승의 독",
+      "poison": 10,
+      "stun": 12,
+      "text": "적을 중독시킨다(독 위력 10), 맞히면 1할 2푼 확률로 적이 다음 합에 손을 쓰지 못한다."
+    },
+    "school": "야수궁",
+    "lineage": "야수곤",
     "lineage_rank": 1
   }
 }
