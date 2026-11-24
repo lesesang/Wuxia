@@ -644,6 +644,10 @@ F = [
  ("사_우문호", "남", "southern punitive force captain of the martial alliance called iron sword, forties, stern face, alliance armor, sword", "military camp at the edge of a jungle", "무"),
  ("사_마상", "남", "challenger called one blade roaming free, thirties, arrogant grin, long hair tied loosely, black robe open at the chest, long saber", "library hall doorway", "무"),
  ("사_곽삼", "남", "lantern keeper leader of the ghost gate cult called black lantern, forties, pale sunken face, grey robe, black paper lantern glowing faintly", "mountain path lined with lanterns at night", "작"),
+ ("사_곡염", "남", "ghost gate cult elder called soul lantern hand, fifties, gaunt grey face, sunken eyes, grey and black robes, many small paper lanterns hanging from his staff glowing pale blue", "mountain path lined with glowing lanterns at night", "무"),
+ ("사_반칠", "남", "river bandit chief called black fish, forties, sun-darkened scarred face, wet hair, sleeveless black tunic, hooked saber", "large river boat at night on the yangtze with torches", "무"),
+ ("사_오란", "녀", "poison sect poison fighter called seven fingers, thirties, sharp cold face, dark green and black clothes, poison needles between her fingers, clay poison jars behind", "jungle market road with carts of clay jars", "작"),
+ ("사_독고칠", "남", "demonic cult beast-core hunter called black fang, thirties, wild hair, fur collar, black leather armor, long hooked spear, beast teeth necklace", "dark southern jungle at night", "무"),
  # 새 소속의 시험 장로와 적대 사건의 대주
  ("청운관장로", "남", "taoist exorcist elder called thunder seal, sixties, gaunt calm face, long grey beard, dark blue taoist robe, yellow paper talismans held between two fingers of a raised open palm", "taoist temple courtyard at night with incense smoke and hanging talismans", "작"),
  ("약왕곡장로", "남", "physician guardian of the medicine king valley called iron needle, fifties, calm sharp eyes, neat black beard, plain green physician robe, long silver acupuncture needles between his fingers", "herb valley with drying racks of medicinal herbs", "작"),
