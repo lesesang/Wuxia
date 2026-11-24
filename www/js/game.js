@@ -31,6 +31,7 @@ const TRAIN_BONUS_BASE = 0.05;
 const TRAIN_GROWTH = [12, 16]; // 수련과 운기로 오르는 기량
 const REST_HEAL = [40, 50]; // 요양의 체력과 내력 회복(할푼)
 const ACTION_EVENT_RATE = 0.55; // 수련, 운기, 요양 중에 그 일에 얽힌 사건을 만날 확률
+const SIDE_LATE_ACTION_RATE = 0.7; // 외전의 4장과 5장에서는 줄거리가 성글어 그 일에 얽힌 사건을 더 자주 만난다
 const DEEP_MONTH_RATE = 0.25; // 깊은 강호의 소식이 달의 문장에 끼는 확률
 const DEEP_BOSSES = ["천마"];
 const OWN_SCALE = ["천마", "혈마", "혈마미완"];
@@ -299,7 +300,8 @@ export class Game {
       this.explore();
     }
     if (!this.battle && !this.event) {
-      const quiet = name !== "탐색" && rng.random() < ACTION_EVENT_RATE ? pickActionEvent(p, name) : null;
+      const rate = sideOrigin(p) && getChapter(p.turn) >= 4 ? SIDE_LATE_ACTION_RATE : ACTION_EVENT_RATE;
+      const quiet = name !== "탐색" && rng.random() < rate ? pickActionEvent(p, name) : null;
       if (this.legacyFound()) this.event = { key: `유산_${name}`, forced: false };
       // 수련, 운기, 요양 중에 그 일에 얽힌 사건을 만난다. 그달의 수련 기록은 남긴다
       else if (quiet) this.event = { key: quiet, forced: false, keep: true };
@@ -970,6 +972,9 @@ function hasArtChoices(player) {
 }
 
 /** 천마까지 가지 못하면 도달한 장의 값을, 천마까지 갔으면 그 결과의 값을 받고 경지를 더한다. 생사경은 경지이자 결말이라 값 하나로 끝난다. */
+/** 강호에 남긴 자취가 주는 카르마: 명성 25마다 1(999까지), 쓰러뜨린 이름 있는 적 하나마다 1(20까지), 끝맺은 인연마다 3, 소속의 인정마다 3(둘까지) */
+export const KARMA_TRACE = { famePer: 25, fameCap: 999, slainCap: 20, chain: 3, sect: 3 };
+
 function karmaGain(player, key, victory) {
   const lines = [];
   let total = 0;
@@ -982,6 +987,11 @@ function karmaGain(player, key, victory) {
   if (key === "사망") add("도달한 장", getChapter(Math.min(player.turn, player.maxTurn)));
   else add(DB.endings.titles[key], DB.endings.karma[key]);
   if (key !== "생사경") add("경지", realmIndex(player.realm));
+  // 강호에 남긴 자취도 카르마가 된다
+  add("이름값", Math.floor(Math.min(player.fame, KARMA_TRACE.fameCap) / KARMA_TRACE.famePer));
+  add("꺾은 고수", Math.min(player.slain.length, KARMA_TRACE.slainCap));
+  add("맺은 인연", player.chainsDone * KARMA_TRACE.chain);
+  add("소속의 인정", Math.min(player.flags.filter((f) => f.endsWith("_인정")).length, 2) * KARMA_TRACE.sect);
   // 깊은 강호일수록 얻는 카르마가 많다
   const level = difficultyOf(player);
   if (level.karma > 1) add(`${level.name}의 강호`, Math.round(total * (level.karma - 1)));

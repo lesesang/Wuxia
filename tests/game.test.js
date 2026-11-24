@@ -3558,6 +3558,17 @@ test("3년 차에 소속 없는 무인은 문을 두드리고 혼자 가면 문�
   assert.ok(gates(true) < gates(false) * 0.5);
 });
 
+test("강호에 남긴 자취도 카르마가 된다", () => {
+  const b = newGame();
+  b.player.fame = 500;
+  b.player.slain = Array.from({ length: 30 }, (_, i) => `적${i}`);
+  b.player.chainsDone = 2;
+  b.player.flags.push("소림_인정", "무당_인정", "화산_인정");
+  b.finishGame(true, "기본");
+  const lines = b.ending.karmaLines;
+  for (const line of ["이름값 +20", "꺾은 고수 +20", "맺은 인연 +6", "소속의 인정 +6"]) assert.ok(lines.includes(line), line);
+});
+
 test("제 소속의 큰일은 그 소속 무인에게 먼저 찾아오고, 큰일 뒤의 일은 큰일을 겪어야 열린다", () => {
   const hits = (sect) => {
     const q = new Player("표국표사");
