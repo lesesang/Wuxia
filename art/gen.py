@@ -6,7 +6,13 @@ QUAL=", very aesthetic, masterpiece, no text"
 UC=("lowres, artistic error, film grain, scan artifacts, worst quality, bad quality, jpeg artifacts, very displeasing, chromatic aberration, dithering, halftone, screentone, multiple views, logo, too many watermarks, "
     "modern clothes, glasses, wristwatch, armor plates, japanese clothes, kimono, katana, samurai, ninja, text, signature, watermark, extra fingers, bad hands, chibi")
 base=style+", "+bg+QUAL
-UC=UC+(", "+extra if extra else "")
+# 빼는 칸은 약 512토큰을 넘으면 뒤가 잘린다. 그 그림만의 말을 앞에 두고 겹치는 말은 한 번만 넣는다
+# 부르는 쪽은 "그 그림만의 말 || 긴 공통 목록"으로 넘긴다. 순서: 그 그림만의 말, 화질 제외어, 긴 공통 목록
+_first, _, _rest = extra.partition("||") if "||" in extra else (extra, "", "")
+_seen=set(); _terms=[]
+for _t in [t.strip() for t in _first.split(",")+UC.split(",")+_rest.split(",")]:
+    if _t and _t not in _seen: _seen.add(_t); _terms.append(_t)
+UC=", ".join(_terms)
 body={"input":base,"model":"nai-diffusion-4-5-full","action":"generate","parameters":{
  "params_version":3,"width":int(os.environ.get("ART_W",832)),"height":int(os.environ.get("ART_H",1216)),"scale":5,"sampler":"k_euler_ancestral","steps":28,"n_samples":1,
  "ucPreset":0,"qualityToggle":True,"seed":int(seed),"noise_schedule":"karras","cfg_rescale":0,"sm":False,"sm_dyn":False,

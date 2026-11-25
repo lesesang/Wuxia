@@ -6,15 +6,15 @@ import os, subprocess, sys
 from 인물 import STYLE, WEAPON, UC
 
 # 짐승과 영물: 사람 얼굴과 손 태그를 빼고 같은 채색을 쓴다
-BEAST = ("korean webtoon key visual, manhwa illustration, anime style, wuxia, ancient china, clean crisp lineart, cel shading with smooth gradients, "
+BEAST = ("korean webtoon key visual, manhwa illustration, wuxia, ancient china, clean crisp lineart, "
          "polished digital painting with clean edges, high contrast, cool cinematic color grading, strong rim light, sharp shadows, wind, "
          "detailed background, scenery, atmospheric depth, no humans, animal focus, majestic creature, detailed fur and scales, "
          "realistic animal anatomy, powerful presence, dynamic pose")
 # 사건 배경: 사람 없이 장소만
-SCENE = ("korean webtoon background art, anime style background, illustration, manhwa key visual, murim, wuxia, ancient china, "
+SCENE = ("korean webtoon background art, illustration, manhwa key visual, murim, wuxia, ancient china, "
          "traditional chinese architecture, intricate details, polished digital painting with clean edges, crisp lineart, "
          "cinematic lighting, volumetric light, rich colors, atmospheric depth, wide shot, establishing shot, scenery, no humans, highly detailed background")
-UC_PERSON = "caucasian, european, western face, blonde hair, light brown hair, modern hairstyle, slicked back hair, undercut, leather jacket, belt buckle, buttons, collar shirt, english text, latin letters, monochrome, greyscale, faceless, blank face, crowd, giant moon, red moon, big red sun behind character, halo, circle behind head, eclipse, black sun, sun, moon behind head"
+UC_PERSON = "light brown hair, buttons, collar shirt, latin letters, monochrome, greyscale, faceless, blank face, crowd, giant moon, red moon, circle behind head, eclipse, black sun, moon behind head"
 UC_BEAST = "photorealistic, photo, 3d, realistic painting, full moon, giant moon, big sun, symmetrical composition, human, 1boy, 1girl, person, rider, cute, chibi, cartoon animal, deformed animal, extra legs, extra heads, extra tails, fused limbs"
 UC_SCENE = "torii, japanese architecture, floating island, photorealistic, photo, 3d render, realistic, people, person, human, character, 1boy, 1girl, crowd, face, text, signature, modern building, car, power lines, western castle"
 
@@ -1171,26 +1171,31 @@ PICK = {
     "흑풍채두목": 9022,
 }
 
+# 맨손 인물에게는 병기를 그리지 않으니 병기에 관한 제외어가 필요 없다
+WEAPON_UC = ("weapon", "blade", "grip", "metal", "hilt")
 def run(path, seed, key, kind, body, bg, wk, extra):
     if os.path.exists(path + ".png"):
         return
     env = dict(os.environ)
+    # 빼는 칸은 앞에서부터 읽힌다. 그 그림만의 말, 병기 형태의 말, 종류의 말, 공통의 말 순서로 둔다
+    first = [extra] if extra else []
     if kind == "인":
-        style, uc, char = STYLE, UC + ", " + UC_PERSON, body
+        style, char = STYLE, body
+        common = [UC_PERSON, UC]
         if wk == "무":
             char = f"{char}, {WEAPON}"
         elif wk == "작":
-            uc = uc + ", long weapon, staff, polearm, spear, sword, club"
+            first.append("long weapon, staff, polearm, spear, sword, club")
         elif wk == "맨":
-            uc = uc + ", weapon, holding weapon"
+            first.append("weapon, holding weapon")
+            common = [UC_PERSON, ", ".join(t.strip() for t in UC.split(",") if not any(w in t for w in WEAPON_UC))]
     elif kind == "수":
-        style, uc, char = BEAST, UC_BEAST, body
+        style, char, common = BEAST, body, [UC_BEAST]
     else:
-        style, uc, char = SCENE, UC_SCENE, "no humans, scenery, " + body
+        style, char, common = SCENE, body, [UC_SCENE]
         env["ART_W"], env["ART_H"] = "1216", "832"
         bg = body
-    if extra:
-        uc = uc + ", " + extra
+    uc = ", ".join(first) + " || " + ", ".join(common)
     subprocess.run([sys.executable, "-I", os.path.join(os.path.dirname(os.path.abspath(__file__)), "gen.py"),
                     path, str(seed), style, char, bg, uc], env=env)
     if os.path.exists(path + ".json"):

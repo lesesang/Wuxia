@@ -21,7 +21,7 @@ UC = ("caucasian, european, western face, blonde hair, modern hairstyle, slicked
       "comical, silly expression, goofy, cartoonish, exaggerated features, cute, moe, childish face, chibi, simple background, pastel colors, photorealistic, 3d, "
       "oversized weapon, giant weapon, weapon too large, stiff pose, awkward pose, unnatural pose, twisted torso, "
       "missing fingers, fused fingers, extra hands, deformed hands, deformed weapon, broken weapon, ugly face, deformed face, "
-      "asymmetrical eyes, bad anatomy, ornate weapon, fantasy weapon, multiple weapons, western clothes, fantasy armor, glasses, "
+      "asymmetrical eyes, bad anatomy, fantasy weapon, multiple weapons, western clothes, fantasy armor, glasses, "
       "bad hands, malformed hands, extra fingers, too many fingers, claw hands, wrong grip, floating weapon, weapon merging with hand, "
       "bent blade, warped blade, blurry weapon, melted metal, blurry, smudged lines, messy lineart, flat shading, low detail")
 HERO = {"남": "1boy, solo, wuxia protagonist, east asian young man, early twenties, handsome, refined facial features, athletic build, broad shoulders, heroic, charismatic, dignified posture",
@@ -280,7 +280,7 @@ def run(path, seed, char, bg, extra):
     elif "holding weapon" not in extra: char = f"{char}, {WEAPON}"
     if os.path.exists(path + ".png"): return
     subprocess.run([sys.executable, "-I", os.path.join(os.path.dirname(os.path.abspath(__file__)), "gen.py"),
-                    path, str(seed), STYLE, char, bg, UC + (", " + extra if extra else "")])
+                    path, str(seed), STYLE, char, bg, (extra or "") + " || " + UC])
     if os.path.exists(path + ".json"): os.remove(path + ".json")
 
 if __name__ == "__main__":
