@@ -64,6 +64,8 @@ function setUpgrades(upgrades = {}, total = 0) {
   const data = loadMeta();
   data.upgrades = upgrades;
   data.total_karma = total;
+  // 남은 카르마도 판마다 같게 둔다. 앞판이 쌓은 카르마로 119달의 물건을 사면 뒤에 잰 판만 강해진다
+  data.current_karma = Math.min(total, 30);
   data.difficulty_cleared = [...DB.difficulty.order];
   saveMeta(data);
 }
