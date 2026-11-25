@@ -17,6 +17,8 @@ jobs:
         with:
           node-version: 22
       - run: npm test
+      - name: 배포할 자료를 한 줄로 줄이기
+        run: node tools/minify_data.js
       - name: www 폴더를 gh-pages 브랜치에 올리기
         run: |
           cd www

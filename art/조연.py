@@ -648,6 +648,16 @@ F = [
  ("사_반칠", "남", "river bandit chief called black fish, forties, sun-darkened scarred face, wet hair, sleeveless black tunic, hooked saber", "large river boat at night on the yangtze with torches", "무"),
  ("사_오란", "녀", "poison sect poison fighter called seven fingers, thirties, sharp cold face, dark green and black clothes, poison needles between her fingers, clay poison jars behind", "jungle market road with carts of clay jars", "작"),
  ("사_독고칠", "남", "demonic cult beast-core hunter called black fang, thirties, wild hair, fur collar, black leather armor, long hooked spear, beast teeth necklace", "dark southern jungle at night", "무"),
+ ("사_마르칸", "남", "southern barbarian beast palace shaman called poison claw, forties, painted face, feather and bone headdress, leopard skin, bone drum and beast-bone staff", "jungle road blocked by wild beasts", "무"),
+ ("사_모용탁", "남", "main-line warrior of the murong clan called jade spear, twenties, handsome proud face, white and blue clan robe, long spear", "courtyard of a noble clan manor in suzhou", "무"),
+ ("사_섭강", "남", "challenger for the ten masters list called sun-falling blade, thirties, sharp arrogant face, black robe, long saber on the back", "bamboo forest path with mist", "무"),
+ ("사_단효", "남", "impostor of the lower nine gate called face-changing hand, forties, forgettable smiling face with a half-peeled mask at the jaw, plain merchant clothes, daggers", "back room of a teahouse branch office", "작"),
+ ("사_하구", "남", "traitor of the unorthodox alliance black water squad called iron face, thirties, scarred stern face, black uniform, ledger tucked in his robe, saber", "riverbank at night", "무"),
+ ("사_막칠", "남", "debt collector of the unorthodox alliance called ghost hand, forties, thin greedy face, dark robe, iron abacus and hooked blade", "small mountain bandit fortress gate", "무"),
+ ("사_조연", "남", "assassin guild token keeper called ghost brush, fifties, gaunt face, ink-stained fingers, black robe, writing brush and thin blade", "dark alley with lanterns", "작"),
+ ("사_석구", "남", "gambling gang enforcer called twin sabers, thirties, scarred brutal face, sleeveless dark tunic, two sabers", "outside a magistrate's wall at night", "무"),
+ ("사_진목", "남", "ghost gate cult lantern master called ash lantern, fifties, pale face, grey robes, a cracked black paper lantern and a blade", "village entrance at night with drifting pale lights", "무"),
+ ("사_현정", "남", "taoist exorcist of qingyun temple called white cloud hand, forties, calm stern face, dark blue taoist robe, sword and talismans", "village at night with drifting ghost lights", "무"),
  # 새 소속의 시험 장로와 적대 사건의 대주
  ("청운관장로", "남", "taoist exorcist elder called thunder seal, sixties, gaunt calm face, long grey beard, dark blue taoist robe, yellow paper talismans held between two fingers of a raised open palm", "taoist temple courtyard at night with incense smoke and hanging talismans", "작"),
  ("약왕곡장로", "남", "physician guardian of the medicine king valley called iron needle, fifties, calm sharp eyes, neat black beard, plain green physician robe, long silver acupuncture needles between his fingers", "herb valley with drying racks of medicinal herbs", "작"),
@@ -678,6 +688,10 @@ for key, sex, look, bg, kind, *extra in F:
 
 DEFAULT = 9013
 PICK = {
+    "사_석구": 9014,
+    "사_조연": 9014,
+    "사_진목": 9014,
+    "사_하구": 9014,
     "묘선": 9014,
     "송하": 9014,
     "우대강": 9014,
