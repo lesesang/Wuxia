@@ -6,7 +6,7 @@ import os, subprocess, sys
 from 인물 import STYLE, WEAPON, UC
 
 # 짐승과 영물: 사람 얼굴과 손 태그를 빼고 같은 채색을 쓴다
-BEAST = ("korean webtoon key visual, manhwa illustration, wuxia, ancient china, clean crisp lineart, "
+BEAST = ("korean webtoon key visual, manhwa illustration, anime style, wuxia, ancient china, clean crisp lineart, cel shading with smooth gradients, "
          "polished digital painting with clean edges, high contrast, cool cinematic color grading, strong rim light, sharp shadows, wind, "
          "detailed background, scenery, atmospheric depth, no humans, animal focus, majestic creature, detailed fur and scales, "
          "realistic animal anatomy, powerful presence, dynamic pose")
