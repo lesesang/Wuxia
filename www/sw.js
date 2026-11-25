@@ -2,6 +2,7 @@
 // 인터넷이 되면 항상 새 파일을 받고, 안 되거나 느리면 저장해 둔 파일로 실행한다.
 const CACHE = "wuxia-v2";
 const NETWORK_TIMEOUT = 4000;
+const STATIC = /\/(img|fonts|audio|icons)\//;
 
 self.addEventListener("install", (event) => {
   event.waitUntil((async () => {
@@ -30,6 +31,8 @@ self.addEventListener("fetch", (event) => {
       return response;
     });
     if (!cached) return network.catch(async () => (await cache.match("index.html")) || Response.error());
+    // 그림, 글꼴, 소리는 저장해 둔 것을 바로 쓰고 새것은 뒤에서 받아 둔다
+    if (STATIC.test(new URL(request.url).pathname)) { event.waitUntil(network.catch(() => {})); return cached; }
     const timeout = new Promise((resolve) => { setTimeout(() => resolve(cached), NETWORK_TIMEOUT); });
     return Promise.race([network.catch(() => cached), timeout]);
   })());

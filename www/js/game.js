@@ -7,7 +7,7 @@ import {
 } from "./events.js";
 import { buy, openMarket, sell } from "./market.js";
 import {
-  activeContent, addKarma, claimAchievements, clearCheckpoint, extraSlots, loadCheckpoint, loadMeta, recordRun, saveCheckpoint, legacyPowers, storeLegacy, canLeaveLegacy, beatFinal, sideEnding, rewardTraits, upgradeTraits, sameLegacy, takeProvisions, takeGate, updateGlobalCodex, updateKnown, difficultyOpen, recordDifficultyClear,
+  activeContent, addKarma, claimAchievements, clearCheckpoint, extraSlots, loadCheckpoint, loadMeta, readMeta, recordRun, saveCheckpoint, legacyPowers, storeLegacy, canLeaveLegacy, beatFinal, sideEnding, rewardTraits, upgradeTraits, sameLegacy, takeProvisions, takeGate, updateGlobalCodex, updateKnown, difficultyOpen, recordDifficultyClear,
 } from "./meta.js";
 import { pick, pickWeighted, randInt, rng } from "./rng.js";
 import {
@@ -847,7 +847,7 @@ export class Game {
   commitCodex() {
     const added = this.player.commitPendingEncounters();
     // 이미 강호록에 있는 인물은 다시 알리지 않는다
-    const known = loadMeta().global_codex;
+    const known = readMeta().global_codex;
     const fresh = added.filter((key) => !known.includes(key));
     updateGlobalCodex(fresh);
     updateKnown(this.player.skills.map((s) => s.key));

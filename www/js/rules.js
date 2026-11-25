@@ -141,8 +141,27 @@ export function nextSlotThreshold(totalKarma) {
   return null;
 }
 
+// 특성의 효과를 종류별로 한 번만 묶어 둔다. 효과 목록이 바뀌면 새로 묶는다
+const effectIndex = new WeakMap();
+function effectsByType(effects) {
+  let index = effectIndex.get(effects);
+  if (!index) {
+    index = {};
+    for (const e of effects) (index[e.type] ||= []).push(e);
+    effectIndex.set(effects, index);
+  }
+  return index;
+}
+
 function effectsOfType(traits, type) {
-  return traits.flatMap((key) => DB.traits[key]?.effects || []).filter((e) => e.type === type);
+  const found = [];
+  for (const key of traits) {
+    const effects = DB.traits[key]?.effects;
+    if (!effects?.length) continue;
+    const list = effectsByType(effects)[type];
+    if (list) for (const e of list) found.push(e);
+  }
+  return found;
 }
 
 export const sumEffect = (traits, type, field) =>

@@ -1,7 +1,7 @@
 // 은자와 시장. 품목은 data/market.json 에 있으며 항목 추가만으로 늘어난다.
 import { Skill, STAT_CAP } from "./character.js";
 import { DB } from "./data.js";
-import { loadMeta, spendKarma } from "./meta.js";
+import { readMeta, spendKarma } from "./meta.js";
 import { pick, pickWeighted } from "./rng.js";
 import { alignValue, fameEffect, getChapter, hasEffect, marketName, sumEffect, talkLine } from "./rules.js";
 import { josa } from "./josa.js";
@@ -199,7 +199,7 @@ function effectIsUseful(player, effect, key) {
 export function blockReason(player, key) {
   // 행낭에 넣는 물건은 쓸 때 효과가 나므로 언제든 살 수 있다
   if (!DB.market[key].consumable && !DB.market[key].effects.some((e) => effectIsUseful(player, e, key))) return "효과 없음";
-  if (DB.market[key].karma_price) return loadMeta().current_karma < DB.market[key].karma_price ? "카르마 부족" : null;
+  if (DB.market[key].karma_price) return readMeta().current_karma < DB.market[key].karma_price ? "카르마 부족" : null;
   if (player.silver < priceOf(player, key)) return "은자 부족";
   return null;
 }
