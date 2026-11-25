@@ -18,7 +18,10 @@ const defaults = () => ({
 });
 
 export function loadMeta() {
-  const raw = storage.get(LEGEND_KEY);
+  return parseMeta(storage.get(LEGEND_KEY));
+}
+
+function parseMeta(raw) {
   if (raw) {
     try {
       const data = JSON.parse(raw);
@@ -44,6 +47,14 @@ function cleanRecord(data) {
 }
 
 export const saveMeta = (data) => storage.set(LEGEND_KEY, JSON.stringify(data));
+
+// 읽기만 할 때 쓰는 기록. 저장된 글이 그대로면 다시 풀지 않는다. 돌려받은 것을 고치지 않는다
+let metaCache = { raw: undefined, data: null };
+export function readMeta() {
+  const raw = storage.get(LEGEND_KEY);
+  if (raw !== metaCache.raw || !metaCache.data) metaCache = { raw, data: parseMeta(raw) };
+  return metaCache.data;
+}
 
 export function addKarma(amount) {
   const data = loadMeta();
@@ -304,6 +315,9 @@ export const originReady = (origin, data = loadMeta()) => !origin || data.unlock
 
 function addToList(listName, keys) {
   if (!keys.length) return;
+  // 새로 더할 것이 없으면 기록을 다시 쓰지 않는다
+  const known = new Set(readMeta()[listName]);
+  if (keys.every((k) => known.has(k))) return;
   const data = loadMeta();
   const added = [...new Set(keys)].filter((k) => !data[listName].includes(k));
   if (added.length) {
@@ -343,7 +357,15 @@ export function recordEventPick(key, text, label, outcome) {
   if (!results.includes(outcome)) results.push(outcome);
   entry.picks[label] = results;
   log[key] = entry;
-  storage.set(EVENT_LOG_KEY, JSON.stringify(log));
+  eventLogDirty = true;
+}
+
+// 사건 기록은 고를 때마다 쓰지 않고 달이 시작할 때나 화면을 떠날 때 한 번에 쓴다
+let eventLogDirty = false;
+export function flushEventLog() {
+  if (!eventLogDirty || !eventLogCache) return;
+  storage.set(EVENT_LOG_KEY, JSON.stringify(eventLogCache));
+  eventLogDirty = false;
 }
 
 /** 강호행 끝에 새로 이룬 업적을 기록하고 돌려준다. */
@@ -400,6 +422,7 @@ export function recordDifficultyClear(key) {
 }
 
 export function recordRun(summary) {
+  flushEventLog();
   const data = loadMeta();
   data.total_runs += 1;
   if (WIN_ENDINGS.includes(summary.ending)) data.total_wins = (data.total_wins || 0) + 1;
@@ -411,7 +434,10 @@ export function recordRun(summary) {
 
 // ---------- 달 체크포인트 ----------
 
-export const saveCheckpoint = (playerDict, log) => storage.set(SAVE_KEY, JSON.stringify({ player: playerDict, log }));
+export function saveCheckpoint(playerDict, log) {
+  storage.set(SAVE_KEY, JSON.stringify({ player: playerDict, log }));
+  flushEventLog();
+}
 
 export function loadCheckpoint() {
   const raw = storage.get(SAVE_KEY);

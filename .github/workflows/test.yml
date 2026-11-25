@@ -1,0 +1,27 @@
+name: PR 테스트
+
+on:
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: test-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm test
+      - name: 문장 규칙 점검
+        run: |
+          out=$(python3 tools/check/text_rules.py 20)
+          echo "$out"
+          test "$out" = "깨끗"

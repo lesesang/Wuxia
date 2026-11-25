@@ -8,6 +8,11 @@ on:
 permissions:
   contents: write
 
+# 잇달아 합쳐도 배포가 차례대로 하나씩 돈다
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
 jobs:
   deploy:
     runs-on: ubuntu-latest

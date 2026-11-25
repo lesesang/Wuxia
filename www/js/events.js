@@ -2,7 +2,7 @@
 import { GRADE_ORDER, HOME_ART_MASTERY, Skill, STAT_NAMES, STAT_SCALE } from "./character.js";
 import { DB } from "./data.js";
 import { bonusFor, ITEM_GRADES, styleWeight, weightsByStyle } from "./market.js";
-import { legacyPowers, loadMeta, recordEventPick, updateKnown } from "./meta.js";
+import { legacyPowers, readMeta, recordEventPick, updateKnown } from "./meta.js";
 import { pick, pickWeighted, rng } from "./rng.js";
 import { ALIGNMENTS, CHAPTER_STARTS, MAX_FAME, applyGrowth, difficultyRank, eventToll, scaledGrowth, fameRankChanged, getChapter, realmIndex, sumEffect, fitsStory, sideOrigin,
 } from "./rules.js";
@@ -187,8 +187,22 @@ export function validateChains() {
 const ORIGIN_EVENT_WEIGHT = 8;  // 출신의 이야기는 탐색에서 더 자주 찾아온다
 
 /** 아직 만나지 못한 출신 전용 이야기 가운데 지금 조건을 채운 것. 조건을 못 채웠으면 나오지 않는다. */
+// 출신마다 그 출신 전용 사건의 키를 한 번만 모아 둔다. 사건 목록을 새로 읽으면 다시 모은다
+let originIndex = { source: null, byOrigin: null };
+function originEventKeys(origin) {
+  if (originIndex.source !== DB.randomEvents) {
+    const byOrigin = {};
+    for (const [key, event] of Object.entries(DB.randomEvents)) {
+      const o = event.requires?.origin;
+      if (o) (byOrigin[o] ||= []).push(key);
+    }
+    originIndex = { source: DB.randomEvents, byOrigin };
+  }
+  return originIndex.byOrigin[origin] || [];
+}
+
 export function pendingOriginEvents(player) {
-  return Object.keys(DB.randomEvents).filter((key) => {
+  return originEventKeys(player.originKey).filter((key) => {
     const event = DB.randomEvents[key];
     if (event.requires?.origin !== player.originKey || player.seenEvents.includes(key)) return false;
     if (event.chain && !canStartChain(player, event.chain.id)) return false;
@@ -255,18 +269,35 @@ const BOUGHT_EVENT_WEIGHT = 5;
 /** 제 소속의 큰일(문파대사_소속)이 그 소속 무인에게 찾아오는 비중 */
 export const OWN_SECT_AFFAIR_WEIGHT = 40;
 
+// 장마다 탐색에 나올 수 있는 사건, 수련 종류와 장마다 그 중에 만나는 사건의 키를 한 번만 모아 둔다.
+// 사건 목록을 새로 읽으면 다시 모으고, 키의 차례는 사건 목록의 차례를 따른다
+let pickIndex = { source: null };
+function eventsFor(kind, chapter) {
+  if (pickIndex.source !== DB.randomEvents) {
+    const explore = {}, action = {};
+    for (const [key, event] of Object.entries(DB.randomEvents)) {
+      if (event.action) {
+        for (const c of event.chapters || [1, 2, 3, 4, 5]) ((action[event.action] ||= {})[c] ||= []).push(key);
+      } else if (!event.legacy_find && !event.manor_event) {
+        // 유산의 흔적과 장원의 일은 정해진 자리에서만 나온다
+        for (const c of event.chapters || []) (explore[c] ||= []).push(key);
+      }
+    }
+    pickIndex = { source: DB.randomEvents, explore, action };
+  }
+  return (kind === "탐색" ? pickIndex.explore : pickIndex.action[kind] || {})[chapter] || [];
+}
+
 export function pickRandomEvent(player) {
   const chapter = getChapter(player.turn);
-  const options = Object.keys(DB.randomEvents).filter((key) => {
+  const options = eventsFor("탐색", chapter).filter((key) => {
     const event = DB.randomEvents[key];
-    if (event.legacy_find || event.action) return false; // 유산의 흔적과 수련 중의 사건은 정해진 자리에서만 나온다
     if (event.chain && !canStartChain(player, event.chain.id)) return false;
-    if (!fitsStory(player, event) || event.manor_event || sideOrigin(player)?.skip?.includes(key)) return false;
+    if (!fitsStory(player, event) || sideOrigin(player)?.skip?.includes(key)) return false;
     // 받지 않는 성별의 문파에 드는 일은 찾아오지 않는다
     const joining = key.match(/^(.+)_입문$/)?.[1] || key.match(/^제안_(.+)$/)?.[1];
     if (joining && sectBarred(player, joining)) return false;
-    return (event.chapters || []).includes(chapter) && !player.seenEvents.includes(key)
-      && checkRequires(player, event.requires);
+    return !player.seenEvents.includes(key) && checkRequires(player, event.requires);
   });
   if (!options.length) return null;
   // 인연이 이어지는 이벤트를 먼저 만날 가능성을 높인다
@@ -285,10 +316,9 @@ export function pickRandomEvent(player) {
 /** 수련, 운기(명상), 요양(휴식) 중에 만나는 사건 */
 export function pickActionEvent(player, action) {
   const chapter = getChapter(player.turn);
-  const options = Object.keys(DB.randomEvents).filter((key) => {
+  const options = eventsFor(action, chapter).filter((key) => {
     const event = DB.randomEvents[key];
-    return event.action === action && fitsStory(player, event) && (event.chapters || [1, 2, 3, 4, 5]).includes(chapter)
-      && !player.seenEvents.includes(key) && checkRequires(player, event.requires);
+    return fitsStory(player, event) && !player.seenEvents.includes(key) && checkRequires(player, event.requires);
   });
   if (!options.length) return null;
   // 깊은 강호에서만 만나는 일은 조금 더 자주 찾아온다
@@ -375,7 +405,7 @@ function takeFoundLegacy(player) {
 }
 
 function takeOneLegacy(player, entry) {
-  const powers = legacyPowers(loadMeta());
+  const powers = legacyPowers(readMeta());
   let name;
   let worn = false;
   if (entry.kind === "skill") {

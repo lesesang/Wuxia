@@ -1,6 +1,7 @@
 // 시작점: 데이터를 읽고 첫 화면을 그린다.
 import { installMusicTriggers } from "./audio.js";
 import { loadDataInBrowser } from "./data.js";
+import { flushEventLog } from "./meta.js";
 import { applySavedFont, installInput, render, watchPerson } from "./ui.js";
 
 async function boot() {
@@ -16,6 +17,9 @@ async function boot() {
   watchPerson();
   installMusicTriggers();
   render();
+  // 모아 둔 사건 기록은 화면을 떠날 때 남긴다
+  addEventListener("pagehide", flushEventLog);
+  document.addEventListener("visibilitychange", () => { if (document.visibilityState === "hidden") flushEventLog(); });
 
   // 기록이 브라우저 정리로 지워지지 않도록 요청하고, 오프라인 실행을 준비한다
   navigator.storage?.persist?.().catch(() => {});
