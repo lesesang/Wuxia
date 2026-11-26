@@ -444,7 +444,7 @@ export function loadCheckpoint() {
   if (!raw) return null;
   try {
     const data = JSON.parse(raw);
-    return data && data.player ? data : null;
+    return isPlain(data?.player) ? { player: data.player, log: stringList(data.log) } : null;
   } catch {
     return null;
   }
@@ -465,14 +465,50 @@ export function importRecords(text) {
   if (data?.format !== "wuxia-records") return false;
   const legend = data.legend;
   if (!legend || typeof legend.current_karma !== "number" || typeof legend.total_karma !== "number") return false;
-  const merged = { ...defaults(), ...legend };
-  for (const key of ["unlocked_origins", "unlocked_traits", "global_codex", "known_skills", "known_items", "endings_seen", "runs", "content", "content_off", "provisions", "legacies", "milestones", "known_events", "achievements", "origin_wins"]) {
-    if (!Array.isArray(merged[key])) merged[key] = defaults()[key];
-  }
-  saveMeta(merged);
-  const log = data?.event_log;
-  eventLogCache = log && typeof log === "object" && !Array.isArray(log) ? log : {};
+  saveMeta(cleanImport(legend));
+  eventLogCache = cleanEventLog(data.event_log);
+  eventLogDirty = false;
   storage.set(EVENT_LOG_KEY, JSON.stringify(eventLogCache));
-  if (data.save?.player) storage.set(SAVE_KEY, JSON.stringify(data.save));
+  if (isPlain(data.save?.player)) storage.set(SAVE_KEY, JSON.stringify({ player: data.save.player, log: stringList(data.save.log) }));
+  else storage.remove(SAVE_KEY);
   return true;
+}
+
+// 가져온 기록은 남이 만든 글일 수 있다. 정해진 꼴만 받고 나머지는 버린다
+const isPlain = (v) => v !== null && typeof v === "object" && !Array.isArray(v);
+const stringList = (v) => (Array.isArray(v) ? v.filter((x) => typeof x === "string") : []);
+const numberMap = (v) => (isPlain(v) ? Object.fromEntries(Object.entries(v).filter(([k, n]) => k !== "__proto__" && Number.isFinite(n))) : {});
+const finite = (v, fallback = 0) => (Number.isFinite(v) ? v : fallback);
+const KEY_LISTS = ["unlocked_origins", "unlocked_traits", "global_codex", "known_skills", "known_items", "endings_seen", "content", "content_off", "provisions", "milestones", "known_events", "achievements", "origin_wins", "difficulty_cleared", "side_done"];
+const RUN_TEXT = ["ending", "origin", "realm", "title", "fame", "difficulty"];
+
+function cleanImport(legend) {
+  const base = defaults();
+  const out = { ...base };
+  for (const [key, fallback] of Object.entries(base)) {
+    const v = legend[key];
+    if (KEY_LISTS.includes(key)) out[key] = stringList(v);
+    else if (typeof fallback === "number") out[key] = finite(v, fallback);
+    else if (typeof fallback === "boolean") out[key] = v === true;
+    else if (key === "upgrades" || key === "upgrade_use" || key === "manor") out[key] = numberMap(v);
+  }
+  out.runs = (Array.isArray(legend.runs) ? legend.runs : []).filter(isPlain).slice(0, RUN_HISTORY_LIMIT).map((r) => ({
+    ...Object.fromEntries(RUN_TEXT.filter((k) => typeof r[k] === "string").map((k) => [k, r[k]])),
+    turn: finite(r.turn), kills: finite(r.kills),
+  }));
+  out.legacies = (Array.isArray(legend.legacies) ? legend.legacies : []).filter((l) => isPlain(l) && typeof l.key === "string" && ["skill", "item"].includes(l.kind))
+    .map((l) => ({ kind: l.kind, key: l.key, ...(typeof l.grade === "string" ? { grade: l.grade } : {}), ...(typeof l.label === "string" ? { label: l.label } : {}) }));
+  return out;
+}
+
+function cleanEventLog(log) {
+  if (!isPlain(log)) return {};
+  const out = {};
+  for (const [key, entry] of Object.entries(log)) {
+    if (key === "__proto__" || !isPlain(entry)) continue;
+    const picks = {};
+    if (isPlain(entry.picks)) for (const [label, results] of Object.entries(entry.picks)) if (label !== "__proto__") picks[label] = stringList(results);
+    out[key] = { texts: stringList(entry.texts), picks };
+  }
+  return out;
 }
