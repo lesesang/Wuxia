@@ -10,7 +10,8 @@ async function boot() {
     await loadDataInBrowser();
   } catch (error) {
     document.getElementById("app").innerHTML = `<div class="boot-message"><p>게임 데이터를 읽지 못했습니다.</p>
-      <p>인터넷 연결을 확인한 뒤 다시 시도하세요.</p><button class="next-btn" onclick="location.reload()">다시 시도</button></div>`;
+      <p>인터넷 연결을 확인한 뒤 다시 시도하세요.</p><button class="next-btn" id="boot-retry">다시 시도</button></div>`;
+    document.getElementById("boot-retry").addEventListener("click", () => location.reload());
     throw error;
   }
   installInput();

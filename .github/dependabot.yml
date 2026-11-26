@@ -1,0 +1,9 @@
+# 워크플로가 쓰는 액션의 새 판이 나오면 PR로 알려 준다
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    commit-message:
+      prefix: "워크플로"

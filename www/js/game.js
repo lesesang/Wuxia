@@ -241,8 +241,17 @@ export class Game {
     const checkpoint = loadCheckpoint();
     if (!checkpoint) return false;
     this.reset();
-    this.player = Player.fromDict(checkpoint.player);
-    this.setLog(checkpoint.log || []);
+    try {
+      this.player = Player.fromDict(checkpoint.player);
+      const p = this.player;
+      if (!DB.origins.origins[p.originKey] || !p.alive || !Number.isInteger(p.turn) || p.turn < 1 || p.turn > p.maxTurn) throw new Error("망가진 저장");
+    } catch {
+      // 망가진 저장은 버리고 첫 화면으로 돌아간다
+      this.reset();
+      clearCheckpoint();
+      return false;
+    }
+    this.setLog(checkpoint.log);
     this.openStoryEvent();
     return true;
   }
