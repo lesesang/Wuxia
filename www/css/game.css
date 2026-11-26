@@ -6,7 +6,7 @@
 /* ===== 색과 크기 ===== */
 :root {
   --ink: #15191e; --ink-2: #1e252c; --ink-3: #2a333c; --line: #3b4651; --line-soft: #2b343d;
-  --paper: #e8e2d4; --paper-dim: #aeb0a6; --paper-faint: #7d8480;
+  --paper: #e8e2d4; --paper-dim: #aeb0a6; --paper-faint: #8a918c;
   --celadon: #8fc0ad; --celadon-deep: #2c5a50; --celadon-hover: #376c60;
   --gold: #d9b56b; --gold-deep: #3b3324; --seal: #b5372c; --seal-deep: #5a1712;
   --jeong: #8fc0ad; --sa: #d9b56b; --ma: #dd6c60;
@@ -102,6 +102,8 @@ body.play #app { flex: 1; min-height: 0; display: flex; flex-direction: column; 
 .chain-strip { font-size: .8rem; color: var(--gold); padding: .25rem 0 0; line-height: 1.5; }
 
 .stage { flex: 1; min-height: 0; overflow-y: auto; padding: var(--gap); display: flex; overscroll-behavior: contain; }
+.stage:focus { outline: none; }
+.stage:focus-visible { outline: 1px solid var(--line); outline-offset: -1px; }
 .stage-inner { margin: 0 auto auto; width: 100%; max-width: var(--read-w); }
 .log-line { margin: 0 0 .7rem; font-size: 1.02rem; text-align: center; }
 .log-line.latest { color: var(--paper); }
