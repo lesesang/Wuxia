@@ -978,7 +978,7 @@ function renderBattlePrelude() {
   const { called, intro, affix } = b.prelude;
   const lines = [b.enemy.desc, intro, ...(affix || [])].filter(Boolean);
   const foe = enemyArt(b.enemy);
-  return `<div class="stage"><div class="stage-inner">${sceneBand(ui.scene, foe, "scene-foe")}<div class="event-sheet">
+  return `<div class="stage" tabindex="0"><div class="stage-inner">${sceneBand(ui.scene, foe, "scene-foe")}<div class="event-sheet">
       <h2 class="event-title">${esc(called)}</h2>
       <div class="event-body">${lines.map((l) => `<p class="event-text">${esc(l)}</p>`).join("")}
         <p class="section-note">${esc(b.enemy.realm)}${b.spar ? ", 비무" : ""}</p>
@@ -1156,7 +1156,7 @@ function renderEnding() {
   const { ending } = game;
   const meta = loadMeta();
   const endScene = backdrop(ending.key === "사망" ? "무덤" : DB.origins.origins[p.originKey]?.side ? "산정_일출" : "천마봉_정상");
-  return `<div class="stage"><div class="stage-inner ending-sheet">${sceneBand(endScene, playerPortrait(p), "scene-ending")}
+  return `<div class="stage" tabindex="0"><div class="stage-inner ending-sheet">${sceneBand(endScene, playerPortrait(p), "scene-ending")}
       <div class="seal seal-${esc(ending.key)}">${esc(ending.seal)}</div>
       <h2 class="ending-title">${esc(ending.title)}</h2>
       ${ending.difficulty && ending.difficulty !== DEFAULT_DIFFICULTY ? `<p class="ending-world">${esc(DB.difficulty.levels[ending.difficulty]?.title ?? "")}</p>` : ""}
@@ -1254,7 +1254,7 @@ function renderArtsPick() {
     }).join("");
     return `<h4 class="market-group">${label}</h4>${rows}`;
   }).join("");
-  return `<div class="stage"><div class="stage-inner"><div class="event-sheet">
+  return `<div class="stage" tabindex="0"><div class="stage-inner"><div class="event-sheet">
       <h2 class="event-title">쓸 무공을 정한다</h2>
       <div class="event-body"><p class="event-text">무공을 여럿 지니고 길을 나선다. 무엇을 앞세울지 먼저 정한다. 병기와 도구, 성취는 주무공에 맞춰 받는다.</p>
       ${groups}</div></div></div></div>
@@ -1266,7 +1266,7 @@ function renderEvent() {
   const view = eventView(p, game.event.key);
   const chapterScene = DB.art?.chapter?.[String(getChapter(p.turn))];
   ui.scene = sceneOf(view.title, view.text, chapterScene);
-  return `<div class="stage"><div class="stage-inner">${sceneBand(ui.scene, npcOf(view.title, view.text))}<div class="event-sheet">
+  return `<div class="stage" tabindex="0"><div class="stage-inner">${sceneBand(ui.scene, npcOf(view.title, view.text))}<div class="event-sheet">
       ${game.notice ? `<div class="event-notice">${game.notice.map((l) => `<p>${esc(l)}</p>`).join("")}</div>` : ""}
       <h2 class="event-title">${esc(view.title)}</h2>
       <div class="event-body"><p class="event-text" data-type>${esc(view.text)}</p>
@@ -1317,7 +1317,7 @@ function renderTurn() {
       </div>
       ${market ? `<p class="hint">${market}</p>` : ""}`;
   ui.scene = turnScene(ui.lastAction, getChapter(p.turn));
-  return `<div class="stage" aria-live="polite"><div class="stage-inner">${sceneBand(ui.scene, null, "scene-sm")}${body}</div></div>
+  return `<div class="stage" tabindex="0" aria-live="polite"><div class="stage-inner">${sceneBand(ui.scene, null, "scene-sm")}${body}</div></div>
     <div class="action-area"><div class="action-inner">${controls}</div></div>`;
 }
 
