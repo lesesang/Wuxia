@@ -75,7 +75,7 @@ function modalShell(id, title, body) {
   const level = ui.modals.indexOf(id);
   return `<div class="modal-overlay${level >= 0 ? " open" : ""}" id="${id}" role="dialog" aria-label="${esc(title)}"${level > 0 ? ` style="z-index:${100 + level}"` : ""}>
     <div class="modal-box">
-      <div class="modal-head"><h3>${esc(title)}</h3><button class="modal-close" data-act="close-modal" aria-label="닫기">✕</button></div>
+      <div class="modal-head"><h2>${esc(title)}</h2><button class="modal-close" data-act="close-modal" aria-label="닫기">✕</button></div>
       ${body}
     </div></div>`;
 }
@@ -231,7 +231,7 @@ function galleryHtml(meta) {
     const url = e && sceneOf(e.title, e.text);
     if (url && !places.has(url)) places.set(url, e.title);
   }
-  const part = (title, items, wide = false) => `<h4 class="gallery-title">${title} <span class="group-count">${items.length}</span></h4>${items.length ? `<div class="gallery${wide ? " wide" : ""}">${items.join("")}</div>` : `<p class="codex-empty">아직 없습니다.</p>`}`;
+  const part = (title, items, wide = false) => `<h3 class="gallery-title">${title} <span class="group-count">${items.length}</span></h3>${items.length ? `<div class="gallery${wide ? " wide" : ""}">${items.join("")}</div>` : `<p class="codex-empty">아직 없습니다.</p>`}`;
   return `<p class="codex-meta">그림을 누르면 크게 볼 수 있습니다.</p>${part("출신", heroes)}${part("만난 사람과 짐승", people)}${part("지나온 곳", [...places].map(([url, title]) => tile(url, title)), true)}`;
 }
 
@@ -274,7 +274,7 @@ function codexReader(key) {
   const allChoices = new Set([...e.choices, ...(e.variants || []).flatMap((v) => v.choices || [])].map((c) => c.label));
   const left = [...allChoices].filter((l) => !log?.picks[l]).length;
   return `<button class="mini-btn" data-act="codex-back">← 목록으로</button>
-    <h4 class="codex-title">${esc(e.title)}</h4>
+    <h3 class="codex-title">${esc(e.title)}</h3>
     <p class="codex-meta">${esc(eventKind(e))}${e.chain ? `, ${esc(DB.chains[e.chain.id].title)} ${e.chain.index + 1}/${e.chain.total}편` : ""}</p>
     <p class="codex-body-text">${esc(e.text)}</p>
     ${others.map((v) => `<p class="codex-meta">${esc(whenText(v.requires))}</p><p class="codex-body-text">${esc(v.text)}</p>`).join("")}
@@ -321,7 +321,7 @@ function refreshCodexList() {
 }
 
 function helpModal() {
-  const section = (title, lines) => `<div class="modal-section"><h4>${title}</h4>${lines.map((l) => `<p class="help-line">${l}</p>`).join("")}</div>`;
+  const section = (title, lines) => `<div class="modal-section"><h3>${title}</h3>${lines.map((l) => `<p class="help-line">${l}</p>`).join("")}</div>`;
   const pages = {
     처음: `${section("목표", ["열 해 뒤 겨울, 천마봉에 올라 천마를 쓰러뜨립니다.", "도중에 쓰러져도 <b>카르마</b>가 남습니다. 카르마로 출신과 자질을 사서 다음 강호행을 더 단단히 준비합니다."])}
 ${section("한 달", [
@@ -443,10 +443,10 @@ const RARITY_ORDER = ["일반", "희귀", "전설"];
 function byRarity(keys, row) {
   const common = RARITY_ORDER.map((rarity) => {
     const rows = keys.filter((key) => DB.traits[key].rarity === rarity && !DB.traits[key].origin);
-    return rows.length ? `<h4 class="shop-group">${rarity}</h4>${rows.map(row).join("")}` : "";
+    return rows.length ? `<h3 class="shop-group">${rarity}</h3>${rows.map(row).join("")}` : "";
   }).join("");
   const own = byOrigin(keys.filter((key) => DB.traits[key].origin), (key) => DB.traits[key].origin);
-  return common + (own.length ? `<h4 class="shop-group">출신 전용</h4>${own.map(row).join("")}` : "");
+  return common + (own.length ? `<h3 class="shop-group">출신 전용</h3>${own.map(row).join("")}` : "");
 }
 
 /** 출신 전용 항목은 출신 차례대로 모은다. 같은 출신끼리는 원래 순서를 지킨다. */
@@ -510,7 +510,7 @@ function shopPanels(meta) {
   const leanOf = (k) => Object.entries(DB.origins.origins[k].alignment || {}).sort((x, y) => y[1] - x[1])[0]?.[0] || "정도";
   const sideRows = [["정도", "정파"], ["사도", "사파"], ["마도", "마도"]].map(([lean, label]) => {
     const rows = lockedSides.filter((k) => leanOf(k) === lean).map(sideRow).join("");
-    return rows ? `<h4 class="shop-group">${label}</h4>${rows}` : "";
+    return rows ? `<h3 class="shop-group">${label}</h3>${rows}` : "";
   }).join("");
   // 해금한 외전은 본 결말의 수와 함께 보여 준다
   const ownedSides = DB.origins.side_order.filter((k) => meta.unlocked_origins.includes(k)).map((k) => {
@@ -519,7 +519,7 @@ function shopPanels(meta) {
     const seen = endings.filter((e) => meta.endings_seen.includes(e)).length;
     return `<div class="pick-row"><div class="pick-main"><div class="pick-name">${esc(o.name)} <span class="rarity">결말 ${seen}/${endings.length}</span></div><p class="pick-desc">${esc(o.goal)}</p></div></div>`;
   }).join("");
-  const sides = `<p class="section-note">외전의 출신은 천마봉으로 가지 않고, 같은 강호의 같은 십 년을 저마다의 목표로 걷습니다. 길은 본편보다 거칩니다.</p>${sideOpen(meta) ? "" : `<p class="section-note">생사경 결말을 한 번이라도 보면 열립니다.</p>`}${sideRows || emptyNote("모든 외전을 해금했습니다.")}${ownedSides ? `<h4 class="shop-group">해금한 외전</h4>${ownedSides}` : ""}`;
+  const sides = `<p class="section-note">외전의 출신은 천마봉으로 가지 않고, 같은 강호의 같은 십 년을 저마다의 목표로 걷습니다. 길은 본편보다 거칩니다.</p>${sideOpen(meta) ? "" : `<p class="section-note">생사경 결말을 한 번이라도 보면 열립니다.</p>`}${sideRows || emptyNote("모든 외전을 해금했습니다.")}${ownedSides ? `<h3 class="shop-group">해금한 외전</h3>${ownedSides}` : ""}`;
   const levels = manorLevels(meta);
   const gate = gateCost(meta);
   const gateRow = meta.manor_gate
@@ -537,7 +537,7 @@ function shopPanels(meta) {
       ? `<div class="pick-row"><div class="pick-main"><div class="pick-name">${name}</div>${body}</div></div>`
       : shopRow(name, body, "build-wing", key, cost, meta, "올리기", !manorOpen(meta));
   };
-  const manor = `<p class="section-note">${esc(DB.karma.manor.note)}</p>${manorOpen(meta) ? "" : `<p class="section-note">쌓은 카르마가 ${DB.karma.manor.need_total}에 이르면 열립니다. 지금 ${meta.total_karma}입니다.</p>`}${gateRow}<h4 class="shop-group">장원의 채</h4>${Object.entries(DB.karma.manor.wings).map(wingRow).join("")}`;
+  const manor = `<p class="section-note">${esc(DB.karma.manor.note)}</p>${manorOpen(meta) ? "" : `<p class="section-note">쌓은 카르마가 ${DB.karma.manor.need_total}에 이르면 열립니다. 지금 ${meta.total_karma}입니다.</p>`}${gateRow}<h3 class="shop-group">장원의 채</h3>${Object.entries(DB.karma.manor.wings).map(wingRow).join("")}`;
   const traits = byRarity(visibleTraits().filter((k) => !meta.unlocked_traits.includes(k)),
     (k) => shopRow(traitName(DB.traits[k]), `<p class="pick-desc">${esc(DB.traits[k].desc)}</p>${originOnly(DB.traits[k].origin, meta)}`, "unlock-trait", k, DB.traits[k].cost, meta, "해금", !open(DB.traits[k].origin)));
   const groups = [...new Set(Object.values(DB.karma.upgrades).map((u) => u.group))];
@@ -552,7 +552,7 @@ function shopPanels(meta) {
     const entries = Object.entries(DB.karma.upgrades).filter(([, u]) => u.group === g);
     const have = entries.reduce((n, [key]) => n + upgradeLevel(key, meta), 0);
     const all = entries.reduce((n, [, u]) => n + u.costs.length, 0);
-    return `<h4 class="shop-group">${esc(g)} <span class="group-count">${have}/${all}</span></h4>`;
+    return `<h3 class="shop-group">${esc(g)} <span class="group-count">${have}/${all}</span></h3>`;
   };
   const upgradeRow = ([key, u]) => {
     const level = upgradeLevel(key, meta);
@@ -573,7 +573,7 @@ function shopPanels(meta) {
   const contentList = contentGroups.filter((g) => contentFilter.on === "전체" || contentFilter.on === g).map((g) => {
     const entries = contentLeft.filter(([, c]) => c.group === g);
     const sorted = g === "출신 전용" ? byOrigin(entries, ([, c]) => c.origin) : entries;
-    return sorted.length ? `<h4 class="shop-group">${esc(g)}</h4>${sorted.map(contentRow).join("")}` : "";
+    return sorted.length ? `<h3 class="shop-group">${esc(g)}</h3>${sorted.map(contentRow).join("")}` : "";
   }).join("");
   const content = contentLeft.length ? contentFilter.row + contentList : "";
   const legacy = legacyShop(meta);
@@ -585,7 +585,7 @@ function shopPanels(meta) {
       <button class="unlock-btn" data-act="refund-provision" data-key="${esc(key)}">카르마 ${p.cost}<br>물리기</button></div>`;
   };
   const provisionFilter = groupFilter("provision", provisionGroups);
-  const provisions = provisionFilter.row + provisionGroups.filter((g) => provisionFilter.on === "전체" || provisionFilter.on === g).map((g) => `<h4 class="shop-group">${esc(g)}</h4>${Object.entries(DB.karma.provisions).filter(([, p]) => p.group === g).map(provisionRow).join("")}`).join("");
+  const provisions = provisionFilter.row + provisionGroups.filter((g) => provisionFilter.on === "전체" || provisionFilter.on === g).map((g) => `<h3 class="shop-group">${esc(g)}</h3>${Object.entries(DB.karma.provisions).filter(([, p]) => p.group === g).map(provisionRow).join("")}`).join("");
   return {
     provision: `<p class="section-note">채비는 다음 강호행 한 번에만 쓰이고, 떠나기 전에는 물릴 수 있습니다.</p>${provisions}`,
     origin: origins || emptyNote("모든 출신을 해금했습니다."),
@@ -615,7 +615,7 @@ function legacyShop(meta) {
   const stored = meta.legacies.map((l, i) => `<div class="pick-row"><div class="pick-main"><div class="pick-name">${esc(l.label)}</div><p class="pick-desc">${esc(l.from)}, ${esc(l.origin)}</p></div>
     <button class="unlock-btn" data-act="drop-legacy" data-key="${i}">지운다</button></div>`).join("");
   const powers = legacyPowers(meta);
-  return `${note}<h4 class="shop-group">강화</h4>${steps}<h4 class="shop-group">보관한 유산 (${meta.legacies.length}/${powers.shelf})</h4>${stored || emptyNote("아직 남겨 둔 유산이 없습니다.")}`;
+  return `${note}<h3 class="shop-group">강화</h3>${steps}<h3 class="shop-group">보관한 유산 (${meta.legacies.length}/${powers.shelf})</h3>${stored || emptyNote("아직 남겨 둔 유산이 없습니다.")}`;
 }
 
 /** 누적 카르마 보상과 카르마를 얻는 길을 한눈에 보여 준다. */
@@ -650,7 +650,7 @@ function renderShop() {
   const tabs = [["origin", "출신"], ["side", "외전"], ["trait", "자질"], ["upgrade", "기틀"], ["content", "인연"], ["provision", "채비"], ["manor", "장원"], ["legacy", "유산"], ["reward", "누적"]];
   app().innerHTML = `<div class="setup-head">
       <button class="back-btn" data-act="shop-back" aria-label="뒤로">←</button>
-      <h2>카르마 상점</h2>
+      <h1>카르마 상점</h1>
       <span class="setup-karma">카르마 ${meta.current_karma}</span>
     </div>
     <div class="setup-tabs">${tabs.map(([key, label]) => `<button class="tab-btn${ui.shopTab === key ? " active" : ""}" data-act="shop-tab" data-tab="${key}">${label}</button>`).join("")}</div>
@@ -793,7 +793,7 @@ function renderSetup() {
 
   const origins = DB.origins.order.filter((key) => meta.unlocked_origins.includes(key)).map((key) => `<div class="pick-row"><label class="pick-label"><input type="radio" name="origin" value="${esc(key)}" ${ui.origin === key ? "checked" : ""}>
       ${originFace(key)}<span class="pick-main"><span class="pick-name">${esc(DB.origins.origins[key].name)}${meta.origin_wins.includes(key) ? ` <span class="rarity">천마 격파</span>` : ""}</span>${originDetail(key)}</span></label></div>`).join("")
-    + (DB.origins.side_order.some((key) => meta.unlocked_origins.includes(key)) ? `<h4 class="shop-group">외전</h4>${DB.origins.side_order.filter((key) => meta.unlocked_origins.includes(key)).map((key) => `<div class="pick-row"><label class="pick-label"><input type="radio" name="origin" value="${esc(key)}" ${ui.origin === key ? "checked" : ""}>
+    + (DB.origins.side_order.some((key) => meta.unlocked_origins.includes(key)) ? `<h3 class="shop-group">외전</h3>${DB.origins.side_order.filter((key) => meta.unlocked_origins.includes(key)).map((key) => `<div class="pick-row"><label class="pick-label"><input type="radio" name="origin" value="${esc(key)}" ${ui.origin === key ? "checked" : ""}>
       ${originFace(key)}<span class="pick-main"><span class="pick-name">${esc(DB.origins.origins[key].name)}${meta.side_done.includes(key) ? ` <span class="rarity">끝맺음</span>` : ""}</span>${originDetail(key)}</span></label></div>`).join("")}` : "");
 
   const ownedTraits = byRarity(visibleTraits(ui.origin).filter((key) => meta.unlocked_traits.includes(key)),
@@ -804,7 +804,7 @@ function renderSetup() {
   const originName = DB.origins.origins[ui.origin].name;
   app().innerHTML = `<div class="setup-head">
       <button class="back-btn" data-act="title" aria-label="뒤로">←</button>
-      <h2>어떤 무인으로 시작할까</h2>
+      <h1>어떤 무인으로 시작할까</h1>
       <button class="shop-link" data-act="shop">카르마 ${meta.current_karma}, 상점</button>
     </div>
     ${personSetup()}
@@ -845,7 +845,7 @@ function chronicleList(p) {
 
 function companionList(p) {
   const rows = activeCompanions(p);
-  return rows.length ? `<div class="modal-section"><h4>결전에 달려올 사람</h4>${rows.map((c) => `<div class="skill-row companion-row">${avatar(companionArt(c.key), "row-portrait", c.name)}<span>${esc(c.name)}<span class="skill-meta block">${esc(c.help_text)}</span></span></div>`).join("")}</div>` : "";
+  return rows.length ? `<div class="modal-section"><h3>결전에 달려올 사람</h3>${rows.map((c) => `<div class="skill-row companion-row">${avatar(companionArt(c.key), "row-portrait", c.name)}<span>${esc(c.name)}<span class="skill-meta block">${esc(c.help_text)}</span></span></div>`).join("")}</div>` : "";
 }
 
 /** 든 병장기를 내려놓는 단추 */
@@ -864,7 +864,7 @@ function gimmickLine(p, slot) {
 /** 챙겨 둔 병장기. 싸우지 않을 때 바꿔 든다 */
 function spareGear(p) {
   if (!p.gear.length) return "";
-  return `<div class="modal-section"><h4>챙겨 둔 병장기</h4>${p.gear.filter((k) => DB.market[k]).map((key) => `<div class="skill-row"><div class="skill-head">
+  return `<div class="modal-section"><h3>챙겨 둔 병장기</h3>${p.gear.filter((k) => DB.market[k]).map((key) => `<div class="skill-row"><div class="skill-head">
     <span>${esc(DB.market[key].name)} <span class="skill-meta">${esc(itemGrade(key))}</span><br><span class="skill-meta">${esc(DB.market[key].desc)}${DB.market[key].gimmick ? ` 영기 ${esc(DB.market[key].gimmick.name)}: ${esc(DB.market[key].gimmick.text)}` : ""}</span></span>
     ${!game.battle && p.alive ? `<button class="mini-btn" data-act="equip-gear" data-key="${esc(key)}">들기</button>` : ""}</div></div>`).join("")}</div>`;
 }
@@ -924,17 +924,17 @@ function statusModal() {
         ${vet.step ? row(vet.name, `주는 피해 +${halpun(vet.damage)}, 받는 피해 -${halpun(vet.reduce)}${vet.next ? `, 실전 ${vet.next}에 더 깊어짐` : ""}`) : row("실전의 손", `실전 ${vet.next}부터 노련해짐`)}
         ${row("선천진기", `${p.revives}번`)}
       </div>
-      ${progress ? `<div class="modal-section"><h4>다음 경지: ${esc(progress.next)}</h4>
+      ${progress ? `<div class="modal-section"><h3>다음 경지: ${esc(progress.next)}</h3>
         ${row("평균 기량", `${progress.avg} / ${progress.avgRequired}`)}
         ${row("최저 기량", `${progress.min} / ${progress.minRequired}`)}
         ${row("실전 경험", `${progress.battles} / ${progress.battlesRequired}`)}</div>` : ""}
-      <div class="modal-section"><h4>성향과 별호: ${esc(byname(p))}</h4>
+      <div class="modal-section"><h3>성향과 별호: ${esc(byname(p))}</h3>
         ${ALIGNMENTS.map((name) => `<div class="align-row"><span>${name}</span><div class="align-track"><div class="a-${name}" style="width:${Math.min(p.alignment[name] / 10, 100)}%"></div></div><span>${p.alignment[name]}</span></div>`).join("")}
         <p class="skill-meta">${esc(benefitText(p.alignment))}</p>
         ${pathPerks(p).map((k) => `<div class="skill-row">${esc(k.path)}, ${esc(k.name)}<div class="skill-meta">${esc(k.desc)}</div></div>`).join("")}
       </div>
-      ${companionList(p)}${realmPerks(p.realm, main?.category).length ? `<div class="modal-section"><h4>경지의 특전</h4>${realmPerks(p.realm, main?.category).map((k) => `<div class="skill-row">${esc(k.realm)}, ${esc(k.name)}<div class="skill-meta">${esc(k.desc)}</div>${k.grown.map((g) => `<div class="skill-meta">${esc(g.realm)}에 올라: ${esc(g.desc)}</div>`).join("")}</div>`).join("")}</div>` : ""}
-      ${traits.length ? `<div class="modal-section"><h4>자질</h4>${traits.map((t) => `<div class="skill-row">${esc(t.name)}<div class="skill-meta">${esc(t.desc)}</div></div>`).join("")}</div>` : ""}`,
+      ${companionList(p)}${realmPerks(p.realm, main?.category).length ? `<div class="modal-section"><h3>경지의 특전</h3>${realmPerks(p.realm, main?.category).map((k) => `<div class="skill-row">${esc(k.realm)}, ${esc(k.name)}<div class="skill-meta">${esc(k.desc)}</div>${k.grown.map((g) => `<div class="skill-meta">${esc(g.realm)}에 올라: ${esc(g.desc)}</div>`).join("")}</div>`).join("")}</div>` : ""}
+      ${traits.length ? `<div class="modal-section"><h3>자질</h3>${traits.map((t) => `<div class="skill-row">${esc(t.name)}<div class="skill-meta">${esc(t.desc)}</div></div>`).join("")}</div>` : ""}`,
     skills: skills + idleArtsNote(p),
     history: chronicleList(p) || `<p class="codex-empty">아직 남길 만한 일이 없습니다.</p>`,
     bag: `<div class="modal-section">
@@ -943,7 +943,7 @@ function statusModal() {
         ${gimmickLine(p, "weapon")}${unequipButton(p, "weapon")}
         ${row("호신구", armor ? `${armor}, ${itemGrade(p.armor)} (받는 피해 -${equipmentBonus(p, "armor")})` : "없음")}
         ${gimmickLine(p, "armor")}${unequipButton(p, "armor")}
-      </div>${spareGear(p)}<div class="modal-section"><h4>상비약과 도구</h4>${bag}</div>`,
+      </div>${spareGear(p)}<div class="modal-section"><h3>상비약과 도구</h3>${bag}</div>`,
   };
   const tabs = [["stats", "기량"], ["skills", "무공"], ["bag", "행낭"], ["history", "기록"]];
   return modalShell("status-modal", "신상", `
@@ -964,7 +964,7 @@ function standBox(p, b) {
   const side = p.dominantAlignment();
   const line = talk.origin[p.originKey] || (side && talk.side[side]) || talk.기본;
   return `<div class="stand-overlay" role="dialog" aria-modal="true"><div class="stand-box">
-      <h3>${esc(b.enemy.name)} 앞에서 쓰러진다</h3>
+      <h2>${esc(b.enemy.name)} 앞에서 쓰러진다</h2>
       <p>${esc(line)}</p>
       <p class="stand-note">선천진기를 일으키면 체력과 내력이 최대의 절반만큼 차오르고, 이 싸움 동안 위력이 오르고 받는 피해가 줍니다. 남은 선천진기 ${p.revives}번.</p>
       <button class="next-btn" data-act="stand" data-gather="1">선천진기를 일으킨다</button>
@@ -979,7 +979,7 @@ function renderBattlePrelude() {
   const lines = [b.enemy.desc, intro, ...(affix || [])].filter(Boolean);
   const foe = enemyArt(b.enemy);
   return `<div class="stage" tabindex="0"><div class="stage-inner">${sceneBand(ui.scene, foe, "scene-foe")}<div class="event-sheet">
-      <h2 class="event-title">${esc(called)}</h2>
+      <h1 class="event-title">${esc(called)}</h1>
       <div class="event-body">${lines.map((l) => `<p class="event-text">${esc(l)}</p>`).join("")}
         <p class="section-note">${esc(b.enemy.realm)}${b.spar ? ", 비무" : ""}</p>
         <button class="choice-btn" data-act="battle" data-action="기본공격" data-begin="1">맞선다</button>
@@ -1143,11 +1143,11 @@ function legacyPanel() {
   const full = meta.legacies.length >= shelf;
   // 보관이 가득 찼으면 무엇을 지울지 먼저 고른다
   if (full && ui.legacyDrop === null) {
-    return `<div class="legacy-panel"><h4>전설의 유산: 보관함이 가득 찼습니다</h4><p class="section-note">새로 남기려면 하나를 지워야 합니다. 지운 유산은 돌아오지 않습니다.</p>
+    return `<div class="legacy-panel"><h3>전설의 유산: 보관함이 가득 찼습니다</h3><p class="section-note">새로 남기려면 하나를 지워야 합니다. 지운 유산은 돌아오지 않습니다.</p>
       ${meta.legacies.map((l, i) => `<button class="choice-btn" data-act="legacy-drop-pick" data-key="${i}">${esc(l.label)} 지우기<small> ${esc(l.from)}</small></button>`).join("")}</div>`;
   }
   const dropped = full ? `<p class="section-note">${esc(meta.legacies[ui.legacyDrop]?.label ?? "")}${josa(esc(meta.legacies[ui.legacyDrop]?.label ?? ""), "을/를")} 지우고 남깁니다. <button class="link-btn" data-act="legacy-drop-pick" data-key="">다시 고르기</button></p>` : "";
-  return `<div class="legacy-panel"><h4>전설의 유산: 하나를 남긴다</h4>${dropped}
+  return `<div class="legacy-panel"><h3>전설의 유산: 하나를 남긴다</h3>${dropped}
     ${options.map((o, i) => `<button class="choice-btn" data-act="leave-legacy" data-key="${i}">${esc(o.label)}</button>`).join("")}</div>`;
 }
 
@@ -1158,7 +1158,7 @@ function renderEnding() {
   const endScene = backdrop(ending.key === "사망" ? "무덤" : DB.origins.origins[p.originKey]?.side ? "산정_일출" : "천마봉_정상");
   return `<div class="stage" tabindex="0"><div class="stage-inner ending-sheet">${sceneBand(endScene, playerPortrait(p), "scene-ending")}
       <div class="seal seal-${esc(ending.key)}">${esc(ending.seal)}</div>
-      <h2 class="ending-title">${esc(ending.title)}</h2>
+      <h1 class="ending-title">${esc(ending.title)}</h1>
       ${ending.difficulty && ending.difficulty !== DEFAULT_DIFFICULTY ? `<p class="ending-world">${esc(DB.difficulty.levels[ending.difficulty]?.title ?? "")}</p>` : ""}
       <p class="ending-name">${esc(fullName(p.person))}</p>
       <p class="ending-text">${esc(ending.text)}</p>
@@ -1205,7 +1205,7 @@ function sellSection(player) {
   const worn = ["weapon", "armor"].filter((slot) => player[slot]).map((slot) => `<div class="market-item"><div class="item-info">
       <div class="item-name">${esc(DB.market[player[slot]].name)}<span class="item-category">들고 있음</span></div></div>
       <div class="item-actions">${unequipButton(player, slot)}</div></div>`).join("");
-  return `<h4 class="market-group">내 짐 팔기</h4>${worn}${rows}`;
+  return `<h3 class="market-group">내 짐 팔기</h3>${worn}${rows}`;
 }
 
 function renderMarket() {
@@ -1225,15 +1225,15 @@ function renderMarket() {
   const known = GROUPS.flatMap(([, cats]) => cats);
   const sections = GROUPS.map(([title, cats]) => {
     const list = views.filter((v) => cats.includes(v.category)).sort((a, b) => fits(a) - fits(b));
-    return list.length ? `<h4 class="market-group">${title}</h4>${list.map(row).join("")}` : "";
+    return list.length ? `<h3 class="market-group">${title}</h3>${list.map(row).join("")}` : "";
   });
   const rest = views.filter((v) => !known.includes(v.category));
-  const specials = rest.length ? `<h4 class="market-group">특별한 물건</h4>${rest.map(row).join("")}` : "";
+  const specials = rest.length ? `<h3 class="market-group">특별한 물건</h3>${rest.map(row).join("")}` : "";
   const stock = specials + sections.join("");
   const marketScene = market.special ? sceneBand(backdrop("대나무숲"), castArt("수상한누군가")) : sceneBand(backdrop("장터"), castArt("장터상인"));
   ui.scene = backdrop(market.special ? "대나무숲" : "장터");
   return `<div class="stage market-stage${market.special ? " market-special" : ""}"><div class="market-inner">${marketScene}
-      <h2 class="market-title">${esc(market.name)}</h2>
+      <h1 class="market-title">${esc(market.name)}</h1>
       <p class="market-sub">${market.special ? "결전을 앞둔 밤, 누군가 말없이 보따리를 풀어 놓는다." : "달을 쓰지 않습니다. 다음 장터는 일 년 뒤입니다."}</p>
       ${market.special ? `<p class="market-karma">은자 <b>${player.silver}</b>, 카르마 <b>${loadMeta().current_karma}</b></p>` : ""}
       ${market.message ? `<p class="market-message">${esc(market.message)}</p>` : ""}
@@ -1252,10 +1252,10 @@ function renderArtsPick() {
       const stat = s.type === "공격무공" ? `위력 ${s.effectiveMultiplier().toFixed(2)}배, 내력 ${s.qiCost}` : "";
       return `<button class="choice-btn${on ? " special" : ""}" data-act="main-skill" data-key="${esc(s.key)}" ${on ? "disabled" : ""}>${on ? `<span class="choice-tag">쓰는 무공</span>` : ""}${esc(s.name)} <small>${esc(s.grade)}${stat ? `, ${esc(stat)}` : ""}<br>${esc(s.desc)}</small></button>`;
     }).join("");
-    return `<h4 class="market-group">${label}</h4>${rows}`;
+    return `<h3 class="market-group">${label}</h3>${rows}`;
   }).join("");
   return `<div class="stage" tabindex="0"><div class="stage-inner"><div class="event-sheet">
-      <h2 class="event-title">쓸 무공을 정한다</h2>
+      <h1 class="event-title">쓸 무공을 정한다</h1>
       <div class="event-body"><p class="event-text">무공을 여럿 지니고 길을 나선다. 무엇을 앞세울지 먼저 정한다. 병기와 도구, 성취는 주무공에 맞춰 받는다.</p>
       ${groups}</div></div></div></div>
     <div class="action-area"><div class="action-inner"><button class="next-btn" data-act="finish-arts">이대로 나선다</button><p class="hint flush">달이 지나지 않는 번외 시간입니다. 나중에도 신상에서 바꿀 수 있습니다.</p></div></div>`;
@@ -1268,7 +1268,7 @@ function renderEvent() {
   ui.scene = sceneOf(view.title, view.text, chapterScene);
   return `<div class="stage" tabindex="0"><div class="stage-inner">${sceneBand(ui.scene, npcOf(view.title, view.text))}<div class="event-sheet">
       ${game.notice ? `<div class="event-notice">${game.notice.map((l) => `<p>${esc(l)}</p>`).join("")}</div>` : ""}
-      <h2 class="event-title">${esc(view.title)}</h2>
+      <h1 class="event-title">${esc(view.title)}</h1>
       <div class="event-body"><p class="event-text" data-type>${esc(view.text)}</p>
         ${view.choices.map((c) => `<button class="choice-btn${c.tag ? " special" : ""}" data-act="choose" data-index="${c.index}" ${c.locked ? "disabled" : ""}>${c.tag ? `<span class="choice-tag">${esc(c.tag)}</span>` : ""}${esc(c.label)}${c.locked ? `<small>${esc(c.locked)}</small>` : ""}</button>`).join("")}
       </div></div></div></div>
@@ -1317,7 +1317,7 @@ function renderTurn() {
       </div>
       ${market ? `<p class="hint">${market}</p>` : ""}`;
   ui.scene = turnScene(ui.lastAction, getChapter(p.turn));
-  return `<div class="stage" tabindex="0" aria-live="polite"><div class="stage-inner">${sceneBand(ui.scene, null, "scene-sm")}${body}</div></div>
+  return `<div class="stage" tabindex="0" aria-live="polite"><div class="stage-inner"><h1 class="sr-only">${getYear(p.turn)}년차 ${getMonth(p.turn)}월</h1>${sceneBand(ui.scene, null, "scene-sm")}${body}</div></div>
     <div class="action-area"><div class="action-inner">${controls}</div></div>`;
 }
 
@@ -1351,7 +1351,7 @@ function idleArtsNote(p) {
   ].filter(([, v]) => v > 0).map(([label, v]) => `${label} +${halpun(v)}`);
   const relief = req ? p.loreRelief(req) : 0;
   if (relief) parts.push(`돌파에 드는 실전 -${relief}`);
-  return parts.length ? `<div class="modal-section"><h4>익혀 둔 무공의 보탬</h4><p class="skill-meta">${parts.join(", ")}</p></div>` : "";
+  return parts.length ? `<div class="modal-section"><h3>익혀 둔 무공의 보탬</h3><p class="skill-meta">${parts.join(", ")}</p></div>` : "";
 }
 
 /** 지금 무인의 호칭과 몸담은 곳의 이름 */
