@@ -1,3 +1,5 @@
+# 화면 문장의 자리표시, 조사, 경지의 기운, 낱말 겹침 같은 것을 훑는다. 걸린 것이 없으면 "깨끗"을 찍는다.
+#   python3 tools/check/lint.py [찾을 갈래] [보여 줄 개수]
 import os
 ROOT=os.path.abspath(os.path.join(os.path.dirname(__file__),"..",".."))
 import json,glob,re,sys,collections
@@ -61,6 +63,7 @@ def check(s,path,f):
 for f in sorted(glob.glob(D+'*.json')):
     walk(json.load(open(f)),'',f.split('/')[-1][:-5]+':')
 only=sys.argv[1] if len(sys.argv)>1 else None
+if not any(v for k,v in finds.items() if not only or only in k): print('깨끗')
 for k,v in sorted(finds.items()):
     if only and only not in k: continue
     print(f'== {k} ({len(v)})')
