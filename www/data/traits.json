@@ -307,6 +307,58 @@
     ],
     "reacts": true
   },
+  "대기만성": {
+    "name": "대기만성",
+    "desc": "시작 기량이 모두 20 낮지만 새 장이 열릴 때마다 모든 기량이 100 오르고, 기량이 1할 빨리 오른다.",
+    "rarity": "일반",
+    "cost": 5,
+    "effects": [
+      {
+        "type": "start_stat",
+        "stat": "external",
+        "amount": -20
+      },
+      {
+        "type": "start_stat",
+        "stat": "internal",
+        "amount": -20
+      },
+      {
+        "type": "start_stat",
+        "stat": "martial",
+        "amount": -20
+      },
+      {
+        "type": "start_stat",
+        "stat": "mind",
+        "amount": -20
+      },
+      {
+        "type": "chapter_growth",
+        "amount": 100
+      },
+      {
+        "type": "growth_rate",
+        "stat": "external",
+        "percent": 10
+      },
+      {
+        "type": "growth_rate",
+        "stat": "internal",
+        "percent": 10
+      },
+      {
+        "type": "growth_rate",
+        "stat": "martial",
+        "percent": 10
+      },
+      {
+        "type": "growth_rate",
+        "stat": "mind",
+        "percent": 10
+      }
+    ]
+  },
   "병약한몸": {
     "name": "병약한 몸",
     "desc": "시작 내공이 180 높지만 외공이 60 낮다. 크게 앓고 일어난 몸이라 앓는 사람의 사정을 안다.",
@@ -1083,38 +1135,6 @@
       {
         "type": "damage_reduce",
         "percent": 16
-      }
-    ]
-  },
-  "대기만성": {
-    "name": "대기만성",
-    "desc": "시작 기량이 모두 40 낮지만 새 장이 열릴 때마다 모든 기량이 80 오른다.",
-    "rarity": "희귀",
-    "cost": 15,
-    "effects": [
-      {
-        "type": "start_stat",
-        "stat": "external",
-        "amount": -40
-      },
-      {
-        "type": "start_stat",
-        "stat": "internal",
-        "amount": -40
-      },
-      {
-        "type": "start_stat",
-        "stat": "martial",
-        "amount": -40
-      },
-      {
-        "type": "start_stat",
-        "stat": "mind",
-        "amount": -40
-      },
-      {
-        "type": "chapter_growth",
-        "amount": 80
       }
     ]
   },

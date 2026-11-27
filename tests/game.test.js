@@ -1264,7 +1264,7 @@ test("새 특성들이 작동한다", () => {
   const herb = new Player("무림초출", ["약초꾼"]);
   assert.equal(herb.inventory.금창약, 3);
   assert.equal(new Player("무림초출", ["가보의호구"]).armor, "철사갑의");
-  assert.equal(new Player("무림초출", ["대기만성"]).external, new Player().external - 40);
+  assert.equal(new Player("무림초출", ["대기만성"]).external, new Player().external - 20);
   const keen = new Player("무림초출", ["눈썰미"]);
   assert.ok(openMarket(12, keen).stock.length > openMarket(12, new Player()).stock.length);
   const game = newGame();
@@ -1272,7 +1272,7 @@ test("새 특성들이 작동한다", () => {
   const before = game.player.external;
   game.player.turn = 24;
   game.startNextTurn();
-  assert.equal(game.player.external, before + 80);
+  assert.equal(game.player.external, before + 100);
 });
 
 test("독인은 독에 당하지 않고 맑은 정신은 점혈되지 않는다", () => {
@@ -3376,7 +3376,7 @@ test("새 장의 성장은 장마다, 회복은 해마다다", () => {
   p.turn = 24;
   game.event = null;
   game.startNextTurn();
-  assert.equal(p.external, before + 80);
+  assert.equal(p.external, before + 100);
 });
 
 // ---------- 전체 플레이 ----------
