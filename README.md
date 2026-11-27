@@ -51,6 +51,7 @@ node tools/fuzz.js 60                 # 아무렇게나 끝까지 해 보며 오
 node tools/check/audit.mjs            # 사건 검증
 python3 tools/check/text_rules.py     # 문장 규칙과 이름 겹침 점검
 node tools/check/sidefight.mjs 40 4 완성   # 외전 마지막 싸움의 승률
+node tools/check/web.mjs 출력폴더          # 브라우저로 한 판을 돌며 오류, 오프라인, 이어하기 확인
 ```
 
 사건 원본을 고쳤으면 `tools/content`에서 `more_events.py`, `main_more.py`, `more_events2.py`, `sects_more.py`, `sect_life.py`, `build.py` 차례로 다시 만듭니다.

@@ -1,6 +1,6 @@
 // 막힘 찾기 도구: 아무 출신, 강호, 장원으로 마구 고르며 끝까지 가 보고 오류와 막힌 사건, 깨진 문장을 센다.
 //   node tools/fuzz.js 60             (60판)
-//   IMMORTAL=1 node tools/fuzz.js 40  (쓰러지지 않게 해 끝까지 간다)
+//   IMMORTAL=1 node tools/fuzz.js 40  (싸움에서 쓰러지지 않게 해 끝까지 간다. 사건으로 몸이 축나 쓰러지는 일은 그대로 둔다)
 import { readFile } from "node:fs/promises";
 import { loadData, DB } from "../www/js/data.js";
 await loadData(async (n) => JSON.parse(await readFile(new URL(`../www/data/${n}.json`, import.meta.url), "utf-8")));
@@ -40,9 +40,10 @@ for (let r = 0; r < N; r++) {
         if (!open.length) { note(bad, "NOCHOICE " + g.event.key); break; }
         g.chooseEvent(c(open).index);
       } else if (g.battle) {
-        if (process.env.IMMORTAL) p.hp = p.maxHp();
+        // 쓰러지지 않게 할 때는 체력을 채우고, 쓰러지는 순간 선천진기를 깨울 기회를 늘 남겨 둔다
+        if (process.env.IMMORTAL) { p.hp = p.maxHp(); p.revives = 99; }
         if (g.battle.interlude) { g.battleInterlude(0); continue; }
-        if (g.battle.standPending) { g.battleStand(Math.random() < 0.7); continue; }
+        if (g.battle.standPending) { g.battleStand(process.env.IMMORTAL ? true : Math.random() < 0.7); continue; }
         pickArts(p);
         const inv = Object.keys(p.inventory).filter((k) => DB.market[k]?.consumable);
         const a = c(ACTS);

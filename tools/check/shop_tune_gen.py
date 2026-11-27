@@ -89,13 +89,13 @@ TT, UT = {}, {}
 for k, t in T.items():
     if not t.get("origin"): continue
     if not all(e["type"] in SCALABLE for e in t["effects"]):
-        print("손으로", k, t["effects"]); continue
+        print("표로 맞추지 않는 자질(값어치는 shop_value.py로 확인):", k); continue
     eff = scale(fit(t["effects"], TRAIT_VALUE), 1.0)  # 끝(CAP)을 늘 지킨다
     TT[k] = {"cost": 10, "effects": eff, "desc": (sentence(eff) + " " + flavor(t["desc"])).strip()}
 for k, u in K["upgrades"].items():
     if not u.get("origin"): continue
     if not all(e["type"] in SCALABLE for e in u["effects"]):
-        print("손으로 기틀", k, u["effects"]); UT[k] = {"costs": ORIGIN_UPGRADE_COSTS}; continue
+        print("표로 맞추지 않는 기틀(값어치는 shop_value.py로 확인):", k); UT[k] = {"costs": ORIGIN_UPGRADE_COSTS}; continue
     eff = fit(u["effects"], 0.32)
     UT[k] = {"costs": ORIGIN_UPGRADE_COSTS, "effects": eff, "desc": "단계마다 " + sentence(eff)}
 with open(os.path.join(HERE, "..", "content", "shop_tune.py"), "w") as f:

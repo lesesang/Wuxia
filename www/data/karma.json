@@ -507,7 +507,7 @@
     "표행밑천": {
       "group": "출신 전용",
       "name": "표행 밑천",
-      "desc": "은자 40과 금창약 1개를 단계마다 더 들고 시작한다.",
+      "desc": "은자 90과 금창약 2개를 단계마다 더 들고 시작한다.",
       "costs": [
         10,
         15,
@@ -516,12 +516,12 @@
       "effects": [
         {
           "type": "start_silver",
-          "amount": 40
+          "amount": 90
         },
         {
           "type": "start_item",
           "item": "금창약",
-          "amount": 1
+          "amount": 2
         }
       ],
       "origin": "표국표사"

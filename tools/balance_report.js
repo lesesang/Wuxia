@@ -1,4 +1,4 @@
-// 자질, 출신, 무기 계열, 성향별 격파율을 잰다.
+// 자질, 출신, 무기 계열, 성향별 격파율을 잰다. 외전 출신은 그 출신의 결말로 끝맺은 판을 격파로 센다.
 //   node tools/balance_report.js 150 [자질|출신|계열|성향|곡선]
 import { readFile } from "node:fs/promises";
 import { pickArts } from "./arts.js";
@@ -45,6 +45,8 @@ export function play({ origin = "무림초출", traits = [], upgrades = BASE_UPG
   data.unlocked_traits = Object.keys(DB.traits);
   data.upgrades = upgrades;
   data.total_karma = total;
+  // 남은 카르마도 판마다 같게 둔다. 앞판이 쌓은 카르마로 119달의 물건을 사면 뒤에 잰 판만 강해진다
+  data.current_karma = Math.min(total, 30);
   data.content = content;
   data.provisions = [];
   saveMeta(data);
@@ -94,8 +96,9 @@ function rate(count, options) {
   let wins = 0; let reached = 0; let top = 0; let weaken = 0; let silver = 0;
   for (let i = 0; i < count; i++) {
     const g = play(options);
-    if (WIN.includes(g.ending?.key)) wins += 1;
-    if (g.player.turn >= 120) reached += 1;
+    // 외전은 천마와 싸우지 않으니 그 출신의 결말로 끝맺은 판을 센다
+    if (WIN.includes(g.ending?.key) || DB.endings.side[g.ending?.key]) wins += 1;
+    if (g.player.turn >= g.player.maxTurn) reached += 1;
     if (g.ending?.key === "생사경") top += 1;
     weaken += g.player.bossWeaken;
     silver += g.player.silver;
