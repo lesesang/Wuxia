@@ -1,0 +1,514 @@
+// 강호행을 넘어 남는 기록(카르마, 해금, 강화, 유산, 도감)과 달 체크포인트
+import { DB } from "./data.js";
+import { storage } from "./storage.js";
+
+const LEGEND_KEY = "wuxia-legend";
+const SAVE_KEY = "wuxia-save";
+const EVENT_LOG_KEY = "wuxia-event-log";
+const RUN_HISTORY_LIMIT = 10;
+const defaults = () => ({
+  current_karma: 0, total_karma: 0,
+  unlocked_origins: ["무림초출"], unlocked_traits: [],
+  global_codex: [], known_skills: [], known_items: [],
+  endings_seen: [], runs: [], total_runs: 0,
+  upgrades: {}, content: [], content_off: [], legacy_open: false, legacy_level: 0, legacies: [], milestones: [],
+  known_events: [], achievements: [], origin_wins: [], total_wins: 0, best_turn: 0,
+  provisions: [], upgrade_use: {}, difficulty_cleared: [],
+  manor: {}, manor_gate: 0, side_done: [],
+});
+
+export function loadMeta() {
+  return parseMeta(storage.get(LEGEND_KEY));
+}
+
+function parseMeta(raw) {
+  if (raw) {
+    try {
+      const data = JSON.parse(raw);
+      if (data && typeof data === "object") return cleanRecord({ ...defaults(), ...data });
+    } catch {
+      // 손상된 기록은 지우지 않고 옆에 남겨 둔다
+      storage.set(`${LEGEND_KEY}-broken`, raw);
+    }
+  }
+  return defaults();
+}
+
+function cleanRecord(data) {
+  // 데이터에 없는 항목이 기록에 남아 있어도 화면이 깨지지 않게 걸러 낸다
+  if (DB.karma) {
+    data.content = data.content.filter((k) => DB.karma.content[k]);
+    data.content_off = data.content_off.filter((k) => DB.karma.content[k]);
+    data.legacies = data.legacies.filter((l) => (l.kind === "skill" ? DB.skills[l.key] : DB.market[l.key]));
+  }
+  if (DB.origins) data.unlocked_origins = data.unlocked_origins.filter((k) => DB.origins.origins[k]);
+  if (DB.traits) data.unlocked_traits = data.unlocked_traits.filter((k) => DB.traits[k]);
+  return data;
+}
+
+export const saveMeta = (data) => storage.set(LEGEND_KEY, JSON.stringify(data));
+
+// 읽기만 할 때 쓰는 기록. 저장된 글이 그대로면 다시 풀지 않는다. 돌려받은 것을 고치지 않는다
+let metaCache = { raw: undefined, data: null };
+export function readMeta() {
+  const raw = storage.get(LEGEND_KEY);
+  if (raw !== metaCache.raw || !metaCache.data) metaCache = { raw, data: parseMeta(raw) };
+  return metaCache.data;
+}
+
+export function addKarma(amount) {
+  const data = loadMeta();
+  data.current_karma += amount;
+  data.total_karma += amount;
+  saveMeta(data);
+}
+
+function unlock(listName, key, cost) {
+  const data = loadMeta();
+  if (listName === "unlocked_origins" && DB.origins.origins[key]?.side && !sideOpen(data)) return false;
+  if (data[listName].includes(key) || data.current_karma < cost) return false;
+  data.current_karma -= cost;
+  data[listName].push(key);
+  saveMeta(data);
+  return true;
+}
+
+export function spendKarma(cost) {
+  const data = loadMeta();
+  if (data.current_karma < cost) return false;
+  data.current_karma -= cost;
+  saveMeta(data);
+  return true;
+}
+
+export function upgradeLevel(key, data = loadMeta()) { return data.upgrades[key] || 0; }
+
+/** 이번 강호행에 쓸 단계. 정하지 않았으면 산 만큼 다 쓴다. */
+export function upgradeUse(key, data = loadMeta()) {
+  return Math.min(upgradeLevel(key, data), data.upgrade_use?.[key] ?? upgradeLevel(key, data));
+}
+
+export function setUpgradeUse(key, level) {
+  const data = loadMeta();
+  data.upgrade_use = { ...data.upgrade_use, [key]: Math.max(0, Math.min(upgradeLevel(key, data), level)) };
+  saveMeta(data);
+}
+
+/** 기틀을 한 단계 올린다. */
+export function buyUpgrade(key) {
+  const data = loadMeta();
+  const level = data.upgrades[key] || 0;
+  const cost = DB.karma.upgrades[key]?.costs[level];
+  if (cost === undefined || data.current_karma < cost || !originReady(DB.karma.upgrades[key].origin, data)) return false;
+  data.current_karma -= cost;
+  data.upgrades[key] = level + 1;
+  // 새로 올리면 그 단계까지 쓰는 것으로 돌아간다
+  if (data.upgrade_use) delete data.upgrade_use[key];
+  saveMeta(data);
+  return true;
+}
+
+/** 강화 단계에 해당하는 숨은 특성 목록 */
+export function upgradeTraits(data = loadMeta(), originKey = null) {
+  return Object.entries(data.upgrades)
+    .filter(([key]) => !DB.karma.upgrades[key]?.origin || !originKey || DB.karma.upgrades[key].origin === originKey)
+    .flatMap(([key]) => Array.from({ length: upgradeUse(key, data) }, (_, i) => `환생_${key}_${i + 1}`)).filter((k) => DB.traits[k]);
+}
+
+// ---------- 한 번 쓰는 채비 ----------
+
+/** 다음 강호행 한 번에 쓸 채비를 산다. 같은 것은 한 번에 하나만 챙길 수 있다. */
+export function buyProvision(key) {
+  const data = loadMeta();
+  const cost = DB.karma.provisions[key]?.cost;
+  if (cost === undefined || data.provisions.includes(key) || data.current_karma < cost) return false;
+  data.current_karma -= cost;
+  data.provisions.push(key);
+  saveMeta(data);
+  return true;
+}
+
+/** 아직 쓰지 않은 채비를 물린다. 값은 그대로 돌려준다. */
+export function refundProvision(key) {
+  const data = loadMeta();
+  if (!data.provisions.includes(key)) return false;
+  data.provisions = data.provisions.filter((k) => k !== key);
+  data.current_karma += DB.karma.provisions[key]?.cost ?? 0;
+  saveMeta(data);
+  return true;
+}
+
+/** 강호행을 시작하며 챙겨 둔 채비를 꺼내 쓴다. 숨은 특성 키 목록을 돌려준다. */
+export function takeProvisions() {
+  const data = loadMeta();
+  const keys = data.provisions.filter((k) => DB.karma.provisions[k]);
+  if (data.provisions.length) {
+    data.provisions = [];
+    saveMeta(data);
+  }
+  return keys;
+}
+
+// ---------- 장원 ----------
+
+/** 지은 채의 단계. 채마다 0부터 그 채의 끝 단계까지 */
+export const manorLevels = (data = loadMeta()) => Object.fromEntries(
+  Object.entries(DB.karma.manor.wings).map(([key, wing]) => [key, Math.min(wing.costs.length, data.manor?.[key] || 0)]));
+export const manorSize = (data = loadMeta()) => Object.values(manorLevels(data)).reduce((a, b) => a + b, 0);
+/** 문패 값은 장원이 클수록 오른다. 올린 단계 셋마다 한 계단이다 */
+export const gateCost = (data = loadMeta()) => {
+  const costs = DB.karma.manor.gate.costs;
+  return costs[Math.min(costs.length - 1, Math.max(0, Math.ceil(manorSize(data) / 3) - 1))];
+};
+
+/** 외전은 생사경에 올라 본 사람에게 열린다. 이미 연 외전이 있으면 그대로 열려 있다 */
+export const sideOpen = (data = loadMeta()) => data.endings_seen.includes("생사경") || DB.origins.side_order.some((k) => data.unlocked_origins.includes(k));
+
+/** 장원은 쌓은 카르마가 넉넉해야 문패를 내준다. 이미 지은 채가 있으면 그대로 열려 있다 */
+export const manorOpen = (data = loadMeta()) => data.total_karma >= DB.karma.manor.need_total || manorSize(data) > 0;
+
+/** 채를 한 단계 올린다 */
+export function buildWing(key) {
+  const data = loadMeta();
+  const wing = DB.karma.manor.wings[key];
+  const level = manorLevels(data)[key];
+  const cost = wing?.costs[level];
+  if (cost === undefined || data.current_karma < cost || !manorOpen(data)) return false;
+  data.current_karma -= cost;
+  data.manor = { ...data.manor, [key]: level + 1 };
+  // 챙겨 둔 문패는 장원이 커져도 치른 값 그대로 쓴다
+  saveMeta(data);
+  return true;
+}
+
+/** 다음 강호행에 쓸 문패를 챙긴다. 지은 채가 하나도 없으면 챙길 것이 없다 */
+export function buyGate() {
+  const data = loadMeta();
+  const cost = gateCost(data);
+  if (data.manor_gate || !manorSize(data) || data.current_karma < cost) return false;
+  data.current_karma -= cost;
+  data.manor_gate = cost;
+  saveMeta(data);
+  return true;
+}
+
+/** 아직 쓰지 않은 문패를 물린다. 치른 값을 그대로 돌려준다 */
+export function refundGate() {
+  const data = loadMeta();
+  if (!data.manor_gate) return false;
+  data.current_karma += data.manor_gate;
+  data.manor_gate = 0;
+  saveMeta(data);
+  return true;
+}
+
+/** 강호행을 시작하며 문패를 쓴다. 챙겨 두었으면 장원의 채 단계를, 아니면 null을 돌려준다 */
+export function takeGate() {
+  const data = loadMeta();
+  if (!data.manor_gate) return null;
+  data.manor_gate = 0;
+  saveMeta(data);
+  return manorSize(data) ? manorLevels(data) : null;
+}
+
+export const extraSlots = (data = loadMeta()) => upgradeUse("그릇", data);
+
+/** 누적 카르마로 받은 보상의 숨은 특성 목록 */
+export const rewardTraits = (data = loadMeta()) => DB.karma.rewards
+  .filter((r) => data.total_karma >= r.at && r.effects.length).map((r) => `누적_${r.at}`);
+
+export const nextReward = (data = loadMeta()) => DB.karma.rewards.find((r) => data.total_karma < r.at) || null;
+
+export function buyContent(key) {
+  const data = loadMeta();
+  const cost = DB.karma.content[key]?.cost;
+  if (cost === undefined || data.content.includes(key) || data.current_karma < cost || !originReady(DB.karma.content[key].origin, data)) return false;
+  data.current_karma -= cost;
+  data.content.push(key);
+  saveMeta(data);
+  return true;
+}
+
+export function toggleContent(key) {
+  const data = loadMeta();
+  data.content_off = data.content_off.includes(key)
+    ? data.content_off.filter((k) => k !== key) : [...data.content_off, key];
+  saveMeta(data);
+}
+
+/** 기틀은 산 단계를 모두 쓰고 인연은 모두 켠다 */
+export function resetSetupChoices() {
+  const data = loadMeta();
+  data.upgrade_use = {};
+  data.content_off = [];
+  saveMeta(data);
+}
+
+export const activeContent = (data = loadMeta()) => data.content.filter((k) => !data.content_off.includes(k));
+
+// ---------- 전설의 유산 ----------
+
+const WIN_ENDINGS = ["기본", "배드", "생사경"];
+export const legacyAvailable = (data = loadMeta()) => data.endings_seen.some((k) => WIN_ENDINGS.includes(k));
+/** 천마를 넘어선 결말인가 */
+export const beatFinal = (endingKey) => WIN_ENDINGS.includes(endingKey);
+/** 외전을 끝맺은 결말인가 */
+export const sideEnding = (endingKey) => !!DB.endings.side?.[endingKey];
+export const canLeaveLegacy = (endingKey) => beatFinal(endingKey) || sideEnding(endingKey);
+export const sameLegacy = (a, b) => a.kind === b.kind && a.key === b.key;
+
+export function openLegacy() {
+  const data = loadMeta();
+  const { cost } = DB.karma.legacy;
+  if (data.legacy_open || !legacyAvailable(data) || data.current_karma < cost) return false;
+  data.current_karma -= cost;
+  data.legacy_open = true;
+  saveMeta(data);
+  return true;
+}
+
+/** 강화 단계에 따른 유산의 힘. 1단계와 3단계에 이어받을 수와 보관 수가 하나씩 늘고, 5단계에는 보관한 유산을 모두 이어받는다 */
+export function legacyPowers(data = loadMeta()) {
+  const level = data.legacy_level || 0;
+  const more = (level >= 1 ? 1 : 0) + (level >= 3 ? 1 : 0);
+  const shelf = DB.karma.legacy.shelf + more;
+  return { level, take: level >= 5 ? shelf : 1 + more, shelf, keepGear: level >= 2, keepGrade: level >= 4, divine: level >= 5 };
+}
+
+/** 유산을 한 단계 강화한다. 다음 단계의 항목이 없거나 카르마가 모자라면 false */
+export function upgradeLegacy() {
+  const data = loadMeta();
+  const next = DB.karma.legacy.upgrades[data.legacy_level || 0];
+  if (!data.legacy_open || !next || data.current_karma < next.cost) return false;
+  data.current_karma -= next.cost;
+  data.legacy_level = (data.legacy_level || 0) + 1;
+  saveMeta(data);
+  return true;
+}
+
+/** 유산을 보관한다. 자리가 차면 지울 것을 골라야 한다. 지울 것을 고르지 않았으면 false */
+export function storeLegacy(entry, dropIndex = null) {
+  const data = loadMeta();
+  // 같은 무공이나 물건은 둘 보관하지 않는다
+  if (data.legacies.some((l) => sameLegacy(l, entry))) return false;
+  if (data.legacies.length >= legacyPowers(data).shelf) {
+    if (dropIndex === null || !data.legacies[dropIndex]) return false;
+    data.legacies.splice(dropIndex, 1);
+  }
+  data.legacies.push(entry);
+  saveMeta(data);
+  return true;
+}
+
+/** 보관한 유산 하나를 지운다. 이어받아도 사라지지 않으므로 지울 때만 없어진다 */
+export function dropLegacy(index) {
+  const data = loadMeta();
+  data.legacies.splice(index, 1);
+  saveMeta(data);
+}
+
+export const unlockOrigin = (key, cost) => unlock("unlocked_origins", key, cost);
+export const unlockTrait = (key, cost) => (originReady(DB.traits[key]?.origin) ? unlock("unlocked_traits", key, cost) : false);
+
+/** 출신 전용 항목은 그 출신을 해금해야 살 수 있다 */
+export const originReady = (origin, data = loadMeta()) => !origin || data.unlocked_origins.includes(origin);
+
+function addToList(listName, keys) {
+  if (!keys.length) return;
+  // 새로 더할 것이 없으면 기록을 다시 쓰지 않는다
+  const known = new Set(readMeta()[listName]);
+  if (keys.every((k) => known.has(k))) return;
+  const data = loadMeta();
+  const added = [...new Set(keys)].filter((k) => !data[listName].includes(k));
+  if (added.length) {
+    data[listName].push(...added);
+    saveMeta(data);
+  }
+}
+
+export const updateGlobalCodex = (keys) => addToList("global_codex", keys);
+
+export function updateKnown(skillKeys = [], itemKeys = [], eventKeys = []) {
+  addToList("known_skills", skillKeys);
+  addToList("known_items", itemKeys);
+  addToList("known_events", eventKeys);
+}
+
+// 사건 기록은 커질 수 있어 따로 저장한다. 매번 읽고 쓰지 않도록 메모리에 들고 있는다.
+let eventLogCache = null;
+
+export function loadEventLog() {
+  if (eventLogCache) return eventLogCache;
+  try {
+    eventLogCache = JSON.parse(storage.get(EVENT_LOG_KEY) || "{}") || {};
+  } catch {
+    eventLogCache = {};
+  }
+  return eventLogCache;
+}
+
+/** 사건에서 본 본문과 고른 선택, 그 결과를 강호록에 남긴다. 새로운 것이 있을 때만 쓴다. */
+export function recordEventPick(key, text, label, outcome) {
+  const log = loadEventLog();
+  const entry = log[key] || { texts: [], picks: {} };
+  const results = entry.picks[label] || [];
+  if (entry.texts.includes(text) && results.includes(outcome)) return;
+  if (!entry.texts.includes(text)) entry.texts.push(text);
+  if (!results.includes(outcome)) results.push(outcome);
+  entry.picks[label] = results;
+  log[key] = entry;
+  eventLogDirty = true;
+}
+
+// 사건 기록은 고를 때마다 쓰지 않고 달이 시작할 때나 화면을 떠날 때 한 번에 쓴다
+let eventLogDirty = false;
+export function flushEventLog() {
+  if (!eventLogDirty || !eventLogCache) return;
+  storage.set(EVENT_LOG_KEY, JSON.stringify(eventLogCache));
+  eventLogDirty = false;
+}
+
+/** 강호행 끝에 새로 이룬 업적을 기록하고 돌려준다. */
+export function claimAchievements(player, ending, victory) {
+  const data = loadMeta();
+  if (victory && !data.origin_wins.includes(player.originKey)) data.origin_wins.push(player.originKey);
+  if (sideEnding(ending) && !data.side_done.includes(player.originKey)) data.side_done.push(player.originKey);
+  const fresh = DB.karma.achievements.filter((a) => !data.achievements.includes(a.key) && achievementMet(a, player, ending, victory, data));
+  data.achievements.push(...fresh.map((a) => a.key));
+  saveMeta(data);
+  return fresh;
+}
+
+function achievementMet(a, p, ending, victory, data) {
+  const visibleTraits = p.traits.filter((k) => !DB.traits[k]?.hidden);
+  const attacks = p.skills.filter((s) => s.type === "공격무공").length;
+  switch (a.type) {
+    case "win": return victory;
+    case "win_plain": return victory && !visibleTraits.length;
+    case "ending": return ending === a.value;
+    case "kills": return p.kills >= a.value;
+    case "fame": return p.fame >= a.value;
+    case "sect": return !!p.sect;
+    case "chains": return p.chainsDone >= a.value;
+    case "attacks": return attacks >= a.value;
+    case "legend": return p.skills.some((s) => DB.skills[s.key].legend || s.grade === "신공");
+    case "origins": return data.origin_wins.length >= a.value;
+    case "sides": return data.side_done.length >= a.value;
+    case "runs": return data.total_runs + 1 >= a.value;
+    case "silver": return p.silver >= a.value;
+    case "events": return data.known_events.length >= a.value;
+    default: return false;
+  }
+}
+
+// ---------- 강호의 깊이 ----------
+
+/** 그 강호에 들어설 수 있는가. 바로 앞의 강호에서 천마를 꺾어야 열린다 */
+export function difficultyOpen(key, data = loadMeta()) {
+  const { order } = DB.difficulty;
+  const at = order.indexOf(key);
+  return at === 0 || (at > 0 && (data.difficulty_cleared || []).includes(order[at - 1]));
+}
+
+/** 그 강호에서 천마를 꺾었다. 새로 열린 강호가 있으면 그 키를 돌려준다 */
+export function recordDifficultyClear(key) {
+  const data = loadMeta();
+  const { order } = DB.difficulty;
+  if (!order.includes(key) || data.difficulty_cleared.includes(key)) return null;
+  data.difficulty_cleared.push(key);
+  saveMeta(data);
+  const next = order[order.indexOf(key) + 1];
+  return next && difficultyOpen(next, data) ? next : null;
+}
+
+export function recordRun(summary) {
+  flushEventLog();
+  const data = loadMeta();
+  data.total_runs += 1;
+  if (WIN_ENDINGS.includes(summary.ending)) data.total_wins = (data.total_wins || 0) + 1;
+  data.best_turn = Math.max(data.best_turn || 0, summary.turn || 0);
+  data.runs = [summary, ...data.runs].slice(0, RUN_HISTORY_LIMIT);
+  if (!data.endings_seen.includes(summary.ending)) data.endings_seen.push(summary.ending);
+  saveMeta(data);
+}
+
+// ---------- 달 체크포인트 ----------
+
+export function saveCheckpoint(playerDict, log) {
+  storage.set(SAVE_KEY, JSON.stringify({ player: playerDict, log }));
+  flushEventLog();
+}
+
+export function loadCheckpoint() {
+  const raw = storage.get(SAVE_KEY);
+  if (!raw) return null;
+  try {
+    const data = JSON.parse(raw);
+    return isPlain(data?.player) ? { player: data.player, log: stringList(data.log) } : null;
+  } catch {
+    return null;
+  }
+}
+
+export const clearCheckpoint = () => storage.remove(SAVE_KEY);
+
+// ---------- 기록 내보내기와 가져오기 ----------
+
+export function exportRecords() {
+  return JSON.stringify({ format: "wuxia-records", version: 1, legend: loadMeta(), save: loadCheckpoint(), event_log: loadEventLog() }, null, 2);
+}
+
+/** 내보낸 기록 파일을 받는다. 성공하면 true */
+export function importRecords(text) {
+  let data;
+  try { data = JSON.parse(text); } catch { return false; }
+  if (data?.format !== "wuxia-records") return false;
+  const legend = data.legend;
+  if (!legend || typeof legend.current_karma !== "number" || typeof legend.total_karma !== "number") return false;
+  saveMeta(cleanImport(legend));
+  eventLogCache = cleanEventLog(data.event_log);
+  eventLogDirty = false;
+  storage.set(EVENT_LOG_KEY, JSON.stringify(eventLogCache));
+  if (isPlain(data.save?.player)) storage.set(SAVE_KEY, JSON.stringify({ player: data.save.player, log: stringList(data.save.log) }));
+  else storage.remove(SAVE_KEY);
+  return true;
+}
+
+// 가져온 기록은 남이 만든 글일 수 있다. 정해진 꼴만 받고 나머지는 버린다
+const isPlain = (v) => v !== null && typeof v === "object" && !Array.isArray(v);
+const stringList = (v) => (Array.isArray(v) ? v.filter((x) => typeof x === "string") : []);
+const numberMap = (v) => (isPlain(v) ? Object.fromEntries(Object.entries(v).filter(([k, n]) => k !== "__proto__" && Number.isFinite(n))) : {});
+const finite = (v, fallback = 0) => (Number.isFinite(v) ? v : fallback);
+const KEY_LISTS = ["unlocked_origins", "unlocked_traits", "global_codex", "known_skills", "known_items", "endings_seen", "content", "content_off", "provisions", "milestones", "known_events", "achievements", "origin_wins", "difficulty_cleared", "side_done"];
+const RUN_TEXT = ["ending", "origin", "realm", "title", "fame", "difficulty"];
+
+function cleanImport(legend) {
+  const base = defaults();
+  const out = { ...base };
+  for (const [key, fallback] of Object.entries(base)) {
+    const v = legend[key];
+    if (KEY_LISTS.includes(key)) out[key] = stringList(v);
+    else if (typeof fallback === "number") out[key] = finite(v, fallback);
+    else if (typeof fallback === "boolean") out[key] = v === true;
+    else if (key === "upgrades" || key === "upgrade_use" || key === "manor") out[key] = numberMap(v);
+  }
+  out.runs = (Array.isArray(legend.runs) ? legend.runs : []).filter(isPlain).slice(0, RUN_HISTORY_LIMIT).map((r) => ({
+    ...Object.fromEntries(RUN_TEXT.filter((k) => typeof r[k] === "string").map((k) => [k, r[k]])),
+    turn: finite(r.turn), kills: finite(r.kills),
+  }));
+  out.legacies = (Array.isArray(legend.legacies) ? legend.legacies : []).filter((l) => isPlain(l) && typeof l.key === "string" && ["skill", "item"].includes(l.kind))
+    .map((l) => ({ kind: l.kind, key: l.key, ...(typeof l.grade === "string" ? { grade: l.grade } : {}), ...(typeof l.label === "string" ? { label: l.label } : {}) }));
+  return out;
+}
+
+function cleanEventLog(log) {
+  if (!isPlain(log)) return {};
+  const out = {};
+  for (const [key, entry] of Object.entries(log)) {
+    if (key === "__proto__" || !isPlain(entry)) continue;
+    const picks = {};
+    if (isPlain(entry.picks)) for (const [label, results] of Object.entries(entry.picks)) if (label !== "__proto__") picks[label] = stringList(results);
+    out[key] = { texts: stringList(entry.texts), picks };
+  }
+  return out;
+}
