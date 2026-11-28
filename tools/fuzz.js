@@ -48,7 +48,15 @@ for (let r = 0; r < N; r++) {
         const inv = Object.keys(p.inventory).filter((k) => DB.market[k]?.consumable);
         const a = c(ACTS);
         g.battleAction(a, a === "소비품" ? c(inv) : null);
-        if (g.battle && g.battle.roundNum > 300) { note(bad, "long battle " + g.battle.enemy.key); break; }
+        // 오래 걸리는 싸움은 약한 봇이면 흔하다. 적의 체력이 백 합 동안 전혀 줄지 않을 때만 막힌 싸움으로 센다
+        if (g.battle) {
+          const b = g.battle;
+          if (b.roundNum === 100 || b.roundNum % 100 === 0) {
+            if (b.fuzzMark && b.fuzzMark.round < b.roundNum && b.enemy.hp >= b.fuzzMark.hp) { note(bad, "stuck battle " + b.enemy.key); break; }
+            b.fuzzMark = { round: b.roundNum, hp: b.enemy.hp };
+          }
+          if (b.roundNum > 1500) { note(bad, "very long battle " + b.enemy.key); break; }
+        }
       } else if (g.market) {
         const st = g.market.stock.filter((s) => s.left > 0);
         if (st.length && Math.random() < 0.6) g.marketBuy(c(st).key);
